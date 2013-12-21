@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2013-01-04T12:14:30Z" product-name="store_finder">
+		<header/>
+		<body>
+			<trans-unit id="name">
+				<source>Storename</source>
+			</trans-unit>
+			<trans-unit id="address">
+				<source>Address</source>
+			</trans-unit>
+			<trans-unit id="zipcode">
+				<source>Zipcode</source>
+			</trans-unit>
+			<trans-unit id="city">
+				<source>City</source>
+			</trans-unit>
+			<trans-unit id="country">
+				<source>Country</source>
+			</trans-unit>
+			<trans-unit id="latitude">
+				<source>Latitude</source>
+			</trans-unit>
+			<trans-unit id="longitude">
+				<source>Longitude</source>
+			</trans-unit>
+			<trans-unit id="products">
+				<source>Products comma separated</source>
+			</trans-unit>
+			<trans-unit id="category">
+				<source>Restrict on Categories</source>
+			</trans-unit>
+			<trans-unit id="radius">
+				<source>Radius (km)</source>
+			</trans-unit>
+			<trans-unit id="submit_find">
+				<source>Find Store</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

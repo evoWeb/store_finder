@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en"
+	  xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers">
+<head>
+	<title>Partial field error template of finder</title>
+</head>
+<body>
+<f:section name="Main">
+
+	<f:form.validationResults for="user" as="validationResults">
+		<f:if condition="{validationResults.flattenedErrors}">
+			<f:for each="{validationResults.flattenedErrors}" key="propertyPath" as="propertyErrors">
+				<f:for each="{propertyErrors}" as="propertyError">
+					<f:if condition="{propertyError.propertyName}=={field}">
+						<f:for each="{propertyError.errors}" as="error">
+							<div class="error errorMessage errorField field{field -> f:cObject(typoscriptObjectPath: 'plugin.tx_storefinder.fieldError')}">{error.message}</div>
+						</f:for>
+					</f:if>
+				</f:for>
+			</f:for>
+		</f:if>
+	</f:form.validationResults>
+
+</f:section>
+</body>
+</html>

@@ -1,0 +1,86 @@
+{namespace sf=Evoweb\StoreFinder\ViewHelpers}
+<?xml version="1.0" encoding="UTF-8" ?>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en"
+	  xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers">
+<head>
+	<title>Map</title>
+</head>
+<body>
+<f:section name="content">
+<script type="text/javascript">
+	var mapConfiguration = <sf:noop>{</sf:noop>
+		<sf:minify>active: true,<f:for each="{settings.mapConfiguration}" as="configuration" key="name" iteration="loop">
+		{name}: '{configuration}'<f:if condition="{loop.isLast}"><f:then></f:then><f:else>,</f:else></f:if></f:for>,
+		center: {lat: <f:format.number decimals="7">{center.latitude}</f:format.number>, lng: <f:format.number decimals="7">{center.longitude}</f:format.number>},
+		zoom: {center.zoom}
+	</sf:minify><sf:noop>}</sf:noop>
+
+	var locations = [<f:for each="{locations}" as="location" iteration="loop">
+		<sf:noop>{</sf:noop><sf:minify>
+			name: '{location.name}',
+			lat: {location.latitude},
+			lng: {location.longitude},
+			information: <sf:noop>{</sf:noop>
+				uid: '{location.uid}',
+				name: '{location.name}',
+				storeid: '{location.storeid}',
+				address: '{location.address}',
+				additionaladdress: '{location.additionaladdress}',
+				city: '{location.city}',
+				person: '{location.person}',
+				zipcode: '{location.zipcode}',
+				products: '{location.products}',
+				email: '{location.email}',
+				phone: '{location.phone}',
+				mobile: '{location.mobile}',
+				fax: '{location.fax}',
+				hours: '{location.hours}',
+				url: '{location.url}',
+				notes: '{location.notes}',
+				icon: '{location.icon}',
+				state: '{location.state}',
+				country: '{location.country}',
+				image: '{location.image}',
+				media: '{location.media}'
+			<sf:noop>}</sf:noop>
+		</sf:minify><sf:noop>}</sf:noop><f:if condition="{loop.isLast}"><f:then></f:then><f:else>,</f:else></f:if></f:for>
+	];
+</script>
+
+<script id="templateInfoWindow" type="text/html">
+	<div class="infoWindow group" style="width: 320px; height: 180px;" data-uid="{{uid}}">
+		<div class="storename">
+			<span id="infoWindowMark{{uid}}" class="marker show"><img src="typo3conf/ext/store_finder/Resource/Public/Images/addToNotepad.gif" title="Add to notepad" alt="Add to notepad"/></span>
+			<span id="infoWindowUnMark{{uid}}" class="marker hide"><img src="typo3conf/ext/store_finder/Resource/Public/Images/removeFromNotepad.gif" title="Remove from notepad" alt="Remove from notepad" /></span>
+			<strong>{{title}}</strong>
+		</div>
+		<div class="right">
+			<div class="image">{{image}}</div>
+			<div class="displayRoute">
+				<a href="index.php?id=5&tx_locator_pi1%5Bdummy%5D=showMap&tx_locator_pi1%5Bmode%5D=showRoute&tx_locator_pi1%5BstoreUid%5D=1&tx_locator_pi1%5BstartZipcode%5D=&tx_locator_pi1%5BstartCity%5D=&tx_locator_pi1%5BstartAddress%5D=&tx_locator_pi1%5BstartCountry%5D=&tx_locator_pi1%5BstartLat%5D=51.5084358&tx_locator_pi1%5BstartLon%5D=7.097707&tx_locator_pi1%5Blat%5D=51.5084358&tx_locator_pi1%5Blon%5D=7.097707&tx_locator_pi1%5Bdistance%5D=0%2C00" target="_top">Route</a>
+			</div>
+		</div>
+		<div class="left">
+			<div class="company">{{company}}</div>
+			<div class="firstName">{{firstname}}</div>
+			<div class="lastName">{{lastname}}</div>
+			<div class="address">{{address}}</div>
+			<div class="city">{{zipcode}} {{city}}</div>
+			<div class="country">{{country}}</div>
+			<div class="phone">{{phone}}</div>
+			<div class="mobile">{{mobile}}</div>
+			<div class="fax">{{fax}}</div>
+			<div class="email">{{email}}</div>
+			<div class="hours">{{hours}}</div>
+			<div class="url">{{url}}</div>
+		</div>
+		<div class="clearfix"></div>
+	</div>
+</script>
+
+<h3>1 {settings.storeTitle} <f:translate key="foundText" arguments="{0: 2}"/></h3>
+
+<div id="tx_storefinder_pi1_map"></div>
+</f:section>
+</body>
+</html>

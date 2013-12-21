@@ -1,0 +1,6 @@
+plugin.tx_storefinder_pi1 {
+	# cat=plugin.tx_storefinder/file/10; type=String; label= CSS file: Define the location of the CSS file to be used.
+	cssFile = EXT:store_finder/Resources/Public/Stylesheet/layout.css
+	# cat=plugin.tx_storefinder/file/11; type=String; label= template file: Define the location of the template file to be used.
+	templateFile = EXT:store_finder/Resources/Private/Templates/template.html
+}

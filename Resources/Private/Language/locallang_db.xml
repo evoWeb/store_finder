@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>database</type>
+		<description>Language labels for database tables/fields belonging to extension 'store_finder'</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="tx_storefinder_domain_model_location">Store Location</label>
+			<label index="tx_storefinder_domain_model_location.hidden">Location</label>
+			<label index="tx_storefinder_domain_model_location.name">Store Name</label>
+			<label index="tx_storefinder_domain_model_location.related">Related to (Uid)</label>
+			<label index="tx_storefinder_domain_model_location.storeid">Store Id</label>
+			<label index="tx_storefinder_domain_model_location.attributes">Attributes</label>
+			<label index="tx_storefinder_domain_model_location.address">Address</label>
+			<label index="tx_storefinder_domain_model_location.additionaladdress">Additional address</label>
+			<label index="tx_storefinder_domain_model_location.person">Contact person</label>
+			<label index="tx_storefinder_domain_model_location.city">City</label>
+			<label index="tx_storefinder_domain_model_location.state">State</label>
+			<label index="tx_storefinder_domain_model_location.zipcode">ZIP / Postal Code</label>
+			<label index="tx_storefinder_domain_model_location.country">Country</label>
+			<label index="tx_storefinder_domain_model_location.products">Products</label>
+			<label index="tx_storefinder_domain_model_location.phone">Phone</label>
+			<label index="tx_storefinder_domain_model_location.mobile">Cellular</label>
+			<label index="tx_storefinder_domain_model_location.fax">Fax</label>
+			<label index="tx_storefinder_domain_model_location.email">Email</label>
+			<label index="tx_storefinder_domain_model_location.hours">Hours</label>
+			<label index="tx_storefinder_domain_model_location.url">URL</label>
+			<label index="tx_storefinder_domain_model_location.notes">Notes</label>
+			<label index="tx_storefinder_domain_model_location.media">Media</label>
+			<label index="tx_storefinder_domain_model_location.image">Image</label>
+			<label index="tx_storefinder_domain_model_location.icon">Icon</label>
+			<label index="tx_storefinder_domain_model_location.content">Content Elements</label>
+			<label index="tx_storefinder_domain_model_location.categories">Categories</label>
+			<label index="tx_storefinder_domain_model_location.latitude">Latitude</label>
+			<label index="tx_storefinder_domain_model_location.longitude">Longitude</label>
+			<label index="tx_storefinder_domain_model_location.use_as_center">Use as center</label>
+
+			<label index="sys_category.add">Add category</label>
+
+			<label index="div-address">Address</label>
+			<label index="div-contact">Contact</label>
+			<label index="div-informations">Informations</label>
+			<label index="div-relations">Relations</label>
+
+			<label index="tx_storefinder_domain_model_attribute">Store Attributes</label>
+			<label index="tx_storefinder_domain_model_attribute.name">Name</label>
+			<label index="tx_storefinder_domain_model_attribute.icon">Icon</label>
+
+			<label index="tx_storefinder_domain_model_zipcodearea">Store Zipcode Areas</label>
+			<label index="tx_storefinder_domain_model_zipcodearea.zipcode">Zipcode</label>
+			<label index="tx_storefinder_domain_model_zipcodearea.area">Area-No.</label>
+			<label index="tx_storefinder_domain_model_zipcodearea.latitude">Latitude</label>
+			<label index="tx_storefinder_domain_model_zipcodearea.longitude">Longitude</label>
+
+			<label index="fe_users.tx_storefinder_latitude">tx_storefinder[latitude]</label>
+			<label index="fe_users.tx_storefinder_longitude">tx_storefinder[longitude]</label>
+
+			<label index="tt_address.tx_storefinder_latitude">tx_storefinder[latitude]</label>
+			<label index="tt_address.tx_storefinder_longitude">tx_storefinder[longitude]</label>
+		</languageKey>
+		<languageKey index="de" type="array">
+			<label index="tx_storefinder_domain_model_location">Store</label>
+			<label index="tx_storefinder_domain_model_location.name">Filialbezeichnung</label>
+			<label index="tx_storefinder_domain_model_location.related">Hat Beziehung zu (Uid)</label>
+			<label index="tx_storefinder_domain_model_location.storeid">Filial ID</label>
+			<label index="tx_storefinder_domain_model_location.attributes">Attribute</label>
+			<label index="tx_storefinder_domain_model_location.address">Adresse</label>
+			<label index="tx_storefinder_domain_model_location.additionaladdress">Adresszusatz</label>
+			<label index="tx_storefinder_domain_model_location.person">Ansprechpartner</label>
+			<label index="tx_storefinder_domain_model_location.city">Stadt</label>
+			<label index="tx_storefinder_domain_model_location.state">Bundesstaat</label>
+			<label index="tx_storefinder_domain_model_location.zipcode">Postleitzahl</label>
+			<label index="tx_storefinder_domain_model_location.country">Land</label>
+			<label index="tx_storefinder_domain_model_location.products">Produkte</label>
+			<label index="tx_storefinder_domain_model_location.phone">Telefon</label>
+			<label index="tx_storefinder_domain_model_location.mobile">Handy</label>
+			<label index="tx_storefinder_domain_model_location.fax">Fax</label>
+			<label index="tx_storefinder_domain_model_location.email">Email</label>
+			<label index="tx_storefinder_domain_model_location.hours">Öffnungszeiten</label>
+			<label index="tx_storefinder_domain_model_location.url">URL</label>
+			<label index="tx_storefinder_domain_model_location.notes">Bemerkungen</label>
+			<label index="tx_storefinder_domain_model_location.media">Media</label>
+			<label index="tx_storefinder_domain_model_location.image">Bild</label>
+			<label index="tx_storefinder_domain_model_location.icon">Symbol</label>
+			<label index="tx_storefinder_domain_model_location.content">Content Elemente</label>
+			<label index="tx_storefinder_domain_model_location.categories">Kategorien</label>
+			<label index="tx_storefinder_domain_model_location.latitude">Breitengrad</label>
+			<label index="tx_storefinder_domain_model_location.longitude">Längengrad</label>
+
+			<label index="tx_storefinder_domain_model_attribute">Filial Attribute</label>
+			<label index="tx_storefinder_domain_model_attribute.name">Name</label>
+			<label index="tx_storefinder_domain_model_attribute.icon">Icon</label>
+
+			<label index="tx_storefinder_domain_model_zipcodearea">Store Zipcode Areas</label>
+			<label index="tx_storefinder_domain_model_zipcodearea.zipcode">Postleitzahl</label>
+			<label index="tx_storefinder_domain_model_zipcodearea.area">Gebiets-Nr.</label>
+			<label index="tx_storefinder_domain_model_zipcodearea.latitude">Breitengrad</label>
+			<label index="tx_storefinder_domain_model_zipcodearea.longitude">Längengrad</label>
+
+			<label index="fe_users.tx_storefinder_latitude">tx_storefinder[Breitengrad]</label>
+			<label index="fe_users.tx_storefinder_longitude">tx_storefinder[Längengrad]</label>
+
+			<label index="tt_address.tx_storefinder_latitude">tx_storefinder[latitude]</label>
+			<label index="tt_address.tx_storefinder_longitude">tx_storefinder[longitude]</label>
+		</languageKey>
+	</data>
+</T3locallang>

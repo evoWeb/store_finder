@@ -1,0 +1,89 @@
+{namespace sf=Evoweb\StoreFinder\ViewHelpers}
+<?xml version="1.0" encoding="UTF-8" ?>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en"
+	  xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers">
+<head>
+	<title>Search</title>
+</head>
+<body>
+<f:section name="content">
+<h3 class="formHeader"><f:translate key="formHeader"/></h3>
+<f:form action="{action}" name="search" object="{search}" enctype="multipart/form-data">
+	<f:render partial="FormErrors" section="Main" arguments="{for: 'search'}" />
+	<f:render partial="FieldError" section="Main" arguments="{field: 'uid'}" />
+
+	<dl>
+		<dt><f:translate key="name" /></dt>
+		<dd>
+			<f:render partial="FieldError" section="Main" arguments="{field: 'name'}" />
+			<f:form.textfield property="name" />
+		</dd>
+
+		<dt><f:translate key="address" /></dt>
+		<dd>
+			<f:render partial="FieldError" section="Main" arguments="{field: 'address'}" />
+			<f:form.textfield property="address" />
+		</dd>
+
+		<dt><f:translate key="zipcode" /></dt>
+		<dd>
+			<f:render partial="FieldError" section="Main" arguments="{field: 'zipcode'}" />
+			<f:form.textfield property="zipcode" />
+		</dd>
+
+		<dt><f:translate key="city" /></dt>
+		<dd>
+			<f:render partial="FieldError" section="Main" arguments="{field: 'city'}" />
+			<f:form.textfield property="city" />
+		</dd>
+
+		<dt><f:translate key="country" /></dt>
+		<dd>
+			<f:render partial="FieldError" section="Main" arguments="{field: 'country'}" />
+			<sf:form.SelectStaticCountries property="country" id="sfrCountry"
+				allowedCountries="{0: 'DE', 1: 'AT'}" />
+		</dd>
+
+		<dt><f:translate key="latitude" /></dt>
+		<dd>
+			<f:render partial="FieldError" section="Main" arguments="{field: 'latitude'}" />
+			<f:form.textfield property="latitude" />
+		</dd>
+
+		<dt><f:translate key="longitude" /></dt>
+		<dd>
+			<f:render partial="FieldError" section="Main" arguments="{field: 'longitude'}" />
+			<f:form.textfield property="longitude" />
+		</dd>
+
+		<dt><f:translate key="products" /></dt>
+		<dd>
+			<f:render partial="FieldError" section="Main" arguments="{field: 'products'}" />
+			<f:form.textfield property="products" />
+		</dd>
+
+		<dt><f:translate key="category" /></dt>
+		<dd>
+			<f:render partial="FieldError" section="Main" arguments="{field: 'category'}" />
+			<f:form.hidden property="category" />
+			<div class="treeview"></div>
+		</dd>
+
+		<dt><f:translate key="radius" /></dt>
+		<dd>
+			<f:render partial="FieldError" section="Main" arguments="{field: 'radius'}" />
+			<f:form.select options="{
+				20: 20, 50: 50, 100: 100, 500: 500, 1000: 1000, 50000: 50000
+			}"/>
+		</dd>
+
+		<dt>&nbsp;</dt>
+		<dd>
+			<f:form.submit class="submit" value="{f:translate(key: 'submit_find')}" />
+		</dd>
+	</dl>
+</f:form>
+
+</f:section>
+</body>
+</html>

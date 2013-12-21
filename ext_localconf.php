@@ -1,0 +1,44 @@
+<?php
+
+if (!defined('TYPO3_MODE')) {
+	die('Access denied.');
+}
+
+/**
+ * Default PageTS
+ */
+/** @noinspection PhpUndefinedVariableInspection */
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
+	'<INCLUDE_TYPOSCRIPT: source="FILE:EXT:' . $_EXTKEY . '/Configuration/PageTS/ModWizards.ts">'
+);
+
+/** @noinspection PhpIncludeInspection */
+require_once(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('store_finder') . 'Classes/Utility/ExtensionConfiguration.php');
+$configuration = \Evoweb\StoreFinder\Utility\ExtensionConfiguration::getConfiguration();
+
+
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addUserTSConfig('
+	options.saveDocNew.tx_storefinder_domain_model_location = 1
+	options.saveDocNew.tx_storefinder_domain_model_category = 1
+	options.saveDocNew.tx_storefinder_domain_model_attribute = 1
+	options.saveDocNew.tx_storefinder_domain_model_zipcodearea = 1
+');
+
+
+/** @noinspection PhpUndefinedVariableInspection */
+\TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+	'Evoweb.' . $_EXTKEY,
+	'Map',
+	array(
+		'Map' => 'search, map, searchWithListMap',
+	),
+	array(
+		'Map' => 'search, map, searchWithListMap',
+	)
+);
+
+
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass']['store_finder'] =
+	'EXT:store_finder/Classes/Hook/TceMainHook.php:Evoweb\StoreFinder\Hook\TceMainHook';
+
+?>

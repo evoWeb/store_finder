@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en"
+	  xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers">
+<head>
+	<title>Partial form error template of registration</title>
+</head>
+<body>
+<f:section name="Main">
+
+<f:form.errors for="{for}">
+	<div class="error">
+		{error.message}
+	</div>
+</f:form.errors>
+
+</f:section>
+</body>
+</html>
