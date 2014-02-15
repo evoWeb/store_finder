@@ -1,12 +1,11 @@
 <?php
-namespace Evoweb\StoreFinder\Utility;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Sebastian Fischer <typo3@evoweb.de>
+ *  (c) 2014 Sebastian Fischer <typo3@evoweb.de>
  *  All rights reserved
  *
- *  This script is part of the TYPO3 project. The TYPO3 project is
+ *  This script is part of the Typo3 project. The Typo3 project is
  *  free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -24,29 +23,7 @@ namespace Evoweb\StoreFinder\Utility;
  ***************************************************************/
 
 /**
- * Provide a way to get the configuration just everywhere
- *
- * @package TYPO3
- * @subpackage store_finder
+ * Update Class for DB Updates
  */
-class ExtensionConfiguration implements \TYPO3\CMS\Core\SingletonInterface {
-	/**
-	 * @var array
-	 */
-	protected static $configuration = NULL;
-
-	/**
-	 * Returns all configuration.
-	 *
-	 * @return array
-	 */
-	public static function getConfiguration() {
-		if (self::$configuration === NULL) {
-			self::$configuration = (array) unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['store_finder']);
-		}
-
-		return self::$configuration;
-	}
+class ext_update extends \Evoweb\StoreFinder\Utility\UpdateUtility {
 }
-
-?>

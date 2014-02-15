@@ -23,8 +23,10 @@ namespace Evoweb\StoreFinder\Domain\Model;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+/**
+ * Class Attribute
+ *
+ * @package Evoweb\StoreFinder\Domain\Model
+ */
 class Attribute extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
-
 }
-
-?>

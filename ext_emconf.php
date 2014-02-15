@@ -23,13 +23,13 @@ $EM_CONF[$_EXTKEY] = array(
 	'module' => '',
 	'state' => 'stable',
 	'uploadfolder' => 1,
-	'createDirs' => 'uploads/tx_storefinder/media,uploads/tx_storefinder/icons',
-	'modify_tables' => 'fe_users,tt_news',
+	'createDirs' => '',
+	'modify_tables' => '',
 	'clearcacheonload' => 0,
 	'lockType' => '',
 	'author' => 'Sebastian Fischer',
-	'author_email' => 'typo3@marketing-factory.de',
-	'author_company' => 'Marketing Factory GmbH',
+	'author_email' => 'typo3@evoweb.de',
+	'author_company' => 'Evoweb',
 	'CGLcompliance' => '',
 	'CGLcompliance_note' => '',
 	'constraints' => array(
@@ -44,5 +44,3 @@ $EM_CONF[$_EXTKEY] = array(
 	),
 	'_md5_values_when_last_written' => '',
 );
-
-?>

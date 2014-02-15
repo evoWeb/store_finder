@@ -28,25 +28,28 @@ namespace Evoweb\StoreFinder\ViewHelpers\Form;
  *
  * <code title="Usage">
  * {namespace register=Evoweb\StoreFinder\ViewHelpers}
- * <register:form.SelectStaticCountries name="country" optionLabelField="cnShortDe"/>
+ * <register:form.SelectStaticCountries name="country"
+ * 		optionLabelField="cnShortDe"/>
  * </code>
  *
  * <code title="Optional label field">
  * {namespace register=Evoweb\StoreFinder\ViewHelpers}
- * <register:form.SelectStaticCountries name="country" optionLabelField="cnShortDe"/>
+ * <register:form.SelectStaticCountries name="country"
+ * 		optionLabelField="cnShortDe"/>
  * </code>
  */
-class SelectStaticCountriesViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\SelectViewHelper {
+class SelectCountriesViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\SelectViewHelper {
 	/**
 	 * Repository that provides the country models
 	 *
-	 * @var \Evoweb\StoreFinder\Domain\Repository\StaticCountryRepository
+	 * @var \Evoweb\StoreFinder\Domain\Repository\CountryRepository
 	 * @inject
 	 */
 	protected $countryRepository;
 
 	/**
-	 * Initialize arguments. Cant be moved to parent because of "private $argumentDefinitions = array();"
+	 * Initialize arguments. Cant be moved to parent because of
+	 * "private $argumentDefinitions = array();"
 	 *
 	 * @return void
 	 */
@@ -54,14 +57,15 @@ class SelectStaticCountriesViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\
 		parent::initializeArguments();
 
 		$this->overrideArgument('options', 'object', 'Associative array with internal IDs as key, and the values are displayed in the select box', FALSE);
-		$this->overrideArgument('optionValueField', 'string', 'If specified, will call the appropriate getter on each object to determine the value.', FALSE, 'cnIso2');
-		$this->overrideArgument('optionLabelField', 'string', 'If specified, will call the appropriate getter on each object to determine the label.', FALSE, 'cnOfficialNameEn');
-		$this->overrideArgument('sortByOptionLabel', 'boolean', 'If true, List will be sorted by label.', FALSE, 'cnOfficialNameEn');
+		$this->overrideArgument('optionValueField', 'string', 'If specified, will call the appropriate getter on each object to determine the value.', FALSE, 'isoCodeA2');
+		$this->overrideArgument('optionLabelField', 'string', 'If specified, will call the appropriate getter on each object to determine the label.', FALSE, 'shortNameLocal');
+		$this->overrideArgument('sortByOptionLabel', 'boolean', 'If true, List will be sorted by label.', FALSE, TRUE);
 		$this->registerArgument('allowedCountries', 'array', 'Array with countries allowed to be displayed.', FALSE, array());
 	}
 
 	/**
-	 * Override the initialize method to load all available countries before rendering
+	 * Override the initialize method to load all available
+	 * countries before rendering
 	 *
 	 * @return void
 	 */
@@ -70,12 +74,15 @@ class SelectStaticCountriesViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\
 
 		if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('static_info_tables')) {
 			if ($this->hasArgument('allowedCountries') && count($this->arguments['allowedCountries'])) {
-				$this->arguments['options'] = $this->countryRepository->findByCnIso2($this->arguments['allowedCountries']);
+				$result = $this->countryRepository->findByIsoCodeA2($this->arguments['allowedCountries']);
 			} else {
-				$this->arguments['options'] = $this->countryRepository->findAll();
+				$result = $this->countryRepository->findAll();
+			}
+
+			$this->arguments['options'] = array();
+			foreach ($result as $country) {
+				$this->arguments['options'][] = $country;
 			}
 		}
 	}
 }
-
-?>

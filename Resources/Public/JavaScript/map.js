@@ -10,6 +10,8 @@ var map,
 	infoWindowTemplate;
 
 /**
+ * Initialize information layer on map
+ *
  * @return void
  */
 function initializeLayer() {
@@ -42,6 +44,11 @@ function initializeLayer() {
 	}
 }
 
+/**
+ * Initialize info window template
+ *
+ * @return void
+ */
 function initializeTemplates() {
 	'use strict';
 
@@ -49,18 +56,28 @@ function initializeTemplates() {
 	infoWindowTemplate = Hogan.compile(source);
 }
 
+/**
+ * Initialize instance of map infoWindow
+ *
+ * @return void
+ */
 function initializeInfoWindow() {
 	'use strict';
 
 	infoWindow = new google.maps.InfoWindow();
-	// infoWindow = new InfoBubble();
 }
 
-function showInformations(event) {
-	var marker = this,
-		location = this.sfLocation;
+/**
+ * Close previously open info window, renders new content and opens the window
+ *
+ * @return void
+ */
+function showInformations() {
+	'use strict';
 
-	var html = infoWindowTemplate.render(location.information);
+	var marker = this,
+		location = this.sfLocation,
+		html = infoWindowTemplate.render(location.information);
 
 	infoWindow.close();
 	infoWindow.setContent(html);
@@ -69,6 +86,20 @@ function showInformations(event) {
 }
 
 /**
+ * Trigger click event on marker on click in result list
+ *
+ * @param index
+ * @return void
+ */
+function openInfoWindow(index) {
+	'use strict';
+
+	google.maps.event.trigger(locations[index].marker, 'click');
+}
+
+/**
+ * Initialize location marker on map
+ *
  * @return void
  */
 function initializeLocation() {
@@ -90,6 +121,8 @@ function initializeLocation() {
 }
 
 /**
+ * Initialize map
+ *
  * @return void
  */
 function initializeMap() {
@@ -102,7 +135,7 @@ function initializeMap() {
 		center: new google.maps.LatLng(mapConfiguration.center.lat, mapConfiguration.center.lng),
 		mapTypeId: google.maps.MapTypeId.ROADMAP
 	};
-	map = new google.maps.Map($('#tx_storefinder_pi1_map')[0], mapOptions);
+	map = new google.maps.Map($('#tx_storefinder_map')[0], mapOptions);
 
 	initializeLayer();
 	initializeLocation();
@@ -111,6 +144,8 @@ function initializeMap() {
 }
 
 /**
+ * Load google map script
+ *
  * @return void
  */
 function loadScript() {

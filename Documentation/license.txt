@@ -1,0 +1,6 @@
+Wizard Icon
+Resources/Public/Icons/google-maps-icon.png
+Url: http://www.iconarchive.com/show/google-play-icons-by-marcus-roberto/Google-Maps-icon.html
+Artist: Marcus Roberto
+Artist-Url: http://marcus-roberto.deviantart.com
+License: Free for personal desktop use only.

@@ -286,14 +286,13 @@ InfoBubble.prototype.buildDom_ = function() {
    */
   this.animationName_ = '_ibani_' + Math.round(Math.random() * 10000);
 
-  var css = '.' + this.animationName_ + '{-webkit-animation-name:' +
+  stylesheet.textContent = '.' + this.animationName_ + '{-webkit-animation-name:' +
       this.animationName_ + ';-webkit-animation-duration:0.5s;' +
       '-webkit-animation-iteration-count:1;}' +
       '@-webkit-keyframes ' + this.animationName_ + ' {from {' +
       '-webkit-transform: scale(0)}50% {-webkit-transform: scale(1.2)}90% ' +
       '{-webkit-transform: scale(0.95)}to {-webkit-transform: scale(1)}}';
 
-  stylesheet.textContent = css;
   document.getElementsByTagName('head')[0].appendChild(stylesheet);
 };
 
@@ -334,7 +333,7 @@ InfoBubble.prototype['setTabClassName'] =
 /**
  * Sets the class of the active Tab
  *
- * @param {string} className the class name to set.
+ * @param {string} activeTabClassName the class name to set.
  */
 InfoBubble.prototype.setActiveTabClassName = function(activeTabClassName) {
   this.set('activeTabClassName', activeTabClassName);
@@ -781,7 +780,7 @@ InfoBubble.prototype['setPadding'] = InfoBubble.prototype.setPadding;
 /**
  * set the padding of the Tab's
  *
- * @param {number} padding The padding to apply to the tab
+ * @param {number} tabPadding The padding to apply to the tab
  */
 InfoBubble.prototype.settabPadding = function(tabPadding) {
   this.set('tabPadding', tabPadding);

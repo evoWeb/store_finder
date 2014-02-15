@@ -1,9 +1,9 @@
 <?php
-namespace Evoweb\StoreFinder\Domain\Repository;
+namespace Evoweb\StoreFinder\Domain\Model;
 /***************************************************************
  * Copyright notice
  *
- * (c) 2011-13 Sebastian Fischer <typo3@evoweb.de>
+ * (c) 2013 Sebastian Fischer <typo3@evoweb.de>
  * All rights reserved
  *
  * This script is part of the TYPO3 project. The TYPO3 project is
@@ -23,40 +23,43 @@ namespace Evoweb\StoreFinder\Domain\Repository;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-/**
- * A repository for static info tables country
- */
-class StaticCountryRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
-	/**
-	 * Find all countries despecting the storage page
-	 *
-	 * @return \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult
-	 */
-	public function findAll() {
-		$query = $this->createQuery();
-		$query
-			->getQuerySettings()
-			->setRespectStoragePage(FALSE);
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
-		return $query->execute();
+/**
+ * Class Category
+ *
+ * @package Evoweb\StoreFinder\Domain\Model
+ */
+class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category {
+	/**
+	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Evoweb\StoreFinder\Domain\Model\Category>
+	 * @lazy
+	 */
+	protected $children;
+
+	/**
+	 * Initialize categories, attributed and media relation
+	 */
+	public function __construct() {
+		$this->children = new ObjectStorage();
 	}
 
 	/**
-	 * Find countries by iso2 codes despection the storage page
+	 * Setter
 	 *
-	 * @param array $cnIso2
-	 * @return \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult
+	 * @param ObjectStorage $children
+	 * @return void
 	 */
-	public function findByCnIso2(array $cnIso2) {
-		$query = $this->createQuery();
-		$query
-			->getQuerySettings()
-			->setRespectStoragePage(FALSE);
+	public function setChildren($children) {
+		$this->children = $children;
+	}
 
-		$query->matching($query->in('cn_iso_2', $cnIso2));
-
-		return $query->execute();
+	/**
+	 * Getter
+	 *
+	 * @return ObjectStorage
+	 */
+	public function getChildren() {
+		return $this->children;
 	}
 }
-
-?>

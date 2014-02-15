@@ -14,6 +14,10 @@ CREATE TABLE tx_storefinder_domain_model_location (
 	endtime int(11) DEFAULT '0' NOT NULL,
 	fe_group int(11) DEFAULT '0' NOT NULL,
 
+	sys_language_uid int(11) DEFAULT '0' NOT NULL,
+	l10n_parent int(11) DEFAULT '0' NOT NULL,
+	l10n_diffsource mediumtext,
+
 	name varchar(255) DEFAULT '' NOT NULL,
 	storeid varchar(25) DEFAULT '' NOT NULL,
 	address varchar(255) DEFAULT '' NOT NULL,
@@ -42,7 +46,10 @@ CREATE TABLE tx_storefinder_domain_model_location (
 
 	latitude double(11,7) DEFAULT '0.0000000' NOT NULL,
 	longitude double(11,7) DEFAULT '0.0000000' NOT NULL,
-	use_as_center int(4) DEFAULT '0' NOT NULL,
+	center int(4) DEFAULT '0' NOT NULL,
+	distance double(11,3) DEFAULT '0.000' NOT NULL,
+
+	import_id int(11) DEFAULT '0' NOT NULL,
 
 	PRIMARY KEY (uid),
 	KEY parent (pid)
@@ -68,34 +75,49 @@ CREATE TABLE tx_storefinder_domain_model_attribute (
 	icon varchar(255) DEFAULT '' NOT NULL,
 	name varchar(255) DEFAULT '' NOT NULL,
 
+	import_id int(11) DEFAULT '0' NOT NULL,
+
 	PRIMARY KEY (uid),
 	KEY parent (pid)
 );
 
 
 #
-# Table structure for table 'fe_users'
+# Table structure for table 'tx_storefinder_location_attribute_mm'
 #
-CREATE TABLE fe_users (
-	tx_storefinder_latitude varchar(255) DEFAULT '' NOT NULL,
-	tx_storefinder_longitude varchar(255) DEFAULT '' NOT NULL,
-	tx_storefinder_geocode int(4) DEFAULT '1' NOT NULL
+CREATE TABLE tx_storefinder_location_attribute_mm (
+	uid_local int(11) DEFAULT '0' NOT NULL,
+	uid_foreign int(11) DEFAULT '0' NOT NULL,
+	sorting int(11) unsigned DEFAULT '0' NOT NULL,
+	sorting_foreign int(11) unsigned DEFAULT '0' NOT NULL,
+	tablenames varchar(255) DEFAULT '' NOT NULL,
+	fieldname varchar(255) DEFAULT '' NOT NULL,
+
+	KEY uid_local (uid_local),
+	KEY uid_foreign (uid_foreign)
 );
 
 
 #
-# Table structure for table 'tt_address'
+# Table structure for table 'tx_storefinder_location_location_mm'
 #
-CREATE TABLE tt_address (
-	tx_storefinder_latitude varchar(255) DEFAULT '' NOT NULL,
-	tx_storefinder_longitude varchar(255) DEFAULT '' NOT NULL,
-	tx_storefinder_geocode int(4) DEFAULT '1' NOT NULL
+CREATE TABLE tx_storefinder_location_location_mm (
+	uid_local int(11) DEFAULT '0' NOT NULL,
+	uid_foreign int(11) DEFAULT '0' NOT NULL,
+	sorting int(11) DEFAULT '0' NOT NULL,
+	sorting_foreign int(11) unsigned DEFAULT '0' NOT NULL,
+	tablenames varchar(255) DEFAULT '' NOT NULL,
+	fieldname varchar(255) DEFAULT '' NOT NULL,
+
+	KEY uid_local (uid_local),
+	KEY uid_foreign (uid_foreign)
 );
 
 
 #
-# Table structure for table 'tt_address_group'
+# Table structure for table 'sys_category'
 #
-CREATE TABLE tt_address_group (
-	tx_storefinder_icon varchar(255) DEFAULT '' NOT NULL
+CREATE TABLE sys_category (
+	children int(11) unsigned DEFAULT '0' NOT NULL,
+	import_id int(11) DEFAULT '0' NOT NULL
 );

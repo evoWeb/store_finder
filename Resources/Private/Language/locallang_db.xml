@@ -9,7 +9,7 @@
 			<label index="tx_storefinder_domain_model_location">Store Location</label>
 			<label index="tx_storefinder_domain_model_location.hidden">Location</label>
 			<label index="tx_storefinder_domain_model_location.name">Store Name</label>
-			<label index="tx_storefinder_domain_model_location.related">Related to (Uid)</label>
+			<label index="tx_storefinder_domain_model_location.related">Related to location</label>
 			<label index="tx_storefinder_domain_model_location.storeid">Store Id</label>
 			<label index="tx_storefinder_domain_model_location.attributes">Attributes</label>
 			<label index="tx_storefinder_domain_model_location.address">Address</label>
@@ -28,13 +28,14 @@
 			<label index="tx_storefinder_domain_model_location.url">URL</label>
 			<label index="tx_storefinder_domain_model_location.notes">Notes</label>
 			<label index="tx_storefinder_domain_model_location.media">Media</label>
-			<label index="tx_storefinder_domain_model_location.image">Image</label>
+			<label index="tx_storefinder_domain_model_location.image">Images</label>
 			<label index="tx_storefinder_domain_model_location.icon">Icon</label>
 			<label index="tx_storefinder_domain_model_location.content">Content Elements</label>
 			<label index="tx_storefinder_domain_model_location.categories">Categories</label>
 			<label index="tx_storefinder_domain_model_location.latitude">Latitude</label>
 			<label index="tx_storefinder_domain_model_location.longitude">Longitude</label>
-			<label index="tx_storefinder_domain_model_location.use_as_center">Use as center</label>
+			<label index="tx_storefinder_domain_model_location.center">Use as center</label>
+			<label index="tx_storefinder_domain_model_location.distance">Calculated value by search query</label>
 
 			<label index="sys_category.add">Add category</label>
 
@@ -43,21 +44,11 @@
 			<label index="div-informations">Informations</label>
 			<label index="div-relations">Relations</label>
 
+			<label index="palette-coordinates">Coordinates</label>
+
 			<label index="tx_storefinder_domain_model_attribute">Store Attributes</label>
 			<label index="tx_storefinder_domain_model_attribute.name">Name</label>
 			<label index="tx_storefinder_domain_model_attribute.icon">Icon</label>
-
-			<label index="tx_storefinder_domain_model_zipcodearea">Store Zipcode Areas</label>
-			<label index="tx_storefinder_domain_model_zipcodearea.zipcode">Zipcode</label>
-			<label index="tx_storefinder_domain_model_zipcodearea.area">Area-No.</label>
-			<label index="tx_storefinder_domain_model_zipcodearea.latitude">Latitude</label>
-			<label index="tx_storefinder_domain_model_zipcodearea.longitude">Longitude</label>
-
-			<label index="fe_users.tx_storefinder_latitude">tx_storefinder[latitude]</label>
-			<label index="fe_users.tx_storefinder_longitude">tx_storefinder[longitude]</label>
-
-			<label index="tt_address.tx_storefinder_latitude">tx_storefinder[latitude]</label>
-			<label index="tt_address.tx_storefinder_longitude">tx_storefinder[longitude]</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="tx_storefinder_domain_model_location">Store</label>
@@ -91,18 +82,6 @@
 			<label index="tx_storefinder_domain_model_attribute">Filial Attribute</label>
 			<label index="tx_storefinder_domain_model_attribute.name">Name</label>
 			<label index="tx_storefinder_domain_model_attribute.icon">Icon</label>
-
-			<label index="tx_storefinder_domain_model_zipcodearea">Store Zipcode Areas</label>
-			<label index="tx_storefinder_domain_model_zipcodearea.zipcode">Postleitzahl</label>
-			<label index="tx_storefinder_domain_model_zipcodearea.area">Gebiets-Nr.</label>
-			<label index="tx_storefinder_domain_model_zipcodearea.latitude">Breitengrad</label>
-			<label index="tx_storefinder_domain_model_zipcodearea.longitude">Längengrad</label>
-
-			<label index="fe_users.tx_storefinder_latitude">tx_storefinder[Breitengrad]</label>
-			<label index="fe_users.tx_storefinder_longitude">tx_storefinder[Längengrad]</label>
-
-			<label index="tt_address.tx_storefinder_latitude">tx_storefinder[latitude]</label>
-			<label index="tt_address.tx_storefinder_longitude">tx_storefinder[longitude]</label>
 		</languageKey>
 	</data>
 </T3locallang>

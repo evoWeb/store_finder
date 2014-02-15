@@ -1,9 +1,9 @@
 <?php
-namespace Evoweb\StoreFinder\ViewHelpers;
+namespace Evoweb\StoreFinder\ViewHelpers\Format;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Sebastian Fischer <typo3@evoweb.de>
+ *  (c) 2014 Sebastian Fischer <typo3@evoweb.de>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -24,34 +24,19 @@ namespace Evoweb\StoreFinder\ViewHelpers;
  ***************************************************************/
 
 /**
- * Class MinifyViewHelper
+ * Class BinaryAndViewHelper
  *
- * @package Evoweb\StoreFinder\ViewHelpers
+ * @package Evoweb\StoreFinder\ViewHelpers\Format
  */
-class MinifyViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {
+class BinaryAndViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {
 	/**
-	 * Renders the content minified
+	 * Make an binary additon and return the result
 	 *
-	 * @param string $content
+	 * @param integer $base
+	 * @param integer $content
 	 * @return string
 	 */
-	public function render($content = '') {
-		$content = $content ? $content : $this->renderChildren();
-
-		/* remove comments */
-		$content = str_replace('://', "\xff", $content);
-		$content = preg_replace('@((?:\/\*(?:[^*]|(?:\*+[^*\/]))*\*+\/)|(?:\/\/.*))@', '', $content);
-		$content = str_replace("\xff", '://', $content);
-
-		/* remove tabs, spaces, newlines, etc. */
-		$content = str_replace(
-			array(CRLF, CR, LF, TAB, '     ', '    ', '  ', ': '),
-			array('', '', '', '', '', '', '', ':'),
-			$content
-		);
-		/* remove other spaces before/after ) */
-		$content = preg_replace(array('(( )+\))', '(\)( )+)'), ')', $content);
-
-		return $content;
+	public function render($base, $content = 0) {
+		return ($content ?: $this->renderChildren()) & $base;
 	}
 }

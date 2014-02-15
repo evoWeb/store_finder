@@ -12,7 +12,9 @@
 		<div class="icon">{location.icon}</div>
 		<div class="storename">{location.name}</div>
 		<div class="url">{location.url}</div>
-		<div class="categories">{location.categories}</div>
+		<div class="categories"><f:for each="{location.categories}" as="category">
+			<f:debug>{category}</f:debug>
+		</f:for></div>
 		<div class="contactperson">{location.person}</div>
 		<div class="address">{location.address}</div>
 		<div class="additionaladdress">{location.additionaladdress}</div>
@@ -26,12 +28,13 @@
 		<div class="products">{location.products}</div>
 		<div class="notes">{location.notes}</div>
 		<div class="hours">{location.hours}</div>
-		<div class="attributes">{location.attributes}</div>
+		<div class="attributes">location.attributes</div>
 		<div class="storeId">{location.storeid}</div>
 		<div class="image">{location.image}</div>
 		<div class="media">{location.media}</div>
 		<div class="content">{location.content}</div>
-		<div class="related">{location.related}</div>
+		<div class="related">location.related</div>
+		<div class="distance">{location.distance}</div>
 	</div>
 </f:for>
 </f:section>

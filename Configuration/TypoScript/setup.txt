@@ -1,4 +1,11 @@
 plugin.tx_storefinder.settings {
+	geocodeUrl = http://maps.googleapis.com/maps/api/geocode/json?sensor=false
+
+	limit = 20
+
+	# [miles, kilometer]
+	distanceUnit = miles
+
 	mapConfiguration {
 		# traffic, weather, bicycling,  panoramio, kml
 		apiV3Layers =
@@ -12,11 +19,12 @@ plugin.tx_storefinder.settings {
 	}
 }
 
-plugin.tx_storefinder.persistence {
+config.tx_extbase.persistence {
 	classes {
-		Evoweb\StoreFinder\Domain\Model\StaticCountry.mapping.tableName = static_countries
-		Evoweb\StoreFinder\Domain\Model\StaticCountryZone.mapping.tableName = static_country_zones
-		Evoweb\StoreFinder\Domain\Model\StaticLanguage.mapping.tableName = static_languages
+		Evoweb\StoreFinder\Domain\Model\Country.mapping.tableName = static_countries
+		Evoweb\StoreFinder\Domain\Model\CountryZone.mapping.tableName = static_country_zones
+
+		Evoweb\StoreFinder\Domain\Model\Category.mapping.tableName = sys_category
 	}
 }
 

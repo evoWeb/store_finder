@@ -10,9 +10,9 @@
 	position: relative;
 }
 
-.tx-storefinder #tx_storefinder_pi1_map {
+.tx-storefinder #tx_storefinder_map {
 	height: 400px;
-	width: 600px;
+	width: 100% !important;
 }
 
 .tx-storefinder .infoWindow {

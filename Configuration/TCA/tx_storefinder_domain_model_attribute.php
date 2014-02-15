@@ -1,15 +1,34 @@
 <?php
+return array(
+	'ctrl' => array(
+		'title' => 'LLL:EXT:store_finder/Resources/Private/Language/locallang_db.xml:tx_storefinder_domain_model_attribute',
+		'label' => 'name',
+		'label_alt' => 'icon',
+		'label_alt_force' => '1',
+		'tstamp' => 'tstamp',
+		'crdate' => 'crdate',
+		'cruser_id' => 'cruser_id',
+		'sortby' => 'sorting',
+		'delete' => 'deleted',
 
-if (!defined('TYPO3_MODE')) {
-	die('Access denied.');
-}
+		'type' => 'type',
+		'languageField' => 'sys_language_uid',
+		'transOrigPointerField' => 'l10n_parent',
+		'transOrigDiffSourceField' => 'l10n_diffsource',
 
-$GLOBALS['TCA']['tx_storefinder_domain_model_attribute'] = array(
-	'ctrl' => $GLOBALS['TCA']['tx_storefinder_domain_model_attribute']['ctrl'],
+		'selicon_field' => 'icon',
+		'selicon_field_path' => 'uploads/tx_storefinder',
+
+		'enablecolumns' => array(
+			'disabled' => 'hidden',
+		),
+		'iconfile' => '../typo3conf/ext/store_finder/Resources/Public/Icons/tx_storefinder_domain_model_attribute.gif',
+	),
+
 	'interface' => array(
 		'showRecordFieldList' => 'sys_language_uid,l10n_parent,l10n_diffsource,name,icon'
 	),
-	'feInterface' => $GLOBALS['TCA']['tx_storefinder_domain_model_attribute']['feInterface'],
+
 	'columns' => array(
 		'sys_language_uid' => array(
 			'exclude' => 1,
@@ -44,7 +63,7 @@ $GLOBALS['TCA']['tx_storefinder_domain_model_attribute'] = array(
 		),
 		'name' => array(
 			'exclude' => 0,
-			'label' => STOREFINDERLLFILE . 'tx_storefinder_domain_model_attribute.name',
+			'label' => 'LLL:EXT:store_finder/Resources/Private/Language/locallang_db.xml:tx_storefinder_domain_model_attribute.name',
 			'config' => array(
 				'type' => 'input',
 				'size' => '30',
@@ -54,7 +73,7 @@ $GLOBALS['TCA']['tx_storefinder_domain_model_attribute'] = array(
 
 		'icon' => array(
 			'exclude' => 0,
-			'label' => STOREFINDERLLFILE . 'tx_storefinder_domain_model_attribute.icon',
+			'label' => 'LLL:EXT:store_finder/Resources/Private/Language/locallang_db.xml:tx_storefinder_domain_model_attribute.icon',
 			'config' => array(
 				'type' => 'group',
 				'internal_type' => 'file',
@@ -68,12 +87,12 @@ $GLOBALS['TCA']['tx_storefinder_domain_model_attribute'] = array(
 			)
 		),
 	),
+
 	'types' => array(
 		'0' => array('showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, name, icon')
 	),
+
 	'palettes' => array(
 		'1' => array('showitem' => '')
 	)
 );
-
-?>

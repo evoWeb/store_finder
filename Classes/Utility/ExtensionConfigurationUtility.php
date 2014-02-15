@@ -1,5 +1,5 @@
 <?php
-namespace Evoweb\StoreFinder\ViewHelpers;
+namespace Evoweb\StoreFinder\Utility;
 /***************************************************************
  *  Copyright notice
  *
@@ -23,14 +23,28 @@ namespace Evoweb\StoreFinder\ViewHelpers;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class NoopViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {
+/**
+ * Provide a way to get the configuration just everywhere
+ *
+ * @package TYPO3
+ * @subpackage store_finder
+ */
+class ExtensionConfigurationUtility implements \TYPO3\CMS\Core\SingletonInterface {
 	/**
-	 * @param string $content
-	 * @return string
+	 * @var array
 	 */
-	public function render($content = '') {
-		return $content ? $content : $this->renderChildren();
+	protected static $configuration = NULL;
+
+	/**
+	 * Returns all configuration.
+	 *
+	 * @return array
+	 */
+	public static function getConfiguration() {
+		if (self::$configuration === NULL) {
+			self::$configuration = (array) unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['store_finder']);
+		}
+
+		return self::$configuration;
 	}
 }
-
-?>

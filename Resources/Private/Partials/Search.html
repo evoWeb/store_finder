@@ -6,9 +6,11 @@
 	<title>Search</title>
 </head>
 <body>
+
 <f:section name="content">
 <h3 class="formHeader"><f:translate key="formHeader"/></h3>
-<f:form action="{action}" name="search" object="{search}" enctype="multipart/form-data">
+
+<f:form object="{search}" action="map" name="search">
 	<f:render partial="FormErrors" section="Main" arguments="{for: 'search'}" />
 	<f:render partial="FieldError" section="Main" arguments="{field: 'uid'}" />
 
@@ -37,12 +39,13 @@
 			<f:form.textfield property="city" />
 		</dd>
 
-		<dt><f:translate key="country" /></dt>
-		<dd>
-			<f:render partial="FieldError" section="Main" arguments="{field: 'country'}" />
-			<sf:form.SelectStaticCountries property="country" id="sfrCountry"
-				allowedCountries="{0: 'DE', 1: 'AT'}" />
-		</dd>
+		<f:if condition="{static_info_tables}">
+			<dt><f:translate key="country" /></dt>
+			<dd>
+				<f:render partial="FieldError" section="Main" arguments="{field: 'country'}" />
+				<sf:form.selectCountries property="country" id="sfrCountry" optionValueField="isoCodeA3" allowedCountries="{0: 'DE', 1: 'AT'}" />
+			</dd>
+		</f:if>
 
 		<dt><f:translate key="latitude" /></dt>
 		<dd>
@@ -62,17 +65,21 @@
 			<f:form.textfield property="products" />
 		</dd>
 
+		<f:if condition="{0:settings.categoryPriority}=={0:'limitResultsToCategories'}">
+		<f:then/>
+		<f:else>
 		<dt><f:translate key="category" /></dt>
-		<dd>
+		<dd class="category-tree">
 			<f:render partial="FieldError" section="Main" arguments="{field: 'category'}" />
-			<f:form.hidden property="category" />
-			<div class="treeview"></div>
+			<f:render section="categoryTree" arguments="{categories: categories}" />
 		</dd>
+		</f:else>
+		</f:if>
 
 		<dt><f:translate key="radius" /></dt>
 		<dd>
 			<f:render partial="FieldError" section="Main" arguments="{field: 'radius'}" />
-			<f:form.select options="{
+			<f:form.select property="radius" options="{
 				20: 20, 50: 50, 100: 100, 500: 500, 1000: 1000, 50000: 50000
 			}"/>
 		</dd>
@@ -83,7 +90,21 @@
 		</dd>
 	</dl>
 </f:form>
-
 </f:section>
+
+<f:section name="categoryTree">
+	<ul>
+		<f:for each="{categories}" as="category">
+			<li>
+				<f:form.checkbox id="category-{category.uid}" property="category" value="{category.uid}" />
+				<label for="category-{category.uid}" title="{category.uid}">{category.title}</label>
+				<f:if condition="{category.children}">
+					<f:render section="categoryTree" arguments="{categories: category.children}" />
+				</f:if>
+			</li>
+		</f:for>
+	</ul>
+</f:section>
+
 </body>
 </html>

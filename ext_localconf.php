@@ -13,15 +13,14 @@ if (!defined('TYPO3_MODE')) {
 );
 
 /** @noinspection PhpIncludeInspection */
-require_once(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('store_finder') . 'Classes/Utility/ExtensionConfiguration.php');
-$configuration = \Evoweb\StoreFinder\Utility\ExtensionConfiguration::getConfiguration();
+require_once(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('store_finder') . 'Classes/Utility/ExtensionConfigurationUtility.php');
+$configuration = \Evoweb\StoreFinder\Utility\ExtensionConfigurationUtility::getConfiguration();
 
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addUserTSConfig('
 	options.saveDocNew.tx_storefinder_domain_model_location = 1
 	options.saveDocNew.tx_storefinder_domain_model_category = 1
 	options.saveDocNew.tx_storefinder_domain_model_attribute = 1
-	options.saveDocNew.tx_storefinder_domain_model_zipcodearea = 1
 ');
 
 
@@ -30,15 +29,13 @@ $configuration = \Evoweb\StoreFinder\Utility\ExtensionConfiguration::getConfigur
 	'Evoweb.' . $_EXTKEY,
 	'Map',
 	array(
-		'Map' => 'search, map, searchWithListMap',
+		'Map' => 'map',
 	),
 	array(
-		'Map' => 'search, map, searchWithListMap',
+		'Map' => 'map',
 	)
 );
 
 
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass']['store_finder'] =
 	'EXT:store_finder/Classes/Hook/TceMainHook.php:Evoweb\StoreFinder\Hook\TceMainHook';
-
-?>

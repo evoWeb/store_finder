@@ -3,13 +3,37 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en"
 	  xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers">
 <head>
-	<title>Map</title>
+	<title>Search with List and Map</title>
 </head>
 <body>
 <f:layout name="General" />
 
 <f:section name="content">
-	<f:render partial="Map" section="content" arguments="{settings: settings, locations: locations, center: center}"/>
+	<f:if condition="{afterSearch} == 0">
+		<f:then>
+			<f:if condition="{sf:format.binaryAnd(base: 1, content: settings.showBeforeSearch)} == 1">
+				<f:render partial="Search" section="content" arguments="{_all}"/>
+			</f:if>
+			<f:if condition="{sf:format.binaryAnd(base: 2, content: settings.showBeforeSearch)} == 2">
+				<f:render partial="Map" section="content" arguments="{_all}"/>
+			</f:if>
+			<f:if condition="{sf:format.binaryAnd(base: 4, content: settings.showBeforeSearch)} == 4">
+				<f:render partial="List" section="content" arguments="{_all}"/>
+			</f:if>
+		</f:then>
+
+		<f:else>
+			<f:if condition="{sf:format.binaryAnd(base: 1, content: settings.showAfterSearch)} == 1">
+				<f:render partial="Search" section="content" arguments="{_all}"/>
+			</f:if>
+			<f:if condition="{sf:format.binaryAnd(base: 2, content: settings.showAfterSearch)} == 2">
+				<f:render partial="Map" section="content" arguments="{_all}"/>
+			</f:if>
+			<f:if condition="{sf:format.binaryAnd(base: 4, content: settings.showAfterSearch)} == 4">
+				<f:render partial="List" section="content" arguments="{_all}"/>
+			</f:if>
+		</f:else>
+	</f:if>
 </f:section>
 </body>
 </html>
