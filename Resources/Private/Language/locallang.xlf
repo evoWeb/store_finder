@@ -36,6 +36,18 @@
 			<trans-unit id="submit_find">
 				<source>Find Store</source>
 			</trans-unit>
+			<trans-unit id="route">
+				<source>Route</source>
+			</trans-unit>
+			<trans-unit id="error_notvalidatable">
+				<source>Model is not validatable</source>
+			</trans-unit>
+			<trans-unit id="error_required">
+				<source>Required field may not be empty</source>
+			</trans-unit>
+			<trans-unit id="error_notexists">
+				<source>Field does not exists</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

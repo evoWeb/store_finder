@@ -28,7 +28,8 @@ class UpdateUtility {
 			'sys_language_uid' => 'sys_language_uid',
 			'l10n_parent' => 'value:attributes:l10n_parent',
 			'l10n_diffsource' => 'l10n_diffsource',
-			'icon' => 'icon',
+			// icon get migrated at an extra step
+			// 'icon' => 'icon',
 			'name' => 'name',
 		),
 		'categories' => array(
@@ -68,7 +69,7 @@ class UpdateUtility {
 			'contactperson' => 'person',
 			'state' => 'state',
 			'zipcode' => 'zipcode',
-				// @todo implement 1:1 references for country
+			// @todo implement 1:1 references for country
 			'country' => 'ref:country',
 			'products' => 'products',
 			'email' => 'email',
@@ -78,10 +79,12 @@ class UpdateUtility {
 			'hours' => 'hours',
 			'url' => 'url',
 			'notes' => 'notes',
-			'media' => 'media',
-				// @todo implement fal references for images
-			'imageurl' => 'ref:image',
-			'icon' => 'icon',
+			// media get migrated at an extra step
+			// 'media' => 'media',
+			// imageurl get migrated at an extra step
+			// 'imageurl' => 'image',
+			// icon get migrated at an extra step
+			// 'icon' => 'icon',
 			'content' => 'content',
 			'use_coordinate' => '',
 			'categoryuid' => 'comma:mm:categories:sys_category_record_mm:uid_foreign:tx_storefinder_domain_model_location:categories',
@@ -89,6 +92,40 @@ class UpdateUtility {
 			'lon' => 'longitude',
 			'geocode' => '',
 			'relatedto' => 'finish_comma:mm:locations:tx_storefinder_location_location_mm:uid_local:tx_storefinder_domain_model_location:related',
+		),
+	);
+
+	/**
+	 * @var array
+	 */
+	protected $fileMapping = array(
+		'attributes' => array(
+			'icon' => array(
+				'sourceField' => 'icon',
+				'sourcePath' => 'uploads/tx_locator/icons/',
+				'destinationField' => 'icon',
+				'destinationTable' => 'tx_storefinder_domain_model_attribute',
+			),
+		),
+		'locations' => array(
+			'media' => array(
+				'sourceField' => 'media',
+				'sourcePath' => 'uploads/tx_locator/media/',
+				'destinationField' => 'media',
+				'destinationTable' => 'tx_storefinder_domain_model_location',
+			),
+			'imageurl' => array(
+				'sourceField' => 'imageurl',
+				'sourcePath' => 'uploads/tx_locator/',
+				'destinationField' => 'image',
+				'destinationTable' => 'tx_storefinder_domain_model_location',
+			),
+			'icon' => array(
+				'sourceField' => 'icon',
+				'sourcePath' => 'uploads/tx_locator/icons/',
+				'destinationField' => 'icon',
+				'destinationTable' => 'tx_storefinder_domain_model_location',
+			),
 		),
 	);
 
@@ -108,6 +145,27 @@ class UpdateUtility {
 
 
 	/**
+	 * @var string
+	 */
+	protected $targetDirectory;
+
+	/**
+	 * @var \TYPO3\CMS\Core\Resource\ResourceFactory
+	 */
+	protected $fileFactory;
+
+	/**
+	 * @var \TYPO3\CMS\Core\Resource\Index\FileIndexRepository
+	 */
+	protected $fileIndexRepository;
+
+	/**
+	 * @var \TYPO3\CMS\Core\Resource\ResourceStorage
+	 */
+	protected $storage;
+
+
+	/**
 	 * Performes the Updates
 	 * Outputs HTML Content
 	 *
@@ -120,6 +178,9 @@ class UpdateUtility {
 
 		if ($this->access()) {
 			if ($this->warningAccepted()) {
+				$this->initializeFalStorage();
+				$this->checkPrerequisites();
+
 				$this->migrateAttributes();
 				$this->migrateCategories();
 				$this->migrateLocations();
@@ -207,6 +268,8 @@ class UpdateUtility {
 				$this->database->exec_INSERTquery($table, $attribute);
 				$this->records['attributes'][$row['uid']] = $attribute['uid'] = $this->database->sql_insert_id();
 			}
+
+			$this->migrateFilesToFal($row, $attribute, $this->fileMapping['attributes']['icon']);
 		}
 
 		$this->messageArray[] = array('message' => count($this->records['attributes']) . ' attributes migrated');
@@ -259,6 +322,10 @@ class UpdateUtility {
 			}
 
 			$this->mapFieldsPostImport($row, $location, 'locations');
+
+			$this->migrateFilesToFal($row, $location, $this->fileMapping['locations']['media']);
+			$this->migrateFilesToFal($row, $location, $this->fileMapping['locations']['imageurl']);
+			$this->migrateFilesToFal($row, $location, $this->fileMapping['locations']['icon']);
 		}
 
 		$this->database->sql_query('
@@ -522,6 +589,102 @@ class UpdateUtility {
 			'1' . \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields('tx_storefinder_domain_model_location')
 		);
 	}
+
+
+	/**
+	 * Prepare FAL storage for migration
+	 *
+	 * @throws \RuntimeException
+	 * @return void
+	 */
+	protected function initializeFalStorage() {
+		if (!$this->storage) {
+			$fileadminDirectory = rtrim($GLOBALS['TYPO3_CONF_VARS']['BE']['fileadminDir'], '/') . '/';
+
+			/** @var $storageRepository \TYPO3\CMS\Core\Resource\StorageRepository */
+			$storageRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\StorageRepository');
+			$storages = $storageRepository->findAll();
+
+			foreach ($storages as $storage) {
+				$storageRecord = $storage->getStorageRecord();
+				$configuration = $storage->getConfiguration();
+				$isLocalDriver = $storageRecord['driver'] === 'Local';
+				$isOnFileadmin = !empty($configuration['basePath']) && \TYPO3\CMS\Core\Utility\GeneralUtility::isFirstPartOfStr($configuration['basePath'], $fileadminDirectory);
+				if ($isLocalDriver && $isOnFileadmin) {
+					$this->storage = $storage;
+					break;
+				}
+			}
+
+			if (!isset($this->storage)) {
+				throw new \RuntimeException('Local default storage could not be initialized - might be due to missing sys_file* tables.');
+			}
+
+			$this->fileFactory = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\ResourceFactory');
+			$this->fileIndexRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\Index\\FileIndexRepository');
+			$this->targetDirectory = PATH_site . $fileadminDirectory . \TYPO3\CMS\Install\Updates\TtContentUploadsUpdateWizard::FOLDER_ContentUploads . '/';
+		}
+	}
+
+	/**
+	 * Ensures a new folder "fileadmin/content_upload/" is available.
+	 *
+	 * @return void
+	 */
+	protected function checkPrerequisites() {
+		if (!$this->storage->hasFolder(\TYPO3\CMS\Install\Updates\TtContentUploadsUpdateWizard::FOLDER_ContentUploads)) {
+			$this->storage->createFolder(\TYPO3\CMS\Install\Updates\TtContentUploadsUpdateWizard::FOLDER_ContentUploads, $this->storage->getRootLevelFolder());
+		}
+	}
+
+	/**
+	 * Processes the actual transformation from CSV to sys_file_references
+	 *
+	 * @param array $source
+	 * @param array $destination
+	 * @param array $configuration
+	 * @return void
+	 */
+	protected function migrateFilesToFal(array $source, array $destination, array $configuration) {
+		$path = PATH_site . $configuration['sourcePath'];
+		$files = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $source[$configuration['sourceField']], TRUE);
+
+		$i = 1;
+		foreach ($files as $file) {
+			if (file_exists($path . $file)) {
+				\TYPO3\CMS\Core\Utility\GeneralUtility::upload_copy_move($path . $file, $this->targetDirectory . $file);
+				/** @var \TYPO3\CMS\Core\Resource\File $fileObject */
+				$fileObject = $this->storage->getFile(\TYPO3\CMS\Install\Updates\TtContentUploadsUpdateWizard::FOLDER_ContentUploads . '/' . $file);
+				$this->fileIndexRepository->add($fileObject);
+
+				$count = $this->database->exec_SELECTcountRows(
+					'*',
+					'sys_file_reference',
+					'tablenames = ' . $this->database->fullQuoteStr($configuration['destinationTable'], 'sys_file_reference') .
+					' AND fieldname = ' . $this->database->fullQuoteStr($configuration['destinationField'], 'sys_file_reference') .
+					' AND uid_local = ' . $fileObject->getUid() .
+					' AND uid_foreign = ' . $destination['uid']
+				);
+
+				if (!$count) {
+					$dataArray = array(
+						'uid_local' => $fileObject->getUid(),
+						'tablenames' => $configuration['destinationTable'],
+						'uid_foreign' => $destination['uid'],
+						// the sys_file_reference record should always placed on the same page
+						// as the record to link to, see issue #46497
+						'pid' => $source['pid'],
+						'fieldname' => $configuration['destinationField'],
+						'sorting_foreign' => $i,
+						'table_local' => 'sys_file'
+					);
+					$this->database->exec_INSERTquery('sys_file_reference', $dataArray);
+				}
+			}
+			$i++;
+		}
+	}
+
 
 	/**
 	 * echeck if the Ipdate is neassessary

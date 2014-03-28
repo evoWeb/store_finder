@@ -38,6 +38,12 @@ class GeocodeService {
 	protected $settings = array();
 
 	/**
+	 * @var \Evoweb\StoreFinder\Cache\CoordinatesCache
+	 * @inject
+	 */
+	protected $coordinatesCache;
+
+	/**
 	 * Constructor
 	 *
 	 * @param array $settings
@@ -65,23 +71,54 @@ class GeocodeService {
 	}
 
 	/**
+	 * Geocode address and retries if first attempt or value in session
+	 * is not geocoded
+	 *
+	 * @param Model\Constraint $address
+	 * @param bool $forceGeocoding
+	 * @return Model\Constraint
+	 */
+	public function geocodeAddress($address, $forceGeocoding = FALSE) {
+		$geocodedAddress = $this->coordinatesCache->getCoordinateByAddress($address);
+		if ($forceGeocoding || !$geocodedAddress->isGeocoded()) {
+			$fieldsHit = array();
+			$geocodedAddress = $this->processAddress($address, $fieldsHit);
+			$this->coordinatesCache->addCoordinateForAddress($geocodedAddress, $fieldsHit);
+		}
+
+		// In case the address without geocoded location was stored in
+		// session or the geocoding did not work a second try is done
+		if (!$forceGeocoding && !$geocodedAddress->isGeocoded()) {
+			$geocodedAddress = $this->geocodeAddress($geocodedAddress, TRUE);
+		}
+
+		return $geocodedAddress;
+	}
+
+	/**
 	 * Geocode address
 	 *
 	 * @param Model\Location|Model\Constraint $location
+	 * @param array &$fields
+	 * @throws \RuntimeException
+	 * @throws \UnexpectedValueException
 	 * @return mixed
 	 */
-	public function geocodeAddress($location) {
+	protected function processAddress($location, &$fields) {
 		// Main Geocoder
-		$query = $this->prepareQuery($location, array('address', 'zipcode', 'city', 'state', 'country'));
-		$coordinate = $this->getCoordinateByQuery($query);
+		$fields = array('address', 'zipcode', 'city', 'state', 'country');
+		$queryValues = $this->prepareValuesForQuery($location, $fields);
+		$coordinate = $this->getCoordinateByApiCall($queryValues);
 
 		// If there is no coordinat yet, we assume it's international and attempt
 		// to find it based on just the city and country.
 		if (!$coordinate->lat && !$coordinate->lng) {
-			$query = $this->prepareQuery($location, array('city', 'country'));
-			$coordinate = $this->getCoordinateByQuery($query);
+			$fields = array('city', 'country');
+			$queryValues = $this->prepareValuesForQuery($location, $fields);
+			$coordinate = $this->getCoordinateByApiCall($queryValues);
 		}
 
+		// We should have coordinates by now and add them to location
 		if ($coordinate->lat && $coordinate->lng) {
 			$location->setLatitude($coordinate->lat);
 			$location->setLongitude($coordinate->lng);
@@ -95,11 +132,13 @@ class GeocodeService {
 	 *
 	 * @param Model\Location|Model\Constraint $location
 	 * @param array $fields
+	 * @throws \RuntimeException
+	 * @throws \UnexpectedValueException
 	 * @return array
 	 */
-	protected function prepareQuery($location, $fields) {
+	protected function prepareValuesForQuery($location, $fields) {
 			// for urlencoding
-		$query = array();
+		$queryValues = array();
 		foreach ($fields as $field) {
 			$methodName = 'get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $field)));
 			$value = $location->{$methodName}();
@@ -124,12 +163,13 @@ class GeocodeService {
 
 				default:
 			}
+
 			if (!empty($value) && !is_object($value) && !is_array($value)) {
-				$query[$field] = urlencode($value);
+				$queryValues[$field] = urlencode($value);
 			}
 		}
 
-		return $query;
+		return $queryValues;
 	}
 
 	/**
@@ -138,7 +178,7 @@ class GeocodeService {
 	 * @param array $parameter
 	 * @return \stdClass
 	 */
-	protected function getCoordinateByQuery($parameter) {
+	protected function getCoordinateByApiCall($parameter) {
 		$apiUrl = $this->settings['geocodeUrl'] . '&address=' . implode(',+', $parameter);
 		$addressData = json_decode(utf8_encode(GeneralUtility::getURL($apiUrl)));
 

@@ -2,7 +2,7 @@ var map,
 	mapConfiguration = mapConfiguration || {
 		active: false,
 		apiV3Layers: '',
-		language: '',
+		language: 'en',
 		allowSensore: false
 	},
 	locations = locations || [],

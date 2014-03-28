@@ -4,3 +4,15 @@ Url: http://www.iconarchive.com/show/google-play-icons-by-marcus-roberto/Google-
 Artist: Marcus Roberto
 Artist-Url: http://marcus-roberto.deviantart.com
 License: Free for personal desktop use only.
+
+InfoBubble
+https://github.com/RelativeMedia/InfoBubble
+
+Hogan.js
+http://twitter.github.io/hogan.js/
+
+jQuery
+http://jquery.com/
+
+Google map stubs
+https://code.google.com/p/closure-compiler/source/browse/#git%2Fcontrib%2Fexterns%2Fmaps

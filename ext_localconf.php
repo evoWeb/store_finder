@@ -4,6 +4,12 @@ if (!defined('TYPO3_MODE')) {
 	die('Access denied.');
 }
 
+if (!is_array($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['store_finder_coordinate'])) {
+	$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['store_finder_coordinate'] = array(
+		'groups' => array('system')
+	);
+}
+
 /**
  * Default PageTS
  */

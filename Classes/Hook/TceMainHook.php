@@ -56,6 +56,8 @@ class TceMainHook {
 	 * @param string $id
 	 * @param array $fieldArray
 	 * @param \TYPO3\CMS\Core\DataHandling\DataHandler $parentObject
+	 * @throws \InvalidArgumentException
+	 * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
 	 * @return void
 	 */
 	public function processDatamap_afterDatabaseOperations($status, $table, $id, $fieldArray, $parentObject) {
@@ -102,6 +104,7 @@ class TceMainHook {
 	 * Fetch location for uid
 	 *
 	 * @param integer $uid
+	 * @throws \InvalidArgumentException
 	 * @return Location
 	 */
 	protected function fetchLocation($uid) {
@@ -111,6 +114,9 @@ class TceMainHook {
 	/**
 	 * Getter for repository
 	 *
+	 * @throws \InvalidArgumentException
+	 * @throws \TYPO3\CMS\Extbase\Object\Exception
+	 * @throws \TYPO3\CMS\Extbase\Object\Exception\CannotBuildObjectException
 	 * @return \Evoweb\StoreFinder\Domain\Repository\LocationRepository
 	 */
 	protected function getRepository() {
@@ -124,6 +130,7 @@ class TceMainHook {
 	/**
 	 * Getter for object manager
 	 *
+	 * @throws \InvalidArgumentException
 	 * @return \TYPO3\CMS\Extbase\Object\ObjectManager
 	 */
 	protected function getObjectManager() {
@@ -139,6 +146,9 @@ class TceMainHook {
 	 * Sets coordinates by using geocoding service
 	 *
 	 * @param Location $location
+	 * @throws \InvalidArgumentException
+	 * @throws \TYPO3\CMS\Extbase\Object\Exception
+	 * @throws \TYPO3\CMS\Extbase\Object\Exception\CannotBuildObjectException
 	 * @return Location
 	 */
 	protected function setCoordinates(Location $location) {
@@ -151,6 +161,10 @@ class TceMainHook {
 	 * Stores location
 	 *
 	 * @param Location $location
+	 * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
+	 * @throws \InvalidArgumentException
+	 * @throws \TYPO3\CMS\Extbase\Object\Exception
+	 * @throws \TYPO3\CMS\Extbase\Object\Exception\CannotBuildObjectException
 	 * @return void
 	 */
 	protected function storeLocation(Location $location) {

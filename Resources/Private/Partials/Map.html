@@ -8,8 +8,7 @@
 <body>
 <f:section name="content">
 <script type="text/javascript">
-	var mapConfiguration = {
-		<sf:minify>active: true,
+	var mapConfiguration = {<sf:minify>active: true,
 		<f:for each="{settings.mapConfiguration}" as="configuration" key="name" iteration="loop">{name}: '{configuration}',</f:for>
 		center: {
 			lat: <f:format.number decimals="7">{center.latitude}</f:format.number>,
@@ -43,24 +42,20 @@
 				icon: '{location.icon}',
 				state: '{location.state}',
 				country: '{location.country}',
-				image: '{location.image}',
+				image: '<f:for each="{location.image}" as="image">{f:uri.image(src: image.uid, width: 70, treatIdAsReference: 1)}</f:for>',
 				media: '{location.media}'
 			}
-		}</sf:minify><f:if condition="{loop.isLast}"><f:then></f:then><f:else>,</f:else></f:if></f:for>
+		}</sf:minify><f:if condition="{loop.isLast}"><f:then/><f:else>,</f:else></f:if></f:for>
 	];
 </script>
 
 <script id="templateInfoWindow" type="text/html">
 	<div class="infoWindow group" style="width: 320px; height: 180px;" data-uid="{{uid}}">
-		<div class="storename">
-			<span id="infoWindowMark{{uid}}" class="marker show"><img src="/typo3conf/ext/store_finder/Resources/Public/Images/addToNotepad.gif" title="Add to notepad" alt="Add to notepad"/></span>
-			<span id="infoWindowUnMark{{uid}}" class="marker hide"><img src="/typo3conf/ext/store_finder/Resources/Public/Images/removeFromNotepad.gif" title="Remove from notepad" alt="Remove from notepad" /></span>
-			<strong>{{title}}</strong>
-		</div>
+		<div class="storename"><strong>{{title}}</strong></div>
 		<div class="right">
-			<div class="image">{{image}}</div>
+			<div class="image">{{#image}}<img src="{{image}}"/>{{/image}}</div>
 			<div class="displayRoute">
-				<a href="/index.php?id=5&tx_locator_pi1%5Bdummy%5D=showMap&tx_locator_pi1%5Bmode%5D=showRoute&tx_locator_pi1%5BstoreUid%5D=1&tx_locator_pi1%5BstartZipcode%5D=&tx_locator_pi1%5BstartCity%5D=&tx_locator_pi1%5BstartAddress%5D=&tx_locator_pi1%5BstartCountry%5D=&tx_locator_pi1%5BstartLat%5D=51.5084358&tx_locator_pi1%5BstartLon%5D=7.097707&tx_locator_pi1%5Blat%5D=51.5084358&tx_locator_pi1%5Blon%5D=7.097707&tx_locator_pi1%5Bdistance%5D=0%2C00" target="_top">Route</a>
+				<a href="https://maps.google.com/?daddr={{lat}},{{lng}}" target="_top"><f:translate key="route"/></a>
 			</div>
 		</div>
 		<div class="left">

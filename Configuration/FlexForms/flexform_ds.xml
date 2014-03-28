@@ -61,16 +61,6 @@
 						</TCEforms>
 					</settings.showAfterSearch>
 
-					<settings.showStoreImage>
-						<TCEforms>
-							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xml:pi_flexform.showStoreImage</label>
-							<config>
-								<type>check</type>
-								<default>1</default>
-							</config>
-						</TCEforms>
-					</settings.showStoreImage>
-
 					<settings.mapConfiguration.apiV3Layers>
 						<TCEforms>
 							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xml:pi_flexform.apiV3Layers</label>
@@ -145,6 +135,16 @@
 							</config>
 						</TCEforms>
 					</view.partialRootPath>
+
+					<settings.showStoreImage>
+						<TCEforms>
+							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xml:pi_flexform.showStoreImage</label>
+							<config>
+								<type>check</type>
+								<default>1</default>
+							</config>
+						</TCEforms>
+					</settings.showStoreImage>
 				</el>
 			</ROOT>
 		</sheetDisplayOptions>
@@ -202,6 +202,21 @@
 						</TCEforms>
 					</settings.categoryPriority>
 
+					<settings.singleLocationId>
+						<TCEforms>
+							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xml:pi_flexform.singleLocationId</label>
+							<config>
+								<type>group</type>
+								<internal_type>db</internal_type>
+								<allowed>tx_storefinder_domain_model_location</allowed>
+								<size>1</size>
+								<maxitems>1</maxitems>
+								<minitems>0</minitems>
+								<show_thumbs>0</show_thumbs>
+							</config>
+						</TCEforms>
+					</settings.singleLocationId>
+
 					<settings.resultPageId>
 						<TCEforms>
 							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xml:pi_flexform.resultPageId</label>
@@ -231,21 +246,6 @@
 							</config>
 						</TCEforms>
 					</settings.routePageId>
-
-					<settings.singleLocationId>
-						<TCEforms>
-							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xml:pi_flexform.singleLocationId</label>
-							<config>
-								<type>group</type>
-								<internal_type>db</internal_type>
-								<allowed>tx_storefinder_domain_model_location</allowed>
-								<size>1</size>
-								<maxitems>1</maxitems>
-								<minitems>0</minitems>
-								<show_thumbs>0</show_thumbs>
-							</config>
-						</TCEforms>
-					</settings.singleLocationId>
 				</el>
 			</ROOT>
 		</sheetReferenceOptions>

@@ -45,10 +45,11 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
 	protected $categoryRepository;
 
 	/**
-	 * @var \Evoweb\StoreFinder\Domain\Repository\SessionRepository
+	 * @var \Evoweb\StoreFinder\Service\GeocodeService
 	 * @inject
 	 */
-	protected $sessionRepository;
+	protected $geocodeService;
+
 
 	/**
 	 * Initializes the controller before invoking an action method.
@@ -59,6 +60,13 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
 	 * @return void
 	 */
 	protected function initializeAction() {
+		if (isset($this->settings['override']) && is_array($this->settings['override'])) {
+			$override = $this->settings['override'];
+			unset($this->settings['override']);
+
+			$this->settings = array_merge($this->settings, $override);
+		}
+
 		$this->settings['allowedCountries'] = explode(',', $this->settings['allowedCountries']);
 		$this->locationRepository->setSettings($this->settings);
 	}
@@ -67,12 +75,16 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
 	 * Action responsible for rendering search, map and list partial
 	 *
 	 * @param Model\Constraint $search
+	 * @throws \BadFunctionCallException
+	 * @throws \TYPO3\CMS\Extbase\Persistence\Generic\Exception
 	 * @return void
+	 * @validate $search Evoweb.StoreFinder:Constraint
 	 */
 	public function mapAction(Model\Constraint $search = NULL) {
 		$afterSearch = 0;
+
 		if ($search !== NULL) {
-			$search = $this->geocodeAddress($search);
+			$search = $this->geocodeService->geocodeAddress($search);
 			$locations = $this->locationRepository->findByConstraint($search);
 
 			$center = $this->getCenter($search);
@@ -81,7 +93,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
 			$afterSearch = 1;
 
 			$this->view->assign('center', $center);
-			$this->view->assign('numberOfLocations', is_object($locations) ? count($locations) : $locations->count());
+			$this->view->assign('numberOfLocations', is_array($locations) ? count($locations) : $locations->count());
 			$this->view->assign('locations', $locations);
 		} elseif ($this->settings['singleLocationId']) {
 			$location = $this->locationRepository->findByUid($this->settings['singleLocationId']);
@@ -99,6 +111,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
 		$this->view->assign('search', $search);
 		$this->view->assign('static_info_tables', \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('static_info_tables') ? 1 : 0);
 	}
+
 
 	/**
 	 * Add categories give in settings to view
@@ -154,6 +167,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
 	 * flagged as center. If
 	 *
 	 * @param Model\Constraint $constraint
+	 * @throws \TYPO3\CMS\Extbase\Persistence\Generic\Exception
 	 * @return Model\Location
 	 */
 	protected function getCenter(Model\Constraint $constraint = NULL) {
@@ -166,7 +180,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
 				$center->setLatitude($constraint->getLatitude());
 				$center->setLongitude($constraint->getLongitude());
 			} else {
-				$center = $this->geocodeAddress($constraint);
+				$center = $this->geocodeService->geocodeAddress($constraint);
 			}
 		}
 
@@ -182,33 +196,6 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
 	}
 
 	/**
-	 * Geocode address and retries if first attempt or value in session
-	 * is not geocoded
-	 *
-	 * @param Model\Constraint $address
-	 * @param bool $forceGeocoding
-	 * @return Model\Constraint
-	 */
-	protected function geocodeAddress($address, $forceGeocoding = FALSE) {
-		$hash = md5(serialize($address));
-
-		if (!($geocodedAddress = $this->sessionRepository->getCoordinateByHash($hash)) || $forceGeocoding) {
-			$geocodedAddress = $this->objectManager
-				->get('Evoweb\\StoreFinder\\Service\\GeocodeService', $this->settings)
-				->geocodeAddress($address);
-			$this->sessionRepository->addCoordinateForHash($geocodedAddress, $hash);
-		}
-
-			// In case the address without geocoded location was stored in
-			// session or the geocoding did not work a second try is done
-		if (!$geocodedAddress->isGeocoded() && !$forceGeocoding) {
-			$geocodedAddress = $this->geocodeAddress($geocodedAddress, TRUE);
-		}
-
-		return $geocodedAddress;
-	}
-
-	/**
 	 * Set zoom level for map based on radius
 	 *
 	 * @param Model\Location|Model\Constraint $location
@@ -216,31 +203,26 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
 	 * @return Model\Location
 	 */
 	protected function setZoomLevel($location, Model\Constraint $constraint) {
-		$zoom = 13;
-		if ($constraint->getRadius() > 500 && $constraint->getRadius() <= 1000) {
+		$radius = $constraint->getRadius();
+		if ($radius > 500 && $radius <= 1000) {
 			$zoom = 12;
-		}
-		if ($constraint->getRadius() <= 500) {
-			$zoom = 10;
-		}
-		if ($constraint->getRadius() <= 100) {
-			$zoom = 8;
-		}
-		if ($constraint->getRadius() <= 25) {
-			$zoom = 6;
-		}
-		if ($constraint->getRadius() < 5) {
-			$zoom = 4;
-		}
-		if ($constraint->getRadius() < 3) {
-			$zoom = 3;
-		}
-		if ($constraint->getRadius() < 2) {
+		} elseif ($radius < 2) {
 			$zoom = 2;
+		} elseif ($radius < 3) {
+			$zoom = 3;
+		} elseif ($radius < 5) {
+			$zoom = 4;
+		} elseif ($radius <= 25) {
+			$zoom = 7;
+		} elseif ($radius <= 100) {
+			$zoom = 9;
+		} elseif ($radius <= 500) {
+			$zoom = 11;
+		} else {
+			$zoom = 13;
 		}
 
-		$location->setZoom($zoom);
-
+		$location->setZoom(18 - $zoom);
 		return $location;
 	}
 }

@@ -162,17 +162,13 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	protected $related;
 
 	/**
-	 * @todo fal
-	 * \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Core\Resource\File>
-	 * @var string
+	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>
 	 * @lazy
 	 */
 	protected $image = '';
 
 	/**
-	 * @todo fal
-	 * \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Core\Resource\File>
-	 * @var string
+	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>
 	 * @lazy
 	 */
 	protected $media = '';
@@ -189,10 +185,12 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 */
 	protected $state = '';
 
+
 	/**
 	 * @var double
 	 */
 	protected $distance = 0.0;
+
 
 	/**
 	 * Initialize categories, attributed and media relation
@@ -202,9 +200,18 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 			$this->categories =
 			$this->content =
 			$this->related =
-					// $this->image =
-					// $this->media =
+			$this->image =
+			$this->media =
 				new ObjectStorage();
+	}
+
+	/**
+	 * Getter
+	 *
+	 * @return string
+	 */
+	public function getAdditionaladdress() {
+		return $this->additionaladdress;
 	}
 
 	/**
@@ -222,8 +229,8 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 *
 	 * @return string
 	 */
-	public function getAdditionaladdress() {
-		return $this->additionaladdress;
+	public function getAddress() {
+		return $this->escapeJsonString($this->address);
 	}
 
 	/**
@@ -239,16 +246,16 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * Getter
 	 *
-	 * @return string
+	 * @return ObjectStorage<\Evoweb\StoreFinder\Domain\Model\Attribute>
 	 */
-	public function getAddress() {
-		return $this->escapeJsonString($this->address);
+	public function getAttributes() {
+		return $this->attributes;
 	}
 
 	/**
 	 * Setter
 	 *
-	 * @param ObjectStorage $attributes
+	 * @param ObjectStorage<\Evoweb\StoreFinder\Domain\Model\Attribute> $attributes
 	 * @return void
 	 */
 	public function setAttributes($attributes) {
@@ -258,16 +265,16 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * Getter
 	 *
-	 * @return ObjectStorage
+	 * @return ObjectStorage<\Evoweb\StoreFinder\Domain\Model\Category>
 	 */
-	public function getAttributes() {
-		return $this->attributes;
+	public function getCategories() {
+		return $this->categories;
 	}
 
 	/**
 	 * Setter
 	 *
-	 * @param ObjectStorage $categories
+	 * @param ObjectStorage<\Evoweb\StoreFinder\Domain\Model\Category> $categories
 	 * @return void
 	 */
 	public function setCategories($categories) {
@@ -277,10 +284,10 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * Getter
 	 *
-	 * @return ObjectStorage
+	 * @return string
 	 */
-	public function getCategories() {
-		return $this->categories;
+	public function getCity() {
+		return $this->escapeJsonString($this->city);
 	}
 
 	/**
@@ -298,8 +305,8 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 *
 	 * @return string
 	 */
-	public function getCity() {
-		return $this->escapeJsonString($this->city);
+	public function getPerson() {
+		return $this->person;
 	}
 
 	/**
@@ -317,8 +324,8 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 *
 	 * @return string
 	 */
-	public function getPerson() {
-		return $this->person;
+	public function getContent() {
+		return $this->content;
 	}
 
 	/**
@@ -336,8 +343,17 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 *
 	 * @return string
 	 */
-	public function getContent() {
-		return $this->content;
+	public function getCountryName() {
+		return $this->getCountry() ? $this->getCountry()->getShortNameEn() : '';
+	}
+
+	/**
+	 * Getter
+	 *
+	 * @return \SJBR\StaticInfoTables\Domain\Model\Country
+	 */
+	public function getCountry() {
+		return $this->country;
 	}
 
 	/**
@@ -353,19 +369,10 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * Getter
 	 *
-	 * @return \SJBR\StaticInfoTables\Domain\Model\Country
-	 */
-	public function getCountry() {
-		return $this->country;
-	}
-
-	/**
-	 * Getter for country name
-	 *
 	 * @return string
 	 */
-	public function getCountryName() {
-		return $this->getCountry() ? $this->getCountry()->getShortNameEn() : '';
+	public function getEmail() {
+		return $this->email;
 	}
 
 	/**
@@ -383,8 +390,8 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 *
 	 * @return string
 	 */
-	public function getEmail() {
-		return $this->email;
+	public function getFax() {
+		return $this->fax;
 	}
 
 	/**
@@ -400,10 +407,10 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * Getter
 	 *
-	 * @return string
+	 * @return int
 	 */
-	public function getFax() {
-		return $this->fax;
+	public function getGeocode() {
+		return $this->geocode;
 	}
 
 	/**
@@ -419,10 +426,10 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * Getter
 	 *
-	 * @return int
+	 * @return string
 	 */
-	public function getGeocode() {
-		return $this->geocode;
+	public function getHours() {
+		return $this->escapeJsonString($this->hours);
 	}
 
 	/**
@@ -440,8 +447,8 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 *
 	 * @return string
 	 */
-	public function getHours() {
-		return $this->escapeJsonString($this->hours);
+	public function getIcon() {
+		return $this->icon;
 	}
 
 	/**
@@ -457,16 +464,16 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * Getter
 	 *
-	 * @return string
+	 * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>
 	 */
-	public function getIcon() {
-		return $this->icon;
+	public function getImage() {
+		return $this->image;
 	}
 
 	/**
 	 * Setter
 	 *
-	 * @param string $image
+	 * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference> $image
 	 * @return void
 	 */
 	public function setImage($image) {
@@ -476,54 +483,16 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * Getter
 	 *
-	 * @return string
+	 * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>
 	 */
-	public function getImage() {
-		return $this->image;
+	public function getMedia() {
+		return $this->media;
 	}
 
 	/**
 	 * Setter
 	 *
-	 * @param double $latitude
-	 * @return void
-	 */
-	public function setLatitude($latitude) {
-		$this->latitude = (float) $latitude;
-	}
-
-	/**
-	 * Getter
-	 *
-	 * @return double
-	 */
-	public function getLatitude() {
-		return (float) $this->latitude;
-	}
-
-	/**
-	 * Setter
-	 *
-	 * @param double $longitude
-	 * @return void
-	 */
-	public function setLongitude($longitude) {
-		$this->longitude = (float) $longitude;
-	}
-
-	/**
-	 * Getter
-	 *
-	 * @return double
-	 */
-	public function getLongitude() {
-		return (float) $this->longitude;
-	}
-
-	/**
-	 * Setter
-	 *
-	 * @param string $media
+	 * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference> $media
 	 * @return void
 	 */
 	public function setMedia($media) {
@@ -535,8 +504,8 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 *
 	 * @return string
 	 */
-	public function getMedia() {
-		return $this->media;
+	public function getMobile() {
+		return $this->mobile;
 	}
 
 	/**
@@ -554,8 +523,8 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 *
 	 * @return string
 	 */
-	public function getMobile() {
-		return $this->mobile;
+	public function getNotes() {
+		return $this->escapeJsonString($this->notes);
 	}
 
 	/**
@@ -573,8 +542,8 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 *
 	 * @return string
 	 */
-	public function getNotes() {
-		return $this->escapeJsonString($this->notes);
+	public function getPhone() {
+		return $this->phone;
 	}
 
 	/**
@@ -592,8 +561,8 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 *
 	 * @return string
 	 */
-	public function getPhone() {
-		return $this->phone;
+	public function getProducts() {
+		return $this->products;
 	}
 
 	/**
@@ -609,10 +578,10 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * Getter
 	 *
-	 * @return string
+	 * @return ObjectStorage
 	 */
-	public function getProducts() {
-		return $this->products;
+	public function getRelated() {
+		return $this->related;
 	}
 
 	/**
@@ -628,10 +597,19 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * Getter
 	 *
-	 * @return ObjectStorage
+	 * @return string
 	 */
-	public function getRelated() {
-		return $this->related;
+	public function getStateName() {
+		return $this->getState() ? $this->getState()->getNameEn() : '';
+	}
+
+	/**
+	 * Getter
+	 *
+	 * @return \SJBR\StaticInfoTables\Domain\Model\CountryZone
+	 */
+	public function getState() {
+		return $this->state;
 	}
 
 	/**
@@ -647,19 +625,10 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * Getter
 	 *
-	 * @return \SJBR\StaticInfoTables\Domain\Model\CountryZone
-	 */
-	public function getState() {
-		return $this->state;
-	}
-
-	/**
-	 * Getter state name
-	 *
 	 * @return string
 	 */
-	public function getStateName() {
-		return $this->getState() ? $this->getState()->getNameEn() : '';
+	public function getStoreid() {
+		return $this->storeid;
 	}
 
 	/**
@@ -677,8 +646,8 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 *
 	 * @return string
 	 */
-	public function getStoreid() {
-		return $this->storeid;
+	public function getName() {
+		return $this->escapeJsonString($this->name);
 	}
 
 	/**
@@ -696,8 +665,8 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 *
 	 * @return string
 	 */
-	public function getName() {
-		return $this->escapeJsonString($this->name);
+	public function getUrl() {
+		return $this->url;
 	}
 
 	/**
@@ -715,8 +684,8 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 *
 	 * @return string
 	 */
-	public function getUrl() {
-		return $this->url;
+	public function getZipcode() {
+		return $this->zipcode;
 	}
 
 	/**
@@ -732,10 +701,10 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * Getter
 	 *
-	 * @return string
+	 * @return bool
 	 */
-	public function getZipcode() {
-		return $this->zipcode;
+	public function getCenter() {
+		return (bool)$this->center;
 	}
 
 	/**
@@ -751,31 +720,11 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * Getter
 	 *
-	 * @return bool
+	 * @return integer
 	 */
-	public function getCenter() {
-		return (bool)$this->center;
+	public function getZoom() {
+		return $this->zoom;
 	}
-
-	/**
-	 * Setter
-	 *
-	 * @param float $distance
-	 * @return void
-	 */
-	public function setDistance($distance) {
-		$this->distance = $distance;
-	}
-
-	/**
-	 * Getter
-	 *
-	 * @return float
-	 */
-	public function getDistance() {
-		return $this->distance;
-	}
-
 
 	/**
 	 * Setter
@@ -790,12 +739,50 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * Getter
 	 *
-	 * @return integer
+	 * @return double
 	 */
-	public function getZoom() {
-		return $this->zoom;
+	public function getLatitude() {
+		return (float) $this->latitude;
 	}
 
+	/**
+	 * Setter
+	 *
+	 * @param double $latitude
+	 * @return void
+	 */
+	public function setLatitude($latitude) {
+		$this->latitude = (float) $latitude;
+	}
+
+	/**
+	 * Getter
+	 *
+	 * @return double
+	 */
+	public function getLongitude() {
+		return (float) $this->longitude;
+	}
+
+	/**
+	 * Setter
+	 *
+	 * @param double $longitude
+	 * @return void
+	 */
+	public function setLongitude($longitude) {
+		$this->longitude = (float) $longitude;
+	}
+
+
+	/**
+	 * Check if location has latitude and longitude
+	 *
+	 * @return bool
+	 */
+	public function isGeocoded() {
+		return $this->getLatitude() && $this->getLongitude();
+	}
 
 	/**
 	 * Escape values for json
@@ -811,11 +798,21 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	}
 
 	/**
-	 * Check if location has latitude and longitude
+	 * Getter
 	 *
-	 * @return bool
+	 * @return float
 	 */
-	public function isGeocoded() {
-		return $this->getLatitude() && $this->getLongitude();
+	public function getDistance() {
+		return $this->distance;
+	}
+
+	/**
+	 * Setter
+	 *
+	 * @param float $distance
+	 * @return void
+	 */
+	public function setDistance($distance) {
+		$this->distance = $distance;
 	}
 }

@@ -2,12 +2,26 @@
 	"name": "evoweb/store-finder",
 	"type": "typo3-cms-plugin",
 	"description": "Store Finder",
-	"homepage": "http://typo3.org",
+	"homepage": "http://www.evoweb.de/",
+	"keywords": [ "store finder", "store locator", "poi", "shop list", "google map" ],
 	"license": ["GPL-2.0+"],
-	"version": "0.0.1",
+	"authors": [
+		{
+			"name": "Sebastian Fischer",
+			"email": "typo3@evoweb.de",
+			"homepage": "http://www.evoweb.de/"
+		}
+	],
+
+	"version": "1.0.1",
 
 	"require": {
 		"php" : ">=5.3.7",
 		"typo3/cms-core": ">=6.0.0"
+	},
+
+	"support": {
+		"issues": "http://forge.typo3.org/projects/extension-store_finder/issues",
+		"source": "https://git.typo3.org/TYPO3CMS/Extensions/store_finder.git"
 	}
 }
