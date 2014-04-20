@@ -23,14 +23,14 @@ that the url can be changed in the same configuration part. Just enter the url
 in the field Url used for geocode.
 
 Configuration:
-~~~~~~~~~~~~~~
+==============
 
 .. figure:: ../Images/admin_config.png
    :alt: Search form
    :align: left
 
 Migrate from locator:
----------------------
+=====================
 
 The extension supports an update script that is able to migrate locator records
 to the own tables. If the update scripts gets executed the start migration button

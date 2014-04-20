@@ -10,16 +10,18 @@
 Introduction
 ------------
 
+
 Search with result map and list
-_______________________________
+===============================
 
 Purpose of this extension is, to have a search for locations based on
 an entered or configured address. The result displays a google map with
 marker for each location and a list of all locations. On click on a
 marker an info window with additional informations get shown.
 
+
 Search form:
-~~~~~~~~~~~~
+============
 
 .. figure:: ../Images/introduction_search.png
    :alt: Search form
@@ -28,15 +30,16 @@ Search form:
 
 
 Result map and list:
-~~~~~~~~~~~~~~~~~~~~
+====================
 
 .. figure:: ../Images/introduction_result.png
    :alt: Result map and list
    :width: 711px
    :align: left
 
+
 Single points of interest
-_________________________
+=========================
 
 Its also possible to pre define a single location to display it on the
 map without search form. This is useful to have map with single point
@@ -44,8 +47,9 @@ of interesst.
 For developer its also possible to use the plugin in their extension
 as map renderer for the location.
 
+
 How geolocations are computed
-_____________________________
+=============================
 
 Every location gets geocoded with help of google maps api after saving
 the record in backend. By this its important to know, that the google

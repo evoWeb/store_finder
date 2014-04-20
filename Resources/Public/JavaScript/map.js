@@ -3,7 +3,7 @@ var map,
 		active: false,
 		apiV3Layers: '',
 		language: 'en',
-		allowSensore: false
+		allowSensors: false
 	},
 	locations = locations || [],
 	infoWindow,
@@ -153,7 +153,7 @@ function loadScript() {
 
 	var parameter = '&callback=initializeMap';
 
-	parameter += '&sensor=' + (mapConfiguration.allowSensore ? 'true' : 'false');
+	parameter += '&sensor=' + (mapConfiguration.allowSensors ? 'true' : 'false');
 
 	if (mapConfiguration.language !== '') {
 		parameter += '&language=' + mapConfiguration.language;
