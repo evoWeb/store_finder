@@ -8,8 +8,10 @@
 <body>
 <f:section name="content">
 <script type="text/javascript">
-	var mapConfiguration = {<sf:minify>active: true,
-		<f:for each="{settings.mapConfiguration}" as="configuration" key="name" iteration="loop">{name}: '{configuration}',</f:for>
+	var mapConfiguration = {
+		active: true,
+		zoom: '{center.zoom}',
+		<f:for each="{settings.mapConfiguration}" as="configuration" key="name">{name}: '{configuration}',</f:for>
 		center: {
 			lat: <f:format.number decimals="7">{center.latitude}</f:format.number>,
 			lng: <f:format.number decimals="7">{center.longitude}</f:format.number>

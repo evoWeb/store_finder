@@ -74,10 +74,14 @@
 			<label index="pi_flexform.sheetCookieOptions">cookie options</label>
 			<label index="pi_flexform.useCookie.label">use cookie</label>
 			<label index="pi_flexform.cookieLifeTime.label">cookie life time [sec]</label>
+			<label index="pi_flexform.zoom">Zoom</label>
 
-			<label index="pi1_title">Store Finder</label>
-			<label index="tt_content.list_type_map">Store Finder</label>
-			<label index="pi1_plus_wiz_description">Adds a store finder search form to the page.</label>
+			<label index="pi1_title_map">Store Finder - Map with search and list</label>
+			<label index="pi1_description_map">Adds a store finder search form with map and result list.</label>
+			<label index="tt_content.list_type_map">Map with search and list</label>
+			<label index="pi1_title_show">Store Finder - Single location map</label>
+			<label index="pi1_description_show">Adds a map for a single location to display.</label>
+			<label index="tt_content.list_type_show">Single location map</label>
 
 			<label index="pi_flexform.sheetDisplayOptions">Display options</label>
 			<label index="pi_flexform.showBeforeSearch">Show before search</label>

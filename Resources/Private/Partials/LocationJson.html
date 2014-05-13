@@ -1,0 +1,41 @@
+{namespace sf=Evoweb\StoreFinder\ViewHelpers}
+<?xml version="1.0" encoding="UTF-8" ?>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en"
+	  xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers"
+	  xmlns:sf="http://dtd.evoweb.de/store_finder.xsd">
+<head>
+	<title>Map</title>
+</head>
+<body>
+<f:section name="content"><sf:minify>{
+		name: '{location.name}',
+		lat: {location.latitude},
+		lng: {location.longitude},
+		information: <f:format.raw/>{
+			<f:format.raw/>uid: '{location.uid}',
+			lat: '{location.latitude}',
+			lng: '{location.longitude}',
+			name: '{location.name}',
+			storeid: '{location.storeid}',
+			address: '{location.address}',
+			additionaladdress: '{location.additionaladdress}',
+			city: '{location.city}',
+			person: '{location.person}',
+			zipcode: '{location.zipcode}',
+			products: '{location.products}',
+			email: '{location.email}',
+			phone: '{location.phone}',
+			mobile: '{location.mobile}',
+			fax: '{location.fax}',
+			hours: '{location.hours}',
+			url: '{location.url}',
+			notes: '{location.notes}',
+			icon: '{location.icon}',
+			state: '{location.state}',
+			country: '{location.country}',
+			media: '{location. media}'<f:if condition="{settings.showStoreImage}">,
+			image: '<f:for each="{location.image}" as="image">{f:uri.image(src: image.uid, width: 70, treatIdAsReference: 1)}</f:for>'</f:if>
+		}
+	}</sf:minify></f:section>
+</body>
+</html>
