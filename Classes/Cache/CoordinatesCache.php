@@ -116,8 +116,8 @@ class CoordinatesCache {
 				}
 
 				if (is_array($coordinate)) {
-					$address->getLatitude($coordinate['latitude']);
-					$address->getLongitude($coordinate['longitude']);
+					$address->setLatitude($coordinate['latitude']);
+					$address->setLongitude($coordinate['longitude']);
 					break;
 				}
 			}
@@ -152,9 +152,8 @@ class CoordinatesCache {
 	}
 
 	/**
-	 * Flush both caches
+	 * Flush both sql table and session caches
 	 *
-	 * @throws \TYPO3\CMS\Core\Exception
 	 * @return void
 	 */
 	public function flushCache() {

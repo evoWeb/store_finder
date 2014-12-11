@@ -105,6 +105,9 @@
 			<label index="pi_flexform.categoryPriority.useAsFilterInFrontend">Filter utilized by the user in frontend</label>
 			<label index="pi_flexform.categoryPriority.limitResultsToCategories">Filter used for the query without user utilization</label>
 			<label index="pi_flexform.categoryPriority.useParentIfNoFilterSelected">Filter utilized by the user in frontend or as filter if the user selected none</label>
+
+			<label index="geocodeLocations.name">Geocode locations</label>
+			<label index="geocodeLocations.description">Fetch locations without latitute/logitude or with geocode set to 1, geocodes it and writes back to database</label>
 		</languageKey>
 	</data>
 </T3locallang>

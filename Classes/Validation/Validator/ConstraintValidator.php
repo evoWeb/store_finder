@@ -26,7 +26,8 @@ namespace Evoweb\StoreFinder\Validation\Validator;
 /**
  * A Uservalidator
  */
-class ConstraintValidator extends \TYPO3\CMS\Extbase\Validation\Validator\GenericObjectValidator implements \TYPO3\CMS\Extbase\Validation\Validator\ValidatorInterface {
+class ConstraintValidator extends \TYPO3\CMS\Extbase\Validation\Validator\GenericObjectValidator
+	implements \TYPO3\CMS\Extbase\Validation\Validator\ValidatorInterface {
 
 	/**
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage
@@ -106,8 +107,12 @@ class ConstraintValidator extends \TYPO3\CMS\Extbase\Validation\Validator\Generi
 	 */
 	public function injectConfigurationManager(\TYPO3\CMS\Extbase\Configuration\ConfigurationManager $configurationManager) {
 		$this->configurationManager = $configurationManager;
-		$this->settings = $this->configurationManager->getConfiguration(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS);
-		$this->frameworkConfiguration = $this->configurationManager->getConfiguration(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
+		$this->settings = $this->configurationManager->getConfiguration(
+			\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS
+		);
+		$this->frameworkConfiguration = $this->configurationManager->getConfiguration(
+			\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK
+		);
 	}
 
 	/**
@@ -127,7 +132,9 @@ class ConstraintValidator extends \TYPO3\CMS\Extbase\Validation\Validator\Generi
 			return $messages;
 		}
 		if (!$this->canValidate($object)) {
-			$messages->addError(\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('error_notvalidatable', 'StoreFinder'), 1301599551);
+			$messages->addError(
+				\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('error_notvalidatable', 'StoreFinder'), 1301599551
+			);
 			return $messages;
 		}
 		if (self::$instancesCurrentlyUnderValidation->contains($object)) {
@@ -200,7 +207,10 @@ class ConstraintValidator extends \TYPO3\CMS\Extbase\Validation\Validator\Generi
 		$this->currentValidatorOptions = (array) $currentValidator['validatorOptions'];
 
 		/** @var $validatorObject \TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator */
-		$validatorObject = $this->validatorResolver->createValidator($currentValidator['validatorName'], $this->currentValidatorOptions);
+		$validatorObject = $this->validatorResolver->createValidator(
+			$currentValidator['validatorName'],
+			$this->currentValidatorOptions
+		);
 
 		if (method_exists($validatorObject, 'setModel')) {
 			/** @noinspection PhpUndefinedMethodInspection */
@@ -267,5 +277,3 @@ class ConstraintValidator extends \TYPO3\CMS\Extbase\Validation\Validator\Generi
 		}
 	}
 }
-
-?>

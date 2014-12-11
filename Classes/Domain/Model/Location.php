@@ -723,7 +723,7 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 * @return integer
 	 */
 	public function getZoom() {
-		return $this->zoom;
+		return (int)$this->zoom;
 	}
 
 	/**

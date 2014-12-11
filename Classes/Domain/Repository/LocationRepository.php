@@ -67,11 +67,12 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository  {
 		$this->settings = $settings;
 	}
 
+
 	/**
 	 * Find locations by contraint
 	 *
 	 * @param \Evoweb\StoreFinder\Domain\Model\Constraint $constraint
-	 * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface|array
+	 * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
 	 */
 	public function findByConstraint($constraint) {
 		/** @var \TYPO3\CMS\Extbase\Persistence\Generic\Query $query */
@@ -107,7 +108,14 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository  {
 		/** @var \TYPO3\CMS\Core\Database\DatabaseConnection $database */
 		$database = $GLOBALS['TYPO3_DB'];
 
-		$sql = $database->SELECTquery($queryParts['SELECT'], $queryParts['FROM'], $queryParts['WHERE'], $queryParts['GROUPBY'], $queryParts['ORDERBY'], $queryParts['LIMIT']);
+		$sql = $database->SELECTquery(
+			$queryParts['SELECT'],
+			$queryParts['FROM'],
+			$queryParts['WHERE'],
+			$queryParts['GROUPBY'],
+			$queryParts['ORDERBY'],
+			$queryParts['LIMIT']
+		);
 		$query->statement($sql);
 
 		return $query->execute();
@@ -126,7 +134,8 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository  {
 
 		if ($constraint->getCountry()) {
 			$queryParts['FROM'] .= ' INNER JOIN static_countries sc ON (l.country = sc.cn_short_en)';
-			$queryParts['WHERE'] .= ' AND sc.' . (is_int($constraint->getCountry()) ? 'uid = ' : 'cn_iso_3 = ') . $database->fullQuoteStr(strtoupper($constraint->getCountry()), 'static_countries');
+			$queryParts['WHERE'] .= ' AND sc.' . (is_int($constraint->getCountry()) ? 'uid = ' : 'cn_iso_3 = ') .
+				$database->fullQuoteStr(strtoupper($constraint->getCountry()), 'static_countries');
 		}
 
 		return $queryParts;
@@ -145,14 +154,17 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository  {
 
 		if ($this->settings['categoryPriority'] == 'limitResultsToCategories') {
 			$constraint->setCategory(GeneralUtility::intExplode(',', $this->settings['categories'], 1));
-		} elseif ($this->settings['categoryPriority'] == 'useSelectedCategoriesIfNoFilterSelected' && !count($constraint->getCategory())) {
+		} elseif (
+			$this->settings['categoryPriority'] == 'useSelectedCategoriesIfNoFilterSelected' && !count($constraint->getCategory())
+		) {
 			$constraint->setCategory(GeneralUtility::intExplode(',', $this->settings['categories'], 1));
 		}
 
 		$categories = $this->fetchCategoriesRecursive($constraint->getCategory());
 
 		if (!empty($categories)) {
-			$queryParts['FROM'] .= ' INNER JOIN sys_category_record_mm c ON (l.uid = c.uid_foreign AND c.tablenames = \'tx_storefinder_domain_model_location\' AND c.fieldname = \'categories\')';
+			$queryParts['FROM'] .= ' INNER JOIN sys_category_record_mm c ON (l.uid = c.uid_foreign
+				AND c.tablenames = \'tx_storefinder_domain_model_location\' AND c.fieldname = \'categories\')';
 			$queryParts['WHERE'] .= ' AND c.uid_local IN (' . implode(',', $database->cleanIntArray($categories)) . ')';
 		}
 
@@ -352,5 +364,29 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository  {
 		}
 
 		return $whereClause;
+	}
+
+
+	/**
+	 * Query location repository for all locations that
+	 * have latitude or longitude empty or geocode set to 1
+	 *
+	 * @param int $limit
+	 * @return array|\TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+	 */
+	public function findAllWithoutLatLon($limit = 500) {
+		$query = $this->createQuery();
+
+		$query->matching($query->logicalOr(
+			$query->equals('geocode', 1),
+			$query->logicalOr(
+				$query->equals('latitude', 0),
+				$query->equals('longitude', 0)
+			)
+		));
+		$query->setLimit($limit);
+		$query->getQuerySettings()->setRespectStoragePage(FALSE);
+
+		return $query->execute();
 	}
 }

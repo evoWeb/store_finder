@@ -56,9 +56,26 @@ class SelectCountriesViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\Select
 	public function initializeArguments() {
 		parent::initializeArguments();
 
-		$this->overrideArgument('options', 'object', 'Associative array with internal IDs as key, and the values are displayed in the select box', FALSE);
-		$this->overrideArgument('optionValueField', 'string', 'If specified, will call the appropriate getter on each object to determine the value.', FALSE, 'isoCodeA2');
-		$this->overrideArgument('optionLabelField', 'string', 'If specified, will call the appropriate getter on each object to determine the label.', FALSE, 'shortNameLocal');
+		$this->overrideArgument(
+			'options',
+			'object',
+			'Associative array with internal IDs as key, and the values are displayed in the select box',
+			FALSE
+		);
+		$this->overrideArgument(
+			'optionValueField',
+			'string',
+			'If specified, will call the appropriate getter on each object to determine the value.',
+			FALSE,
+			'isoCodeA2'
+		);
+		$this->overrideArgument(
+			'optionLabelField',
+			'string',
+			'If specified, will call the appropriate getter on each object to determine the label.',
+			FALSE,
+			'shortNameLocal'
+		);
 		$this->overrideArgument('sortByOptionLabel', 'boolean', 'If true, List will be sorted by label.', FALSE, TRUE);
 		$this->registerArgument('allowedCountries', 'array', 'Array with countries allowed to be displayed.', FALSE, array());
 	}

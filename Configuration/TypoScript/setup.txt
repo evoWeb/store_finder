@@ -9,6 +9,16 @@ plugin.tx_storefinder.settings {
 	# [miles, kilometer]
 	distanceUnit = miles
 
+	showLocationsForDefaultConstraint = 0
+	defaultConstraint {
+		limit = 1000
+		# radius in kilometer
+		radius = 1000
+		zipcode =
+		city =
+		country =
+	}
+
 	mapConfiguration {
 		# traffic, weather, bicycling,  panoramio, kml
 		apiV3Layers =
@@ -17,8 +27,8 @@ plugin.tx_storefinder.settings {
 	}
 
 	mapSize {
-		height = 400
-		width = 600
+		height = 400px
+		width = 600px
 	}
 
 	validation {

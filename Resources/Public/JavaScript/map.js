@@ -106,17 +106,19 @@ function initializeLocation() {
 	'use strict';
 
 	var index, location;
-	for (index = 0; index < locations.length; index++) {
-		location = locations[index];
+	if (locations.length) {
+		for (index = 0; index < locations.length; index++) {
+			location = locations[index];
 
-		location.marker = new google.maps.Marker({
-			map: map,
-			title: location.name,
-			position: new google.maps.LatLng(location.lat, location.lng)
-		});
-		location.marker.sfLocation = location;
+			location.marker = new google.maps.Marker({
+				map: map,
+				title: location.name,
+				position: new google.maps.LatLng(location.lat, location.lng)
+			});
+			location.marker.sfLocation = location;
 
-		google.maps.event.addListener(location.marker, 'click', showInformations);
+			google.maps.event.addListener(location.marker, 'click', showInformations);
+		}
 	}
 }
 
@@ -135,6 +137,7 @@ function initializeMap() {
 		center: new google.maps.LatLng(mapConfiguration.center.lat, mapConfiguration.center.lng),
 		mapTypeId: google.maps.MapTypeId.ROADMAP
 	};
+	console.log(mapOptions);
 	map = new google.maps.Map($('#tx_storefinder_map')[0], mapOptions);
 
 	initializeLayer();

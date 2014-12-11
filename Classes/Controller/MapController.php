@@ -68,6 +68,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
 		}
 
 		$this->settings['allowedCountries'] = explode(',', $this->settings['allowedCountries']);
+		$this->geocodeService->setSettings($this->settings);
 		$this->locationRepository->setSettings($this->settings);
 	}
 
@@ -85,31 +86,58 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
 
 		if ($search !== NULL) {
 			$search = $this->geocodeService->geocodeAddress($search);
-			$locations = $this->locationRepository->findByConstraint($search);
 
 			$center = $this->getCenter($search);
 			$center = $this->setZoomLevel($center, $search);
+			$this->view->assign('center', $center);
 
 			$afterSearch = 1;
 
-			$this->view->assign('center', $center);
-			$this->view->assign('numberOfLocations', is_array($locations) ? count($locations) : $locations->count());
+			$locations = $this->locationRepository->findByConstraint($search);
+			// manual rewind needed because fluid doesnt do it
+			$locations->rewind();
+			$this->view->assign('numberOfLocations', $locations->count());
 			$this->view->assign('locations', $locations);
 		} elseif ($this->settings['singleLocationId']) {
-			$location = $this->locationRepository->findByUid($this->settings['singleLocationId']);
-
+			/** @var Model\Constraint $search */
 			$search = $this->objectManager->get('Evoweb\\StoreFinder\\Domain\\Model\\Constraint');
 
+			$center = $this->getCenter($search);
+			$center = $this->setZoomLevel($center, $search);
+			$this->view->assign('center', $center);
+
+			$location = $this->locationRepository->findByUid($this->settings['singleLocationId']);
 			$this->view->assign('numberOfLocations', is_object($location) ? 1 : 0);
 			$this->view->assign('locations', array($location));
 		} else {
+			/** @var Model\Constraint $search */
 			$search = $this->objectManager->get('Evoweb\\StoreFinder\\Domain\\Model\\Constraint');
+
+			if ($this->settings['showBeforeSearch'] & 2 && is_array($this->settings['defaultConstraint'])) {
+				$search = $this->addDefaultConstraint($search);
+				$search = $this->geocodeService->geocodeAddress($search);
+
+				$center = $this->getCenter($search);
+				$center = $this->setZoomLevel($center, $search);
+				$this->view->assign('center', $center);
+
+				if ($this->settings['showLocationsForDefaultConstraint']) {
+					$locations = $this->locationRepository->findByConstraint($search);
+					// manual rewind needed because fluid doesnt do it
+					$locations->rewind();
+					$this->view->assign('numberOfLocations', $locations->count());
+					$this->view->assign('locations', $locations);
+				}
+			}
 		}
 
 		$this->addCategoryFilterToView();
 		$this->view->assign('afterSearch', $afterSearch);
 		$this->view->assign('search', $search);
-		$this->view->assign('static_info_tables', \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('static_info_tables') ? 1 : 0);
+		$this->view->assign(
+			'static_info_tables',
+			\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('static_info_tables') ? 1 : 0
+		);
 	}
 
 
@@ -176,7 +204,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
 		if ($constraint !== NULL) {
 			if ($constraint->getLatitude() && $constraint->getLongitude()) {
 				/** @var Model\Location $center */
-				$center = $this->objectManager->get('Evoweb\StoreFinder\Domain\Model\Location');
+				$center = $this->objectManager->get('Evoweb\\StoreFinder\\Domain\\Model\\Location');
 				$center->setLatitude($constraint->getLatitude());
 				$center->setLongitude($constraint->getLongitude());
 			} else {
@@ -224,5 +252,22 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
 
 		$location->setZoom(18 - $zoom);
 		return $location;
+	}
+
+	/**
+	 * @param Model\Constraint $search
+	 * @return Model\Constraint
+	 */
+	private function addDefaultConstraint($search) {
+		$defaultConstraint = $this->settings['defaultConstraint'];
+
+		foreach ($defaultConstraint as $property => $value) {
+			$setter = 'set' . ucfirst($property);
+			if (method_exists($search, $setter)) {
+				$search->{$setter}($value);
+			}
+		}
+
+		return $search;
 	}
 }

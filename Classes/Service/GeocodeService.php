@@ -32,6 +32,12 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @package Evoweb\StoreFinder\Service
  */
 class GeocodeService {
+
+	/**
+	 * @var string
+	 */
+	protected $defaultApiUrl = 'http://maps.googleapis.com/maps/api/geocode/json?sensor=false';
+
 	/**
 	 * @var array
 	 */
@@ -52,6 +58,9 @@ class GeocodeService {
 	public function __construct(array $settings = array()) {
 		if (count($settings)) {
 			$this->setSettings($settings);
+		} else {
+			$this->settings['geocodeUrl'] = $this->defaultApiUrl;
+			$this->settings['geocodeLimit'] = 2500;
 		}
 	}
 
@@ -64,19 +73,17 @@ class GeocodeService {
 	public function setSettings(array &$settings) {
 		$this->settings = &$settings;
 
-		$this->settings['geocodeLimit'] = $this->settings['geocodeLimit'] ? (int) $this->settings['geocodeLimit'] : '2500';
-		$this->settings['geocodeUrl'] = $this->settings['geocodeUrl'] ?
-			$this->settings['geocodeUrl'] :
-			'http://maps.googleapis.com/maps/api/geocode/json?sensor=false';
+		$this->settings['geocodeLimit'] = $this->settings['geocodeLimit'] ? (int) $this->settings['geocodeLimit'] : 2500;
+		$this->settings['geocodeUrl'] = $this->settings['geocodeUrl'] ? $this->settings['geocodeUrl'] : $this->defaultApiUrl;
 	}
 
 	/**
 	 * Geocode address and retries if first attempt or value in session
 	 * is not geocoded
 	 *
-	 * @param Model\Constraint $address
+	 * @param Model\Constraint|Model\Location $address
 	 * @param bool $forceGeocoding
-	 * @return Model\Constraint
+	 * @return Model\Constraint|Model\Location
 	 */
 	public function geocodeAddress($address, $forceGeocoding = FALSE) {
 		$geocodedAddress = $this->coordinatesCache->getCoordinateByAddress($address);
@@ -137,7 +144,7 @@ class GeocodeService {
 	 * @return array
 	 */
 	protected function prepareValuesForQuery($location, $fields) {
-			// for urlencoding
+		// for urlencoding
 		$queryValues = array();
 		foreach ($fields as $field) {
 			$methodName = 'get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $field)));

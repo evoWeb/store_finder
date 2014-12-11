@@ -62,7 +62,8 @@ class UpdateUtility {
 			'fe_group' => 'fe_group',
 			'storename' => 'name',
 			'storeid' => 'storeid',
-			'attributes' => 'comma:mm:attributes:tx_storefinder_location_attribute_mm:uid_local:tx_storefinder_domain_model_attribute:attributes',
+			'attributes' =>
+				'comma:mm:attributes:tx_storefinder_location_attribute_mm:uid_local:tx_storefinder_domain_model_attribute:attributes',
 			'address' => 'address',
 			'additionaladdress' => 'additionaladdress',
 			'city' => 'city',
@@ -91,7 +92,8 @@ class UpdateUtility {
 			'lat' => 'latitude',
 			'lon' => 'longitude',
 			'geocode' => '',
-			'relatedto' => 'finish_comma:mm:locations:tx_storefinder_location_location_mm:uid_local:tx_storefinder_domain_model_location:related',
+			'relatedto' =>
+				'finish_comma:mm:locations:tx_storefinder_location_location_mm:uid_local:tx_storefinder_domain_model_location:related',
 		),
 	);
 
@@ -205,10 +207,13 @@ class UpdateUtility {
 				\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('tx_extensionmanager_tools_extensionmanagerextensionmanager')
 		));
 
-		$content = '</br>Do you want to start the migration?</br>
-			<form action="' . $action . '" method="POST">
+		$content = sprintf(
+			'</br>Do you want to start the migration?</br>
+			<form action="%1$s" method="POST">
 				<button name="tx_storefinder_update[confirm]" value="1">Start migration</button>
-			</form>';
+			</form>',
+			$action
+		);
 
 		return $content;
 	}
@@ -609,7 +614,8 @@ class UpdateUtility {
 				$storageRecord = $storage->getStorageRecord();
 				$configuration = $storage->getConfiguration();
 				$isLocalDriver = $storageRecord['driver'] === 'Local';
-				$isOnFileadmin = !empty($configuration['basePath']) && \TYPO3\CMS\Core\Utility\GeneralUtility::isFirstPartOfStr($configuration['basePath'], $fileadminDirectory);
+				$isOnFileadmin = !empty($configuration['basePath']) &&
+					\TYPO3\CMS\Core\Utility\GeneralUtility::isFirstPartOfStr($configuration['basePath'], $fileadminDirectory);
 				if ($isLocalDriver && $isOnFileadmin) {
 					$this->storage = $storage;
 					break;
@@ -621,8 +627,11 @@ class UpdateUtility {
 			}
 
 			$this->fileFactory = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\ResourceFactory');
-			$this->fileIndexRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\Index\\FileIndexRepository');
-			$this->targetDirectory = PATH_site . $fileadminDirectory . \TYPO3\CMS\Install\Updates\TtContentUploadsUpdateWizard::FOLDER_ContentUploads . '/';
+			$this->fileIndexRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+				'TYPO3\\CMS\\Core\\Resource\\Index\\FileIndexRepository'
+			);
+			$this->targetDirectory = PATH_site . $fileadminDirectory .
+				\TYPO3\CMS\Install\Updates\TtContentUploadsUpdateWizard::FOLDER_ContentUploads . '/';
 		}
 	}
 
@@ -633,7 +642,10 @@ class UpdateUtility {
 	 */
 	protected function checkPrerequisites() {
 		if (!$this->storage->hasFolder(\TYPO3\CMS\Install\Updates\TtContentUploadsUpdateWizard::FOLDER_ContentUploads)) {
-			$this->storage->createFolder(\TYPO3\CMS\Install\Updates\TtContentUploadsUpdateWizard::FOLDER_ContentUploads, $this->storage->getRootLevelFolder());
+			$this->storage->createFolder(
+				\TYPO3\CMS\Install\Updates\TtContentUploadsUpdateWizard::FOLDER_ContentUploads,
+				$this->storage->getRootLevelFolder()
+			);
 		}
 	}
 
@@ -654,7 +666,9 @@ class UpdateUtility {
 			if (file_exists($path . $file)) {
 				\TYPO3\CMS\Core\Utility\GeneralUtility::upload_copy_move($path . $file, $this->targetDirectory . $file);
 				/** @var \TYPO3\CMS\Core\Resource\File $fileObject */
-				$fileObject = $this->storage->getFile(\TYPO3\CMS\Install\Updates\TtContentUploadsUpdateWizard::FOLDER_ContentUploads . '/' . $file);
+				$fileObject = $this->storage->getFile(
+					\TYPO3\CMS\Install\Updates\TtContentUploadsUpdateWizard::FOLDER_ContentUploads . '/' . $file
+				);
 				$this->fileIndexRepository->add($fileObject);
 
 				$count = $this->database->exec_SELECTcountRows(

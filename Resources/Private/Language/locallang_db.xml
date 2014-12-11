@@ -35,6 +35,7 @@
 			<label index="tx_storefinder_domain_model_location.latitude">Latitude</label>
 			<label index="tx_storefinder_domain_model_location.longitude">Longitude</label>
 			<label index="tx_storefinder_domain_model_location.center">Use as center</label>
+			<label index="tx_storefinder_domain_model_location.geocode">Geocode this location</label>
 			<label index="tx_storefinder_domain_model_location.distance">Calculated value by search query</label>
 
 			<label index="sys_category.add">Add category</label>
@@ -78,6 +79,9 @@
 			<label index="tx_storefinder_domain_model_location.categories">Kategorien</label>
 			<label index="tx_storefinder_domain_model_location.latitude">Breitengrad</label>
 			<label index="tx_storefinder_domain_model_location.longitude">Längengrad</label>
+			<label index="tx_storefinder_domain_model_location.center">Als Mitte verwenden</label>
+			<label index="tx_storefinder_domain_model_location.geocode">Diese Location geo kodieren</label>
+			<label index="tx_storefinder_domain_model_location.distance">Berechnete Entfernung</label>
 
 			<label index="tx_storefinder_domain_model_attribute">Filial Attribute</label>
 			<label index="tx_storefinder_domain_model_attribute.name">Name</label>

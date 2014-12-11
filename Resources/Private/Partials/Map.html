@@ -14,7 +14,7 @@
 			lat: <f:format.number decimals="7">{center.latitude}</f:format.number>,
 			lng: <f:format.number decimals="7">{center.longitude}</f:format.number>
 		},
-		zoom: '{center.zoom}'
+		zoom: {center.zoom}
 	</sf:minify>};
 
 	var locations = [<f:for each="{locations}" as="location" iteration="loop">
@@ -43,7 +43,9 @@
 				state: '{location.state}',
 				country: '{location.country}',
 				image: '<f:for each="{location.image}" as="image">{f:uri.image(src: image.uid, width: 70, treatIdAsReference: 1)}</f:for>',
-				media: '{location.media}'
+				media: '{location.media}',
+				lat: {location.latitude},
+				lng: {location.longitude}
 			}
 		}</sf:minify><f:if condition="{loop.isLast}"><f:then/><f:else>,</f:else></f:if></f:for>
 	];
@@ -55,7 +57,7 @@
 		<div class="right">
 			<div class="image">{{#image}}<img src="{{image}}"/>{{/image}}</div>
 			<div class="displayRoute">
-				<a href="https://maps.google.com/?daddr={{lat}},{{lng}}" target="_top"><f:translate key="route"/></a>
+				<a href="https://maps.google.com/?daddr={{lat}},{{lng}}" target="_blank"><f:translate key="route"/></a>
 			</div>
 		</div>
 		<div class="left">

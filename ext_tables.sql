@@ -48,6 +48,7 @@ CREATE TABLE tx_storefinder_domain_model_location (
 	longitude double(11,7) DEFAULT '0.0000000' NOT NULL,
 	center int(4) DEFAULT '0' NOT NULL,
 	distance double(11,3) DEFAULT '0.000' NOT NULL,
+	geocode int(4) DEFAULT '0' NOT NULL,
 
 	import_id int(11) DEFAULT '0' NOT NULL,
 

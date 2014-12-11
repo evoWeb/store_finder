@@ -26,7 +26,9 @@ return array(
 	),
 
 	'interface' => array(
-		'showRecordFieldList' => 'hidden,endtime,fe_group,name,storeid,address,additionaladdress,person,city,state,zipcode,country,attributes,products,phone,mobile,hours,url,notes,image,icon,content,use_coordinate,categories,latitude,longitude,geocode'
+		'showRecordFieldList' => 'hidden, endtime, fe_group, name, storeid, address, additionaladdress, person, city, state,
+			zipcode, country, attributes, products, phone, mobile, hours, url, notes, image, icon, content, use_coordinate,
+			categories, latitude, longitude, geocode'
 	),
 
 	'columns' => array(
@@ -49,7 +51,8 @@ return array(
 					)
 				),
 				'foreign_table' => 'tx_storefinder_domain_model_location',
-				'foreign_table_where' => 'AND tx_storefinder_domain_model_location.pid=###CURRENT_PID### AND tx_storefinder_domain_model_location.sys_language_uid IN (-1,0)'
+				'foreign_table_where' => 'AND tx_storefinder_domain_model_location.pid=###CURRENT_PID###
+					AND tx_storefinder_domain_model_location.sys_language_uid IN (-1,0)'
 			)
 		),
 
@@ -88,7 +91,8 @@ return array(
 
 		'additionaladdress' => array(
 			'exclude' => 0,
-			'label' => 'LLL:EXT:store_finder/Resources/Private/Language/locallang_db.xml:tx_storefinder_domain_model_location.additionaladdress',
+			'label' =>
+				'LLL:EXT:store_finder/Resources/Private/Language/locallang_db.xml:tx_storefinder_domain_model_location.additionaladdress',
 			'config' => array(
 				'type' => 'input',
 				'size' => '30',
@@ -221,7 +225,8 @@ return array(
 					Array('', 0)
 				),
 				'foreign_table' => 'tx_storefinder_domain_model_location',
-				'foreign_table_where' => 'AND tx_storefinder_domain_model_location.uid != ###THIS_UID### ORDER BY tx_storefinder_domain_model_location.name',
+				'foreign_table_where' => 'AND tx_storefinder_domain_model_location.uid != ###THIS_UID###
+					ORDER BY tx_storefinder_domain_model_location.name',
 				'MM' => 'sys_category_record_mm',
 				'MM_match_fields' => array(
 					'tablenames' => 'tx_storefinder_domain_model_location',
@@ -278,7 +283,8 @@ return array(
 			'config' => array(
 				'type' => 'select',
 				'foreign_table' => 'tx_storefinder_domain_model_attribute',
-				'foreign_table_where' => ' AND tx_storefinder_domain_model_attribute.sys_language_uid = 0 AND tx_storefinder_domain_model_attribute.pid = ###CURRENT_PID###',
+				'foreign_table_where' => ' AND tx_storefinder_domain_model_attribute.sys_language_uid = 0
+					AND tx_storefinder_domain_model_attribute.pid = ###CURRENT_PID###',
 				'MM' => 'tx_storefinder_location_attribute_mm',
 				'MM_match_fields' => array(
 					'tablenames' => 'tx_storefinder_domain_model_attribute',
@@ -358,6 +364,14 @@ return array(
 		'center' => array(
 			'exclude' => 1,
 			'label' => 'LLL:EXT:store_finder/Resources/Private/Language/locallang_db.xml:tx_storefinder_domain_model_location.center',
+			'config' => array(
+				'type' => 'check',
+			)
+		),
+
+		'geocode' => array(
+			'exclude' => 1,
+			'label' => 'LLL:EXT:store_finder/Resources/Private/Language/locallang_db.xml:tx_storefinder_domain_model_location.geocode',
 			'config' => array(
 				'type' => 'check',
 			)
@@ -560,7 +574,7 @@ return array(
 
 	'palettes' => array(
 		'coordinates' => array(
-			'showitem' => 'latitude, longitude, center',
+			'showitem' => 'latitude, longitude, center, geocode',
 			'canNotCollapse' => 1
 		),
 		'visibility' => array(

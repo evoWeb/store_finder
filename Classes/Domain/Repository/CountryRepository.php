@@ -38,7 +38,10 @@ class CountryRepository extends \SJBR\StaticInfoTables\Domain\Repository\Country
 
 		$nsSeparator = strpos($this->getRepositoryClassName(), '\\') !== FALSE ? '\\\\' : '_';
 		$this->objectType = preg_replace(
-			array('/' . $nsSeparator . 'Repository' . $nsSeparator . '(?!.*' . $nsSeparator . 'Repository' . $nsSeparator . ')/', '/Repository$/'),
+			array(
+				'/' . $nsSeparator . 'Repository' . $nsSeparator . '(?!.*' . $nsSeparator . 'Repository' . $nsSeparator . ')/',
+				'/Repository$/'
+			),
 			array($nsSeparator . 'Model' . $nsSeparator, ''),
 			get_parent_class($this)
 		);

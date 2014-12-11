@@ -19,7 +19,9 @@ if (!is_array($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations
 );
 
 /** @noinspection PhpIncludeInspection */
-require_once(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('store_finder') . 'Classes/Utility/ExtensionConfigurationUtility.php');
+require_once(
+	\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('store_finder') . 'Classes/Utility/ExtensionConfigurationUtility.php'
+);
 $configuration = \Evoweb\StoreFinder\Utility\ExtensionConfigurationUtility::getConfiguration();
 
 
@@ -44,4 +46,12 @@ $configuration = \Evoweb\StoreFinder\Utility\ExtensionConfigurationUtility::getC
 
 
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass']['store_finder'] =
-	'EXT:store_finder/Classes/Hook/TceMainHook.php:Evoweb\StoreFinder\Hook\TceMainHook';
+	'EXT:store_finder/Classes/Hook/TceMainHook.php:Evoweb\\StoreFinder\\Hook\\TceMainHook';
+
+
+// Add location geocodeing task
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['Evoweb\\StoreFinder\\Task\\GeocodeLocationsTask'] = array(
+	'extension' => $_EXTKEY,
+	'title' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_be.xml:geocodeLocations.name',
+	'description' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_be.xml:geocodeLocations.description'
+);
