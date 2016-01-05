@@ -15,6 +15,9 @@
 			<trans-unit id="city">
 				<source>City</source>
 			</trans-unit>
+			<trans-unit id="phonenumber">
+				<source>Phonenumber</source>
+			</trans-unit>
 			<trans-unit id="country">
 				<source>Country</source>
 			</trans-unit>
@@ -44,6 +47,9 @@
 			</trans-unit>
 			<trans-unit id="error_required">
 				<source>Required field may not be empty</source>
+			</trans-unit>
+			<trans-unit id="error_either">
+				<source>At least one of the required fields need to be filled in</source>
 			</trans-unit>
 			<trans-unit id="error_notexists">
 				<source>Field does not exists</source>

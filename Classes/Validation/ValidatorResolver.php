@@ -1,5 +1,6 @@
 <?php
 namespace Evoweb\StoreFinder\Validation;
+
 /***************************************************************
  * Copyright notice
  *
@@ -26,14 +27,17 @@ namespace Evoweb\StoreFinder\Validation;
 /**
  * Validator resolver to automatically find a validator for a given subject
  */
-class ValidatorResolver extends \TYPO3\CMS\Extbase\Validation\ValidatorResolver {
-	/**
-	 * Get the parsed options given in @validate annotations.
-	 *
-	 * @param string $validateValue
-	 * @return array
-	 */
-	public function getParsedValidatorAnnotation($validateValue) {
-		return $this->parseValidatorAnnotation($validateValue);
-	}
+class ValidatorResolver extends \TYPO3\CMS\Extbase\Validation\ValidatorResolver
+{
+    /**
+     * Get the parsed options given in @validate annotations.
+     *
+     * @param string $validateValue
+     *
+     * @return array
+     */
+    public function getParsedValidatorAnnotation($validateValue)
+    {
+        return $this->parseValidatorAnnotation($validateValue);
+    }
 }

@@ -1,5 +1,5 @@
-	# cat=basic/enable/100; type=input; label=LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xml:apiConsoleKey
+# cat=basic/enable/100; type=input; label=LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xml:apiConsoleKey
 apiConsoleKey =
 
-	# cat=basic/enable/100; type=input; label=LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xml:geocodeUrl
-geocodeUrl = http://maps.googleapis.com/maps/api/geocode/json?sensor=false
+# cat=basic/enable/100; type=input; label=LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xml:geocodeUrl
+geocodeUrl = https://maps.googleapis.com/maps/api/geocode/json?sensor=false

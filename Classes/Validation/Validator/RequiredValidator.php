@@ -1,5 +1,6 @@
 <?php
 namespace Evoweb\StoreFinder\Validation\Validator;
+
 /***************************************************************
  * Copyright notice
  *
@@ -23,39 +24,49 @@ namespace Evoweb\StoreFinder\Validation\Validator;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Extbase\Validation\Validator;
+
 /**
  * A required validator to check that a value is set
  *
  * @scope singleton
  */
-class RequiredValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator
-	implements \TYPO3\CMS\Extbase\Validation\Validator\ValidatorInterface {
-	/**
-	 * Override to be able to validate empty values
-	 *
-	 * @param mixed $value The value that should be validated
-	 * @return \TYPO3\CMS\Extbase\Error\Result
-	 */
-	public function validate($value) {
-		$this->result = new \TYPO3\CMS\Extbase\Error\Result();
-		$this->isValid($value);
-		return $this->result;
-	}
+class RequiredValidator extends Validator\AbstractValidator implements Validator\ValidatorInterface
+{
+    /**
+     * Override to be able to validate empty values
+     *
+     * @param mixed $value The value that should be validated
+     *
+     * @return \TYPO3\CMS\Extbase\Error\Result
+     */
+    public function validate($value)
+    {
+        $this->result = new \TYPO3\CMS\Extbase\Error\Result();
+        $this->isValid($value);
 
-	/**
-	 * If the given value is empty
-	 *
-	 * @param string $value The value
-	 * @return boolean
-	 */
-	public function isValid($value) {
-		$result = TRUE;
+        return $this->result;
+    }
 
-		if (empty($value)) {
-			$this->addError(\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('error_required', 'StoreFinder'), 1305008423);
-			$result = FALSE;
-		}
+    /**
+     * If the given value is empty
+     *
+     * @param string $value The value
+     *
+     * @return boolean
+     */
+    public function isValid($value)
+    {
+        $result = true;
 
-		return $result;
-	}
+        if (empty($value)) {
+            $this->addError(
+                \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('error_required', 'StoreFinder'),
+                1305008423
+            );
+            $result = false;
+        }
+
+        return $result;
+    }
 }

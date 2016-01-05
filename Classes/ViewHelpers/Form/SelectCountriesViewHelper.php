@@ -1,5 +1,6 @@
 <?php
 namespace Evoweb\StoreFinder\ViewHelpers\Form;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -25,81 +26,83 @@ namespace Evoweb\StoreFinder\ViewHelpers\Form;
 
 /**
  * Viewhelper to render a selectbox with values of static info tables countries
- *
  * <code title="Usage">
  * {namespace register=Evoweb\StoreFinder\ViewHelpers}
  * <register:form.SelectStaticCountries name="country"
- * 		optionLabelField="cnShortDe"/>
+ *        optionLabelField="cnShortDe"/>
  * </code>
- *
  * <code title="Optional label field">
  * {namespace register=Evoweb\StoreFinder\ViewHelpers}
  * <register:form.SelectStaticCountries name="country"
- * 		optionLabelField="cnShortDe"/>
+ *        optionLabelField="cnShortDe"/>
  * </code>
  */
-class SelectCountriesViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\SelectViewHelper {
-	/**
-	 * Repository that provides the country models
-	 *
-	 * @var \Evoweb\StoreFinder\Domain\Repository\CountryRepository
-	 * @inject
-	 */
-	protected $countryRepository;
+class SelectCountriesViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\SelectViewHelper
+{
+    /**
+     * Repository that provides the country models
+     *
+     * @var \Evoweb\StoreFinder\Domain\Repository\CountryRepository
+     * @inject
+     */
+    protected $countryRepository;
 
-	/**
-	 * Initialize arguments. Cant be moved to parent because of
-	 * "private $argumentDefinitions = array();"
-	 *
-	 * @return void
-	 */
-	public function initializeArguments() {
-		parent::initializeArguments();
+    /**
+     * Initialize arguments. Cant be moved to parent because of
+     * "private $argumentDefinitions = array();"
+     *
+     * @return void
+     */
+    public function initializeArguments()
+    {
+        parent::initializeArguments();
 
-		$this->overrideArgument(
-			'options',
-			'object',
-			'Associative array with internal IDs as key, and the values are displayed in the select box',
-			FALSE
-		);
-		$this->overrideArgument(
-			'optionValueField',
-			'string',
-			'If specified, will call the appropriate getter on each object to determine the value.',
-			FALSE,
-			'isoCodeA2'
-		);
-		$this->overrideArgument(
-			'optionLabelField',
-			'string',
-			'If specified, will call the appropriate getter on each object to determine the label.',
-			FALSE,
-			'shortNameLocal'
-		);
-		$this->overrideArgument('sortByOptionLabel', 'boolean', 'If true, List will be sorted by label.', FALSE, TRUE);
-		$this->registerArgument('allowedCountries', 'array', 'Array with countries allowed to be displayed.', FALSE, array());
-	}
+        $this->overrideArgument('options', 'object',
+            'Associative array with internal IDs as key, and the values are displayed in the select box', false);
+        $this->overrideArgument('optionValueField', 'string',
+            'If specified, will call the appropriate getter on each object to determine the value.', false,
+            'isoCodeA2');
+        $this->overrideArgument('optionLabelField', 'string',
+            'If specified, will call the appropriate getter on each object to determine the label.', false,
+            'shortNameLocal');
+        $this->overrideArgument('sortByOptionLabel', 'boolean', 'If true, List will be sorted by label.', false, true);
+        $this->registerArgument('allowedCountries', 'array', 'Array with countries allowed to be displayed.', false,
+            array());
+    }
 
-	/**
-	 * Override the initialize method to load all available
-	 * countries before rendering
-	 *
-	 * @return void
-	 */
-	public function initialize() {
-		parent::initialize();
+    /**
+     * Override the initialize method to load all available
+     * countries before rendering
+     *
+     * @return void
+     */
+    public function initialize()
+    {
+        parent::initialize();
 
-		if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('static_info_tables')) {
-			if ($this->hasArgument('allowedCountries') && count($this->arguments['allowedCountries'])) {
-				$result = $this->countryRepository->findByIsoCodeA2($this->arguments['allowedCountries']);
-			} else {
-				$result = $this->countryRepository->findAll();
-			}
+        if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('static_info_tables')) {
+            if ($this->hasArgument('allowedCountries') && count($this->arguments['allowedCountries'])) {
+                $result = $this->countryRepository->findByIsoCodeA2($this->arguments['allowedCountries']);
+            } else {
+                $result = $this->countryRepository->findAll();
+            }
 
-			$this->arguments['options'] = array();
-			foreach ($result as $country) {
-				$this->arguments['options'][] = $country;
-			}
-		}
-	}
+            if (!empty($this->arguments['allowedCountries'])) {
+                $orderedResults = array();
+                foreach ($this->arguments['allowedCountries'] as $countryKey) {
+                    foreach ($result as $country) {
+                        if ($country->getIsoCodeA2() == $countryKey) {
+                            $orderedResults[] = $country;
+                        }
+                    }
+                }
+                $result = $orderedResults;
+            }
+
+            $this->arguments['options'] = array();
+            foreach ($result as $country) {
+                $this->arguments['options'][] = $country;
+            }
+        }
+    }
 }

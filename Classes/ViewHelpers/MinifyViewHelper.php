@@ -1,5 +1,6 @@
 <?php
 namespace Evoweb\StoreFinder\ViewHelpers;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -28,30 +29,30 @@ namespace Evoweb\StoreFinder\ViewHelpers;
  *
  * @package Evoweb\StoreFinder\ViewHelpers
  */
-class MinifyViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {
-	/**
-	 * Renders the content minified
-	 *
-	 * @param string $content
-	 * @return string
-	 */
-	public function render($content = '') {
-		$content = $content ? $content : $this->renderChildren();
+class MinifyViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
+{
+    /**
+     * Renders the content minified
+     *
+     * @param string $content
+     *
+     * @return string
+     */
+    public function render($content = '')
+    {
+        $content = $content ? $content : $this->renderChildren();
 
-		/* remove comments */
-		$content = str_replace('://', "\xff", $content);
-		$content = preg_replace('@((?:\/\*(?:[^*]|(?:\*+[^*\/]))*\*+\/)|(?:\/\/.*))@', '', $content);
-		$content = str_replace("\xff", '://', $content);
+        /* remove comments */
+        $content = str_replace('://', "\xff", $content);
+        $content = preg_replace('@((?:\/\*(?:[^*]|(?:\*+[^*\/]))*\*+\/)|(?:\/\/.*))@', '', $content);
+        $content = str_replace("\xff", '://', $content);
 
-		/* remove tabs, spaces, newlines, etc. */
-		$content = str_replace(
-			array(CRLF, CR, LF, TAB, '     ', '    ', '  ', ': '),
-			array('', '', '', '', '', '', '', ':'),
-			$content
-		);
-		/* remove other spaces before/after ) */
-		$content = preg_replace(array('(( )+\))', '(\)( )+)'), ')', $content);
+        /* remove tabs, spaces, newlines, etc. */
+        $content = str_replace(array(CRLF, CR, LF, TAB, '     ', '    ', '  ', ': '),
+            array('', '', '', '', '', '', '', ':'), $content);
+        /* remove other spaces before/after ) */
+        $content = preg_replace(array('(( )+\))', '(\)( )+)'), ')', $content);
 
-		return $content;
-	}
+        return $content;
+    }
 }

@@ -1,5 +1,6 @@
 <?php
 namespace Evoweb\StoreFinder\Domain\Repository;
+
 /***************************************************************
  * Copyright notice
  *
@@ -26,55 +27,54 @@ namespace Evoweb\StoreFinder\Domain\Repository;
 /**
  * A repository for static info tables country
  */
-class CountryRepository extends \SJBR\StaticInfoTables\Domain\Repository\CountryRepository {
-	/**
-	 * Constructs a new Repository
-	 *
-	 * @param \TYPO3\CMS\Extbase\Object\ObjectManagerInterface $objectManager
-	 * @return self
-	 */
-	public function __construct(\TYPO3\CMS\Extbase\Object\ObjectManagerInterface $objectManager) {
-		$this->objectManager = $objectManager;
+class CountryRepository extends \SJBR\StaticInfoTables\Domain\Repository\CountryRepository
+{
+    /**
+     * Constructs a new Repository
+     *
+     * @param \TYPO3\CMS\Extbase\Object\ObjectManagerInterface $objectManager
+     *
+     * @return self
+     */
+    public function __construct(\TYPO3\CMS\Extbase\Object\ObjectManagerInterface $objectManager)
+    {
+        $this->objectManager = $objectManager;
 
-		$nsSeparator = strpos($this->getRepositoryClassName(), '\\') !== FALSE ? '\\\\' : '_';
-		$this->objectType = preg_replace(
-			array(
-				'/' . $nsSeparator . 'Repository' . $nsSeparator . '(?!.*' . $nsSeparator . 'Repository' . $nsSeparator . ')/',
-				'/Repository$/'
-			),
-			array($nsSeparator . 'Model' . $nsSeparator, ''),
-			get_parent_class($this)
-		);
-	}
+        $nsSeparator = strpos($this->getRepositoryClassName(), '\\') !== false ? '\\\\' : '_';
+        $this->objectType = preg_replace(array(
+            '/' . $nsSeparator . 'Repository' . $nsSeparator . '(?!.*' . $nsSeparator . 'Repository' . $nsSeparator
+            . ')/',
+            '/Repository$/'
+        ), array($nsSeparator . 'Model' . $nsSeparator, ''), get_parent_class($this));
+    }
 
-	/**
-	 * Find all countries despecting the storage page
-	 *
-	 * @return \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult
-	 */
-	public function findAll() {
-		$query = $this->createQuery();
-		$query
-			->getQuerySettings()
-			->setRespectStoragePage(FALSE);
+    /**
+     * Find all countries despecting the storage page
+     *
+     * @return \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult
+     */
+    public function findAll()
+    {
+        $query = $this->createQuery();
+        $query->getQuerySettings()->setRespectStoragePage(false);
 
-		return $query->execute();
-	}
+        return $query->execute();
+    }
 
-	/**
-	 * Find countries by iso2 codes despection the storage page
-	 *
-	 * @param array $isoCodeA2
-	 * @return \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult
-	 */
-	public function findByIsoCodeA2(array $isoCodeA2) {
-		$query = $this->createQuery();
-		$query
-			->getQuerySettings()
-			->setRespectStoragePage(FALSE);
+    /**
+     * Find countries by iso2 codes despection the storage page
+     *
+     * @param array $isoCodeA2
+     *
+     * @return \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult
+     */
+    public function findByIsoCodeA2(array $isoCodeA2)
+    {
+        $query = $this->createQuery();
+        $query->getQuerySettings()->setRespectStoragePage(false);
 
-		$query->matching($query->in('isoCodeA2', $isoCodeA2));
+        $query->matching($query->in('isoCodeA2', $isoCodeA2));
 
-		return $query->execute();
-	}
+        return $query->execute();
+    }
 }

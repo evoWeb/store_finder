@@ -19,6 +19,10 @@
 				<source>City</source>
 				<target>Stadt</target>
 			</trans-unit>
+			<trans-unit id="phonenumber">
+				<source>Phonenumber</source>
+				<target>Telefonnummer</target>
+			</trans-unit>
 			<trans-unit id="country">
 				<source>Country</source>
 				<target>Land</target>
@@ -37,7 +41,7 @@
 			</trans-unit>
 			<trans-unit id="category">
 				<source>Restrict on Categories</source>
-				<target>Beschränkt auf Kategroien</target>
+				<target>Beschränkt auf Kategorien</target>
 			</trans-unit>
 			<trans-unit id="radius">
 				<source>Radius (km)</source>
@@ -56,6 +60,10 @@
 			<trans-unit id="error_required">
 				<source>Required field may not be empty</source>
 				<target>Pflichtfeld darf nicht leer sein</target>
+			</trans-unit>
+			<trans-unit id="error_either">
+				<source>At least one of the required fields need to be filled in</source>
+				<target>Mindestens eines der Pflichtfelder muss gefüllt sein.</target>
 			</trans-unit>
 			<trans-unit id="error_notexists">
 				<source>Field does not exists</source>

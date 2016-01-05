@@ -1,5 +1,6 @@
 <?php
 namespace Evoweb\StoreFinder\Domain\Repository;
+
 /***************************************************************
  * Copyright notice
  *
@@ -31,35 +32,39 @@ use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
  *
  * @package Evoweb\StoreFinder\Domain\Repository
  */
-class CategoryRepository extends \TYPO3\CMS\Extbase\Domain\Repository\CategoryRepository {
-	/**
-	 * Initializes the repository.
-	 *
-	 * @return void
-	 */
-	public function initializeObject() {
-		/** @var $querySettings Typo3QuerySettings */
-		$querySettings = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\Typo3QuerySettings');
-		$querySettings->setRespectStoragePage(FALSE);
-		$this->setDefaultQuerySettings($querySettings);
-	}
+class CategoryRepository extends \TYPO3\CMS\Extbase\Domain\Repository\CategoryRepository
+{
+    /**
+     * Initializes the repository.
+     *
+     * @return void
+     */
+    public function initializeObject()
+    {
+        /** @var $querySettings Typo3QuerySettings */
+        $querySettings = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\Typo3QuerySettings');
+        $querySettings->setRespectStoragePage(false);
+        $this->setDefaultQuerySettings($querySettings);
+    }
 
-	/**
-	 * Find by list or array or uids
-	 *
-	 * @param array|string $uids
-	 * @return array|\TYPO3\CMS\Extbase\Persistence\QueryResultInterface
-	 */
-	public function findByUids($uids) {
-		$query = $this->createQuery();
+    /**
+     * Find by list or array or uids
+     *
+     * @param array|string $uids
+     *
+     * @return array|\TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+     */
+    public function findByUids($uids)
+    {
+        $query = $this->createQuery();
 
-		if (!is_array($uids)) {
-			$uids = GeneralUtility::intExplode(',', $uids);
-		}
+        if (!is_array($uids)) {
+            $uids = GeneralUtility::intExplode(',', $uids);
+        }
 
-		$query->setOrderings(array('sorting' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING));
-		$query->matching($query->in('uid', $uids));
+        $query->setOrderings(array('sorting' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING));
+        $query->matching($query->in('uid', $uids));
 
-		return $query->execute();
-	}
+        return $query->execute();
+    }
 }

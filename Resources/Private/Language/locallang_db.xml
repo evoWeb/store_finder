@@ -80,8 +80,17 @@
 			<label index="tx_storefinder_domain_model_location.latitude">Breitengrad</label>
 			<label index="tx_storefinder_domain_model_location.longitude">Längengrad</label>
 			<label index="tx_storefinder_domain_model_location.center">Als Mitte verwenden</label>
-			<label index="tx_storefinder_domain_model_location.geocode">Diese Location geo kodieren</label>
+			<label index="tx_storefinder_domain_model_location.geocode">Diese Location geokodieren</label>
 			<label index="tx_storefinder_domain_model_location.distance">Berechnete Entfernung</label>
+
+			<label index="sys_category.add">Kategorie hinzufügen</label>
+
+			<label index="div-address">Adresse</label>
+			<label index="div-contact">Kontakt</label>
+			<label index="div-informations">Informationen</label>
+			<label index="div-relations">Relationen</label>
+
+			<label index="palette-coordinates">Coordinates</label>
 
 			<label index="tx_storefinder_domain_model_attribute">Filial Attribute</label>
 			<label index="tx_storefinder_domain_model_attribute.name">Name</label>
