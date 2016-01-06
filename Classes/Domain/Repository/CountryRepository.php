@@ -38,14 +38,18 @@ class CountryRepository extends \SJBR\StaticInfoTables\Domain\Repository\Country
      */
     public function __construct(\TYPO3\CMS\Extbase\Object\ObjectManagerInterface $objectManager)
     {
-        $this->objectManager = $objectManager;
+        parent::__construct($objectManager);
 
         $nsSeparator = strpos($this->getRepositoryClassName(), '\\') !== false ? '\\\\' : '_';
-        $this->objectType = preg_replace(array(
-            '/' . $nsSeparator . 'Repository' . $nsSeparator . '(?!.*' . $nsSeparator . 'Repository' . $nsSeparator
-            . ')/',
-            '/Repository$/'
-        ), array($nsSeparator . 'Model' . $nsSeparator, ''), get_parent_class($this));
+        $this->objectType = preg_replace(
+            array(
+                '/' . $nsSeparator . 'Repository' . $nsSeparator . '(?!.*' . $nsSeparator . 'Repository' .
+                $nsSeparator . ')/',
+                '/Repository$/'
+            ),
+            array($nsSeparator . 'Model' . $nsSeparator, ''),
+            get_parent_class($this)
+        );
     }
 
     /**

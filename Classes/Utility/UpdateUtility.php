@@ -12,6 +12,13 @@ use TYPO3\CMS\Install\Updates\TtContentUploadsUpdateWizard;
 class UpdateUtility
 {
     /**
+     * Folder to migrate files from locator to
+     *
+     * @var string
+     */
+    const FILE_MIGRATION_FOLDER = '_store_finder/';
+
+    /**
      * @var \TYPO3\CMS\Core\Database\DatabaseConnection $database
      */
     protected $database;
@@ -240,7 +247,7 @@ class UpdateUtility
      */
     protected function generateOutput()
     {
-        $output = '';
+        $output = '<ul class="typo3-messages">';
 
         foreach ($this->messageArray as $messageItem) {
             /** @var \TYPO3\CMS\Core\Messaging\FlashMessage $flashMessage */
@@ -251,8 +258,15 @@ class UpdateUtility
                 \TYPO3\CMS\Core\Messaging\FlashMessage::INFO
             );
 
-            $output .= $flashMessage->render();
+            $severityClass = sprintf('alert %s', $flashMessage->getClass());
+            $messageContent = htmlspecialchars($flashMessage->getMessage());
+            if ($flashMessage->getTitle() !== '') {
+                $messageContent = sprintf('<h4>%s</h4>', htmlspecialchars($flashMessage->getTitle())) . $messageContent;
+            }
+            $output .= sprintf('<li class="%s">%s</li>', htmlspecialchars($severityClass), $messageContent);
         }
+
+        $output .= '</ul>';
 
         return $output;
     }
@@ -462,10 +476,7 @@ class UpdateUtility
                             list(, , $sourceModel, $mmTable, $mmField, $destinationTable, $destinationField) = $parts;
                             $sorting = 0;
 
-                            foreach (GeneralUtility::trimExplode(
-                                ',',
-                                $source[$fieldFrom]
-                            ) as $fromValue) {
+                            foreach (GeneralUtility::trimExplode(',', $source[$fieldFrom]) as $fromValue) {
                                 if ($mmField == 'uid_local') {
                                     $uidForeign = $this->records[$sourceModel][$fromValue];
                                     $uidLocal = $destination['uid'];
@@ -479,13 +490,16 @@ class UpdateUtility
                                 }
 
                                 if (!$this->mmRelationExists($mmTable, $uidLocal, $uidForeign, $destinationTable)) {
-                                    $this->database->exec_INSERTquery($mmTable, array(
+                                    $this->database->exec_INSERTquery(
+                                        $mmTable,
+                                        array(
                                             'uid_local' => $uidLocal,
                                             'uid_foreign' => $uidForeign,
                                             'tablenames' => $destinationTable,
                                             'sorting' . ($mmField == 'uid_foreign' ? '_foreign' : '') => $sorting,
                                             'fieldname' => $destinationField,
-                                        ));
+                                        )
+                                    );
                                 }
 
                                 $sorting++;
@@ -518,10 +532,7 @@ class UpdateUtility
                         if ($parts[1] == 'mm') {
                             list(, , $sourceModel, $mmTable, $mmField, $destinationTable, $destinationField) = $parts;
                             $sorting = 0;
-                            foreach (GeneralUtility::trimExplode(
-                                ',',
-                                $source[$fieldFrom]
-                            ) as $fromValue) {
+                            foreach (GeneralUtility::trimExplode(',', $source[$fieldFrom]) as $fromValue) {
                                 if ($mmField == 'uid_local') {
                                     $uidForeign = $this->records[$sourceModel][$fromValue];
                                     $uidLocal = $destination['uid'];
@@ -535,13 +546,16 @@ class UpdateUtility
                                 }
 
                                 if (!$this->mmRelationExists($mmTable, $uidLocal, $uidForeign, $destinationTable)) {
-                                    $this->database->exec_INSERTquery($mmTable, array(
+                                    $this->database->exec_INSERTquery(
+                                        $mmTable,
+                                        array(
                                             'uid_local' => $uidLocal,
                                             'uid_foreign' => $uidForeign,
                                             'tablenames' => $destinationTable,
                                             'sorting' . ($mmField == 'uid_foreign' ? '_foreign' : '') => $sorting,
                                             'fieldname' => $destinationField,
-                                        ));
+                                        )
+                                    );
                                 }
 
                                 $sorting++;
@@ -616,7 +630,9 @@ class UpdateUtility
     protected function initializeFalStorage()
     {
         if (!$this->storage) {
-            $fileadminDirectory = rtrim($GLOBALS['TYPO3_CONF_VARS']['BE']['fileadminDir'], '/') . '/';
+            $fileadminDirectory = !empty($GLOBALS['TYPO3_CONF_VARS']['BE']['fileadminDir']) ?
+                rtrim($GLOBALS['TYPO3_CONF_VARS']['BE']['fileadminDir'], '/') . '/' :
+                'fileadmin/';
 
             /** @var $storageRepository \TYPO3\CMS\Core\Resource\StorageRepository */
             $storageRepository = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\StorageRepository');
@@ -644,8 +660,7 @@ class UpdateUtility
             $this->fileIndexRepository = GeneralUtility::makeInstance(
                 'TYPO3\\CMS\\Core\\Resource\\Index\\FileIndexRepository'
             );
-            $this->targetDirectory = PATH_site . $fileadminDirectory .
-                TtContentUploadsUpdateWizard::FOLDER_ContentUploads . '/';
+            $this->targetDirectory = PATH_site . $fileadminDirectory . self::FILE_MIGRATION_FOLDER;
         }
     }
 
@@ -656,11 +671,8 @@ class UpdateUtility
      */
     protected function checkPrerequisites()
     {
-        if (!$this->storage->hasFolder(TtContentUploadsUpdateWizard::FOLDER_ContentUploads)) {
-            $this->storage->createFolder(
-                TtContentUploadsUpdateWizard::FOLDER_ContentUploads,
-                $this->storage->getRootLevelFolder()
-            );
+        if (!$this->storage->hasFolder(self::FILE_MIGRATION_FOLDER)) {
+            $this->storage->createFolder(self::FILE_MIGRATION_FOLDER, $this->storage->getRootLevelFolder());
         }
     }
 
@@ -683,8 +695,7 @@ class UpdateUtility
             if (file_exists($path . $file)) {
                 GeneralUtility::upload_copy_move($path . $file, $this->targetDirectory . $file);
                 /** @var \TYPO3\CMS\Core\Resource\File $fileObject */
-                $fileObject = $this->storage->getFile(TtContentUploadsUpdateWizard::FOLDER_ContentUploads
-                    . '/' . $file);
+                $fileObject = $this->storage->getFile(self::FILE_MIGRATION_FOLDER . $file);
                 $this->fileIndexRepository->add($fileObject);
 
                 $count = $this->database->exec_SELECTcountRows(
@@ -728,21 +739,23 @@ class UpdateUtility
         /** @var \TYPO3\CMS\Core\Database\DatabaseConnection $database */
         $database = $GLOBALS['TYPO3_DB'];
 
-		$res = $database->sql_query('show tables like \'tx_locator_%\';');
+        $res = $database->sql_query('show tables like \'tx_locator_%\';');
 
-		$countLocations = $countAttributes = 0;
-		if ($database->sql_num_rows($res)) {
-			$countLocations = $database->exec_SELECTcountRows(
-				'l.uid',
-				'tx_locator_locations AS l LEFT JOIN tx_storefinder_domain_model_location AS sl ON l.uid = sl.import_id',
-				'l.deleted = 0'
-			);
-			$countAttributes = $database->exec_SELECTcountRows(
-				'a.uid',
-				'tx_locator_attributes AS a LEFT JOIN tx_storefinder_domain_model_attribute AS sa ON a.uid = sa.import_id',
-				'a.deleted = 0'
-			);
-		}
+        $countLocations = $countAttributes = 0;
+        if ($database->sql_num_rows($res)) {
+            $countLocations = $database->exec_SELECTcountRows(
+                'l.uid',
+                'tx_locator_locations AS l
+                    LEFT JOIN tx_storefinder_domain_model_location AS sl ON l.uid = sl.import_id',
+                'l.deleted = 0'
+            );
+            $countAttributes = $database->exec_SELECTcountRows(
+                'a.uid',
+                'tx_locator_attributes AS a
+                    LEFT JOIN tx_storefinder_domain_model_attribute AS sa ON a.uid = sa.import_id',
+                'a.deleted = 0'
+            );
+        }
 
         $result = false;
         if ($countLocations || $countAttributes) {

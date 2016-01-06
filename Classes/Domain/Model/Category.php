@@ -1,5 +1,6 @@
 <?php
 namespace Evoweb\StoreFinder\Domain\Model;
+
 /***************************************************************
  * Copyright notice
  *
@@ -30,36 +31,41 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
  *
  * @package Evoweb\StoreFinder\Domain\Model
  */
-class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category {
-	/**
-	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Evoweb\StoreFinder\Domain\Model\Category>
-	 * @lazy
-	 */
-	protected $children;
+class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
+{
+    /**
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Evoweb\StoreFinder\Domain\Model\Category>
+     * @lazy
+     */
+    protected $children;
 
-	/**
-	 * Initialize categories, attributed and media relation
-	 */
-	public function __construct() {
-		$this->children = new ObjectStorage();
-	}
+    /**
+     * Initialize categories, attributed and media relation
+     */
+    public function __construct()
+    {
+        $this->children = new ObjectStorage();
+    }
 
-	/**
-	 * Setter
-	 *
-	 * @param ObjectStorage $children
-	 * @return void
-	 */
-	public function setChildren($children) {
-		$this->children = $children;
-	}
+    /**
+     * Setter
+     *
+     * @param ObjectStorage $children
+     *
+     * @return void
+     */
+    public function setChildren($children)
+    {
+        $this->children = $children;
+    }
 
-	/**
-	 * Getter
-	 *
-	 * @return ObjectStorage
-	 */
-	public function getChildren() {
-		return $this->children;
-	}
+    /**
+     * Getter
+     *
+     * @return ObjectStorage
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
 }

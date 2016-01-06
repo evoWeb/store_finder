@@ -48,8 +48,11 @@ class MinifyViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelp
         $content = str_replace("\xff", '://', $content);
 
         /* remove tabs, spaces, newlines, etc. */
-        $content = str_replace(array(CRLF, CR, LF, TAB, '     ', '    ', '  ', ': '),
-            array('', '', '', '', '', '', '', ':'), $content);
+        $content = str_replace(
+            array(CRLF, CR, LF, TAB, '     ', '    ', '  ', ': '),
+            array('', '', '', '', '', '', '', ':'),
+            $content
+        );
         /* remove other spaces before/after ) */
         $content = preg_replace(array('(( )+\))', '(\)( )+)'), ')', $content);
 

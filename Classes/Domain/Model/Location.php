@@ -200,7 +200,12 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     public function __construct()
     {
-        $this->attributes = $this->categories = $this->content = $this->related = $this->image = $this->media = new ObjectStorage();
+        $this->attributes =
+            $this->categories =
+            $this->content =
+            $this->related =
+            $this->image =
+            $this->media = new ObjectStorage();
     }
 
     /**

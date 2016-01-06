@@ -332,7 +332,7 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $query = $this->createQuery();
 
         $query->setOrderings(array('sorting' => QueryInterface::ORDER_ASCENDING));
-        $query->matching('center', 1);
+        $query->matching($query->equals('center', 1));
 
         return $query->execute()->getFirst();
     }

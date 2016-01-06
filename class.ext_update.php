@@ -25,5 +25,6 @@
 /**
  * Update Class for DB Updates
  */
-class ext_update extends \Evoweb\StoreFinder\Utility\UpdateUtility {
+class ext_update extends \Evoweb\StoreFinder\Utility\UpdateUtility
+{
 }
