@@ -634,7 +634,7 @@ class UpdateUtility
                 'fileadmin/';
 
             /** @var $storageRepository \TYPO3\CMS\Core\Resource\StorageRepository */
-            $storageRepository = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\StorageRepository');
+            $storageRepository = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Resource\StorageRepository::class);
             $storages = $storageRepository->findAll();
 
             foreach ($storages as $storage) {
@@ -655,9 +655,9 @@ class UpdateUtility
                 );
             }
 
-            $this->fileFactory = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\ResourceFactory');
+            $this->fileFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Resource\ResourceFactory::class);
             $this->fileIndexRepository = GeneralUtility::makeInstance(
-                'TYPO3\\CMS\\Core\\Resource\\Index\\FileIndexRepository'
+                \TYPO3\CMS\Core\Resource\Index\FileIndexRepository::class
             );
             $this->targetDirectory = PATH_site . $fileadminDirectory . self::FILE_MIGRATION_FOLDER;
         }

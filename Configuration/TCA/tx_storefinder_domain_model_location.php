@@ -33,7 +33,6 @@ $foreignTypes = array(
     )
 );
 
-$coreLangFile = 'LLL:EXT:lang/locallang_tca.xlf:';
 $languageFile = 'LLL:EXT:store_finder/Resources/Private/Language/locallang_db.xml:';
 
 return array(
@@ -327,6 +326,10 @@ return array(
                 'foreign_table_where' => ' AND tx_storefinder_domain_model_attribute.sys_language_uid = 0
                     AND tx_storefinder_domain_model_attribute.pid = ###CURRENT_PID###',
                 'MM' => 'tx_storefinder_location_attribute_mm',
+                'MM_match_fields' => array(
+                    'tablenames' => 'tx_storefinder_domain_model_attribute',
+                    'fieldname' => 'attributes',
+                ),
                 'size' => 10,
                 'maxitems' => 30,
             )
