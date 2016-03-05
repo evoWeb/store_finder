@@ -1,7 +1,40 @@
 <?php
 
-$languageFile = 'LLL:EXT:store_finder/Resources/Private/Language/locallang_db.xml:';
+$foreignTypes = array(
+    '0' => array(
+        'showitem' => '
+--palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
+--palette--;;filePalette'
+    ),
+    \TYPO3\CMS\Core\Resource\File::FILETYPE_TEXT => array(
+        'showitem' => '
+--palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
+--palette--;;filePalette'
+    ),
+    \TYPO3\CMS\Core\Resource\File::FILETYPE_IMAGE => array(
+        'showitem' => '
+--palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
+--palette--;;filePalette'
+    ),
+    \TYPO3\CMS\Core\Resource\File::FILETYPE_AUDIO => array(
+        'showitem' => '
+--palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
+--palette--;;filePalette'
+    ),
+    \TYPO3\CMS\Core\Resource\File::FILETYPE_VIDEO => array(
+        'showitem' => '
+--palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
+--palette--;;filePalette'
+    ),
+    \TYPO3\CMS\Core\Resource\File::FILETYPE_APPLICATION => array(
+        'showitem' => '
+--palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
+--palette--;;filePalette'
+    )
+);
+
 $coreLangFile = 'LLL:EXT:lang/locallang_tca.xlf:';
+$languageFile = 'LLL:EXT:store_finder/Resources/Private/Language/locallang_db.xml:';
 
 return array(
     'ctrl' => array(
@@ -55,8 +88,8 @@ return array(
                     )
                 ),
                 'foreign_table' => 'tx_storefinder_domain_model_location',
-                'foreign_table_where' => 'AND tx_storefinder_domain_model_location.pid=###CURRENT_PID###
-					AND tx_storefinder_domain_model_location.sys_language_uid IN (-1,0)'
+                'foreign_table_where' => 'AND tx_storefinder_domain_model_location.pid=###CURRENT_PID### 
+                    AND tx_storefinder_domain_model_location.sys_language_uid IN (-1,0)'
             )
         ),
 
@@ -133,8 +166,8 @@ return array(
                     array('', 0),
                 ),
                 'foreign_table' => 'static_country_zones',
-                'foreign_table_where' =>
-                    'AND zn_country_uid = ###REC_FIELD_country### ORDER BY static_country_zones.zn_name_local',
+                'foreign_table_where' => 'AND zn_country_uid = ###REC_FIELD_country### 
+                    ORDER BY static_country_zones.zn_name_local',
                 'size' => 1,
                 'minitems' => 0,
                 'maxitems' => 1
@@ -150,8 +183,8 @@ return array(
                     array('', 0),
                 ),
                 'foreign_table' => 'static_countries',
-                'itemsProcFunc' =>
-                    'SJBR\\StaticInfoTables\\Hook\\Backend\\Form\\ElementRenderingHelper->translateCountriesSelector',
+                'itemsProcFunc' => \SJBR\StaticInfoTables\Hook\Backend\Form\ElementRenderingHelper::class
+                    . '->translateCountriesSelector',
                 'size' => 1,
                 'minitems' => 1,
                 'maxitems' => 1
@@ -219,6 +252,7 @@ return array(
             )
         ),
 
+
         // relations
         'related' => array(
             'exclude' => 0,
@@ -230,7 +264,7 @@ return array(
                 ),
                 'foreign_table' => 'tx_storefinder_domain_model_location',
                 'foreign_table_where' => 'AND tx_storefinder_domain_model_location.uid != ###THIS_UID###
-					ORDER BY tx_storefinder_domain_model_location.name',
+                    ORDER BY tx_storefinder_domain_model_location.name',
                 'MM' => 'sys_category_record_mm',
                 'MM_match_fields' => array(
                     'tablenames' => 'tx_storefinder_domain_model_location',
@@ -275,7 +309,9 @@ return array(
                             'pid' => '###CURRENT_PID###',
                             'setValue' => 'prepend'
                         ),
-                        'script' => 'wizard_add.php',
+                        'module' => array(
+                            'name' => 'wizard_add'
+                        )
                     )
                 ),
             )
@@ -286,14 +322,11 @@ return array(
             'label' => $languageFile . 'tx_storefinder_domain_model_location.attributes',
             'config' => array(
                 'type' => 'select',
+                'renderType' => 'selectMultipleSideBySide',
                 'foreign_table' => 'tx_storefinder_domain_model_attribute',
                 'foreign_table_where' => ' AND tx_storefinder_domain_model_attribute.sys_language_uid = 0
-					AND tx_storefinder_domain_model_attribute.pid = ###CURRENT_PID###',
+                    AND tx_storefinder_domain_model_attribute.pid = ###CURRENT_PID###',
                 'MM' => 'tx_storefinder_location_attribute_mm',
-                'MM_match_fields' => array(
-                    'tablenames' => 'tx_storefinder_domain_model_attribute',
-                    'fieldname' => 'attributes',
-                ),
                 'size' => 10,
                 'maxitems' => 30,
             )
@@ -302,47 +335,20 @@ return array(
         'icon' => array(
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.icon',
-            'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig('icon', array(
-                'appearance' => array(
-                    'createNewRelationLinkTitle' => 'LLL:EXT:cms/locallang_ttc.xlf:images.addFileReference'
+            'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
+                'icon',
+                array(
+                    'appearance' => array(
+                        'createNewRelationLinkTitle' => 'LLL:EXT:cms/locallang_ttc.xlf:images.addFileReference'
+                    ),
+                    'minitems' => 0,
+                    'maxitems' => 1,
+                    // custom configuration for displaying fields in the overlay/reference table
+                    // to use the imageoverlayPalette instead of the basicoverlayPalette
+                    'foreign_types' => $foreignTypes,
                 ),
-                'minitems' => 0,
-                'maxitems' => 1,
-                // custom configuration for displaying fields in the overlay/reference table
-                // to use the imageoverlayPalette instead of the basicoverlayPalette
-                'foreign_types' => array(
-                    '0' => array(
-                        'showitem' => '
-							--palette--;' . $coreLangFile . 'sys_file_reference.imageoverlayPalette;imageoverlayPalette,
-							--palette--;;filePalette'
-                    ),
-                    \TYPO3\CMS\Core\Resource\File::FILETYPE_TEXT => array(
-                        'showitem' => '
-							--palette--;' . $coreLangFile . 'sys_file_reference.imageoverlayPalette;imageoverlayPalette,
-							--palette--;;filePalette'
-                    ),
-                    \TYPO3\CMS\Core\Resource\File::FILETYPE_IMAGE => array(
-                        'showitem' => '
-							--palette--;' . $coreLangFile . 'sys_file_reference.imageoverlayPalette;imageoverlayPalette,
-							--palette--;;filePalette'
-                    ),
-                    \TYPO3\CMS\Core\Resource\File::FILETYPE_AUDIO => array(
-                        'showitem' => '
-							--palette--;' . $coreLangFile . 'sys_file_reference.imageoverlayPalette;imageoverlayPalette,
-							--palette--;;filePalette'
-                    ),
-                    \TYPO3\CMS\Core\Resource\File::FILETYPE_VIDEO => array(
-                        'showitem' => '
-							--palette--;' . $coreLangFile . 'sys_file_reference.imageoverlayPalette;imageoverlayPalette,
-							--palette--;;filePalette'
-                    ),
-                    \TYPO3\CMS\Core\Resource\File::FILETYPE_APPLICATION => array(
-                        'showitem' => '
-							--palette--;' . $coreLangFile . 'sys_file_reference.imageoverlayPalette;imageoverlayPalette,
-							--palette--;;filePalette'
-                    )
-                )
-            ), $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']),
+                $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']
+            ),
         ),
 
         'latitude' => array(
@@ -373,15 +379,6 @@ return array(
             )
         ),
 
-        'geocode' => array(
-            'exclude' => 1,
-            'label' => $languageFile . 'tx_storefinder_domain_model_location.geocode',
-            'config' => array(
-                'type' => 'check',
-                'default' => 1,
-            )
-        ),
-
         'distance' => array(
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.distance',
@@ -391,8 +388,15 @@ return array(
                 'size' => 10,
             )
         ),
+        'geocode' => array(
+            'exclude' => 1,
+            'label' => $languageFile . 'tx_storefinder_domain_model_location.geocode',
+            'config' => array(
+                'type' => 'check',
+            )
+        ),
 
-        // information
+        // informations
         'products' => array(
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.products',
@@ -429,7 +433,9 @@ return array(
                         'type' => 'popup',
                         'title' => 'Link',
                         'icon' => 'link_popup.gif',
-                        'script' => 'browse_links.php?mode=wizard',
+                        'module' => array(
+                            'name' => 'wizard_link',
+                        ),
                         'JSopenParams' => 'height=300,width=500,status=0,menubar=0,scrollbars=1'
                     )
                 )
@@ -439,97 +445,43 @@ return array(
         'image' => array(
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.image',
-            'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig('image', array(
-                'appearance' => array(
-                    'headerThumbnail' => array(
-                        'width' => '100',
-                        'height' => '100c',
+            'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
+                'image',
+                array(
+                    'appearance' => array(
+                        'headerThumbnail' => array(
+                            'width' => '100',
+                            'height' => '100c',
+                        ),
+                        'createNewRelationLinkTitle' => 'LLL:EXT:cms/locallang_ttc.xlf:images.addFileReference'
                     ),
-                    'createNewRelationLinkTitle' => 'LLL:EXT:cms/locallang_ttc.xlf:images.addFileReference'
+                    // custom configuration for displaying fields in the overlay/reference table
+                    // to use the imageoverlayPalette instead of the basicoverlayPalette
+                    'foreign_types' => $foreignTypes,
                 ),
-                // custom configuration for displaying fields in the overlay/reference table
-                // to use the imageoverlayPalette instead of the basicoverlayPalette
-                'foreign_types' => array(
-                    '0' => array(
-                        'showitem' => '
-							--palette--;' . $coreLangFile . 'sys_file_reference.imageoverlayPalette;imageoverlayPalette,
-							--palette--;;filePalette'
-                    ),
-                    \TYPO3\CMS\Core\Resource\File::FILETYPE_TEXT => array(
-                        'showitem' => '
-							--palette--;' . $coreLangFile . 'sys_file_reference.imageoverlayPalette;imageoverlayPalette,
-							--palette--;;filePalette'
-                    ),
-                    \TYPO3\CMS\Core\Resource\File::FILETYPE_IMAGE => array(
-                        'showitem' => '
-							--palette--;' . $coreLangFile . 'sys_file_reference.imageoverlayPalette;imageoverlayPalette,
-							--palette--;;filePalette'
-                    ),
-                    \TYPO3\CMS\Core\Resource\File::FILETYPE_AUDIO => array(
-                        'showitem' => '
-							--palette--;' . $coreLangFile . 'sys_file_reference.imageoverlayPalette;imageoverlayPalette,
-							--palette--;;filePalette'
-                    ),
-                    \TYPO3\CMS\Core\Resource\File::FILETYPE_VIDEO => array(
-                        'showitem' => '
-							--palette--;' . $coreLangFile . 'sys_file_reference.imageoverlayPalette;imageoverlayPalette,
-							--palette--;;filePalette'
-                    ),
-                    \TYPO3\CMS\Core\Resource\File::FILETYPE_APPLICATION => array(
-                        'showitem' => '
-							--palette--;' . $coreLangFile . 'sys_file_reference.imageoverlayPalette;imageoverlayPalette,
-							--palette--;;filePalette'
-                    )
-                )
-            ), $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']),
+                $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']
+            ),
         ),
 
         'media' => array(
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.media',
-            'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig('media', array(
-                'appearance' => array(
-                    'headerThumbnail' => array(
-                        'width' => '100',
-                        'height' => '100c',
+            'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
+                'media',
+                array(
+                    'appearance' => array(
+                        'headerThumbnail' => array(
+                            'width' => '100',
+                            'height' => '100c',
+                        ),
+                        'createNewRelationLinkTitle' => 'LLL:EXT:cms/locallang_ttc.xlf:images.addFileReference'
                     ),
-                    'createNewRelationLinkTitle' => 'LLL:EXT:cms/locallang_ttc.xlf:images.addFileReference'
+                    // custom configuration for displaying fields in the overlay/reference table
+                    // to use the imageoverlayPalette instead of the basicoverlayPalette
+                    'foreign_types' => $foreignTypes,
                 ),
-                // custom configuration for displaying fields in the overlay/reference table
-                // to use the imageoverlayPalette instead of the basicoverlayPalette
-                'foreign_types' => array(
-                    '0' => array(
-                        'showitem' => '
-							--palette--;' . $coreLangFile . 'sys_file_reference.imageoverlayPalette;imageoverlayPalette,
-							--palette--;;filePalette'
-                    ),
-                    \TYPO3\CMS\Core\Resource\File::FILETYPE_TEXT => array(
-                        'showitem' => '
-							--palette--;' . $coreLangFile . 'sys_file_reference.imageoverlayPalette;imageoverlayPalette,
-							--palette--;;filePalette'
-                    ),
-                    \TYPO3\CMS\Core\Resource\File::FILETYPE_IMAGE => array(
-                        'showitem' => '
-							--palette--;' . $coreLangFile . 'sys_file_reference.imageoverlayPalette;imageoverlayPalette,
-							--palette--;;filePalette'
-                    ),
-                    \TYPO3\CMS\Core\Resource\File::FILETYPE_AUDIO => array(
-                        'showitem' => '
-							--palette--;' . $coreLangFile . 'sys_file_reference.imageoverlayPalette;imageoverlayPalette,
-							--palette--;;filePalette'
-                    ),
-                    \TYPO3\CMS\Core\Resource\File::FILETYPE_VIDEO => array(
-                        'showitem' => '
-							--palette--;' . $coreLangFile . 'sys_file_reference.imageoverlayPalette;imageoverlayPalette,
-							--palette--;;filePalette'
-                    ),
-                    \TYPO3\CMS\Core\Resource\File::FILETYPE_APPLICATION => array(
-                        'showitem' => '
-							--palette--;' . $coreLangFile . 'sys_file_reference.imageoverlayPalette;imageoverlayPalette,
-							--palette--;;filePalette'
-                    )
-                )
-            ), $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']),
+                $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']
+            ),
         ),
 
         'content' => array(
@@ -561,20 +513,20 @@ return array(
     'types' => array(
         '0' => array(
             'showitem' => '
-			--div--;' . $languageFile . 'div-address,
-				name, storeid, address, additionaladdress, zipcode, city, state, country,
-			--div--;' . $languageFile . 'div-contact,
-				person, phone, mobile, fax, email, hours,
-			--div--;' . $languageFile . 'div-relations,
-				related, categories, attributes, icon,
-				--palette--;' . $languageFile . 'palette-coordinates;coordinates,
-			--div--;' . $languageFile . 'div-informations,
-				products, notes;;;richtext:rte_transform[flag=rte_enabled|mode=ts_css], url,
-				image;' . $languageFile . 'tx_storefinder_domain_model_location.image,
-				media;' . $languageFile . 'tx_storefinder_domain_model_location.media, content,
-			--div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access,
-				--palette--;LLL:EXT:cms/locallang_ttc.xlf:palette.visibility;visibility,
-				--palette--;LLL:EXT:cms/locallang_ttc.xlf:palette.access;access,'
+            --div--;' . $languageFile . 'div-address,
+                name, storeid, address, additionaladdress, zipcode, city, state, country,
+            --div--;' . $languageFile . 'div-contact,
+                person, phone, mobile, fax, email, hours,
+            --div--;' . $languageFile . 'div-relations,
+                related, categories, attributes, icon,
+                --palette--;' . $languageFile . 'palette-coordinates;coordinates,
+            --div--;' . $languageFile . 'div-informations,
+                products, notes;;;richtext:rte_transform[flag=rte_enabled|mode=ts_css], url,
+                image;' . $languageFile . 'tx_storefinder_domain_model_location.image,
+                media;' . $languageFile . 'tx_storefinder_domain_model_location.media, content,
+            --div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access,
+                --palette--;LLL:EXT:cms/locallang_ttc.xlf:palette.visibility;visibility,
+                --palette--;LLL:EXT:cms/locallang_ttc.xlf:palette.access;access,'
         )
     ),
 
@@ -584,7 +536,8 @@ return array(
             'canNotCollapse' => 1
         ),
         'visibility' => array(
-            'showitem' => 'hidden;' . $languageFile . 'tx_storefinder_domain_model_location.hidden',
+            'showitem' => '
+                hidden;' . $languageFile . 'tx_storefinder_domain_model_location.hidden',
             'canNotCollapse' => 1
         ),
         'access' => array(

@@ -15,7 +15,6 @@ return array(
         'sortby' => 'sorting',
         'delete' => 'deleted',
 
-        'type' => 'type',
         'languageField' => 'sys_language_uid',
         'transOrigPointerField' => 'l18n_parent',
         'transOrigDiffSourceField' => 'l18n_diffsource',
