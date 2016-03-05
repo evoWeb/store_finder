@@ -280,7 +280,7 @@ return array(
             'config' => array(
                 'type' => 'select',
                 'foreign_table' => 'sys_category',
-                'foreign_table_where' => 'AND sys_category.sys_language_uid IN (0,-1) ORDER BY sys_category.title ASC',
+                'foreign_table_where' => 'AND sys_category.sys_language_uid IN (-1,0) ORDER BY sys_category.title ASC',
                 'MM' => 'sys_category_record_mm',
                 'MM_opposite_field' => 'items',
                 'MM_match_fields' => array(
@@ -323,7 +323,7 @@ return array(
                 'type' => 'select',
                 'renderType' => 'selectMultipleSideBySide',
                 'foreign_table' => 'tx_storefinder_domain_model_attribute',
-                'foreign_table_where' => ' AND tx_storefinder_domain_model_attribute.sys_language_uid = 0
+                'foreign_table_where' => ' AND tx_storefinder_domain_model_attribute.sys_language_uid IN (-1,0)
                     AND tx_storefinder_domain_model_attribute.pid = ###CURRENT_PID###',
                 'MM' => 'tx_storefinder_location_attribute_mm',
                 'MM_match_fields' => array(
