@@ -53,7 +53,8 @@ CREATE TABLE tx_storefinder_domain_model_location (
 	import_id int(11) DEFAULT '0' NOT NULL,
 
 	PRIMARY KEY (uid),
-	KEY parent (pid)
+	KEY parent (pid),
+	KEY import_id (import_id)
 );
 
 
@@ -79,7 +80,8 @@ CREATE TABLE tx_storefinder_domain_model_attribute (
 	import_id int(11) DEFAULT '0' NOT NULL,
 
 	PRIMARY KEY (uid),
-	KEY parent (pid)
+	KEY parent (pid),
+	KEY import_id (import_id)
 );
 
 
