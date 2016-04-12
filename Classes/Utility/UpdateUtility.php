@@ -746,13 +746,13 @@ class UpdateUtility
                 'l.uid',
                 'tx_locator_locations AS l
                     LEFT JOIN tx_storefinder_domain_model_location AS sl ON l.uid = sl.import_id',
-                'l.deleted = 0'
+                'l.deleted = 0 AND sl.uid IS NULL'
             );
             $countAttributes = $database->exec_SELECTcountRows(
                 'a.uid',
                 'tx_locator_attributes AS a
                     LEFT JOIN tx_storefinder_domain_model_attribute AS sa ON a.uid = sa.import_id',
-                'a.deleted = 0'
+                'a.deleted = 0 AND sa.uid IS NULL'
             );
         }
 
