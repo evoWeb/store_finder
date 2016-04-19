@@ -65,7 +65,6 @@ class CoordinatesCache
      * @throws \TYPO3\CMS\Core\Cache\Exception\InvalidBackendException
      * @throws \TYPO3\CMS\Core\Cache\Exception\InvalidCacheException
      * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
-     * @return self
      */
     public function __construct()
     {

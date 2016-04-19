@@ -33,8 +33,6 @@ class CountryRepository extends \SJBR\StaticInfoTables\Domain\Repository\Country
      * Constructs a new Repository
      *
      * @param \TYPO3\CMS\Extbase\Object\ObjectManagerInterface $objectManager
-     *
-     * @return self
      */
     public function __construct(\TYPO3\CMS\Extbase\Object\ObjectManagerInterface $objectManager)
     {

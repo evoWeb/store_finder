@@ -155,29 +155,30 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         );
     }
 
-	/**
-	 * Render a map with only one location
-	 *
-	 * @param Model\Location $location
-	 * @return void
-	 */
-	public function showAction(Model\Location $location = NULL) {
-		if ($location === NULL) {
-			if ($this->settings['location']) {
-				$location = $this->locationRepository->findByUid((int) $this->settings['location']);
-			}
-		}
+    /**
+     * Render a map with only one location
+     *
+     * @param Model\Location $location
+     * @return void
+     */
+    public function showAction(Model\Location $location = null)
+    {
+        if ($location === null) {
+            if ($this->settings['location']) {
+                $location = $this->locationRepository->findByUid((int) $this->settings['location']);
+            }
+        }
 
-		if ($location !== NULL) {
-			/** @var Model\Location $center */
-			$center = $location;
-			$center->setZoom($this->settings['zoom'] ? $this->settings['zoom'] : 15);
+        if ($location !== null) {
+            /** @var Model\Location $center */
+            $center = $location;
+            $center->setZoom($this->settings['zoom'] ? $this->settings['zoom'] : 15);
 
-			$this->view->assign('center', $center);
-			$this->view->assign('numberOfLocations', 1);
-			$this->view->assign('locations', array($location));
-		}
-	}
+            $this->view->assign('center', $center);
+            $this->view->assign('numberOfLocations', 1);
+            $this->view->assign('locations', array($location));
+        }
+    }
 
 
     /**

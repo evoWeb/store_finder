@@ -54,7 +54,9 @@ class AddLocationToCacheTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
      */
     public function setUp()
     {
-        $this->objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
+        $this->objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+            'TYPO3\\CMS\\Extbase\\Object\\ObjectManager'
+        );
         $this->coordinatesCache = $this->objectManager->get('Evoweb\\StoreFinder\\Cache\\CoordinatesCache');
     }
 

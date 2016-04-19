@@ -54,8 +54,6 @@ class GeocodeService
      * Constructor
      *
      * @param array $settings
-     *
-     * @return self
      */
     public function __construct(array $settings = array())
     {
@@ -215,7 +213,7 @@ class GeocodeService
 
         $apiUrl = $this->settings['geocodeUrl'] . '&address=' . implode('+', $parameter);
         $apiUrl .= (!empty($components) ? '&components=' . implode('|', $components) : '');
-        $addressData = json_decode(utf8_encode(GeneralUtility::getURL(str_replace('?&', '?', $apiUrl))));
+        $addressData = json_decode(utf8_encode(GeneralUtility::getUrl(str_replace('?&', '?', $apiUrl))));
 
         if (is_object($addressData) && property_exists($addressData, 'status') && $addressData->status === 'OK') {
             $result = $addressData->results[0]->geometry->location;
