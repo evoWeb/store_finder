@@ -1,8 +1,5 @@
 <?php
-
-if (!defined('TYPO3_MODE')) {
-    die('Access denied.');
-}
+defined('TYPO3_MODE') || die('Access denied.');
 
 
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['livesearch']['location'] = 'tx_storefinder_domain_model_location';
@@ -14,17 +11,17 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['livesearch']['location'] = 'tx_storefinder_d
 
 
 /** @noinspection PhpUndefinedVariableInspection */
-$tempColumns = array(
-    'children' => array(
+$tempColumns = [
+    'children' => [
         'exclude' => 1,
         'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_db.xml:sys_category.children',
-        'config' => array(
+        'config' => [
             'type' => 'inline',
             'foreign_table' => 'sys_category',
             'foreign_field' => 'parent',
-        )
-    ),
-);
+        ]
+    ],
+];
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('sys_category', $tempColumns, 1);
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes('sys_category', 'children', '', 'after:parent');
@@ -35,13 +32,27 @@ $TCA['tt_content']['types']['list']['subtypes_excludelist'][$pluginSignature] = 
 $TCA['tt_content']['types']['list']['subtypes_addlist'][$pluginSignature] = 'pi_flexform';
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue(
     $pluginSignature,
-    'FILE:EXT:' . $_EXTKEY . '/Configuration/FlexForms/flexform_ds.xml'
+    'FILE:EXT:' . $_EXTKEY . '/Configuration/FlexForms/flexform_mapWithSearch.xml'
 );
 
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
     $_EXTKEY,
     'Map',
     'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_be.xml:tt_content.list_type_map'
+);
+
+$pluginSignature = 'storefinder_show';
+$TCA['tt_content']['types']['list']['subtypes_excludelist'][$pluginSignature] = 'layout, select_key';
+$TCA['tt_content']['types']['list']['subtypes_addlist'][$pluginSignature] = 'pi_flexform';
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue(
+    $pluginSignature,
+    'FILE:EXT:' . $_EXTKEY . '/Configuration/FlexForms/flexform_singleLocation.xml'
+);
+
+\TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
+    $_EXTKEY,
+    'Show',
+    'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_be.xml:tt_content.list_type_show'
 );
 
 

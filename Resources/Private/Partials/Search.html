@@ -80,9 +80,7 @@
 		<dt><f:translate key="radius" /></dt>
 		<dd>
 			<f:render partial="FieldError" section="Main" arguments="{field: 'radius'}" />
-			<f:form.select property="radius" options="{
-				20: 20, 50: 50, 100: 100, 500: 500, 1000: 1000, 50000: 50000
-			}"/>
+			<f:form.select property="radius" options="{settings.radius}"/>
 		</dd>
 
 		<dt>&nbsp;</dt>

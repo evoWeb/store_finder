@@ -154,7 +154,7 @@ class GeocodeService
      * @throws \UnexpectedValueException
      * @return array
      */
-    protected function prepareValuesForQuery($location, $fields)
+    protected function prepareValuesForQuery($location, &$fields)
     {
         // for urlencoding
         $queryValues = array();
@@ -189,6 +189,8 @@ class GeocodeService
             }
         }
 
+        $fields = array_keys($queryValues);
+
         return $queryValues;
     }
 
@@ -206,7 +208,7 @@ class GeocodeService
             $components[] = 'postal_code:' . $parameter['zipcode'];
             unset($parameter['zipcode']);
         }
-        if (isset($parameter['country'])) {
+        if (isset($parameter['country']) && count($parameter) > 1) {
             $components[] = 'country:' . $parameter['country'];
             unset($parameter['country']);
         }

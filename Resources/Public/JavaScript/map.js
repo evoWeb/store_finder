@@ -130,15 +130,38 @@ function initializeLocation() {
 function initializeMap() {
 	'use strict';
 
+	var center;
+
 	google.maps.visualRefresh = true;
+
+	if (typeof mapConfiguration.center !== 'undefined') {
+		center = new google.maps.LatLng(mapConfiguration.center.lat, mapConfiguration.center.lng);
+	} else {
+		center = new google.maps.LatLng(0, 0);
+	}
 
 	var mapOptions = {
 		zoom: parseInt(mapConfiguration.zoom, 10),
-		center: new google.maps.LatLng(mapConfiguration.center.lat, mapConfiguration.center.lng),
-		mapTypeId: google.maps.MapTypeId.ROADMAP
+		center: center,
+		disableDefaultUI: true, // a way to quickly hide all controls
+		zoomControl: true,
+		zoomControlOptions: {
+			style: google.maps.ZoomControlStyle.LARGE
+		}
 	};
-	console.log(mapOptions);
+
 	map = new google.maps.Map($('#tx_storefinder_map')[0], mapOptions);
+
+	if (mapConfiguration.afterSearch == 0 && navigator.geolocation) {
+		navigator.geolocation.getCurrentPosition(function(position) {
+			var pos = {
+				lat: position.coords.latitude,
+				lng: position.coords.longitude
+			};
+
+			map.setCenter(pos);
+		});
+	}
 
 	initializeLayer();
 	initializeLocation();
@@ -149,13 +172,15 @@ function initializeMap() {
 /**
  * Load google map script
  *
+ * @param {object} configuration
+ *
  * @return void
  */
-function loadScript() {
+function loadScript(configuration) {
 	'use strict';
 
-	var parameter = '&callback=initializeMap';
-
+	var parameter = '&key=' + configuration.apiConsoleKey;
+	parameter += '&callback=initializeMap';
 	parameter += '&sensor=' + (mapConfiguration.allowSensors ? 'true' : 'false');
 
 	if (mapConfiguration.language !== '') {
@@ -169,6 +194,6 @@ $(window).on('load', function() {
 	'use strict';
 
 	if (mapConfiguration.active) {
-		loadScript();
+		loadScript(mapConfiguration);
 	}
 });

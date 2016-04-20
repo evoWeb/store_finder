@@ -147,7 +147,7 @@ class Constraint extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     public function getCategory()
     {
-        return (array) $this->category;
+        return $this->category;
     }
 
     /**

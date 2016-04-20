@@ -26,6 +26,8 @@ namespace Evoweb\StoreFinder\Controller;
 
 use Evoweb\StoreFinder\Domain\Model;
 use Evoweb\StoreFinder\Domain\Repository;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
 /**
  * Class MapController
@@ -38,7 +40,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      * @var \Evoweb\StoreFinder\Domain\Repository\LocationRepository
      * @inject
      */
-    protected $locationRepository;
+    public $locationRepository;
 
     /**
      * @var \Evoweb\StoreFinder\Domain\Repository\CategoryRepository
@@ -72,6 +74,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $this->settings['allowedCountries'] = explode(',', $this->settings['allowedCountries']);
         $this->geocodeService->setSettings($this->settings);
         $this->locationRepository->setSettings($this->settings);
+        $this->signalSlotDispatcher = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\SignalSlot\Dispatcher::class);
     }
 
     /**
@@ -89,22 +92,30 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $afterSearch = 0;
 
         if ($search !== null) {
+            $afterSearch = 1;
+
             $search = $this->geocodeService->geocodeAddress($search);
+
+            $locations = $this->locationRepository->findByConstraint($search);
+            $result = $this->signalSlotDispatcher->dispatch(
+                __CLASS__,
+                'mapActionWithConstraint',
+                array($search, $locations, $this)
+            );
+            /** @var Model\Constraint $search */
+            $search = $result[0];
+            /** @var QueryResultInterface $locations */
+            $locations = $result[1];
 
             $center = $this->getCenter($search);
             $center = $this->setZoomLevel($center, $search);
             $this->view->assign('center', $center);
 
-            $afterSearch = 1;
-
-            $locations = $this->locationRepository->findByConstraint($search);
-            // manual rewind needed because fluid doesn't do it
-            $locations->rewind();
             $this->view->assign('numberOfLocations', $locations->count());
             $this->view->assign('locations', $locations);
         } elseif ($this->settings['singleLocationId']) {
             /** @var Model\Constraint $search */
-            $search = $this->objectManager->get('Evoweb\\StoreFinder\\Domain\\Model\\Constraint');
+            $search = $this->objectManager->get(\Evoweb\StoreFinder\Domain\Model\Constraint::class);
 
             $center = $this->getCenter($search);
             $center = $this->setZoomLevel($center, $search);
@@ -115,7 +126,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             $this->view->assign('locations', array($location));
         } else {
             /** @var Model\Constraint $search */
-            $search = $this->objectManager->get('Evoweb\\StoreFinder\\Domain\\Model\\Constraint');
+            $search = $this->objectManager->get(\Evoweb\StoreFinder\Domain\Model\Constraint::class);
 
             if ($this->settings['showBeforeSearch'] & 2 && is_array($this->settings['defaultConstraint'])) {
                 $search = $this->addDefaultConstraint($search);
@@ -127,8 +138,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
                 if ($this->settings['showLocationsForDefaultConstraint']) {
                     $locations = $this->locationRepository->findByConstraint($search);
-                    // manual rewind needed because fluid doesn't do it
-                    $locations->rewind();
+
                     $this->view->assign('numberOfLocations', $locations->count());
                     $this->view->assign('locations', $locations);
                 }
@@ -234,6 +244,25 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     }
 
     /**
+     * @param Model\Constraint $search
+     *
+     * @return Model\Constraint
+     */
+    protected function addDefaultConstraint($search)
+    {
+        $defaultConstraint = $this->settings['defaultConstraint'];
+
+        foreach ($defaultConstraint as $property => $value) {
+            $setter = 'set' . ucfirst($property);
+            if (method_exists($search, $setter)) {
+                $search->{$setter}($value);
+            }
+        }
+
+        return $search;
+    }
+
+    /**
      * Geocode requested address and use as center or fetch location that was
      * flagged as center. If
      *
@@ -242,7 +271,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      * @throws \TYPO3\CMS\Extbase\Persistence\Generic\Exception
      * @return Model\Location
      */
-    protected function getCenter(Model\Constraint $constraint = null)
+    public function getCenter(Model\Constraint $constraint = null)
     {
         $center = null;
 
@@ -276,7 +305,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      *
      * @return Model\Location
      */
-    protected function setZoomLevel($location, Model\Constraint $constraint)
+    public function setZoomLevel($location, Model\Constraint $constraint)
     {
         $radius = $constraint->getRadius();
         if ($radius > 500 && $radius <= 1000) {
@@ -303,22 +332,11 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     }
 
     /**
-     * @param Model\Constraint $search
-     *
-     * @return Model\Constraint
+     * @return array
      */
-    private function addDefaultConstraint($search)
+    public function getSettings()
     {
-        $defaultConstraint = $this->settings['defaultConstraint'];
-
-        foreach ($defaultConstraint as $property => $value) {
-            $setter = 'set' . ucfirst($property);
-            if (method_exists($search, $setter)) {
-                $search->{$setter}($value);
-            }
-        }
-
-        return $search;
+        return $this->settings;
     }
 
     /**

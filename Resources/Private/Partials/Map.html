@@ -12,11 +12,14 @@
 		active: true,
 		zoom: '{center.zoom}',
 		<f:for each="{settings.mapConfiguration}" as="configuration" key="name">{name}: '{configuration}',</f:for>
+		<f:if condition="{center.latitude}">
 		center: {
 			lat: <f:format.number decimals="7">{center.latitude}</f:format.number>,
 			lng: <f:format.number decimals="7">{center.longitude}</f:format.number>
 		},
-		zoom: {center.zoom}
+		</f:if>
+		zoom: {center.zoom},
+		afterSearch: {afterSearch}
 	</sf:minify>};
 
 	var locations = [<f:for each="{locations}" as="location" iteration="loop">

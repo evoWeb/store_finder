@@ -17,6 +17,9 @@
 			<f:if condition="{sf:format.binaryAnd(base: 2, content: settings.showBeforeSearch)} == 2">
 				<f:render partial="Map" section="content" arguments="{_all}"/>
 			</f:if>
+			<f:if condition="{sf:format.binaryAnd(base: 1, content: settings.showAfterSearch)} == 1">
+				<f:render partial="Categories" section="content" arguments="{_all}"/>
+			</f:if>
 			<f:if condition="{sf:format.binaryAnd(base: 4, content: settings.showBeforeSearch)} == 4">
 				<f:render partial="List" section="content" arguments="{_all}"/>
 			</f:if>
@@ -28,6 +31,9 @@
 			</f:if>
 			<f:if condition="{sf:format.binaryAnd(base: 2, content: settings.showAfterSearch)} == 2">
 				<f:render partial="Map" section="content" arguments="{_all}"/>
+			</f:if>
+			<f:if condition="{sf:format.binaryAnd(base: 1, content: settings.showAfterSearch)} == 1">
+				<f:render partial="Categories" section="content" arguments="{_all}"/>
 			</f:if>
 			<f:if condition="{sf:format.binaryAnd(base: 4, content: settings.showAfterSearch)} == 4">
 				<f:render partial="List" section="content" arguments="{_all}"/>

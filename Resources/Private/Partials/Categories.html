@@ -1,0 +1,24 @@
+{namespace sf=Evoweb\StoreFinder\ViewHelpers}
+<?xml version="1.0" encoding="UTF-8" ?>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en"
+		xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers">
+<head>
+	<title>Map</title>
+</head>
+<body>
+<f:section name="content">
+
+<f:if condition="{categories}">
+	<ul>
+		<f:for each="{categories}" as="category">
+			<li>
+				<input type="checkbox" id="expert{category.uid}" class="expert"/>
+				<label for="expert{category.uid}"><f:translate id="only_expert"/> {category.title}</label>
+			</li>
+		</f:for>
+	</ul>
+</f:if>
+
+</f:section>
+</body>
+</html>
