@@ -37,6 +37,7 @@ class GeocodeLocationsTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
     public function execute()
     {
         $globalConfiguration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['store_finder']);
+        $globalConfiguration = is_array($globalConfiguration) ? $globalConfiguration : [];
 
         /**
          * @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager
@@ -48,17 +49,17 @@ class GeocodeLocationsTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
         /**
          * @var \Evoweb\StoreFinder\Domain\Repository\LocationRepository $locationRepository
          */
-        $locationRepository = $objectManager->get('Evoweb\\StoreFinder\\Domain\\Repository\\LocationRepository');
+        $locationRepository = $objectManager->get(\Evoweb\StoreFinder\Domain\Repository\LocationRepository::class);
 
         /**
          * @var \Evoweb\StoreFinder\Service\GeocodeService $geocodeService
          */
-        $geocodeService = $objectManager->get('Evoweb\\StoreFinder\\Service\\GeocodeService', $globalConfiguration);
+        $geocodeService = $objectManager->get(\Evoweb\StoreFinder\Service\GeocodeService::class, $globalConfiguration);
 
         /**
          * @var \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager $persistenceManager
          */
-        $persistenceManager = $objectManager->get('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
+        $persistenceManager = $objectManager->get(\TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager::class);
 
         $loopCount = 0;
         $locationsToGeocode = $locationRepository->findAllWithoutLatLon();
