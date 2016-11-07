@@ -51,6 +51,11 @@ class GeocodeService
     protected $coordinatesCache;
 
     /**
+     * @var bool
+     */
+    public $hasMultipleResults;
+
+    /**
      * Constructor
      *
      * @param array $settings
@@ -166,13 +171,13 @@ class GeocodeService
                 // if a known country code is used we fetch the english shortname
                 // to enhance the map api query result
                 case 'country':
-                    if (is_int($value) || strlen($value) == 3) {
+                    if (is_numeric($value) || strlen($value) == 3) {
                         /** @var \TYPO3\CMS\Core\Database\DatabaseConnection $database */
                         $database = $GLOBALS['TYPO3_DB'];
                         $country = $database->exec_SELECTgetSingleRow(
                             'cn_iso_2',
                             'static_countries',
-                            (is_int($value) ? 'uid = ' : 'cn_iso_3 = ') .
+                            (is_numeric($value) ? 'uid = ' : 'cn_iso_3 = ') .
                             $database->fullQuoteStr($value, 'static_countries')
                         );
                         if (count($country)) {
@@ -204,20 +209,22 @@ class GeocodeService
     protected function getCoordinateByApiCall($parameter)
     {
         $components = array();
-        if (isset($parameter['zipcode'])) {
-            $components[] = 'postal_code:' . $parameter['zipcode'];
-            unset($parameter['zipcode']);
-        }
-        if (isset($parameter['country']) && count($parameter) > 1) {
+        if (isset($parameter['country'])) {
             $components[] = 'country:' . $parameter['country'];
             unset($parameter['country']);
         }
+        if (isset($parameter['zipcode']) && count($parameter) > 1) {
+            $components[] = 'postal_code:' . $parameter['zipcode'];
+            unset($parameter['zipcode']);
+        }
+
 
         $apiUrl = $this->settings['geocodeUrl'] . '&address=' . implode('+', $parameter);
         $apiUrl .= (!empty($components) ? '&components=' . implode('|', $components) : '');
         $addressData = json_decode(utf8_encode(GeneralUtility::getUrl(str_replace('?&', '?', $apiUrl))));
 
         if (is_object($addressData) && property_exists($addressData, 'status') && $addressData->status === 'OK') {
+            $this->hasMultipleResults = count($addressData->results) > 1;
             $result = $addressData->results[0]->geometry->location;
         } else {
             $result = new \stdClass();

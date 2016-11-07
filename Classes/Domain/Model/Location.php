@@ -24,6 +24,7 @@ namespace Evoweb\StoreFinder\Domain\Model;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use SJBR\StaticInfoTables\Domain\Repository\CountryRepository;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
@@ -33,6 +34,11 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
  */
 class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
+    /**
+     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
+     */
+    protected $objectManager;
+
     /**
      * @var string
      */
@@ -177,10 +183,14 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $media = '';
 
     /**
-     * @var \SJBR\StaticInfoTables\Domain\Model\Country
-     * @lazy
+     * @var string
      */
     protected $country = '';
+
+    /**
+     * @var string
+     */
+    protected $_country;
 
     /**
      * @var \SJBR\StaticInfoTables\Domain\Model\CountryZone
@@ -206,6 +216,19 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
             $this->related =
             $this->image =
             $this->media = new ObjectStorage();
+    }
+
+    /**
+     * @return \TYPO3\CMS\Extbase\Object\ObjectManager
+     */
+    protected function getObjectManager()
+    {
+        if (is_null($this->objectManager)) {
+            $this->objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                \TYPO3\CMS\Extbase\Object\ObjectManager::class
+            );
+        }
+        return $this->objectManager;
     }
 
     /**
@@ -307,6 +330,16 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
+     * Getter
+     *
+     * @return string
+     */
+    public function getCityRaw()
+    {
+        return $this->city;
+    }
+
+    /**
      * Setter
      *
      * @param string $city
@@ -379,7 +412,26 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     public function getCountry()
     {
-        return $this->country;
+        if (is_null($this->_country)) {
+            /** @var CountryRepository $repository */
+            $repository = $this->getObjectManager()->get(CountryRepository::class);
+            /** @var \TYPO3\CMS\Extbase\Persistence\Generic\Query $query */
+            $query = $repository->createQuery();
+
+            if (TYPO3_MODE === 'FE') {
+                $enableFields = $this->getTypoScriptFrontendController()->sys_page->enableFields('static_countries');
+            } else {
+                $enableFields = \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields('static_countries');
+            }
+
+            $this->_country = $query->statement(
+                'SELECT * FROM static_countries WHERE '
+                . (is_numeric($this->country) ? 'uid = ' : 'cn_iso_3 = ')
+                . $this->getDatabaseConnection()->fullQuoteStr($this->country, 'static_countries')
+                . $enableFields
+            )->execute()->getFirst();
+        }
+        return $this->_country;
     }
 
     /**
@@ -723,6 +775,16 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
+     * Getter
+     *
+     * @return string
+     */
+    public function getNameRaw()
+    {
+        return $this->name;
+    }
+
+    /**
      * Setter
      *
      * @param string $name
@@ -913,5 +975,22 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setDistance($distance)
     {
         $this->distance = $distance;
+    }
+
+
+    /**
+     * @return \TYPO3\CMS\Core\Database\DatabaseConnection
+     */
+    protected function getDatabaseConnection()
+    {
+        return $GLOBALS['TYPO3_DB'];
+    }
+
+    /**
+     * @return \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController $frontend
+     */
+    protected function getTypoScriptFrontendController()
+    {
+        return $GLOBALS['TSFE'];
     }
 }

@@ -53,7 +53,7 @@ class CountryRepository extends \SJBR\StaticInfoTables\Domain\Repository\Country
     /**
      * Find all countries despecting the storage page
      *
-     * @return \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult
+     * @return array|\TYPO3\CMS\Extbase\Persistence\Generic\QueryResult
      */
     public function findAll()
     {
@@ -68,7 +68,7 @@ class CountryRepository extends \SJBR\StaticInfoTables\Domain\Repository\Country
      *
      * @param array $isoCodeA2
      *
-     * @return \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult
+     * @return array|\TYPO3\CMS\Extbase\Persistence\Generic\QueryResult
      */
     public function findByIsoCodeA2(array $isoCodeA2)
     {

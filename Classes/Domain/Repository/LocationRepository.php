@@ -26,6 +26,7 @@ namespace Evoweb\StoreFinder\Domain\Repository;
 
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\Query;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 
@@ -142,9 +143,17 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $database = $GLOBALS['TYPO3_DB'];
 
         if ($constraint->getCountry()) {
-            $queryParts['FROM'] .= ' INNER JOIN static_countries sc ON (l.country = sc.cn_short_en)';
-            $queryParts['WHERE'] .= ' AND sc.' . (is_int($constraint->getCountry()) ? 'uid = ' : 'cn_iso_3 = ')
-                . $database->fullQuoteStr(strtoupper($constraint->getCountry()), 'static_countries');
+            $country = $constraint->getCountry();
+            if (is_numeric($country)) {
+                $queryParts['FROM'] .= ' INNER JOIN static_countries sc ON (l.country = sc.uid)';
+                $queryParts['WHERE'] .= ' AND sc.uid = ' . $country;
+            } else {
+                $queryParts['FROM'] .= ' INNER JOIN static_countries sc ON (l.country = sc.cn_iso_3)';
+                $queryParts['WHERE'] .= ' AND sc.cn_iso_3 = '
+                    . $database->fullQuoteStr(strtoupper($constraint->getCountry()), 'static_countries');
+            }
+
+
         }
 
         return $queryParts;

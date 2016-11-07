@@ -31,6 +31,11 @@ namespace Evoweb\StoreFinder\Domain\Model;
  */
 class Constraint extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
+
+    const STORE_TYPE_EXHIBITOR = 'Großhandel';
+
+    const STORE_TYPE_INSTALLER = 'Installationsbetrieb';
+
     /**
      * @var string
      */
@@ -105,6 +110,11 @@ class Constraint extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @var int
      */
     protected $page = 0;
+
+    /**
+     * @var array
+     */
+    protected $storeTypes;
 
     /**
      * Setter
@@ -445,5 +455,29 @@ class Constraint extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function isGeocoded()
     {
         return $this->getLatitude() && $this->getLongitude() && !$this->getGeocode();
+    }
+
+    /**
+     * @param string $storeType
+     */
+    public function addStoreType($storeType)
+    {
+        if (!in_array($storeType, [static::STORE_TYPE_EXHIBITOR, static::STORE_TYPE_INSTALLER], true)) {
+            return;
+        }
+
+        if (in_array($storeType, $this->storeTypes, true)) {
+            return;
+        }
+
+        $this->storeTypes[] = $storeType;
+    }
+
+    /**
+     * @return array
+     */
+    public function getStoreTypes()
+    {
+        return $this->storeTypes;
     }
 }

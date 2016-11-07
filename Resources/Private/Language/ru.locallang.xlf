@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2013-01-04T12:14:30Z" product-name="store_finder">
+		<header/>
+		<body>
+			<trans-unit id="name">
+				<source>Storename</source>
+				<target>Name</target>
+			</trans-unit>
+			<trans-unit id="address">
+				<source>Address</source>
+				<target>Anschrift</target>
+			</trans-unit>
+			<trans-unit id="zipcode">
+				<source>Zipcode</source>
+				<target>индекс</target>
+			</trans-unit>
+			<trans-unit id="city">
+				<source>City</source>
+				<target>Город</target>
+			</trans-unit>
+			<trans-unit id="phonenumber">
+				<source>Phonenumber</source>
+				<target>Telefonnummer</target>
+			</trans-unit>
+			<trans-unit id="country">
+				<source>Country</source>
+				<target>Страна</target>
+			</trans-unit>
+			<trans-unit id="latitude">
+				<source>Latitude</source>
+				<target>Längengrad</target>
+			</trans-unit>
+			<trans-unit id="longitude">
+				<source>Longitude</source>
+				<target>Breitengrad</target>
+			</trans-unit>
+			<trans-unit id="products">
+				<source>Products comma separated</source>
+				<target>Produkte (Komma-separiert)</target>
+			</trans-unit>
+			<trans-unit id="category">
+				<source>Restrict on Categories</source>
+				<target>Beschränkt auf Kategorien</target>
+			</trans-unit>
+			<trans-unit id="radius">
+				<source>Radius (km)</source>
+			</trans-unit>
+			<trans-unit id="submit_find">
+				<source>Find Store</source>
+				<target>Geschäft finden</target>
+			</trans-unit>
+			<trans-unit id="route">
+				<source>Route</source>
+			</trans-unit>
+			<trans-unit id="error_notvalidatable">
+				<source>Model is not validatable</source>
+				<target>Model ist nicht validierbar</target>
+			</trans-unit>
+			<trans-unit id="error_required">
+				<source>Required field may not be empty</source>
+				<target>Pflichtfeld darf nicht leer sein</target>
+			</trans-unit>
+			<trans-unit id="error_either">
+				<source>At least one of the required fields need to be filled in</source>
+				<target>Mindestens eines der Pflichtfelder muss gefüllt sein.</target>
+			</trans-unit>
+			<trans-unit id="error_notexists">
+				<source>Field does not exists</source>
+				<target>Diese Feld gibt es nicht</target>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

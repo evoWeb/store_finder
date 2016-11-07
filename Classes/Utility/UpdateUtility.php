@@ -42,6 +42,7 @@ class UpdateUtility
             // 'icon' => 'icon',
             'name' => 'name',
         ),
+
         'categories' => array(
             'uid' => 'import_id',
             'pid' => 'pid',
@@ -53,12 +54,13 @@ class UpdateUtility
             'hidden' => 'hidden',
             'deleted' => 'deleted',
             'sys_language_uid' => 'sys_language_uid',
-            'l10n_parent' => 'value:categories:l18n_parent',
-            'l10n_diffsource' => 'l18n_diffsource',
-            'fe_group' => '',
+            'l10n_parent' => 'value:categories:l10n_parent',
+            'l10n_diffsource' => 'l10n_diffsource',
+            // 'fe_group' => '',
             'name' => 'title',
             'description' => 'description',
         ),
+
         'locations' => array(
             'uid' => 'import_id',
             'pid' => 'pid',
@@ -80,8 +82,8 @@ class UpdateUtility
             'state' => 'state',
             'zipcode' => 'zipcode',
             // @todo implement 1:1 references for country
-            'country' => 'ref:country',
-            'products' => 'products',
+            'country' => 'map:country',
+            'products' => 'convert:int:products',
             'email' => 'email',
             'phone' => 'phone',
             'mobile' => 'mobile',
@@ -98,8 +100,8 @@ class UpdateUtility
             'content' => 'content',
             'use_coordinate' => '',
             'categoryuid' => 'comma:mm:categories:sys_category_record_mm:uid_foreign:tx_storefinder_domain_model_location:categories',
-            'lat' => 'latitude',
-            'lon' => 'longitude',
+            'lat' => 'convert:double:latitude',
+            'lon' => 'convert:double:longitude',
             'geocode' => '',
             'relatedto' => 'finish_comma:mm:locations:tx_storefinder_location_location_mm:uid_local:tx_storefinder_domain_model_location:related',
         ),
@@ -447,12 +449,46 @@ class UpdateUtility
                         $result[$parts[2]] = (string) $this->records[$parts[1]][$row[$fieldFrom]];
                         break;
 
+                    case 'map':
+                        if ($parts[1] == 'country') {
+                            $result[$parts[1]] = $this->mapCountry($row[$fieldFrom]);
+                        }
+                        break;
+
+                    case 'convert':
+                        if ($parts[1] == 'int') {
+                            $result[$parts[2]] = intval($row[$fieldFrom]);
+                        }
+                        if ($parts[1] == 'double' || $parts[1] == 'float') {
+                            $result[$parts[2]] = floatval($row[$fieldFrom]);
+                        }
+                        break;
+
                     default:
                 }
             }
         }
 
         return $result;
+    }
+
+    protected function mapCountry($value)
+    {
+        static $countries = null;
+
+        if (is_null($countries)) {
+            $countries = $this->getDatabaseConnection()->exec_SELECTgetRows(
+                'cn_iso_2, cn_iso_3',
+                'static_countries',
+                '1',
+                '',
+                '',
+                '',
+                'cn_iso_2'
+            );
+        }
+
+        return (string)$countries[$value]['cn_iso_3'];
     }
 
     /**
@@ -762,5 +798,13 @@ class UpdateUtility
         }
 
         return $result;
+    }
+
+    /**
+     * @return \TYPO3\CMS\Core\Database\DatabaseConnection
+     */
+    protected function getDatabaseConnection()
+    {
+        return $GLOBALS['TYPO3_DB'];
     }
 }

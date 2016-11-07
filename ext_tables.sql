@@ -26,7 +26,7 @@ CREATE TABLE tx_storefinder_domain_model_location (
 	city varchar(255) DEFAULT '' NOT NULL,
 	zipcode varchar(255) DEFAULT '' NOT NULL,
 	state varchar(255) DEFAULT '' NOT NULL,
-	country int(11) DEFAULT '0' NOT NULL,
+	country varchar(11) DEFAULT '' NOT NULL,
 	products varchar(255) DEFAULT '' NOT NULL,
 	phone varchar(255) DEFAULT '' NOT NULL,
 	mobile varchar(255) DEFAULT '' NOT NULL,

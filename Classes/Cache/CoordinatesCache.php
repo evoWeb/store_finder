@@ -55,6 +55,7 @@ class CoordinatesCache
     protected $fieldCombinations = array(
         array('address', 'zipcode', 'city', 'state', 'country'),
         array('zipcode', 'city', 'country'),
+        array('zipcode', 'country'),
         array('city', 'country'),
     );
 
@@ -71,7 +72,7 @@ class CoordinatesCache
         $this->database = $GLOBALS['TYPO3_DB'];
 
         /** @var \TYPO3\CMS\Core\Cache\CacheManager $cacheManager */
-        $cacheManager = $GLOBALS['typo3CacheManager'];
+        $cacheManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class);
         $this->cacheFrontend = $cacheManager->getCache('store_finder_coordinate');
     }
 

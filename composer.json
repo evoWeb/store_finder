@@ -12,8 +12,11 @@
 			"homepage": "http://www.evoweb.de/"
 		}
 	],
-
-	"version": "1.0.1",
+	"autoload": {
+		"psr-4": {
+			"Evoweb\\StoreFinder\\": "Classes/"
+		}
+	},
 
 	"require": {
 		"php" : ">=5.3.7",

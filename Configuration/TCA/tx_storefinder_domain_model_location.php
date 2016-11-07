@@ -94,6 +94,7 @@ return array(
 
         // address
         'name' => array(
+            'l10n_mode' => 'mergeIfNotBlank',
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.name',
             'config' => array(
@@ -105,6 +106,7 @@ return array(
         ),
 
         'storeid' => array(
+            'l10n_mode' => 'exclude',
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.storeid',
             'config' => array(
@@ -115,6 +117,7 @@ return array(
         ),
 
         'address' => array(
+            'l10n_mode' => 'mergeIfNotBlank',
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.address',
             'config' => array(
@@ -126,6 +129,7 @@ return array(
         ),
 
         'additionaladdress' => array(
+            'l10n_mode' => 'mergeIfNotBlank',
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.additionaladdress',
             'config' => array(
@@ -136,6 +140,7 @@ return array(
         ),
 
         'zipcode' => array(
+            'l10n_mode' => 'exclude',
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.zipcode',
             'config' => array(
@@ -146,6 +151,7 @@ return array(
         ),
 
         'city' => array(
+            'l10n_mode' => 'mergeIfNotBlank',
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.city',
             'config' => array(
@@ -156,6 +162,7 @@ return array(
         ),
 
         'state' => array(
+            'l10n_mode' => 'mergeIfNotBlank',
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.state',
             'displayCond' => 'FIELD:country:>:0',
@@ -174,6 +181,7 @@ return array(
         ),
 
         'country' => array(
+            'l10n_mode' => 'mergeIfNotBlank',
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.country',
             'config' => array(
@@ -192,6 +200,7 @@ return array(
 
         // contact
         'person' => array(
+            'l10n_mode' => 'mergeIfNotBlank',
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.person',
             'config' => array(
@@ -202,6 +211,7 @@ return array(
         ),
 
         'phone' => array(
+            'l10n_mode' => 'mergeIfNotBlank',
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.phone',
             'config' => array(
@@ -212,6 +222,7 @@ return array(
         ),
 
         'mobile' => array(
+            'l10n_mode' => 'mergeIfNotBlank',
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.mobile',
             'config' => array(
@@ -222,6 +233,7 @@ return array(
         ),
 
         'fax' => array(
+            'l10n_mode' => 'mergeIfNotBlank',
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.fax',
             'config' => array(
@@ -232,6 +244,7 @@ return array(
         ),
 
         'email' => array(
+            'l10n_mode' => 'mergeIfNotBlank',
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.email',
             'config' => array(
@@ -242,6 +255,7 @@ return array(
         ),
 
         'hours' => array(
+            'l10n_mode' => 'mergeIfNotBlank',
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.hours',
             'config' => array(
@@ -254,6 +268,7 @@ return array(
 
         // relations
         'related' => array(
+            'l10n_mode' => 'exclude',
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.related',
             'config' => array(
@@ -276,6 +291,7 @@ return array(
         ),
 
         'categories' => array(
+            'l10n_mode' => 'exclude',
             'label' => $languageFile . 'tx_storefinder_domain_model_location.categories',
             'config' => array(
                 'type' => 'select',
@@ -294,7 +310,7 @@ return array(
                 'treeConfig' => array(
                     'parentField' => 'parent',
                     'appearance' => array(
-                        'expandAll' => true,
+                        'expandAll' => false,
                         'showHeader' => true,
                     ),
                 ),
@@ -317,6 +333,7 @@ return array(
         ),
 
         'attributes' => array(
+            'l10n_mode' => 'exclude',
             'exclude' => 1,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.attributes',
             'config' => array(
@@ -336,6 +353,7 @@ return array(
         ),
 
         'icon' => array(
+            'l10n_mode' => 'exclude',
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.icon',
             'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
@@ -355,6 +373,7 @@ return array(
         ),
 
         'latitude' => array(
+            'l10n_mode' => 'exclude',
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.latitude',
             'config' => array(
@@ -365,6 +384,7 @@ return array(
         ),
 
         'longitude' => array(
+            'l10n_mode' => 'exclude',
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.longitude',
             'config' => array(
@@ -375,6 +395,7 @@ return array(
         ),
 
         'center' => array(
+            'l10n_mode' => 'exclude',
             'exclude' => 1,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.center',
             'config' => array(
@@ -383,6 +404,7 @@ return array(
         ),
 
         'distance' => array(
+            'l10n_mode' => 'exclude',
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.distance',
             'config' => array(
@@ -392,6 +414,7 @@ return array(
             )
         ),
         'geocode' => array(
+            'l10n_mode' => 'exclude',
             'exclude' => 1,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.geocode',
             'config' => array(

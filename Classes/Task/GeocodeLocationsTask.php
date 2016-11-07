@@ -43,7 +43,7 @@ class GeocodeLocationsTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
          * @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager
          */
         $objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-            'TYPO3\\CMS\\Extbase\\Object\\ObjectManager'
+            \TYPO3\CMS\Extbase\Object\ObjectManager::class
         );
 
         /**

@@ -13,7 +13,7 @@ $EM_CONF[$_EXTKEY] = array(
     'description' => 'Manage store locations, search by distance and show Google maps.',
     'category' => 'plugin',
     'shy' => 0,
-    'version' => '1.0.2',
+    'version' => '1.3.0',
     'dependencies' => '',
     'conflicts' => '',
     'priority' => '',
@@ -30,7 +30,7 @@ $EM_CONF[$_EXTKEY] = array(
     'author_company' => 'Evoweb',
     'constraints' => array(
         'depends' => array(
-            'typo3' => '6.0.0-7.6.99',
+            'typo3' => '7.6.0-7.6.99',
             'static_info_tables' => '6.0.4-',
         ),
         'conflicts' => array(),

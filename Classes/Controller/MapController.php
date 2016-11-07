@@ -25,7 +25,6 @@ namespace Evoweb\StoreFinder\Controller;
  ***************************************************************/
 
 use Evoweb\StoreFinder\Domain\Model;
-use Evoweb\StoreFinder\Domain\Repository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
@@ -95,6 +94,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             $afterSearch = 1;
 
             $search = $this->geocodeService->geocodeAddress($search);
+            $this->view->assign('searchWasNotClearEnough', $this->geocodeService->hasMultipleResults);
 
             $locations = $this->locationRepository->findByConstraint($search);
             $result = $this->signalSlotDispatcher->dispatch(
@@ -108,7 +108,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             $locations = $result[1];
 
             $center = $this->getCenter($search);
-            $center = $this->setZoomLevel($center, $search);
+            $center = $this->setZoomLevel($center, $locations);
             $this->view->assign('center', $center);
 
             $this->view->assign('numberOfLocations', $locations->count());
@@ -117,13 +117,13 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             /** @var Model\Constraint $search */
             $search = $this->objectManager->get(\Evoweb\StoreFinder\Domain\Model\Constraint::class);
 
-            $center = $this->getCenter($search);
-            $center = $this->setZoomLevel($center, $search);
-            $this->view->assign('center', $center);
-
             $location = $this->locationRepository->findByUid((int) $this->settings['singleLocationId']);
             $this->view->assign('numberOfLocations', is_object($location) ? 1 : 0);
             $this->view->assign('locations', array($location));
+
+            $center = $this->getCenter($search);
+            $center = $this->setZoomLevel($center, array($location));
+            $this->view->assign('center', $center);
         } else {
             /** @var Model\Constraint $search */
             $search = $this->objectManager->get(\Evoweb\StoreFinder\Domain\Model\Constraint::class);
@@ -131,17 +131,20 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             if ($this->settings['showBeforeSearch'] & 2 && is_array($this->settings['defaultConstraint'])) {
                 $search = $this->addDefaultConstraint($search);
                 $search = $this->geocodeService->geocodeAddress($search);
-
-                $center = $this->getCenter($search);
-                $center = $this->setZoomLevel($center, $search);
-                $this->view->assign('center', $center);
+                $this->view->assign('searchWasNotClearEnough', $this->geocodeService->hasMultipleResults);
 
                 if ($this->settings['showLocationsForDefaultConstraint']) {
                     $locations = $this->locationRepository->findByConstraint($search);
 
                     $this->view->assign('numberOfLocations', $locations->count());
                     $this->view->assign('locations', $locations);
+                } else {
+                    $locations = array();
                 }
+
+                $center = $this->getCenter($search);
+                $center = $this->setZoomLevel($center, $locations);
+                $this->view->assign('center', $center);
             }
 
             if ($this->settings['showBeforeSearch'] & 4) {
@@ -217,7 +220,9 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     protected function getCenterOfQueryResult($queryResult)
     {
         if ($queryResult->count() == 1) {
-            return $queryResult->getFirst();
+            /** @var \Evoweb\StoreFinder\Domain\Model\Location $center */
+            $center = $queryResult->getFirst();
+            return $center;
         } elseif (!$queryResult->count()) {
             return $this->getCenter();
         }
@@ -300,14 +305,24 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     /**
      * Set zoom level for map based on radius
      *
-     * @param Model\Location|Model\Constraint $location
-     * @param Model\Constraint $constraint
+     * @param Model\Location|Model\Constraint $center
+     * @param QueryResultInterface|array $locations
      *
      * @return Model\Location
      */
-    public function setZoomLevel($location, Model\Constraint $constraint)
+    public function setZoomLevel($center, $locations)
     {
-        $radius = $constraint->getRadius();
+        $locations = is_object($locations) ? $locations->toArray() : $locations;
+        $radius = false;
+        foreach ($locations as $location) {
+            $distance = is_object($location) ? $location->getDistance() : $location['distance'];
+            $radius = $distance > $radius ? $distance : $radius;
+        }
+
+        if ($radius === false) {
+            $radius = $this->settings['radius'];
+        }
+
         if ($radius > 500 && $radius <= 1000) {
             $zoom = 12;
         } elseif ($radius < 2) {
@@ -316,6 +331,8 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             $zoom = 3;
         } elseif ($radius < 5) {
             $zoom = 4;
+        } elseif ($radius < 15) {
+            $zoom = 6;
         } elseif ($radius <= 25) {
             $zoom = 7;
         } elseif ($radius <= 100) {
@@ -326,9 +343,9 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             $zoom = 13;
         }
 
-        $location->setZoom(18 - $zoom);
+        $center->setZoom(18 - $zoom);
 
-        return $location;
+        return $center;
     }
 
     /**
