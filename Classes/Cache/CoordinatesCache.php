@@ -94,9 +94,9 @@ class CoordinatesCache
         );
 
         $hash = $this->getHashForAddressWithFields($address, $fields);
-        if (count($fields) <= 3) {
+        if (count($fields) == 2 || count($fields) == 3) {
             $this->setValueInCacheTable($hash, $coordinate);
-        } else {
+        } elseif (count($fields) > 3) {
             $this->setValueInSession($hash, $coordinate);
         }
     }
