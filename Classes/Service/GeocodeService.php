@@ -102,7 +102,9 @@ class GeocodeService
         if ($forceGeocoding || !$geocodedAddress->isGeocoded()) {
             $fieldsHit = array();
             $geocodedAddress = $this->processAddress($address, $fieldsHit);
-            $this->coordinatesCache->addCoordinateForAddress($geocodedAddress, $fieldsHit);
+            if (!$this->hasMultipleResults) {
+                $this->coordinatesCache->addCoordinateForAddress($geocodedAddress, $fieldsHit);
+            }
         }
 
         // In case the address without geocoded location was stored in
