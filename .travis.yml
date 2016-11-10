@@ -51,21 +51,22 @@ notifications:
     - typo3@evoweb.de
 
 before_install:
-  - phpenv config-rm xdebug.ini || echo "xdebug not available"
+  - echo $TRAVIS_PHP_VERSION
+  - if php -i | grep -q xdebug; then phpenv config-rm xdebug.ini; fi
   - composer self-update
   - composer --version
 
 before_script:
-  - composer require "typo3/cms:$TYPO3_VERSION"
-  # Restore composer.json
-  - git checkout composer.json
-  - export TYPO3_PATH_WEB=$PWD/.Build/Web
+  - git clean -dffx
+  - composer require typo3/cms="$TYPO3_VERSION"
+  - export TYPO3_PATH_WEB="$PWD/.Build/Web"
+  - ln -s Scripts/typo3cms typo3cms
 
 script:
   - >
     echo;
     echo "Running php lint";
-    find typo3conf/ext/store_finder/ -name \*.php ! -path "./.Build/*" | parallel --gnu php -d display_errors=stderr -l {} > /dev/null \;
+    find . -name \*.php ! -path "./.Build/*" | parallel --gnu php -d display_errors=stderr -l {} > /dev/null \;
 
 after_script:
   - >
