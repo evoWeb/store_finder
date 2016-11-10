@@ -1,9 +1,9 @@
 <?php
 
-$serviceClassname = 'Evoweb\\StoreFinder\\Service\\GeocodeService';
-
 namespace PHPSTORM_META
 {
+    $serviceClassname = 'Evoweb\\StoreFinder\\Service\\GeocodeService';
+
     /** @noinspection PhpUnusedLocalVariableInspection */
     /** @noinspection PhpIllegalArrayKeyTypeInspection */
     /** @noinspection PhpDynamicAsStaticMethodCallInspection */
