@@ -65,7 +65,7 @@ script:
   - >
     echo;
     echo "Running php lint";
-    find "$PWD/." -name \*.php ! -path "./.Build/*" ! -path "./vendor/*" ! -path "./typo3/*" | parallel --gnu php -d display_errors=stderr -l {} > /dev/null \;
+    find "$PWD/." -name \*.php ! -path "./.Build/*" ! -path "./vendor/composer/*" ! -path "./typo3/*" | parallel --gnu php -d display_errors=stderr -l {} > /dev/null \;
     ls -la;
 
 after_script:
