@@ -66,10 +66,10 @@ script:
     echo;
     echo "Running php lint";
     # find "$TYPO3_PATH_WEB/." -name \*.php ! -path "./.Build/*" ! -path "./vendor/composer/*" | parallel --gnu php -d display_errors=stderr -l {} > /dev/null \;
-    find "$TYPO3_PATH_WEB/." -name \*.php | cat
-    echo "$TYPO3_PATH_WEB/."
-    echo "test"
-    echo "$PWD"
+    find "$TYPO3_PATH_WEB/." -name \*.php | cat;
+    echo "$TYPO3_PATH_WEB/.";
+    echo "test";
+    echo "$PWD";
 
 after_script:
   - >
