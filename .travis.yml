@@ -56,7 +56,7 @@ before_install:
   - composer --version
 
 before_script:
-  - git clean -dffx
+  - git clean -dffx 
   - composer require --prefer-dist typo3/cms="$TYPO3_VERSION"
   - export TYPO3_PATH_WEB="$PWD/.Build/Web"
   - ln -s Scripts/typo3cms typo3cms
@@ -65,7 +65,8 @@ script:
   - >
     echo;
     echo "Running php lint";
-    find . -name \*.php ! -path "./.Build/*" ! -path "./vendor/composer/*" | parallel --gnu php -d display_errors=stderr -l {} > /dev/null \;
+    # find "$TYPO3_PATH_WEB/." -name \*.php ! -path "./.Build/*" ! -path "./vendor/composer/*" | parallel --gnu php -d display_errors=stderr -l {} > /dev/null \;
+    find "$TYPO3_PATH_WEB/." -name \*.php | echo {}
 
 after_script:
   - >
