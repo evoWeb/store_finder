@@ -34,6 +34,9 @@ matrix:
     - php: 7.1
       env: TYPO3_VERSION="dev-master as 8.5.0"
   allow_failures:
+    - env: TYPO3_VERSION=~8.3.0
+    - env: TYPO3_VERSION=~8.4.0
+    - env: TYPO3_VERSION=~8.5.0
     - env: TYPO3_VERSION="dev-master as 8.5.0"
 
 cache:
