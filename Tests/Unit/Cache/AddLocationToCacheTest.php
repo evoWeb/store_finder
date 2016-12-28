@@ -75,26 +75,32 @@ class AddLocationToCacheTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
     {
         $this->coordinatesCache->flushCache();
 
-        $data = array(
+        $data = [
             'address' => '',
             'zipcode' => substr(mktime(), -5),
             'city' => uniqid('City'),
             'state' => '',
             'country' => uniqid('Country'),
-        );
+        ];
 
         $constraint = $this->getConstraintStub($data);
-        $coordinate = array(
+        $coordinate = [
             'latitude' => $constraint->getLatitude(),
             'longitude' => $constraint->getLongitude(),
-        );
+        ];
 
-        $fields = array('zipcode', 'city', 'country');
+        $GLOBALS['TYPO3_DB']->expects($this->any())
+            ->method('exec_SELECTgetSingleRow')
+            ->will(self::returnValue([
+                'content' => serialize($coordinate),
+            ]));
+
+        $fields = ['zipcode', 'city', 'country'];
         $this->coordinatesCache->addCoordinateForAddress($constraint, $fields);
 
-        $fields = array('zipcode', 'city', 'country');
-        $hash = $this->coordinatesCache->getHashForAddressWithFields($constraint, $fields);
-        $this->assertEquals($coordinate, $this->coordinatesCache->getValueFromCacheTable($hash));
+        $fields = ['zipcode', 'city', 'country'];
+        $entryIdentifier = $this->coordinatesCache->getHashForAddressWithFields($constraint, $fields);
+        $this->assertEquals($coordinate, $this->coordinatesCache->getValueFromCacheTable($entryIdentifier));
     }
 
     /**
@@ -109,26 +115,32 @@ class AddLocationToCacheTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
     {
         $this->coordinatesCache->flushCache();
 
-        $data = array(
+        $data = [
             'address' => '',
             'zipcode' => substr(mktime(), -5),
             'city' => uniqid('City'),
             'state' => '',
             'country' => uniqid('Country'),
-        );
+         ];
 
         $constraint = $this->getConstraintStub($data);
-        $coordinate = array(
+        $coordinate = [
             'latitude' => $constraint->getLatitude(),
             'longitude' => $constraint->getLongitude(),
-        );
+        ];
 
-        $fields = array('address', 'zipcode', 'city', 'state', 'country');
+        $GLOBALS['TYPO3_DB']->expects($this->any())
+            ->method('exec_SELECTgetSingleRow')
+            ->will(self::returnValue([
+                'content' => serialize($coordinate),
+            ]));
+
+        $fields = ['address', 'zipcode', 'city', 'state', 'country'];
         $this->coordinatesCache->addCoordinateForAddress($constraint, $fields);
 
-        $fields = array('zipcode', 'city', 'country');
-        $hash = $this->coordinatesCache->getHashForAddressWithFields($constraint, $fields);
-        $this->assertEquals($coordinate, $this->coordinatesCache->getValueFromCacheTable($hash));
+        $fields = ['zipcode', 'city', 'country'];
+        $entryIdentifier = $this->coordinatesCache->getHashForAddressWithFields($constraint, $fields);
+        $this->assertEquals($coordinate, $this->coordinatesCache->getValueFromCacheTable($entryIdentifier));
     }
 
 
@@ -143,24 +155,24 @@ class AddLocationToCacheTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
     {
         $this->coordinatesCache->flushCache();
 
-        $data = array(
+        $data = [
             'address' => uniqid('Address'),
             'zipcode' => substr(mktime(), -5),
             'city' => uniqid('City'),
             'state' => '',
             'country' => uniqid('Country'),
-        );
+        ];
 
         $constraint = $this->getConstraintStub($data);
-        $coordinate = array(
+        $coordinate = [
             'latitude' => $constraint->getLatitude(),
             'longitude' => $constraint->getLongitude(),
-        );
+        ];
 
-        $fields = array('address', 'zipcode', 'city', 'state', 'country');
+        $fields = ['address', 'zipcode', 'city', 'state', 'country'];
         $this->coordinatesCache->addCoordinateForAddress($constraint, $fields);
 
-        $fields = array('address', 'zipcode', 'city', 'country');
+        $fields = ['address', 'zipcode', 'city', 'country'];
         $hash = $this->coordinatesCache->getHashForAddressWithFields($constraint, $fields);
         $this->assertEquals($coordinate, $this->coordinatesCache->getValueFromSession($hash));
     }
@@ -176,24 +188,24 @@ class AddLocationToCacheTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
     {
         $this->coordinatesCache->flushCache();
 
-        $data = array(
+        $data = [
             'address' => uniqid('Address'),
             'zipcode' => substr(mktime(), -5),
             'city' => uniqid('City'),
             'state' => '',
             'country' => uniqid('Country'),
-        );
+        ];
 
         $constraint = $this->getConstraintStub($data);
-        $coordinate = array(
+        $coordinate = [
             'latitude' => $constraint->getLatitude(),
             'longitude' => $constraint->getLongitude(),
-        );
+        ];
 
-        $fields = array('address', 'zipcode', 'city', 'state', 'country');
+        $fields = ['address', 'zipcode', 'city', 'state', 'country'];
         $this->coordinatesCache->addCoordinateForAddress($constraint, $fields);
 
-        $fields = array('address', 'zipcode', 'city', 'state', 'country');
+        $fields = ['address', 'zipcode', 'city', 'state', 'country'];
         $hash = $this->coordinatesCache->getHashForAddressWithFields($constraint, $fields);
         $this->assertEquals($coordinate, $this->coordinatesCache->getValueFromSession($hash));
     }
@@ -233,14 +245,6 @@ class AddLocationToCacheTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
             \TYPO3\CMS\Core\Database\DatabaseConnection::class,
             ['connectDB', 'fullQuoteStr', 'exec_SELECTgetSingleRow', 'query']
         );
-        $dbConnection->expects($this->any())
-            ->method('exec_SELECTgetSingleRow')
-            ->will(self::returnValue([
-                'address' => 'An der Eickesmühle 38',
-                'zip' => '41238',
-                'city' => 'Mönchengladbach',
-                'country' => 'Germany',
-            ]));
 
         $GLOBALS['TYPO3_DB'] = $dbConnection;
     }
@@ -250,14 +254,15 @@ class AddLocationToCacheTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
      */
     protected function setupCaches()
     {
-        /** @var \TYPO3\CMS\Core\Core\ApplicationContext $applicationContext */
-        $applicationContext = \TYPO3\CMS\Core\Core\Bootstrap::getInstance()->getApplicationContext();
         /** @var \TYPO3\CMS\Core\Cache\CacheManager $cacheManager */
         $cacheManager = $this->objectManager->get(\TYPO3\CMS\Core\Cache\CacheManager::class);
 
         try {
             $cacheManager->getCache('store_finder_coordinate');
         } catch (\Exception $e) {
+            /** @var \TYPO3\CMS\Core\Core\ApplicationContext $applicationContext */
+            $applicationContext = \TYPO3\CMS\Core\Core\Bootstrap::getInstance()->getApplicationContext();
+
             /** @var \TYPO3\CMS\Core\Cache\CacheFactory $cacheFactory */
             $cacheFactory = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
                 \TYPO3\CMS\Core\Cache\CacheFactory::class,
