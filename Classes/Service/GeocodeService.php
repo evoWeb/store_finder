@@ -163,14 +163,14 @@ class GeocodeService
      */
     protected function prepareValuesForQuery($location, &$fields)
     {
-        // for urlencoding
+        // for url encoding
         $queryValues = array();
         foreach ($fields as $field) {
             $methodName = 'get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $field)));
             $value = $location->{$methodName}();
 
             switch ($field) {
-                // if a known country code is used we fetch the english shortname
+                // if a known country code is used we fetch the english short name
                 // to enhance the map api query result
                 case 'country':
                     if (is_numeric($value) || strlen($value) == 3) {
@@ -185,6 +185,9 @@ class GeocodeService
                         if (count($country)) {
                             $value = reset($country);
                         }
+                    } elseif (is_object($value) && method_exists($value, 'getIsoCodeA2')) {
+                        /** @var \SJBR\StaticInfoTables\Domain\Model\Country $value */
+                        $value = $value->getIsoCodeA2();
                     }
                     break;
 

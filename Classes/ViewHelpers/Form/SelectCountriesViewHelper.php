@@ -77,7 +77,7 @@ class SelectCountriesViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\Select
             false,
             'shortNameLocal'
         );
-        $this->overrideArgument('sortByOptionLabel', 'boolean', 'If true, List will be sorted by label.', false, true);
+        $this->overrideArgument('sortByOptionLabel', 'boolean', 'If true, List will be sorted by label.', false, false);
         $this->registerArgument(
             'allowedCountries',
             'array',
@@ -98,6 +98,10 @@ class SelectCountriesViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\Select
         parent::initialize();
 
         if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('static_info_tables')) {
+            $this->countryRepository->setDefaultOrderings([
+                'cn_short_local' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING,
+            ]);
+
             if ($this->hasArgument('allowedCountries') && count($this->arguments['allowedCountries'])) {
                 $result = $this->countryRepository->findByIsoCodeA2($this->arguments['allowedCountries']);
             } else {
