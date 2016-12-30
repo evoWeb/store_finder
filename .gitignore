@@ -13,8 +13,10 @@
 *.idea
 *.project
 *.swp
+.Build
 .buildpath
 .cache
+composer.lock
 .project
 .session
 .settings
