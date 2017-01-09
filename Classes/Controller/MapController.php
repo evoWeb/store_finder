@@ -25,7 +25,8 @@ namespace Evoweb\StoreFinder\Controller;
  ***************************************************************/
 
 use Evoweb\StoreFinder\Domain\Model;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
+use Evoweb\StoreFinder\Domain\Repository\CategoryRepository;
+use Evoweb\StoreFinder\Domain\Repository\LocationRepository;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
 /**
@@ -36,22 +37,44 @@ use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
     /**
-     * @var \Evoweb\StoreFinder\Domain\Repository\LocationRepository
-     * @inject
+     * @var LocationRepository
      */
     public $locationRepository;
 
     /**
-     * @var \Evoweb\StoreFinder\Domain\Repository\CategoryRepository
-     * @inject
+     * @var CategoryRepository
      */
     protected $categoryRepository;
 
     /**
      * @var \Evoweb\StoreFinder\Service\GeocodeService
-     * @inject
      */
     protected $geocodeService;
+
+
+    /**
+     * @param LocationRepository $locationRepository
+     */
+    public function injectLocationRepository(LocationRepository $locationRepository)
+    {
+        $this->locationRepository = $locationRepository;
+    }
+
+    /**
+     * @param CategoryRepository $categoryRepository
+     */
+    public function injectCategoryRepository(CategoryRepository $categoryRepository)
+    {
+        $this->categoryRepository = $categoryRepository;
+    }
+
+    /**
+     * @param \Evoweb\StoreFinder\Service\GeocodeService $geocodeService
+     */
+    public function injectGeocodeService(\Evoweb\StoreFinder\Service\GeocodeService $geocodeService)
+    {
+        $this->geocodeService = $geocodeService;
+    }
 
 
     /**
@@ -73,7 +96,9 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $this->settings['allowedCountries'] = explode(',', $this->settings['allowedCountries']);
         $this->geocodeService->setSettings($this->settings);
         $this->locationRepository->setSettings($this->settings);
-        $this->signalSlotDispatcher = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\SignalSlot\Dispatcher::class);
+        $this->signalSlotDispatcher = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+            \TYPO3\CMS\Extbase\SignalSlot\Dispatcher::class
+        );
     }
 
     /**

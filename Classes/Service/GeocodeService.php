@@ -25,7 +25,6 @@ namespace Evoweb\StoreFinder\Service;
  ***************************************************************/
 
 use Evoweb\StoreFinder\Domain\Model;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Class GeocodeService
@@ -46,7 +45,6 @@ class GeocodeService
 
     /**
      * @var \Evoweb\StoreFinder\Cache\CoordinatesCache
-     * @inject
      */
     protected $coordinatesCache;
 
@@ -68,6 +66,14 @@ class GeocodeService
             $this->settings['geocodeUrl'] = $this->defaultApiUrl;
             $this->settings['geocodeLimit'] = 2500;
         }
+    }
+
+    /**
+     * @param \Evoweb\StoreFinder\Cache\CoordinatesCache $coordinatesCache
+     */
+    public function injectCoordinatesCache(\Evoweb\StoreFinder\Cache\CoordinatesCache $coordinatesCache)
+    {
+        $this->coordinatesCache = $coordinatesCache;
     }
 
     /**
@@ -226,7 +232,9 @@ class GeocodeService
 
         $apiUrl = $this->settings['geocodeUrl'] . '&address=' . implode('+', $parameter);
         $apiUrl .= (!empty($components) ? '&components=' . implode('|', $components) : '');
-        $addressData = json_decode(utf8_encode(GeneralUtility::getUrl(str_replace('?&', '?', $apiUrl))));
+        $addressData = json_decode(utf8_encode(
+            \TYPO3\CMS\Core\Utility\GeneralUtility::getUrl(str_replace('?&', '?', $apiUrl))
+        ));
 
         if (is_object($addressData) && property_exists($addressData, 'status') && $addressData->status === 'OK') {
             $this->hasMultipleResults = count($addressData->results) > 1;

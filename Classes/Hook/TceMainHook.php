@@ -117,7 +117,9 @@ class TceMainHook
      */
     protected function fetchLocation($uid)
     {
-        return $this->getRepository()->findByUid($uid);
+        /** @var Location $location */
+        $location = $this->getRepository()->findByUid($uid);
+        return $location;
     }
 
     /**
@@ -168,7 +170,7 @@ class TceMainHook
     {
         /** @var \Evoweb\StoreFinder\Service\GeocodeService $geocodeService */
         $geocodeService = $this->getObjectManager()
-            ->get('Evoweb\\StoreFinder\\Service\\GeocodeService', $this->configuration);
+            ->get(\Evoweb\StoreFinder\Service\GeocodeService::class, $this->configuration);
         $location = $geocodeService->geocodeAddress($location);
 
         return $location;

@@ -34,15 +34,9 @@ use Evoweb\StoreFinder\Domain\Model;
 class CoordinatesCache
 {
     /**
-     * @var \TYPO3\CMS\Core\Database\DatabaseConnection
-     */
-    protected $database;
-
-    /**
      * @var \TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication
-     * @inject
      */
-    protected $frontendUser = null;
+    protected $frontendUser;
 
     /**
      * @var \TYPO3\CMS\Core\Cache\Frontend\FrontendInterface
@@ -69,11 +63,25 @@ class CoordinatesCache
      */
     public function __construct()
     {
-        $this->database = $GLOBALS['TYPO3_DB'];
-
         /** @var \TYPO3\CMS\Core\Cache\CacheManager $cacheManager */
         $cacheManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class);
-        $this->cacheFrontend = $cacheManager->getCache('store_finder_coordinate');
+        $this->injectCacheFrontend($cacheManager->getCache('store_finder_coordinate'));
+    }
+
+    /**
+     * @param \TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication $frontendUser
+     */
+    public function injectFrontendUser(\TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication $frontendUser)
+    {
+        $this->frontendUser = $frontendUser;
+    }
+
+    /**
+     * @param \TYPO3\CMS\Core\Cache\Frontend\FrontendInterface $cacheFrontend
+     */
+    public function injectCacheFrontend(\TYPO3\CMS\Core\Cache\Frontend\FrontendInterface $cacheFrontend)
+    {
+        $this->cacheFrontend = $cacheFrontend;
     }
 
 
