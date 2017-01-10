@@ -26,7 +26,6 @@ namespace Evoweb\StoreFinder\Domain\Repository;
 
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\Query;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 
@@ -79,7 +78,7 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      *
      * @param \Evoweb\StoreFinder\Domain\Model\Constraint $constraint
      *
-     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface|array
      */
     public function findByConstraint($constraint)
     {
@@ -251,7 +250,7 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     protected function fetchCategoriesRecursive(array $subcategories, $categories = array())
     {
         /** @var CategoryRepository $categoryRepository */
-        $categoryRepository = $this->objectManager->get('Evoweb\\StoreFinder\\Domain\\Repository\\CategoryRepository');
+        $categoryRepository = $this->objectManager->get(CategoryRepository::class);
 
         /** @var \Evoweb\StoreFinder\Domain\Model\Category $subcategory */
         foreach ($subcategories as $subcategory) {
@@ -343,7 +342,9 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $query->setOrderings(array('sorting' => QueryInterface::ORDER_ASCENDING));
         $query->matching($query->equals('center', 1));
 
-        return $query->execute()->getFirst();
+        /** @var \Evoweb\StoreFinder\Domain\Model\Location $location */
+        $location = $query->execute()->getFirst();
+        return $location;
     }
 
     /**

@@ -134,7 +134,7 @@ class TceMainHook
     {
         if ($this->repository === null) {
             $this->repository = $this->getObjectManager()
-                ->get('Evoweb\\StoreFinder\\Domain\\Repository\\LocationRepository');
+                ->get(\Evoweb\StoreFinder\Domain\Repository\LocationRepository::class);
         }
 
         return $this->repository;
@@ -149,7 +149,7 @@ class TceMainHook
     protected function getObjectManager()
     {
         if ($this->objectManager === null) {
-            $this->objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
+            $this->objectManager = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Object\ObjectManager::class);
         }
 
         return $this->objectManager;
@@ -193,7 +193,7 @@ class TceMainHook
 
         /** @var PersistenceManager $persistenceManager */
         $persistenceManager = $this->getObjectManager()
-            ->get('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
+            ->get(PersistenceManager::class);
         $persistenceManager->persistAll();
     }
 }

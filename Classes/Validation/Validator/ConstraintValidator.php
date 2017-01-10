@@ -40,7 +40,6 @@ class ConstraintValidator extends Validator\GenericObjectValidator implements Va
      * Object manager
      *
      * @var \TYPO3\CMS\Extbase\Object\ObjectManagerInterface
-     * @inject
      */
     protected $objectManager;
 
@@ -102,6 +101,14 @@ class ConstraintValidator extends Validator\GenericObjectValidator implements Va
 
 
     /**
+     * @param \TYPO3\CMS\Extbase\Object\ObjectManagerInterface $objectManager
+     */
+    public function injectObjectManager(\TYPO3\CMS\Extbase\Object\ObjectManagerInterface $objectManager)
+    {
+        $this->objectManager = $objectManager;
+    }
+
+    /**
      * Inject of configuration manager
      *
      * @param \TYPO3\CMS\Extbase\Configuration\ConfigurationManager $configurationManager
@@ -140,8 +147,9 @@ class ConstraintValidator extends Validator\GenericObjectValidator implements Va
         }
         if (!$this->canValidate($object)) {
             /** @var \TYPO3\CMS\Extbase\Error\Error $error */
+            /** @noinspection PhpMethodParametersCountMismatchInspection */
             $error = $this->objectManager->get(
-                'TYPO3\\CMS\\Extbase\\Error\\Error',
+                \TYPO3\CMS\Extbase\Error\Error::class,
                 \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('error_notvalidatable', 'StoreFinder'),
                 1301599551
             );
@@ -161,8 +169,9 @@ class ConstraintValidator extends Validator\GenericObjectValidator implements Va
         foreach ($propertyValidators as $propertyName => $validatorsNames) {
             if (!property_exists($object, $propertyName)) {
                 /** @var \TYPO3\CMS\Extbase\Error\Error $error */
+                /** @noinspection PhpMethodParametersCountMismatchInspection */
                 $error = $this->objectManager->get(
-                    'TYPO3\\CMS\\Extbase\\Error\\Error',
+                    \TYPO3\CMS\Extbase\Error\Error::class,
                     \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('error_notexists', 'StoreFinder'),
                     1301599575
                 );

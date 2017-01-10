@@ -188,7 +188,7 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $country = '';
 
     /**
-     * @var string
+     * @var \SJBR\StaticInfoTables\Domain\Model\Country
      */
     protected $_country;
 

@@ -253,7 +253,7 @@ class UpdateUtility
         foreach ($this->messageArray as $messageItem) {
             /** @var \TYPO3\CMS\Core\Messaging\FlashMessage $flashMessage */
             $flashMessage = GeneralUtility::makeInstance(
-                'TYPO3\\CMS\\Core\\Messaging\\FlashMessage',
+                \TYPO3\CMS\Core\Messaging\FlashMessage::class,
                 htmlspecialchars($messageItem['message']),
                 '',
                 \TYPO3\CMS\Core\Messaging\FlashMessage::INFO

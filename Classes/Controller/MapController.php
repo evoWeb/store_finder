@@ -140,7 +140,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             $this->view->assign('locations', $locations);
         } elseif ($this->settings['singleLocationId']) {
             /** @var Model\Constraint $search */
-            $search = $this->objectManager->get(\Evoweb\StoreFinder\Domain\Model\Constraint::class);
+            $search = $this->objectManager->get(Model\Constraint::class);
 
             $location = $this->locationRepository->findByUid((int) $this->settings['singleLocationId']);
             $this->view->assign('numberOfLocations', is_object($location) ? 1 : 0);
@@ -151,7 +151,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             $this->view->assign('center', $center);
         } else {
             /** @var Model\Constraint $search */
-            $search = $this->objectManager->get(\Evoweb\StoreFinder\Domain\Model\Constraint::class);
+            $search = $this->objectManager->get(Model\Constraint::class);
 
             if ($this->settings['showBeforeSearch'] & 2 && is_array($this->settings['defaultConstraint'])) {
                 $search = $this->addDefaultConstraint($search);
@@ -308,7 +308,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         if ($constraint !== null) {
             if ($constraint->getLatitude() && $constraint->getLongitude()) {
                 /** @var Model\Location $center */
-                $center = $this->objectManager->get('Evoweb\\StoreFinder\\Domain\\Model\\Location');
+                $center = $this->objectManager->get(Model\Location::class);
                 $center->setLatitude($constraint->getLatitude());
                 $center->setLongitude($constraint->getLongitude());
             } else {

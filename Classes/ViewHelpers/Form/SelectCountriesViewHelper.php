@@ -43,9 +43,18 @@ class SelectCountriesViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\Select
      * Repository that provides the country models
      *
      * @var \Evoweb\StoreFinder\Domain\Repository\CountryRepository
-     * @inject
      */
     protected $countryRepository;
+
+
+    /**
+     * @param \Evoweb\StoreFinder\Domain\Repository\CountryRepository $countryRepository
+     */
+    public function injectCountryRepository(\Evoweb\StoreFinder\Domain\Repository\CountryRepository $countryRepository)
+    {
+        $this->countryRepository = $countryRepository;
+    }
+
 
     /**
      * Initialize arguments. Cant be moved to parent because of
