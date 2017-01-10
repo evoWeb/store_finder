@@ -129,7 +129,7 @@ class ConstraintValidator extends Validator\GenericObjectValidator implements Va
         foreach ($propertyValidators as $propertyName => $validatorsNames) {
             if (!property_exists($value, $propertyName)) {
                 $fieldNotExists = str_replace('%1$s', $propertyName, $notExistMessage);
-                $this->result->addError(new \TYPO3\CMS\Extbase\Error\Error($fieldNotExists, 1301599575));
+                $this->addError($fieldNotExists, 1301599575);
             } else {
                 foreach ($validatorsNames as $validatorsName) {
                     $validator = $this->getValidator($value, $propertyName, $validatorsName);

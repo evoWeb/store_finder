@@ -34,19 +34,11 @@ use TYPO3\CMS\Extbase\Validation\Validator;
 class RequiredValidator extends Validator\AbstractValidator implements Validator\ValidatorInterface
 {
     /**
-     * Override to be able to validate empty values
+     * Set to false to always call isValid even if value is empty
      *
-     * @param mixed $value The value that should be validated
-     *
-     * @return \TYPO3\CMS\Extbase\Error\Result
+     * @var bool
      */
-    public function validate($value)
-    {
-        $this->result = new \TYPO3\CMS\Extbase\Error\Result();
-        $this->isValid($value);
-
-        return $this->result;
-    }
+    protected $acceptsEmptyValues = false;
 
     /**
      * If the given value is empty

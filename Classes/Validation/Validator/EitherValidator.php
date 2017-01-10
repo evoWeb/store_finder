@@ -36,6 +36,13 @@ use TYPO3\CMS\Extbase\Validation\Exception\InvalidValidationOptionsException;
 class EitherValidator extends Validator\AbstractValidator implements Validator\ValidatorInterface
 {
     /**
+     * Set to false to always call isValid even if value is empty
+     *
+     * @var bool
+     */
+    protected $acceptsEmptyValues = false;
+
+    /**
      * @var array
      */
     protected $supportedOptions = array(
@@ -94,20 +101,6 @@ class EitherValidator extends Validator\AbstractValidator implements Validator\V
         $this->propertyName = $propertyName;
     }
 
-    /**
-     * Override to be able to validate empty values
-     *
-     * @param mixed $value The value that should be validated
-     *
-     * @return \TYPO3\CMS\Extbase\Error\Result
-     */
-    public function validate($value)
-    {
-        $this->result = new \TYPO3\CMS\Extbase\Error\Result();
-        $this->isValid($value);
-
-        return $this->result;
-    }
 
     /**
      * If the given value is empty
