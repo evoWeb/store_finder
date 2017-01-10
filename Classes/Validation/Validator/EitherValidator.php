@@ -29,9 +29,9 @@ use TYPO3\CMS\Extbase\Validation\Validator;
 use TYPO3\CMS\Extbase\Validation\Exception\InvalidValidationOptionsException;
 
 /**
- * A required validator to check that a value is set
+ * A required validator to check that one of the properties is set
  *
- * @scope singleton
+ * @package Evoweb\StoreFinder\Validation\Validator
  */
 class EitherValidator extends Validator\AbstractValidator implements Validator\ValidatorInterface
 {

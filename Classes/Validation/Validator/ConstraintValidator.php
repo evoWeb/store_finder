@@ -27,7 +27,9 @@ namespace Evoweb\StoreFinder\Validation\Validator;
 use TYPO3\CMS\Extbase\Validation\Validator;
 
 /**
- * A Uservalidator
+ * Class ConstraintValidator
+ *
+ * @package Evoweb\StoreFinder\Validation\Validator
  */
 class ConstraintValidator extends Validator\GenericObjectValidator implements Validator\ValidatorInterface
 {

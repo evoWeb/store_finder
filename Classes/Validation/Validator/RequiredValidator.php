@@ -29,7 +29,7 @@ use TYPO3\CMS\Extbase\Validation\Validator;
 /**
  * A required validator to check that a value is set
  *
- * @scope singleton
+ * @package Evoweb\StoreFinder\Validation\Validator
  */
 class RequiredValidator extends Validator\AbstractValidator implements Validator\ValidatorInterface
 {

@@ -27,15 +27,14 @@ namespace Evoweb\StoreFinder\Utility;
 /**
  * Provide a way to get the configuration just everywhere
  *
- * @package TYPO3
- * @subpackage store_finder
+ * @package Evoweb\StoreFinder\Utility
  */
 class ExtensionConfigurationUtility implements \TYPO3\CMS\Core\SingletonInterface
 {
     /**
      * @var array
      */
-    protected static $configuration = null;
+    protected static $configuration = [];
 
     /**
      * Returns all configuration.
