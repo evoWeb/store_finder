@@ -32,18 +32,6 @@ use TYPO3\CMS\Extbase\Validation\Validator;
 class ConstraintValidator extends Validator\GenericObjectValidator implements Validator\ValidatorInterface
 {
     /**
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage
-     */
-    static protected $instancesCurrentlyUnderValidation;
-
-    /**
-     * Object manager
-     *
-     * @var \TYPO3\CMS\Extbase\Object\ObjectManagerInterface
-     */
-    protected $objectManager;
-
-    /**
      * Configuration manager
      *
      * @var \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface
@@ -55,58 +43,15 @@ class ConstraintValidator extends Validator\GenericObjectValidator implements Va
      *
      * @var array
      */
-    protected $settings = null;
-
-    /**
-     * Configuration of the framework
-     *
-     * @var array
-     */
-    protected $frameworkConfiguration = array();
-
-    /**
-     * @var \TYPO3\CMS\Extbase\Error\Result
-     * @inject
-     */
-    protected $result;
+    protected $settings;
 
     /**
      * Validator resolver
      *
      * @var \Evoweb\StoreFinder\Validation\ValidatorResolver
-     * @inject
      */
     protected $validatorResolver;
 
-    /**
-     * Name of the current field to validate
-     *
-     * @var string
-     */
-    protected $currentPropertyName = '';
-
-    /**
-     * Options for the current validation
-     *
-     * @var array
-     */
-    protected $currentValidatorOptions = array();
-
-    /**
-     * Model that gets validated currently
-     *
-     * @var object
-     */
-    protected $model;
-
-
-    /**
-     * @param \TYPO3\CMS\Extbase\Object\ObjectManagerInterface $objectManager
-     */
-    public function injectObjectManager(\TYPO3\CMS\Extbase\Object\ObjectManagerInterface $objectManager)
-    {
-        $this->objectManager = $objectManager;
-    }
 
     /**
      * Inject of configuration manager
@@ -122,88 +67,40 @@ class ConstraintValidator extends Validator\GenericObjectValidator implements Va
         $this->settings = $this->configurationManager->getConfiguration(
             \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS
         );
-        $this->frameworkConfiguration = $this->configurationManager->getConfiguration(
-            \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK
-        );
     }
 
     /**
-     * Validate object
+     * Inject of validation resolver
      *
-     * @param mixed $object
-     *
-     * @throws \TYPO3\CMS\Extbase\Reflection\Exception\PropertyNotAccessibleException
-     * @throws \InvalidArgumentException
-     * @return boolean|\TYPO3\CMS\Extbase\Error\Result
+     * @param \Evoweb\StoreFinder\Validation\ValidatorResolver $validatorResolver
      */
-    public function validate($object)
+    public function injectValidatorResolver(\Evoweb\StoreFinder\Validation\ValidatorResolver $validatorResolver)
     {
-        $messages = new \TYPO3\CMS\Extbase\Error\Result();
-        if (self::$instancesCurrentlyUnderValidation === null) {
-            self::$instancesCurrentlyUnderValidation = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
-        }
-        if ($object === null) {
-            return $messages;
-        }
-        if (!$this->canValidate($object)) {
-            /** @var \TYPO3\CMS\Extbase\Error\Error $error */
-            /** @noinspection PhpMethodParametersCountMismatchInspection */
-            $error = $this->objectManager->get(
-                \TYPO3\CMS\Extbase\Error\Error::class,
-                \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('error_notvalidatable', 'StoreFinder'),
-                1301599551
-            );
-            $messages->addError($error);
+        $this->validatorResolver = $validatorResolver;
+    }
 
-            return $messages;
-        }
-        if (self::$instancesCurrentlyUnderValidation->contains($object)) {
-            return $messages;
-        } else {
-            self::$instancesCurrentlyUnderValidation->attach($object);
-        }
 
-        $this->model = $object;
-
-        $propertyValidators = $this->getValidationRulesFromSettings();
-        foreach ($propertyValidators as $propertyName => $validatorsNames) {
-            if (!property_exists($object, $propertyName)) {
-                /** @var \TYPO3\CMS\Extbase\Error\Error $error */
-                /** @noinspection PhpMethodParametersCountMismatchInspection */
-                $error = $this->objectManager->get(
-                    \TYPO3\CMS\Extbase\Error\Error::class,
-                    \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('error_notexists', 'StoreFinder'),
-                    1301599575
-                );
-                $messages->addError($error);
-            } else {
-                $this->currentPropertyName = $propertyName;
-                $propertyValue = $this->getPropertyValue($object, $propertyName);
-                $this->checkProperty($propertyValue, (array) $validatorsNames, $messages->forProperty($propertyName));
+    /**
+     * Checks if the given value is valid according to the validator, and returns
+     * the Error Messages object which occurred.
+     *
+     * @param \Evoweb\StoreFinder\Domain\Model\Constraint $value The value that should be validated
+     *
+     * @return \TYPO3\CMS\Extbase\Error\Result
+     */
+    public function validate($value)
+    {
+        $this->result = new \TYPO3\CMS\Extbase\Error\Result();
+        if ($this->acceptsEmptyValues === false || $this->isEmpty($value) === false) {
+            if (!is_object($value)) {
+                $this->addError('Object expected, %1$s given.', 1241099149, [gettype($value)]);
+            } elseif ($this->isValidatedAlready($value) === false) {
+                $this->addValidatorsBySettings($value);
+                $this->isValid($value);
             }
         }
 
-        self::$instancesCurrentlyUnderValidation->detach($object);
-
-        return $messages;
-    }
-
-    /**
-     * Checks if the specified property of the given object is valid, and adds
-     * found errors to the $messages object.
-     *
-     * @param mixed $value The value to be validated
-     * @param array $validatorNames Contains an array with validator names
-     * @param \TYPO3\CMS\Extbase\Error\Result $messages the result object to
-     *        which the validation errors should be added
-     *
-     * @return void
-     */
-    protected function checkProperty($value, $validatorNames, \TYPO3\CMS\Extbase\Error\Result $messages)
-    {
-        foreach ($validatorNames as $validatorName) {
-            $messages->merge($this->getValidator($validatorName)->validate($value));
-        }
+        return $this->result;
     }
 
     /**
@@ -215,45 +112,61 @@ class ConstraintValidator extends Validator\GenericObjectValidator implements Va
      */
     public function canValidate($object)
     {
-        return ($object instanceof \Evoweb\StoreFinder\Domain\Model\Constraint);
+        return is_object($object) && ($object instanceof \Evoweb\StoreFinder\Domain\Model\Constraint);
     }
+
 
     /**
      * Get validation rules from settings
      *
-     * @return array
+     * @param \Evoweb\StoreFinder\Domain\Model\Constraint $value
      */
-    protected function getValidationRulesFromSettings()
+    protected function addValidatorsBySettings($value)
     {
-        return $this->settings['validation'];
+        $propertyValidators = $this->settings['validation'];
+        $notExistMessage = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('error_notexists', 'StoreFinder');
+
+        foreach ($propertyValidators as $propertyName => $validatorsNames) {
+            if (!property_exists($value, $propertyName)) {
+                $fieldNotExists = str_replace('%1$s', $propertyName, $notExistMessage);
+                $this->result->addError(new \TYPO3\CMS\Extbase\Error\Error($fieldNotExists, 1301599575));
+            } else {
+                foreach ($validatorsNames as $validatorsName) {
+                    $validator = $this->getValidator($value, $propertyName, $validatorsName);
+                    $this->addPropertyValidator($propertyName, $validator);
+                }
+            }
+        }
     }
 
     /**
      * Parse the rule and instanciate an validator with the name and the options
      *
+     * @param \Evoweb\StoreFinder\Domain\Model\Constraint $value
+     * @param string $propertyName
      * @param string $rule
      *
      * @throws \InvalidArgumentException
      * @return \TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator
      */
-    protected function getValidator($rule)
+    protected function getValidator($value, $propertyName, $rule)
     {
         $currentValidator = $this->parseRule($rule);
-        $this->currentValidatorOptions = (array) $currentValidator['validatorOptions'];
 
         /** @var $validatorObject \TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator */
         $validatorObject = $this->validatorResolver->createValidator(
             $currentValidator['validatorName'],
-            $this->currentValidatorOptions
+            (array) $currentValidator['validatorOptions']
         );
 
         if (method_exists($validatorObject, 'setModel')) {
             /** @noinspection PhpUndefinedMethodInspection */
-            $validatorObject->setModel($this->model);
+            $validatorObject->setModel($value);
         }
+
         if (method_exists($validatorObject, 'setPropertyName')) {
             /** @noinspection PhpUndefinedMethodInspection */
-            $validatorObject->setPropertyName($this->currentPropertyName);
+            $validatorObject->setPropertyName($propertyName);
         }
 
         return $validatorObject;
