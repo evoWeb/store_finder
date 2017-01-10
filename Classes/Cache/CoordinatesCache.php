@@ -65,7 +65,7 @@ class CoordinatesCache
     {
         /** @var \TYPO3\CMS\Core\Cache\CacheManager $cacheManager */
         $cacheManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class);
-        $this->injectCacheFrontend($cacheManager->getCache('store_finder_coordinate'));
+        $this->setCacheFrontend($cacheManager->getCache('store_finder_coordinate'));
     }
 
     /**
@@ -79,7 +79,7 @@ class CoordinatesCache
     /**
      * @param \TYPO3\CMS\Core\Cache\Frontend\FrontendInterface $cacheFrontend
      */
-    public function injectCacheFrontend(\TYPO3\CMS\Core\Cache\Frontend\FrontendInterface $cacheFrontend)
+    public function setCacheFrontend(\TYPO3\CMS\Core\Cache\Frontend\FrontendInterface $cacheFrontend)
     {
         $this->cacheFrontend = $cacheFrontend;
     }
