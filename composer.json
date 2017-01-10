@@ -27,7 +27,8 @@
 
   "require": {
     "php": ">=5.3.7",
-    "typo3/cms": "^7.6"
+    "typo3/cms": "^7.6",
+    "sjbr/static-info-tables": ">6"
   },
 
   "require-dev": {

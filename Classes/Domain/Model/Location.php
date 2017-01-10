@@ -40,6 +40,11 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $objectManager;
 
     /**
+     * @var \SJBR\StaticInfoTables\Domain\Model\Country
+     */
+    protected $internalCountry;
+
+    /**
      * @var string
      */
     protected $name = '';
@@ -186,11 +191,6 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @var string
      */
     protected $country = '';
-
-    /**
-     * @var \SJBR\StaticInfoTables\Domain\Model\Country
-     */
-    protected $_country;
 
     /**
      * @var \SJBR\StaticInfoTables\Domain\Model\CountryZone
@@ -412,7 +412,7 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     public function getCountry()
     {
-        if (is_null($this->_country)) {
+        if (is_null($this->internalCountry)) {
             /** @var CountryRepository $repository */
             $repository = $this->getObjectManager()->get(CountryRepository::class);
             /** @var \TYPO3\CMS\Extbase\Persistence\Generic\Query $query */
@@ -424,14 +424,14 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
                 $enableFields = \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields('static_countries');
             }
 
-            $this->_country = $query->statement(
+            $this->internalCountry = $query->statement(
                 'SELECT * FROM static_countries WHERE '
                 . (is_numeric($this->country) ? 'uid = ' : 'cn_iso_3 = ')
                 . $this->getDatabaseConnection()->fullQuoteStr($this->country, 'static_countries')
                 . $enableFields
             )->execute()->getFirst();
         }
-        return $this->_country;
+        return $this->internalCountry;
     }
 
     /**
