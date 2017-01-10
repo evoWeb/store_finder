@@ -25,6 +25,7 @@ namespace Evoweb\StoreFinder\Service;
  ***************************************************************/
 
 use Evoweb\StoreFinder\Domain\Model;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Class GeocodeService
@@ -232,9 +233,10 @@ class GeocodeService
 
         $apiUrl = $this->settings['geocodeUrl'] . '&address=' . implode('+', $parameter);
         $apiUrl .= (!empty($components) ? '&components=' . implode('|', $components) : '');
-        $addressData = json_decode(utf8_encode(
-            \TYPO3\CMS\Core\Utility\GeneralUtility::getUrl(str_replace('?&', '?', $apiUrl))
-        ));
+        if (TYPO3_MODE == 'FE' && isset($this->getTypoScriptFrontendController()->lang)) {
+            $apiUrl .= '&language=' . $this->getTypoScriptFrontendController()->lang;
+        }
+        $addressData = json_decode(utf8_encode(GeneralUtility::getUrl(str_replace('?&', '?', $apiUrl))));
 
         if (is_object($addressData) && property_exists($addressData, 'status') && $addressData->status === 'OK') {
             $this->hasMultipleResults = count($addressData->results) > 1;
@@ -244,5 +246,13 @@ class GeocodeService
         }
 
         return $result;
+    }
+
+    /**
+     * @return \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController
+     */
+    protected function getTypoScriptFrontendController()
+    {
+        return $GLOBALS['TSFE'];
     }
 }
