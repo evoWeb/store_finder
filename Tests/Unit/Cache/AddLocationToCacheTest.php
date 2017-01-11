@@ -27,7 +27,7 @@ namespace Evoweb\StoreFinder\Tests\Unit\Cache;
 /**
  * Coordinate cache test
  */
-class AddLocationToCacheTest extends \TYPO3\CMS\Components\TestingFramework\Core\UnitTestCase
+class AddLocationToCacheTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
 {
     /**
      * @var \Evoweb\StoreFinder\Cache\CoordinatesCache|\PHPUnit_Framework_MockObject_MockObject
@@ -82,6 +82,7 @@ class AddLocationToCacheTest extends \TYPO3\CMS\Components\TestingFramework\Core
 
         $fields = ['zipcode', 'city', 'country'];
         $entryIdentifier = $this->coordinatesCache->getHashForAddressWithFields($constraint, $fields);
+        //$this->assertEquals($coordinate, $this->coordinatesCache->getCoordinateByAddress($constraint));
         $this->assertEquals($coordinate, $this->coordinatesCache->getValueFromCacheTable($entryIdentifier));
     }
 
