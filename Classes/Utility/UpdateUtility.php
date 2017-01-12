@@ -36,7 +36,7 @@ class UpdateUtility
             'hidden' => 'hidden',
             'deleted' => 'deleted',
             'sys_language_uid' => 'sys_language_uid',
-            'l10n_parent' => 'value:attributes:l18n_parent',
+            'l10n_parent' => ['value', 'attributes', 'l18n_parent'],
             'l10n_diffsource' => 'l18n_diffsource',
             // icon get migrated at an extra step
             // 'icon' => 'icon',
@@ -46,7 +46,7 @@ class UpdateUtility
         'categories' => [
             'uid' => 'import_id',
             'pid' => 'pid',
-            'parentuid' => 'value:categories:parent',
+            'parentuid' => ['value', 'categories', 'parent'],
             'tstamp' => 'tstamp',
             'crdate' => 'crdate',
             'cruser_id' => 'cruser_id',
@@ -54,7 +54,7 @@ class UpdateUtility
             'hidden' => 'hidden',
             'deleted' => 'deleted',
             'sys_language_uid' => 'sys_language_uid',
-            'l10n_parent' => 'value:categories:l10n_parent',
+            'l10n_parent' => ['value', 'categories', 'l10n_parent'],
             'l10n_diffsource' => 'l10n_diffsource',
             // 'fe_group' => '',
             'name' => 'title',
@@ -74,17 +74,24 @@ class UpdateUtility
             'fe_group' => 'fe_group',
             'storename' => 'name',
             'storeid' => 'storeid',
-            /** @noinspection PhpCSValidationInspection */
-            'attributes' => 'comma:mm:attributes:tx_storefinder_location_attribute_mm:uid_local:tx_storefinder_domain_model_attribute:attributes',
+            'attributes' => [
+                'comma',
+                'mm',
+                'attributes',
+                'tx_storefinder_location_attribute_mm',
+                'uid_local',
+                'tx_storefinder_domain_model_attribute',
+                'attributes'
+            ],
             'address' => 'address',
             'additionaladdress' => 'additionaladdress',
             'city' => 'city',
             'contactperson' => 'person',
             'state' => 'state',
             'zipcode' => 'zipcode',
-            // @todo implement 1:1 references for country
-            'country' => 'map:country',
-            'products' => 'convert:int:products',
+            // @todo implement 1 to 1 references for country
+            'country' => ['map', 'country'],
+            'products' => ['convert', 'int', 'products'],
             'email' => 'email',
             'phone' => 'phone',
             'mobile' => 'mobile',
@@ -100,13 +107,27 @@ class UpdateUtility
             // 'icon' => 'icon',
             'content' => 'content',
             'use_coordinate' => '',
-            /** @noinspection PhpCSValidationInspection */
-            'categoryuid' => 'comma:mm:categories:sys_category_record_mm:uid_foreign:tx_storefinder_domain_model_location:categories',
-            'lat' => 'convert:double:latitude',
-            'lon' => 'convert:double:longitude',
+            'categoryuid' => [
+                'comma',
+                'mm',
+                'categories',
+                'sys_category_record_mm',
+                'uid_foreign',
+                'tx_storefinder_domain_model_location',
+                'categories'
+            ],
+            'lat' => ['convert', 'double', 'latitude'],
+            'lon' => ['convert', 'double', 'longitude'],
             'geocode' => '',
-            /** @noinspection PhpCSValidationInspection */
-            'relatedto' => 'finish_comma:mm:locations:tx_storefinder_location_location_mm:uid_local:tx_storefinder_domain_model_location:related',
+            'relatedto' => [
+                'finish_comma',
+                'mm',
+                'locations',
+                'tx_storefinder_location_location_mm',
+                'uid_local',
+                'tx_storefinder_domain_model_location',
+                'related'
+            ],
         ],
     ];
 
@@ -224,10 +245,10 @@ class UpdateUtility
                 )
         ]);
 
-        $content = sprintf('</br>Do you want to start the migration?</br>
-			<form action="%1$s" method="POST">
+        $content = '</br>Do you want to start the migration?</br>
+			<form action="' . $action . '" method="POST">
 				<button name="tx_storefinder_update[confirm]" value="1">Start migration</button>
-			</form>', $action);
+			</form>';
 
         return $content;
     }
@@ -442,28 +463,26 @@ class UpdateUtility
         $result = [];
 
         foreach ($this->mapping[$table] as $fieldFrom => $fieldTo) {
-            if ($fieldTo && strpos($fieldTo, ':') === false) {
+            if ($fieldTo && !is_array($fieldTo)) {
                 $result[$fieldTo] = is_null($row[$fieldFrom]) ? (string) $row[$fieldFrom] : $row[$fieldFrom];
             } elseif ($fieldTo) {
-                $parts = GeneralUtility::trimExplode(':', $fieldTo);
-
-                switch ($parts[0]) {
+                switch ($fieldTo[0]) {
                     case 'value':
-                        $result[$parts[2]] = (string) $this->records[$parts[1]][$row[$fieldFrom]];
+                        $result[$fieldTo[2]] = (string) $this->records[$fieldTo[1]][$row[$fieldFrom]];
                         break;
 
                     case 'map':
-                        if ($parts[1] == 'country') {
-                            $result[$parts[1]] = $this->mapCountry($row[$fieldFrom]);
+                        if ($fieldTo[1] == 'country') {
+                            $result[$fieldTo[1]] = $this->mapCountry($row[$fieldFrom]);
                         }
                         break;
 
                     case 'convert':
-                        if ($parts[1] == 'int') {
-                            $result[$parts[2]] = intval($row[$fieldFrom]);
+                        if ($fieldTo[1] == 'int') {
+                            $result[$fieldTo[2]] = intval($row[$fieldFrom]);
                         }
-                        if ($parts[1] == 'double' || $parts[1] == 'float') {
-                            $result[$parts[2]] = floatval($row[$fieldFrom]);
+                        if ($fieldTo[1] == 'double' || $fieldTo[1] == 'float') {
+                            $result[$fieldTo[2]] = floatval($row[$fieldFrom]);
                         }
                         break;
 
@@ -506,12 +525,11 @@ class UpdateUtility
     protected function mapFieldsPostImport($source, $destination, $table)
     {
         foreach ($this->mapping[$table] as $fieldFrom => $fieldTo) {
-            if (strpos($fieldTo, ':') !== false) {
-                $parts = GeneralUtility::trimExplode(':', $fieldTo);
-                switch ($parts[0]) {
+            if (is_array($fieldTo)) {
+                switch ($fieldTo[0]) {
                     case 'comma':
-                        if ($parts[1] == 'mm') {
-                            list(, , $sourceModel, $mmTable, $mmField, $destinationTable, $destinationField) = $parts;
+                        if ($fieldTo[1] == 'mm') {
+                            list(, , $sourceModel, $mmTable, $mmField, $destinationTable, $destinationField) = $fieldTo;
                             $sorting = 0;
 
                             foreach (GeneralUtility::trimExplode(',', $source[$fieldFrom]) as $fromValue) {
@@ -563,12 +581,11 @@ class UpdateUtility
     protected function mapFieldsFinish($source, $destination, $table)
     {
         foreach ($this->mapping[$table] as $fieldFrom => $fieldTo) {
-            if (strpos($fieldTo, ':') !== false) {
-                $parts = GeneralUtility::trimExplode(':', $fieldTo);
-                switch (str_replace('finish_', '', $parts[0])) {
+            if (is_array($fieldTo)) {
+                switch (str_replace('finish_', '', $fieldTo[0])) {
                     case 'comma':
-                        if ($parts[1] == 'mm') {
-                            list(, , $sourceModel, $mmTable, $mmField, $destinationTable, $destinationField) = $parts;
+                        if ($fieldTo[1] == 'mm') {
+                            list(, , $sourceModel, $mmTable, $mmField, $destinationTable, $destinationField) = $fieldTo;
                             $sorting = 0;
                             foreach (GeneralUtility::trimExplode(',', $source[$fieldFrom]) as $fromValue) {
                                 if ($mmField == 'uid_local') {
