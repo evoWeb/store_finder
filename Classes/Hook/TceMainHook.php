@@ -38,7 +38,7 @@ class TceMainHook
     /**
      * @var array
      */
-    protected $configuration = array();
+    protected $configuration = [];
 
     /**
      * @var \TYPO3\CMS\Extbase\Object\ObjectManager

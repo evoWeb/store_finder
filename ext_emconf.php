@@ -8,7 +8,7 @@
  * writing. "version" and "dependencies" must not be touched!
  ***************************************************************/
 
-$EM_CONF[$_EXTKEY] = array(
+$EM_CONF['store_finder'] = [
     'title' => 'Store Finder',
     'description' => 'Manage store locations, search by distance and show Google maps.',
     'category' => 'plugin',
@@ -28,12 +28,12 @@ $EM_CONF[$_EXTKEY] = array(
     'author' => 'Sebastian Fischer',
     'author_email' => 'typo3@evoweb.de',
     'author_company' => 'Evoweb',
-    'constraints' => array(
-        'depends' => array(
+    'constraints' => [
+        'depends' => [
             'typo3' => '7.6.0-7.6.99',
             'static_info_tables' => '6.0.4-',
-        ),
-        'conflicts' => array(),
-        'suggests' => array(),
-    ),
-);
+        ],
+        'conflicts' => [],
+        'suggests' => [],
+    ],
+];

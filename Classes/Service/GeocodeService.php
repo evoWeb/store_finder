@@ -42,7 +42,7 @@ class GeocodeService
     /**
      * @var array
      */
-    protected $settings = array();
+    protected $settings = [];
 
     /**
      * @var \Evoweb\StoreFinder\Cache\CoordinatesCache
@@ -59,7 +59,7 @@ class GeocodeService
      *
      * @param array $settings
      */
-    public function __construct(array $settings = array())
+    public function __construct(array $settings = [])
     {
         if (count($settings)) {
             $this->setSettings($settings);
@@ -107,7 +107,7 @@ class GeocodeService
     {
         $geocodedAddress = $this->coordinatesCache->getCoordinateByAddress($address);
         if ($forceGeocoding || !$geocodedAddress->isGeocoded()) {
-            $fieldsHit = array();
+            $fieldsHit = [];
             $geocodedAddress = $this->processAddress($address, $fieldsHit);
             if (!$this->hasMultipleResults) {
                 $this->coordinatesCache->addCoordinateForAddress($geocodedAddress, $fieldsHit);
@@ -136,14 +136,14 @@ class GeocodeService
     protected function processAddress($location, &$fields)
     {
         // Main Geocoder
-        $fields = array('address', 'zipcode', 'city', 'state', 'country');
+        $fields = ['address', 'zipcode', 'city', 'state', 'country'];
         $queryValues = $this->prepareValuesForQuery($location, $fields);
         $coordinate = $this->getCoordinateByApiCall($queryValues);
 
         // If there is no coordinat yet, we assume it's international and attempt
         // to find it based on just the city and country.
         if (!$coordinate->lat && !$coordinate->lng) {
-            $fields = array('city', 'country');
+            $fields = ['city', 'country'];
             $queryValues = $this->prepareValuesForQuery($location, $fields);
             $coordinate = $this->getCoordinateByApiCall($queryValues);
         }
@@ -171,7 +171,7 @@ class GeocodeService
     protected function prepareValuesForQuery($location, &$fields)
     {
         // for url encoding
-        $queryValues = array();
+        $queryValues = [];
         foreach ($fields as $field) {
             $methodName = 'get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $field)));
             $value = $location->{$methodName}();
@@ -220,7 +220,7 @@ class GeocodeService
      */
     protected function getCoordinateByApiCall($parameter)
     {
-        $components = array();
+        $components = [];
         if (isset($parameter['country'])) {
             $components[] = 'country:' . $parameter['country'];
             unset($parameter['country']);

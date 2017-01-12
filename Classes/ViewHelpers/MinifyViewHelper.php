@@ -49,12 +49,12 @@ class MinifyViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelp
 
         /* remove tabs, spaces, newlines, etc. */
         $content = str_replace(
-            array(CRLF, CR, LF, TAB, '     ', '    ', '  ', ': '),
-            array('', '', '', '', '', '', '', ':'),
+            [CRLF, CR, LF, TAB, '     ', '    ', '  ', ': '],
+            ['', '', '', '', '', '', '', ':'],
             $content
         );
         /* remove other spaces before/after ) */
-        $content = preg_replace(array('(( )+\))', '(\)( )+)'), ')', $content);
+        $content = preg_replace(['(( )+\))', '(\)( )+)'], ')', $content);
 
         return $content;
     }

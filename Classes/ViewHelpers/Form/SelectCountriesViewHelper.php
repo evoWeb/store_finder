@@ -58,7 +58,7 @@ class SelectCountriesViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\Select
 
     /**
      * Initialize arguments. Cant be moved to parent because of
-     * "private $argumentDefinitions = array();"
+     * "private $argumentDefinitions = [];"
      *
      * @return void
      */
@@ -92,7 +92,7 @@ class SelectCountriesViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\Select
             'array',
             'Array with countries allowed to be displayed.',
             false,
-            array()
+            []
         );
     }
 
@@ -118,7 +118,7 @@ class SelectCountriesViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\Select
             }
 
             if (!empty($this->arguments['allowedCountries'])) {
-                $orderedResults = array();
+                $orderedResults = [];
                 foreach ($this->arguments['allowedCountries'] as $countryKey) {
                     foreach ($result as $country) {
                         if ($country->getIsoCodeA2() == $countryKey) {
@@ -129,7 +129,7 @@ class SelectCountriesViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\Select
                 $result = $orderedResults;
             }
 
-            $this->arguments['options'] = array();
+            $this->arguments['options'] = [];
             foreach ($result as $country) {
                 $this->arguments['options'][] = $country;
             }

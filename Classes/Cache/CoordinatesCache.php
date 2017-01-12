@@ -46,12 +46,12 @@ class CoordinatesCache
     /**
      * @var array
      */
-    protected $fieldCombinations = array(
-        array('address', 'zipcode', 'city', 'state', 'country'),
-        array('zipcode', 'city', 'country'),
-        array('zipcode', 'country'),
-        array('city', 'country'),
-    );
+    protected $fieldCombinations = [
+        ['address', 'zipcode', 'city', 'state', 'country'],
+        ['zipcode', 'city', 'country'],
+        ['zipcode', 'country'],
+        ['city', 'country'],
+    ];
 
 
     /**
@@ -96,10 +96,10 @@ class CoordinatesCache
      */
     public function addCoordinateForAddress($address, $fields)
     {
-        $coordinate = array(
+        $coordinate = [
             'latitude' => $address->getLatitude(),
             'longitude' => $address->getLongitude()
-        );
+        ];
 
         $hash = $this->getHashForAddressWithFields($address, $fields);
         if (count($fields) == 2 || count($fields) == 3) {
@@ -151,7 +151,7 @@ class CoordinatesCache
      */
     public function getHashForAddressWithFields($address, &$fields)
     {
-        $values = array();
+        $values = [];
 
         foreach ($fields as $field) {
             $methodName = 'get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $field)));
@@ -245,7 +245,7 @@ class CoordinatesCache
      */
     public function flushSessionCache()
     {
-        $this->frontendUser->setKey('ses', 'tx_storefinder_coordinates', array());
+        $this->frontendUser->setKey('ses', 'tx_storefinder_coordinates', []);
         $this->frontendUser->storeSessionData();
     }
 

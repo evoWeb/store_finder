@@ -58,7 +58,7 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     /**
      * @var array
      */
-    protected $settings = array();
+    protected $settings = [];
 
     /**
      * Setter
@@ -86,10 +86,10 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $query = $this->createQuery();
 
         if (!$constraint->isGeocoded()) {
-            return array();
+            return [];
         }
 
-        $queryParts = array(
+        $queryParts = [
             'SELECT' => '
                 distinct l.*,
                 (acos(
@@ -105,7 +105,7 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             'GROUPBY' => '',
             'ORDERBY' => 'distance',
             'LIMIT' => '',
-        );
+        ];
 
         $queryParts = $this->addCountryQueryPart($constraint, $queryParts);
         $queryParts = $this->addCategoryQueryPart($constraint, $queryParts);
@@ -247,7 +247,7 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      *
      * @return array
      */
-    protected function fetchCategoriesRecursive(array $subcategories, $categories = array())
+    protected function fetchCategoriesRecursive(array $subcategories, $categories = [])
     {
         /** @var CategoryRepository $categoryRepository */
         $categoryRepository = $this->objectManager->get(CategoryRepository::class);
@@ -278,7 +278,7 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         /** @var \TYPO3\CMS\Extbase\Persistence\Generic\Query $query */
         $query = $this->createQuery();
 
-        $query->setOrderings(array('latitude' => QueryInterface::ORDER_ASCENDING));
+        $query->setOrderings(['latitude' => QueryInterface::ORDER_ASCENDING]);
         /** @var \Evoweb\StoreFinder\Domain\Model\Location $minLatitude south */
         $minLatitude = $query->execute()->getFirst();
 
@@ -287,15 +287,15 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         if ($minLatitude === null) {
             $maxLatitude = $minLongitute = $maxLongitute = null;
         } else {
-            $query->setOrderings(array('latitude' => QueryInterface::ORDER_DESCENDING));
+            $query->setOrderings(['latitude' => QueryInterface::ORDER_DESCENDING]);
             /** @var \Evoweb\StoreFinder\Domain\Model\Location $maxLatitude north */
             $maxLatitude = $query->execute()->getFirst();
 
-            $query->setOrderings(array('longitude' => QueryInterface::ORDER_ASCENDING));
+            $query->setOrderings(['longitude' => QueryInterface::ORDER_ASCENDING]);
             /** @var \Evoweb\StoreFinder\Domain\Model\Location $minLongitute west */
             $minLongitute = $query->execute()->getFirst();
 
-            $query->setOrderings(array('longitude' => QueryInterface::ORDER_DESCENDING));
+            $query->setOrderings(['longitude' => QueryInterface::ORDER_DESCENDING]);
             /** @var \Evoweb\StoreFinder\Domain\Model\Location $maxLongitute east */
             $maxLongitute = $query->execute()->getFirst();
         }
@@ -339,7 +339,7 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         /** @var \TYPO3\CMS\Extbase\Persistence\Generic\Query $query */
         $query = $this->createQuery();
 
-        $query->setOrderings(array('sorting' => QueryInterface::ORDER_ASCENDING));
+        $query->setOrderings(['sorting' => QueryInterface::ORDER_ASCENDING]);
         $query->matching($query->equals('center', 1));
 
         /** @var \Evoweb\StoreFinder\Domain\Model\Location $location */

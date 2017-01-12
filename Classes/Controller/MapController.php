@@ -125,7 +125,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             $result = $this->signalSlotDispatcher->dispatch(
                 __CLASS__,
                 'mapActionWithConstraint',
-                array($search, $locations, $this)
+                [$search, $locations, $this]
             );
             /** @var Model\Constraint $search */
             $search = $result[0];
@@ -144,10 +144,10 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
             $location = $this->locationRepository->findByUid((int) $this->settings['singleLocationId']);
             $this->view->assign('numberOfLocations', is_object($location) ? 1 : 0);
-            $this->view->assign('locations', array($location));
+            $this->view->assign('locations', [$location]);
 
             $center = $this->getCenter($search);
-            $center = $this->setZoomLevel($center, array($location));
+            $center = $this->setZoomLevel($center, [$location]);
             $this->view->assign('center', $center);
         } else {
             /** @var Model\Constraint $search */
@@ -164,7 +164,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
                     $this->view->assign('numberOfLocations', $locations->count());
                     $this->view->assign('locations', $locations);
                 } else {
-                    $locations = array();
+                    $locations = [];
                 }
 
                 $center = $this->getCenter($search);
@@ -173,11 +173,11 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             }
 
             if ($this->settings['showBeforeSearch'] & 4) {
-                $this->locationRepository->setDefaultOrderings(array(
+                $this->locationRepository->setDefaultOrderings([
                     'zipcode' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING,
                     'city' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING,
                     'name' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING,
-                ));
+                ]);
                 $locations = $this->locationRepository->findAll();
 
                 $this->view->assign('locations', $locations);
@@ -214,7 +214,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
             $this->view->assign('center', $center);
             $this->view->assign('numberOfLocations', 1);
-            $this->view->assign('locations', array($location));
+            $this->view->assign('locations', [$location]);
         }
     }
 

@@ -40,12 +40,12 @@ class CountryRepository extends \SJBR\StaticInfoTables\Domain\Repository\Country
 
         $nsSeparator = strpos($this->getRepositoryClassName(), '\\') !== false ? '\\\\' : '_';
         $this->objectType = preg_replace(
-            array(
+            [
                 '/' . $nsSeparator . 'Repository' . $nsSeparator . '(?!.*' . $nsSeparator . 'Repository' .
                 $nsSeparator . ')/',
                 '/Repository$/'
-            ),
-            array($nsSeparator . 'Model' . $nsSeparator, ''),
+            ],
+            [$nsSeparator . 'Model' . $nsSeparator, ''],
             get_parent_class($this)
         );
     }

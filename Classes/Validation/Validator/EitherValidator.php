@@ -45,14 +45,14 @@ class EitherValidator extends Validator\AbstractValidator implements Validator\V
     /**
      * @var array
      */
-    protected $supportedOptions = array(
-        'properties' => array(false, 'Properties to check in either', 'string'),
-    );
+    protected $supportedOptions = [
+        'properties' => [false, 'Properties to check in either', 'string'],
+    ];
 
     /**
      * @var array
      */
-    protected $properties = array();
+    protected $properties = [];
 
     /**
      * @var \Evoweb\StoreFinder\Domain\Model\Constraint
@@ -71,7 +71,7 @@ class EitherValidator extends Validator\AbstractValidator implements Validator\V
      * @throws InvalidValidationOptionsException
      * @api
      */
-    public function __construct(array $options = array())
+    public function __construct(array $options = [])
     {
         parent::__construct($options);
 
@@ -116,7 +116,7 @@ class EitherValidator extends Validator\AbstractValidator implements Validator\V
         if (!empty($value)) {
             $result = true;
         } else {
-            $properties = array_diff($this->properties, array($this->propertyName));
+            $properties = array_diff($this->properties, [$this->propertyName]);
             foreach ($properties as $property) {
                 $methodName = 'get' . ucfirst($property);
                 $value = $this->model->{$methodName}();

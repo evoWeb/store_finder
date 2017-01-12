@@ -948,8 +948,8 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected function escapeJsonString($value)
     {
-        $escapers = array('\\', '/', '"', "\n", "\r", "\t", "\x08", "\x0c", "'");
-        $replacements = array('\\\\', '\\/', '\\"', "\\n", "\\r", "\\t", "\\f", '\\b', "\'");
+        $escapers = ['\\', '/', '"', "\n", "\r", "\t", "\x08", "\x0c", "'"];
+        $replacements = ['\\\\', '\\/', '\\"', "\\n", "\\r", "\\t", "\\f", '\\b', "\'"];
         $result = str_replace($escapers, $replacements, $value);
 
         return $result;
