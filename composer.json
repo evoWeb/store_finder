@@ -21,21 +21,21 @@
     }
   ],
   "support": {
-    "issues": "http://forge.typo3.org/projects/extension-store_finder/issues",
-    "source": "https://git.typo3.org/TYPO3CMS/Extensions/store_finder.git"
+    "issues": "https://github.com/evoweb/store_finder/issues",
+    "source": "https://github.com/evoWeb/store_finder.git"
   },
 
   "require": {
     "php": ">=5.4.0",
-    "typo3/cms": "^7.6",
-    "sjbr/static-info-tables": ">6"
+    "typo3/cms": "~7.6,~8",
+    "sjbr/static-info-tables": "~6.3"
   },
 
   "require-dev": {
-    "namelesscoder/typo3-repository-client": "^1.2.0",
+    "namelesscoder/typo3-repository-client": "~1.2.0",
     "mikey179/vfsStream": "~1.6.0",
     "phpunit/phpunit": "~4.8.0",
-    "sjbr/static-info-tables": "^6.3.9"
+    "sjbr/static-info-tables": "~6.3"
   },
 
   "replace": {

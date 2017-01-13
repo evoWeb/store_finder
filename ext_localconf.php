@@ -11,9 +11,8 @@ call_user_func(function () {
     /**
      * Default PageTS
      */
-    /** @noinspection PhpUndefinedVariableInspection */
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
-        '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:store_finder/Configuration/PageTS/ModWizards.ts">'
+        '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:store_finder/Configuration/PageTSconfig/NewContentElementWizard.ts">'
     );
 
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addUserTSConfig('
@@ -22,12 +21,16 @@ call_user_func(function () {
         options.saveDocNew.tx_storefinder_domain_model_attribute = 1
     ');
 
-    /** @noinspection PhpUndefinedVariableInspection */
-    \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin('Evoweb.store_finder', 'Map', array(
+    \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+        'Evoweb.store_finder',
+        'Map',
+        [
             'Map' => 'map',
-        ), array(
+        ],
+        [
             'Map' => 'map',
-        ));
+        ]
+    );
 
     $scOptions =& $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS'];
     $languageFile = 'LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xml:';

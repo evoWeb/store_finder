@@ -82,8 +82,9 @@ class AddLocationToCacheTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
 
         $fields = ['zipcode', 'city', 'country'];
         $entryIdentifier = $this->coordinatesCache->getHashForAddressWithFields($constraint, $fields);
-        //$this->assertEquals($coordinate, $this->coordinatesCache->getCoordinateByAddress($constraint));
-        $this->assertEquals($coordinate, $this->coordinatesCache->getValueFromCacheTable($entryIdentifier));
+        $cacheEntry = $this->coordinatesCache->getCoordinateByAddress($constraint);
+        $cacheEntry = $this->coordinatesCache->getValueFromCacheTable($entryIdentifier);
+        $this->assertEquals($coordinate, $cacheEntry);
     }
 
     /**

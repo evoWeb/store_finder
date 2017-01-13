@@ -30,8 +30,8 @@ $EM_CONF['store_finder'] = [
     'author_company' => 'Evoweb',
     'constraints' => [
         'depends' => [
-            'typo3' => '7.6.0-7.6.99',
-            'static_info_tables' => '6.0.4-',
+            'typo3' => '7.6.0-8.6.99',
+            'static_info_tables' => '6.3.0-',
         ],
         'conflicts' => [],
         'suggests' => [],
