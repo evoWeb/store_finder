@@ -97,8 +97,7 @@ class SelectCountriesViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\Select
     }
 
     /**
-     * Override the initialize method to load all available
-     * countries before rendering
+     * Override the initialize method to load all available countries before rendering
      *
      * @return void
      */

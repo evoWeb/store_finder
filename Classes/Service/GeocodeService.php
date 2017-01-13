@@ -84,14 +84,12 @@ class GeocodeService
      *
      * @return void
      */
-    public function setSettings(array &$settings)
+    public function setSettings(array $settings)
     {
-        $this->settings = &$settings;
+        $settings['geocodeLimit'] = isset($this['geocodeLimit']) ? (int) $this['geocodeLimit'] : 2500;
+        $settings['geocodeUrl'] = isset($this['geocodeUrl']) ? $this['geocodeUrl'] : $this->defaultApiUrl;
 
-        $this->settings['geocodeLimit'] = $this->settings['geocodeLimit'] ? (int) $this->settings['geocodeLimit'] :
-            2500;
-        $this->settings['geocodeUrl'] = $this->settings['geocodeUrl'] ? $this->settings['geocodeUrl'] :
-            $this->defaultApiUrl;
+        $this->settings = $settings;
     }
 
     /**
@@ -181,13 +179,11 @@ class GeocodeService
                 // to enhance the map api query result
                 case 'country':
                     if (is_numeric($value) || strlen($value) == 3) {
-                        /** @var \TYPO3\CMS\Core\Database\DatabaseConnection $database */
-                        $database = $GLOBALS['TYPO3_DB'];
-                        $country = $database->exec_SELECTgetSingleRow(
+                        $country = $this->getDatabaseConnection()->exec_SELECTgetSingleRow(
                             'cn_iso_2',
                             'static_countries',
                             (is_numeric($value) ? 'uid = ' : 'cn_iso_3 = ') .
-                            $database->fullQuoteStr($value, 'static_countries')
+                            $this->getDatabaseConnection()->fullQuoteStr($value, 'static_countries')
                         );
                         if (count($country)) {
                             $value = reset($country);
@@ -248,11 +244,20 @@ class GeocodeService
         return $result;
     }
 
+
     /**
      * @return \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController
      */
     protected function getTypoScriptFrontendController()
     {
         return $GLOBALS['TSFE'];
+    }
+
+    /**
+     * @return \TYPO3\CMS\Core\Database\DatabaseConnection
+     */
+    protected function getDatabaseConnection()
+    {
+        return $GLOBALS['TYPO3_DB'];
     }
 }

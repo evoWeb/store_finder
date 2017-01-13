@@ -112,10 +112,7 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $queryParts = $this->addRadiusQueryPart($constraint, $queryParts);
         $queryParts = $this->addLimitQueryParts($constraint, $queryParts);
 
-        /** @var \TYPO3\CMS\Core\Database\DatabaseConnection $database */
-        $database = $GLOBALS['TYPO3_DB'];
-
-        $sql = $database->SELECTquery(
+        $sql = $this->getDatabaseConnection()->SELECTquery(
             $queryParts['SELECT'],
             $queryParts['FROM'],
             $queryParts['WHERE'],
@@ -138,9 +135,6 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      */
     protected function addCountryQueryPart($constraint, $queryParts)
     {
-        /** @var \TYPO3\CMS\Core\Database\DatabaseConnection $database */
-        $database = $GLOBALS['TYPO3_DB'];
-
         if ($constraint->getCountry()) {
             $country = $constraint->getCountry();
             if (is_numeric($country)) {
@@ -149,7 +143,10 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             } else {
                 $queryParts['FROM'] .= ' INNER JOIN static_countries sc ON (l.country = sc.cn_iso_3)';
                 $queryParts['WHERE'] .= ' AND sc.cn_iso_3 = '
-                    . $database->fullQuoteStr(strtoupper($constraint->getCountry()), 'static_countries');
+                    . $this->getDatabaseConnection()->fullQuoteStr(
+                        strtoupper($constraint->getCountry()),
+                        'static_countries'
+                    );
             }
 
 
@@ -168,9 +165,6 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      */
     protected function addCategoryQueryPart($constraint, $queryParts)
     {
-        /** @var \TYPO3\CMS\Core\Database\DatabaseConnection $database */
-        $database = $GLOBALS['TYPO3_DB'];
-
         if ($this->settings['categoryPriority'] == 'limitResultsToCategories') {
             $constraint->setCategory(GeneralUtility::intExplode(',', $this->settings['categories'], 1));
         } elseif ($this->settings['categoryPriority'] == 'useSelectedCategoriesIfNoFilterSelected'
@@ -184,7 +178,9 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         if (!empty($categories)) {
             $queryParts['FROM'] .= ' INNER JOIN sys_category_record_mm c ON (l.uid = c.uid_foreign
 				AND c.tablenames = \'tx_storefinder_domain_model_location\' AND c.fieldname = \'categories\')';
-            $queryParts['WHERE'] .= ' AND c.uid_local IN (' . implode(',', $database->cleanIntArray($categories)) . ')';
+            $queryParts['WHERE'] .= ' AND c.uid_local IN (' .
+                implode(',', $this->getDatabaseConnection()->cleanIntArray($categories)) .
+                ')';
         }
 
         return $queryParts;
@@ -200,13 +196,11 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      */
     protected function addRadiusQueryPart($constraint, $queryParts)
     {
-        /** @var \TYPO3\CMS\Core\Database\DatabaseConnection $database */
-        $database = $GLOBALS['TYPO3_DB'];
-
         if ($this->settings['distanceUnit'] == 'miles') {
             $constraint->setRadius(max($constraint->getRadius(), 1) * 1.6);
         }
-        $queryParts['WHERE'] .= ' HAVING distance <= ' . $database->fullQuoteStr($constraint->getRadius(), '');
+        $queryParts['WHERE'] .= ' HAVING distance <= ' .
+            $this->getDatabaseConnection()->fullQuoteStr($constraint->getRadius(), '');
 
         return $queryParts;
     }
@@ -430,5 +424,14 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $query->getQuerySettings()->setRespectStoragePage(false);
 
         return $query->execute();
+    }
+
+
+    /**
+     * @return \TYPO3\CMS\Core\Database\DatabaseConnection
+     */
+    protected function getDatabaseConnection()
+    {
+        return $GLOBALS['TYPO3_DB'];
     }
 }

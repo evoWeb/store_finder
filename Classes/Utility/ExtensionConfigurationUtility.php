@@ -44,7 +44,13 @@ class ExtensionConfigurationUtility implements \TYPO3\CMS\Core\SingletonInterfac
     public static function getConfiguration()
     {
         if (self::$configuration === null) {
-            self::$configuration = (array) unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['store_finder']);
+            self::$configuration = isset($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['store_finder']) ?
+                $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['store_finder'] :
+                [];
+
+            if (is_string(self::$configuration)) {
+                self::$configuration = (array) unserialize(self::$configuration);
+            }
         }
 
         return self::$configuration;

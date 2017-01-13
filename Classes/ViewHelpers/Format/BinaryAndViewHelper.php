@@ -32,7 +32,7 @@ namespace Evoweb\StoreFinder\ViewHelpers\Format;
 class BinaryAndViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
 {
     /**
-     * Make an binary additon and return the result
+     * Make an binary addition and return the result
      *
      * @param integer $base
      * @param integer $content

@@ -18,11 +18,6 @@ class UpdateUtility
     const FILE_MIGRATION_FOLDER = '_store_finder/';
 
     /**
-     * @var \TYPO3\CMS\Core\Database\DatabaseConnection $database
-     */
-    protected $database;
-
-    /**
      * @var array
      */
     protected $mapping = [
@@ -209,8 +204,6 @@ class UpdateUtility
      */
     public function main()
     {
-        $this->database = $GLOBALS['TYPO3_DB'];
-
         $content = '';
 
         if ($this->access()) {
@@ -306,17 +299,19 @@ class UpdateUtility
     {
         $attributes = $this->fetchAttributes();
 
-        while (($row = $this->database->sql_fetch_assoc($attributes))) {
+        while (($row = $this->getDatabaseConnection()->sql_fetch_assoc($attributes))) {
             $attribute = $this->mapFieldsPreImport($row, 'attributes');
 
             $table = 'tx_storefinder_domain_model_attribute';
             if (($record = $this->isAlreadyImported($attribute, $table))) {
                 unset($attribute['import_id']);
-                $this->database->exec_UPDATEquery($table, 'uid = ' . $record['uid'], $attribute);
+                $this->getDatabaseConnection()->exec_UPDATEquery($table, 'uid = ' . $record['uid'], $attribute);
                 $this->records['attributes'][$row['uid']] = $attribute['uid'] = $record['uid'];
             } else {
-                $this->database->exec_INSERTquery($table, $attribute);
-                $this->records['attributes'][$row['uid']] = $attribute['uid'] = $this->database->sql_insert_id();
+                $this->getDatabaseConnection()->exec_INSERTquery($table, $attribute);
+                $this->records['attributes'][$row['uid']] =
+                    $attribute['uid'] =
+                        $this->getDatabaseConnection()->sql_insert_id();
             }
 
             $this->migrateFilesToFal($row, $attribute, $this->fileMapping['attributes']['icon']);
@@ -334,17 +329,19 @@ class UpdateUtility
     {
         $categories = $this->fetchCategories();
 
-        while (($row = $this->database->sql_fetch_assoc($categories))) {
+        while (($row = $this->getDatabaseConnection()->sql_fetch_assoc($categories))) {
             $category = $this->mapFieldsPreImport($row, 'categories');
 
             $table = 'sys_category';
             if (($record = $this->isAlreadyImported($category, $table))) {
                 unset($category['import_id']);
-                $this->database->exec_UPDATEquery($table, 'uid = ' . $record['uid'], $category);
+                $this->getDatabaseConnection()->exec_UPDATEquery($table, 'uid = ' . $record['uid'], $category);
                 $this->records['categories'][$row['uid']] = $category['uid'] = $record['uid'];
             } else {
-                $this->database->exec_INSERTquery($table, $category);
-                $this->records['categories'][$row['uid']] = $category['uid'] = $this->database->sql_insert_id();
+                $this->getDatabaseConnection()->exec_INSERTquery($table, $category);
+                $this->records['categories'][$row['uid']] =
+                    $category['uid'] =
+                        $this->getDatabaseConnection()->sql_insert_id();
             }
         }
 
@@ -360,17 +357,19 @@ class UpdateUtility
     {
         $locations = $this->fetchLocations();
 
-        while (($row = $this->database->sql_fetch_assoc($locations))) {
+        while (($row = $this->getDatabaseConnection()->sql_fetch_assoc($locations))) {
             $location = $this->mapFieldsPreImport($row, 'locations');
 
             $table = 'tx_storefinder_domain_model_location';
             if (($record = $this->isAlreadyImported($location, $table))) {
                 unset($location['import_id']);
-                $this->database->exec_UPDATEquery($table, 'uid = ' . $record['uid'], $location);
+                $this->getDatabaseConnection()->exec_UPDATEquery($table, 'uid = ' . $record['uid'], $location);
                 $this->records['locations'][$row['uid']] = $location['uid'] = $record['uid'];
             } else {
-                $this->database->exec_INSERTquery($table, $location);
-                $this->records['locations'][$row['uid']] = $location['uid'] = $this->database->sql_insert_id();
+                $this->getDatabaseConnection()->exec_INSERTquery($table, $location);
+                $this->records['locations'][$row['uid']] =
+                    $location['uid'] =
+                        $this->getDatabaseConnection()->sql_insert_id();
             }
 
             $this->mapFieldsPostImport($row, $location, 'locations');
@@ -380,7 +379,7 @@ class UpdateUtility
             $this->migrateFilesToFal($row, $location, $this->fileMapping['locations']['icon']);
         }
 
-        $this->database->sql_query('
+        $this->getDatabaseConnection()->sql_query('
 			update tx_storefinder_domain_model_location AS l
 				LEFT JOIN (
 					SELECT uid_foreign, COUNT(*) AS count
@@ -390,7 +389,7 @@ class UpdateUtility
 				) AS c ON l.uid = c.uid_foreign
 			set l.categories = COALESCE(c.count, 0);
 		');
-        $this->database->sql_query('
+        $this->getDatabaseConnection()->sql_query('
 			update tx_storefinder_domain_model_location AS l
 				LEFT JOIN (
 					SELECT uid_local, COUNT(*) AS count
@@ -399,7 +398,7 @@ class UpdateUtility
 				) AS a ON l.uid = a.uid_local
 			set l.attributes = COALESCE(a.count, 0);
 		');
-        $this->database->sql_query('
+        $this->getDatabaseConnection()->sql_query('
 			update tx_storefinder_domain_model_location AS l
 				LEFT JOIN (
 					SELECT uid_local, COUNT(*) AS count
@@ -420,7 +419,13 @@ class UpdateUtility
      */
     protected function fetchAttributes()
     {
-        return $this->database->exec_SELECTquery('*', 'tx_locator_attributes', 'deleted = 0', '', 'sys_language_uid');
+        return $this->getDatabaseConnection()->exec_SELECTquery(
+            '*',
+            'tx_locator_attributes',
+            'deleted = 0',
+            '',
+            'sys_language_uid'
+        );
     }
 
     /**
@@ -430,7 +435,7 @@ class UpdateUtility
      */
     protected function fetchCategories()
     {
-        return $this->database->exec_SELECTquery(
+        return $this->getDatabaseConnection()->exec_SELECTquery(
             '*',
             'tx_locator_categories',
             'deleted = 0',
@@ -446,7 +451,7 @@ class UpdateUtility
      */
     protected function fetchLocations()
     {
-        return $this->database->exec_SELECTquery('*', 'tx_locator_locations', 'deleted = 0', '', 'uid');
+        return $this->getDatabaseConnection()->exec_SELECTquery('*', 'tx_locator_locations', 'deleted = 0', '', 'uid');
     }
 
 
@@ -546,7 +551,7 @@ class UpdateUtility
                                 }
 
                                 if (!$this->mmRelationExists($mmTable, $uidLocal, $uidForeign, $destinationTable)) {
-                                    $this->database->exec_INSERTquery(
+                                    $this->getDatabaseConnection()->exec_INSERTquery(
                                         $mmTable,
                                         [
                                             'uid_local' => $uidLocal,
@@ -601,7 +606,7 @@ class UpdateUtility
                                 }
 
                                 if (!$this->mmRelationExists($mmTable, $uidLocal, $uidForeign, $destinationTable)) {
-                                    $this->database->exec_INSERTquery(
+                                    $this->getDatabaseConnection()->exec_INSERTquery(
                                         $mmTable,
                                         [
                                             'uid_local' => $uidLocal,
@@ -636,7 +641,7 @@ class UpdateUtility
      */
     protected function mmRelationExists($mmTable, $uidLocal, $uidForeign, $tablenames)
     {
-        return (bool) $this->database->exec_SELECTcountRows(
+        return (bool) $this->getDatabaseConnection()->exec_SELECTcountRows(
             '*',
             $mmTable,
             'uid_local = ' . $uidLocal . ' AND uid_foreign = ' . $uidForeign .
@@ -654,7 +659,7 @@ class UpdateUtility
      */
     protected function isAlreadyImported($record, $table)
     {
-        return $this->database->exec_SELECTgetSingleRow(
+        return $this->getDatabaseConnection()->exec_SELECTgetSingleRow(
             'uid',
             $table,
             'import_id = ' . $record['import_id'] . ' AND deleted = 0'
@@ -668,7 +673,7 @@ class UpdateUtility
      */
     protected function countStoreFinderLocations()
     {
-        return $this->database->exec_SELECTcountRows(
+        return $this->getDatabaseConnection()->exec_SELECTcountRows(
             'uid',
             'tx_storefinder_domain_model_location',
             '1' . \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields('tx_storefinder_domain_model_location')
@@ -753,14 +758,14 @@ class UpdateUtility
                 $fileObject = $this->storage->getFile(self::FILE_MIGRATION_FOLDER . $file);
                 $this->fileIndexRepository->add($fileObject);
 
-                $count = $this->database->exec_SELECTcountRows(
+                $count = $this->getDatabaseConnection()->exec_SELECTcountRows(
                     '*',
                     'sys_file_reference',
-                    'tablenames = ' . $this->database->fullQuoteStr(
+                    'tablenames = ' . $this->getDatabaseConnection()->fullQuoteStr(
                         $configuration['destinationTable'],
                         'sys_file_reference'
                     ) . ' AND fieldname = '
-                    . $this->database->fullQuoteStr($configuration['destinationField'], 'sys_file_reference')
+                    . $this->getDatabaseConnection()->fullQuoteStr($configuration['destinationField'], 'sys_file_reference')
                     . ' AND uid_local = ' . $fileObject->getUid() . ' AND uid_foreign = ' . $destination['uid']
                 );
 
@@ -776,7 +781,7 @@ class UpdateUtility
                         'sorting_foreign' => $i,
                         'table_local' => 'sys_file'
                     ];
-                    $this->database->exec_INSERTquery('sys_file_reference', $dataArray);
+                    $this->getDatabaseConnection()->exec_INSERTquery('sys_file_reference', $dataArray);
                 }
             }
             $i++;
@@ -791,20 +796,17 @@ class UpdateUtility
      */
     public function access()
     {
-        /** @var \TYPO3\CMS\Core\Database\DatabaseConnection $database */
-        $database = $GLOBALS['TYPO3_DB'];
-
-        $res = $database->sql_query('show tables like \'tx_locator_%\';');
+        $res = $this->getDatabaseConnection()->sql_query('show tables like \'tx_locator_%\';');
 
         $countLocations = $countAttributes = 0;
-        if ($database->sql_num_rows($res)) {
-            $countLocations = $database->exec_SELECTcountRows(
+        if ($this->getDatabaseConnection()->sql_num_rows($res)) {
+            $countLocations = $this->getDatabaseConnection()->exec_SELECTcountRows(
                 'l.uid',
                 'tx_locator_locations AS l
                     LEFT JOIN tx_storefinder_domain_model_location AS sl ON l.uid = sl.import_id',
                 'l.deleted = 0 AND sl.uid IS NULL'
             );
-            $countAttributes = $database->exec_SELECTcountRows(
+            $countAttributes = $this->getDatabaseConnection()->exec_SELECTcountRows(
                 'a.uid',
                 'tx_locator_attributes AS a
                     LEFT JOIN tx_storefinder_domain_model_attribute AS sa ON a.uid = sa.import_id',
@@ -819,6 +821,7 @@ class UpdateUtility
 
         return $result;
     }
+
 
     /**
      * @return \TYPO3\CMS\Core\Database\DatabaseConnection
