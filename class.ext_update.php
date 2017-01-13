@@ -1,4 +1,6 @@
 <?php
+namespace Evoweb\StoreFinder;
+
 /***************************************************************
  *  Copyright notice
  *
