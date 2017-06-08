@@ -1,6 +1,5 @@
 <?php
 
-/** @noinspection PhpUndefinedVariableInspection */
 $tempColumns = [
     'children' => [
         'exclude' => 1,
@@ -13,5 +12,5 @@ $tempColumns = [
     ],
 ];
 
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('sys_category', $tempColumns, 1);
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('sys_category', $tempColumns);
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes('sys_category', 'children', '', 'after:parent');

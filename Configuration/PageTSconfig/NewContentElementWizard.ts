@@ -10,8 +10,6 @@ mod.wizards.newContentElement.wizardItems {
 					list_type = storefinder_map
 				}
 			}
-		}
-		elements {
 			storefinder_show {
 				iconIdentifier = store-finder-plugin
 				title = LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xml:pi1_title_show
