@@ -27,7 +27,7 @@ namespace Evoweb\StoreFinder\Tests\Unit\Cache;
 /**
  * Coordinate cache test
  */
-class AddLocationToCacheTest extends \TYPO3\TestingFramework\Core\Unit\UnitTestCase
+class AddLocationToCacheTest extends \TYPO3\TestingFramework\Core\Functional\FunctionalTestCase
 {
     /**
      * @var \TYPO3\CMS\Extbase\Object\ObjectManagerInterface
@@ -54,10 +54,17 @@ class AddLocationToCacheTest extends \TYPO3\TestingFramework\Core\Unit\UnitTestC
      */
     public function setUp()
     {
-        $this->objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-            'TYPO3\\CMS\\Extbase\\Object\\ObjectManager'
+        $frontendUserMock = new \TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication();
+
+        $cacheBackend = new \TYPO3\CMS\Core\Cache\Backend\FileBackend('production');
+        /** @var \TYPO3\CMS\Core\Cache\Frontend\PhpFrontend $cacheMock */
+        $cacheFrontendMock = $this->getAccessibleMock(
+            \TYPO3\CMS\Core\Cache\Frontend\PhpFrontend::class,
+            [],
+            ['store_finder_coordinate', $cacheBackend]
         );
-        $this->coordinatesCache = $this->objectManager->get('Evoweb\\StoreFinder\\Cache\\CoordinatesCache');
+
+        $this->coordinatesCache = new \Evoweb\StoreFinder\Cache\CoordinatesCache($frontendUserMock, $cacheFrontendMock);
     }
 
 

@@ -15,51 +15,51 @@ php:
 env:
   - TYPO3_VERSION="^7.6"
     PHPUNIT_VERSION="~4.8.0"
-    UNITTEST_FOLDER="Tests/Unit7/"
-    UNITTEST_SUITE=".Build/Web/typo3/sysext/core/Build/UnitTests.xml"
+    FUNCTIONALTEST_FOLDER="Tests/Functional7/"
+    FUNCTIONALTEST_SUITE=".Build/vendor/typo3/cms/typo3/sysext/core/Build/FunctionalTests.xml"
 
   - TYPO3_VERSION="^8.7"
     PHPUNIT_VERSION="~5.7.0"
-    UNITTEST_FOLDER="Tests/Unit/"
-    UNITTEST_SUITE=".Build/vendor/typo3/testing-framework/Resources/Core/Build/UnitTests.xml"
+    FUNCTIONALTEST_FOLDER="Tests/Functional/"
+    FUNCTIONALTEST_SUITE=".Build/vendor/typo3/testing-framework/Resources/Core/Build/FunctionalTests.xml"
 
   - TYPO3_VERSION="dev-master as 8.7.0"
     PHPUNIT_VERSION="~5.7.0"
-    UNITTEST_FOLDER="Tests/Unit/"
-    UNITTEST_SUITE=".Build/vendor/typo3/testing-framework/Resources/Core/Build/UnitTests.xml"
+    FUNCTIONALTEST_FOLDER="Tests/Functional/"
+    FUNCTIONALTEST_SUITE=".Build/vendor/typo3/testing-framework/Resources/Core/Build/FunctionalTests.xml"
 
 matrix:
   fast_finish: true
   allow_failures:
     - env: TYPO3_VERSION="dev-master as 8.7.0"
            PHPUNIT_VERSION="~5.7.0"
-           UNITTEST_FOLDER="Tests/Unit/"
-           UNITTEST_SUITE=".Build/vendor/typo3/testing-framework/Resources/Core/Build/UnitTests.xml"
+           FUNCTIONALTEST_FOLDER="Tests/Functional/"
+           FUNCTIONALTEST_SUITE=".Build/vendor/typo3/testing-framework/Resources/Core/Build/FunctionalTests.xml"
 
   exclude:
     - php: 5.5
       env: TYPO3_VERSION="^8.7"
            PHPUNIT_VERSION="~5.7.0"
-           UNITTEST_FOLDER="Tests/Unit/"
-           UNITTEST_SUITE=".Build/vendor/typo3/testing-framework/Resources/Core/Build/UnitTests.xml"
+           FUNCTIONALTEST_FOLDER="Tests/Functional/"
+           FUNCTIONALTEST_SUITE=".Build/vendor/typo3/testing-framework/Resources/Core/Build/FunctionalTests.xml"
 
     - php: 5.6
       env: TYPO3_VERSION="^8.7"
            PHPUNIT_VERSION="~5.7.0"
-           UNITTEST_FOLDER="Tests/Unit/"
-           UNITTEST_SUITE=".Build/vendor/typo3/testing-framework/Resources/Core/Build/UnitTests.xml"
+           FUNCTIONALTEST_FOLDER="Tests/Functional/"
+           FUNCTIONALTEST_SUITE=".Build/vendor/typo3/testing-framework/Resources/Core/Build/FunctionalTests.xml"
 
     - php: 5.5
       env: TYPO3_VERSION="dev-master as 8.7.0"
            PHPUNIT_VERSION="~5.7.0"
-           UNITTEST_FOLDER="Tests/Unit/"
-           UNITTEST_SUITE=".Build/vendor/typo3/testing-framework/Resources/Core/Build/UnitTests.xml"
+           FUNCTIONALTEST_FOLDER="Tests/Functional/"
+           FUNCTIONALTEST_SUITE=".Build/vendor/typo3/testing-framework/Resources/Core/Build/FunctionalTests.xml"
 
     - php: 5.6
       env: TYPO3_VERSION="dev-master as 8.7.0"
            PHPUNIT_VERSION="~5.7.0"
-           UNITTEST_FOLDER="Tests/Unit/"
-           UNITTEST_SUITE=".Build/vendor/typo3/testing-framework/Resources/Core/Build/UnitTests.xml"
+           FUNCTIONALTEST_FOLDER="Tests/Functional/"
+           FUNCTIONALTEST_SUITE=".Build/vendor/typo3/testing-framework/Resources/Core/Build/FunctionalTests.xml"
 
 sudo: false
 
@@ -95,8 +95,13 @@ script:
 
   - >
     echo;
-    echo "Running unit tests in folder '$UNITTEST_FOLDER' with suite '$UNITTEST_SUITE'";
-    .Build/bin/phpunit --colors -c $UNITTEST_SUITE $UNITTEST_FOLDER
+    echo "Running functional tests in folder '$FUNCTIONALTEST_FOLDER' with suite '$FUNCTIONALTEST_SUITE'";
+    export typo3DatabaseName="typo3";
+    export typo3DatabaseHost="localhost";
+    export typo3DatabaseUsername="root";
+    export typo3DatabasePassword="";
+    php .Build/bin/phpunit --colors -c $FUNCTIONALTEST_SUITE $FUNCTIONALTEST_FOLDER;
+
 
 after_script:
   - >

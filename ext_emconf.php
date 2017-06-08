@@ -19,4 +19,9 @@ $EM_CONF['store_finder'] = [
         'conflicts' => [],
         'suggests' => [],
     ],
+    "autoload-dev" => [
+        "psr-4" => [
+            "Evoweb\\StoreFinder\\Tests\\" => "Tests/",
+        ],
+    ],
 ];

@@ -1,5 +1,5 @@
 <?php
-namespace Evoweb\StoreFinder\Tests\Unit7\Cache;
+namespace Evoweb\StoreFinder\Tests\Functional7\Cache;
 
 /***************************************************************
  * Copyright notice
@@ -27,12 +27,12 @@ namespace Evoweb\StoreFinder\Tests\Unit7\Cache;
 /**
  * Coordinate cache test
  */
-class AddLocationToCacheTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
+class AddLocationToCacheTest extends \TYPO3\CMS\Core\Tests\FunctionalTestCase
 {
     /**
-     * @var \TYPO3\CMS\Extbase\Object\ObjectManagerInterface
+     * @var string
      */
-    protected $objectManager;
+    protected $fixturePath = 'typo3conf/ext/store_finder/Tests/Functional/Fixtures/';
 
     /**
      * @var \Evoweb\StoreFinder\Cache\CoordinatesCache|\PHPUnit_Framework_MockObject_MockObject
@@ -40,41 +40,27 @@ class AddLocationToCacheTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
     protected $coordinatesCache;
 
     /**
-     * @var \TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $frontendUser;
-
-
-    /**
      * Setup for tests
-     *
-     * @throws \InvalidArgumentException
-     * @throws \PHPUnit_Framework_Exception
-     * @return void
      */
     public function setUp()
     {
         $frontendUserMock = new \TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication();
 
         $cacheBackend = new \TYPO3\CMS\Core\Cache\Backend\FileBackend('production');
-        /** @var \TYPO3\CMS\Core\Cache\Frontend\PhpFrontend $cacheMock */
-        $cacheFrontendMock = $this->getAccessibleMock(
-            \TYPO3\CMS\Core\Cache\Frontend\PhpFrontend::class,
-            [],
-            ['store_finder_coordinate', $cacheBackend]
-        );
+        /** @var \TYPO3\CMS\Core\Cache\Frontend\VariableFrontend $cacheFrontendMock */
+        $cacheFrontendMock = $this->getMockBuilder(\TYPO3\CMS\Core\Cache\Frontend\VariableFrontend::class)
+            ->setMethods(['get'])
+            ->setConstructorArgs(['store_finder_coordinate', $cacheBackend])
+            ->getMock();
 
         $this->coordinatesCache = new \Evoweb\StoreFinder\Cache\CoordinatesCache($frontendUserMock, $cacheFrontendMock);
     }
 
 
     /**
-     * Test for something
+     * Test if location only gets stored with zip, city and country in cache table
      *
      * @test
-     * @throws \PHPUnit_Framework_Exception
-     * @throws \TYPO3\CMS\Core\Exception
-     * @return void
      */
     public function locationWithZipCityCountryOnlyGetStoredInCacheTable()
     {
@@ -105,10 +91,7 @@ class AddLocationToCacheTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
     /**
      * Test for something
      *
-     * @test
-     * @throws \PHPUnit_Framework_Exception
-     * @throws \TYPO3\CMS\Core\Exception
-     * @return void
+     * @te
      */
     public function locationWithAddressZipCityStateCountryGetStoredInCacheTableIfStreetAndStateIsEmpty()
     {
@@ -140,9 +123,7 @@ class AddLocationToCacheTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
     /**
      * Test for something
      *
-     * @test
-     * @throws \TYPO3\CMS\Core\Exception
-     * @return void
+     * @te
      */
     public function locationWithAddressZipCityCountryGetStoredInSessionCache()
     {
@@ -173,9 +154,7 @@ class AddLocationToCacheTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
     /**
      * Test for something
      *
-     * @test
-     * @throws \TYPO3\CMS\Core\Exception
-     * @return void
+     * @te
      */
     public function locationWithAddressZipCityStateCountryGetStoredInSessionCache()
     {
