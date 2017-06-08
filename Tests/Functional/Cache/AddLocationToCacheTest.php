@@ -1,5 +1,5 @@
 <?php
-namespace Evoweb\StoreFinder\Tests\Unit\Cache;
+namespace Evoweb\StoreFinder\Tests\Functional\Cache;
 
 /***************************************************************
  * Copyright notice
@@ -30,20 +30,14 @@ namespace Evoweb\StoreFinder\Tests\Unit\Cache;
 class AddLocationToCacheTest extends \TYPO3\TestingFramework\Core\Functional\FunctionalTestCase
 {
     /**
-     * @var \TYPO3\CMS\Extbase\Object\ObjectManagerInterface
+     * @var array
      */
-    protected $objectManager;
+    protected $coreExtensionsToLoad = ['extbase', 'fluid'];
 
     /**
      * @var \Evoweb\StoreFinder\Cache\CoordinatesCache|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $coordinatesCache;
-
-    /**
-     * @var \TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $frontendUser;
-
 
     /**
      * Setup for tests
@@ -54,17 +48,22 @@ class AddLocationToCacheTest extends \TYPO3\TestingFramework\Core\Functional\Fun
      */
     public function setUp()
     {
-        $frontendUserMock = new \TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication();
+        // normaly this is set in ext_localconf
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['store_finder_coordinate'] = [
+            'groups' => ['system'],
+        ];
 
-        $cacheBackend = new \TYPO3\CMS\Core\Cache\Backend\FileBackend('production');
-        /** @var \TYPO3\CMS\Core\Cache\Frontend\PhpFrontend $cacheMock */
-        $cacheFrontendMock = $this->getAccessibleMock(
-            \TYPO3\CMS\Core\Cache\Frontend\PhpFrontend::class,
-            [],
-            ['store_finder_coordinate', $cacheBackend]
-        );
+        $this->testExtensionsToLoad[] = 'typo3conf/ext/store_finder';
 
-        $this->coordinatesCache = new \Evoweb\StoreFinder\Cache\CoordinatesCache($frontendUserMock, $cacheFrontendMock);
+        parent::setUp();
+
+        $frontendUser = new \TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication();
+
+        $cacheManager = new \TYPO3\CMS\Core\Cache\CacheManager();
+        $cacheManager->setCacheConfigurations($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']);
+        $cacheFrontend = $cacheManager->getCache('store_finder_coordinate');
+
+        $this->coordinatesCache = new \Evoweb\StoreFinder\Cache\CoordinatesCache($frontendUser, $cacheFrontend);
     }
 
 
@@ -72,9 +71,6 @@ class AddLocationToCacheTest extends \TYPO3\TestingFramework\Core\Functional\Fun
      * Test for something
      *
      * @test
-     * @throws \PHPUnit_Framework_Exception
-     * @throws \TYPO3\CMS\Core\Exception
-     * @return void
      */
     public function locationWithZipCityCountryOnlyGetStoredInCacheTable()
     {
@@ -106,9 +102,6 @@ class AddLocationToCacheTest extends \TYPO3\TestingFramework\Core\Functional\Fun
      * Test for something
      *
      * @test
-     * @throws \PHPUnit_Framework_Exception
-     * @throws \TYPO3\CMS\Core\Exception
-     * @return void
      */
     public function locationWithAddressZipCityStateCountryGetStoredInCacheTableIfStreetAndStateIsEmpty()
     {
@@ -141,8 +134,6 @@ class AddLocationToCacheTest extends \TYPO3\TestingFramework\Core\Functional\Fun
      * Test for something
      *
      * @test
-     * @throws \TYPO3\CMS\Core\Exception
-     * @return void
      */
     public function locationWithAddressZipCityCountryGetStoredInSessionCache()
     {
@@ -174,8 +165,6 @@ class AddLocationToCacheTest extends \TYPO3\TestingFramework\Core\Functional\Fun
      * Test for something
      *
      * @test
-     * @throws \TYPO3\CMS\Core\Exception
-     * @return void
      */
     public function locationWithAddressZipCityStateCountryGetStoredInSessionCache()
     {
@@ -213,8 +202,7 @@ class AddLocationToCacheTest extends \TYPO3\TestingFramework\Core\Functional\Fun
      */
     public function getConstraintStub($data)
     {
-        /** @var \Evoweb\StoreFinder\Domain\Model\Constraint $constraint */
-        $constraint = $this->objectManager->get('Evoweb\\StoreFinder\\Domain\\Model\\Constraint');
+        $constraint = new \Evoweb\StoreFinder\Domain\Model\Constraint();
 
         foreach ($data as $field => $value) {
             $setter = 'set' . ucfirst($field);
