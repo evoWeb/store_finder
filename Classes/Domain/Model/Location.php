@@ -40,11 +40,6 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $objectManager;
 
     /**
-     * @var \SJBR\StaticInfoTables\Domain\Model\Country
-     */
-    protected $internalCountry;
-
-    /**
      * @var string
      */
     protected $name = '';
@@ -191,6 +186,11 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @var string
      */
     protected $country = '';
+
+    /**
+     * @var string
+     */
+    protected $_country;
 
     /**
      * @var \SJBR\StaticInfoTables\Domain\Model\CountryZone
@@ -412,7 +412,7 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     public function getCountry()
     {
-        if (is_null($this->internalCountry)) {
+        if (is_null($this->_country)) {
             /** @var CountryRepository $repository */
             $repository = $this->getObjectManager()->get(CountryRepository::class);
             /** @var \TYPO3\CMS\Extbase\Persistence\Generic\Query $query */
@@ -424,14 +424,14 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
                 $enableFields = \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields('static_countries');
             }
 
-            $this->internalCountry = $query->statement(
+            $this->_country = $query->statement(
                 'SELECT * FROM static_countries WHERE '
                 . (is_numeric($this->country) ? 'uid = ' : 'cn_iso_3 = ')
                 . $this->getDatabaseConnection()->fullQuoteStr($this->country, 'static_countries')
                 . $enableFields
             )->execute()->getFirst();
         }
-        return $this->internalCountry;
+        return $this->_country;
     }
 
     /**
@@ -948,8 +948,8 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected function escapeJsonString($value)
     {
-        $escapers = ['\\', '/', '"', "\n", "\r", "\t", "\x08", "\x0c", "'"];
-        $replacements = ['\\\\', '\\/', '\\"', "\\n", "\\r", "\\t", "\\f", '\\b', "\'"];
+        $escapers = array('\\', '/', '"', "\n", "\r", "\t", "\x08", "\x0c", "'");
+        $replacements = array('\\\\', '\\/', '\\"', "\\n", "\\r", "\\t", "\\f", '\\b', "\'");
         $result = str_replace($escapers, $replacements, $value);
 
         return $result;

@@ -1,47 +1,51 @@
 <?php
-defined('TYPO3_MODE') || die('Access denied.');
 
-call_user_func(function () {
-    if (!is_array($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['store_finder_coordinate'])) {
-        $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['store_finder_coordinate'] = [
-            'groups' => ['system'],
-        ];
-    }
+if (!defined('TYPO3_MODE')) {
+    die('Access denied.');
+}
 
-    /**
-     * Default PageTS
-     */
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
-        '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:store_finder/Configuration/PageTSconfig/NewContentElementWizard.ts">'
+if (!is_array($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['store_finder_coordinate'])) {
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['store_finder_coordinate'] = array(
+        'groups' => array('system'),
     );
+}
 
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addUserTSConfig('
-        options.saveDocNew.tx_storefinder_domain_model_location = 1
-        options.saveDocNew.tx_storefinder_domain_model_category = 1
-        options.saveDocNew.tx_storefinder_domain_model_attribute = 1
-    ');
+/**
+ * Default PageTS
+ */
+/** @noinspection PhpUndefinedVariableInspection */
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
+    '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:' . $_EXTKEY . '/Configuration/PageTS/ModWizards.ts">'
+);
 
-    \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-        'Evoweb.store_finder',
-        'Map',
-        [
-            'Map' => 'map',
-        ],
-        [
-            'Map' => 'map',
-        ]
+$configuration = \Evoweb\StoreFinder\Utility\ExtensionConfigurationUtility::getConfiguration();
+
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addUserTSConfig('
+	options.saveDocNew.tx_storefinder_domain_model_location = 1
+	options.saveDocNew.tx_storefinder_domain_model_category = 1
+	options.saveDocNew.tx_storefinder_domain_model_attribute = 1
+');
+
+/** @noinspection PhpUndefinedVariableInspection */
+\TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+    'Evoweb.' . $_EXTKEY,
+    'Map',
+    array(
+        'Map' => 'map',
+    ),
+    array(
+        'Map' => 'map',
+    )
+);
+
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass']['store_finder'] =
+    \Evoweb\StoreFinder\Hook\TceMainHook::class;
+
+// Add location geocodeing task
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks'][\Evoweb\StoreFinder\Task\GeocodeLocationsTask::class] =
+    array(
+        'extension' => $_EXTKEY,
+        'title' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_be.xml:geocodeLocations.name',
+        'description' => 'LLL:EXT:' . $_EXTKEY .
+            '/Resources/Private/Language/locallang_be.xml:geocodeLocations.description',
     );
-
-    $scOptions =& $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS'];
-    $languageFile = 'LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xml:';
-
-    $scOptions['t3lib/class.t3lib_tcemain.php']['processDatamapClass']['store_finder'] =
-        \Evoweb\StoreFinder\Hook\TceMainHook::class;
-
-    // Add location geocodeing task
-    $scOptions['scheduler']['tasks'][\Evoweb\StoreFinder\Task\GeocodeLocationsTask::class] = [
-        'extension' => 'store_finder',
-        'title' => $languageFile . 'geocodeLocations.name',
-        'description' => $languageFile . 'geocodeLocations.description',
-    ];
-});

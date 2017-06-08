@@ -38,7 +38,7 @@ class TceMainHook
     /**
      * @var array
      */
-    protected $configuration = [];
+    protected $configuration = array();
 
     /**
      * @var \TYPO3\CMS\Extbase\Object\ObjectManager
@@ -117,9 +117,7 @@ class TceMainHook
      */
     protected function fetchLocation($uid)
     {
-        /** @var Location $location */
-        $location = $this->getRepository()->findByUid($uid);
-        return $location;
+        return $this->getRepository()->findByUid($uid);
     }
 
     /**
@@ -134,7 +132,7 @@ class TceMainHook
     {
         if ($this->repository === null) {
             $this->repository = $this->getObjectManager()
-                ->get(\Evoweb\StoreFinder\Domain\Repository\LocationRepository::class);
+                ->get('Evoweb\\StoreFinder\\Domain\\Repository\\LocationRepository');
         }
 
         return $this->repository;
@@ -149,7 +147,7 @@ class TceMainHook
     protected function getObjectManager()
     {
         if ($this->objectManager === null) {
-            $this->objectManager = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Object\ObjectManager::class);
+            $this->objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
         }
 
         return $this->objectManager;
@@ -170,7 +168,7 @@ class TceMainHook
     {
         /** @var \Evoweb\StoreFinder\Service\GeocodeService $geocodeService */
         $geocodeService = $this->getObjectManager()
-            ->get(\Evoweb\StoreFinder\Service\GeocodeService::class, $this->configuration);
+            ->get('Evoweb\\StoreFinder\\Service\\GeocodeService', $this->configuration);
         $location = $geocodeService->geocodeAddress($location);
 
         return $location;
@@ -193,7 +191,7 @@ class TceMainHook
 
         /** @var PersistenceManager $persistenceManager */
         $persistenceManager = $this->getObjectManager()
-            ->get(PersistenceManager::class);
+            ->get('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
         $persistenceManager->persistAll();
     }
 }

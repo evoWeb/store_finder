@@ -36,7 +36,8 @@ class GeocodeLocationsTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
      */
     public function execute()
     {
-        $globalConfiguration = \Evoweb\StoreFinder\Utility\ExtensionConfigurationUtility::getConfiguration();
+        $globalConfiguration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['store_finder']);
+        $globalConfiguration = is_array($globalConfiguration) ? $globalConfiguration : [];
 
         /**
          * @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager

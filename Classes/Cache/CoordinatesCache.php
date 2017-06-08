@@ -34,9 +34,15 @@ use Evoweb\StoreFinder\Domain\Model;
 class CoordinatesCache
 {
     /**
-     * @var \TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication
+     * @var \TYPO3\CMS\Core\Database\DatabaseConnection
      */
-    protected $frontendUser;
+    protected $database;
+
+    /**
+     * @var \TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication
+     * @inject
+     */
+    protected $frontendUser = null;
 
     /**
      * @var \TYPO3\CMS\Core\Cache\Frontend\FrontendInterface
@@ -46,12 +52,12 @@ class CoordinatesCache
     /**
      * @var array
      */
-    protected $fieldCombinations = [
-        ['address', 'zipcode', 'city', 'state', 'country'],
-        ['zipcode', 'city', 'country'],
-        ['zipcode', 'country'],
-        ['city', 'country'],
-    ];
+    protected $fieldCombinations = array(
+        array('address', 'zipcode', 'city', 'state', 'country'),
+        array('zipcode', 'city', 'country'),
+        array('zipcode', 'country'),
+        array('city', 'country'),
+    );
 
 
     /**
@@ -63,25 +69,11 @@ class CoordinatesCache
      */
     public function __construct()
     {
+        $this->database = $GLOBALS['TYPO3_DB'];
+
         /** @var \TYPO3\CMS\Core\Cache\CacheManager $cacheManager */
         $cacheManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class);
-        $this->setCacheFrontend($cacheManager->getCache('store_finder_coordinate'));
-    }
-
-    /**
-     * @param \TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication $frontendUser
-     */
-    public function injectFrontendUser(\TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication $frontendUser)
-    {
-        $this->frontendUser = $frontendUser;
-    }
-
-    /**
-     * @param \TYPO3\CMS\Core\Cache\Frontend\FrontendInterface $cacheFrontend
-     */
-    public function setCacheFrontend(\TYPO3\CMS\Core\Cache\Frontend\FrontendInterface $cacheFrontend)
-    {
-        $this->cacheFrontend = $cacheFrontend;
+        $this->cacheFrontend = $cacheManager->getCache('store_finder_coordinate');
     }
 
 
@@ -96,10 +88,10 @@ class CoordinatesCache
      */
     public function addCoordinateForAddress($address, $fields)
     {
-        $coordinate = [
+        $coordinate = array(
             'latitude' => $address->getLatitude(),
             'longitude' => $address->getLongitude()
-        ];
+        );
 
         $hash = $this->getHashForAddressWithFields($address, $fields);
         if (count($fields) == 2 || count($fields) == 3) {
@@ -151,7 +143,7 @@ class CoordinatesCache
      */
     public function getHashForAddressWithFields($address, &$fields)
     {
-        $values = [];
+        $values = array();
 
         foreach ($fields as $field) {
             $methodName = 'get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $field)));
@@ -245,7 +237,7 @@ class CoordinatesCache
      */
     public function flushSessionCache()
     {
-        $this->frontendUser->setKey('ses', 'tx_storefinder_coordinates', []);
+        $this->frontendUser->setKey('ses', 'tx_storefinder_coordinates', array());
         $this->frontendUser->storeSessionData();
     }
 

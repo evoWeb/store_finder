@@ -43,22 +43,13 @@ class SelectCountriesViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\Select
      * Repository that provides the country models
      *
      * @var \Evoweb\StoreFinder\Domain\Repository\CountryRepository
+     * @inject
      */
     protected $countryRepository;
 
-
-    /**
-     * @param \Evoweb\StoreFinder\Domain\Repository\CountryRepository $countryRepository
-     */
-    public function injectCountryRepository(\Evoweb\StoreFinder\Domain\Repository\CountryRepository $countryRepository)
-    {
-        $this->countryRepository = $countryRepository;
-    }
-
-
     /**
      * Initialize arguments. Cant be moved to parent because of
-     * "private $argumentDefinitions = [];"
+     * "private $argumentDefinitions = array();"
      *
      * @return void
      */
@@ -92,12 +83,13 @@ class SelectCountriesViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\Select
             'array',
             'Array with countries allowed to be displayed.',
             false,
-            []
+            array()
         );
     }
 
     /**
-     * Override the initialize method to load all available countries before rendering
+     * Override the initialize method to load all available
+     * countries before rendering
      *
      * @return void
      */
@@ -117,7 +109,7 @@ class SelectCountriesViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\Select
             }
 
             if (!empty($this->arguments['allowedCountries'])) {
-                $orderedResults = [];
+                $orderedResults = array();
                 foreach ($this->arguments['allowedCountries'] as $countryKey) {
                     foreach ($result as $country) {
                         if ($country->getIsoCodeA2() == $countryKey) {
@@ -128,7 +120,7 @@ class SelectCountriesViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\Select
                 $result = $orderedResults;
             }
 
-            $this->arguments['options'] = [];
+            $this->arguments['options'] = array();
             foreach ($result as $country) {
                 $this->arguments['options'][] = $country;
             }

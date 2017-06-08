@@ -26,8 +26,6 @@ namespace Evoweb\StoreFinder\Validation;
 
 /**
  * Validator resolver to automatically find a validator for a given subject
- *
- * @package Evoweb\StoreFinder\Validation
  */
 class ValidatorResolver extends \TYPO3\CMS\Extbase\Validation\ValidatorResolver
 {

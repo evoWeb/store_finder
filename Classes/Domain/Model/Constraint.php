@@ -79,7 +79,7 @@ class Constraint extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * @var array
      */
-    protected $category = [];
+    protected $category = array();
 
     /**
      * @var int

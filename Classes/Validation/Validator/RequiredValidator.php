@@ -29,16 +29,24 @@ use TYPO3\CMS\Extbase\Validation\Validator;
 /**
  * A required validator to check that a value is set
  *
- * @package Evoweb\StoreFinder\Validation\Validator
+ * @scope singleton
  */
 class RequiredValidator extends Validator\AbstractValidator implements Validator\ValidatorInterface
 {
     /**
-     * Set to false to always call isValid even if value is empty
+     * Override to be able to validate empty values
      *
-     * @var bool
+     * @param mixed $value The value that should be validated
+     *
+     * @return \TYPO3\CMS\Extbase\Error\Result
      */
-    protected $acceptsEmptyValues = false;
+    public function validate($value)
+    {
+        $this->result = new \TYPO3\CMS\Extbase\Error\Result();
+        $this->isValid($value);
+
+        return $this->result;
+    }
 
     /**
      * If the given value is empty

@@ -3,6 +3,11 @@
   "type": "typo3-cms-plugin",
   "description": "Store Finder",
   "homepage": "http://www.evoweb.de/",
+  "license": ["GPL-2.0+"],
+
+  "support": {
+    "issues": "https://github.com/evoWeb/store_finder/issues"
+  },
   "keywords": [
     "store finder",
     "store locator",
@@ -10,63 +15,25 @@
     "shop list",
     "google map"
   ],
-  "license": [
-    "GPL-2.0+"
-  ],
-  "authors": [
-    {
-      "name": "Sebastian Fischer",
-      "email": "typo3@evoweb.de",
-      "homepage": "http://www.evoweb.de/"
-    }
-  ],
-  "support": {
-    "issues": "https://github.com/evoweb/store_finder/issues",
-    "source": "https://github.com/evoWeb/store_finder.git"
-  },
 
   "require": {
-    "php": ">=5.4.0",
-    "typo3/cms": "~7.6,~8",
-    "sjbr/static-info-tables": "~6.3"
-  },
-
-  "require-dev": {
-    "namelesscoder/typo3-repository-client": "~1.2.0",
-    "mikey179/vfsStream": "~1.6.0",
-    "phpunit/phpunit": "~4.8.0",
-    "sjbr/static-info-tables": "~6.3"
-  },
-
-  "replace": {
-    "store_finder": "self.version",
-    "typo3-ter/store-finder": "self.version"
+    "typo3/cms-core": ">=7.6.0"
   },
 
   "autoload": {
-    "psr-4": {
-      "Evoweb\\StoreFinder\\": "Classes/"
-    }
+      "psr-4": {
+          "Evoweb\\StoreFinder\\": "Classes/"
+      }
   },
 
   "config": {
     "vendor-dir": ".Build/vendor",
     "bin-dir": ".Build/bin"
   },
-
-  "scripts": {
-    "extension-release": [
-      "rm -rf Tests/"
-    ]
-  },
-
   "extra": {
     "typo3/cms": {
       "cms-package-dir": "{$vendor-dir}/typo3/cms",
-      "web-dir": ".Build/Web",
-      "Package": {
-        "partOfMinimalUsableSystem": true
-      }
+      "web-dir": ".Build/Web"
     }
   }
 }

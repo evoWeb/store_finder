@@ -42,10 +42,11 @@ class GeocodeService
     /**
      * @var array
      */
-    protected $settings = [];
+    protected $settings = array();
 
     /**
      * @var \Evoweb\StoreFinder\Cache\CoordinatesCache
+     * @inject
      */
     protected $coordinatesCache;
 
@@ -59,7 +60,7 @@ class GeocodeService
      *
      * @param array $settings
      */
-    public function __construct(array $settings = [])
+    public function __construct(array $settings = array())
     {
         if (count($settings)) {
             $this->setSettings($settings);
@@ -70,26 +71,20 @@ class GeocodeService
     }
 
     /**
-     * @param \Evoweb\StoreFinder\Cache\CoordinatesCache $coordinatesCache
-     */
-    public function injectCoordinatesCache(\Evoweb\StoreFinder\Cache\CoordinatesCache $coordinatesCache)
-    {
-        $this->coordinatesCache = $coordinatesCache;
-    }
-
-    /**
      * Setter
      *
      * @param array &$settings
      *
      * @return void
      */
-    public function setSettings(array $settings)
+    public function setSettings(array &$settings)
     {
-        $settings['geocodeLimit'] = isset($this['geocodeLimit']) ? (int) $this['geocodeLimit'] : 2500;
-        $settings['geocodeUrl'] = isset($this['geocodeUrl']) ? $this['geocodeUrl'] : $this->defaultApiUrl;
+        $this->settings = &$settings;
 
-        $this->settings = $settings;
+        $this->settings['geocodeLimit'] = $this->settings['geocodeLimit'] ? (int) $this->settings['geocodeLimit'] :
+            2500;
+        $this->settings['geocodeUrl'] = $this->settings['geocodeUrl'] ? $this->settings['geocodeUrl'] :
+            $this->defaultApiUrl;
     }
 
     /**
@@ -105,7 +100,7 @@ class GeocodeService
     {
         $geocodedAddress = $this->coordinatesCache->getCoordinateByAddress($address);
         if ($forceGeocoding || !$geocodedAddress->isGeocoded()) {
-            $fieldsHit = [];
+            $fieldsHit = array();
             $geocodedAddress = $this->processAddress($address, $fieldsHit);
             if (!$this->hasMultipleResults) {
                 $this->coordinatesCache->addCoordinateForAddress($geocodedAddress, $fieldsHit);
@@ -134,14 +129,14 @@ class GeocodeService
     protected function processAddress($location, &$fields)
     {
         // Main Geocoder
-        $fields = ['address', 'zipcode', 'city', 'state', 'country'];
+        $fields = array('address', 'zipcode', 'city', 'state', 'country');
         $queryValues = $this->prepareValuesForQuery($location, $fields);
         $coordinate = $this->getCoordinateByApiCall($queryValues);
 
         // If there is no coordinat yet, we assume it's international and attempt
         // to find it based on just the city and country.
         if (!$coordinate->lat && !$coordinate->lng) {
-            $fields = ['city', 'country'];
+            $fields = array('city', 'country');
             $queryValues = $this->prepareValuesForQuery($location, $fields);
             $coordinate = $this->getCoordinateByApiCall($queryValues);
         }
@@ -168,22 +163,24 @@ class GeocodeService
      */
     protected function prepareValuesForQuery($location, &$fields)
     {
-        // for url encoding
-        $queryValues = [];
+        // for urlencoding
+        $queryValues = array();
         foreach ($fields as $field) {
             $methodName = 'get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $field)));
             $value = $location->{$methodName}();
 
             switch ($field) {
-                // if a known country code is used we fetch the english short name
+                // if a known country code is used we fetch the english shortname
                 // to enhance the map api query result
                 case 'country':
                     if (is_numeric($value) || strlen($value) == 3) {
-                        $country = $this->getDatabaseConnection()->exec_SELECTgetSingleRow(
+                        /** @var \TYPO3\CMS\Core\Database\DatabaseConnection $database */
+                        $database = $GLOBALS['TYPO3_DB'];
+                        $country = $database->exec_SELECTgetSingleRow(
                             'cn_iso_2',
                             'static_countries',
                             (is_numeric($value) ? 'uid = ' : 'cn_iso_3 = ') .
-                            $this->getDatabaseConnection()->fullQuoteStr($value, 'static_countries')
+                            $database->fullQuoteStr($value, 'static_countries')
                         );
                         if (count($country)) {
                             $value = reset($country);
@@ -216,7 +213,7 @@ class GeocodeService
      */
     protected function getCoordinateByApiCall($parameter)
     {
-        $components = [];
+        $components = array();
         if (isset($parameter['country'])) {
             $components[] = 'country:' . $parameter['country'];
             unset($parameter['country']);
@@ -229,8 +226,8 @@ class GeocodeService
 
         $apiUrl = $this->settings['geocodeUrl'] . '&address=' . implode('+', $parameter);
         $apiUrl .= (!empty($components) ? '&components=' . implode('|', $components) : '');
-        if (TYPO3_MODE == 'FE' && isset($this->getTypoScriptFrontendController()->lang)) {
-            $apiUrl .= '&language=' . $this->getTypoScriptFrontendController()->lang;
+        if (TYPO3_MODE == 'FE' && isset($GLOBALS['TSFE']->lang)) {
+            $apiUrl .= '&language=' . $GLOBALS['TSFE']->lang;
         }
         $addressData = json_decode(utf8_encode(GeneralUtility::getUrl(str_replace('?&', '?', $apiUrl))));
 
@@ -242,22 +239,5 @@ class GeocodeService
         }
 
         return $result;
-    }
-
-
-    /**
-     * @return \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController
-     */
-    protected function getTypoScriptFrontendController()
-    {
-        return $GLOBALS['TSFE'];
-    }
-
-    /**
-     * @return \TYPO3\CMS\Core\Database\DatabaseConnection
-     */
-    protected function getDatabaseConnection()
-    {
-        return $GLOBALS['TYPO3_DB'];
     }
 }

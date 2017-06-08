@@ -1,42 +1,42 @@
 <?php
 
-$foreignTypes = [
-    '0' => [
+$foreignTypes = array(
+    '0' => array(
         'showitem' => '
 --palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
 --palette--;;filePalette'
-    ],
-    \TYPO3\CMS\Core\Resource\File::FILETYPE_TEXT => [
+    ),
+    \TYPO3\CMS\Core\Resource\File::FILETYPE_TEXT => array(
         'showitem' => '
 --palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
 --palette--;;filePalette'
-    ],
-    \TYPO3\CMS\Core\Resource\File::FILETYPE_IMAGE => [
+    ),
+    \TYPO3\CMS\Core\Resource\File::FILETYPE_IMAGE => array(
         'showitem' => '
 --palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
 --palette--;;filePalette'
-    ],
-    \TYPO3\CMS\Core\Resource\File::FILETYPE_AUDIO => [
+    ),
+    \TYPO3\CMS\Core\Resource\File::FILETYPE_AUDIO => array(
         'showitem' => '
 --palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
 --palette--;;filePalette'
-    ],
-    \TYPO3\CMS\Core\Resource\File::FILETYPE_VIDEO => [
+    ),
+    \TYPO3\CMS\Core\Resource\File::FILETYPE_VIDEO => array(
         'showitem' => '
 --palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
 --palette--;;filePalette'
-    ],
-    \TYPO3\CMS\Core\Resource\File::FILETYPE_APPLICATION => [
+    ),
+    \TYPO3\CMS\Core\Resource\File::FILETYPE_APPLICATION => array(
         'showitem' => '
 --palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
 --palette--;;filePalette'
-    ]
-];
+    )
+);
 
 $languageFile = 'LLL:EXT:store_finder/Resources/Private/Language/locallang_db.xml:';
 
-return [
-    'ctrl' => [
+return array(
+    'ctrl' => array(
         'title' => $languageFile . 'tx_storefinder_domain_model_location',
         'label' => 'name',
         'tstamp' => 'tstamp',
@@ -51,475 +51,475 @@ return [
 
         'requestUpdate' => 'country',
         'searchFields' => 'name, zipcode, city, address, country, notes',
-        'enablecolumns' => [
+        'enablecolumns' => array(
             'disabled' => 'hidden',
             'starttime' => 'starttime',
             'endtime' => 'endtime',
             'fe_group' => 'fe_group',
-        ],
+        ),
         'dividers2tabs' => 1,
         'iconfile' => '../typo3conf/ext/store_finder/Resources/Public/Icons/tx_storefinder_domain_model_location.gif',
-    ],
+    ),
 
-    'interface' => [
+    'interface' => array(
         'showRecordFieldList' => 'hidden, endtime, fe_group, name, storeid, address, additionaladdress, person, city,
             state, zipcode, country, attributes, products, phone, mobile, hours, url, notes, image, icon, content,
             use_coordinate, categories, latitude, longitude, geocode'
-    ],
+    ),
 
-    'columns' => [
+    'columns' => array(
         'hidden' => $GLOBALS['TCA']['tt_content']['columns']['hidden'],
         'starttime' => $GLOBALS['TCA']['tt_content']['columns']['starttime'],
         'endtime' => $GLOBALS['TCA']['tt_content']['columns']['endtime'],
         'fe_group' => $GLOBALS['TCA']['tt_content']['columns']['fe_group'],
         'sys_language_uid' => $GLOBALS['TCA']['tt_content']['columns']['sys_language_uid'],
 
-        'l18n_parent' => [
+        'l18n_parent' => array(
             'displayCond' => 'FIELD:sys_language_uid:>:0',
             'exclude' => 1,
             'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.l18n_parent',
-            'config' => [
+            'config' => array(
                 'type' => 'select',
-                'items' => [
-                    [
+                'items' => array(
+                    array(
                         '',
                         0
-                    ]
-                ],
+                    )
+                ),
                 'foreign_table' => 'tx_storefinder_domain_model_location',
                 'foreign_table_where' => 'AND tx_storefinder_domain_model_location.pid=###CURRENT_PID### 
                     AND tx_storefinder_domain_model_location.sys_language_uid IN (-1,0)'
-            ]
-        ],
+            )
+        ),
 
         // address
-        'name' => [
+        'name' => array(
             'l10n_mode' => 'mergeIfNotBlank',
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.name',
-            'config' => [
+            'config' => array(
                 'type' => 'input',
                 'size' => '30',
                 'max' => '256',
                 'eval' => 'required,trim',
-            ]
-        ],
+            )
+        ),
 
-        'storeid' => [
+        'storeid' => array(
             'l10n_mode' => 'exclude',
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.storeid',
-            'config' => [
+            'config' => array(
                 'type' => 'input',
                 'size' => '30',
                 'eval' => 'trim',
-            ]
-        ],
+            )
+        ),
 
-        'address' => [
+        'address' => array(
             'l10n_mode' => 'mergeIfNotBlank',
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.address',
-            'config' => [
+            'config' => array(
                 'type' => 'text',
                 'cols' => '30',
                 'rows' => '3',
                 'eval' => 'trim',
-            ]
-        ],
+            )
+        ),
 
-        'additionaladdress' => [
+        'additionaladdress' => array(
             'l10n_mode' => 'mergeIfNotBlank',
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.additionaladdress',
-            'config' => [
+            'config' => array(
                 'type' => 'input',
                 'size' => '30',
                 'eval' => 'trim',
-            ]
-        ],
+            )
+        ),
 
-        'zipcode' => [
+        'zipcode' => array(
             'l10n_mode' => 'exclude',
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.zipcode',
-            'config' => [
+            'config' => array(
                 'type' => 'input',
                 'size' => '30',
                 'eval' => 'required,trim',
-            ]
-        ],
+            )
+        ),
 
-        'city' => [
+        'city' => array(
             'l10n_mode' => 'mergeIfNotBlank',
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.city',
-            'config' => [
+            'config' => array(
                 'type' => 'input',
                 'size' => '30',
                 'eval' => 'required,trim',
-            ]
-        ],
+            )
+        ),
 
-        'state' => [
+        'state' => array(
             'l10n_mode' => 'mergeIfNotBlank',
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.state',
             'displayCond' => 'FIELD:country:>:0',
-            'config' => [
+            'config' => array(
                 'type' => 'select',
-                'items' => [
-                    ['', 0],
-                ],
+                'items' => array(
+                    array('', 0),
+                ),
                 'foreign_table' => 'static_country_zones',
                 'foreign_table_where' => 'AND zn_country_uid = ###REC_FIELD_country### 
                     ORDER BY static_country_zones.zn_name_local',
                 'size' => 1,
                 'minitems' => 0,
                 'maxitems' => 1
-            ]
-        ],
+            )
+        ),
 
-        'country' => [
+        'country' => array(
             'l10n_mode' => 'mergeIfNotBlank',
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.country',
-            'config' => [
+            'config' => array(
                 'type' => 'select',
-                'items' => [
-                    ['', 0],
-                ],
+                'items' => array(
+                    array('', 0),
+                ),
                 'foreign_table' => 'static_countries',
                 'itemsProcFunc' => \SJBR\StaticInfoTables\Hook\Backend\Form\ElementRenderingHelper::class
                     . '->translateCountriesSelector',
                 'size' => 1,
                 'minitems' => 1,
                 'maxitems' => 1
-            ]
-        ],
+            )
+        ),
 
         // contact
-        'person' => [
+        'person' => array(
             'l10n_mode' => 'mergeIfNotBlank',
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.person',
-            'config' => [
+            'config' => array(
                 'type' => 'input',
                 'size' => '30',
                 'eval' => 'trim',
-            ]
-        ],
+            )
+        ),
 
-        'phone' => [
+        'phone' => array(
             'l10n_mode' => 'mergeIfNotBlank',
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.phone',
-            'config' => [
+            'config' => array(
                 'type' => 'input',
                 'size' => '30',
                 'eval' => 'trim',
-            ]
-        ],
+            )
+        ),
 
-        'mobile' => [
+        'mobile' => array(
             'l10n_mode' => 'mergeIfNotBlank',
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.mobile',
-            'config' => [
+            'config' => array(
                 'type' => 'input',
                 'size' => '30',
                 'eval' => 'trim',
-            ]
-        ],
+            )
+        ),
 
-        'fax' => [
+        'fax' => array(
             'l10n_mode' => 'mergeIfNotBlank',
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.fax',
-            'config' => [
+            'config' => array(
                 'type' => 'input',
                 'size' => '30',
                 'eval' => 'trim',
-            ]
-        ],
+            )
+        ),
 
-        'email' => [
+        'email' => array(
             'l10n_mode' => 'mergeIfNotBlank',
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.email',
-            'config' => [
+            'config' => array(
                 'type' => 'input',
                 'size' => '30',
                 'eval' => 'trim',
-            ]
-        ],
+            )
+        ),
 
-        'hours' => [
+        'hours' => array(
             'l10n_mode' => 'mergeIfNotBlank',
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.hours',
-            'config' => [
+            'config' => array(
                 'type' => 'text',
                 'cols' => '30',
                 'rows' => '5',
-            ]
-        ],
+            )
+        ),
 
 
         // relations
-        'related' => [
+        'related' => array(
             'l10n_mode' => 'exclude',
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.related',
-            'config' => [
+            'config' => array(
                 'type' => 'select',
-                'items' => [
-                    ['', 0]
-                ],
+                'items' => array(
+                    array('', 0)
+                ),
                 'foreign_table' => 'tx_storefinder_domain_model_location',
                 'foreign_table_where' => 'AND tx_storefinder_domain_model_location.uid != ###THIS_UID###
                     ORDER BY tx_storefinder_domain_model_location.name',
                 'MM' => 'sys_category_record_mm',
-                'MM_match_fields' => [
+                'MM_match_fields' => array(
                     'tablenames' => 'tx_storefinder_domain_model_location',
                     'fieldname' => 'related',
-                ],
+                ),
                 'minitems' => '0',
                 'maxitems' => '1',
                 'default' => '0',
-            ]
-        ],
+            )
+        ),
 
-        'categories' => [
+        'categories' => array(
             'l10n_mode' => 'exclude',
             'label' => $languageFile . 'tx_storefinder_domain_model_location.categories',
-            'config' => [
+            'config' => array(
                 'type' => 'select',
                 'foreign_table' => 'sys_category',
                 'foreign_table_where' => 'AND sys_category.sys_language_uid IN (-1,0) ORDER BY sys_category.title ASC',
                 'MM' => 'sys_category_record_mm',
                 'MM_opposite_field' => 'items',
-                'MM_match_fields' => [
+                'MM_match_fields' => array(
                     'tablenames' => 'tx_storefinder_domain_model_location',
                     'fieldname' => 'categories',
-                ],
+                ),
                 'size' => 10,
                 'autoSizeMax' => 50,
                 'maxitems' => 9999,
                 'renderMode' => 'tree',
-                'treeConfig' => [
+                'treeConfig' => array(
                     'parentField' => 'parent',
-                    'appearance' => [
+                    'appearance' => array(
                         'expandAll' => false,
                         'showHeader' => true,
-                    ],
-                ],
-                'wizards' => [
-                    'add' => [
+                    ),
+                ),
+                'wizards' => array(
+                    'add' => array(
                         'type' => 'script',
                         'title' => $languageFile . 'sys_category.add',
                         'icon' => 'add.gif',
-                        'params' => [
+                        'params' => array(
                             'table' => 'sys_category',
                             'pid' => '###CURRENT_PID###',
                             'setValue' => 'prepend'
-                        ],
-                        'module' => [
+                        ),
+                        'module' => array(
                             'name' => 'wizard_add'
-                        ]
-                    ]
-                ],
-            ]
-        ],
+                        )
+                    )
+                ),
+            )
+        ),
 
-        'attributes' => [
+        'attributes' => array(
             'l10n_mode' => 'exclude',
             'exclude' => 1,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.attributes',
-            'config' => [
+            'config' => array(
                 'type' => 'select',
                 'renderType' => 'selectMultipleSideBySide',
                 'foreign_table' => 'tx_storefinder_domain_model_attribute',
                 'foreign_table_where' => ' AND tx_storefinder_domain_model_attribute.sys_language_uid IN (-1,0)
                     AND tx_storefinder_domain_model_attribute.pid = ###CURRENT_PID###',
                 'MM' => 'tx_storefinder_location_attribute_mm',
-                'MM_match_fields' => [
+                'MM_match_fields' => array(
                     'tablenames' => 'tx_storefinder_domain_model_attribute',
                     'fieldname' => 'attributes',
-                ],
+                ),
                 'size' => 10,
                 'maxitems' => 30,
-            ]
-        ],
+            )
+        ),
 
-        'icon' => [
+        'icon' => array(
             'l10n_mode' => 'exclude',
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.icon',
             'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
                 'icon',
-                [
-                    'appearance' => [
+                array(
+                    'appearance' => array(
                         'createNewRelationLinkTitle' => 'LLL:EXT:cms/locallang_ttc.xlf:images.addFileReference'
-                    ],
+                    ),
                     'minitems' => 0,
                     'maxitems' => 1,
                     // custom configuration for displaying fields in the overlay/reference table
                     // to use the imageoverlayPalette instead of the basicoverlayPalette
                     'foreign_types' => $foreignTypes,
-                ],
+                ),
                 $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']
             ),
-        ],
+        ),
 
-        'latitude' => [
+        'latitude' => array(
             'l10n_mode' => 'exclude',
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.latitude',
-            'config' => [
+            'config' => array(
                 'type' => 'input',
                 'readOnly' => 1,
                 'size' => 10,
-            ]
-        ],
+            )
+        ),
 
-        'longitude' => [
+        'longitude' => array(
             'l10n_mode' => 'exclude',
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.longitude',
-            'config' => [
+            'config' => array(
                 'type' => 'input',
                 'readOnly' => 1,
                 'size' => 10,
-            ]
-        ],
+            )
+        ),
 
-        'center' => [
+        'center' => array(
             'l10n_mode' => 'exclude',
             'exclude' => 1,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.center',
-            'config' => [
+            'config' => array(
                 'type' => 'check',
-            ]
-        ],
+            )
+        ),
 
-        'distance' => [
+        'distance' => array(
             'l10n_mode' => 'exclude',
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.distance',
-            'config' => [
+            'config' => array(
                 'type' => 'input',
                 'readOnly' => 1,
                 'size' => 10,
-            ]
-        ],
-        'geocode' => [
+            )
+        ),
+        'geocode' => array(
             'l10n_mode' => 'exclude',
             'exclude' => 1,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.geocode',
-            'config' => [
+            'config' => array(
                 'type' => 'check',
-            ]
-        ],
+            )
+        ),
 
         // informations
-        'products' => [
+        'products' => array(
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.products',
-            'config' => [
+            'config' => array(
                 'type' => 'input',
                 'size' => '50',
                 'eval' => 'trim',
                 'max' => '255',
-            ]
-        ],
+            )
+        ),
 
-        'notes' => [
+        'notes' => array(
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.notes',
-            'config' => [
+            'config' => array(
                 'type' => 'text',
                 'cols' => '80',
                 'rows' => '15',
                 'softref' => 'rtehtmlarea_images,typolink_tag,images,email[subst],url',
-            ]
-        ],
+            )
+        ),
 
-        'url' => [
+        'url' => array(
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.url',
-            'config' => [
+            'config' => array(
                 'type' => 'input',
                 'size' => '30',
                 'max' => '255',
                 'eval' => 'trim',
-                'wizards' => [
+                'wizards' => array(
                     '_PADDING' => 2,
-                    'link' => [
+                    'link' => array(
                         'type' => 'popup',
                         'title' => 'Link',
                         'icon' => 'link_popup.gif',
-                        'module' => [
+                        'module' => array(
                             'name' => 'wizard_link',
-                        ],
+                        ),
                         'JSopenParams' => 'height=300,width=500,status=0,menubar=0,scrollbars=1'
-                    ]
-                ]
-            ]
-        ],
+                    )
+                )
+            )
+        ),
 
-        'image' => [
+        'image' => array(
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.image',
             'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
                 'image',
-                [
-                    'appearance' => [
-                        'headerThumbnail' => [
+                array(
+                    'appearance' => array(
+                        'headerThumbnail' => array(
                             'width' => '100',
                             'height' => '100c',
-                        ],
+                        ),
                         'createNewRelationLinkTitle' => 'LLL:EXT:cms/locallang_ttc.xlf:images.addFileReference'
-                    ],
+                    ),
                     // custom configuration for displaying fields in the overlay/reference table
                     // to use the imageoverlayPalette instead of the basicoverlayPalette
                     'foreign_types' => $foreignTypes,
-                ],
+                ),
                 $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']
             ),
-        ],
+        ),
 
-        'media' => [
+        'media' => array(
             'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.media',
             'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
                 'media',
-                [
-                    'appearance' => [
-                        'headerThumbnail' => [
+                array(
+                    'appearance' => array(
+                        'headerThumbnail' => array(
                             'width' => '100',
                             'height' => '100c',
-                        ],
+                        ),
                         'createNewRelationLinkTitle' => 'LLL:EXT:cms/locallang_ttc.xlf:images.addFileReference'
-                    ],
+                    ),
                     // custom configuration for displaying fields in the overlay/reference table
                     // to use the imageoverlayPalette instead of the basicoverlayPalette
                     'foreign_types' => $foreignTypes,
-                ],
+                ),
                 $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']
             ),
-        ],
+        ),
 
-        'content' => [
+        'content' => array(
             'exclude' => 1,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.content',
-            'config' => [
+            'config' => array(
                 'type' => 'inline',
                 'allowed' => 'tt_content',
                 'foreign_table' => 'tt_content',
                 'minitems' => 0,
                 'maxitems' => 10,
-                'appearance' => [
+                'appearance' => array(
                     'collapseAll' => 1,
                     'expandSingle' => 1,
                     'levelLinksPosition' => 'bottom',
@@ -528,16 +528,16 @@ return [
                     'showRemovedLocalizationRecords' => 1,
                     'showAllLocalizationLink' => 1,
                     'showSynchronizationLink' => 1,
-                    'enabledControls' => [
+                    'enabledControls' => array(
                         'info' => false,
-                    ]
-                ]
-            ]
-        ],
-    ],
+                    )
+                )
+            )
+        ),
+    ),
 
-    'types' => [
-        '0' => [
+    'types' => array(
+        '0' => array(
             'showitem' => '
             --div--;' . $languageFile . 'div-address,
                 name, storeid, address, additionaladdress, zipcode, city, state, country,
@@ -553,25 +553,25 @@ return [
             --div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access,
                 --palette--;LLL:EXT:cms/locallang_ttc.xlf:palette.visibility;visibility,
                 --palette--;LLL:EXT:cms/locallang_ttc.xlf:palette.access;access,'
-        ]
-    ],
+        )
+    ),
 
-    'palettes' => [
-        'coordinates' => [
+    'palettes' => array(
+        'coordinates' => array(
             'showitem' => 'latitude, longitude, center, geocode',
             'canNotCollapse' => 1
-        ],
-        'visibility' => [
+        ),
+        'visibility' => array(
             'showitem' => '
                 hidden;' . $languageFile . 'tx_storefinder_domain_model_location.hidden',
             'canNotCollapse' => 1
-        ],
-        'access' => [
+        ),
+        'access' => array(
             'showitem' => '
 				starttime;LLL:EXT:cms/locallang_ttc.xlf:starttime_formlabel,
 				endtime;LLL:EXT:cms/locallang_ttc.xlf:endtime_formlabel,
 				--linebreak--, fe_group;LLL:EXT:cms/locallang_ttc.xlf:fe_group_formlabel',
             'canNotCollapse' => 1
-        ],
-    ]
-];
+        ),
+    )
+);

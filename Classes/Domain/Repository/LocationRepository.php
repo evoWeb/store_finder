@@ -26,6 +26,7 @@ namespace Evoweb\StoreFinder\Domain\Repository;
 
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\Query;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 
@@ -58,7 +59,7 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     /**
      * @var array
      */
-    protected $settings = [];
+    protected $settings = array();
 
     /**
      * Setter
@@ -78,7 +79,7 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      *
      * @param \Evoweb\StoreFinder\Domain\Model\Constraint $constraint
      *
-     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface|array
+     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      */
     public function findByConstraint($constraint)
     {
@@ -86,10 +87,10 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $query = $this->createQuery();
 
         if (!$constraint->isGeocoded()) {
-            return [];
+            return array();
         }
 
-        $queryParts = [
+        $queryParts = array(
             'SELECT' => '
                 distinct l.*,
                 (acos(
@@ -105,14 +106,17 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             'GROUPBY' => '',
             'ORDERBY' => 'distance',
             'LIMIT' => '',
-        ];
+        );
 
         $queryParts = $this->addCountryQueryPart($constraint, $queryParts);
         $queryParts = $this->addCategoryQueryPart($constraint, $queryParts);
         $queryParts = $this->addRadiusQueryPart($constraint, $queryParts);
         $queryParts = $this->addLimitQueryParts($constraint, $queryParts);
 
-        $sql = $this->getDatabaseConnection()->SELECTquery(
+        /** @var \TYPO3\CMS\Core\Database\DatabaseConnection $database */
+        $database = $GLOBALS['TYPO3_DB'];
+
+        $sql = $database->SELECTquery(
             $queryParts['SELECT'],
             $queryParts['FROM'],
             $queryParts['WHERE'],
@@ -135,6 +139,9 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      */
     protected function addCountryQueryPart($constraint, $queryParts)
     {
+        /** @var \TYPO3\CMS\Core\Database\DatabaseConnection $database */
+        $database = $GLOBALS['TYPO3_DB'];
+
         if ($constraint->getCountry()) {
             $country = $constraint->getCountry();
             if (is_numeric($country)) {
@@ -143,10 +150,7 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             } else {
                 $queryParts['FROM'] .= ' INNER JOIN static_countries sc ON (l.country = sc.cn_iso_3)';
                 $queryParts['WHERE'] .= ' AND sc.cn_iso_3 = '
-                    . $this->getDatabaseConnection()->fullQuoteStr(
-                        strtoupper($constraint->getCountry()),
-                        'static_countries'
-                    );
+                    . $database->fullQuoteStr(strtoupper($constraint->getCountry()), 'static_countries');
             }
 
 
@@ -165,6 +169,9 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      */
     protected function addCategoryQueryPart($constraint, $queryParts)
     {
+        /** @var \TYPO3\CMS\Core\Database\DatabaseConnection $database */
+        $database = $GLOBALS['TYPO3_DB'];
+
         if ($this->settings['categoryPriority'] == 'limitResultsToCategories') {
             $constraint->setCategory(GeneralUtility::intExplode(',', $this->settings['categories'], 1));
         } elseif ($this->settings['categoryPriority'] == 'useSelectedCategoriesIfNoFilterSelected'
@@ -178,9 +185,7 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         if (!empty($categories)) {
             $queryParts['FROM'] .= ' INNER JOIN sys_category_record_mm c ON (l.uid = c.uid_foreign
 				AND c.tablenames = \'tx_storefinder_domain_model_location\' AND c.fieldname = \'categories\')';
-            $queryParts['WHERE'] .= ' AND c.uid_local IN (' .
-                implode(',', $this->getDatabaseConnection()->cleanIntArray($categories)) .
-                ')';
+            $queryParts['WHERE'] .= ' AND c.uid_local IN (' . implode(',', $database->cleanIntArray($categories)) . ')';
         }
 
         return $queryParts;
@@ -196,11 +201,13 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      */
     protected function addRadiusQueryPart($constraint, $queryParts)
     {
+        /** @var \TYPO3\CMS\Core\Database\DatabaseConnection $database */
+        $database = $GLOBALS['TYPO3_DB'];
+
         if ($this->settings['distanceUnit'] == 'miles') {
             $constraint->setRadius(max($constraint->getRadius(), 1) * 1.6);
         }
-        $queryParts['WHERE'] .= ' HAVING distance <= ' .
-            $this->getDatabaseConnection()->fullQuoteStr($constraint->getRadius(), '');
+        $queryParts['WHERE'] .= ' HAVING distance <= ' . $database->fullQuoteStr($constraint->getRadius(), '');
 
         return $queryParts;
     }
@@ -241,10 +248,10 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      *
      * @return array
      */
-    protected function fetchCategoriesRecursive(array $subcategories, $categories = [])
+    protected function fetchCategoriesRecursive(array $subcategories, $categories = array())
     {
         /** @var CategoryRepository $categoryRepository */
-        $categoryRepository = $this->objectManager->get(CategoryRepository::class);
+        $categoryRepository = $this->objectManager->get('Evoweb\\StoreFinder\\Domain\\Repository\\CategoryRepository');
 
         /** @var \Evoweb\StoreFinder\Domain\Model\Category $subcategory */
         foreach ($subcategories as $subcategory) {
@@ -272,7 +279,7 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         /** @var \TYPO3\CMS\Extbase\Persistence\Generic\Query $query */
         $query = $this->createQuery();
 
-        $query->setOrderings(['latitude' => QueryInterface::ORDER_ASCENDING]);
+        $query->setOrderings(array('latitude' => QueryInterface::ORDER_ASCENDING));
         /** @var \Evoweb\StoreFinder\Domain\Model\Location $minLatitude south */
         $minLatitude = $query->execute()->getFirst();
 
@@ -281,15 +288,15 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         if ($minLatitude === null) {
             $maxLatitude = $minLongitute = $maxLongitute = null;
         } else {
-            $query->setOrderings(['latitude' => QueryInterface::ORDER_DESCENDING]);
+            $query->setOrderings(array('latitude' => QueryInterface::ORDER_DESCENDING));
             /** @var \Evoweb\StoreFinder\Domain\Model\Location $maxLatitude north */
             $maxLatitude = $query->execute()->getFirst();
 
-            $query->setOrderings(['longitude' => QueryInterface::ORDER_ASCENDING]);
+            $query->setOrderings(array('longitude' => QueryInterface::ORDER_ASCENDING));
             /** @var \Evoweb\StoreFinder\Domain\Model\Location $minLongitute west */
             $minLongitute = $query->execute()->getFirst();
 
-            $query->setOrderings(['longitude' => QueryInterface::ORDER_DESCENDING]);
+            $query->setOrderings(array('longitude' => QueryInterface::ORDER_DESCENDING));
             /** @var \Evoweb\StoreFinder\Domain\Model\Location $maxLongitute east */
             $maxLongitute = $query->execute()->getFirst();
         }
@@ -333,12 +340,10 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         /** @var \TYPO3\CMS\Extbase\Persistence\Generic\Query $query */
         $query = $this->createQuery();
 
-        $query->setOrderings(['sorting' => QueryInterface::ORDER_ASCENDING]);
+        $query->setOrderings(array('sorting' => QueryInterface::ORDER_ASCENDING));
         $query->matching($query->equals('center', 1));
 
-        /** @var \Evoweb\StoreFinder\Domain\Model\Location $location */
-        $location = $query->execute()->getFirst();
-        return $location;
+        return $query->execute()->getFirst();
     }
 
     /**
@@ -424,14 +429,5 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $query->getQuerySettings()->setRespectStoragePage(false);
 
         return $query->execute();
-    }
-
-
-    /**
-     * @return \TYPO3\CMS\Core\Database\DatabaseConnection
-     */
-    protected function getDatabaseConnection()
-    {
-        return $GLOBALS['TYPO3_DB'];
     }
 }
