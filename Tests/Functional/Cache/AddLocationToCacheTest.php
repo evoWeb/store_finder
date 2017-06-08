@@ -48,20 +48,20 @@ class AddLocationToCacheTest extends \TYPO3\TestingFramework\Core\Functional\Fun
      */
     public function setUp()
     {
-        // normaly this is set in ext_localconf
-        $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['store_finder_coordinate'] = [
-            'groups' => ['system'],
-        ];
-
-        $this->testExtensionsToLoad[] = 'typo3conf/ext/store_finder';
-
         parent::setUp();
 
         $frontendUser = new \TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication();
 
         $cacheManager = new \TYPO3\CMS\Core\Cache\CacheManager();
-        $cacheManager->setCacheConfigurations($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']);
+        $cacheManager->setCacheConfigurations([
+            'store_finder_coordinate' => [
+                'groups' => ['system'],
+            ]
+        ]);
         $cacheFrontend = $cacheManager->getCache('store_finder_coordinate');
+
+        $classLoader = require ORIGINAL_ROOT . 'typo3_src/vendor/autoload.php';
+        $classLoader->addPsr4('Evoweb\\StoreFinder\\', [realpath(__DIR__ . '/../../../Classes/')]);
 
         $this->coordinatesCache = new \Evoweb\StoreFinder\Cache\CoordinatesCache($frontendUser, $cacheFrontend);
     }

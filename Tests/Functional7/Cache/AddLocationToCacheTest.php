@@ -44,16 +44,22 @@ class AddLocationToCacheTest extends \TYPO3\CMS\Core\Tests\FunctionalTestCase
      */
     public function setUp()
     {
-        $frontendUserMock = new \TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication();
+        parent::setUp();
 
-        $cacheBackend = new \TYPO3\CMS\Core\Cache\Backend\FileBackend('production');
-        /** @var \TYPO3\CMS\Core\Cache\Frontend\VariableFrontend $cacheFrontendMock */
-        $cacheFrontendMock = $this->getMockBuilder(\TYPO3\CMS\Core\Cache\Frontend\VariableFrontend::class)
-            ->setMethods(['get'])
-            ->setConstructorArgs(['store_finder_coordinate', $cacheBackend])
-            ->getMock();
+        $frontendUser = new \TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication();
 
-        $this->coordinatesCache = new \Evoweb\StoreFinder\Cache\CoordinatesCache($frontendUserMock, $cacheFrontendMock);
+        $cacheManager = new \TYPO3\CMS\Core\Cache\CacheManager();
+        $cacheManager->setCacheConfigurations([
+            'store_finder_coordinate' => [
+                'groups' => ['system'],
+            ]
+        ]);
+        $cacheFrontend = $cacheManager->getCache('store_finder_coordinate');
+
+        $classLoader = require ORIGINAL_ROOT . 'typo3_src/vendor/autoload.php';
+        $classLoader->addPsr4('Evoweb\\StoreFinder\\', [realpath(__DIR__ . '/../../../Classes/')]);
+
+        $this->coordinatesCache = new \Evoweb\StoreFinder\Cache\CoordinatesCache($frontendUser, $cacheFrontend);
     }
 
 
