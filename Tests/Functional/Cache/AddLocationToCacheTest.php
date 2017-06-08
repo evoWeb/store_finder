@@ -60,6 +60,7 @@ class AddLocationToCacheTest extends \TYPO3\TestingFramework\Core\Functional\Fun
         ]);
         $cacheFrontend = $cacheManager->getCache('store_finder_coordinate');
 
+        /** @noinspection PhpIncludeInspection */
         $classLoader = require ORIGINAL_ROOT . 'typo3_src/vendor/autoload.php';
         $classLoader->addPsr4('Evoweb\\StoreFinder\\', [realpath(__DIR__ . '/../../../Classes/')]);
 
