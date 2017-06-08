@@ -24,6 +24,8 @@ namespace Evoweb\StoreFinder\Tests\Functional\Cache;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+
 /**
  * Coordinate cache test
  */
@@ -59,6 +61,8 @@ class AddLocationToCacheTest extends \TYPO3\TestingFramework\Core\Functional\Fun
             ]
         ]);
         $cacheFrontend = $cacheManager->getCache('store_finder_coordinate');
+
+        $this->createCacheTables($cacheFrontend);
 
         /** @noinspection PhpIncludeInspection */
         $classLoader = require ORIGINAL_ROOT . 'typo3_src/vendor/autoload.php';
@@ -216,5 +220,34 @@ class AddLocationToCacheTest extends \TYPO3\TestingFramework\Core\Functional\Fun
         $constraint->setLongitude(10.451526);
 
         return $constraint;
+    }
+
+
+    /**
+     * @param \TYPO3\CMS\Core\Cache\Frontend\FrontendInterface $cacheFrontend
+     */
+    protected function createCacheTables($cacheFrontend)
+    {
+        /** @var \TYPO3\CMS\Core\Cache\Backend\Typo3DatabaseBackend $cacheBackend */
+        $cacheBackend = $cacheFrontend->getBackend();
+
+        $cacheTableSql = file_get_contents(
+            ExtensionManagementUtility::extPath('core') .
+            'Resources/Private/Sql/Cache/Backend/Typo3DatabaseBackendCache.sql'
+        );
+        $requiredTableStructures = str_replace('###CACHE_TABLE###', $cacheBackend->getCacheTable(), $cacheTableSql);
+        $tagsTableSql = file_get_contents(
+            ExtensionManagementUtility::extPath('core') .
+            'Resources/Private/Sql/Cache/Backend/Typo3DatabaseBackendTags.sql'
+        );
+        $requiredTagTableStructures = str_replace('###TAGS_TABLE###', $cacheBackend->getTagsTable(), $tagsTableSql);
+
+        /** @noinspection PhpInternalEntityUsedInspection */
+        /** @var \TYPO3\CMS\Core\Database\Schema\SchemaMigrator $schemaMigrator */
+        $schemaMigrator = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+            \TYPO3\CMS\Core\Database\Schema\SchemaMigrator::class
+        );
+        $schemaMigrator->install([$requiredTableStructures]);
+        $schemaMigrator->install([$requiredTagTableStructures]);
     }
 }
