@@ -34,11 +34,6 @@ use Evoweb\StoreFinder\Domain\Model;
 class CoordinatesCache
 {
     /**
-     * @var \TYPO3\CMS\Core\Database\DatabaseConnection
-     */
-    protected $database;
-
-    /**
      * @var \TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication
      * @inject
      */
@@ -52,27 +47,42 @@ class CoordinatesCache
     /**
      * @var array
      */
-    protected $fieldCombinations = array(
-        array('address', 'zipcode', 'city', 'state', 'country'),
-        array('zipcode', 'city', 'country'),
-        array('zipcode', 'country'),
-        array('city', 'country'),
-    );
+    protected $fieldCombinations = [
+        ['address', 'zipcode', 'city', 'state', 'country'],
+        ['zipcode', 'city', 'country'],
+        ['zipcode', 'country'],
+        ['city', 'country'],
+    ];
 
 
     /**
      * Constructor
      *
-     * @throws \TYPO3\CMS\Core\Cache\Exception\InvalidBackendException
-     * @throws \TYPO3\CMS\Core\Cache\Exception\InvalidCacheException
-     * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
+     * @param \TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication $frontendUser
+     * @param \TYPO3\CMS\Core\Cache\Frontend\FrontendInterface $cacheFrontend
      */
-    public function __construct()
+    public function __construct($frontendUser = null, $cacheFrontend = null)
     {
-        $this->database = $GLOBALS['TYPO3_DB'];
+        if (!is_null($frontendUser)) {
+            $this->frontendUser = $frontendUser;
+        }
 
+        if (!is_null($cacheFrontend)) {
+            $this->cacheFrontend = $cacheFrontend;
+        } else {
+            $this->initializeCacheFrontend();
+        }
+    }
+
+    /**
+     * @return void
+     */
+    protected function initializeCacheFrontend()
+    {
         /** @var \TYPO3\CMS\Core\Cache\CacheManager $cacheManager */
-        $cacheManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class);
+        $cacheManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+            \TYPO3\CMS\Core\Cache\CacheManager::class
+        );
         $this->cacheFrontend = $cacheManager->getCache('store_finder_coordinate');
     }
 
@@ -287,5 +297,14 @@ class CoordinatesCache
     public function flushCacheTable()
     {
         $this->cacheFrontend->flush();
+    }
+
+
+    /**
+     * @return \TYPO3\CMS\Core\Database\DatabaseConnection
+     */
+    protected function getDatabaseConnection()
+    {
+        return $GLOBALS['TYPO3_DB'];
     }
 }
