@@ -1,5 +1,5 @@
 <?php
-namespace Evoweb\StoreFinder\Tests\Unit\Cache;
+namespace Evoweb\StoreFinder\Tests\Unit7\Cache;
 
 /***************************************************************
  * Copyright notice
@@ -27,7 +27,7 @@ namespace Evoweb\StoreFinder\Tests\Unit\Cache;
 /**
  * Coordinate cache test
  */
-class AddLocationToCacheTest extends \TYPO3\TestingFramework\Core\Unit\UnitTestCase
+class AddLocationToCacheTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
 {
     /**
      * @var \TYPO3\CMS\Extbase\Object\ObjectManagerInterface
