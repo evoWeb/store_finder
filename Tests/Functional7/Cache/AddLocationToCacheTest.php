@@ -65,7 +65,7 @@ class AddLocationToCacheTest extends \TYPO3\CMS\Core\Tests\FunctionalTestCase
         $this->createCacheTables($cacheFrontend);
 
         /** @noinspection PhpIncludeInspection */
-        $classLoader = require ORIGINAL_ROOT . '.Build/vendor/autoload.php';
+        $classLoader = require ORIGINAL_ROOT . '../vendor/autoload.php';
         $classLoader->addPsr4('Evoweb\\StoreFinder\\', [realpath(__DIR__ . '/../../../Classes/')]);
 
         $this->coordinatesCache = new \Evoweb\StoreFinder\Cache\CoordinatesCache($frontendUser, $cacheFrontend);
