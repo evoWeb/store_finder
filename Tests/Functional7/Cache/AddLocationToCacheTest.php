@@ -55,15 +55,16 @@ class AddLocationToCacheTest extends \TYPO3\CMS\Core\Tests\FunctionalTestCase
         $frontendUser = new \TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication();
 
         $cacheManager = new \TYPO3\CMS\Core\Cache\CacheManager();
+
+        $cacheFactory = new \TYPO3\CMS\Core\Cache\CacheFactory('production', $cacheManager);
+        $cacheManager->injectCacheFactory($cacheFactory);
+
         $cacheManager->setCacheConfigurations([
             'store_finder_coordinate' => [
                 'groups' => ['system'],
             ]
         ]);
         $cacheFrontend = $cacheManager->getCache('store_finder_coordinate');
-
-        $cacheFactory = new \TYPO3\CMS\Core\Cache\CacheFactory('production', $cacheManager);
-        $cacheManager->injectCacheFactory($cacheFactory);
 
         $this->createCacheTables($cacheFrontend);
 
@@ -109,7 +110,7 @@ class AddLocationToCacheTest extends \TYPO3\CMS\Core\Tests\FunctionalTestCase
     /**
      * Test for something
      *
-     * @te
+     * @test
      */
     public function locationWithAddressZipCityStateCountryGetStoredInCacheTableIfStreetAndStateIsEmpty()
     {
@@ -141,7 +142,7 @@ class AddLocationToCacheTest extends \TYPO3\CMS\Core\Tests\FunctionalTestCase
     /**
      * Test for something
      *
-     * @te
+     * @test
      */
     public function locationWithAddressZipCityCountryGetStoredInSessionCache()
     {
@@ -172,7 +173,7 @@ class AddLocationToCacheTest extends \TYPO3\CMS\Core\Tests\FunctionalTestCase
     /**
      * Test for something
      *
-     * @te
+     * @test
      */
     public function locationWithAddressZipCityStateCountryGetStoredInSessionCache()
     {
@@ -245,12 +246,15 @@ class AddLocationToCacheTest extends \TYPO3\CMS\Core\Tests\FunctionalTestCase
         );
         $requiredTagTableStructures = str_replace('###TAGS_TABLE###', $cacheBackend->getTagsTable(), $tagsTableSql);
 
-        /** @noinspection PhpInternalEntityUsedInspection */
-        /** @var \TYPO3\CMS\Core\Database\Schema\SchemaMigrator $schemaMigrator */
-        $schemaMigrator = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-            \TYPO3\CMS\Core\Database\Schema\SchemaMigrator::class
-        );
-        $schemaMigrator->install([$requiredTableStructures]);
-        $schemaMigrator->install([$requiredTagTableStructures]);
+        $this->getDatabaseConnection()->admin_query($requiredTableStructures);
+        $this->getDatabaseConnection()->admin_query($requiredTagTableStructures);
+    }
+
+    /**
+     * @return \TYPO3\CMS\Core\Database\DatabaseConnection
+     */
+    protected function getDatabaseConnection()
+    {
+        return $GLOBALS['TYPO3_DB'];
     }
 }
