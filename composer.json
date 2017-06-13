@@ -25,6 +25,11 @@
           "Evoweb\\StoreFinder\\": "Classes/"
       }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "TYPO3\\CMS\\Core\\Tests\\": "Tests/"
+    }
+  },
 
   "config": {
     "vendor-dir": ".Build/vendor",
@@ -34,6 +39,10 @@
     "typo3/cms": {
       "cms-package-dir": "{$vendor-dir}/typo3/cms",
       "web-dir": ".Build/Web"
+    },
+    "preferred-install": {
+      "typo3/cms": "source",
+      "*": "dist"
     }
   }
 }
