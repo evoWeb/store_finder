@@ -27,7 +27,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "TYPO3\\CMS\\Core\\Tests\\": "Tests/"
+      "TYPO3\\CMS\\Core\\Tests\\": ".Build/Web/typo3/sysext/core/Tests/"
     }
   },
 
