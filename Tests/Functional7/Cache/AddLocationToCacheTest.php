@@ -62,6 +62,9 @@ class AddLocationToCacheTest extends \TYPO3\CMS\Core\Tests\FunctionalTestCase
         ]);
         $cacheFrontend = $cacheManager->getCache('store_finder_coordinate');
 
+        $cacheFactory = new \TYPO3\CMS\Core\Cache\CacheFactory('production', $cacheManager);
+        $cacheManager->injectCacheFactory($cacheFactory);
+
         $this->createCacheTables($cacheFrontend);
 
         /** @noinspection PhpIncludeInspection */
