@@ -18,15 +18,10 @@ class UpdateUtility
     const FILE_MIGRATION_FOLDER = '_store_finder/';
 
     /**
-     * @var \TYPO3\CMS\Core\Database\DatabaseConnection $database
-     */
-    protected $database;
-
-    /**
      * @var array
      */
-    protected $mapping = array(
-        'attributes' => array(
+    protected $mapping = [
+        'attributes' => [
             'uid' => 'import_id',
             'pid' => 'pid',
             'tstamp' => 'tstamp',
@@ -41,9 +36,9 @@ class UpdateUtility
             // icon get migrated at an extra step
             // 'icon' => 'icon',
             'name' => 'name',
-        ),
+        ],
 
-        'categories' => array(
+        'categories' => [
             'uid' => 'import_id',
             'pid' => 'pid',
             'parentuid' => 'value:categories:parent',
@@ -59,9 +54,9 @@ class UpdateUtility
             // 'fe_group' => '',
             'name' => 'title',
             'description' => 'description',
-        ),
+        ],
 
-        'locations' => array(
+        'locations' => [
             'uid' => 'import_id',
             'pid' => 'pid',
             'tstamp' => 'tstamp',
@@ -104,56 +99,56 @@ class UpdateUtility
             'lon' => 'convert:double:longitude',
             'geocode' => '',
             'relatedto' => 'finish_comma:mm:locations:tx_storefinder_location_location_mm:uid_local:tx_storefinder_domain_model_location:related',
-        ),
-    );
+        ],
+    ];
 
     /**
      * @var array
      */
-    protected $fileMapping = array(
-        'attributes' => array(
-            'icon' => array(
+    protected $fileMapping = [
+        'attributes' => [
+            'icon' => [
                 'sourceField' => 'icon',
                 'sourcePath' => 'uploads/tx_locator/icons/',
                 'destinationField' => 'icon',
                 'destinationTable' => 'tx_storefinder_domain_model_attribute',
-            ),
-        ),
-        'locations' => array(
-            'media' => array(
+            ],
+        ],
+        'locations' => [
+            'media' => [
                 'sourceField' => 'media',
                 'sourcePath' => 'uploads/tx_locator/media/',
                 'destinationField' => 'media',
                 'destinationTable' => 'tx_storefinder_domain_model_location',
-            ),
-            'imageurl' => array(
+            ],
+            'imageurl' => [
                 'sourceField' => 'imageurl',
                 'sourcePath' => 'uploads/tx_locator/',
                 'destinationField' => 'image',
                 'destinationTable' => 'tx_storefinder_domain_model_location',
-            ),
-            'icon' => array(
+            ],
+            'icon' => [
                 'sourceField' => 'icon',
                 'sourcePath' => 'uploads/tx_locator/icons/',
                 'destinationField' => 'icon',
                 'destinationTable' => 'tx_storefinder_domain_model_location',
-            ),
-        ),
-    );
+            ],
+        ],
+    ];
 
     /**
      * @var array
      */
-    protected $records = array(
-        'attributes' => array(),
-        'categories' => array(),
-        'locations' => array(),
-    );
+    protected $records = [
+        'attributes' => [],
+        'categories' => [],
+        'locations' => [],
+    ];
 
     /**
      * @var array
      */
-    protected $messageArray = array();
+    protected $messageArray = [];
 
 
     /**
@@ -185,8 +180,6 @@ class UpdateUtility
      */
     public function main()
     {
-        $this->database = $GLOBALS['TYPO3_DB'];
-
         $content = '';
 
         if ($this->access()) {
@@ -213,13 +206,11 @@ class UpdateUtility
      */
     protected function renderWarning()
     {
-        $action = GeneralUtility::linkThisScript(array(
+        $action = GeneralUtility::linkThisScript([
             'M' => GeneralUtility::_GP('M'),
             'tx_extensionmanager_tools_extensionmanagerextensionmanager' =>
-                GeneralUtility::_GP(
-                    'tx_extensionmanager_tools_extensionmanagerextensionmanager'
-                )
-        ));
+                GeneralUtility::_GP('tx_extensionmanager_tools_extensionmanagerextensionmanager')
+        ]);
 
         $content = sprintf('</br>Do you want to start the migration?</br>
 			<form action="%1$s" method="POST">
@@ -253,7 +244,7 @@ class UpdateUtility
         foreach ($this->messageArray as $messageItem) {
             /** @var \TYPO3\CMS\Core\Messaging\FlashMessage $flashMessage */
             $flashMessage = GeneralUtility::makeInstance(
-                'TYPO3\\CMS\\Core\\Messaging\\FlashMessage',
+                \TYPO3\CMS\Core\Messaging\FlashMessage::class,
                 htmlspecialchars($messageItem['message']),
                 '',
                 \TYPO3\CMS\Core\Messaging\FlashMessage::INFO
@@ -282,23 +273,24 @@ class UpdateUtility
     {
         $attributes = $this->fetchAttributes();
 
-        while (($row = $this->database->sql_fetch_assoc($attributes))) {
+        while (($row = $this->getDatabaseConnection()->sql_fetch_assoc($attributes))) {
             $attribute = $this->mapFieldsPreImport($row, 'attributes');
 
             $table = 'tx_storefinder_domain_model_attribute';
             if (($record = $this->isAlreadyImported($attribute, $table))) {
                 unset($attribute['import_id']);
-                $this->database->exec_UPDATEquery($table, 'uid = ' . $record['uid'], $attribute);
+                $this->getDatabaseConnection()->exec_UPDATEquery($table, 'uid = ' . $record['uid'], $attribute);
                 $this->records['attributes'][$row['uid']] = $attribute['uid'] = $record['uid'];
             } else {
-                $this->database->exec_INSERTquery($table, $attribute);
-                $this->records['attributes'][$row['uid']] = $attribute['uid'] = $this->database->sql_insert_id();
+                $this->getDatabaseConnection()->exec_INSERTquery($table, $attribute);
+                $this->records['attributes'][$row['uid']] = $attribute['uid'] =
+                    $this->getDatabaseConnection()->sql_insert_id();
             }
 
             $this->migrateFilesToFal($row, $attribute, $this->fileMapping['attributes']['icon']);
         }
 
-        $this->messageArray[] = array('message' => count($this->records['attributes']) . ' attributes migrated');
+        $this->messageArray[] = ['message' => count($this->records['attributes']) . ' attributes migrated'];
     }
 
     /**
@@ -310,21 +302,22 @@ class UpdateUtility
     {
         $categories = $this->fetchCategories();
 
-        while (($row = $this->database->sql_fetch_assoc($categories))) {
+        while (($row = $this->getDatabaseConnection()->sql_fetch_assoc($categories))) {
             $category = $this->mapFieldsPreImport($row, 'categories');
 
             $table = 'sys_category';
             if (($record = $this->isAlreadyImported($category, $table))) {
                 unset($category['import_id']);
-                $this->database->exec_UPDATEquery($table, 'uid = ' . $record['uid'], $category);
+                $this->getDatabaseConnection()->exec_UPDATEquery($table, 'uid = ' . $record['uid'], $category);
                 $this->records['categories'][$row['uid']] = $category['uid'] = $record['uid'];
             } else {
-                $this->database->exec_INSERTquery($table, $category);
-                $this->records['categories'][$row['uid']] = $category['uid'] = $this->database->sql_insert_id();
+                $this->getDatabaseConnection()->exec_INSERTquery($table, $category);
+                $this->records['categories'][$row['uid']] = $category['uid'] =
+                    $this->getDatabaseConnection()->sql_insert_id();
             }
         }
 
-        $this->messageArray[] = array('message' => count($this->records['categories']) . ' categories migrated');
+        $this->messageArray[] = ['message' => count($this->records['categories']) . ' categories migrated'];
     }
 
     /**
@@ -336,17 +329,18 @@ class UpdateUtility
     {
         $locations = $this->fetchLocations();
 
-        while (($row = $this->database->sql_fetch_assoc($locations))) {
+        while (($row = $this->getDatabaseConnection()->sql_fetch_assoc($locations))) {
             $location = $this->mapFieldsPreImport($row, 'locations');
 
             $table = 'tx_storefinder_domain_model_location';
             if (($record = $this->isAlreadyImported($location, $table))) {
                 unset($location['import_id']);
-                $this->database->exec_UPDATEquery($table, 'uid = ' . $record['uid'], $location);
+                $this->getDatabaseConnection()->exec_UPDATEquery($table, 'uid = ' . $record['uid'], $location);
                 $this->records['locations'][$row['uid']] = $location['uid'] = $record['uid'];
             } else {
-                $this->database->exec_INSERTquery($table, $location);
-                $this->records['locations'][$row['uid']] = $location['uid'] = $this->database->sql_insert_id();
+                $this->getDatabaseConnection()->exec_INSERTquery($table, $location);
+                $this->records['locations'][$row['uid']] = $location['uid'] =
+                    $this->getDatabaseConnection()->sql_insert_id();
             }
 
             $this->mapFieldsPostImport($row, $location, 'locations');
@@ -356,7 +350,7 @@ class UpdateUtility
             $this->migrateFilesToFal($row, $location, $this->fileMapping['locations']['icon']);
         }
 
-        $this->database->sql_query('
+        $this->getDatabaseConnection()->sql_query('
 			update tx_storefinder_domain_model_location AS l
 				LEFT JOIN (
 					SELECT uid_foreign, COUNT(*) AS count
@@ -366,7 +360,7 @@ class UpdateUtility
 				) AS c ON l.uid = c.uid_foreign
 			set l.categories = COALESCE(c.count, 0);
 		');
-        $this->database->sql_query('
+        $this->getDatabaseConnection()->sql_query('
 			update tx_storefinder_domain_model_location AS l
 				LEFT JOIN (
 					SELECT uid_local, COUNT(*) AS count
@@ -375,7 +369,7 @@ class UpdateUtility
 				) AS a ON l.uid = a.uid_local
 			set l.attributes = COALESCE(a.count, 0);
 		');
-        $this->database->sql_query('
+        $this->getDatabaseConnection()->sql_query('
 			update tx_storefinder_domain_model_location AS l
 				LEFT JOIN (
 					SELECT uid_local, COUNT(*) AS count
@@ -385,7 +379,7 @@ class UpdateUtility
 			set l.related = COALESCE(a.count, 0);
 		');
 
-        $this->messageArray[] = array('message' => count($this->records['locations']) . ' locations migrated');
+        $this->messageArray[] = ['message' => count($this->records['locations']) . ' locations migrated'];
     }
 
 
@@ -396,7 +390,13 @@ class UpdateUtility
      */
     protected function fetchAttributes()
     {
-        return $this->database->exec_SELECTquery('*', 'tx_locator_attributes', 'deleted = 0', '', 'sys_language_uid');
+        return $this->getDatabaseConnection()->exec_SELECTquery(
+            '*',
+            'tx_locator_attributes',
+            'deleted = 0',
+            '',
+            'sys_language_uid'
+        );
     }
 
     /**
@@ -406,7 +406,7 @@ class UpdateUtility
      */
     protected function fetchCategories()
     {
-        return $this->database->exec_SELECTquery(
+        return $this->getDatabaseConnection()->exec_SELECTquery(
             '*',
             'tx_locator_categories',
             'deleted = 0',
@@ -422,7 +422,13 @@ class UpdateUtility
      */
     protected function fetchLocations()
     {
-        return $this->database->exec_SELECTquery('*', 'tx_locator_locations', 'deleted = 0', '', 'uid');
+        return $this->getDatabaseConnection()->exec_SELECTquery(
+            '*',
+            'tx_locator_locations',
+            'deleted = 0',
+            '',
+            'uid'
+        );
     }
 
 
@@ -436,7 +442,7 @@ class UpdateUtility
      */
     protected function mapFieldsPreImport($row, $table)
     {
-        $result = array();
+        $result = [];
 
         foreach ($this->mapping[$table] as $fieldFrom => $fieldTo) {
             if ($fieldTo && strpos($fieldTo, ':') === false) {
@@ -525,15 +531,15 @@ class UpdateUtility
                                 }
 
                                 if (!$this->mmRelationExists($mmTable, $uidLocal, $uidForeign, $destinationTable)) {
-                                    $this->database->exec_INSERTquery(
+                                    $this->getDatabaseConnection()->exec_INSERTquery(
                                         $mmTable,
-                                        array(
+                                        [
                                             'uid_local' => $uidLocal,
                                             'uid_foreign' => $uidForeign,
                                             'tablenames' => $destinationTable,
                                             'sorting' . ($mmField == 'uid_foreign' ? '_foreign' : '') => $sorting,
                                             'fieldname' => $destinationField,
-                                        )
+                                        ]
                                     );
                                 }
 
@@ -581,15 +587,15 @@ class UpdateUtility
                                 }
 
                                 if (!$this->mmRelationExists($mmTable, $uidLocal, $uidForeign, $destinationTable)) {
-                                    $this->database->exec_INSERTquery(
+                                    $this->getDatabaseConnection()->exec_INSERTquery(
                                         $mmTable,
-                                        array(
+                                        [
                                             'uid_local' => $uidLocal,
                                             'uid_foreign' => $uidForeign,
                                             'tablenames' => $destinationTable,
                                             'sorting' . ($mmField == 'uid_foreign' ? '_foreign' : '') => $sorting,
                                             'fieldname' => $destinationField,
-                                        )
+                                        ]
                                     );
                                 }
 
@@ -616,7 +622,7 @@ class UpdateUtility
      */
     protected function mmRelationExists($mmTable, $uidLocal, $uidForeign, $tablenames)
     {
-        return (bool) $this->database->exec_SELECTcountRows(
+        return (bool) $this->getDatabaseConnection()->exec_SELECTcountRows(
             '*',
             $mmTable,
             'uid_local = ' . $uidLocal . ' AND uid_foreign = ' . $uidForeign .
@@ -634,7 +640,7 @@ class UpdateUtility
      */
     protected function isAlreadyImported($record, $table)
     {
-        return $this->database->exec_SELECTgetSingleRow(
+        return $this->getDatabaseConnection()->exec_SELECTgetSingleRow(
             'uid',
             $table,
             'import_id = ' . $record['import_id'] . ' AND deleted = 0'
@@ -648,7 +654,7 @@ class UpdateUtility
      */
     protected function countStoreFinderLocations()
     {
-        return $this->database->exec_SELECTcountRows(
+        return $this->getDatabaseConnection()->exec_SELECTcountRows(
             'uid',
             'tx_storefinder_domain_model_location',
             '1' . \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields('tx_storefinder_domain_model_location')
@@ -733,19 +739,22 @@ class UpdateUtility
                 $fileObject = $this->storage->getFile(self::FILE_MIGRATION_FOLDER . $file);
                 $this->fileIndexRepository->add($fileObject);
 
-                $count = $this->database->exec_SELECTcountRows(
+                $count = $this->getDatabaseConnection()->exec_SELECTcountRows(
                     '*',
                     'sys_file_reference',
-                    'tablenames = ' . $this->database->fullQuoteStr(
+                    'tablenames = ' . $this->getDatabaseConnection()->fullQuoteStr(
                         $configuration['destinationTable'],
                         'sys_file_reference'
                     ) . ' AND fieldname = '
-                    . $this->database->fullQuoteStr($configuration['destinationField'], 'sys_file_reference')
+                    . $this->getDatabaseConnection()->fullQuoteStr(
+                        $configuration['destinationField'],
+                        'sys_file_reference'
+                    )
                     . ' AND uid_local = ' . $fileObject->getUid() . ' AND uid_foreign = ' . $destination['uid']
                 );
 
                 if (!$count) {
-                    $dataArray = array(
+                    $dataArray = [
                         'uid_local' => $fileObject->getUid(),
                         'tablenames' => $configuration['destinationTable'],
                         'uid_foreign' => $destination['uid'],
@@ -755,8 +764,8 @@ class UpdateUtility
                         'fieldname' => $configuration['destinationField'],
                         'sorting_foreign' => $i,
                         'table_local' => 'sys_file'
-                    );
-                    $this->database->exec_INSERTquery('sys_file_reference', $dataArray);
+                    ];
+                    $this->getDatabaseConnection()->exec_INSERTquery('sys_file_reference', $dataArray);
                 }
             }
             $i++;
