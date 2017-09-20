@@ -1,6 +1,7 @@
 <?php
 defined('TYPO3_MODE') || die('Access denied.');
 
+
 call_user_func(function () {
     if (!is_array($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['store_finder_coordinate'])) {
         $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['store_finder_coordinate'] = [
@@ -9,7 +10,7 @@ call_user_func(function () {
     }
 
     /**
-     * Default PageTS
+     * Default PageTSConfig
      */
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
         '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:store_finder/Configuration/PageTSconfig/NewContentElementWizard.ts">'

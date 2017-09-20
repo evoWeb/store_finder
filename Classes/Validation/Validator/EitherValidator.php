@@ -29,30 +29,23 @@ use TYPO3\CMS\Extbase\Validation\Validator;
 use TYPO3\CMS\Extbase\Validation\Exception\InvalidValidationOptionsException;
 
 /**
- * A required validator to check that one of the properties is set
+ * A required validator to check that a value is set
  *
- * @package Evoweb\StoreFinder\Validation\Validator
+ * @scope singleton
  */
 class EitherValidator extends Validator\AbstractValidator implements Validator\ValidatorInterface
 {
     /**
-     * Set to false to always call isValid even if value is empty
-     *
-     * @var bool
+     * @var array
      */
-    protected $acceptsEmptyValues = false;
+    protected $supportedOptions = array(
+        'properties' => array(false, 'Properties to check in either', 'string'),
+    );
 
     /**
      * @var array
      */
-    protected $supportedOptions = [
-        'properties' => [false, 'Properties to check in either', 'string'],
-    ];
-
-    /**
-     * @var array
-     */
-    protected $properties = [];
+    protected $properties = array();
 
     /**
      * @var \Evoweb\StoreFinder\Domain\Model\Constraint
@@ -71,7 +64,7 @@ class EitherValidator extends Validator\AbstractValidator implements Validator\V
      * @throws InvalidValidationOptionsException
      * @api
      */
-    public function __construct(array $options = [])
+    public function __construct(array $options = array())
     {
         parent::__construct($options);
 
@@ -101,6 +94,20 @@ class EitherValidator extends Validator\AbstractValidator implements Validator\V
         $this->propertyName = $propertyName;
     }
 
+    /**
+     * Override to be able to validate empty values
+     *
+     * @param mixed $value The value that should be validated
+     *
+     * @return \TYPO3\CMS\Extbase\Error\Result
+     */
+    public function validate($value)
+    {
+        $this->result = new \TYPO3\CMS\Extbase\Error\Result();
+        $this->isValid($value);
+
+        return $this->result;
+    }
 
     /**
      * If the given value is empty
@@ -116,7 +123,7 @@ class EitherValidator extends Validator\AbstractValidator implements Validator\V
         if (!empty($value)) {
             $result = true;
         } else {
-            $properties = array_diff($this->properties, [$this->propertyName]);
+            $properties = array_diff($this->properties, array($this->propertyName));
             foreach ($properties as $property) {
                 $methodName = 'get' . ucfirst($property);
                 $value = $this->model->{$methodName}();

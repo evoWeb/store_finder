@@ -1,10 +1,10 @@
 <?php
-namespace Evoweb\StoreFinder\Tests\Unit\Cache;
+namespace Evoweb\StoreFinder\Tests\Functional7\Cache;
 
 /***************************************************************
  * Copyright notice
  *
- * (c) 2016 Sebastian Fischer, <typo3@evoweb.de>
+ * (c) 2014 Sebastian Fischer, <typo3@evoweb.de>
  * All rights reserved
  *
  * This script is part of the TYPO3 project. The TYPO3 project is
@@ -24,11 +24,18 @@ namespace Evoweb\StoreFinder\Tests\Unit\Cache;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+
 /**
  * Coordinate cache test
  */
-class AddLocationToCacheTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
+class AddLocationToCacheTest extends \TYPO3\CMS\Core\Tests\FunctionalTestCase
 {
+    /**
+     * @var string
+     */
+    protected $fixturePath = 'typo3conf/ext/store_finder/Tests/Functional/Fixtures/';
+
     /**
      * @var \Evoweb\StoreFinder\Cache\CoordinatesCache|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -43,16 +50,36 @@ class AddLocationToCacheTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
      */
     public function setUp()
     {
-        $this->setupCaches();
+        parent::setUp();
+
+        $frontendUser = new \TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication();
+
+        $cacheManager = new \TYPO3\CMS\Core\Cache\CacheManager();
+
+        $cacheFactory = new \TYPO3\CMS\Core\Cache\CacheFactory('production', $cacheManager);
+        $cacheManager->injectCacheFactory($cacheFactory);
+
+        $cacheManager->setCacheConfigurations([
+            'store_finder_coordinate' => [
+                'groups' => ['system'],
+            ]
+        ]);
+        $cacheFrontend = $cacheManager->getCache('store_finder_coordinate');
+
+        $this->createCacheTables($cacheFrontend);
+
+        /** @noinspection PhpIncludeInspection */
+        $classLoader = require ORIGINAL_ROOT . '../vendor/autoload.php';
+        $classLoader->addPsr4('Evoweb\\StoreFinder\\', [realpath(__DIR__ . '/../../../Classes/')]);
+
+        $this->coordinatesCache = new \Evoweb\StoreFinder\Cache\CoordinatesCache($frontendUser, $cacheFrontend);
     }
 
 
     /**
-     * Test for something
+     * Test if location only gets stored with zip, city and country in cache table
      *
      * @test
-     * @throws \PHPUnit_Framework_Exception
-     * @return void
      */
     public function locationWithZipCityCountryOnlyGetStoredInCacheTable()
     {
@@ -72,27 +99,18 @@ class AddLocationToCacheTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
             'longitude' => $constraint->getLongitude(),
         ];
 
-        $this->coordinatesCache
-            ->expects($this->once())
-            ->method('getValueFromCacheTable')
-            ->will($this->returnValue($coordinate));
-
         $fields = ['zipcode', 'city', 'country'];
         $this->coordinatesCache->addCoordinateForAddress($constraint, $fields);
 
         $fields = ['zipcode', 'city', 'country'];
-        $entryIdentifier = $this->coordinatesCache->getHashForAddressWithFields($constraint, $fields);
-        $cacheEntry = $this->coordinatesCache->getCoordinateByAddress($constraint);
-        $cacheEntry = $this->coordinatesCache->getValueFromCacheTable($entryIdentifier);
-        $this->assertEquals($coordinate, $cacheEntry);
+        $hash = $this->coordinatesCache->getHashForAddressWithFields($constraint, $fields);
+        $this->assertEquals($coordinate, $this->coordinatesCache->getValueFromCacheTable($hash));
     }
 
     /**
      * Test for something
      *
-     * @te st
-     * @throws \PHPUnit_Framework_Exception
-     * @return void
+     * @test
      */
     public function locationWithAddressZipCityStateCountryGetStoredInCacheTableIfStreetAndStateIsEmpty()
     {
@@ -104,7 +122,7 @@ class AddLocationToCacheTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
             'city' => uniqid('City'),
             'state' => '',
             'country' => uniqid('Country'),
-         ];
+        ];
 
         $constraint = $this->getConstraintStub($data);
         $coordinate = [
@@ -112,26 +130,19 @@ class AddLocationToCacheTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
             'longitude' => $constraint->getLongitude(),
         ];
 
-        $GLOBALS['TYPO3_DB']->expects($this->any())
-            ->method('exec_SELECTgetSingleRow')
-            ->will(self::returnValue([
-                'content' => serialize($coordinate),
-            ]));
-
         $fields = ['address', 'zipcode', 'city', 'state', 'country'];
         $this->coordinatesCache->addCoordinateForAddress($constraint, $fields);
 
         $fields = ['zipcode', 'city', 'country'];
-        $entryIdentifier = $this->coordinatesCache->getHashForAddressWithFields($constraint, $fields);
-        $this->assertEquals($coordinate, $this->coordinatesCache->getValueFromCacheTable($entryIdentifier));
+        $hash = $this->coordinatesCache->getHashForAddressWithFields($constraint, $fields);
+        $this->assertEquals($coordinate, $this->coordinatesCache->getValueFromCacheTable($hash));
     }
 
 
     /**
      * Test for something
      *
-     * @te st
-     * @return void
+     * @test
      */
     public function locationWithAddressZipCityCountryGetStoredInSessionCache()
     {
@@ -162,8 +173,7 @@ class AddLocationToCacheTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
     /**
      * Test for something
      *
-     * @te st
-     * @return void
+     * @test
      */
     public function locationWithAddressZipCityStateCountryGetStoredInSessionCache()
     {
@@ -199,7 +209,7 @@ class AddLocationToCacheTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
      *
      * @return \Evoweb\StoreFinder\Domain\Model\Constraint
      */
-    protected function getConstraintStub($data)
+    public function getConstraintStub($data)
     {
         $constraint = new \Evoweb\StoreFinder\Domain\Model\Constraint();
 
@@ -216,18 +226,35 @@ class AddLocationToCacheTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
         return $constraint;
     }
 
-    /**
-     * @return void
-     */
-    protected function setupCaches()
-    {
-        $this->coordinatesCache = $this
-            ->getMockBuilder(\Evoweb\StoreFinder\Cache\CoordinatesCache::class)
-            ->disableOriginalConstructor()
-            ->getMock();
 
-        $this->coordinatesCache
-            ->expects($this->at(0))
-            ->method('flushCache');
+    /**
+     * @param \TYPO3\CMS\Core\Cache\Frontend\FrontendInterface $cacheFrontend
+     */
+    protected function createCacheTables($cacheFrontend)
+    {
+        /** @var \TYPO3\CMS\Core\Cache\Backend\Typo3DatabaseBackend $cacheBackend */
+        $cacheBackend = $cacheFrontend->getBackend();
+
+        $cacheTableSql = file_get_contents(
+            ExtensionManagementUtility::extPath('core') .
+            'Resources/Private/Sql/Cache/Backend/Typo3DatabaseBackendCache.sql'
+        );
+        $requiredTableStructures = str_replace('###CACHE_TABLE###', $cacheBackend->getCacheTable(), $cacheTableSql);
+        $tagsTableSql = file_get_contents(
+            ExtensionManagementUtility::extPath('core') .
+            'Resources/Private/Sql/Cache/Backend/Typo3DatabaseBackendTags.sql'
+        );
+        $requiredTagTableStructures = str_replace('###TAGS_TABLE###', $cacheBackend->getTagsTable(), $tagsTableSql);
+
+        $this->getDatabaseConnection()->admin_query($requiredTableStructures);
+        $this->getDatabaseConnection()->admin_query($requiredTagTableStructures);
+    }
+
+    /**
+     * @return \TYPO3\CMS\Core\Database\DatabaseConnection
+     */
+    protected function getDatabaseConnection()
+    {
+        return $GLOBALS['TYPO3_DB'];
     }
 }

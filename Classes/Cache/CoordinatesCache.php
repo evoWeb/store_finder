@@ -35,8 +35,9 @@ class CoordinatesCache
 {
     /**
      * @var \TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication
+     * @inject
      */
-    protected $frontendUser;
+    protected $frontendUser = null;
 
     /**
      * @var \TYPO3\CMS\Core\Cache\Frontend\FrontendInterface
@@ -57,31 +58,32 @@ class CoordinatesCache
     /**
      * Constructor
      *
-     * @throws \TYPO3\CMS\Core\Cache\Exception\InvalidBackendException
-     * @throws \TYPO3\CMS\Core\Cache\Exception\InvalidCacheException
-     * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
-     */
-    public function __construct()
-    {
-        /** @var \TYPO3\CMS\Core\Cache\CacheManager $cacheManager */
-        $cacheManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class);
-        $this->setCacheFrontend($cacheManager->getCache('store_finder_coordinate'));
-    }
-
-    /**
      * @param \TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication $frontendUser
-     */
-    public function injectFrontendUser(\TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication $frontendUser)
-    {
-        $this->frontendUser = $frontendUser;
-    }
-
-    /**
      * @param \TYPO3\CMS\Core\Cache\Frontend\FrontendInterface $cacheFrontend
      */
-    public function setCacheFrontend(\TYPO3\CMS\Core\Cache\Frontend\FrontendInterface $cacheFrontend)
+    public function __construct($frontendUser = null, $cacheFrontend = null)
     {
-        $this->cacheFrontend = $cacheFrontend;
+        if (!is_null($frontendUser)) {
+            $this->frontendUser = $frontendUser;
+        }
+
+        if (!is_null($cacheFrontend)) {
+            $this->cacheFrontend = $cacheFrontend;
+        } else {
+            $this->initializeCacheFrontend();
+        }
+    }
+
+    /**
+     * @return void
+     */
+    protected function initializeCacheFrontend()
+    {
+        /** @var \TYPO3\CMS\Core\Cache\CacheManager $cacheManager */
+        $cacheManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+            \TYPO3\CMS\Core\Cache\CacheManager::class
+        );
+        $this->cacheFrontend = $cacheManager->getCache('store_finder_coordinate');
     }
 
 
@@ -96,10 +98,10 @@ class CoordinatesCache
      */
     public function addCoordinateForAddress($address, $fields)
     {
-        $coordinate = [
+        $coordinate = array(
             'latitude' => $address->getLatitude(),
             'longitude' => $address->getLongitude()
-        ];
+        );
 
         $hash = $this->getHashForAddressWithFields($address, $fields);
         if (count($fields) == 2 || count($fields) == 3) {
@@ -151,7 +153,7 @@ class CoordinatesCache
      */
     public function getHashForAddressWithFields($address, &$fields)
     {
-        $values = [];
+        $values = array();
 
         foreach ($fields as $field) {
             $methodName = 'get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $field)));
@@ -245,7 +247,7 @@ class CoordinatesCache
      */
     public function flushSessionCache()
     {
-        $this->frontendUser->setKey('ses', 'tx_storefinder_coordinates', []);
+        $this->frontendUser->setKey('ses', 'tx_storefinder_coordinates', array());
         $this->frontendUser->storeSessionData();
     }
 
@@ -295,5 +297,14 @@ class CoordinatesCache
     public function flushCacheTable()
     {
         $this->cacheFrontend->flush();
+    }
+
+
+    /**
+     * @return \TYPO3\CMS\Core\Database\DatabaseConnection
+     */
+    protected function getDatabaseConnection()
+    {
+        return $GLOBALS['TYPO3_DB'];
     }
 }

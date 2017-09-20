@@ -33,23 +33,25 @@ $foreignTypes = [
     ]
 ];
 
+$table = 'tx_storefinder_domain_model_location';
+$attributeTable = 'tx_storefinder_domain_model_attribute';
 $languageFile = 'LLL:EXT:store_finder/Resources/Private/Language/locallang_db.xml:';
 
 return [
     'ctrl' => [
         'title' => $languageFile . 'tx_storefinder_domain_model_location',
         'label' => 'name',
+        'sortby' => 'sorting',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
         'cruser_id' => 'cruser_id',
-        'sortby' => 'sorting',
         'delete' => 'deleted',
 
-        'languageField' => 'sys_language_uid',
         'transOrigPointerField' => 'l18n_parent',
         'transOrigDiffSourceField' => 'l18n_diffsource',
+        'languageField' => 'sys_language_uid',
+        'translationSource' => 'l10n_source',
 
-        'requestUpdate' => 'country',
         'searchFields' => 'name, zipcode, city, address, country, notes',
         'enablecolumns' => [
             'disabled' => 'hidden',
@@ -57,8 +59,7 @@ return [
             'endtime' => 'endtime',
             'fe_group' => 'fe_group',
         ],
-        'dividers2tabs' => 1,
-        'iconfile' => '../typo3conf/ext/store_finder/Resources/Public/Icons/tx_storefinder_domain_model_location.gif',
+        'iconfile' => 'EXT:store_finder/Resources/Public/Icons/tx_storefinder_domain_model_location.gif',
     ],
 
     'interface' => [
@@ -75,99 +76,110 @@ return [
         'sys_language_uid' => $GLOBALS['TCA']['tt_content']['columns']['sys_language_uid'],
 
         'l18n_parent' => [
+            'exclude' => true,
             'displayCond' => 'FIELD:sys_language_uid:>:0',
-            'exclude' => 1,
-            'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.l18n_parent',
+            'label' => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
             'config' => [
                 'type' => 'select',
+                'renderType' => 'selectSingle',
                 'items' => [
                     [
                         '',
                         0
                     ]
                 ],
-                'foreign_table' => 'tx_storefinder_domain_model_location',
-                'foreign_table_where' => 'AND tx_storefinder_domain_model_location.pid=###CURRENT_PID### 
-                    AND tx_storefinder_domain_model_location.sys_language_uid IN (-1,0)'
+                'foreign_table' => $table,
+                'foreign_table_where' =>
+                    'AND ' . $table . '.pid = ###CURRENT_PID### AND ' . $table . '.sys_language_uid IN (-1, 0)',
+                'default' => 0
+            ]
+        ],
+        'l10n_source' => [
+            'config' => [
+                'type' => 'passthrough'
+            ]
+        ],
+        'l18n_diffsource' => [
+            'config' => [
+                'type' => 'passthrough',
+                'default' => ''
             ]
         ],
 
         // address
         'name' => [
-            'l10n_mode' => 'mergeIfNotBlank',
-            'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.name',
             'config' => [
                 'type' => 'input',
-                'size' => '30',
-                'max' => '256',
+                'size' => 50,
+                'max' => 255,
                 'eval' => 'required,trim',
             ]
         ],
 
         'storeid' => [
             'l10n_mode' => 'exclude',
-            'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.storeid',
             'config' => [
                 'type' => 'input',
-                'size' => '30',
+                'size' => 30,
                 'eval' => 'trim',
             ]
         ],
 
         'address' => [
-            'l10n_mode' => 'mergeIfNotBlank',
-            'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.address',
             'config' => [
                 'type' => 'text',
-                'cols' => '30',
-                'rows' => '3',
+                'cols' => 30,
+                'rows' => 3,
                 'eval' => 'trim',
+                'behaviour' => [
+                    'allowLanguageSynchronization' => true
+                ]
             ]
         ],
 
         'additionaladdress' => [
-            'l10n_mode' => 'mergeIfNotBlank',
-            'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.additionaladdress',
             'config' => [
                 'type' => 'input',
-                'size' => '30',
+                'size' => 30,
                 'eval' => 'trim',
+                'behaviour' => [
+                    'allowLanguageSynchronization' => true
+                ]
             ]
         ],
 
         'zipcode' => [
             'l10n_mode' => 'exclude',
-            'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.zipcode',
             'config' => [
                 'type' => 'input',
-                'size' => '30',
+                'size' => 30,
                 'eval' => 'required,trim',
             ]
         ],
 
         'city' => [
-            'l10n_mode' => 'mergeIfNotBlank',
-            'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.city',
             'config' => [
                 'type' => 'input',
-                'size' => '30',
+                'size' => 30,
                 'eval' => 'required,trim',
+                'behaviour' => [
+                    'allowLanguageSynchronization' => true
+                ]
             ]
         ],
 
         'state' => [
-            'l10n_mode' => 'mergeIfNotBlank',
-            'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.state',
             'displayCond' => 'FIELD:country:>:0',
             'config' => [
                 'type' => 'select',
+                'renderType' => 'selectSingle',
                 'items' => [
                     ['', 0],
                 ],
@@ -176,92 +188,105 @@ return [
                     ORDER BY static_country_zones.zn_name_local',
                 'size' => 1,
                 'minitems' => 0,
-                'maxitems' => 1
+                'maxitems' => 1,
+                'behaviour' => [
+                    'allowLanguageSynchronization' => true
+                ]
             ]
         ],
 
         'country' => [
-            'l10n_mode' => 'mergeIfNotBlank',
-            'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.country',
+            'onChange' => 'reload',
             'config' => [
                 'type' => 'select',
+                'renderType' => 'selectSingle',
                 'items' => [
                     ['', 0],
                 ],
                 'foreign_table' => 'static_countries',
-                'itemsProcFunc' => \SJBR\StaticInfoTables\Hook\Backend\Form\ElementRenderingHelper::class
-                    . '->translateCountriesSelector',
+                'itemsProcFunc' =>
+                    \SJBR\StaticInfoTables\Hook\Backend\Form\FormDataProvider\TcaSelectItemsProcessor::class .
+                        '->translateCountriesSelector',
                 'size' => 1,
                 'minitems' => 1,
-                'maxitems' => 1
+                'maxitems' => 1,
+                'behaviour' => [
+                    'allowLanguageSynchronization' => true
+                ]
             ]
         ],
 
         // contact
         'person' => [
-            'l10n_mode' => 'mergeIfNotBlank',
-            'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.person',
             'config' => [
                 'type' => 'input',
-                'size' => '30',
+                'size' => 30,
                 'eval' => 'trim',
+                'behaviour' => [
+                    'allowLanguageSynchronization' => true
+                ]
             ]
         ],
 
         'phone' => [
-            'l10n_mode' => 'mergeIfNotBlank',
-            'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.phone',
             'config' => [
                 'type' => 'input',
-                'size' => '30',
+                'size' => 30,
                 'eval' => 'trim',
+                'behaviour' => [
+                    'allowLanguageSynchronization' => true
+                ]
             ]
         ],
 
         'mobile' => [
-            'l10n_mode' => 'mergeIfNotBlank',
-            'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.mobile',
             'config' => [
                 'type' => 'input',
-                'size' => '30',
+                'size' => 30,
                 'eval' => 'trim',
+                'behaviour' => [
+                    'allowLanguageSynchronization' => true
+                ]
             ]
         ],
 
         'fax' => [
-            'l10n_mode' => 'mergeIfNotBlank',
-            'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.fax',
             'config' => [
                 'type' => 'input',
-                'size' => '30',
+                'size' => 30,
                 'eval' => 'trim',
+                'behaviour' => [
+                    'allowLanguageSynchronization' => true
+                ]
             ]
         ],
 
         'email' => [
-            'l10n_mode' => 'mergeIfNotBlank',
-            'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.email',
             'config' => [
                 'type' => 'input',
-                'size' => '30',
+                'size' => 30,
                 'eval' => 'trim',
+                'behaviour' => [
+                    'allowLanguageSynchronization' => true
+                ]
             ]
         ],
 
         'hours' => [
-            'l10n_mode' => 'mergeIfNotBlank',
-            'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.hours',
             'config' => [
                 'type' => 'text',
-                'cols' => '30',
-                'rows' => '5',
+                'cols' => 30,
+                'rows' => 5,
+                'behaviour' => [
+                    'allowLanguageSynchronization' => true
+                ]
             ]
         ],
 
@@ -269,10 +294,10 @@ return [
         // relations
         'related' => [
             'l10n_mode' => 'exclude',
-            'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.related',
             'config' => [
                 'type' => 'select',
+                'renderType' => 'selectSingle',
                 'items' => [
                     ['', 0]
                 ],
@@ -284,9 +309,9 @@ return [
                     'tablenames' => 'tx_storefinder_domain_model_location',
                     'fieldname' => 'related',
                 ],
-                'minitems' => '0',
-                'maxitems' => '1',
-                'default' => '0',
+                'minitems' => 0,
+                'maxitems' => 1,
+                'default' => 0,
             ]
         ],
 
@@ -295,6 +320,7 @@ return [
             'label' => $languageFile . 'tx_storefinder_domain_model_location.categories',
             'config' => [
                 'type' => 'select',
+                'renderType' => 'selectTree',
                 'foreign_table' => 'sys_category',
                 'foreign_table_where' => 'AND sys_category.sys_language_uid IN (-1,0) ORDER BY sys_category.title ASC',
                 'MM' => 'sys_category_record_mm',
@@ -303,10 +329,8 @@ return [
                     'tablenames' => 'tx_storefinder_domain_model_location',
                     'fieldname' => 'categories',
                 ],
-                'size' => 10,
-                'autoSizeMax' => 50,
+                'size' => 50,
                 'maxitems' => 9999,
-                'renderMode' => 'tree',
                 'treeConfig' => [
                     'parentField' => 'parent',
                     'appearance' => [
@@ -314,18 +338,13 @@ return [
                         'showHeader' => true,
                     ],
                 ],
-                'wizards' => [
-                    'add' => [
-                        'type' => 'script',
-                        'title' => $languageFile . 'sys_category.add',
-                        'icon' => 'add.gif',
-                        'params' => [
-                            'table' => 'sys_category',
+                'fieldControl' => [
+                    'addRecord' => [
+                        'options' => [
                             'pid' => '###CURRENT_PID###',
-                            'setValue' => 'prepend'
-                        ],
-                        'module' => [
-                            'name' => 'wizard_add'
+                            'setValue' => 'prepend',
+                            'table' => 'sys_category',
+                            'title' => $languageFile . 'sys_category.add',
                         ]
                     ]
                 ],
@@ -334,14 +353,14 @@ return [
 
         'attributes' => [
             'l10n_mode' => 'exclude',
-            'exclude' => 1,
+            'exclude' => true,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.attributes',
             'config' => [
                 'type' => 'select',
                 'renderType' => 'selectMultipleSideBySide',
                 'foreign_table' => 'tx_storefinder_domain_model_attribute',
-                'foreign_table_where' => ' AND tx_storefinder_domain_model_attribute.sys_language_uid IN (-1,0)
-                    AND tx_storefinder_domain_model_attribute.pid = ###CURRENT_PID###',
+                'foreign_table_where' => ' AND ' . $attributeTable . '.sys_language_uid IN (-1,0) AND ' .
+                    $attributeTable . '.pid = ###CURRENT_PID###',
                 'MM' => 'tx_storefinder_location_attribute_mm',
                 'MM_match_fields' => [
                     'tablenames' => 'tx_storefinder_domain_model_attribute',
@@ -354,7 +373,6 @@ return [
 
         'icon' => [
             'l10n_mode' => 'exclude',
-            'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.icon',
             'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
                 'icon',
@@ -374,7 +392,6 @@ return [
 
         'latitude' => [
             'l10n_mode' => 'exclude',
-            'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.latitude',
             'config' => [
                 'type' => 'input',
@@ -385,7 +402,6 @@ return [
 
         'longitude' => [
             'l10n_mode' => 'exclude',
-            'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.longitude',
             'config' => [
                 'type' => 'input',
@@ -396,7 +412,6 @@ return [
 
         'center' => [
             'l10n_mode' => 'exclude',
-            'exclude' => 1,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.center',
             'config' => [
                 'type' => 'check',
@@ -405,7 +420,6 @@ return [
 
         'distance' => [
             'l10n_mode' => 'exclude',
-            'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.distance',
             'config' => [
                 'type' => 'input',
@@ -415,7 +429,7 @@ return [
         ],
         'geocode' => [
             'l10n_mode' => 'exclude',
-            'exclude' => 1,
+            'exclude' => true,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.geocode',
             'config' => [
                 'type' => 'check',
@@ -424,7 +438,6 @@ return [
 
         // informations
         'products' => [
-            'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.products',
             'config' => [
                 'type' => 'input',
@@ -435,30 +448,30 @@ return [
         ],
 
         'notes' => [
-            'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.notes',
             'config' => [
                 'type' => 'text',
                 'cols' => '80',
                 'rows' => '15',
+                'enableRichtext' => true,
                 'softref' => 'rtehtmlarea_images,typolink_tag,images,email[subst],url',
             ]
         ],
 
         'url' => [
-            'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.url',
             'config' => [
                 'type' => 'input',
-                'size' => '30',
-                'max' => '255',
+                'renderType' => 'inputLink',
+                'size' => 30,
+                'max' => 255,
                 'eval' => 'trim',
                 'wizards' => [
                     '_PADDING' => 2,
                     'link' => [
                         'type' => 'popup',
                         'title' => 'Link',
-                        'icon' => 'link_popup.gif',
+                        'icon' => 'actions-wizard-link',
                         'module' => [
                             'name' => 'wizard_link',
                         ],
@@ -469,7 +482,6 @@ return [
         ],
 
         'image' => [
-            'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.image',
             'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
                 'image',
@@ -490,7 +502,6 @@ return [
         ],
 
         'media' => [
-            'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.media',
             'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
                 'media',
@@ -511,7 +522,7 @@ return [
         ],
 
         'content' => [
-            'exclude' => 1,
+            'exclude' => true,
             'label' => $languageFile . 'tx_storefinder_domain_model_location.content',
             'config' => [
                 'type' => 'inline',
@@ -547,7 +558,7 @@ return [
                 related, categories, attributes, icon,
                 --palette--;' . $languageFile . 'palette-coordinates;coordinates,
             --div--;' . $languageFile . 'div-informations,
-                products, notes;;;richtext:rte_transform[flag=rte_enabled|mode=ts_css], url,
+                products, notes,
                 image;' . $languageFile . 'tx_storefinder_domain_model_location.image,
                 media;' . $languageFile . 'tx_storefinder_domain_model_location.media, content,
             --div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access,
@@ -568,9 +579,9 @@ return [
         ],
         'access' => [
             'showitem' => '
-				starttime;LLL:EXT:cms/locallang_ttc.xlf:starttime_formlabel,
-				endtime;LLL:EXT:cms/locallang_ttc.xlf:endtime_formlabel,
-				--linebreak--, fe_group;LLL:EXT:cms/locallang_ttc.xlf:fe_group_formlabel',
+                starttime;LLL:EXT:cms/locallang_ttc.xlf:starttime_formlabel,
+                endtime;LLL:EXT:cms/locallang_ttc.xlf:endtime_formlabel,
+                --linebreak--, fe_group;LLL:EXT:cms/locallang_ttc.xlf:fe_group_formlabel',
             'canNotCollapse' => 1
         ],
     ]

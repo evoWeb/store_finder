@@ -33,6 +33,7 @@ $foreignTypes = [
     ]
 ];
 
+$table = 'tx_storefinder_domain_model_attribute';
 $languageFile = 'LLL:EXT:store_finder/Resources/Private/Language/locallang_db.xml:';
 
 return [
@@ -41,15 +42,16 @@ return [
         'label' => 'name',
         'label_alt' => 'icon',
         'label_alt_force' => '1',
+        'sortby' => 'sorting',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
         'cruser_id' => 'cruser_id',
-        'sortby' => 'sorting',
         'delete' => 'deleted',
 
-        'languageField' => 'sys_language_uid',
         'transOrigPointerField' => 'l18n_parent',
         'transOrigDiffSourceField' => 'l18n_diffsource',
+        'languageField' => 'sys_language_uid',
+        'translationSource' => 'l10n_source',
 
         'selicon_field' => 'icon',
         'selicon_field_path' => 'uploads/tx_storefinder',
@@ -57,7 +59,7 @@ return [
         'enablecolumns' => [
             'disabled' => 'hidden',
         ],
-        'iconfile' => '../typo3conf/ext/store_finder/Resources/Public/Icons/tx_storefinder_domain_model_attribute.gif',
+        'iconfile' => 'EXT:store_finder/Resources/Public/Icons/tx_storefinder_domain_model_attribute.gif',
     ],
 
     'interface' => [
@@ -65,50 +67,50 @@ return [
     ],
 
     'columns' => [
-        'sys_language_uid' => [
-            'exclude' => 1,
-            'label' => 'LLL:EXT:lang/locallang_general.xml:LGL.language',
-            'config' => [
-                'type' => 'select',
-                'foreign_table' => 'sys_language',
-                'foreign_table_where' => 'ORDER BY sys_language.title',
-                'items' => [
-                    ['LLL:EXT:lang/locallang_general.xml:LGL.allLanguages', -1],
-                    ['LLL:EXT:lang/locallang_general.xml:LGL.default_value', 0]
-                ]
-            ]
-        ],
+        'sys_language_uid' => $GLOBALS['TCA']['tt_content']['columns']['sys_language_uid'],
+
         'l18n_parent' => [
+            'exclude' => true,
             'displayCond' => 'FIELD:sys_language_uid:>:0',
-            'exclude' => 1,
-            'label' => 'LLL:EXT:lang/locallang_general.xml:LGL.l18n_parent',
+            'label' => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
             'config' => [
                 'type' => 'select',
+                'renderType' => 'selectSingle',
                 'items' => [
-                    ['', 0],
+                    [
+                        '',
+                        0
+                    ]
                 ],
-                'foreign_table' => 'tx_storefinder_domain_model_attribute',
-                'foreign_table_where' => 'AND tx_storefinder_domain_model_attribute.pid=###CURRENT_PID###
-                    AND tx_storefinder_domain_model_attribute.sys_language_uid IN (-1,0)',
+                'foreign_table' => $table,
+                'foreign_table_where' =>
+                    'AND ' . $table . '.pid = ###CURRENT_PID### AND ' . $table . '.sys_language_uid IN (-1, 0)',
+                'default' => 0
             ]
         ],
-        'l18n_diffsource' => [
+        'l10n_source' => [
             'config' => [
                 'type' => 'passthrough'
             ]
         ],
+        'l18n_diffsource' => [
+            'config' => [
+                'type' => 'passthrough',
+                'default' => ''
+            ]
+        ],
+
         'name' => [
-            'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_attribute.name',
             'config' => [
                 'type' => 'input',
-                'size' => '30',
+                'size' => 50,
+                'max' => 255,
                 'eval' => 'required,trim',
             ]
         ],
 
         'icon' => [
-            'exclude' => 0,
             'label' => $languageFile . 'tx_storefinder_domain_model_attribute.icon',
             'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
                 'icon',
@@ -128,10 +130,16 @@ return [
     ],
 
     'types' => [
-        '0' => ['showitem' => 'sys_language_uid;;;;1-1-1, l18n_parent, l18n_diffsource, name, icon']
+        '0' => [
+            'showitem' => 'sys_language_uid, l18n_parent, l18n_diffsource, name, icon'
+        ]
     ],
-
     'palettes' => [
-        '1' => ['showitem' => '']
+        'language' => [
+            'showitem' => '
+            sys_language_uid;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:sys_language_uid_formlabel,
+            l18n_parent
+            ',
+        ],
     ]
 ];

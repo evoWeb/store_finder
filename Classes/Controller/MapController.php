@@ -25,8 +25,7 @@ namespace Evoweb\StoreFinder\Controller;
  ***************************************************************/
 
 use Evoweb\StoreFinder\Domain\Model;
-use Evoweb\StoreFinder\Domain\Repository\CategoryRepository;
-use Evoweb\StoreFinder\Domain\Repository\LocationRepository;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
 /**
@@ -37,44 +36,22 @@ use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
     /**
-     * @var LocationRepository
+     * @var \Evoweb\StoreFinder\Domain\Repository\LocationRepository
+     * @inject
      */
     public $locationRepository;
 
     /**
-     * @var CategoryRepository
+     * @var \Evoweb\StoreFinder\Domain\Repository\CategoryRepository
+     * @inject
      */
     protected $categoryRepository;
 
     /**
      * @var \Evoweb\StoreFinder\Service\GeocodeService
+     * @inject
      */
     protected $geocodeService;
-
-
-    /**
-     * @param LocationRepository $locationRepository
-     */
-    public function injectLocationRepository(LocationRepository $locationRepository)
-    {
-        $this->locationRepository = $locationRepository;
-    }
-
-    /**
-     * @param CategoryRepository $categoryRepository
-     */
-    public function injectCategoryRepository(CategoryRepository $categoryRepository)
-    {
-        $this->categoryRepository = $categoryRepository;
-    }
-
-    /**
-     * @param \Evoweb\StoreFinder\Service\GeocodeService $geocodeService
-     */
-    public function injectGeocodeService(\Evoweb\StoreFinder\Service\GeocodeService $geocodeService)
-    {
-        $this->geocodeService = $geocodeService;
-    }
 
 
     /**
@@ -96,9 +73,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $this->settings['allowedCountries'] = explode(',', $this->settings['allowedCountries']);
         $this->geocodeService->setSettings($this->settings);
         $this->locationRepository->setSettings($this->settings);
-        $this->signalSlotDispatcher = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-            \TYPO3\CMS\Extbase\SignalSlot\Dispatcher::class
-        );
+        $this->signalSlotDispatcher = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\SignalSlot\Dispatcher::class);
     }
 
     /**
@@ -125,7 +100,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             $result = $this->signalSlotDispatcher->dispatch(
                 __CLASS__,
                 'mapActionWithConstraint',
-                [$search, $locations, $this]
+                array($search, $locations, $this)
             );
             /** @var Model\Constraint $search */
             $search = $result[0];
@@ -140,18 +115,18 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             $this->view->assign('locations', $locations);
         } elseif ($this->settings['singleLocationId']) {
             /** @var Model\Constraint $search */
-            $search = $this->objectManager->get(Model\Constraint::class);
+            $search = $this->objectManager->get(\Evoweb\StoreFinder\Domain\Model\Constraint::class);
 
             $location = $this->locationRepository->findByUid((int) $this->settings['singleLocationId']);
             $this->view->assign('numberOfLocations', is_object($location) ? 1 : 0);
-            $this->view->assign('locations', [$location]);
+            $this->view->assign('locations', array($location));
 
             $center = $this->getCenter($search);
-            $center = $this->setZoomLevel($center, [$location]);
+            $center = $this->setZoomLevel($center, array($location));
             $this->view->assign('center', $center);
         } else {
             /** @var Model\Constraint $search */
-            $search = $this->objectManager->get(Model\Constraint::class);
+            $search = $this->objectManager->get(\Evoweb\StoreFinder\Domain\Model\Constraint::class);
 
             if ($this->settings['showBeforeSearch'] & 2 && is_array($this->settings['defaultConstraint'])) {
                 $search = $this->addDefaultConstraint($search);
@@ -164,7 +139,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
                     $this->view->assign('numberOfLocations', $locations->count());
                     $this->view->assign('locations', $locations);
                 } else {
-                    $locations = [];
+                    $locations = array();
                 }
 
                 $center = $this->getCenter($search);
@@ -173,11 +148,11 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             }
 
             if ($this->settings['showBeforeSearch'] & 4) {
-                $this->locationRepository->setDefaultOrderings([
+                $this->locationRepository->setDefaultOrderings(array(
                     'zipcode' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING,
                     'city' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING,
                     'name' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING,
-                ]);
+                ));
                 $locations = $this->locationRepository->findAll();
 
                 $this->view->assign('locations', $locations);
@@ -214,7 +189,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
             $this->view->assign('center', $center);
             $this->view->assign('numberOfLocations', 1);
-            $this->view->assign('locations', [$location]);
+            $this->view->assign('locations', array($location));
         }
     }
 
@@ -308,7 +283,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         if ($constraint !== null) {
             if ($constraint->getLatitude() && $constraint->getLongitude()) {
                 /** @var Model\Location $center */
-                $center = $this->objectManager->get(Model\Location::class);
+                $center = $this->objectManager->get('Evoweb\\StoreFinder\\Domain\\Model\\Location');
                 $center->setLatitude($constraint->getLatitude());
                 $center->setLongitude($constraint->getLongitude());
             } else {
