@@ -87,11 +87,17 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $query = $this->createQuery();
 
         if (!$constraint->isGeocoded()) {
-            return array();
-        }
-
-        $queryParts = array(
-            'SELECT' => '
+            $queryParts = array(
+                'SELECT' => '*',
+                'FROM' => 'tx_storefinder_domain_model_location l',
+                'WHERE' => '1=2',
+                'GROUPBY' => '',
+                'ORDERBY' => '',
+                'LIMIT' => '',
+            );
+        } else {
+            $queryParts = array(
+                'SELECT' => '
                 distinct l.*,
                 (acos(
                     sin(' . $constraint->getLatitude() * M_PI . ' / 180) *
@@ -100,19 +106,19 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                     cos(latitude * ' . M_PI . ' / 180) *
                     cos((' . $constraint->getLongitude() . ' - longitude) * ' . M_PI . ' / 180)
                 ) * 6370) as distance',
-            'FROM' => 'tx_storefinder_domain_model_location l',
-            'WHERE' => 'l.pid IN (' . implode(',', $query->getQuerySettings()->getStoragePageIds()) . ')' .
+                'FROM' => 'tx_storefinder_domain_model_location l',
+                'WHERE' => 'l.pid IN (' . implode(',', $query->getQuerySettings()->getStoragePageIds()) . ')' .
                 $this->getWhereClauseForEnabledFields('tx_storefinder_domain_model_location', 'l'),
-            'GROUPBY' => '',
-            'ORDERBY' => 'distance',
-            'LIMIT' => '',
-        );
+                'GROUPBY' => '',
+                'ORDERBY' => 'distance',
+                'LIMIT' => '',
+            );
 
-        $queryParts = $this->addCountryQueryPart($constraint, $queryParts);
-        $queryParts = $this->addCategoryQueryPart($constraint, $queryParts);
-        $queryParts = $this->addRadiusQueryPart($constraint, $queryParts);
-        $queryParts = $this->addLimitQueryParts($constraint, $queryParts);
-
+            $queryParts = $this->addCountryQueryPart($constraint, $queryParts);
+            $queryParts = $this->addCategoryQueryPart($constraint, $queryParts);
+            $queryParts = $this->addRadiusQueryPart($constraint, $queryParts);
+            $queryParts = $this->addLimitQueryParts($constraint, $queryParts);
+        }
         /** @var \TYPO3\CMS\Core\Database\DatabaseConnection $database */
         $database = $GLOBALS['TYPO3_DB'];
 
