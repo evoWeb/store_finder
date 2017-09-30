@@ -229,6 +229,11 @@ class GeocodeService
         if (TYPO3_MODE == 'FE' && isset($GLOBALS['TSFE']->lang)) {
             $apiUrl .= '&language=' . $GLOBALS['TSFE']->lang;
         }
+        
+        if ($this->settings['activateGoogleMapsPremium'] && !empty($this->settings['apiConsoleKey'])) {
+            $apiUrl .= '&key=' . $this->settings['apiConsoleKey'];
+        }
+        
         $addressData = json_decode(utf8_encode(GeneralUtility::getUrl(str_replace('?&', '?', $apiUrl))));
 
         if (is_object($addressData) && property_exists($addressData, 'status') && $addressData->status === 'OK') {
