@@ -82,7 +82,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      * @param Model\Constraint $search
      *
      * @throws \BadFunctionCallException
-     * @throws \TYPO3\CMS\Extbase\Persistence\Generic\Exception
+     *
      * @return void
      * @validate $search Evoweb.StoreFinder:Constraint
      */
@@ -273,7 +273,6 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      *
      * @param Model\Constraint $constraint
      *
-     * @throws \TYPO3\CMS\Extbase\Persistence\Generic\Exception
      * @return Model\Location
      */
     public function getCenter(Model\Constraint $constraint = null)

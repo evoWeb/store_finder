@@ -26,7 +26,6 @@ namespace Evoweb\StoreFinder\Domain\Repository;
 
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\Query;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 
@@ -87,11 +86,17 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $query = $this->createQuery();
 
         if (!$constraint->isGeocoded()) {
-            return array();
-        }
-
-        $queryParts = array(
-            'SELECT' => '
+            $queryParts = array(
+                'SELECT' => '*',
+                'FROM' => 'tx_storefinder_domain_model_location l',
+                'WHERE' => '1=2',
+                'GROUPBY' => '',
+                'ORDERBY' => '',
+                'LIMIT' => '',
+            );
+        } else {
+            $queryParts = array(
+                'SELECT' => '
                 distinct l.*,
                 (acos(
                     sin(' . $constraint->getLatitude() * M_PI . ' / 180) *
@@ -100,19 +105,19 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                     cos(latitude * ' . M_PI . ' / 180) *
                     cos((' . $constraint->getLongitude() . ' - longitude) * ' . M_PI . ' / 180)
                 ) * 6370) as distance',
-            'FROM' => 'tx_storefinder_domain_model_location l',
-            'WHERE' => 'l.pid IN (' . implode(',', $query->getQuerySettings()->getStoragePageIds()) . ')' .
+                'FROM' => 'tx_storefinder_domain_model_location l',
+                'WHERE' => 'l.pid IN (' . implode(',', $query->getQuerySettings()->getStoragePageIds()) . ')' .
                 $this->getWhereClauseForEnabledFields('tx_storefinder_domain_model_location', 'l'),
-            'GROUPBY' => '',
-            'ORDERBY' => 'distance',
-            'LIMIT' => '',
-        );
+                'GROUPBY' => '',
+                'ORDERBY' => 'distance',
+                'LIMIT' => '',
+            );
 
-        $queryParts = $this->addCountryQueryPart($constraint, $queryParts);
-        $queryParts = $this->addCategoryQueryPart($constraint, $queryParts);
-        $queryParts = $this->addRadiusQueryPart($constraint, $queryParts);
-        $queryParts = $this->addLimitQueryParts($constraint, $queryParts);
-
+            $queryParts = $this->addCountryQueryPart($constraint, $queryParts);
+            $queryParts = $this->addCategoryQueryPart($constraint, $queryParts);
+            $queryParts = $this->addRadiusQueryPart($constraint, $queryParts);
+            $queryParts = $this->addLimitQueryParts($constraint, $queryParts);
+        }
         /** @var \TYPO3\CMS\Core\Database\DatabaseConnection $database */
         $database = $GLOBALS['TYPO3_DB'];
 
@@ -152,8 +157,6 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 $queryParts['WHERE'] .= ' AND sc.cn_iso_3 = '
                     . $database->fullQuoteStr(strtoupper($constraint->getCountry()), 'static_countries');
             }
-
-
         }
 
         return $queryParts;
@@ -333,7 +336,7 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     /**
      * Find one location that is flagged as center
      *
-     * @return \Evoweb\StoreFinder\Domain\Model\Location
+     * @return \Evoweb\StoreFinder\Domain\Model\Location|null
      */
     public function findOneByCenter()
     {
@@ -343,7 +346,9 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $query->setOrderings(array('sorting' => QueryInterface::ORDER_ASCENDING));
         $query->matching($query->equals('center', 1));
 
-        return $query->execute()->getFirst();
+        /** @var \Evoweb\StoreFinder\Domain\Model\Location $location */
+        $location = $query->execute()->getFirst();
+        return $location;
     }
 
     /**
@@ -351,7 +356,7 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      *
      * @param float $latitude
      *
-     * @return string
+     * @return float
      */
     protected function latRad($latitude)
     {

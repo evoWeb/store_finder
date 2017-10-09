@@ -6,7 +6,8 @@
   "license": ["GPL-2.0+"],
 
   "support": {
-    "issues": "https://github.com/evoWeb/store_finder/issues"
+    "issues": "https://github.com/evoWeb/store_finder/issues",
+    "source": "https://git.typo3.org/TYPO3CMS/Extensions/store_finder.git"
   },
   "keywords": [
     "store finder",

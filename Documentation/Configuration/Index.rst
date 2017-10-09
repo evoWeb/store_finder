@@ -40,6 +40,8 @@ plugin.tx_storefinder.settings
   singleLocationId_                                     :ref:`data-type-integer`                          yes        yes        no         -
 
   geocodeUrl_                                           :ref:`data-type-string`                           yes                   no         service url
+  useConsoleKeyForGeocoding_                            :ref:`data-type-boolean`                          yes        no         no         0
+  apiConsoleKey_                                        :ref:`data-type-string`                           yes        no         no         -
   distanceUnit_                                         :ref:`data-type-string`                           yes                   no         miles
   `mapConfiguration.language <mc-language_>`_           :ref:`data-type-string`                           yes                   no         en
   `mapConfiguration.allowSensors <mc-allowSensors_>`_   :ref:`data-type-boolean`                          yes                   no         1
@@ -251,6 +253,51 @@ plugin.tx_storefinder.persistence
 
    Default
          http://maps.googleapis.com/maps/api/geocode/json?sensor=false
+
+
+
+.. _useConsoleKeyForGeocoding:
+.. ### BEGIN~OF~TABLE ###
+
+.. container:: table-row
+
+   Property
+         useConsoleKeyForGeocoding
+
+   Data type
+         boolean
+
+   Description
+         If activate the api console key gets used while geo coding addresses.
+         This is only useful if the key was activated for google premium accounting.
+         To active please visit the following url
+         https://developers.google.com/maps/documentation/javascript/get-api-key
+         Warning: if activated but the key is not an geo code premium service key the
+         response of the service will be empty.
+
+   Default
+         0
+
+
+
+.. _apiConsoleKey:
+.. ### BEGIN~OF~TABLE ###
+
+.. container:: table-row
+
+   Property
+         apiConsoleKey
+
+   Data type
+         string
+
+   Description
+         If you want to use static maps in the map output or premium geo coding you need
+         to register an geo code api key at google.
+         https://developers.google.com/maps/documentation/javascript/get-api-key
+
+   Default
+
 
 
 .. _distanceUnit:
