@@ -26,7 +26,6 @@ namespace Evoweb\StoreFinder\Domain\Repository;
 
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\Query;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 
@@ -158,8 +157,6 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 $queryParts['WHERE'] .= ' AND sc.cn_iso_3 = '
                     . $database->fullQuoteStr(strtoupper($constraint->getCountry()), 'static_countries');
             }
-
-
         }
 
         return $queryParts;
@@ -339,7 +336,7 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     /**
      * Find one location that is flagged as center
      *
-     * @return \Evoweb\StoreFinder\Domain\Model\Location
+     * @return \Evoweb\StoreFinder\Domain\Model\Location|null
      */
     public function findOneByCenter()
     {
@@ -349,7 +346,9 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $query->setOrderings(array('sorting' => QueryInterface::ORDER_ASCENDING));
         $query->matching($query->equals('center', 1));
 
-        return $query->execute()->getFirst();
+        /** @var \Evoweb\StoreFinder\Domain\Model\Location $location */
+        $location = $query->execute()->getFirst();
+        return $location;
     }
 
     /**
@@ -357,7 +356,7 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      *
      * @param float $latitude
      *
-     * @return string
+     * @return float
      */
     protected function latRad($latitude)
     {
