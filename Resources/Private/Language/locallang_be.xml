@@ -8,7 +8,7 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
-			<label index="apiConsoleKey">Api Console Key (Google Maps API for Business only)</label>
+			<label index="apiConsoleKey">Api Console Key (Google Maps API for standard or business users [https://developers.google.com/maps/documentation/javascript/get-api-key])</label>
 			<label index="geocodeUrl">Url used for geocode</label>
 
 			<label index="pi_flexform.showOverviewMap.label">Show overview map in result table</label>
