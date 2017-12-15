@@ -8,7 +8,7 @@
 <body>
 <f:section name="content">
 <script type="text/javascript">
-	var mapConfiguration = {
+	var mapConfiguration = {<sf:minify>
 		active: true,
 		zoom: '{center.zoom}',
 		<f:for each="{settings.mapConfiguration}" as="configuration" key="name">{name}: '{configuration}',</f:for>
