@@ -21,10 +21,15 @@ plugin.tx_storefinder.settings {
 		100 = 100
 	}
 
+	# either uid if country field contains integer relation to static_country record
+	# or isoCodeA3 if the field contains iso3 country codes
+	countryValueType = uid
+
 	# [miles, kilometer]
 	distanceUnit = miles
 
 	showLocationsForDefaultConstraint = 0
+
 	defaultConstraint {
 		limit = 1000
 		# radius in kilometer

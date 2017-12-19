@@ -8,7 +8,7 @@
 <body>
 <f:section name="content">
 <script type="text/javascript">
-	var mapConfiguration = {
+	var mapConfiguration = <f:format.raw>{<sf:minify>
 		active: true,
 		zoom: '{center.zoom}',
 		<f:for each="{settings.mapConfiguration}" as="configuration" key="name">{name}: '{configuration}',</f:for>
@@ -19,9 +19,9 @@
 		},
 		</f:if>
 		afterSearch: {afterSearch}
-	</sf:minify>};
+	</sf:minify>};</f:format.raw>
 
-	var locations = [<f:for each="{locations}" as="location" iteration="loop">
+	var locations = <f:format.raw>[<f:for each="{locations}" as="location" iteration="loop">
 		<sf:minify><f:format.raw>{</f:format.raw>
 			name: '{location.name}',
 			lat: {location.latitude},
@@ -35,7 +35,7 @@
 				city: '{location.city}',
 				person: '{location.person}',
 				zipcode: '{location.zipcode}',
-				products: '{location.products}',
+				products: '<f:for each="{location.products}" as="product">{product.uid}</f:for>',
 				email: '{location.email}',
 				phone: '{location.phone}',
 				mobile: '{location.mobile}',
@@ -45,42 +45,45 @@
 				notes: '{location.notes}',
 				icon: '{location.icon}',
 				state: '{location.state}',
-				country: '{location.country}',
+				country: '{location.country.cnShortEn}',
 				image: '<f:for each="{location.image}" as="image">{f:uri.image(src: image.uid, width: 70, treatIdAsReference: 1)}</f:for>',
-				media: '{location.media}',
+				media: '<f:for each="{location.media}" as="media">{media.uid}</f:for>',
 				lat: {location.latitude},
 				lng: {location.longitude}
 			}
 		}</sf:minify><f:if condition="{loop.isLast}"><f:then/><f:else>,</f:else></f:if></f:for>
-	];
+	];</f:format.raw>
 </script>
 
+<f:format.raw>
+<sf:format.removeEscaping>
 <script id="templateInfoWindow" type="text/html">
 	<div class="infoWindow group" style="width: 320px; height: 180px;" data-uid="{{uid}}">
-		<div class="storename"><strong>{{title}}</strong></div>
+		<div class="storename"><strong>\{\{title\}\}</strong></div>
 		<div class="right">
-			<div class="image">{{#image}}<img src="{{image}}"/>{{/image}}</div>
+			<div class="image">\{\{#image\}\}<img src="\{\{image\}\}"/>\{\{/image\}\}</div>
 			<div class="displayRoute">
-				<a href="https://maps.google.com/?daddr={{lat}},{{lng}}" target="_blank"><f:translate key="route"/></a>
+				<a href="https://maps.google.com/?daddr=\{\{lat\}\},\{\{lng\}\}" target="_blank"><f:translate key="route"/></a>
 			</div>
 		</div>
 		<div class="left">
-			<div class="company">{{company}}</div>
-			<div class="firstName">{{firstname}}</div>
-			<div class="lastName">{{lastname}}</div>
-			<div class="address">{{address}}</div>
-			<div class="city">{{zipcode}} {{city}}</div>
-			<div class="country">{{country}}</div>
-			<div class="phone">{{phone}}</div>
-			<div class="mobile">{{mobile}}</div>
-			<div class="fax">{{fax}}</div>
-			<div class="email">{{email}}</div>
-			<div class="hours">{{hours}}</div>
-			<div class="url">{{url}}</div>
+			<div class="company">\{\{company\}\}</div>
+			<div class="firstName">{{firstname\}\}</div>
+			<div class="lastName">\{\{lastname\}\}</div>
+			<div class="address">\{\{address\}\}</div>
+			<div class="city">\{\{zipcode\}\} \{\{city\}\}</div>
+			<div class="phone">\{\{phone\}\}</div>
+			<div class="mobile">\{\{mobile\}\}</div>
+			<div class="fax">\{\{fax\}\}</div>
+			<div class="email">\{\{email\}\}</div>
+			<div class="hours">\{\{hours\}\}</div>
+			<div class="url">\{\{url\}\}</div>
 		</div>
 		<div class="clearfix"></div>
 	</div>
 </script>
+</sf:format.removeEscaping>
+</f:format.raw>
 
 <h3>{settings.storeTitle} <f:translate key="foundText" arguments="{0: 2}"/></h3>
 
