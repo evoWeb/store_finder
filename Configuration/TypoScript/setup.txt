@@ -2,9 +2,9 @@ plugin.tx_storefinder.settings {
 	geocodeUrl = https://maps.googleapis.com/maps/api/geocode/json?sensor=false
 
 	# needed for google premium accounts
-	# key must be activated in google api console before using
-	# would result in empty response if not done before switching!
-	useConsoleKeyForGeocoding = 0
+	# starting with June 2018 google map only provides premium access.
+	# https://mapsplatform.googleblog.com/2018/05/introducing-google-maps-platform.html
+	useConsoleKeyForGeocoding =
 
 	apiConsoleKey =
 
