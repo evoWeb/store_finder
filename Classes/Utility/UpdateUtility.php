@@ -1,13 +1,20 @@
 <?php
 namespace Evoweb\StoreFinder\Utility;
 
+/**
+ * This file is developed by evoweb.
+ *
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ */
+
+use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-/**
- * Class UpdateUtility
- *
- * @package Evoweb\StoreFinder\Utility
- */
 class UpdateUtility
 {
     /**
@@ -173,12 +180,12 @@ class UpdateUtility
 
 
     /**
-     * Performes the Updates
+     * Performs the Updates
      * Outputs HTML Content
      *
      * @return string
      */
-    public function main()
+    public function main(): string
     {
         $content = '';
 
@@ -204,7 +211,7 @@ class UpdateUtility
      *
      * @return string
      */
-    protected function renderWarning()
+    protected function renderWarning(): string
     {
         $action = GeneralUtility::linkThisScript([
             'M' => GeneralUtility::_GP('M'),
@@ -213,9 +220,9 @@ class UpdateUtility
         ]);
 
         $content = sprintf('</br>Do you want to start the migration?</br>
-			<form action="%1$s" method="POST">
-				<button name="tx_storefinder_update[confirm]" value="1">Start migration</button>
-			</form>', $action);
+            <form action="%1$s" method="POST">
+                <button name="tx_storefinder_update[confirm]" value="1">Start migration</button>
+            </form>', $action);
 
         return $content;
     }
@@ -225,7 +232,7 @@ class UpdateUtility
      *
      * @return bool
      */
-    protected function warningAccepted()
+    protected function warningAccepted(): bool
     {
         $updateVars = GeneralUtility::_GP('tx_storefinder_update');
 
@@ -237,7 +244,7 @@ class UpdateUtility
      *
      * @return string
      */
-    protected function generateOutput()
+    protected function generateOutput(): string
     {
         $output = '<ul class="typo3-messages">';
 
@@ -250,12 +257,9 @@ class UpdateUtility
                 \TYPO3\CMS\Core\Messaging\FlashMessage::INFO
             );
 
-            $severityClass = sprintf('alert %s', $flashMessage->getClass());
-            $messageContent = htmlspecialchars($flashMessage->getMessage());
-            if ($flashMessage->getTitle() !== '') {
-                $messageContent = sprintf('<h4>%s</h4>', htmlspecialchars($flashMessage->getTitle())) . $messageContent;
-            }
-            $output .= sprintf('<li class="%s">%s</li>', htmlspecialchars($severityClass), $messageContent);
+            $output .= GeneralUtility::makeInstance(
+                \TYPO3\CMS\Core\Messaging\FlashMessageRendererResolver::class
+            )->resolve()->render([$flashMessage]);
         }
 
         $output .= '</ul>';
@@ -273,18 +277,29 @@ class UpdateUtility
     {
         $attributes = $this->fetchAttributes();
 
-        while (($row = $this->getDatabaseConnection()->sql_fetch_assoc($attributes))) {
+        while (($row = $attributes->fetch())) {
             $attribute = $this->mapFieldsPreImport($row, 'attributes');
 
             $table = 'tx_storefinder_domain_model_attribute';
+            $queryBuilder = $this->getQueryBuilderForTable($table);
+
             if (($record = $this->isAlreadyImported($attribute, $table))) {
                 unset($attribute['import_id']);
-                $this->getDatabaseConnection()->exec_UPDATEquery($table, 'uid = ' . $record['uid'], $attribute);
+                $queryBuilder
+                    ->getConnection()
+                    ->update(
+                        $table,
+                        $attribute,
+                        ['uid' => (int)$record['uid']]
+                    );
                 $this->records['attributes'][$row['uid']] = $attribute['uid'] = $record['uid'];
             } else {
-                $this->getDatabaseConnection()->exec_INSERTquery($table, $attribute);
+                $queryBuilder
+                    ->insert($table)
+                    ->values($attribute)
+                    ->execute();
                 $this->records['attributes'][$row['uid']] = $attribute['uid'] =
-                    $this->getDatabaseConnection()->sql_insert_id();
+                    $queryBuilder->getConnection()->lastInsertId();
             }
 
             $this->migrateFilesToFal($row, $attribute, $this->fileMapping['attributes']['icon']);
@@ -302,18 +317,29 @@ class UpdateUtility
     {
         $categories = $this->fetchCategories();
 
-        while (($row = $this->getDatabaseConnection()->sql_fetch_assoc($categories))) {
+        while (($row = $categories->fetch())) {
             $category = $this->mapFieldsPreImport($row, 'categories');
 
             $table = 'sys_category';
+            $queryBuilder = $this->getQueryBuilderForTable($table);
+
             if (($record = $this->isAlreadyImported($category, $table))) {
                 unset($category['import_id']);
-                $this->getDatabaseConnection()->exec_UPDATEquery($table, 'uid = ' . $record['uid'], $category);
+                $queryBuilder
+                    ->getConnection()
+                    ->update(
+                        $table,
+                        $category,
+                        ['uid' => (int)$record['uid']]
+                    );
                 $this->records['categories'][$row['uid']] = $category['uid'] = $record['uid'];
             } else {
-                $this->getDatabaseConnection()->exec_INSERTquery($table, $category);
+                $queryBuilder
+                    ->insert($table)
+                    ->values($category)
+                    ->execute();
                 $this->records['categories'][$row['uid']] = $category['uid'] =
-                    $this->getDatabaseConnection()->sql_insert_id();
+                    $queryBuilder->getConnection()->lastInsertId();
             }
         }
 
@@ -329,18 +355,29 @@ class UpdateUtility
     {
         $locations = $this->fetchLocations();
 
-        while (($row = $this->getDatabaseConnection()->sql_fetch_assoc($locations))) {
+        while (($row = $locations->fetch())) {
             $location = $this->mapFieldsPreImport($row, 'locations');
 
             $table = 'tx_storefinder_domain_model_location';
+            $queryBuilder = $this->getQueryBuilderForTable($table);
+
             if (($record = $this->isAlreadyImported($location, $table))) {
                 unset($location['import_id']);
-                $this->getDatabaseConnection()->exec_UPDATEquery($table, 'uid = ' . $record['uid'], $location);
+                $queryBuilder
+                    ->getConnection()
+                    ->update(
+                        $table,
+                        $location,
+                        ['uid' => (int)$record['uid']]
+                    );
                 $this->records['locations'][$row['uid']] = $location['uid'] = $record['uid'];
             } else {
-                $this->getDatabaseConnection()->exec_INSERTquery($table, $location);
+                $queryBuilder
+                    ->insert($table)
+                    ->values($location)
+                    ->execute();
                 $this->records['locations'][$row['uid']] = $location['uid'] =
-                    $this->getDatabaseConnection()->sql_insert_id();
+                    $queryBuilder->getConnection()->lastInsertId();
             }
 
             $this->mapFieldsPostImport($row, $location, 'locations');
@@ -350,7 +387,8 @@ class UpdateUtility
             $this->migrateFilesToFal($row, $location, $this->fileMapping['locations']['icon']);
         }
 
-        $this->getDatabaseConnection()->sql_query('
+        $queryBuilder = $this->getQueryBuilderForTable('tx_storefinder_domain_model_location');
+        $queryBuilder->getConnection()->query('
 			update tx_storefinder_domain_model_location AS l
 				LEFT JOIN (
 					SELECT uid_foreign, COUNT(*) AS count
@@ -360,7 +398,7 @@ class UpdateUtility
 				) AS c ON l.uid = c.uid_foreign
 			set l.categories = COALESCE(c.count, 0);
 		');
-        $this->getDatabaseConnection()->sql_query('
+        $queryBuilder->getConnection()->query('
 			update tx_storefinder_domain_model_location AS l
 				LEFT JOIN (
 					SELECT uid_local, COUNT(*) AS count
@@ -369,7 +407,7 @@ class UpdateUtility
 				) AS a ON l.uid = a.uid_local
 			set l.attributes = COALESCE(a.count, 0);
 		');
-        $this->getDatabaseConnection()->sql_query('
+        $queryBuilder->getConnection()->query('
 			update tx_storefinder_domain_model_location AS l
 				LEFT JOIN (
 					SELECT uid_local, COUNT(*) AS count
@@ -386,49 +424,59 @@ class UpdateUtility
     /**
      * Fetch locator attributes
      *
-     * @return \mysqli_result
+     * @return \Doctrine\DBAL\Driver\Statement
      */
-    protected function fetchAttributes()
+    protected function fetchAttributes(): \Doctrine\DBAL\Driver\Statement
     {
-        return $this->getDatabaseConnection()->exec_SELECTquery(
-            '*',
-            'tx_locator_attributes',
-            'deleted = 0',
-            '',
-            'sys_language_uid'
-        );
+        $queryBuilder = $this->getQueryBuilderForTable('tx_locator_attributes');
+        $queryBuilder
+            ->getRestrictions()
+            ->removeAll()
+            ->add(GeneralUtility::makeInstance(DeletedRestriction::class));
+        return $queryBuilder
+            ->select('*')
+            ->from('tx_locator_attributes')
+            ->orderBy('sys_language_uid')
+            ->execute();
     }
 
     /**
      * Fetch locator categories
      *
-     * @return \mysqli_result
+     * @return \Doctrine\DBAL\Driver\Statement
      */
-    protected function fetchCategories()
+    protected function fetchCategories(): \Doctrine\DBAL\Driver\Statement
     {
-        return $this->getDatabaseConnection()->exec_SELECTquery(
-            '*',
-            'tx_locator_categories',
-            'deleted = 0',
-            '',
-            'sys_language_uid, parentuid'
-        );
+        $queryBuilder = $this->getQueryBuilderForTable('tx_locator_categories');
+        $queryBuilder
+            ->getRestrictions()
+            ->removeAll()
+            ->add(GeneralUtility::makeInstance(DeletedRestriction::class));
+        return $queryBuilder
+            ->select('*')
+            ->from('tx_locator_categories')
+            ->orderBy('sys_language_uid')
+            ->addOrderBy('parentuid')
+            ->execute();
     }
 
     /**
      * Fetch locator locations
      *
-     * @return \mysqli_result
+     * @return \Doctrine\DBAL\Driver\Statement
      */
-    protected function fetchLocations()
+    protected function fetchLocations(): \Doctrine\DBAL\Driver\Statement
     {
-        return $this->getDatabaseConnection()->exec_SELECTquery(
-            '*',
-            'tx_locator_locations',
-            'deleted = 0',
-            '',
-            'uid'
-        );
+        $queryBuilder = $this->getQueryBuilderForTable('tx_locator_locations');
+        $queryBuilder
+            ->getRestrictions()
+            ->removeAll()
+            ->add(GeneralUtility::makeInstance(DeletedRestriction::class));
+        return $queryBuilder
+            ->select('*')
+            ->from('tx_locator_locations')
+            ->orderBy('uid')
+            ->execute();
     }
 
 
@@ -440,7 +488,7 @@ class UpdateUtility
      *
      * @return array
      */
-    protected function mapFieldsPreImport($row, $table)
+    protected function mapFieldsPreImport($row, $table): array
     {
         $result = [];
 
@@ -469,8 +517,6 @@ class UpdateUtility
                             $result[$parts[2]] = floatval($row[$fieldFrom]);
                         }
                         break;
-
-                    default:
                 }
             }
         }
@@ -478,20 +524,23 @@ class UpdateUtility
         return $result;
     }
 
-    protected function mapCountry($value)
+    protected function mapCountry($value): string
     {
         static $countries = null;
 
         if (is_null($countries)) {
-            $countries = $this->getDatabaseConnection()->exec_SELECTgetRows(
-                'cn_iso_2, cn_iso_3',
-                'static_countries',
-                '1',
-                '',
-                '',
-                '',
-                'cn_iso_2'
-            );
+            $queryBuilder = $this->getQueryBuilderForTable('static_countries');
+            $queryBuilder
+                ->getRestrictions()
+                ->removeAll()
+                ->add(GeneralUtility::makeInstance(DeletedRestriction::class));
+            $rows = $queryBuilder
+                ->select('cn_iso_2', 'cn_iso_3')
+                ->from('static_countries')
+                ->execute();
+            while ($row = $rows->fetch()) {
+                $countries[$row['cn_iso_2']] = $row;
+            }
         }
 
         return (string)$countries[$value]['cn_iso_3'];
@@ -531,16 +580,19 @@ class UpdateUtility
                                 }
 
                                 if (!$this->mmRelationExists($mmTable, $uidLocal, $uidForeign, $destinationTable)) {
-                                    $this->getDatabaseConnection()->exec_INSERTquery(
-                                        $mmTable,
-                                        [
-                                            'uid_local' => $uidLocal,
-                                            'uid_foreign' => $uidForeign,
-                                            'tablenames' => $destinationTable,
-                                            'sorting' . ($mmField == 'uid_foreign' ? '_foreign' : '') => $sorting,
-                                            'fieldname' => $destinationField,
-                                        ]
-                                    );
+                                    $queryBuilder = $this->getQueryBuilderForTable($mmTable);
+                                    $queryBuilder
+                                        ->getConnection()
+                                        ->insert(
+                                            $mmTable,
+                                            [
+                                                'uid_local' => $uidLocal,
+                                                'uid_foreign' => $uidForeign,
+                                                'tablenames' => $destinationTable,
+                                                'sorting' . ($mmField == 'uid_foreign' ? '_foreign' : '') => $sorting,
+                                                'fieldname' => $destinationField,
+                                            ]
+                                        );
                                 }
 
                                 $sorting++;
@@ -587,16 +639,19 @@ class UpdateUtility
                                 }
 
                                 if (!$this->mmRelationExists($mmTable, $uidLocal, $uidForeign, $destinationTable)) {
-                                    $this->getDatabaseConnection()->exec_INSERTquery(
-                                        $mmTable,
-                                        [
-                                            'uid_local' => $uidLocal,
-                                            'uid_foreign' => $uidForeign,
-                                            'tablenames' => $destinationTable,
-                                            'sorting' . ($mmField == 'uid_foreign' ? '_foreign' : '') => $sorting,
-                                            'fieldname' => $destinationField,
-                                        ]
-                                    );
+                                    $queryBuilder = $this->getQueryBuilderForTable($mmTable);
+                                    $queryBuilder
+                                        ->getConnection()
+                                        ->insert(
+                                            $mmTable,
+                                            [
+                                                'uid_local' => $uidLocal,
+                                                'uid_foreign' => $uidForeign,
+                                                'tablenames' => $destinationTable,
+                                                'sorting' . ($mmField == 'uid_foreign' ? '_foreign' : '') => $sorting,
+                                                'fieldname' => $destinationField,
+                                            ]
+                                        );
                                 }
 
                                 $sorting++;
@@ -616,18 +671,24 @@ class UpdateUtility
      * @param string $mmTable
      * @param int $uidLocal
      * @param int $uidForeign
-     * @param string $tablenames
+     * @param string $tableNames
      *
      * @return bool
      */
-    protected function mmRelationExists($mmTable, $uidLocal, $uidForeign, $tablenames)
+    protected function mmRelationExists($mmTable, $uidLocal, $uidForeign, $tableNames): bool
     {
-        return (bool) $this->getDatabaseConnection()->exec_SELECTcountRows(
-            '*',
-            $mmTable,
-            'uid_local = ' . $uidLocal . ' AND uid_foreign = ' . $uidForeign .
-            ' AND tablenames = \'' . $tablenames . '\''
-        );
+        $queryBuilder = $this->getQueryBuilderForTable($mmTable);
+        $count = $queryBuilder
+            ->count('*')
+            ->from($mmTable)
+            ->where(
+                $queryBuilder->expr()->eq('uid_local', $uidLocal),
+                $queryBuilder->expr()->eq('uid_foreign', $uidForeign),
+                $queryBuilder->expr()->eq('tablenames', $tableNames)
+            )
+            ->execute()
+            ->fetchColumn(0);
+        return $count > 0;
     }
 
     /**
@@ -636,29 +697,25 @@ class UpdateUtility
      * @param array $record
      * @param string $table
      *
-     * @return bool
+     * @return array
      */
-    protected function isAlreadyImported($record, $table)
+    protected function isAlreadyImported($record, $table): array
     {
-        return $this->getDatabaseConnection()->exec_SELECTgetSingleRow(
-            'uid',
-            $table,
-            'import_id = ' . $record['import_id'] . ' AND deleted = 0'
-        );
-    }
+        $queryBuilder = $this->getQueryBuilderForTable($table);
+        $queryBuilder
+            ->getRestrictions()
+            ->removeAll()
+            ->add(GeneralUtility::makeInstance(DeletedRestriction::class));
+        $row = $queryBuilder
+            ->select('uid')
+            ->from($table)
+            ->where(
+                $queryBuilder->expr()->eq('import_id', $record['import_id'])
+            )
+            ->execute()
+            ->fetch();
 
-    /**
-     * Count locations
-     *
-     * @return int
-     */
-    protected function countStoreFinderLocations()
-    {
-        return $this->getDatabaseConnection()->exec_SELECTcountRows(
-            'uid',
-            'tx_storefinder_domain_model_location',
-            '1' . \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields('tx_storefinder_domain_model_location')
-        );
+        return is_array($row) ? $row : [];
     }
 
 
@@ -739,33 +796,52 @@ class UpdateUtility
                 $fileObject = $this->storage->getFile(self::FILE_MIGRATION_FOLDER . $file);
                 $this->fileIndexRepository->add($fileObject);
 
-                $count = $this->getDatabaseConnection()->exec_SELECTcountRows(
-                    '*',
-                    'sys_file_reference',
-                    'tablenames = ' . $this->getDatabaseConnection()->fullQuoteStr(
-                        $configuration['destinationTable'],
-                        'sys_file_reference'
-                    ) . ' AND fieldname = '
-                    . $this->getDatabaseConnection()->fullQuoteStr(
-                        $configuration['destinationField'],
-                        'sys_file_reference'
+                $queryBuilder = $this->getQueryBuilderForTable('sys_file_reference');
+                $queryBuilder
+                    ->getRestrictions()
+                    ->removeAll();
+                $count = $queryBuilder
+                    ->count('*')
+                    ->from('sys_file_reference')
+                    ->where(
+                        $queryBuilder->expr()->eq(
+                            'tablenames',
+                            $queryBuilder->createNamedParameter($configuration['destinationTable'], \PDO::PARAM_STR)
+                        ),
+                        $queryBuilder->expr()->eq(
+                            'fieldname',
+                            $queryBuilder->createNamedParameter($configuration['destinationField'], \PDO::PARAM_STR)
+                        ),
+                        $queryBuilder->expr()->eq(
+                            'uid_local',
+                            $queryBuilder->createNamedParameter($fileObject->getUid(), \PDO::PARAM_INT)
+                        ),
+                        $queryBuilder->expr()->eq(
+                            'uid_foreign',
+                            $queryBuilder->createNamedParameter($destination['uid'], \PDO::PARAM_INT)
+                        )
                     )
-                    . ' AND uid_local = ' . $fileObject->getUid() . ' AND uid_foreign = ' . $destination['uid']
-                );
+                    ->execute()
+                    ->fetchColumn();
 
                 if (!$count) {
-                    $dataArray = [
-                        'uid_local' => $fileObject->getUid(),
-                        'tablenames' => $configuration['destinationTable'],
-                        'uid_foreign' => $destination['uid'],
-                        // the sys_file_reference record should always placed on the same page
-                        // as the record to link to, see issue #46497
-                        'pid' => $source['pid'],
-                        'fieldname' => $configuration['destinationField'],
-                        'sorting_foreign' => $i,
-                        'table_local' => 'sys_file'
-                    ];
-                    $this->getDatabaseConnection()->exec_INSERTquery('sys_file_reference', $dataArray);
+                    $queryBuilder = $this->getQueryBuilderForTable('sys_file_reference');
+                    $queryBuilder
+                        ->getConnection()
+                        ->insert(
+                            'sys_file_reference',
+                            [
+                                'uid_local' => $fileObject->getUid(),
+                                'tablenames' => $configuration['destinationTable'],
+                                'uid_foreign' => $destination['uid'],
+                                // the sys_file_reference record should always placed on the same page
+                                // as the record to link to, see issue #46497
+                                'pid' => $source['pid'],
+                                'fieldname' => $configuration['destinationField'],
+                                'sorting_foreign' => $i,
+                                'table_local' => 'sys_file'
+                            ]
+                        );
                 }
             }
             $i++;
@@ -774,46 +850,58 @@ class UpdateUtility
 
 
     /**
-     * echeck if the Ipdate is neassessary
+     * Check if the update is necessary
      *
-     * @return bool True if update should be perfomed
+     * @return bool True if update should be performed
      */
-    public function access()
+    public function access(): bool
     {
-        /** @var \TYPO3\CMS\Core\Database\DatabaseConnection $database */
-        $database = $GLOBALS['TYPO3_DB'];
+        $tableNames = $this->getQueryBuilderForTable('pages')->getConnection()->getSchemaManager()->listTableNames();
 
-        $res = $database->sql_query('show tables like \'tx_locator_%\';');
+        $found = false;
+        array_walk($tableNames, function ($value) use (&$found) {
+            if (strpos($value, 'tx_locator_') !== false) {
+                $found = true;
+            }
+        });
 
-        $countLocations = $countAttributes = 0;
-        if ($database->sql_num_rows($res)) {
-            $countLocations = $database->exec_SELECTcountRows(
-                'l.uid',
-                'tx_locator_locations AS l
-                    LEFT JOIN tx_storefinder_domain_model_location AS sl ON l.uid = sl.import_id',
-                'l.deleted = 0 AND sl.uid IS NULL'
-            );
-            $countAttributes = $database->exec_SELECTcountRows(
-                'a.uid',
-                'tx_locator_attributes AS a
-                    LEFT JOIN tx_storefinder_domain_model_attribute AS sa ON a.uid = sa.import_id',
-                'a.deleted = 0 AND sa.uid IS NULL'
-            );
+        $countLocations = 0;
+        $countAttributes = 0;
+        if ($found) {
+            $queryBuilder = $this->getQueryBuilderForTable('tx_locator_locations');
+            $queryBuilder->getRestrictions()->removeAll();
+            $countLocations = $queryBuilder
+                ->count('l.uid')
+                ->from('tx_locator_locations', 'l')
+                ->leftJoin('l', 'tx_storefinder_domain_model_location', 'sl', 'l.uid = sl.import_id')
+                ->where(
+                    $queryBuilder->expr()->eq('l.deleted', 0),
+                    $queryBuilder->expr()->isNull('sl.uid')
+                )
+                ->execute()
+                ->fetchColumn(0);
+
+            $queryBuilder = $this->getQueryBuilderForTable('tx_locator_attributes');
+            $queryBuilder->getRestrictions()->removeAll();
+            $countAttributes = $queryBuilder
+                ->count('a.uid')
+                ->from('tx_locator_attributes', 'a')
+                ->leftJoin('a', 'tx_storefinder_domain_model_attribute', 'sa', 'a.uid = sa.import_id')
+                ->where(
+                    $queryBuilder->expr()->eq('a.deleted', 0),
+                    $queryBuilder->expr()->isNull('sa.uid')
+                )
+                ->execute()
+                ->fetchColumn(0);
         }
 
-        $result = false;
-        if ($countLocations || $countAttributes) {
-            $result = true;
-        }
-
-        return $result;
+        return $countLocations || $countAttributes;
     }
 
-    /**
-     * @return \TYPO3\CMS\Core\Database\DatabaseConnection
-     */
-    protected function getDatabaseConnection()
+    protected function getQueryBuilderForTable(string $table): \TYPO3\CMS\Core\Database\Query\QueryBuilder
     {
-        return $GLOBALS['TYPO3_DB'];
+        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+            \TYPO3\CMS\Core\Database\ConnectionPool::class
+        )->getQueryBuilderForTable($table);
     }
 }

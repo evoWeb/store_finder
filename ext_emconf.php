@@ -10,11 +10,11 @@ $EM_CONF['store_finder'] = [
     'state' => 'stable',
     'uploadfolder' => 1,
     'clearcacheonload' => 0,
-    'version' => '1.4.0',
+    'version' => '2.0.0',
     'constraints' => [
         'depends' => [
-            'typo3' => '7.6.0-8.7.99',
-            'static_info_tables' => '6.4.2-',
+            'typo3' => '8.7.0-9.2.99',
+            'static_info_tables' => '6.5.1-',
         ],
         'conflicts' => [],
         'suggests' => [],
