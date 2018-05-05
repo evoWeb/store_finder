@@ -38,7 +38,11 @@ class UpdateUtility
             'hidden' => 'hidden',
             'deleted' => 'deleted',
             'sys_language_uid' => 'sys_language_uid',
-            'l10n_parent' => 'value:attributes:l18n_parent',
+            'l10n_parent' => [
+                'value',
+                'attributes',
+                'l18n_parent'
+            ],
             'l10n_diffsource' => 'l18n_diffsource',
             // icon get migrated at an extra step
             // 'icon' => 'icon',
@@ -48,7 +52,11 @@ class UpdateUtility
         'categories' => [
             'uid' => 'import_id',
             'pid' => 'pid',
-            'parentuid' => 'value:categories:parent',
+            'parentuid' => [
+                'value',
+                'categories',
+                'parent'
+            ],
             'tstamp' => 'tstamp',
             'crdate' => 'crdate',
             'cruser_id' => 'cruser_id',
@@ -56,7 +64,11 @@ class UpdateUtility
             'hidden' => 'hidden',
             'deleted' => 'deleted',
             'sys_language_uid' => 'sys_language_uid',
-            'l10n_parent' => 'value:categories:l10n_parent',
+            'l10n_parent' => [
+                'value',
+                'categories',
+                'l10n_parent'
+            ],
             'l10n_diffsource' => 'l10n_diffsource',
             // 'fe_group' => '',
             'name' => 'title',
@@ -76,7 +88,15 @@ class UpdateUtility
             'fe_group' => 'fe_group',
             'storename' => 'name',
             'storeid' => 'storeid',
-            'attributes' => 'comma:mm:attributes:tx_storefinder_location_attribute_mm:uid_local:tx_storefinder_domain_model_attribute:attributes',
+            'attributes' => [
+                'comma',
+                'mm',
+                'attributes',
+                'tx_storefinder_location_attribute_mm',
+                'uid_local',
+                'tx_storefinder_domain_model_attribute',
+                'attributes',
+            ],
             'address' => 'address',
             'additionaladdress' => 'additionaladdress',
             'city' => 'city',
@@ -84,8 +104,15 @@ class UpdateUtility
             'state' => 'state',
             'zipcode' => 'zipcode',
             // @todo implement 1:1 references for country
-            'country' => 'map:country',
-            'products' => 'convert:int:products',
+            'country' => [
+                'map',
+                'country'
+            ],
+            'products' => [
+                'convert',
+                'int',
+                'products'
+            ],
             'email' => 'email',
             'phone' => 'phone',
             'mobile' => 'mobile',
@@ -101,11 +128,35 @@ class UpdateUtility
             // 'icon' => 'icon',
             'content' => 'content',
             'use_coordinate' => '',
-            'categoryuid' => 'comma:mm:categories:sys_category_record_mm:uid_foreign:tx_storefinder_domain_model_location:categories',
-            'lat' => 'convert:double:latitude',
-            'lon' => 'convert:double:longitude',
+            'categoryuid' => [
+                'comma',
+                'mm',
+                'categories',
+                'sys_category_record_mm',
+                'uid_foreign',
+                'tx_storefinder_domain_model_location',
+                'categories'
+            ],
+            'lat' => [
+                'convert',
+                'double',
+                'latitude'
+            ],
+            'lon' => [
+                'convert',
+                'double',
+                'longitude'
+            ],
             'geocode' => '',
-            'relatedto' => 'finish_comma:mm:locations:tx_storefinder_location_location_mm:uid_local:tx_storefinder_domain_model_location:related',
+            'relatedto' => [
+                'finish_comma',
+                'mm',
+                'locations',
+                'tx_storefinder_location_location_mm',
+                'uid_local',
+                'tx_storefinder_domain_model_location',
+                'related'
+            ],
         ],
     ];
 
@@ -493,11 +544,10 @@ class UpdateUtility
         $result = [];
 
         foreach ($this->mapping[$table] as $fieldFrom => $fieldTo) {
-            if ($fieldTo && strpos($fieldTo, ':') === false) {
+            if (!is_array($fieldTo)) {
                 $result[$fieldTo] = is_null($row[$fieldFrom]) ? (string) $row[$fieldFrom] : $row[$fieldFrom];
             } elseif ($fieldTo) {
-                $parts = GeneralUtility::trimExplode(':', $fieldTo);
-
+                $parts = $fieldTo;
                 switch ($parts[0]) {
                     case 'value':
                         $result[$parts[2]] = (string) $this->records[$parts[1]][$row[$fieldFrom]];
@@ -558,8 +608,8 @@ class UpdateUtility
     protected function mapFieldsPostImport($source, $destination, $table)
     {
         foreach ($this->mapping[$table] as $fieldFrom => $fieldTo) {
-            if (strpos($fieldTo, ':') !== false) {
-                $parts = GeneralUtility::trimExplode(':', $fieldTo);
+            if (is_array($fieldTo)) {
+                $parts = $fieldTo;
                 switch ($parts[0]) {
                     case 'comma':
                         if ($parts[1] == 'mm') {
@@ -618,8 +668,8 @@ class UpdateUtility
     protected function mapFieldsFinish($source, $destination, $table)
     {
         foreach ($this->mapping[$table] as $fieldFrom => $fieldTo) {
-            if (strpos($fieldTo, ':') !== false) {
-                $parts = GeneralUtility::trimExplode(':', $fieldTo);
+            if (is_array($fieldTo)) {
+                $parts = $fieldTo;
                 switch (str_replace('finish_', '', $parts[0])) {
                     case 'comma':
                         if ($parts[1] == 'mm') {
