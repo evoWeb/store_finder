@@ -1,43 +1,25 @@
 <?php
 namespace Evoweb\StoreFinder\Cache;
 
-/***************************************************************
- * Copyright notice
+/**
+ * This file is developed by evoweb.
  *
- * (c) 2014 Sebastian Fischer <typo3@evoweb.de>
- * All rights reserved
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
  *
- * This script is part of the TYPO3 project. The TYPO3 project is
- * free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * The GNU General Public License can be found at
- * http://www.gnu.org/copyleft/gpl.html.
- *
- * This script is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ */
 
 use Evoweb\StoreFinder\Domain\Model;
 
-/**
- * Class CoordinatesCache
- *
- * @package Evoweb\StoreFinder\Domain\Repository
- */
 class CoordinatesCache
 {
     /**
      * @var \TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication
-     * @inject
      */
-    protected $frontendUser = null;
+    protected $frontendUser;
 
     /**
      * @var \TYPO3\CMS\Core\Cache\Frontend\FrontendInterface
@@ -54,19 +36,8 @@ class CoordinatesCache
         ['city', 'country'],
     ];
 
-
-    /**
-     * Constructor
-     *
-     * @param \TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication $frontendUser
-     * @param \TYPO3\CMS\Core\Cache\Frontend\FrontendInterface $cacheFrontend
-     */
-    public function __construct($frontendUser = null, $cacheFrontend = null)
+    public function __construct(\TYPO3\CMS\Core\Cache\Frontend\FrontendInterface $cacheFrontend = null)
     {
-        if (!is_null($frontendUser)) {
-            $this->frontendUser = $frontendUser;
-        }
-
         if (!is_null($cacheFrontend)) {
             $this->cacheFrontend = $cacheFrontend;
         } else {
@@ -74,9 +45,12 @@ class CoordinatesCache
         }
     }
 
-    /**
-     * @return void
-     */
+    public function injectFrontendUser(
+        \TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication $frontendUser
+    ) {
+        $this->frontendUser = $frontendUser;
+    }
+
     protected function initializeCacheFrontend()
     {
         /** @var \TYPO3\CMS\Core\Cache\CacheManager $cacheManager */
@@ -86,22 +60,18 @@ class CoordinatesCache
         $this->cacheFrontend = $cacheManager->getCache('store_finder_coordinate');
     }
 
-
     /**
      * Add calculated coordinate for hash
      *
      * @param Model\Constraint|Model\Location $address
      * @param array $fields
-     *
-     * @throws \TYPO3\CMS\Core\Exception
-     * @return void
      */
-    public function addCoordinateForAddress($address, $fields)
+    public function addCoordinateForAddress($address, array $fields)
     {
-        $coordinate = array(
+        $coordinate = [
             'latitude' => $address->getLatitude(),
             'longitude' => $address->getLongitude()
-        );
+        ];
 
         $hash = $this->getHashForAddressWithFields($address, $fields);
         if (count($fields) == 2 || count($fields) == 3) {
@@ -114,7 +84,7 @@ class CoordinatesCache
     /**
      * Get coordinate by address
      *
-     * @param Model\Constraint $address
+     * @param Model\Constraint|Model\Location $address
      *
      * @return Model\Constraint|Model\Location
      */
@@ -151,9 +121,9 @@ class CoordinatesCache
      *
      * @return string
      */
-    public function getHashForAddressWithFields($address, &$fields)
+    public function getHashForAddressWithFields($address, &$fields): string
     {
-        $values = array();
+        $values = [];
 
         foreach ($fields as $field) {
             $methodName = 'get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $field)));
@@ -172,8 +142,6 @@ class CoordinatesCache
 
     /**
      * Flush both sql table and session caches
-     *
-     * @return void
      */
     public function flushCache()
     {
@@ -189,7 +157,7 @@ class CoordinatesCache
      *
      * @return bool
      */
-    public function sessionHasKey($key)
+    public function sessionHasKey(string $key)
     {
         $sessionData = null;
 
@@ -207,7 +175,7 @@ class CoordinatesCache
      *
      * @return array
      */
-    public function getValueFromSession($key)
+    public function getValueFromSession(string $key)
     {
         $sessionData = null;
 
@@ -215,7 +183,7 @@ class CoordinatesCache
             $sessionData = $this->frontendUser->getKey('ses', 'tx_storefinder_coordinates');
         }
 
-        return is_array($sessionData) && isset($sessionData[$key]) ? unserialize($sessionData[$key]) : null;
+        return is_array($sessionData) && isset($sessionData[$key]) ? unserialize($sessionData[$key]) : [];
     }
 
     /**
@@ -223,11 +191,8 @@ class CoordinatesCache
      *
      * @param string $key
      * @param array $value
-     *
-     * @throws \TYPO3\CMS\Core\Exception
-     * @return void
      */
-    public function setValueInSession($key, $value)
+    public function setValueInSession(string $key, $value)
     {
         if ($this->frontendUser != null) {
             $sessionData = $this->frontendUser->getKey('ses', 'tx_storefinder_coordinates');
@@ -241,13 +206,10 @@ class CoordinatesCache
 
     /**
      * Flush session cache
-     *
-     * @throws \TYPO3\CMS\Core\Exception
-     * @return void
      */
     public function flushSessionCache()
     {
-        $this->frontendUser->setKey('ses', 'tx_storefinder_coordinates', array());
+        $this->frontendUser->setKey('ses', 'tx_storefinder_coordinates', []);
         $this->frontendUser->storeSessionData();
     }
 
@@ -259,7 +221,7 @@ class CoordinatesCache
      *
      * @return bool
      */
-    public function cacheTableHasKey($key)
+    public function cacheTableHasKey(string $key)
     {
         return $this->cacheFrontend->has($key) && $this->getValueFromCacheTable($key) !== false;
     }
@@ -271,7 +233,7 @@ class CoordinatesCache
      *
      * @return array
      */
-    public function getValueFromCacheTable($key)
+    public function getValueFromCacheTable(string $key)
     {
         return $this->cacheFrontend->get($key);
     }
@@ -281,30 +243,17 @@ class CoordinatesCache
      *
      * @param string $key
      * @param array $value
-     *
-     * @return void
      */
-    public function setValueInCacheTable($key, $value)
+    public function setValueInCacheTable(string $key, $value)
     {
         $this->cacheFrontend->set($key, $value);
     }
 
     /**
      * Flush data from cache table
-     *
-     * @return void
      */
     public function flushCacheTable()
     {
         $this->cacheFrontend->flush();
-    }
-
-
-    /**
-     * @return \TYPO3\CMS\Core\Database\DatabaseConnection
-     */
-    protected function getDatabaseConnection()
-    {
-        return $GLOBALS['TYPO3_DB'];
     }
 }

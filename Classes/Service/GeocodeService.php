@@ -1,37 +1,20 @@
 <?php
 namespace Evoweb\StoreFinder\Service;
 
-/***************************************************************
- * Copyright notice
+/**
+ * This file is developed by evoweb.
  *
- * (c) 2014 Sebastian Fischer <typo3@evoweb.de>
- * All rights reserved
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
  *
- * This script is part of the TYPO3 project. The TYPO3 project is
- * free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * The GNU General Public License can be found at
- * http://www.gnu.org/copyleft/gpl.html.
- *
- * This script is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ */
 
 use Evoweb\StoreFinder\Domain\Model;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-/**
- * Class GeocodeService
- *
- * @package Evoweb\StoreFinder\Service
- */
 class GeocodeService
 {
     /**
@@ -42,11 +25,10 @@ class GeocodeService
     /**
      * @var array
      */
-    protected $settings = array();
+    protected $settings = [];
 
     /**
      * @var \Evoweb\StoreFinder\Cache\CoordinatesCache
-     * @inject
      */
     protected $coordinatesCache;
 
@@ -60,7 +42,7 @@ class GeocodeService
      *
      * @param array $settings
      */
-    public function __construct(array $settings = array())
+    public function __construct(array $settings = [])
     {
         if (count($settings)) {
             $this->setSettings($settings);
@@ -70,37 +52,42 @@ class GeocodeService
         }
     }
 
+    public function injectCoordinatesCache(
+        \Evoweb\StoreFinder\Cache\CoordinatesCache $coordinatesCache
+    ) {
+        $this->coordinatesCache = $coordinatesCache;
+    }
+
     /**
      * Setter
      *
      * @param array &$settings
-     *
-     * @return void
      */
     public function setSettings(array &$settings)
     {
         $this->settings = &$settings;
 
-        $this->settings['geocodeLimit'] = $this->settings['geocodeLimit'] ? (int) $this->settings['geocodeLimit'] :
+        $this->settings['geocodeLimit'] = $this->settings['geocodeLimit'] ?
+            (int) $this->settings['geocodeLimit'] :
             2500;
-        $this->settings['geocodeUrl'] = $this->settings['geocodeUrl'] ? $this->settings['geocodeUrl'] :
+        $this->settings['geocodeUrl'] = $this->settings['geocodeUrl'] ?
+            $this->settings['geocodeUrl'] :
             $this->defaultApiUrl;
     }
 
     /**
-     * Geocode address and retries if first attempt or value in session
-     * is not geocoded
+     * Geocode address and retries if first attempt or value in session is not geocoded
      *
      * @param Model\Constraint|Model\Location $address
      * @param bool $forceGeocoding
      *
      * @return Model\Constraint|Model\Location
      */
-    public function geocodeAddress($address, $forceGeocoding = false)
+    public function geocodeAddress($address, bool $forceGeocoding = false)
     {
         $geocodedAddress = $this->coordinatesCache->getCoordinateByAddress($address);
         if ($forceGeocoding || !$geocodedAddress->isGeocoded()) {
-            $fieldsHit = array();
+            $fieldsHit = [];
             $geocodedAddress = $this->processAddress($address, $fieldsHit);
             if (!$this->hasMultipleResults) {
                 $this->coordinatesCache->addCoordinateForAddress($geocodedAddress, $fieldsHit);
@@ -122,9 +109,7 @@ class GeocodeService
      * @param Model\Location|Model\Constraint $location
      * @param array &$fields
      *
-     * @throws \RuntimeException
-     * @throws \UnexpectedValueException
-     * @return mixed
+     * @return Model\Location|Model\Constraint
      */
     protected function processAddress($location, &$fields)
     {
@@ -157,14 +142,12 @@ class GeocodeService
      * @param Model\Location|Model\Constraint $location
      * @param array $fields
      *
-     * @throws \RuntimeException
-     * @throws \UnexpectedValueException
      * @return array
      */
-    protected function prepareValuesForQuery($location, &$fields)
+    protected function prepareValuesForQuery($location, &$fields): array
     {
         // for urlencoding
-        $queryValues = array();
+        $queryValues = [];
         foreach ($fields as $field) {
             $methodName = 'get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $field)));
             $value = $location->{$methodName}();
@@ -174,16 +157,29 @@ class GeocodeService
                 // to enhance the map api query result
                 case 'country':
                     if (is_numeric($value) || strlen($value) == 3) {
-                        /** @var \TYPO3\CMS\Core\Database\DatabaseConnection $database */
-                        $database = $GLOBALS['TYPO3_DB'];
-                        $country = $database->exec_SELECTgetSingleRow(
-                            'cn_iso_2',
-                            'static_countries',
-                            (is_numeric($value) ? 'uid = ' : 'cn_iso_3 = ') .
-                            $database->fullQuoteStr($value, 'static_countries')
-                        );
-                        if (count($country)) {
-                            $value = reset($country);
+                        $queryBuilder = $this->getQueryBuilderForTable('static_countries');
+
+                        if (is_numeric($value)) {
+                            $constraint = $queryBuilder->expr()->eq(
+                                'uid',
+                                $queryBuilder->createNamedParameter($value, \PDO::PARAM_INT)
+                            );
+                        } else {
+                            $constraint = $queryBuilder->expr()->eq(
+                                'cn_iso_3',
+                                $queryBuilder->createNamedParameter($value, \PDO::PARAM_STR)
+                            );
+                        }
+
+                        $country = $queryBuilder
+                            ->select('cn_iso_2')
+                            ->from('static_countries')
+                            ->where($constraint)
+                            ->execute()
+                            ->fetchColumn(0);
+
+                        if (!empty($country)) {
+                            $value = $country;
                         }
                     } elseif (is_object($value) && method_exists($value, 'getIsoCodeA2')) {
                         /** @var \SJBR\StaticInfoTables\Domain\Model\Country $value */
@@ -211,9 +207,9 @@ class GeocodeService
      *
      * @return \stdClass
      */
-    protected function getCoordinateByApiCall($parameter)
+    protected function getCoordinateByApiCall(array $parameter): \stdClass
     {
-        $components = array();
+        $components = [];
         if (isset($parameter['country'])) {
             $components[] = 'country:' . $parameter['country'];
             unset($parameter['country']);
@@ -244,5 +240,12 @@ class GeocodeService
         }
 
         return $result;
+    }
+
+    protected function getQueryBuilderForTable(string $table): \TYPO3\CMS\Core\Database\Query\QueryBuilder
+    {
+        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+            \TYPO3\CMS\Core\Database\ConnectionPool::class
+        )->getQueryBuilderForTable($table);
     }
 }

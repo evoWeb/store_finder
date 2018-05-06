@@ -1,11 +1,7 @@
-{namespace sf=Evoweb\StoreFinder\ViewHelpers}
-<?xml version="1.0" encoding="UTF-8" ?>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en"
-	  xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers">
-<head>
-	<title>Map</title>
-</head>
-<body>
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+			xmlns:sf="http://typo3.org/ns/Evoweb/StoreFinder/ViewHelpers"
+			data-namespace-typo3-fluid="true">
+
 <f:section name="content">
 <script type="text/javascript">
 	var mapConfiguration = {<sf:minify>
@@ -86,5 +82,5 @@
 
 <div id="tx_storefinder_map" style="height: {mapSize.height}; width: {mapSize.width};"></div>
 </f:section>
-</body>
+
 </html>

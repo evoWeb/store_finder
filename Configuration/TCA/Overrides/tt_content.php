@@ -11,7 +11,7 @@ $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist'][$pluginSignat
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
     'store_finder',
     'Map',
-    'LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xml:tt_content.list_type_map'
+    'LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:tt_content.list_type_map'
 );
 
 $pluginSignature = 'storefinder_show';
@@ -25,5 +25,5 @@ $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist'][$pluginSignat
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
     'store_finder',
     'Show',
-    'LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xml:tt_content.list_type_show'
+    'LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:tt_content.list_type_show'
 );

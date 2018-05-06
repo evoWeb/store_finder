@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2018-05-06T14:18:57Z" product-name="store_finder">
+		<header/>
+		<body>
+			<trans-unit id="title.description" xml:space="preserve">
+				<source>Enter the title of the page or folder.</source>
+			</trans-unit>
+			<trans-unit id="title.syntax" xml:space="preserve">
+				<source>You must enter a page title. The field is required.</source>
+			</trans-unit>
+			<trans-unit id="doktype.description" xml:space="preserve">
+				<source>Select the page type. This affects . . . ses.</source>
+			</trans-unit>
+			<trans-unit id="doktype.details" xml:space="preserve">
+				<source>The 'Standard' type represents a . . . any problems).</source>
+			</trans-unit>
+			<trans-unit id="TSconfig.description" xml:space="preserve">
+				<source>Page TypoScript configuration.</source>
+			</trans-unit>
+			<trans-unit id="TSconfig.details" xml:space="preserve">
+				<source>Basically 'TypoScript' is a . . . alled).</source>
+			</trans-unit>
+			<trans-unit id="TSconfig.syntax" xml:space="preserve">
+				<source>Basic TypoScr. . . 'Conditions' and 'Constants'.</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>
