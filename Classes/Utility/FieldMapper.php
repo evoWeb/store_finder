@@ -351,35 +351,48 @@ class FieldMapper
     {
         foreach ($this->mapping[$table] as $fieldFrom => $fieldTo) {
             if (is_array($fieldTo)) {
-                $parts = $fieldTo;
-                switch ($parts[0]) {
+                switch ($fieldTo[0]) {
                     case 'comma':
-                        if ($parts[1] == 'mm') {
-                            list(, , $sourceModel, $mmTable, $mmField, $destinationTable, $destinationField) = $parts;
+                        if ($fieldTo[1] == 'mm') {
+                            list(, , , $mmTable, $mmField, $destinationTable, $destinationField) = $fieldTo;
                             $sorting = 0;
 
                             foreach (GeneralUtility::trimExplode(',', $source[$fieldFrom]) as $fromValue) {
+                                $valueA = $destination['uid'];
+                                $queryBuilder = $this->getQueryBuilderForTable($destinationTable);
+                                $valueB = $queryBuilder
+                                    ->select('uid')
+                                    ->from($destinationTable)
+                                    ->where(
+                                        $queryBuilder->expr()->eq(
+                                            'import_id',
+                                            $queryBuilder->createNamedParameter($fromValue, \PDO::PARAM_INT)
+                                        )
+                                    )
+                                    ->execute()
+                                    ->fetchColumn(0);
+
                                 if ($mmField == 'uid_local') {
-                                    $uidForeign = $this->records[$sourceModel][$fromValue];
-                                    $uidLocal = $destination['uid'];
+                                    $fieldA = 'uid_local';
+                                    $fieldB = 'uid_foreign';
                                 } else {
-                                    $uidLocal = $this->records[$sourceModel][$fromValue];
-                                    $uidForeign = $destination['uid'];
+                                    $fieldA = 'uid_foreign';
+                                    $fieldB = 'uid_local';
                                 }
 
-                                if (!$uidLocal || !$uidForeign) {
+                                if (!$valueA || !$valueB) {
                                     continue;
                                 }
 
-                                if (!$this->mmRelationExists($mmTable, $uidLocal, $uidForeign, $destinationTable)) {
+                                if (!$this->mmRelationExists($mmTable, $valueA, $valueB, $destinationTable)) {
                                     $queryBuilder = $this->getQueryBuilderForTable($mmTable);
                                     $queryBuilder
                                         ->getConnection()
                                         ->insert(
                                             $mmTable,
                                             [
-                                                'uid_local' => $uidLocal,
-                                                'uid_foreign' => $uidForeign,
+                                                $fieldA => $valueA,
+                                                $fieldB => $valueB,
                                                 'tablenames' => $destinationTable,
                                                 'sorting' . ($mmField == 'uid_foreign' ? '_foreign' : '') => $sorting,
                                                 'fieldname' => $destinationField,
@@ -411,34 +424,47 @@ class FieldMapper
     {
         foreach ($this->mapping[$table] as $fieldFrom => $fieldTo) {
             if (is_array($fieldTo)) {
-                $parts = $fieldTo;
-                switch (str_replace('finish_', '', $parts[0])) {
+                switch (str_replace('finish_', '', $fieldTo[0])) {
                     case 'comma':
-                        if ($parts[1] == 'mm') {
-                            list(, , $sourceModel, $mmTable, $mmField, $destinationTable, $destinationField) = $parts;
+                        if ($fieldTo[1] == 'mm') {
+                            list(, , , $mmTable, $mmField, $destinationTable, $destinationField) = $fieldTo;
                             $sorting = 0;
                             foreach (GeneralUtility::trimExplode(',', $source[$fieldFrom]) as $fromValue) {
+                                $valueA = $destination['uid'];
+                                $queryBuilder = $this->getQueryBuilderForTable($destinationTable);
+                                $valueB = $queryBuilder
+                                    ->select('uid')
+                                    ->from($destinationTable)
+                                    ->where(
+                                        $queryBuilder->expr()->eq(
+                                            'import_id',
+                                            $queryBuilder->createNamedParameter($fromValue, \PDO::PARAM_INT)
+                                        )
+                                    )
+                                    ->execute()
+                                    ->fetchColumn(0);
+
                                 if ($mmField == 'uid_local') {
-                                    $uidForeign = $this->records[$sourceModel][$fromValue];
-                                    $uidLocal = $destination['uid'];
+                                    $fieldA = 'uid_local';
+                                    $fieldB = 'uid_foreign';
                                 } else {
-                                    $uidLocal = $this->records[$sourceModel][$fromValue];
-                                    $uidForeign = $destination['uid'];
+                                    $fieldA = 'uid_foreign';
+                                    $fieldB = 'uid_local';
                                 }
 
-                                if (!$uidLocal || !$uidForeign) {
+                                if (!$valueA || !$valueB) {
                                     continue;
                                 }
 
-                                if (!$this->mmRelationExists($mmTable, $uidLocal, $uidForeign, $destinationTable)) {
+                                if (!$this->mmRelationExists($mmTable, $valueA, $valueB, $destinationTable)) {
                                     $queryBuilder = $this->getQueryBuilderForTable($mmTable);
                                     $queryBuilder
                                         ->getConnection()
                                         ->insert(
                                             $mmTable,
                                             [
-                                                'uid_local' => $uidLocal,
-                                                'uid_foreign' => $uidForeign,
+                                                $fieldA => $valueA,
+                                                $fieldB => $valueB,
                                                 'tablenames' => $destinationTable,
                                                 'sorting' . ($mmField == 'uid_foreign' ? '_foreign' : '') => $sorting,
                                                 'fieldname' => $destinationField,
