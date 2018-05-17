@@ -189,9 +189,9 @@ class Constraint extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->radius;
     }
 
-    public function setZipcode(string $zipcode)
+    public function setZipcode(string $zipCode)
     {
-        $this->zipcode = $zipcode;
+        $this->zipcode = $zipCode;
     }
 
     public function getZipcode(): string

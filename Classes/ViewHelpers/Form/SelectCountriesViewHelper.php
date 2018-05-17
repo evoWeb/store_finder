@@ -38,22 +38,10 @@ class SelectCountriesViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\Select
         $this->countryRepository = $countryRepository;
     }
 
-    /**
-     * Initialize arguments. Cant be moved to parent because of
-     * "private $argumentDefinitions = array();"
-     *
-     * @return void
-     */
     public function initializeArguments()
     {
         parent::initializeArguments();
 
-        $this->overrideArgument(
-            'options',
-            'object',
-            'Associative array with internal IDs as key, and the values are displayed in the select box',
-            false
-        );
         $this->overrideArgument(
             'optionValueField',
             'string',
@@ -68,21 +56,17 @@ class SelectCountriesViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\Select
             false,
             'shortNameLocal'
         );
-        $this->overrideArgument('sortByOptionLabel', 'boolean', 'If true, List will be sorted by label.', false, false);
         $this->registerArgument(
             'allowedCountries',
             'array',
             'Array with countries allowed to be displayed.',
             false,
-            array()
+            []
         );
     }
 
     /**
-     * Override the initialize method to load all available
-     * countries before rendering
-     *
-     * @return void
+     * Override the initialize method to load all available countries before rendering
      */
     public function initialize()
     {
@@ -100,7 +84,7 @@ class SelectCountriesViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\Select
             }
 
             if (!empty($this->arguments['allowedCountries'])) {
-                $orderedResults = array();
+                $orderedResults = [];
                 foreach ($this->arguments['allowedCountries'] as $countryKey) {
                     foreach ($result as $country) {
                         if ($country->getIsoCodeA2() == $countryKey) {
@@ -111,7 +95,7 @@ class SelectCountriesViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\Select
                 $result = $orderedResults;
             }
 
-            $this->arguments['options'] = array();
+            $this->arguments['options'] = [];
             foreach ($result as $country) {
                 $this->arguments['options'][] = $country;
             }

@@ -305,10 +305,9 @@ class LocationMigrationWizard extends \TYPO3\CMS\Install\Updates\AbstractUpdate
     protected function fetchAttributes(int $offset): \Doctrine\DBAL\Driver\Statement
     {
         $queryBuilder = $this->getQueryBuilderForTable('tx_locator_attributes');
-        $queryBuilder
-            ->getRestrictions()
-            ->removeAll()
-            ->add(GeneralUtility::makeInstance(DeletedRestriction::class));
+        /** @var DeletedRestriction $deleteRestriction */
+        $deleteRestriction = GeneralUtility::makeInstance(DeletedRestriction::class);
+        $queryBuilder->getRestrictions()->removeAll()->add($deleteRestriction);
         return $queryBuilder
             ->select('*')
             ->from('tx_locator_attributes')
@@ -321,10 +320,9 @@ class LocationMigrationWizard extends \TYPO3\CMS\Install\Updates\AbstractUpdate
     protected function fetchCategories(int $offset): \Doctrine\DBAL\Driver\Statement
     {
         $queryBuilder = $this->getQueryBuilderForTable('tx_locator_categories');
-        $queryBuilder
-            ->getRestrictions()
-            ->removeAll()
-            ->add(GeneralUtility::makeInstance(DeletedRestriction::class));
+        /** @var DeletedRestriction $deleteRestriction */
+        $deleteRestriction = GeneralUtility::makeInstance(DeletedRestriction::class);
+        $queryBuilder->getRestrictions()->removeAll()->add($deleteRestriction);
         return $queryBuilder
             ->select('*')
             ->from('tx_locator_categories')
@@ -338,10 +336,9 @@ class LocationMigrationWizard extends \TYPO3\CMS\Install\Updates\AbstractUpdate
     protected function fetchLocations(int $offset): \Doctrine\DBAL\Driver\Statement
     {
         $queryBuilder = $this->getQueryBuilderForTable('tx_locator_locations');
-        $queryBuilder
-            ->getRestrictions()
-            ->removeAll()
-            ->add(GeneralUtility::makeInstance(DeletedRestriction::class));
+        /** @var DeletedRestriction $deleteRestriction */
+        $deleteRestriction = GeneralUtility::makeInstance(DeletedRestriction::class);
+        $queryBuilder->getRestrictions()->removeAll()->add($deleteRestriction);
         return $queryBuilder
             ->select('*')
             ->from('tx_locator_locations')
@@ -355,10 +352,9 @@ class LocationMigrationWizard extends \TYPO3\CMS\Install\Updates\AbstractUpdate
     protected function isAlreadyImported(array $record, string $table): array
     {
         $queryBuilder = $this->getQueryBuilderForTable($table);
-        $queryBuilder
-            ->getRestrictions()
-            ->removeAll()
-            ->add(GeneralUtility::makeInstance(DeletedRestriction::class));
+        /** @var DeletedRestriction $deleteRestriction */
+        $deleteRestriction = GeneralUtility::makeInstance(DeletedRestriction::class);
+        $queryBuilder->getRestrictions()->removeAll()->add($deleteRestriction);
         $row = $queryBuilder
             ->select('uid')
             ->from($table)

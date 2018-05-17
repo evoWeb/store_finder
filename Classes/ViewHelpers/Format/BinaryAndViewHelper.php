@@ -23,13 +23,13 @@ class BinaryAndViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewH
     {
         parent::initializeArguments();
 
-        $this->overrideArgument(
+        $this->registerArgument(
             'base',
             'int',
             'Content to be added on top',
             false
         );
-        $this->overrideArgument(
+        $this->registerArgument(
             'content',
             'int',
             'Base to add',

@@ -17,6 +17,7 @@ use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\Query;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
 class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 {
@@ -30,12 +31,12 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     /**
      * A constant in Google's map projection
      *
-     * @var integer
+     * @var int
      */
     const GLOBE_WIDTH = 256;
 
     /**
-     * @var integer
+     * @var int
      */
     const ZOOM_MAX = 21;
 
@@ -49,7 +50,24 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $this->settings = $settings;
     }
 
-    public function findByConstraint(Constraint $constraint): \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+    /**
+     * Finds an object matching the given identifier.
+     *
+     * @param int $uid The identifier of the object to find
+     *
+     * @return QueryResultInterface
+     */
+    public function findOneByUid(int $uid): QueryResultInterface
+    {
+        /** @var Query $query */
+        $query = $this->createQuery();
+
+        $query->matching($query->equals('uid', $uid));
+
+        return $query->execute();
+    }
+
+    public function findByConstraint(Constraint $constraint): QueryResultInterface
     {
         /** @var \TYPO3\CMS\Extbase\Persistence\Generic\Query $query */
         $query = $this->createQuery();
@@ -76,7 +94,7 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                         cos(' . $constraint->getLatitude() * M_PI . ' / 180) *
                         cos(latitude * ' . M_PI . ' / 180) *
                         cos((' . $constraint->getLongitude() . ' - longitude) * ' . M_PI . ' / 180)
-                    ) * 6370) as distance'
+                    ) * 6370) as `distance`'
                 )
                 ->where(
                     $queryBuilder->expr()->in(
@@ -101,7 +119,9 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $parameterType = $queryBuilder->getParameterTypes();
         array_walk($parameters, function ($value, $key) use (&$sql, $parameterType) {
             if ($parameterType[$key] == 2) {
-                $sql = str_replace(':' .  $key, '"' . $value . '"', $sql);
+                $sql = str_replace(':' . $key, '\'' . $value . '\'', $sql);
+            } elseif ($parameterType[$key] == 101) {
+                $sql = str_replace(':' . $key, implode(',', $value), $sql);
             } else {
                 $sql = str_replace(':' .  $key, $value, $sql);
             }
@@ -185,7 +205,7 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         }
 
         $queryBuilder->having(
-            'distance <= ' . $queryBuilder->createNamedParameter($constraint->getRadius(), \PDO::PARAM_STR)
+            '`distance` <= ' . $queryBuilder->createNamedParameter($constraint->getRadius(), \PDO::PARAM_STR)
         );
 
         return $queryBuilder;
@@ -295,7 +315,7 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         /** @var \TYPO3\CMS\Extbase\Persistence\Generic\Query $query */
         $query = $this->createQuery();
 
-        $query->setOrderings(array('sorting' => QueryInterface::ORDER_ASCENDING));
+        $query->setOrderings(['sorting' => QueryInterface::ORDER_ASCENDING]);
         $query->matching($query->equals('center', 1));
 
         /** @var \Evoweb\StoreFinder\Domain\Model\Location $location */
@@ -338,9 +358,9 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      *
      * @param int $limit
      *
-     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+     * @return QueryResultInterface
      */
-    public function findAllWithoutLatLon(int $limit = 500): \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+    public function findAllWithoutLatLon(int $limit = 500): QueryResultInterface
     {
         /** @var Query $query */
         $query = $this->createQuery();
@@ -360,7 +380,7 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $query->execute();
     }
 
-    protected function getQueryBuilderForTable(string $table): \TYPO3\CMS\Core\Database\Query\QueryBuilder
+    protected function getQueryBuilderForTable(string $table): QueryBuilder
     {
         return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             \TYPO3\CMS\Core\Database\ConnectionPool::class

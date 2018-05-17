@@ -213,15 +213,13 @@ class FieldMapper
         $this->initializeFalStorage();
     }
 
-    public function setRecords(&$records)
+    public function setRecords(array &$records)
     {
         $this->records &= $records;
     }
 
     /**
      * Ensures a new folder "fileadmin/content_upload/" is available.
-     *
-     * @return void
      */
     public function checkPrerequisites()
     {
@@ -234,7 +232,6 @@ class FieldMapper
      * Prepare FAL storage for migration
      *
      * @throws \RuntimeException
-     * @return void
      */
     protected function initializeFalStorage()
     {
@@ -322,10 +319,9 @@ class FieldMapper
 
         if (is_null($countries)) {
             $queryBuilder = $this->getQueryBuilderForTable('static_countries');
-            $queryBuilder
-                ->getRestrictions()
-                ->removeAll()
-                ->add(GeneralUtility::makeInstance(DeletedRestriction::class));
+            /** @var DeletedRestriction $deleteRestriction */
+            $deleteRestriction = GeneralUtility::makeInstance(DeletedRestriction::class);
+            $queryBuilder->getRestrictions()->removeAll()->add($deleteRestriction);
             $rows = $queryBuilder
                 ->select('cn_iso_2', 'cn_iso_3')
                 ->from('static_countries')
@@ -344,8 +340,6 @@ class FieldMapper
      * @param array $source
      * @param array $destination
      * @param string $table
-     *
-     * @return void
      */
     public function mapFieldsPostImport($source, $destination, $table)
     {
@@ -417,8 +411,6 @@ class FieldMapper
      * @param array $source
      * @param array $destination
      * @param string $table
-     *
-     * @return void
      */
     protected function mapFieldsFinish($source, $destination, $table)
     {
@@ -516,8 +508,6 @@ class FieldMapper
      * @param array $destination
      * @param string $type
      * @param string $field
-     *
-     * @return void
      */
     public function migrateFilesToFal(array $source, array $destination, string $type, string $field)
     {

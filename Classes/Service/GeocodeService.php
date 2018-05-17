@@ -79,28 +79,28 @@ class GeocodeService
      * Geocode address and retries if first attempt or value in session is not geocoded
      *
      * @param Model\Constraint|Model\Location $address
-     * @param bool $forceGeocoding
+     * @param bool $forceGeoCoding
      *
      * @return Model\Constraint|Model\Location
      */
-    public function geocodeAddress($address, bool $forceGeocoding = false)
+    public function geocodeAddress($address, bool $forceGeoCoding = false)
     {
-        $geocodedAddress = $this->coordinatesCache->getCoordinateByAddress($address);
-        if ($forceGeocoding || !$geocodedAddress->isGeocoded()) {
+        $geoCodedAddress = $this->coordinatesCache->getCoordinateByAddress($address);
+        if ($forceGeoCoding || !$geoCodedAddress->isGeocoded()) {
             $fieldsHit = [];
-            $geocodedAddress = $this->processAddress($address, $fieldsHit);
+            $geoCodedAddress = $this->processAddress($address, $fieldsHit);
             if (!$this->hasMultipleResults) {
-                $this->coordinatesCache->addCoordinateForAddress($geocodedAddress, $fieldsHit);
+                $this->coordinatesCache->addCoordinateForAddress($geoCodedAddress, $fieldsHit);
             }
         }
 
         // In case the address without geocoded location was stored in
         // session or the geocoding did not work a second try is done
-        if (!$forceGeocoding && !$geocodedAddress->isGeocoded()) {
-            $geocodedAddress = $this->geocodeAddress($geocodedAddress, true);
+        if (!$forceGeoCoding && !$geoCodedAddress->isGeocoded()) {
+            $geoCodedAddress = $this->geocodeAddress($geoCodedAddress, true);
         }
 
-        return $geocodedAddress;
+        return $geoCodedAddress;
     }
 
     /**
@@ -113,15 +113,15 @@ class GeocodeService
      */
     protected function processAddress($location, &$fields)
     {
-        // Main Geocoder
-        $fields = array('address', 'zipcode', 'city', 'state', 'country');
+        // Main geo coder
+        $fields = ['address', 'zipcode', 'city', 'state', 'country'];
         $queryValues = $this->prepareValuesForQuery($location, $fields);
         $coordinate = $this->getCoordinateByApiCall($queryValues);
 
-        // If there is no coordinat yet, we assume it's international and attempt
+        // If there is no coordinate yet, we assume it's international and attempt
         // to find it based on just the city and country.
         if (!$coordinate->lat && !$coordinate->lng) {
-            $fields = array('city', 'country');
+            $fields = ['city', 'country'];
             $queryValues = $this->prepareValuesForQuery($location, $fields);
             $coordinate = $this->getCoordinateByApiCall($queryValues);
         }
@@ -146,14 +146,14 @@ class GeocodeService
      */
     protected function prepareValuesForQuery($location, &$fields): array
     {
-        // for urlencoding
+        // for url encoding
         $queryValues = [];
         foreach ($fields as $field) {
             $methodName = 'get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $field)));
             $value = $location->{$methodName}();
 
             switch ($field) {
-                // if a known country code is used we fetch the english shortname
+                // if a known country code is used we fetch the english short name
                 // to enhance the map api query result
                 case 'country':
                     if (is_numeric($value) || strlen($value) == 3) {
@@ -223,8 +223,8 @@ class GeocodeService
             (!empty($this->settings['apiConsoleKey']) ? '&key=' . $this->settings['apiConsoleKey'] : '') .
             '&address=' . implode('+', $parameter) .
             (!empty($components) ? '&components=' . implode('|', $components) : '');
-        if (TYPO3_MODE == 'FE' && isset($GLOBALS['TSFE']->lang)) {
-            $apiUrl .= '&language=' . $GLOBALS['TSFE']->lang;
+        if (TYPO3_MODE == 'FE' && isset($this->getTypoScriptFrontendController()->lang)) {
+            $apiUrl .= '&language=' . $this->getTypoScriptFrontendController()->lang;
         }
 
         if ($this->settings['useConsoleKeyForGeocoding'] && !empty($this->settings['apiConsoleKey'])) {
@@ -241,6 +241,11 @@ class GeocodeService
         }
 
         return $result;
+    }
+
+    protected function getTypoScriptFrontendController(): \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController
+    {
+        return $GLOBALS['TSFE'];
     }
 
     protected function getQueryBuilderForTable(string $table): \TYPO3\CMS\Core\Database\Query\QueryBuilder

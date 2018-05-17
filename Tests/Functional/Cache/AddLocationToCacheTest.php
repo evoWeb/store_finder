@@ -24,6 +24,7 @@ namespace Evoweb\StoreFinder\Tests\Functional\Cache;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Evoweb\StoreFinder\Domain\Model\Constraint;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 /**
@@ -68,7 +69,8 @@ class AddLocationToCacheTest extends \TYPO3\TestingFramework\Core\Functional\Fun
         $classLoader = require ORIGINAL_ROOT . '../vendor/autoload.php';
         $classLoader->addPsr4('Evoweb\\StoreFinder\\', [realpath(__DIR__ . '/../../../Classes/')]);
 
-        $this->coordinatesCache = new \Evoweb\StoreFinder\Cache\CoordinatesCache($frontendUser, $cacheFrontend);
+        $this->coordinatesCache = new \Evoweb\StoreFinder\Cache\CoordinatesCache($cacheFrontend);
+        $this->coordinatesCache->injectFrontendUser($frontendUser);
     }
 
 
@@ -81,24 +83,24 @@ class AddLocationToCacheTest extends \TYPO3\TestingFramework\Core\Functional\Fun
     {
         $this->coordinatesCache->flushCache();
 
-        $data = array(
+        $data = [
             'address' => '',
             'zipcode' => substr(mktime(), -5),
             'city' => uniqid('City'),
             'state' => '',
             'country' => uniqid('Country'),
-        );
+        ];
 
         $constraint = $this->getConstraintStub($data);
-        $coordinate = array(
+        $coordinate = [
             'latitude' => $constraint->getLatitude(),
             'longitude' => $constraint->getLongitude(),
-        );
+        ];
 
-        $fields = array('zipcode', 'city', 'country');
+        $fields = ['zipcode', 'city', 'country'];
         $this->coordinatesCache->addCoordinateForAddress($constraint, $fields);
 
-        $fields = array('zipcode', 'city', 'country');
+        $fields = ['zipcode', 'city', 'country'];
         $hash = $this->coordinatesCache->getHashForAddressWithFields($constraint, $fields);
         $this->assertEquals($coordinate, $this->coordinatesCache->getValueFromCacheTable($hash));
     }
@@ -112,24 +114,24 @@ class AddLocationToCacheTest extends \TYPO3\TestingFramework\Core\Functional\Fun
     {
         $this->coordinatesCache->flushCache();
 
-        $data = array(
+        $data = [
             'address' => '',
             'zipcode' => substr(mktime(), -5),
             'city' => uniqid('City'),
             'state' => '',
             'country' => uniqid('Country'),
-        );
+        ];
 
         $constraint = $this->getConstraintStub($data);
-        $coordinate = array(
+        $coordinate = [
             'latitude' => $constraint->getLatitude(),
             'longitude' => $constraint->getLongitude(),
-        );
+        ];
 
-        $fields = array('address', 'zipcode', 'city', 'state', 'country');
+        $fields = ['address', 'zipcode', 'city', 'state', 'country'];
         $this->coordinatesCache->addCoordinateForAddress($constraint, $fields);
 
-        $fields = array('zipcode', 'city', 'country');
+        $fields = ['zipcode', 'city', 'country'];
         $hash = $this->coordinatesCache->getHashForAddressWithFields($constraint, $fields);
         $this->assertEquals($coordinate, $this->coordinatesCache->getValueFromCacheTable($hash));
     }
@@ -144,24 +146,24 @@ class AddLocationToCacheTest extends \TYPO3\TestingFramework\Core\Functional\Fun
     {
         $this->coordinatesCache->flushCache();
 
-        $data = array(
+        $data = [
             'address' => uniqid('Address'),
             'zipcode' => substr(mktime(), -5),
             'city' => uniqid('City'),
             'state' => '',
             'country' => uniqid('Country'),
-        );
+        ];
 
         $constraint = $this->getConstraintStub($data);
-        $coordinate = array(
+        $coordinate = [
             'latitude' => $constraint->getLatitude(),
             'longitude' => $constraint->getLongitude(),
-        );
+        ];
 
-        $fields = array('address', 'zipcode', 'city', 'state', 'country');
+        $fields = ['address', 'zipcode', 'city', 'state', 'country'];
         $this->coordinatesCache->addCoordinateForAddress($constraint, $fields);
 
-        $fields = array('address', 'zipcode', 'city', 'country');
+        $fields = ['address', 'zipcode', 'city', 'country'];
         $hash = $this->coordinatesCache->getHashForAddressWithFields($constraint, $fields);
         $this->assertEquals($coordinate, $this->coordinatesCache->getValueFromSession($hash));
     }
@@ -175,39 +177,32 @@ class AddLocationToCacheTest extends \TYPO3\TestingFramework\Core\Functional\Fun
     {
         $this->coordinatesCache->flushCache();
 
-        $data = array(
+        $data = [
             'address' => uniqid('Address'),
             'zipcode' => substr(mktime(), -5),
             'city' => uniqid('City'),
             'state' => '',
             'country' => uniqid('Country'),
-        );
+        ];
 
         $constraint = $this->getConstraintStub($data);
-        $coordinate = array(
+        $coordinate = [
             'latitude' => $constraint->getLatitude(),
             'longitude' => $constraint->getLongitude(),
-        );
+        ];
 
-        $fields = array('address', 'zipcode', 'city', 'state', 'country');
+        $fields = ['address', 'zipcode', 'city', 'state', 'country'];
         $this->coordinatesCache->addCoordinateForAddress($constraint, $fields);
 
-        $fields = array('address', 'zipcode', 'city', 'state', 'country');
+        $fields = ['address', 'zipcode', 'city', 'state', 'country'];
         $hash = $this->coordinatesCache->getHashForAddressWithFields($constraint, $fields);
         $this->assertEquals($coordinate, $this->coordinatesCache->getValueFromSession($hash));
     }
 
 
-    /**
-     * Get a constraint stub
-     *
-     * @param array $data
-     *
-     * @return \Evoweb\StoreFinder\Domain\Model\Constraint
-     */
-    public function getConstraintStub($data)
+    public function getConstraintStub(array $data): Constraint
     {
-        $constraint = new \Evoweb\StoreFinder\Domain\Model\Constraint();
+        $constraint = new Constraint();
 
         foreach ($data as $field => $value) {
             $setter = 'set' . ucfirst($field);
@@ -223,10 +218,7 @@ class AddLocationToCacheTest extends \TYPO3\TestingFramework\Core\Functional\Fun
     }
 
 
-    /**
-     * @param \TYPO3\CMS\Core\Cache\Frontend\FrontendInterface $cacheFrontend
-     */
-    protected function createCacheTables($cacheFrontend)
+    protected function createCacheTables(\TYPO3\CMS\Core\Cache\Frontend\FrontendInterface $cacheFrontend)
     {
         /** @var \TYPO3\CMS\Core\Cache\Backend\Typo3DatabaseBackend $cacheBackend */
         $cacheBackend = $cacheFrontend->getBackend();

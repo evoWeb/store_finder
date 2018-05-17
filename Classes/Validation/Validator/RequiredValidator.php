@@ -29,7 +29,7 @@ class RequiredValidator extends Validator\AbstractValidator implements Validator
      *
      * @param string $value The value
      */
-    public function isValid($value)
+    protected function isValid($value)
     {
         if (empty($value)) {
             $this->addError(

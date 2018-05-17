@@ -23,12 +23,12 @@ class MinifyViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelp
     {
         parent::initializeArguments();
 
-        $this->overrideArgument(
+        $this->registerArgument(
             'content',
-            'int',
+            'string',
             'Content to minify',
             false,
-            0
+            ''
         );
     }
 

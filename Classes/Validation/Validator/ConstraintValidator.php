@@ -68,7 +68,7 @@ class ConstraintValidator extends Validator\GenericObjectValidator implements Va
      *
      * @var array
      */
-    protected $currentValidatorOptions = array();
+    protected $currentValidatorOptions = [];
 
     /**
      * Model that gets validated currently
@@ -88,7 +88,8 @@ class ConstraintValidator extends Validator\GenericObjectValidator implements Va
     ) {
         $this->configurationManager = $configurationManager;
         $this->settings = $this->configurationManager->getConfiguration(
-            \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS
+            \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
+            'StoreFinder'
         );
         $this->frameworkConfiguration = $this->configurationManager->getConfiguration(
             \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK
@@ -106,9 +107,9 @@ class ConstraintValidator extends Validator\GenericObjectValidator implements Va
      *
      * @param mixed $object
      *
-     * @return boolean|\TYPO3\CMS\Extbase\Error\Result
+     * @return \TYPO3\CMS\Extbase\Error\Result
      */
-    public function validate($object)
+    public function validate($object): \TYPO3\CMS\Extbase\Error\Result
     {
         $this->result = new \TYPO3\CMS\Extbase\Error\Result();
         if (self::$instancesCurrentlyUnderValidation === null) {
@@ -164,7 +165,7 @@ class ConstraintValidator extends Validator\GenericObjectValidator implements Va
      *
      * @param mixed $value The value to be validated
      * @param array $validatorNames Contains an array with validator names
-     * @param string $propertyName Name of ther property to check
+     * @param string $propertyName Name of the property to check
      */
     protected function checkProperty($value, $validatorNames, $propertyName)
     {
@@ -180,7 +181,7 @@ class ConstraintValidator extends Validator\GenericObjectValidator implements Va
      *
      * @return bool
      */
-    public function canValidate($object)
+    public function canValidate($object): bool
     {
         return ($object instanceof \Evoweb\StoreFinder\Domain\Model\Constraint);
     }
@@ -190,9 +191,9 @@ class ConstraintValidator extends Validator\GenericObjectValidator implements Va
      *
      * @return array
      */
-    protected function getValidationRulesFromSettings()
+    protected function getValidationRulesFromSettings(): array
     {
-        return $this->settings['validation'];
+        return (array)$this->settings['validation'];
     }
 
     /**
@@ -200,25 +201,22 @@ class ConstraintValidator extends Validator\GenericObjectValidator implements Va
      *
      * @param string $rule
      *
-     * @return \TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator
+     * @return Validator\ValidatorInterface
      */
-    protected function getValidator($rule)
+    protected function getValidator(string $rule): Validator\ValidatorInterface
     {
         $currentValidator = $this->parseRule($rule);
         $this->currentValidatorOptions = (array) $currentValidator['validatorOptions'];
 
-        /** @var $validatorObject \TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator */
         $validatorObject = $this->validatorResolver->createValidator(
             $currentValidator['validatorName'],
             $this->currentValidatorOptions
         );
 
         if (method_exists($validatorObject, 'setModel')) {
-            /** @noinspection PhpUndefinedMethodInspection */
             $validatorObject->setModel($this->model);
         }
         if (method_exists($validatorObject, 'setPropertyName')) {
-            /** @noinspection PhpUndefinedMethodInspection */
             $validatorObject->setPropertyName($this->currentPropertyName);
         }
 
@@ -232,7 +230,7 @@ class ConstraintValidator extends Validator\GenericObjectValidator implements Va
      *
      * @return array
      */
-    protected function parseRule($rule)
+    protected function parseRule(string $rule): array
     {
         $parsedRules = $this->validatorResolver->getParsedValidatorAnnotation($rule);
 

@@ -2,6 +2,11 @@ language: php
 
 sudo: false
 
+addons:
+  apt:
+    packages:
+      - libxml2-utils
+
 branches:
   only:
     - master
@@ -22,19 +27,18 @@ before_script:
 install:
   - export TYPO3_PATH_WEB=$PWD/.Build/Web
   - composer require typo3/minimal="$TYPO3_VERSION" $PREFER_LOWEST
-  - composer require --dev phpunit/phpunit="$PHPUNIT_VERSION"
-  - if [ ! -z "$TESTING_FRAMEWORK" ]; then composer require --dev typo3/testing-framework="$TESTING_FRAMEWORK"; fi;
+  - composer require --dev typo3/testing-framework="$TESTING_FRAMEWORK"
   - git checkout composer.json
 
 script:
   - >
     echo;
-    echo "Running functional tests in folder '$FUNCTIONALTEST_FOLDER' with suite '$FUNCTIONALTEST_SUITE'";
+    echo "Running functional tests";
     export typo3DatabaseName="typo3";
     export typo3DatabaseHost="localhost";
     export typo3DatabaseUsername="root";
     export typo3DatabasePassword="";
-    php .Build/bin/phpunit --colors -c $FUNCTIONALTEST_SUITE $FUNCTIONALTEST_FOLDER;
+    php .Build/bin/phpunit --colors -c .Build/vendor/typo3/testing-framework/Resources/Core/Build/FunctionalTests.xml Tests/Functional/;
 
 jobs:
   fast_finish: true
@@ -43,8 +47,6 @@ jobs:
         - TYPO3_VERSION="dev-master as 9.3.0"
           TESTING_FRAMEWORK="^3.2"
           PHPUNIT_VERSION="~5.7.0"
-          UNITTEST_FOLDER="Tests/Unit/"
-          UNITTEST_SUITE=".Build/vendor/typo3/testing-framework/Resources/Core/Build/FunctionalTests.xml"
 
   include:
     - &lint
@@ -62,45 +64,45 @@ jobs:
       php: 7.0
 
     - stage: test
+      php: 7.2
+      env: PHP Lint
+      before_install: skip
+      install: skip
+      before_script: skip
+      script:
+        - echo "Running xmllint (Xliff)";
+          find Resources/Private/Language/ -name '*.xlf' -type f | xargs xmllint --noout --schema https://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd
+
+    - stage: test
       php: 7.0
       env:
         - TYPO3_VERSION="^8.7"
           TESTING_FRAMEWORK="~1.2.2"
           PHPUNIT_VERSION="^6.2"
-          UNITTEST_FOLDER="Tests/Unit/"
-          UNITTEST_SUITE=".Build/vendor/typo3/testing-framework/Resources/Core/Build/FunctionalTests.xml"
     - stage: test
       php: 7.1
       env:
         - TYPO3_VERSION="^8.7"
           TESTING_FRAMEWORK="~1.2.2"
           PHPUNIT_VERSION="^6.2"
-          UNITTEST_FOLDER="Tests/Unit/"
-          UNITTEST_SUITE=".Build/vendor/typo3/testing-framework/Resources/Core/Build/FunctionalTests.xml"
     - stage: test
       php: 7.2
       env:
         - TYPO3_VERSION="^8.7"
           TESTING_FRAMEWORK="~1.2.2"
           PHPUNIT_VERSION="^6.2"
-          UNITTEST_FOLDER="Tests/Unit/"
-          UNITTEST_SUITE=".Build/vendor/typo3/testing-framework/Resources/Core/Build/FunctionalTests.xml"
     - stage: test
       php: 7.2
       env:
         - TYPO3_VERSION="^9.2.0"
           TESTING_FRAMEWORK="^3.2"
-          PHPUNIT_VERSION="^6.2"
-          UNITTEST_FOLDER="Tests/Unit/"
-          UNITTEST_SUITE=".Build/vendor/typo3/testing-framework/Resources/Core/Build/FunctionalTests.xml"
+          PHPUNIT_VERSION="^7.1"
     - stage: test
       php: 7.2
       env:
         - TYPO3_VERSION="dev-master as 9.3.0"
           TESTING_FRAMEWORK="^3.2"
-          PHPUNIT_VERSION="~5.7.0"
-          UNITTEST_FOLDER="Tests/Unit/"
-          UNITTEST_SUITE=".Build/vendor/typo3/testing-framework/Resources/Core/Build/FunctionalTests.xml"
+          PHPUNIT_VERSION="^7.1"
 
     - stage: publish in ter
       if: tag IS present

@@ -121,7 +121,7 @@ class CoordinatesCache
      *
      * @return string
      */
-    public function getHashForAddressWithFields($address, &$fields): string
+    public function getHashForAddressWithFields($address, array &$fields): string
     {
         $values = [];
 
@@ -157,7 +157,7 @@ class CoordinatesCache
      *
      * @return bool
      */
-    public function sessionHasKey(string $key)
+    public function sessionHasKey(string $key): bool
     {
         $sessionData = null;
 
@@ -175,7 +175,7 @@ class CoordinatesCache
      *
      * @return array
      */
-    public function getValueFromSession(string $key)
+    public function getValueFromSession(string $key): array
     {
         $sessionData = null;
 
@@ -221,7 +221,7 @@ class CoordinatesCache
      *
      * @return bool
      */
-    public function cacheTableHasKey(string $key)
+    public function cacheTableHasKey(string $key): bool
     {
         return $this->cacheFrontend->has($key) && $this->getValueFromCacheTable($key) !== false;
     }
@@ -231,7 +231,7 @@ class CoordinatesCache
      *
      * @param string $key
      *
-     * @return array
+     * @return mixed
      */
     public function getValueFromCacheTable(string $key)
     {
@@ -244,7 +244,7 @@ class CoordinatesCache
      * @param string $key
      * @param array $value
      */
-    public function setValueInCacheTable(string $key, $value)
+    public function setValueInCacheTable(string $key, array $value)
     {
         $this->cacheFrontend->set($key, $value);
     }

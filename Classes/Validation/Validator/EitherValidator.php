@@ -79,14 +79,14 @@ class EitherValidator extends Validator\AbstractValidator implements Validator\V
      *
      * @param string $value The value
      */
-    public function isValid($value)
+    protected function isValid($value)
     {
         $result = false;
 
         if (!empty($value)) {
             $result = true;
         } else {
-            $properties = array_diff($this->properties, array($this->propertyName));
+            $properties = array_diff($this->properties, [$this->propertyName]);
             foreach ($properties as $property) {
                 $methodName = 'get' . ucfirst($property);
                 $value = $this->model->{$methodName}();

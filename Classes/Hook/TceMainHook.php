@@ -81,26 +81,14 @@ class TceMainHook
     }
 
 
-    /**
-     * Fetch location for uid
-     *
-     * @param int $uid
-     *
-     * @return Location
-     */
-    protected function fetchLocation(int $uid)
+    protected function fetchLocation(int $uid): Location
     {
         /** @var Location $location */
         $location = $this->getRepository()->findByUid($uid);
         return $location;
     }
 
-    /**
-     * Getter for repository
-     *
-     * @return \Evoweb\StoreFinder\Domain\Repository\LocationRepository
-     */
-    protected function getRepository()
+    protected function getRepository(): \Evoweb\StoreFinder\Domain\Repository\LocationRepository
     {
         if ($this->repository === null) {
             $this->repository = $this->getObjectManager()
@@ -110,12 +98,7 @@ class TceMainHook
         return $this->repository;
     }
 
-    /**
-     * Getter for object manager
-     *
-     * @return \TYPO3\CMS\Extbase\Object\ObjectManager
-     */
-    protected function getObjectManager()
+    protected function getObjectManager(): \TYPO3\CMS\Extbase\Object\ObjectManager
     {
         if ($this->objectManager === null) {
             $this->objectManager = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Object\ObjectManager::class);
@@ -126,13 +109,13 @@ class TceMainHook
 
 
     /**
-     * Sets coordinates by using geocoding service
+     * Sets coordinates by using geo coding service
      *
      * @param Location $location
      *
      * @return Location
      */
-    protected function setCoordinates(Location $location)
+    protected function setCoordinates(Location $location): Location
     {
         /** @var \Evoweb\StoreFinder\Service\GeocodeService $geocodeService */
         $geocodeService = $this->getObjectManager()

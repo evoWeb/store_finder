@@ -47,7 +47,7 @@ class GeocodeLocationsCommandController extends \TYPO3\CMS\Extbase\Mvc\Controlle
         $this->persistenceManager = $persistenceManager;
     }
 
-    public function geocodeCommand()
+    public function geocodeCommand(): bool
     {
         $this->geocodeService->setSettings(
             \Evoweb\StoreFinder\Utility\ExtensionConfigurationUtility::getConfiguration()
