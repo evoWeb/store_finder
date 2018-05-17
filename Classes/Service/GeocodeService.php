@@ -219,9 +219,10 @@ class GeocodeService
             unset($parameter['zipcode']);
         }
 
-
-        $apiUrl = $this->settings['geocodeUrl'] . '&address=' . implode('+', $parameter);
-        $apiUrl .= (!empty($components) ? '&components=' . implode('|', $components) : '');
+        $apiUrl = $this->settings['geocodeUrl'] .
+            (!empty($this->settings['apiConsoleKey']) ? '&key=' . $this->settings['apiConsoleKey'] : '') .
+            '&address=' . implode('+', $parameter) .
+            (!empty($components) ? '&components=' . implode('|', $components) : '');
         if (TYPO3_MODE == 'FE' && isset($GLOBALS['TSFE']->lang)) {
             $apiUrl .= '&language=' . $GLOBALS['TSFE']->lang;
         }

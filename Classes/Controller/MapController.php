@@ -305,7 +305,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         }
 
         if ($radius === false) {
-            $radius = $this->settings['radius'];
+            $radius = $this->settings['defaultConstraint']['radius'];
         }
 
         if ($radius > 500 && $radius <= 1000) {
