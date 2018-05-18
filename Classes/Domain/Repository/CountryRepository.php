@@ -47,4 +47,23 @@ class CountryRepository extends \SJBR\StaticInfoTables\Domain\Repository\Country
 
         return $query->execute();
     }
+
+    public function findByIsoCodeA3($isoCodeA3): \SJBR\StaticInfoTables\Domain\Model\Country
+    {
+        /** @var \TYPO3\CMS\Extbase\Persistence\Generic\Query $query */
+        $query = $this->createQuery();
+
+        $query->matching($query->equals('isoCodeA3', $isoCodeA3));
+
+        /** @var \SJBR\StaticInfoTables\Domain\Model\Country $result */
+        $result = $query->execute()->getFirst();
+        return $result;
+    }
+
+    protected function getQueryBuilderForTable(string $table): \TYPO3\CMS\Core\Database\Query\QueryBuilder
+    {
+        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+            \TYPO3\CMS\Core\Database\ConnectionPool::class
+        )->getQueryBuilderForTable($table);
+    }
 }

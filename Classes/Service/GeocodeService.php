@@ -13,7 +13,6 @@ namespace Evoweb\StoreFinder\Service;
  */
 
 use Evoweb\StoreFinder\Domain\Model;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class GeocodeService
 {
@@ -144,7 +143,7 @@ class GeocodeService
      *
      * @return array
      */
-    protected function prepareValuesForQuery($location, &$fields): array
+    protected function prepareValuesForQuery($location, array &$fields): array
     {
         // for url encoding
         $queryValues = [];
@@ -157,32 +156,21 @@ class GeocodeService
                 // to enhance the map api query result
                 case 'country':
                     if (is_numeric($value) || strlen($value) == 3) {
-                        $queryBuilder = $this->getQueryBuilderForTable('static_countries');
+                        /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
+                        $objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                            \TYPO3\CMS\Extbase\Object\ObjectManager::class
+                        );
+                        /** @var \Evoweb\StoreFinder\Domain\Repository\CountryRepository $repository */
+                        $repository = $objectManager->get(\Evoweb\StoreFinder\Domain\Repository\CountryRepository::class);
 
                         if (is_numeric($value)) {
-                            $constraint = $queryBuilder->expr()->eq(
-                                'uid',
-                                $queryBuilder->createNamedParameter($value, \PDO::PARAM_INT)
-                            );
+                            $value = $repository->findByUid($value);
                         } else {
-                            $constraint = $queryBuilder->expr()->eq(
-                                'cn_iso_3',
-                                $queryBuilder->createNamedParameter($value, \PDO::PARAM_STR)
-                            );
+                            $value = $repository->findByIsoCodeA3($value);
                         }
+                    }
 
-                        $country = $queryBuilder
-                            ->select('cn_iso_2')
-                            ->from('static_countries')
-                            ->where($constraint)
-                            ->execute()
-                            ->fetchColumn(0);
-
-                        if (!empty($country)) {
-                            $value = $country;
-                        }
-                    } elseif (is_object($value) && method_exists($value, 'getIsoCodeA2')) {
-                        /** @var \SJBR\StaticInfoTables\Domain\Model\Country $value */
+                    if ($value instanceof \SJBR\StaticInfoTables\Domain\Model\Country) {
                         $value = $value->getIsoCodeA2();
                     }
                     break;
@@ -200,58 +188,21 @@ class GeocodeService
         return $queryValues;
     }
 
-    /**
-     * Get coordinates by query google maps api
-     *
-     * @param array $parameter
-     *
-     * @return \stdClass
-     */
-    protected function getCoordinateByApiCall(array $parameter): \stdClass
+    protected function getCoordinateByApiCall(array $queryValues): \stdClass
     {
-        $components = [];
-        if (isset($parameter['country'])) {
-            $components[] = 'country:' . $parameter['country'];
-            unset($parameter['country']);
-        }
-        if (isset($parameter['zipcode']) && count($parameter) > 1) {
-            $components[] = 'postal_code:' . $parameter['zipcode'];
-            unset($parameter['zipcode']);
+        if (strpos($this->settings['apiProvider'], '\\') === false) {
+            $providerClass = 'Evoweb\\StoreFinder\\Service\\Provider\\' . ucfirst($this->settings['apiProvider']) . 'Provider';
+        } else {
+            $providerClass = $this->settings['apiProvider'];
         }
 
-        $apiUrl = $this->settings['geocodeUrl'] .
-            (!empty($this->settings['apiConsoleKey']) ? '&key=' . $this->settings['apiConsoleKey'] : '') .
-            '&address=' . implode('+', $parameter) .
-            (!empty($components) ? '&components=' . implode('|', $components) : '');
-        if (TYPO3_MODE == 'FE' && isset($this->getTypoScriptFrontendController()->lang)) {
-            $apiUrl .= '&language=' . $this->getTypoScriptFrontendController()->lang;
-        }
-
-        if ($this->settings['useConsoleKeyForGeocoding'] && !empty($this->settings['apiConsoleKey'])) {
-            $apiUrl .= '&key=' . $this->settings['apiConsoleKey'];
-        }
-
-        $addressData = json_decode(utf8_encode(GeneralUtility::getUrl(str_replace('?&', '?', $apiUrl))));
-
-        if (is_object($addressData) && property_exists($addressData, 'status') && $addressData->status === 'OK') {
-            $this->hasMultipleResults = count($addressData->results) > 1;
-            $result = $addressData->results[0]->geometry->location;
+        $provider = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($providerClass);
+        if ($provider instanceof \Evoweb\StoreFinder\Service\Provider\EncodeProviderInterface) {
+            list($this->hasMultipleResults, $result) = $provider->encodeAddress($queryValues, $this->settings);
         } else {
             $result = new \stdClass();
         }
 
         return $result;
-    }
-
-    protected function getTypoScriptFrontendController(): \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController
-    {
-        return $GLOBALS['TSFE'];
-    }
-
-    protected function getQueryBuilderForTable(string $table): \TYPO3\CMS\Core\Database\Query\QueryBuilder
-    {
-        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-            \TYPO3\CMS\Core\Database\ConnectionPool::class
-        )->getQueryBuilderForTable($table);
     }
 }
