@@ -1,18 +1,21 @@
 /* global window, define, jQuery */
 (function(factory) {
-	"function" == typeof define && define.amd ? define('map', ['jquery', 'window'], factory) : factory(jQuery, window)
+	'function' === typeof define && define.amd ? define('map', ['jquery', 'window'], factory) : factory(jQuery, window)
 })(function($, root) {
 	var module = {};
 
+
 	var map,
 		mapConfiguration = root.mapConfiguration || {
-				active: false,
-				apiV3Layers: '',
-				language: 'en',
-				allowSensors: false
-			},
+			active: false,
+			apiV3Layers: '',
+			language: 'en',
+			allowSensors: false,
+			renderSingleViewCallback: null,
+			handleCloseButtonCallback: null
+		},
 		locations = root.locations || [],
-		infoWindow,
+		infoWindow = null,
 		infoWindowTemplate;
 
 	/**
@@ -52,8 +55,6 @@
 
 	/**
 	 * Initialize info window template
-	 *
-	 * @return void
 	 */
 	module.initializeTemplates = function() {
 		'use strict';
@@ -64,10 +65,10 @@
 		$(document).on('click', '.tx-storefinder .infoWindow .close', function() {
 			var $closeButton = $(this);
 
-			if (typeof mapConfiguration.insertSingleViewInto != 'undefined') {
-				var $singleView = $closeButton.parents(mapConfiguration.insertSingleViewInto);
-				$singleView.hide();
-				$singleView.removeClass('show');
+			if (typeof mapConfiguration.insertSingleViewInto !== 'undefined') {
+				alert('Using configuration.insertSingleViewInto is deprecated please use configuration.handleCloseButtonCallback instead');
+			} else if (typeof configuration.renderSingleViewCallback === 'function') {
+				configuration.handleCloseButtonCallback($closeButton);
 			} else {
 				infoWindow.close();
 			}
@@ -76,8 +77,6 @@
 
 	/**
 	 * Initialize instance of map infoWindow
-	 *
-	 * @return void
 	 */
 	module.initializeInfoWindow = function() {
 		'use strict';
@@ -87,36 +86,20 @@
 
 	/**
 	 * Close previously open info window, renders new content and opens the window
-	 *
-	 * @return void
 	 */
-	module.showInformations = function() {
+	module.showInformation = function() {
 		'use strict';
 
 		var marker = this,
 			location = this.sfLocation;
 
-		location.information.staticMapCenter = encodeURIComponent(location.information.address) + ',+'
-			+ encodeURIComponent(location.information.zipcode) + ',+'
-			+ encodeURIComponent(location.information.city) + ',+'
-			+ encodeURIComponent(location.information.country);
-
-		var html = infoWindowTemplate.render(location.information);
-
-		if (typeof mapConfiguration.insertSingleViewInto != 'undefined') {
-			var $singleView = $(mapConfiguration.insertSingleViewInto);
-			if ($singleView.hasClass('show')) {
-				$singleView.hide();
-				$singleView.removeClass('show');
-			}
-			$singleView.html(html);
-			$singleView.show();
-			$singleView.addClass('show');
-
-			$("body").trigger("initializeTabs");
+		if (typeof mapConfiguration.insertSingleViewInto !== 'undefined') {
+			alert('Using configuration.insertSingleViewInto is deprecated please use configuration.renderSingleViewCallback instead');
+		} else if (typeof mapConfiguration.renderSingleViewCallback === 'function') {
+			mapConfiguration.renderSingleViewCallback(location, infoWindowTemplate);
 		} else {
 			infoWindow.close();
-			infoWindow.setContent(html);
+			infoWindow.setContent(infoWindowTemplate.render(location.information));
 			infoWindow.setPosition(marker.getPosition());
 			infoWindow.open(map, marker);
 		}
@@ -125,8 +108,7 @@
 	/**
 	 * Trigger click event on marker on click in result list
 	 *
-	 * @param index
-	 * @return void
+	 * @param {Integer} index
 	 */
 	module.openInfoWindow = function(index) {
 		'use strict';
@@ -136,8 +118,6 @@
 
 	/**
 	 * Initialize location marker on map
-	 *
-	 * @return void
 	 */
 	module.initializeLocation = function() {
 		'use strict';
@@ -146,7 +126,7 @@
 		if (locations.length) {
 			for (index = 0; index < locations.length; index++) {
 				location = locations[index];
-				location.information.index = index;
+				location['information']['index'] = index;
 
 				var marker = new google.maps.Marker({
 					map: map,
@@ -155,18 +135,16 @@
 				});
 				marker.sfLocation = location;
 
+				google.maps.event.addListener(marker, 'click', module.showInformation);
+
 				// attach marker to location to be able to close it later
 				location.marker = marker;
-
-				google.maps.event.addListener(marker, 'click', module.showInformations);
 			}
 		}
 	};
 
 	/**
 	 * Initialize map
-	 *
-	 * @return void
 	 */
 	module.initializeMap = function() {
 		'use strict';
@@ -193,7 +171,7 @@
 
 		map = new google.maps.Map($('#tx_storefinder_map')[0], mapOptions);
 
-		if (mapConfiguration.afterSearch == 0 && navigator.geolocation) {
+		if (mapConfiguration['afterSearch'] === 0 && navigator.geolocation) {
 			navigator.geolocation.getCurrentPosition(function (position) {
 				var pos = {
 					lat: position.coords.latitude,
@@ -207,8 +185,6 @@
 
 	/**
 	 * Initialize list click events
-	 *
-	 * @return void
 	 */
 	module.initializeListEvents = function() {
 		'use strict';
@@ -220,8 +196,6 @@
 
 	/**
 	 * Initialize map
-	 *
-	 * @return void
 	 */
 	module.postLoadScript = function() {
 		'use strict';
@@ -236,18 +210,11 @@
 
 	/**
 	 * Load google map script
-	 *
-	 * @param {object} configuration
-	 *
-	 * @return void
 	 */
-	module.loadScript = function(configuration) {
+	module.loadScript = function() {
 		'use strict';
 
-		// make module public to be available for callback after load
-		root.StoreFinder = module;
-
-		var parameter = '&key=' + configuration.apiConsoleKey;
+		var parameter = '&key=' + mapConfiguration.apiConsoleKey;
 		parameter += '&callback=StoreFinder.postLoadScript';
 		parameter += '&sensor=' + (mapConfiguration.allowSensors ? 'true' : 'false');
 
@@ -261,8 +228,11 @@
 	$(document).ready(function() {
 		'use strict';
 
+		// make module public to be available for callback after load
+		root.StoreFinder = module;
+
 		if (mapConfiguration.active) {
-			module.loadScript(mapConfiguration);
+			module.loadScript();
 		}
 	});
 

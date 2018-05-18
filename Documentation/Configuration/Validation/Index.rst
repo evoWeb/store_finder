@@ -58,8 +58,8 @@ __________________________
 
 ::
 
- 	plugin.tx_storefinder.settings.validation.zipcode =
- 		Evoweb\StoreFinder\Validation\Validator\RequiredValidator
+	plugin.tx_storefinder.settings.validation.zipcode =
+		Evoweb\StoreFinder\Validation\Validator\RequiredValidator
 
 
 And finaly it's possible to have multiple validators for one field like in the
