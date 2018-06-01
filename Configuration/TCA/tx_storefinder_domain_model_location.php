@@ -639,6 +639,7 @@ return [
                 --div--;' . $languageFile . 'div-contact,
                     person,
                     --palette--;;contact,
+                    url,
                     hours,
                 --div--;' . $languageFile . 'div-relations,
                     categories,
