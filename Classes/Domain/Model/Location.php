@@ -125,7 +125,7 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $zoom = 1;
 
     /**
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Evoweb\StoreFinder\Domain\Model\Attributes>
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Evoweb\StoreFinder\Domain\Model\Attribute>
      * @lazy
      */
     protected $attributes = '';
