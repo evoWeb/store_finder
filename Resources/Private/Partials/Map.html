@@ -42,7 +42,7 @@
 				icon: '{location.icon}',
 				state: '{location.state}',
 				country: '{location.country}',
-				image: '<f:for each="{location.image}" as="image">{f:uri.image(src: image.uid, width: 70, treatIdAsReference: 1)}</f:for>',
+				image: '<f:if condition="{location.image}"><f:for each="{location.image}" as="image">{f:uri.image(src: image.uid, width: 70, treatIdAsReference: 1)}</f:for></f:if>',
 				media: '{location.media}',
 				lat: {location.latitude},
 				lng: {location.longitude}
