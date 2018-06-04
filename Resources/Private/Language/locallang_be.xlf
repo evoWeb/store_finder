@@ -6,6 +6,9 @@
 			<trans-unit id="apiConsoleKey" xml:space="preserve">
 				<source>Api Console Key (Google Maps API for standard or business users [https://developers.google.com/maps/documentation/javascript/get-api-key])</source>
 			</trans-unit>
+			<trans-unit id="apiProvider" xml:space="preserve">
+				<source>Name of API to use (mapQuest, googleMaps or fully qualified classname)</source>
+			</trans-unit>
 			<trans-unit id="geocodeUrl" xml:space="preserve">
 				<source>Url used for geocode</source>
 			</trans-unit>
