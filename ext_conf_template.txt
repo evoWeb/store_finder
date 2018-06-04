@@ -2,7 +2,7 @@
 apiConsoleKey =
 
 # cat=basic/enable/100; type=input; label=LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:apiProvider
-apiProvider =
+apiProvider = googleMaps
 
 # cat=basic/enable/100; type=input; label=LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:geocodeUrl
 geocodeUrl = https://maps.googleapis.com/maps/api/geocode/json?sensor=false
