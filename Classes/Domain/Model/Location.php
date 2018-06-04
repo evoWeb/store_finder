@@ -433,6 +433,9 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 
     public function getState(): \SJBR\StaticInfoTables\Domain\Model\CountryZone
     {
+        if ($this->state instanceof \TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy) {
+            $this->state = $this->state->_loadRealInstance();
+        }
         return $this->state;
     }
 
