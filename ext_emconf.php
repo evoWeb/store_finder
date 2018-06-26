@@ -13,7 +13,7 @@ $EM_CONF['store_finder'] = [
     'version' => '2.0.0',
     'constraints' => [
         'depends' => [
-            'typo3' => '8.7.0-9.2.99',
+            'typo3' => '8.7.0-9.3.99',
             'static_info_tables' => '6.5.1-',
         ],
         'conflicts' => [],
