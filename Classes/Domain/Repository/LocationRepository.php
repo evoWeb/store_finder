@@ -67,7 +67,12 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $query->execute();
     }
 
-    public function findByConstraint(Constraint $constraint): QueryResultInterface
+    /**
+     * @param Constraint $constraint
+     *
+     * @return array|QueryResultInterface
+     */
+    public function findByConstraint(Constraint $constraint)
     {
         /** @var \TYPO3\CMS\Extbase\Persistence\Generic\Query $query */
         $query = $this->createQuery();
