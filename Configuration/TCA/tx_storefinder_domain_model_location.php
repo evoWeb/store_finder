@@ -1,41 +1,50 @@
 <?php
 
-$foreignTypes = [
-    '0' => [
-        'showitem' => '
---palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
---palette--;;filePalette'
+$overrideChildTca = [
+    'types' => [
+        '0' => [
+            'showitem' => '
+                --palette--;;imageoverlayPalette,
+                --palette--;;filePalette'
+        ],
+        \TYPO3\CMS\Core\Resource\File::FILETYPE_TEXT => [
+            'showitem' => '
+                --palette--;;imageoverlayPalette,
+                --palette--;;filePalette'
+        ],
+        \TYPO3\CMS\Core\Resource\File::FILETYPE_IMAGE => [
+            'showitem' => '
+                --palette--;;imageoverlayPalette,
+                --palette--;;filePalette'
+        ],
+        \TYPO3\CMS\Core\Resource\File::FILETYPE_AUDIO => [
+            'showitem' => '
+                --palette--;;audioOverlayPalette,
+                --palette--;;filePalette'
+        ],
+        \TYPO3\CMS\Core\Resource\File::FILETYPE_VIDEO => [
+            'showitem' => '
+                --palette--;;videoOverlayPalette,
+                --palette--;;filePalette'
+        ],
+        \TYPO3\CMS\Core\Resource\File::FILETYPE_APPLICATION => [
+            'showitem' => '
+                --palette--;;imageoverlayPalette,
+                --palette--;;filePalette'
+        ]
     ],
-    \TYPO3\CMS\Core\Resource\File::FILETYPE_TEXT => [
-        'showitem' => '
---palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
---palette--;;filePalette'
-    ],
-    \TYPO3\CMS\Core\Resource\File::FILETYPE_IMAGE => [
-        'showitem' => '
---palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
---palette--;;filePalette'
-    ],
-    \TYPO3\CMS\Core\Resource\File::FILETYPE_AUDIO => [
-        'showitem' => '
---palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
---palette--;;filePalette'
-    ],
-    \TYPO3\CMS\Core\Resource\File::FILETYPE_VIDEO => [
-        'showitem' => '
---palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
---palette--;;filePalette'
-    ],
-    \TYPO3\CMS\Core\Resource\File::FILETYPE_APPLICATION => [
-        'showitem' => '
---palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
---palette--;;filePalette'
-    ]
 ];
 
 $table = 'tx_storefinder_domain_model_location';
 $attributeTable = 'tx_storefinder_domain_model_attribute';
-$languageFile = 'LLL:EXT:store_finder/Resources/Private/Language/locallang_db.xml:';
+$languageFile = 'LLL:EXT:store_finder/Resources/Private/Language/locallang_db.xlf' . ':';
+
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages(
+    'tx_storefinder_domain_model_location'
+);
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToInsertRecords(
+    'tx_storefinder_domain_model_location'
+);
 
 return [
     'ctrl' => [
@@ -69,12 +78,91 @@ return [
     ],
 
     'columns' => [
-        'hidden' => $GLOBALS['TCA']['tt_content']['columns']['hidden'],
-        'starttime' => $GLOBALS['TCA']['tt_content']['columns']['starttime'],
-        'endtime' => $GLOBALS['TCA']['tt_content']['columns']['endtime'],
-        'fe_group' => $GLOBALS['TCA']['tt_content']['columns']['fe_group'],
-        'sys_language_uid' => $GLOBALS['TCA']['tt_content']['columns']['sys_language_uid'],
-
+        'hidden' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.hidden',
+            'config' => [
+                'type' => 'check',
+                'items' => [
+                    '1' => [
+                        '0' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:hidden.I.0'
+                    ]
+                ]
+            ]
+        ],
+        'starttime' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.starttime',
+            'config' => [
+                'type' => 'input',
+                'renderType' => 'inputDateTime',
+                'eval' => 'datetime,int',
+                'default' => 0
+            ],
+            'l10n_mode' => 'exclude',
+            'l10n_display' => 'defaultAsReadonly'
+        ],
+        'endtime' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.endtime',
+            'config' => [
+                'type' => 'input',
+                'renderType' => 'inputDateTime',
+                'eval' => 'datetime,int',
+                'default' => 0,
+                'range' => [
+                    'upper' => mktime(0, 0, 0, 1, 1, 2038)
+                ]
+            ],
+            'l10n_mode' => 'exclude',
+            'l10n_display' => 'defaultAsReadonly'
+        ],
+        'fe_group' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.fe_group',
+            'config' => [
+                'type' => 'select',
+                'renderType' => 'selectMultipleSideBySide',
+                'size' => 5,
+                'maxitems' => 20,
+                'default' => 0,
+                'items' => [
+                    [
+                        'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.hide_at_login',
+                        -1
+                    ],
+                    [
+                        'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.any_login',
+                        -2
+                    ],
+                    [
+                        'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.usergroups',
+                        '--div--'
+                    ]
+                ],
+                'exclusiveKeys' => '-1,-2',
+                'foreign_table' => 'fe_groups',
+                'foreign_table_where' => 'ORDER BY fe_groups.title',
+                'enableMultiSelectFilterTextfield' => true
+            ]
+        ],
+        'sys_language_uid' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.language',
+            'config' => [
+                'type' => 'select',
+                'renderType' => 'selectSingle',
+                'special' => 'languages',
+                'items' => [
+                    [
+                        'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.allLanguages',
+                        -1,
+                        'flags-multiple'
+                    ],
+                ],
+                'default' => 0,
+            ]
+        ],
         'l18n_parent' => [
             'exclude' => true,
             'displayCond' => 'FIELD:sys_language_uid:>:0',
@@ -329,7 +417,7 @@ return [
                     'tablenames' => 'tx_storefinder_domain_model_location',
                     'fieldname' => 'categories',
                 ],
-                'size' => 50,
+                'size' => 10,
                 'maxitems' => 9999,
                 'treeConfig' => [
                     'parentField' => 'parent',
@@ -378,13 +466,14 @@ return [
                 'icon',
                 [
                     'appearance' => [
-                        'createNewRelationLinkTitle' => 'LLL:EXT:cms/locallang_ttc.xlf:images.addFileReference'
+                        'createNewRelationLinkTitle' =>
+                            'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:images.addFileReference'
                     ],
                     'minitems' => 0,
                     'maxitems' => 1,
                     // custom configuration for displaying fields in the overlay/reference table
                     // to use the imageoverlayPalette instead of the basicoverlayPalette
-                    'foreign_types' => $foreignTypes,
+                    'overrideChildTca' => $overrideChildTca,
                 ],
                 $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']
             ),
@@ -487,15 +576,12 @@ return [
                 'image',
                 [
                     'appearance' => [
-                        'headerThumbnail' => [
-                            'width' => '100',
-                            'height' => '100c',
-                        ],
-                        'createNewRelationLinkTitle' => 'LLL:EXT:cms/locallang_ttc.xlf:images.addFileReference'
+                        'createNewRelationLinkTitle' =>
+                            'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:images.addFileReference'
                     ],
                     // custom configuration for displaying fields in the overlay/reference table
                     // to use the imageoverlayPalette instead of the basicoverlayPalette
-                    'foreign_types' => $foreignTypes,
+                    'overrideChildTca' => $overrideChildTca,
                 ],
                 $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']
             ),
@@ -507,15 +593,12 @@ return [
                 'media',
                 [
                     'appearance' => [
-                        'headerThumbnail' => [
-                            'width' => '100',
-                            'height' => '100c',
-                        ],
-                        'createNewRelationLinkTitle' => 'LLL:EXT:cms/locallang_ttc.xlf:images.addFileReference'
+                        'createNewRelationLinkTitle' =>
+                            'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:images.addFileReference'
                     ],
                     // custom configuration for displaying fields in the overlay/reference table
                     // to use the imageoverlayPalette instead of the basicoverlayPalette
-                    'foreign_types' => $foreignTypes,
+                    'overrideChildTca' => $overrideChildTca,
                 ],
                 $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']
             ),
@@ -550,39 +633,79 @@ return [
     'types' => [
         '0' => [
             'showitem' => '
-            --div--;' . $languageFile . 'div-address,
-                name, storeid, address, additionaladdress, zipcode, city, state, country,
-            --div--;' . $languageFile . 'div-contact,
-                person, phone, mobile, fax, email, hours,
-            --div--;' . $languageFile . 'div-relations,
-                related, categories, attributes, icon,
-                --palette--;' . $languageFile . 'palette-coordinates;coordinates,
-            --div--;' . $languageFile . 'div-informations,
-                products, notes,
-                image;' . $languageFile . 'tx_storefinder_domain_model_location.image,
-                media;' . $languageFile . 'tx_storefinder_domain_model_location.media, content,
-            --div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access,
-                --palette--;LLL:EXT:cms/locallang_ttc.xlf:palette.visibility;visibility,
-                --palette--;LLL:EXT:cms/locallang_ttc.xlf:palette.access;access,'
+                --div--;' . $languageFile . 'div-address,
+                    --palette--;;name,
+                    --palette--;;address,
+                --div--;' . $languageFile . 'div-contact,
+                    person,
+                    --palette--;;contact,
+                    url,
+                    hours,
+                --div--;' . $languageFile . 'div-relations,
+                    categories,
+                    attributes,
+                    icon,
+                    related,
+                    --palette--;;coordinates,
+                --div--;' . $languageFile . 'div-informations,
+                    products,
+                    notes,
+                    image,
+                    media,
+                    content,
+                --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,
+                    --palette--;;hidden,
+                    --palette--;;access,
+            '
         ]
     ],
 
     'palettes' => [
-        'coordinates' => [
-            'showitem' => 'latitude, longitude, center, geocode',
-            'canNotCollapse' => 1
-        ],
-        'visibility' => [
+        'name' => [
+            'label' => $languageFile . 'palette-name',
             'showitem' => '
-                hidden;' . $languageFile . 'tx_storefinder_domain_model_location.hidden',
-            'canNotCollapse' => 1
+                name, storeid
+            '
+        ],
+        'address' => [
+            'label' => $languageFile . 'palette-address',
+            'showitem' => '
+                address, additionaladdress,
+                --linebreak--,
+                zipcode, city,
+                --linebreak--,
+                state, country
+            '
+        ],
+        'contact' => [
+            'label' => $languageFile . 'palette-contact',
+            'showitem' => '
+                phone, mobile,
+                --linebreak--,
+                fax, email
+            '
+        ],
+        'coordinates' => [
+            'label' => $languageFile . 'palette-coordinates',
+            'showitem' => '
+                latitude, longitude,
+                --linebreak--,
+                geocode, center
+            '
+        ],
+        'hidden' => [
+            'showitem' => '
+                hidden;' . $languageFile . 'tx_storefinder_domain_model_location.hidden
+            ',
         ],
         'access' => [
+            'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:palette.access',
             'showitem' => '
-                starttime;LLL:EXT:cms/locallang_ttc.xlf:starttime_formlabel,
-                endtime;LLL:EXT:cms/locallang_ttc.xlf:endtime_formlabel,
-                --linebreak--, fe_group;LLL:EXT:cms/locallang_ttc.xlf:fe_group_formlabel',
-            'canNotCollapse' => 1
+                starttime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:starttime_formlabel,
+                endtime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:endtime_formlabel,
+                --linebreak--,
+                fe_group;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:fe_group_formlabel,
+            '
         ],
     ]
 ];

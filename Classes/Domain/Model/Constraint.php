@@ -1,34 +1,17 @@
 <?php
 namespace Evoweb\StoreFinder\Domain\Model;
 
-/***************************************************************
- * Copyright notice
- *
- * (c) 2013 Sebastian Fischer <typo3@evoweb.de>
- * All rights reserved
- *
- * This script is part of the TYPO3 project. The TYPO3 project is
- * free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * The GNU General Public License can be found at
- * http://www.gnu.org/copyleft/gpl.html.
- *
- * This script is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
-
 /**
- * Class Constraint
+ * This file is developed by evoweb.
  *
- * @package Evoweb\StoreFinder\Domain\Model
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
  */
+
 class Constraint extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
     /**
@@ -79,7 +62,7 @@ class Constraint extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * @var array
      */
-    protected $category = array();
+    protected $category = [];
 
     /**
      * @var int
@@ -106,343 +89,158 @@ class Constraint extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $page = 0;
 
-    /**
-     * Setter
-     *
-     * @param string $address
-     *
-     * @return void
-     */
-    public function setAddress($address)
+    public function setAddress(string $address)
     {
         $this->address = $address;
     }
 
-    /**
-     * Getter
-     *
-     * @return string
-     */
-    public function getAddress()
+    public function getAddress(): string
     {
         return $this->address;
     }
 
-    /**
-     * Setter
-     *
-     * @param array $category
-     *
-     * @return void
-     */
-    public function setCategory($category)
+    public function setCategory(array $category)
     {
         $this->category = (array) $category;
     }
 
-    /**
-     * Getter
-     *
-     * @return array
-     */
-    public function getCategory()
+    public function getCategory(): array
     {
         return $this->category;
     }
 
-    /**
-     * Setter
-     *
-     * @param string $city
-     *
-     * @return void
-     */
-    public function setCity($city)
+    public function setCity(string $city)
     {
         $this->city = $city;
     }
 
-    /**
-     * Getter
-     *
-     * @return string
-     */
-    public function getCity()
+    public function getCity(): string
     {
         return $this->city;
     }
 
-    /**
-     * Setter
-     *
-     * @param string $state
-     *
-     * @return void
-     */
-    public function setState($state)
+    public function setState(string $state)
     {
         $this->state = $state;
     }
 
-    /**
-     * Getter
-     *
-     * @return string
-     */
-    public function getState()
+    public function getState(): string
     {
         return $this->state;
     }
 
-    /**
-     * Setter
-     *
-     * @param string $country
-     *
-     * @return void
-     */
-    public function setCountry($country)
+    public function setCountry(string $country)
     {
         $this->country = $country;
     }
 
-    /**
-     * Getter
-     *
-     * @return string
-     */
-    public function getCountry()
+    public function getCountry(): string
     {
         return $this->country;
     }
 
-    /**
-     * Setter
-     *
-     * @param string $latitude
-     *
-     * @return void
-     */
-    public function setLatitude($latitude)
+    public function setLatitude(string $latitude)
     {
         $this->latitude = $latitude;
     }
 
-    /**
-     * Getter
-     *
-     * @return string
-     */
-    public function getLatitude()
+    public function getLatitude(): string
     {
         return $this->latitude ?: '';
     }
 
-    /**
-     * Setter
-     *
-     * @param string $longitude
-     *
-     * @return void
-     */
-    public function setLongitude($longitude)
+    public function setLongitude(string $longitude)
     {
         $this->longitude = $longitude;
     }
 
-    /**
-     * Getter
-     *
-     * @return string
-     */
-    public function getLongitude()
+    public function getLongitude(): string
     {
         return $this->longitude ?: '';
     }
 
-    /**
-     * Setter
-     *
-     * @param string $name
-     *
-     * @return void
-     */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
     }
 
-    /**
-     * Getter
-     *
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * Setter
-     *
-     * @param string $products
-     *
-     * @return void
-     */
-    public function setProducts($products)
+    public function setProducts(string $products)
     {
         $this->products = $products;
     }
 
-    /**
-     * Getter
-     *
-     * @return string
-     */
-    public function getProducts()
+    public function getProducts(): string
     {
         return $this->products;
     }
 
-    /**
-     * Setter
-     *
-     * @param int $radius
-     *
-     * @return void
-     */
-    public function setRadius($radius)
+    public function setRadius(int $radius)
     {
-        $this->radius = (int) $radius;
+        $this->radius = $radius;
     }
 
-    /**
-     * Getter
-     *
-     * @return int
-     */
-    public function getRadius()
+    public function getRadius(): int
     {
-        return (int) $this->radius;
+        return $this->radius;
     }
 
-    /**
-     * Setter
-     *
-     * @param string $zipcode
-     *
-     * @return void
-     */
-    public function setZipcode($zipcode)
+    public function setZipcode(string $zipCode)
     {
-        $this->zipcode = $zipcode;
+        $this->zipcode = $zipCode;
     }
 
-    /**
-     * Getter
-     *
-     * @return string
-     */
-    public function getZipcode()
+    public function getZipcode(): string
     {
         return $this->zipcode;
     }
 
-    /**
-     * Setter
-     *
-     * @param integer $zoom
-     *
-     * @return void
-     */
-    public function setZoom($zoom)
+    public function setZoom(int $zoom)
     {
         $this->zoom = $zoom;
     }
 
-    /**
-     * Getter
-     *
-     * @return integer
-     */
-    public function getZoom()
+    public function getZoom(): int
     {
-        return (int) $this->zoom;
+        return $this->zoom;
     }
 
-    /**
-     * Setter
-     *
-     * @param int $geocode
-     *
-     * @return void
-     */
-    public function setGeocode($geocode)
+    public function setGeocode(int $geocode)
     {
         $this->geocode = $geocode;
     }
 
-    /**
-     * Getter
-     *
-     * @return int
-     */
-    public function getGeocode()
+    public function getGeocode(): int
     {
         return $this->geocode;
     }
 
-    /**
-     * Setter
-     *
-     * @param int $limit
-     *
-     * @return void
-     */
-    public function setLimit($limit)
+    public function setLimit(int $limit)
     {
-        $this->limit = (int) $limit;
+        $this->limit = $limit;
     }
 
-    /**
-     * Getter
-     *
-     * @return int
-     */
-    public function getLimit()
+    public function getLimit(): int
     {
-        return (int) $this->limit;
+        return $this->limit;
     }
 
-    /**
-     * Setter
-     *
-     * @param int $page
-     *
-     * @return void
-     */
-    public function setPage($page)
+    public function setPage(int $page)
     {
-        $this->page = (int) $page;
+        $this->page = $page;
     }
 
-    /**
-     * Getter
-     *
-     * @return int
-     */
-    public function getPage()
+    public function getPage(): int
     {
-        return (int) $this->page;
+        return $this->page;
     }
 
 
-    /**
-     * Check if latitude and longitude are set
-     *
-     * @return bool
-     */
-    public function isGeocoded()
+    public function isGeocoded(): bool
     {
         return $this->getLatitude() && $this->getLongitude() && !$this->getGeocode();
     }

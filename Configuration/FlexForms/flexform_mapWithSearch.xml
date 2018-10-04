@@ -8,28 +8,28 @@
 		<sheetDisplayOptions>
 			<ROOT>
 				<TCEforms>
-					<sheetTitle>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xml:pi_flexform.sheetDisplayOptions</sheetTitle>
-					<cshFile>LLL:EXT:store_finder/Resources/Private/Language/locallang_csh.xml</cshFile>
+					<sheetTitle>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.sheetDisplayOptions</sheetTitle>
+					<cshFile>LLL:EXT:store_finder/Resources/Private/Language/locallang_csh.xlf</cshFile>
 				</TCEforms>
 				<type>array</type>
 				<el>
 					<settings.showBeforeSearch>
 						<TCEforms>
-							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xml:pi_flexform.showBeforeSearch</label>
+							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.showBeforeSearch</label>
 							<config>
 								<type>check</type>
 								<default>1</default>
 								<items type="array">
 									<numIndex index="0" type="array">
-										<numIndex index="0">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xml:pi_flexform.showItems.search</numIndex>
+										<numIndex index="0">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.showItems.search</numIndex>
 										<numIndex index="1">1</numIndex>
 									</numIndex>
 									<numIndex index="1" type="array">
-										<numIndex index="0">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xml:pi_flexform.showItems.map</numIndex>
+										<numIndex index="0">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.showItems.map</numIndex>
 										<numIndex index="1">2</numIndex>
 									</numIndex>
 									<numIndex index="2" type="array">
-										<numIndex index="0">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xml:pi_flexform.showItems.list</numIndex>
+										<numIndex index="0">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.showItems.list</numIndex>
 										<numIndex index="1">4</numIndex>
 									</numIndex>
 								</items>
@@ -39,21 +39,21 @@
 
 					<settings.showAfterSearch>
 						<TCEforms>
-							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xml:pi_flexform.showAfterSearch</label>
+							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.showAfterSearch</label>
 							<config>
 								<type>check</type>
 								<default>6</default>
 								<items type="array">
 									<numIndex index="0" type="array">
-										<numIndex index="0">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xml:pi_flexform.showItems.search</numIndex>
+										<numIndex index="0">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.showItems.search</numIndex>
 										<numIndex index="1">1</numIndex>
 									</numIndex>
 									<numIndex index="1" type="array">
-										<numIndex index="0">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xml:pi_flexform.showItems.map</numIndex>
+										<numIndex index="0">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.showItems.map</numIndex>
 										<numIndex index="1">2</numIndex>
 									</numIndex>
 									<numIndex index="2" type="array">
-										<numIndex index="0">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xml:pi_flexform.showItems.list</numIndex>
+										<numIndex index="0">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.showItems.list</numIndex>
 										<numIndex index="1">4</numIndex>
 									</numIndex>
 								</items>
@@ -63,28 +63,28 @@
 
 					<settings.mapConfiguration.apiV3Layers>
 						<TCEforms>
-							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xml:pi_flexform.apiV3Layers</label>
+							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.apiV3Layers</label>
 							<config>
 								<type>select</type>
 								<items type="array">
 									<numIndex index="0" type="array">
-										<numIndex index="0">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xml:pi_flexform.apiV3Layers.trafficOverlay</numIndex>
+										<numIndex index="0">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.apiV3Layers.trafficOverlay</numIndex>
 										<numIndex index="1">traffic</numIndex>
 									</numIndex>
 									<numIndex index="1" type="array">
-										<numIndex index="0">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xml:pi_flexform.apiV3Layers.weatherOverlay</numIndex>
+										<numIndex index="0">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.apiV3Layers.weatherOverlay</numIndex>
 										<numIndex index="1">weather</numIndex>
 									</numIndex>
 									<numIndex index="2" type="array">
-										<numIndex index="0">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xml:pi_flexform.apiV3Layers.bicyclingOverlay</numIndex>
+										<numIndex index="0">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.apiV3Layers.bicyclingOverlay</numIndex>
 										<numIndex index="1">bicycling</numIndex>
 									</numIndex>
 									<numIndex index="3" type="array">
-										<numIndex index="0">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xml:pi_flexform.apiV3Layers.panoramioOverlay</numIndex>
+										<numIndex index="0">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.apiV3Layers.panoramioOverlay</numIndex>
 										<numIndex index="1">panoramio</numIndex>
 									</numIndex>
 									<numIndex index="4" type="array">
-										<numIndex index="0">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xml:pi_flexform.apiV3Layers.kmlOverlay</numIndex>
+										<numIndex index="0">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.apiV3Layers.kmlOverlay</numIndex>
 										<numIndex index="1">kml</numIndex>
 									</numIndex>
 								</items>
@@ -96,7 +96,7 @@
 
 					<settings.allowedCountries>
 						<TCEforms>
-							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xml:pi_flexform.allowedCountries</label>
+							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.allowedCountries</label>
 							<config>
 								<type>group</type>
 								<type>input</type>
@@ -110,7 +110,7 @@
 
 					<view.templateRootPath>
 						<TCEforms>
-							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xml:pi_flexform.templateRootPath</label>
+							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.templateRootPath</label>
 							<config>
 								<type>group</type>
 								<type>input</type>
@@ -124,7 +124,7 @@
 
 					<view.partialRootPath>
 						<TCEforms>
-							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xml:pi_flexform.partialRootPath</label>
+							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.partialRootPath</label>
 							<config>
 								<type>group</type>
 								<type>input</type>
@@ -138,7 +138,7 @@
 
 					<settings.showStoreImage>
 						<TCEforms>
-							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xml:pi_flexform.showStoreImage</label>
+							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.showStoreImage</label>
 							<config>
 								<type>check</type>
 								<default>1</default>
@@ -152,14 +152,14 @@
 		<sheetReferenceOptions>
 			<ROOT>
 				<TCEforms>
-					<sheetTitle>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xml:pi_flexform.sheetReferenceOptions</sheetTitle>
-					<cshFile>LLL:EXT:store_finder/Resources/Private/Language/locallang_csh.xml</cshFile>
+					<sheetTitle>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.sheetReferenceOptions</sheetTitle>
+					<cshFile>LLL:EXT:store_finder/Resources/Private/Language/locallang_csh.xlf</cshFile>
 				</TCEforms>
 				<type>array</type>
 				<el>
 					<settings.categories>
 						<TCEforms>
-							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xml:pi_flexform.categories</label>
+							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.categories</label>
 							<config>
 								<type>select</type>
 								<autoSizeMax>50</autoSizeMax>
@@ -181,20 +181,20 @@
 
 					<settings.categoryPriority>
 						<TCEforms>
-							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xml:pi_flexform.categoryPriority</label>
+							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.categoryPriority</label>
 							<config>
 								<type>select</type>
 								<items type="array">
 									<numIndex index="0" type="array">
-										<numIndex index="0">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xml:pi_flexform.categoryPriority.useAsFilterInFrontend</numIndex>
+										<numIndex index="0">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.categoryPriority.useAsFilterInFrontend</numIndex>
 										<numIndex index="1">useAsFilterInFrontend</numIndex>
 									</numIndex>
 									<numIndex index="1" type="array">
-										<numIndex index="0">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xml:pi_flexform.categoryPriority.useParentIfNoFilterSelected</numIndex>
+										<numIndex index="0">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.categoryPriority.useParentIfNoFilterSelected</numIndex>
 										<numIndex index="1">useParentIfNoFilterSelected</numIndex>
 									</numIndex>
 									<numIndex index="2" type="array">
-										<numIndex index="0">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xml:pi_flexform.categoryPriority.limitResultsToCategories</numIndex>
+										<numIndex index="0">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.categoryPriority.limitResultsToCategories</numIndex>
 										<numIndex index="1">limitResultsToCategories</numIndex>
 									</numIndex>
 								</items>
@@ -204,7 +204,7 @@
 
 					<settings.singleLocationId>
 						<TCEforms>
-							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xml:pi_flexform.singleLocationId</label>
+							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.singleLocationId</label>
 							<config>
 								<type>group</type>
 								<internal_type>db</internal_type>
@@ -219,7 +219,7 @@
 
 					<settings.resultPageId>
 						<TCEforms>
-							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xml:pi_flexform.resultPageId</label>
+							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.resultPageId</label>
 							<config>
 								<type>group</type>
 								<internal_type>db</internal_type>
@@ -234,7 +234,7 @@
 
 					<settings.routePageId>
 						<TCEforms>
-							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xml:pi_flexform.routePageId</label>
+							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.routePageId</label>
 							<config>
 								<type>group</type>
 								<internal_type>db</internal_type>

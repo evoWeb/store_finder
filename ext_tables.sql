@@ -16,6 +16,8 @@ CREATE TABLE tx_storefinder_domain_model_location (
 
 	sys_language_uid int(11) DEFAULT '0' NOT NULL,
 	l18n_parent int(11) DEFAULT '0' NOT NULL,
+	l10n_source int(11) DEFAULT '0' NOT NULL,
+	l10n_state text,
 	l18n_diffsource mediumtext,
 
 	name varchar(255) DEFAULT '' NOT NULL,
@@ -68,10 +70,13 @@ CREATE TABLE tx_storefinder_domain_model_attribute (
 	crdate int(11) DEFAULT '0' NOT NULL,
 	cruser_id int(11) DEFAULT '0' NOT NULL,
 	sorting int(10) DEFAULT '0' NOT NULL,
-	hidden tinyint(4) DEFAULT '0' NOT NULL,
 	deleted tinyint(4) DEFAULT '0' NOT NULL,
+	hidden tinyint(4) DEFAULT '0' NOT NULL,
+
 	sys_language_uid int(11) DEFAULT '0' NOT NULL,
 	l18n_parent int(11) DEFAULT '0' NOT NULL,
+	l10n_source int(11) DEFAULT '0' NOT NULL,
+	l10n_state text,
 	l18n_diffsource mediumtext,
 
 	icon varchar(255) DEFAULT '' NOT NULL,
@@ -122,5 +127,5 @@ CREATE TABLE tx_storefinder_location_location_mm (
 #
 CREATE TABLE sys_category (
 	children int(11) unsigned DEFAULT '0' NOT NULL,
-	import_id int(11) DEFAULT '0' NOT NULL
+	import_id varchar(100) DEFAULT '' NOT NULL
 );

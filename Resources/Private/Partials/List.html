@@ -1,11 +1,5 @@
-{namespace sf=Evoweb\StoreFinder\ViewHelpers}
-<?xml version="1.0" encoding="UTF-8" ?>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en"
-	  xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers">
-<head>
-	<title>Map</title>
-</head>
-<body>
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+
 <f:section name="content">
 <f:for each="{locations}" as="location" iteration="loop">
 	<div class="mapHeader">
@@ -35,5 +29,5 @@
 	</div>
 </f:for>
 </f:section>
-</body>
+
 </html>

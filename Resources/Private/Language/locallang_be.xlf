@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+	<file source-language="en" datatype="plaintext" original="messages" date="2018-05-06T14:18:35Z" product-name="store_finder">
+		<header/>
+		<body>
+			<trans-unit id="apiConsoleKey" xml:space="preserve">
+				<source>Api Console Key (Google Maps API for standard or business users [https://developers.google.com/maps/documentation/javascript/get-api-key])</source>
+			</trans-unit>
+			<trans-unit id="apiProvider" xml:space="preserve">
+				<source>Name of API to use (mapQuest, googleMaps or fully qualified classname)</source>
+			</trans-unit>
+			<trans-unit id="geocodeUrl" xml:space="preserve">
+				<source>Url used for geocode</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.showOverviewMap.label" xml:space="preserve">
+				<source>Show overview map in result table</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.searchByName.label" xml:space="preserve">
+				<source>Search by name (only store_finder tables)</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.feUserListingPageId.label" xml:space="preserve">
+				<source>feUserListing page id (only FE user)</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.helpPageId.label" xml:space="preserve">
+				<source>Help page id</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.useNotesInternal.label" xml:space="preserve">
+				<source>Use notes internal</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.useStoreFinderTable.label" xml:space="preserve">
+				<source>Use store finder table as stores</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.useStoreFinderData.label" xml:space="preserve">
+				<source>Use store finder table as stores</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.useFeUserData.label" xml:space="preserve">
+				<source>Use fe users table as stores</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.useExternalTable.label" xml:space="preserve">
+				<source>External locations table</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.useTt_newsTable.label" xml:space="preserve">
+				<source>tt_news table</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.useTt_addressTable.label" xml:space="preserve">
+				<source>tt_address table</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.externalLocationTable.label" xml:space="preserve">
+				<source>External location table</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.feUserGroup.label" xml:space="preserve">
+				<source>FE user group</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.tt_addressnameField.label" xml:space="preserve">
+				<source>tt_address name Field</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.numberOfMails.label" xml:space="preserve">
+				<source>Number of mails generated</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.showOnlyMailResultTable.label" xml:space="preserve">
+				<source>Show only mail result table</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.countryCodes.label" xml:space="preserve">
+				<source>Allowed country codes in search form</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.radiusPresets.label" xml:space="preserve">
+				<source>Radius presets in km/miles</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.resultLimit.label" xml:space="preserve">
+				<source>Result limit</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.enableLogs.label" xml:space="preserve">
+				<source>Enable logs</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.debug.label" xml:space="preserve">
+				<source>Debug (especially for use with cc_debug)</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.sheetDisplayOptions" xml:space="preserve">
+				<source>Display options</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.useFeUserPageTitle.label" xml:space="preserve">
+				<source>Use page title from FE user (single view)</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.storeTitle.label" xml:space="preserve">
+				<source>store title</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.linkTarget.label" xml:space="preserve">
+				<source>target of links</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.routeViewTarget.label" xml:space="preserve">
+				<source>target of routeview</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform._top.label" xml:space="preserve">
+				<source>_top</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform._blank.label" xml:space="preserve">
+				<source>_blank</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.monthSingleRow.label" xml:space="preserve">
+				<source>display months in single rows</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.mapView.label" xml:space="preserve">
+				<source>display normal maps</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.allMapView.label" xml:space="preserve">
+				<source>display all stores in a map</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.mapAllNoFormView.label" xml:space="preserve">
+				<source>display all stores in a map without form</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.routeView.label" xml:space="preserve">
+				<source>displays driving routes</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.single.label" xml:space="preserve">
+				<source>single view</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.listView.label" xml:space="preserve">
+				<source>show list of stores (only for store finder tables)</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.countryCitySelector.label" xml:space="preserve">
+				<source>country city selector</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.shopFinder.label" xml:space="preserve">
+				<source>shop template</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.searchFormView.label" xml:space="preserve">
+				<source>search form view</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.catMenu.label" xml:space="preserve">
+				<source>category menu view</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.ajaxSearchWithMap.label" xml:space="preserve">
+				<source>ajax search with map</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.showPoiTable.label" xml:space="preserve">
+				<source>show POI table (not in route view and not in normal map view)</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.enableMoreButton.label" xml:space="preserve">
+				<source>enable overlays button</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.additionalLayers.label" xml:space="preserve">
+				<source>additional overlays api v2</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.enableStreetViewOverlay.label" xml:space="preserve">
+				<source>enable street view overlay</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.enableStreetView.label" xml:space="preserve">
+				<source>enable street view</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.uidOfSingle.label" xml:space="preserve">
+				<source>uid of single (default 1)</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.showTabbedInfoWindow.label" xml:space="preserve">
+				<source>show tabbed infoWindow</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.showVideoPlayer.label" xml:space="preserve">
+				<source>enable Video in infoWindow</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.autoMailView.label" xml:space="preserve">
+				<source>automated mails</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.distanceUnit.label" xml:space="preserve">
+				<source>distances in</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.unitKm.label" xml:space="preserve">
+				<source>km</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.unitMiles.label" xml:space="preserve">
+				<source>miles</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.additionalMapTypes.label" xml:space="preserve">
+				<source>additional map types</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.sheetTemplateOptions" xml:space="preserve">
+				<source>template options</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.templateFile.label" xml:space="preserve">
+				<source>template file</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.cssFile.label" xml:space="preserve">
+				<source>css file</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.finderTemplate.label" xml:space="preserve">
+				<source>finder template</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.restaurantFinder.label" xml:space="preserve">
+				<source>restaurant template</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.sheetShapeAreaOptions" xml:space="preserve">
+				<source>shape area options</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.shapeFile.label" xml:space="preserve">
+				<source>shapefile</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.sheetCookieOptions" xml:space="preserve">
+				<source>cookie options</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.useCookie.label" xml:space="preserve">
+				<source>use cookie</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.cookieLifeTime.label" xml:space="preserve">
+				<source>cookie life time [sec]</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.zoom" xml:space="preserve">
+				<source>Zoom</source>
+			</trans-unit>
+			<trans-unit id="pi1_title_map" xml:space="preserve">
+				<source>Store Finder - Map with search and list</source>
+			</trans-unit>
+			<trans-unit id="pi1_description_map" xml:space="preserve">
+				<source>Adds a store finder search form with map and result list.</source>
+			</trans-unit>
+			<trans-unit id="tt_content.list_type_map" xml:space="preserve">
+				<source>Store Finder - Map with search and list</source>
+			</trans-unit>
+			<trans-unit id="pi1_title_show" xml:space="preserve">
+				<source>Store Finder - Single location map</source>
+			</trans-unit>
+			<trans-unit id="pi1_description_show" xml:space="preserve">
+				<source>Adds a map for a single location to display.</source>
+			</trans-unit>
+			<trans-unit id="tt_content.list_type_show" xml:space="preserve">
+				<source>Store Finder - Single location map</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.showBeforeSearch" xml:space="preserve">
+				<source>Show before search</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.showAfterSearch" xml:space="preserve">
+				<source>Show after search</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.showItems.search" xml:space="preserve">
+				<source>Search</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.showItems.map" xml:space="preserve">
+				<source>Map</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.showItems.list" xml:space="preserve">
+				<source>List</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.showStoreImage" xml:space="preserve">
+				<source>Show store image in list</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.apiV3Layers" xml:space="preserve">
+				<source>additional overlays in api v3</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.apiV3Layers.trafficOverlay" xml:space="preserve">
+				<source>traffic</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.apiV3Layers.weatherOverlay" xml:space="preserve">
+				<source>weather</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.apiV3Layers.bicyclingOverlay" xml:space="preserve">
+				<source>bicycling</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.apiV3Layers.panoramioOverlay" xml:space="preserve">
+				<source>panoramio</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.apiV3Layers.kmlOverlay" xml:space="preserve">
+				<source>kml</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.allowedCountries" xml:space="preserve">
+				<source>Countries allowed in search country selectbox</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.templateRootPath" xml:space="preserve">
+				<source>Template path</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.partialRootPath" xml:space="preserve">
+				<source>Partial path</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.sheetReferenceOptions" xml:space="preserve">
+				<source>Reference options</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.resultPageId" xml:space="preserve">
+				<source>Result page</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.routePageId" xml:space="preserve">
+				<source>Routing page id</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.singleLocationId" xml:space="preserve">
+				<source>Single location to render</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.categories" xml:space="preserve">
+				<source>Categories</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.categoryPriority" xml:space="preserve">
+				<source>Category used for</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.categoryPriority.useAsFilterInFrontend" xml:space="preserve">
+				<source>Filter utilized by the user in frontend</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.categoryPriority.limitResultsToCategories" xml:space="preserve">
+				<source>Filter used for the query without user utilization</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.categoryPriority.useParentIfNoFilterSelected" xml:space="preserve">
+				<source>Filter utilized by the user in frontend or as filter if the user selected none</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

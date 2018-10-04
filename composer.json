@@ -1,49 +1,57 @@
 {
-  "name": "evoweb/store-finder",
-  "type": "typo3-cms-plugin",
-  "description": "Store Finder",
-  "homepage": "http://www.evoweb.de/",
-  "license": ["GPL-2.0+"],
+	"name": "evoweb/store-finder",
+	"type": "typo3-cms-extension",
+	"description": "Store Finder",
+	"homepage": "http://www.evoweb.de/",
 
-  "support": {
-    "issues": "https://github.com/evoWeb/store_finder/issues",
-    "source": "https://git.typo3.org/TYPO3CMS/Extensions/store_finder.git"
-  },
-  "keywords": [
-    "store finder",
-    "store locator",
-    "poi",
-    "shop list",
-    "google map"
-  ],
+	"license": [
+		"GPL-2.0-or-later"
+	],
 
-  "require": {
-    "typo3/cms-core": ">=7.6.0"
-  },
+	"support": {
+		"issues": "https://github.com/evoWeb/store_finder/issues"
+	},
 
-  "autoload": {
-      "psr-4": {
-          "Evoweb\\StoreFinder\\": "Classes/"
-      }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "TYPO3\\CMS\\Core\\Tests\\": ".Build/Web/typo3/sysext/core/Tests/"
-    }
-  },
+	"keywords": [
+		"store finder",
+		"store locator",
+		"poi",
+		"shop list",
+		"google map"
+	],
 
-  "config": {
-    "vendor-dir": ".Build/vendor",
-    "bin-dir": ".Build/bin",
-    "preferred-install": {
-      "typo3/cms": "source",
-      "*": "dist"
-    }
-  },
-  "extra": {
-    "typo3/cms": {
-      "cms-package-dir": "{$vendor-dir}/typo3/cms",
-      "web-dir": ".Build/Web"
-    }
-  }
+	"require": {
+		"typo3/cms-core": "^8.7.0 || ^9.3.0",
+		"sjbr/static-info-tables": "^6.5.1"
+	},
+
+	"autoload": {
+		"psr-4": {
+			"Evoweb\\StoreFinder\\": "Classes/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Evoweb\\StoreFinder\\Tests\\": "Tests/",
+			"TYPO3\\CMS\\Core\\Tests\\": ".Build/Web/typo3/sysext/core/Tests/"
+		}
+	},
+
+	"config": {
+		"vendor-dir": ".Build/Web/vendor",
+		"bin-dir": ".Build/bin"
+	},
+	"extra": {
+		"typo3/cms": {
+			"cms-package-dir": "{$vendor-dir}/typo3/cms",
+			"web-dir": ".Build/Web"
+		}
+	},
+
+	"scripts": {
+		"post-autoload-dump": [
+			"mkdir -p .Build/Web/typo3conf/ext/",
+			"[ -L .Build/Web/typo3conf/ext/store_finder ] || ln -snvf ../../../../. .Build/Web/typo3conf/ext/store_finder"
+		]
+	}
 }

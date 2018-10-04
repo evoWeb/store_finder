@@ -3,7 +3,7 @@
 $tempColumns = [
     'children' => [
         'exclude' => 1,
-        'label' => 'LLL:EXT:store_finder/Resources/Private/Language/locallang_db.xml:sys_category.children',
+        'label' => 'LLL:EXT:store_finder/Resources/Private/Language/locallang_db.xlf:sys_category.children',
         'config' => [
             'type' => 'inline',
             'foreign_table' => 'sys_category',

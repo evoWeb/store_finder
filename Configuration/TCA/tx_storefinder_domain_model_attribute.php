@@ -1,40 +1,46 @@
 <?php
 
-$foreignTypes = [
-    '0' => [
-        'showitem' => '
---palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
---palette--;;filePalette'
+$overrideChildTca = [
+    'types' => [
+        '0' => [
+            'showitem' => '
+                --palette--;;imageoverlayPalette,
+                --palette--;;filePalette'
+        ],
+        \TYPO3\CMS\Core\Resource\File::FILETYPE_TEXT => [
+            'showitem' => '
+                --palette--;;imageoverlayPalette,
+                --palette--;;filePalette'
+        ],
+        \TYPO3\CMS\Core\Resource\File::FILETYPE_IMAGE => [
+            'showitem' => '
+                --palette--;;imageoverlayPalette,
+                --palette--;;filePalette'
+        ],
+        \TYPO3\CMS\Core\Resource\File::FILETYPE_AUDIO => [
+            'showitem' => '
+                --palette--;;audioOverlayPalette,
+                --palette--;;filePalette'
+        ],
+        \TYPO3\CMS\Core\Resource\File::FILETYPE_VIDEO => [
+            'showitem' => '
+                --palette--;;videoOverlayPalette,
+                --palette--;;filePalette'
+        ],
+        \TYPO3\CMS\Core\Resource\File::FILETYPE_APPLICATION => [
+            'showitem' => '
+                --palette--;;imageoverlayPalette,
+                --palette--;;filePalette'
+        ]
     ],
-    \TYPO3\CMS\Core\Resource\File::FILETYPE_TEXT => [
-        'showitem' => '
---palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
---palette--;;filePalette'
-    ],
-    \TYPO3\CMS\Core\Resource\File::FILETYPE_IMAGE => [
-        'showitem' => '
---palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
---palette--;;filePalette'
-    ],
-    \TYPO3\CMS\Core\Resource\File::FILETYPE_AUDIO => [
-        'showitem' => '
---palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
---palette--;;filePalette'
-    ],
-    \TYPO3\CMS\Core\Resource\File::FILETYPE_VIDEO => [
-        'showitem' => '
---palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
---palette--;;filePalette'
-    ],
-    \TYPO3\CMS\Core\Resource\File::FILETYPE_APPLICATION => [
-        'showitem' => '
---palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
---palette--;;filePalette'
-    ]
 ];
 
 $table = 'tx_storefinder_domain_model_attribute';
-$languageFile = 'LLL:EXT:store_finder/Resources/Private/Language/locallang_db.xml:';
+$languageFile = 'LLL:EXT:store_finder/Resources/Private/Language/locallang_db.xlf' . ':';
+
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages(
+    'tx_storefinder_domain_model_attribute'
+);
 
 return [
     'ctrl' => [
@@ -67,8 +73,23 @@ return [
     ],
 
     'columns' => [
-        'sys_language_uid' => $GLOBALS['TCA']['tt_content']['columns']['sys_language_uid'],
-
+        'sys_language_uid' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.language',
+            'config' => [
+                'type' => 'select',
+                'renderType' => 'selectSingle',
+                'special' => 'languages',
+                'items' => [
+                    [
+                        'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.allLanguages',
+                        -1,
+                        'flags-multiple'
+                    ],
+                ],
+                'default' => 0,
+            ]
+        ],
         'l18n_parent' => [
             'exclude' => true,
             'displayCond' => 'FIELD:sys_language_uid:>:0',
@@ -116,13 +137,14 @@ return [
                 'icon',
                 [
                     'appearance' => [
-                        'createNewRelationLinkTitle' => 'LLL:EXT:cms/locallang_ttc.xlf:images.addFileReference'
+                        'createNewRelationLinkTitle' =>
+                            'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:images.addFileReference'
                     ],
                     'minitems' => 0,
                     'maxitems' => 1,
                     // custom configuration for displaying fields in the overlay/reference table
                     // to use the imageoverlayPalette instead of the basicoverlayPalette
-                    'foreign_types' => $foreignTypes,
+                    'overrideChildTca' => $overrideChildTca,
                 ],
                 $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']
             ),

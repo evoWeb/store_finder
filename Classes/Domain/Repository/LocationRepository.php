@@ -1,39 +1,24 @@
 <?php
 namespace Evoweb\StoreFinder\Domain\Repository;
 
-/***************************************************************
- * Copyright notice
+/**
+ * This file is developed by evoweb.
  *
- * (c) 2013 Sebastian Fischer <typo3@evoweb.de>
- * All rights reserved
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
  *
- * This script is part of the TYPO3 project. The TYPO3 project is
- * free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * The GNU General Public License can be found at
- * http://www.gnu.org/copyleft/gpl.html.
- *
- * This script is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ */
 
-use TYPO3\CMS\Backend\Utility\BackendUtility;
+use Evoweb\StoreFinder\Domain\Model\Constraint;
+use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\Query;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
-/**
- * Class LocationRepository
- *
- * @package Evoweb\StoreFinder\Domain\Repository
- */
 class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 {
     /**
@@ -46,135 +31,139 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     /**
      * A constant in Google's map projection
      *
-     * @var integer
+     * @var int
      */
     const GLOBE_WIDTH = 256;
 
     /**
-     * @var integer
+     * @var int
      */
     const ZOOM_MAX = 21;
 
     /**
      * @var array
      */
-    protected $settings = array();
+    protected $settings = [];
 
-    /**
-     * Setter
-     *
-     * @param array $settings
-     *
-     * @return void
-     */
     public function setSettings(array $settings)
     {
         $this->settings = $settings;
     }
 
-
     /**
-     * Find locations by contraint
+     * Finds an object matching the given identifier.
      *
-     * @param \Evoweb\StoreFinder\Domain\Model\Constraint $constraint
+     * @param int $uid The identifier of the object to find
      *
-     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+     * @return QueryResultInterface
      */
-    public function findByConstraint($constraint)
+    public function findOneByUid(int $uid): QueryResultInterface
     {
-        /** @var \TYPO3\CMS\Extbase\Persistence\Generic\Query $query */
+        /** @var Query $query */
         $query = $this->createQuery();
 
-        if (!$constraint->isGeocoded()) {
-            $queryParts = array(
-                'SELECT' => '*',
-                'FROM' => 'tx_storefinder_domain_model_location l',
-                'WHERE' => '1=2',
-                'GROUPBY' => '',
-                'ORDERBY' => '',
-                'LIMIT' => '',
-            );
-        } else {
-            $queryParts = array(
-                'SELECT' => '
-                distinct l.*,
-                (acos(
-                    sin(' . $constraint->getLatitude() * M_PI . ' / 180) *
-                    sin(latitude * ' . M_PI . ' / 180) +
-                    cos(' . $constraint->getLatitude() * M_PI . ' / 180) *
-                    cos(latitude * ' . M_PI . ' / 180) *
-                    cos((' . $constraint->getLongitude() . ' - longitude) * ' . M_PI . ' / 180)
-                ) * 6370) as distance',
-                'FROM' => 'tx_storefinder_domain_model_location l',
-                'WHERE' => 'l.pid IN (' . implode(',', $query->getQuerySettings()->getStoragePageIds()) . ')' .
-                $this->getWhereClauseForEnabledFields('tx_storefinder_domain_model_location', 'l'),
-                'GROUPBY' => '',
-                'ORDERBY' => 'distance',
-                'LIMIT' => '',
-            );
-
-            $queryParts = $this->addCountryQueryPart($constraint, $queryParts);
-            $queryParts = $this->addCategoryQueryPart($constraint, $queryParts);
-            $queryParts = $this->addRadiusQueryPart($constraint, $queryParts);
-            $queryParts = $this->addLimitQueryParts($constraint, $queryParts);
-        }
-        /** @var \TYPO3\CMS\Core\Database\DatabaseConnection $database */
-        $database = $GLOBALS['TYPO3_DB'];
-
-        $sql = $database->SELECTquery(
-            $queryParts['SELECT'],
-            $queryParts['FROM'],
-            $queryParts['WHERE'],
-            $queryParts['GROUPBY'],
-            $queryParts['ORDERBY'],
-            $queryParts['LIMIT']
-        );
-        $query->statement($sql);
+        $query->matching($query->equals('uid', $uid));
 
         return $query->execute();
     }
 
     /**
-     * Adds country to query parts if present in contraints
+     * @param Constraint $constraint
      *
-     * @param \Evoweb\StoreFinder\Domain\Model\Constraint $constraint
-     * @param array $queryParts
-     *
-     * @return array
+     * @return array|QueryResultInterface
      */
-    protected function addCountryQueryPart($constraint, $queryParts)
+    public function findByConstraint(Constraint $constraint)
     {
-        /** @var \TYPO3\CMS\Core\Database\DatabaseConnection $database */
-        $database = $GLOBALS['TYPO3_DB'];
+        /** @var \TYPO3\CMS\Extbase\Persistence\Generic\Query $query */
+        $query = $this->createQuery();
 
-        if ($constraint->getCountry()) {
-            $country = $constraint->getCountry();
-            if (is_numeric($country)) {
-                $queryParts['FROM'] .= ' INNER JOIN static_countries sc ON (l.country = sc.uid)';
-                $queryParts['WHERE'] .= ' AND sc.uid = ' . $country;
-            } else {
-                $queryParts['FROM'] .= ' INNER JOIN static_countries sc ON (l.country = sc.cn_iso_3)';
-                $queryParts['WHERE'] .= ' AND sc.cn_iso_3 = '
-                    . $database->fullQuoteStr(strtoupper($constraint->getCountry()), 'static_countries');
-            }
+        $queryBuilder = $this->getQueryBuilderForTable('tx_storefinder_domain_model_location');
+        $queryBuilder
+            ->from('tx_storefinder_domain_model_location', 'l');
+
+        if (!$constraint->isGeocoded()) {
+            $queryBuilder
+                ->select('*')
+                ->where(
+                    // this comparison leads to an empty result, which
+                    // is what we want if the constraint is not encoded.
+                    $queryBuilder->expr()->eq(1, 2)
+                );
+        } else {
+            $queryBuilder
+                ->selectLiteral(
+                    'distinct l.*',
+                    '(acos(
+                        sin(' . $constraint->getLatitude() * M_PI . ' / 180) *
+                        sin(latitude * ' . M_PI . ' / 180) +
+                        cos(' . $constraint->getLatitude() * M_PI . ' / 180) *
+                        cos(latitude * ' . M_PI . ' / 180) *
+                        cos((' . $constraint->getLongitude() . ' - longitude) * ' . M_PI . ' / 180)
+                    ) * 6370) as `distance`'
+                )
+                ->where(
+                    $queryBuilder->expr()->in(
+                        'l.pid',
+                        $queryBuilder->createNamedParameter(
+                            $query->getQuerySettings()->getStoragePageIds(),
+                            \Doctrine\DBAL\Connection::PARAM_INT_ARRAY
+                        )
+                    )
+                )
+                ->orderBy('distance');
+
+            $queryBuilder = $this->addCountryQueryPart($constraint, $queryBuilder);
+            $queryBuilder = $this->addCategoryQueryPart($constraint, $queryBuilder);
+            $queryBuilder = $this->addRadiusQueryPart($constraint, $queryBuilder);
+            $queryBuilder = $this->addLimitQueryParts($constraint, $queryBuilder);
         }
 
-        return $queryParts;
+        $sql = $queryBuilder->getSQL();
+
+        $parameters = $queryBuilder->getParameters();
+        $parameterType = $queryBuilder->getParameterTypes();
+        array_walk($parameters, function ($value, $key) use (&$sql, $parameterType) {
+            if ($parameterType[$key] == 2) {
+                $sql = str_replace(':' . $key, '\'' . $value . '\'', $sql);
+            } elseif ($parameterType[$key] == 101) {
+                $sql = str_replace(':' . $key, implode(',', $value), $sql);
+            } else {
+                $sql = str_replace(':' .  $key, $value, $sql);
+            }
+        });
+
+        $query->statement($sql);
+
+        return $query->execute();
     }
 
-    /**
-     * Adds categories to query parts if present in contraints
-     *
-     * @param \Evoweb\StoreFinder\Domain\Model\Constraint $constraint
-     * @param array $queryParts
-     *
-     * @return array
-     */
-    protected function addCategoryQueryPart($constraint, $queryParts)
+    protected function addCountryQueryPart(Constraint $constraint, QueryBuilder $queryBuilder): QueryBuilder
     {
-        /** @var \TYPO3\CMS\Core\Database\DatabaseConnection $database */
-        $database = $GLOBALS['TYPO3_DB'];
+        if ($constraint->getCountry()) {
+            if (is_numeric($constraint->getCountry())) {
+                $on = '(l.country = sc.uid)';
+                $field = 'uid';
+                $type = \PDO::PARAM_INT;
+            } else {
+                $on = '(l.country = sc.cn_iso_3)';
+                $field = 'cn_iso_3';
+                $type = \PDO::PARAM_STR;
+            }
 
+            $queryBuilder->innerJoin('l', 'static_countries', 'sc', $on);
+            $queryBuilder->andWhere(
+                $queryBuilder->expr()->eq('sc.' . $field, $queryBuilder->createNamedParameter(
+                    $constraint->getCountry(),
+                    $type
+                ))
+            );
+        }
+
+        return $queryBuilder;
+    }
+
+    protected function addCategoryQueryPart(Constraint $constraint, QueryBuilder $queryBuilder): QueryBuilder
+    {
         if ($this->settings['categoryPriority'] == 'limitResultsToCategories') {
             $constraint->setCategory(GeneralUtility::intExplode(',', $this->settings['categories'], 1));
         } elseif ($this->settings['categoryPriority'] == 'useSelectedCategoriesIfNoFilterSelected'
@@ -186,44 +175,48 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $categories = $this->fetchCategoriesRecursive($constraint->getCategory());
 
         if (!empty($categories)) {
-            $queryParts['FROM'] .= ' INNER JOIN sys_category_record_mm c ON (l.uid = c.uid_foreign
-				AND c.tablenames = \'tx_storefinder_domain_model_location\' AND c.fieldname = \'categories\')';
-            $queryParts['WHERE'] .= ' AND c.uid_local IN (' . implode(',', $database->cleanIntArray($categories)) . ')';
+            $expression = $queryBuilder->expr();
+            $queryBuilder->innerJoin(
+                'l',
+                'sys_category_record_mm',
+                'c',
+                $expression->andX(
+                    $expression->eq('l.uid', 'c.uid_foreign'),
+                    $expression->eq(
+                        'c.tablenames',
+                        $queryBuilder->createNamedParameter('tx_storefinder_domain_model_location')
+                    ),
+                    $expression->eq(
+                        'c.fieldname',
+                        $queryBuilder->createNamedParameter('categories')
+                    )
+                )
+            );
+            $queryBuilder->andWhere(
+                $expression->in(
+                    'c.uid_local',
+                    $queryBuilder->createNamedParameter($categories, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY)
+                )
+            );
         }
 
-        return $queryParts;
+        return $queryBuilder;
     }
 
-    /**
-     * Adds radius to query parts if present in contraints
-     *
-     * @param \Evoweb\StoreFinder\Domain\Model\Constraint $constraint
-     * @param array $queryParts
-     *
-     * @return array
-     */
-    protected function addRadiusQueryPart($constraint, $queryParts)
+    protected function addRadiusQueryPart(Constraint $constraint, QueryBuilder $queryBuilder): QueryBuilder
     {
-        /** @var \TYPO3\CMS\Core\Database\DatabaseConnection $database */
-        $database = $GLOBALS['TYPO3_DB'];
-
         if ($this->settings['distanceUnit'] == 'miles') {
             $constraint->setRadius(max($constraint->getRadius(), 1) * 1.6);
         }
-        $queryParts['WHERE'] .= ' HAVING distance <= ' . $database->fullQuoteStr($constraint->getRadius(), '');
 
-        return $queryParts;
+        $queryBuilder->having(
+            '`distance` <= ' . $queryBuilder->createNamedParameter($constraint->getRadius(), \PDO::PARAM_STR)
+        );
+
+        return $queryBuilder;
     }
 
-    /**
-     * Add limit to query parts
-     *
-     * @param \Evoweb\StoreFinder\Domain\Model\Constraint $constraint
-     * @param array $queryParts
-     *
-     * @return array
-     */
-    protected function addLimitQueryParts($constraint, $queryParts)
+    protected function addLimitQueryParts(Constraint $constraint, QueryBuilder $queryBuilder): QueryBuilder
     {
         $limit = (int) $this->settings['limit'];
         $page = 0;
@@ -237,24 +230,17 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         }
 
         if ($limit) {
-            $queryParts['LIMIT'] = $page . ',' . $limit;
+            $queryBuilder->setMaxResults($limit);
+            $queryBuilder->setFirstResult($page);
         }
 
-        return $queryParts;
+        return $queryBuilder;
     }
 
-    /**
-     * Fetch categories recursive
-     *
-     * @param array|int $subcategories
-     * @param array $categories
-     *
-     * @return array
-     */
-    protected function fetchCategoriesRecursive(array $subcategories, $categories = array())
+    protected function fetchCategoriesRecursive(array $subcategories, array $categories = []): array
     {
         /** @var CategoryRepository $categoryRepository */
-        $categoryRepository = $this->objectManager->get('Evoweb\\StoreFinder\\Domain\\Repository\\CategoryRepository');
+        $categoryRepository = $this->objectManager->get(CategoryRepository::class);
 
         /** @var \Evoweb\StoreFinder\Domain\Model\Category $subcategory */
         foreach ($subcategories as $subcategory) {
@@ -271,41 +257,35 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return array_unique($categories);
     }
 
-
-    /**
-     * Find center for latitude and longitude
-     *
-     * @return \Evoweb\StoreFinder\Domain\Model\Location
-     */
-    public function findCenterByLatitudeAndLongitude()
+    public function findCenterByLatitudeAndLongitude(): \Evoweb\StoreFinder\Domain\Model\Location
     {
         /** @var \TYPO3\CMS\Extbase\Persistence\Generic\Query $query */
         $query = $this->createQuery();
 
-        $query->setOrderings(array('latitude' => QueryInterface::ORDER_ASCENDING));
+        $query->setOrderings(['latitude' => QueryInterface::ORDER_ASCENDING]);
         /** @var \Evoweb\StoreFinder\Domain\Model\Location $minLatitude south */
         $minLatitude = $query->execute()->getFirst();
 
         // only search for the other locations if first succed or else we have no
         // locations at all
         if ($minLatitude === null) {
-            $maxLatitude = $minLongitute = $maxLongitute = null;
+            $maxLatitude = $minLongitude = $maxLongitude = null;
         } else {
-            $query->setOrderings(array('latitude' => QueryInterface::ORDER_DESCENDING));
+            $query->setOrderings(['latitude' => QueryInterface::ORDER_DESCENDING]);
             /** @var \Evoweb\StoreFinder\Domain\Model\Location $maxLatitude north */
             $maxLatitude = $query->execute()->getFirst();
 
-            $query->setOrderings(array('longitude' => QueryInterface::ORDER_ASCENDING));
-            /** @var \Evoweb\StoreFinder\Domain\Model\Location $minLongitute west */
-            $minLongitute = $query->execute()->getFirst();
+            $query->setOrderings(['longitude' => QueryInterface::ORDER_ASCENDING]);
+            /** @var \Evoweb\StoreFinder\Domain\Model\Location $minLongitude west */
+            $minLongitude = $query->execute()->getFirst();
 
-            $query->setOrderings(array('longitude' => QueryInterface::ORDER_DESCENDING));
-            /** @var \Evoweb\StoreFinder\Domain\Model\Location $maxLongitute east */
-            $maxLongitute = $query->execute()->getFirst();
+            $query->setOrderings(['longitude' => QueryInterface::ORDER_DESCENDING]);
+            /** @var \Evoweb\StoreFinder\Domain\Model\Location $maxLongitude east */
+            $maxLongitude = $query->execute()->getFirst();
         }
 
         /** @var \Evoweb\StoreFinder\Domain\Model\Location $location */
-        $location = $this->objectManager->get('Evoweb\StoreFinder\Domain\Model\Location');
+        $location = $this->objectManager->get(\Evoweb\StoreFinder\Domain\Model\Location::class);
         $latitudeZoom = $longitudeZoom = 0;
 
         /**
@@ -314,14 +294,16 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
          */
         if ($minLatitude !== null && $maxLatitude !== null) {
             $location->setLatitude(($maxLatitude->getLatitude() + $minLatitude->getLatitude()) / 2);
-            $latitudeFraction = ($this->latRad($maxLatitude->getLatitude())
-                    - $this->latRad($minLatitude->getLatitude())) / M_PI;
+            $latitudeFraction = (
+                $this->latRad($maxLatitude->getLatitude())
+                - $this->latRad($minLatitude->getLatitude())
+                ) / M_PI;
             $latitudeZoom = $this->zoom($this->settings['mapSize']['height'], self::GLOBE_WIDTH, $latitudeFraction);
         }
 
-        if ($minLongitute !== null && $maxLongitute !== null) {
-            $location->setLongitude(($maxLongitute->getLongitude() + $minLongitute->getLongitude()) / 2);
-            $longitudeDiff = $maxLongitute->getLongitude() - $minLongitute->getLongitude();
+        if ($minLongitude !== null && $maxLongitude !== null) {
+            $location->setLongitude(($maxLongitude->getLongitude() + $minLongitude->getLongitude()) / 2);
+            $longitudeDiff = $maxLongitude->getLongitude() - $minLongitude->getLongitude();
             $longitudeFraction = (($longitudeDiff < 0) ? ($longitudeDiff + 360) : $longitudeDiff) / 360;
             $longitudeZoom = $this->zoom($this->settings['mapSize']['width'], self::GLOBE_WIDTH, $longitudeFraction);
         }
@@ -333,17 +315,12 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $location;
     }
 
-    /**
-     * Find one location that is flagged as center
-     *
-     * @return \Evoweb\StoreFinder\Domain\Model\Location|null
-     */
-    public function findOneByCenter()
+    public function findOneByCenter(): \Evoweb\StoreFinder\Domain\Model\Location
     {
         /** @var \TYPO3\CMS\Extbase\Persistence\Generic\Query $query */
         $query = $this->createQuery();
 
-        $query->setOrderings(array('sorting' => QueryInterface::ORDER_ASCENDING));
+        $query->setOrderings(['sorting' => QueryInterface::ORDER_ASCENDING]);
         $query->matching($query->equals('center', 1));
 
         /** @var \Evoweb\StoreFinder\Domain\Model\Location $location */
@@ -352,13 +329,13 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     }
 
     /**
-     * Rad method for latitude calculation
+     * Rad calculation of latitude value
      *
      * @param float $latitude
      *
      * @return float
      */
-    protected function latRad($latitude)
+    protected function latRad(float $latitude): float
     {
         $sin = sin($latitude * M_PI / 180);
         $radX2 = log((1 + $sin) / (1 - $sin)) / 2;
@@ -369,44 +346,16 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     /**
      * Calculate the map radius
      *
-     * @param integer $mapPx
-     * @param integer $worldPx
+     * @param int $mapPx
+     * @param int $worldPx
      * @param float $fraction
      *
      * @return float
      */
-    protected function zoom($mapPx, $worldPx, $fraction)
+    protected function zoom(int $mapPx, int $worldPx, float $fraction): float
     {
         return floor(log($mapPx / $worldPx / $fraction) / self::MATH_LN2);
     }
-
-    /**
-     * Get where clause for enable fields
-     *
-     * @param string $table
-     * @param string $replacement
-     *
-     * @return string
-     */
-    protected function getWhereClauseForEnabledFields($table, $replacement = '')
-    {
-        if (TYPO3_MODE === 'FE') {
-            // frontend context
-            $whereClause = $GLOBALS['TSFE']->sys_page->enableFields($table);
-            $whereClause .= $GLOBALS['TSFE']->sys_page->deleteClause($table);
-        } else {
-            // backend context
-            $whereClause = BackendUtility::BEenableFields($table);
-            $whereClause .= BackendUtility::deleteClause($table);
-        }
-
-        if ($replacement) {
-            $whereClause = str_replace($table, $replacement, $whereClause);
-        }
-
-        return $whereClause;
-    }
-
 
     /**
      * Query location repository for all locations that
@@ -414,12 +363,14 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      *
      * @param int $limit
      *
-     * @return array|\TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+     * @return QueryResultInterface
      */
-    public function findAllWithoutLatLon($limit = 500)
+    public function findAllWithoutLatLon(int $limit = 500): QueryResultInterface
     {
         /** @var Query $query */
         $query = $this->createQuery();
+        $query->setLimit($limit);
+        $query->getQuerySettings()->setRespectStoragePage(false);
 
         $query->matching(
             $query->logicalOr(
@@ -430,9 +381,14 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 )
             )
         );
-        $query->setLimit($limit);
-        $query->getQuerySettings()->setRespectStoragePage(false);
 
         return $query->execute();
+    }
+
+    protected function getQueryBuilderForTable(string $table): QueryBuilder
+    {
+        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+            \TYPO3\CMS\Core\Database\ConnectionPool::class
+        )->getQueryBuilderForTable($table);
     }
 }
