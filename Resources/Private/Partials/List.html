@@ -6,27 +6,25 @@
 		<div class="icon">{location.icon}</div>
 		<div class="storename">{location.name}</div>
 		<div class="url">{location.url}</div>
-		<div class="categories"><f:for each="{location.categories}" as="category">
-			<f:debug>{category}</f:debug>
-		</f:for></div>
+		<div class="categories"><f:for each="{location.categories}" as="category"><f:debug>{category}</f:debug></f:for></div>
 		<div class="contactperson">{location.person}</div>
 		<div class="address">{location.address}</div>
 		<div class="additionaladdress">{location.additionaladdress}</div>
 		<div class="city">{location.zipcode} {location.city}</div>
-		<div class="country">{location.country} {location.state}</div>
+		<div class="country">{location.country.cnShortEn} {location.state}</div>
 		<div class="phone">{location.phone}</div>
 		<div class="mobile">{location.mobile}</div>
 		<div class="fax">{location.fax}</div>
 		<div class="email">{location.email}</div>
-		<div class="products">{location.products}</div>
+		<div class="products"><f:for each="{location.products}" as="product"><f:debug>{product}</f:debug></f:for></div>
 		<div class="notes">{location.notes}</div>
 		<div class="hours">{location.hours}</div>
-		<div class="attributes">location.attributes</div>
+		<div class="attributes"><f:for each="{location.attributes}" as="attribute"><f:debug>{attribute}</f:debug></f:for></div>
 		<div class="storeId">{location.storeid}</div>
-		<div class="image">{location.image}</div>
-		<div class="media">{location.media}</div>
+		<div class="image"><f:for each="{location.image}" as="image">{f:uri.image(src: image.uid, width: 70, treatIdAsReference: 1)}</f:for></div>
+		<div class="media"><f:for each="{location.media}" as="media"><f:debug>{media}</f:debug></f:for></div>
 		<div class="content">{location.content}</div>
-		<div class="related">location.related</div>
+		<div class="related"><f:for each="{location.related}" as="related"><f:debug>{related}</f:debug></f:for></div>
 		<div class="distance">{location.distance}</div>
 	</div>
 </f:for>

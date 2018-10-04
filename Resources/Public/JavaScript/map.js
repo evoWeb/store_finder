@@ -4,7 +4,6 @@
 })(function($, root) {
 	var module = {};
 
-
 	var map,
 		mapConfiguration = root.mapConfiguration || {
 			active: false,
@@ -128,11 +127,17 @@
 				location = locations[index];
 				location['information']['index'] = index;
 
-				var marker = new google.maps.Marker({
-					map: map,
-					title: location.name,
-					position: new google.maps.LatLng(location.lat, location.lng)
-				});
+                var markerArguments = {
+                    map: map,
+                    title: location.name,
+                    position: new google.maps.LatLng(location.lat, location.lng)
+                };
+
+                if (mapConfiguration.hasOwnProperty('markerIcon')) {
+                    markerArguments.icon = mapConfiguration.markerIcon;
+                }
+
+                var marker = new google.maps.Marker(markerArguments);
 				marker.sfLocation = location;
 
 				google.maps.event.addListener(marker, 'click', module.showInformation);
@@ -214,7 +219,8 @@
 	module.loadScript = function() {
 		'use strict';
 
-		var parameter = '&key=' + mapConfiguration.apiConsoleKey;
+		var apiUrl= 'https://maps.googleapis.com/maps/api/js?v=3.exp',
+            parameter = '&key=' + mapConfiguration.apiConsoleKey;
 		parameter += '&callback=StoreFinder.postLoadScript';
 		parameter += '&sensor=' + (mapConfiguration.allowSensors ? 'true' : 'false');
 
@@ -222,7 +228,11 @@
 			parameter += '&language=' + mapConfiguration.language;
 		}
 
-		$.getScript('https://maps.googleapis.com/maps/api/js?v=3.exp' + parameter);
+        if (mapConfiguration.hasOwnProperty('apiUrl')) {
+            apiUrl = mapConfiguration.apiUrl;
+        }
+
+		$.getScript(apiUrl + parameter);
 	};
 
 	$(document).ready(function() {
