@@ -431,7 +431,15 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->getState() ? $this->getState()->getNameEn() : '';
     }
 
-    public function getState(): \SJBR\StaticInfoTables\Domain\Model\CountryZone
+    public function setState(\SJBR\StaticInfoTables\Domain\Model\CountryZone $state)
+    {
+        $this->state = $state;
+    }
+
+    /**
+     * @return object|\SJBR\StaticInfoTables\Domain\Model\CountryZone|string
+     */
+    public function getState()
     {
         if ($this->state instanceof \TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy) {
             $this->state = $this->state->_loadRealInstance();
@@ -439,19 +447,14 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->state;
     }
 
-    public function setState(\SJBR\StaticInfoTables\Domain\Model\CountryZone $state)
+    public function setStoreid(string $storeid)
     {
-        $this->state = $state;
+        $this->storeid = $storeid;
     }
 
     public function getStoreid(): string
     {
         return $this->storeid;
-    }
-
-    public function setStoreid(string $storeid)
-    {
-        $this->storeid = $storeid;
     }
 
     public function getName(): string

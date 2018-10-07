@@ -67,7 +67,7 @@ class Constraint extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * @var int
      */
-    protected $radius = '';
+    protected $radius = 0;
 
     /**
      * @var int
