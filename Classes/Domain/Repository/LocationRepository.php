@@ -87,7 +87,7 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 ->where(
                     // this comparison leads to an empty result, which
                     // is what we want if the constraint is not encoded.
-                    $queryBuilder->expr()->eq(1, 2)
+                    $queryBuilder->expr()->eq('uid', PHP_INT_MAX)
                 );
         } else {
             $queryBuilder
@@ -315,7 +315,10 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $location;
     }
 
-    public function findOneByCenter(): \Evoweb\StoreFinder\Domain\Model\Location
+    /**
+     * @return \Evoweb\StoreFinder\Domain\Model\Location|null
+     */
+    public function findOneByCenter()
     {
         /** @var \TYPO3\CMS\Extbase\Persistence\Generic\Query $query */
         $query = $this->createQuery();

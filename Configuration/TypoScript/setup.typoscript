@@ -60,6 +60,11 @@ plugin.tx_storefinder.settings {
     country = Evoweb\StoreFinder\Validation\Validator\RequiredValidator
   }
 }
+plugin.tx_storefinder.view {
+  templateRootPaths.0 = EXT:store_finder/Resources/Private/Templates/
+  partialRootPaths.0 = EXT:store_finder/Resources/Private/Partials/
+  layoutRootPaths.0 = EXT:store_finder/Resources/Private/Layouts/
+}
 
 config.tx_extbase.persistence {
   classes {

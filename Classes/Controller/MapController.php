@@ -301,7 +301,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      *
      * @return Model\Location
      */
-    public function setZoomLevel(Model\Location $center, $locations): Model\Location
+    public function setZoomLevel($center, $locations)
     {
         $radius = false;
         /** @var Model\Location $location */

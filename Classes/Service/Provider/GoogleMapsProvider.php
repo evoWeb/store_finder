@@ -46,9 +46,26 @@ class GoogleMapsProvider implements EncodeProviderInterface
         if (is_object($addressData) && property_exists($addressData, 'status') && $addressData->status === 'OK') {
             $hasMultipleResults = count($addressData->results) > 1;
             $result = $addressData->results[0]->geometry->location;
+        } else {
+            $this->getBeUser()->writelog(
+                4,
+                0,
+                1,
+                0,
+                'store_finder - Class : ' . self::class . ' ' . $addressData->error_message,
+                [$parameter, $components]
+            );
         }
 
         return [$hasMultipleResults, $result];
+    }
+
+    /**
+     * @return \TYPO3\CMS\Core\Authentication\BackendUserAuthentication
+     */
+    protected function getBeUser()
+    {
+        return isset($GLOBALS['BE_USER']) ? $GLOBALS['BE_USER'] : null;
     }
 
     protected function getTypoScriptFrontendController(): \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController
