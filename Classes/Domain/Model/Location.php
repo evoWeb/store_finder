@@ -128,7 +128,7 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Evoweb\StoreFinder\Domain\Model\Attribute>
      * @lazy
      */
-    protected $attributes = '';
+    protected $attributes;
 
     /**
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Evoweb\StoreFinder\Domain\Model\Category>
@@ -137,9 +137,10 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $categories;
 
     /**
-     * @var string
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Evoweb\StoreFinder\Domain\Model\Location>
+     * @lazy
      */
-    protected $content = '';
+    protected $content;
 
     /**
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Evoweb\StoreFinder\Domain\Model\Location>
@@ -151,13 +152,13 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>
      * @lazy
      */
-    protected $image = '';
+    protected $image;
 
     /**
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>
      * @lazy
      */
-    protected $media = '';
+    protected $media;
 
     /**
      * @var string
@@ -431,15 +432,7 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->getState() ? $this->getState()->getNameEn() : '';
     }
 
-    public function setState(\SJBR\StaticInfoTables\Domain\Model\CountryZone $state)
-    {
-        $this->state = $state;
-    }
-
-    /**
-     * @return object|\SJBR\StaticInfoTables\Domain\Model\CountryZone|string
-     */
-    public function getState()
+    public function getState(): \SJBR\StaticInfoTables\Domain\Model\CountryZone
     {
         if ($this->state instanceof \TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy) {
             $this->state = $this->state->_loadRealInstance();
@@ -447,14 +440,19 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->state;
     }
 
-    public function setStoreid(string $storeid)
+    public function setState(\SJBR\StaticInfoTables\Domain\Model\CountryZone $state)
     {
-        $this->storeid = $storeid;
+        $this->state = $state;
     }
 
     public function getStoreid(): string
     {
         return $this->storeid;
+    }
+
+    public function setStoreid(string $storeid)
+    {
+        $this->storeid = $storeid;
     }
 
     public function getName(): string
