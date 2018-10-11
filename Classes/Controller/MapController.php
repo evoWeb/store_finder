@@ -107,7 +107,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             $center = $this->setZoomLevel($center, $locations);
             $this->view->assign('center', $center);
 
-	    $this->view->assign('numberOfLocations', is_object($locations) ? $locations->count() : count($locations));
+            $this->view->assign('numberOfLocations', is_object($locations) ? $locations->count() : count($locations));
             $this->view->assign('locations', $locations);
         } elseif ($this->settings['singleLocationId']) {
             /** @var Model\Constraint $search */
@@ -128,7 +128,9 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
             if ($this->settings['showBeforeSearch'] & 2 && is_array($this->settings['defaultConstraint'])) {
                 $search = $this->addDefaultConstraint($search);
-                $search = $this->geocodeService->geocodeAddress($search);
+                if (intval($this->settings['geocodeDefaultConstraint']) === 1) {
+                    $search = $this->geocodeService->geocodeAddress($search);
+                }
                 $this->view->assign('searchWasNotClearEnough', $this->geocodeService->hasMultipleResults);
 
                 if ($this->settings['showLocationsForDefaultConstraint']) {
