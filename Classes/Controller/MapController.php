@@ -330,6 +330,8 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             $zoom = 7;
         } elseif ($radius <= 100) {
             $zoom = 9;
+        } elseif ($radius <= 300) {
+            $zoom = 10;
         } elseif ($radius <= 500) {
             $zoom = 11;
         } else {
