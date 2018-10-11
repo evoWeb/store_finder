@@ -29,6 +29,11 @@ class GoogleMapsProvider implements EncodeProviderInterface
             unset($parameter['zipcode']);
         }
 
+        // nothing to encode so leave early
+        if (empty($parameter) && empty($components)) {
+            return [false, new \stdClass()];
+        }
+
         $apiUrl = $settings['geocodeUrl'] .
             (!empty($settings['apiConsoleKey']) ? '&key=' . $settings['apiConsoleKey'] : '') .
             '&address=' . implode('+', $parameter) .
@@ -46,7 +51,7 @@ class GoogleMapsProvider implements EncodeProviderInterface
         if (is_object($addressData) && property_exists($addressData, 'status') && $addressData->status === 'OK') {
             $hasMultipleResults = count($addressData->results) > 1;
             $result = $addressData->results[0]->geometry->location;
-        } else {
+        } elseif (is_object($addressData) && $addressData->error_message) {
             $this->getBeUser()->writelog(
                 4,
                 0,

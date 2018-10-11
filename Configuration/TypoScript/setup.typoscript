@@ -41,6 +41,7 @@ plugin.tx_storefinder.settings {
     city =
     country =
   }
+  geocodeDefaultConstraint = 1
 
   mapConfiguration {
     # traffic, weather, bicycling,  panoramio, kml
