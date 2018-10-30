@@ -155,7 +155,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
                 $center = $this->setZoomLevel($center, $locations);
                 $this->view->assign('center', $center);
 
-                $this->view->assign('numberOfLocations', $locations->count());
+                $this->view->assign('numberOfLocations', count($locations));
                 $this->view->assign('locations', $locations);
             }
         }
