@@ -51,7 +51,7 @@ class GoogleMapsProvider implements EncodeProviderInterface
         if (is_object($addressData) && property_exists($addressData, 'status') && $addressData->status === 'OK') {
             $hasMultipleResults = count($addressData->results) > 1;
             $result = $addressData->results[0]->geometry->location;
-        } elseif (is_object($addressData) && $addressData->error_message) {
+        } elseif ($this->getBeUser() !== null && is_object($addressData) && $addressData->error_message) {
             $this->getBeUser()->writelog(
                 4,
                 0,
