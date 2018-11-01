@@ -50,6 +50,7 @@ jobs:
     - &lint
       stage: test
       php: 7.2
+      env: TASK="PHP Lint"
       before_install: skip
       install: skip
       before_script: skip
@@ -63,6 +64,7 @@ jobs:
 
     - stage: test
       php: 7.2
+      env: TASK="XML Lint (Xliff)"
       before_install: skip
       install: skip
       before_script: skip
