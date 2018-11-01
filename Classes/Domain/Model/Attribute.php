@@ -27,7 +27,10 @@ class Attribute extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $name;
 
-    public function getIcon(): \TYPO3\CMS\Extbase\Domain\Model\FileReference
+    /**
+     * @return \TYPO3\CMS\Extbase\Domain\Model\FileReference
+     */
+    public function getIcon()
     {
         return $this->icon;
     }

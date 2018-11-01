@@ -194,7 +194,10 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
             $this->media = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
     }
 
-    protected function getObjectManager(): \TYPO3\CMS\Extbase\Object\ObjectManager
+    /**
+     * @return \TYPO3\CMS\Extbase\Object\ObjectManager
+     */
+    protected function getObjectManager()
     {
         if (is_null($this->objectManager)) {
             $this->objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
@@ -224,7 +227,10 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->address = $address;
     }
 
-    public function getAttributes(): \TYPO3\CMS\Extbase\Persistence\ObjectStorage
+    /**
+     * @return Attribute[]|\TYPO3\CMS\Extbase\Persistence\ObjectStorage
+     */
+    public function getAttributes()
     {
         return $this->attributes;
     }
@@ -234,7 +240,10 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->attributes = $attributes;
     }
 
-    public function getCategories(): \TYPO3\CMS\Extbase\Persistence\ObjectStorage
+    /**
+     * @return Category[]|\TYPO3\CMS\Extbase\Persistence\ObjectStorage
+     */
+    public function getCategories()
     {
         return $this->categories;
     }
@@ -284,7 +293,10 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->getCountry() ? $this->getCountry()->getShortNameEn() : '';
     }
 
-    public function getCountry(): \SJBR\StaticInfoTables\Domain\Model\Country
+    /**
+     * @return \SJBR\StaticInfoTables\Domain\Model\Country
+     */
+    public function getCountry()
     {
         if (is_null($this->_country)) {
             /** @var \Evoweb\StoreFinder\Domain\Repository\CountryRepository $repository */
@@ -357,7 +369,10 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->icon = $icon;
     }
 
-    public function getImage(): \TYPO3\CMS\Extbase\Persistence\ObjectStorage
+    /**
+     * @return \TYPO3\CMS\Extbase\Domain\Model\FileReference[]|\TYPO3\CMS\Extbase\Persistence\ObjectStorage
+     */
+    public function getImage()
     {
         return $this->image;
     }
@@ -367,7 +382,10 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->image = $image;
     }
 
-    public function getMedia(): \TYPO3\CMS\Extbase\Persistence\ObjectStorage
+    /**
+     * @return \TYPO3\CMS\Extbase\Domain\Model\FileReference[]|\TYPO3\CMS\Extbase\Persistence\ObjectStorage
+     */
+    public function getMedia()
     {
         return $this->media;
     }
@@ -417,7 +435,10 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->products = $products;
     }
 
-    public function getRelated(): \TYPO3\CMS\Extbase\Persistence\ObjectStorage
+    /**
+     * @return Location[]|\TYPO3\CMS\Extbase\Persistence\ObjectStorage
+     */
+    public function getRelated()
     {
         return $this->related;
     }
@@ -432,7 +453,10 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->getState() ? $this->getState()->getNameEn() : '';
     }
 
-    public function getState(): \SJBR\StaticInfoTables\Domain\Model\CountryZone
+    /**
+     * @return \SJBR\StaticInfoTables\Domain\Model\CountryZone
+     */
+    public function getState()
     {
         if ($this->state instanceof \TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy) {
             $this->state = $this->state->_loadRealInstance();
