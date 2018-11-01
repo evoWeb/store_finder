@@ -33,7 +33,10 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
         $this->children = $children;
     }
 
-    public function getChildren(): \TYPO3\CMS\Extbase\Persistence\ObjectStorage
+    /**
+     * @return Category[]|\TYPO3\CMS\Extbase\Persistence\ObjectStorage
+     */
+    public function getChildren()
     {
         return $this->children;
     }
