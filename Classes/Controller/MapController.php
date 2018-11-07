@@ -15,6 +15,8 @@ namespace Evoweb\StoreFinder\Controller;
 use Evoweb\StoreFinder\Domain\Model;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
+use TYPO3\CMS\Extbase\Property\PropertyMappingConfiguration;
+use TYPO3\CMS\Extbase\Property\TypeConverter\PersistentObjectConverter;
 
 class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
@@ -57,6 +59,26 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $this->signalSlotDispatcher = $signalSlotDispatcher;
     }
 
+    protected function setTypeConverter()
+    {
+        if ($this->request->hasArgument('search')) {
+            /** @var array $search */
+            $search = $this->request->getArgument('search');
+            if (!is_array($search['category'])) {
+                $search['category'] = [$search['category']];
+                $this->request->setArgument('search', $search);
+            }
+            /** @var PropertyMappingConfiguration $configuration */
+            $configuration = $this->arguments['search']->getPropertyMappingConfiguration();
+            $configuration->allowProperties('category');
+            $configuration->setTypeConverterOption(
+                PersistentObjectConverter::class,
+                PersistentObjectConverter::CONFIGURATION_CREATION_ALLOWED,
+                true
+            );
+        }
+    }
+
     /**
      * Initializes the controller before invoking an action method.
      * Override this method to solve tasks which all actions have in
@@ -74,6 +96,8 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $this->settings['allowedCountries'] = explode(',', $this->settings['allowedCountries']);
         $this->geocodeService->setSettings($this->settings);
         $this->locationRepository->setSettings($this->settings);
+
+        $this->setTypeConverter();
     }
 
     /**
@@ -85,88 +109,85 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      */
     public function mapAction(Model\Constraint $search = null)
     {
-        $afterSearch = 0;
-
         if ($search !== null) {
-            $afterSearch = 1;
-
-            $search = $this->geocodeService->geocodeAddress($search);
-            $this->view->assign('searchWasNotClearEnough', $this->geocodeService->hasMultipleResults);
-
-            $locations = $this->locationRepository->findByConstraint($search);
-
-            /** @var Model\Constraint $search */
-            /** @var QueryResultInterface $locations */
-            list($search, $locations) = $this->signalSlotDispatcher->dispatch(
-                __CLASS__,
-                'mapActionWithConstraint',
-                [$search, $locations, $this]
-            );
-
-            $center = $this->getCenter($search);
-            $center = $this->setZoomLevel($center, $locations);
-            $this->view->assign('center', $center);
-
-            $this->view->assign('numberOfLocations', is_object($locations) ? $locations->count() : count($locations));
-            $this->view->assign('locations', $locations);
-        } elseif ($this->settings['singleLocationId']) {
-            /** @var Model\Constraint $search */
-            $search = $this->objectManager->get(\Evoweb\StoreFinder\Domain\Model\Constraint::class);
-
-            $locations = $this->locationRepository->findOneByUid((int) $this->settings['singleLocationId']);
-
-            $center = $this->getCenter($search);
-            $center = $this->setZoomLevel($center, $locations);
-            $this->view->assign('center', $center);
-
-            $this->view->assign('numberOfLocations', $locations->count());
-            $this->view->assign('locations', $locations);
+            $this->getLocationsByConstraints($search);
+        } elseif ($this->settings['location']) {
+            $this->forward('show');
         } else {
-            /** @var Model\Constraint $search */
-            $search = $this->objectManager->get(\Evoweb\StoreFinder\Domain\Model\Constraint::class);
-            $locations = false;
-
-            if ($this->settings['showBeforeSearch'] & 2 && is_array($this->settings['defaultConstraint'])) {
-                $search = $this->addDefaultConstraint($search);
-                if (intval($this->settings['geocodeDefaultConstraint']) === 1) {
-                    $search = $this->geocodeService->geocodeAddress($search);
-                }
-                $this->view->assign('searchWasNotClearEnough', $this->geocodeService->hasMultipleResults);
-
-                if ($this->settings['showLocationsForDefaultConstraint']) {
-                    $locations = $this->locationRepository->findByConstraint($search);
-                } else {
-                    $locations = $this->locationRepository->findOneByUid(-1);
-                }
-            }
-
-            if ($this->settings['showBeforeSearch'] & 4) {
-                $this->locationRepository->setDefaultOrderings([
-                    'zipcode' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING,
-                    'city' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING,
-                    'name' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING,
-                ]);
-
-                $locations = $this->locationRepository->findAll();
-            }
-
-            if ($locations) {
-                $center = $this->getCenter($search);
-                $center = $this->setZoomLevel($center, $locations);
-                $this->view->assign('center', $center);
-
-                $this->view->assign('numberOfLocations', count($locations));
-                $this->view->assign('locations', $locations);
-            }
+            $this->getLocationsByDefaultConstraints();
         }
 
         $this->addCategoryFilterToView();
-        $this->view->assign('afterSearch', $afterSearch);
         $this->view->assign('search', $search);
         $this->view->assign(
             'static_info_tables',
             \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('static_info_tables') ? 1 : 0
         );
+    }
+
+    protected function getLocationsByConstraints(Model\Constraint $search)
+    {
+        $search = $this->addDefaultConstraint($search);
+        $search = $this->geocodeService->geocodeAddress($search);
+        $this->view->assign('searchWasNotClearEnough', $this->geocodeService->hasMultipleResults);
+
+        $locations = $this->locationRepository->findByConstraint($search);
+
+        /** @var Model\Constraint $search */
+        /** @var QueryResultInterface $locations */
+        list($search, $locations) = $this->signalSlotDispatcher->dispatch(
+            __CLASS__,
+            'mapActionWithConstraint',
+            [$search, $locations, $this]
+        );
+
+        $center = $this->getCenter($search);
+        $center = $this->setZoomLevel($center, $locations);
+        $this->view->assign('center', $center);
+
+        $this->view->assign('numberOfLocations', is_object($locations) ? $locations->count() : count($locations));
+        $this->view->assign('locations', $locations);
+        $this->view->assign('afterSearch', 1);
+    }
+
+    protected function getLocationsByDefaultConstraints()
+    {
+        /** @var Model\Constraint $search */
+        $search = $this->objectManager->get(\Evoweb\StoreFinder\Domain\Model\Constraint::class);
+        $locations = false;
+
+        if ($this->settings['showBeforeSearch'] & 2 && is_array($this->settings['defaultConstraint'])) {
+            $search = $this->addDefaultConstraint($search);
+            if (intval($this->settings['geocodeDefaultConstraint']) === 1) {
+                $search = $this->geocodeService->geocodeAddress($search);
+            }
+            $this->view->assign('searchWasNotClearEnough', $this->geocodeService->hasMultipleResults);
+
+            if ($this->settings['showLocationsForDefaultConstraint']) {
+                $locations = $this->locationRepository->findByConstraint($search);
+            } else {
+                $locations = $this->locationRepository->findOneByUid(-1);
+            }
+        }
+
+        if ($this->settings['showBeforeSearch'] & 4) {
+            $this->locationRepository->setDefaultOrderings([
+                'zipcode' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING,
+                'city' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING,
+                'name' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING,
+            ]);
+
+            $locations = $this->locationRepository->findAll();
+        }
+
+        if ($locations) {
+            $center = $this->getCenter($search);
+            $center = $this->setZoomLevel($center, $locations);
+            $this->view->assign('center', $center);
+
+            $this->view->assign('numberOfLocations', count($locations));
+            $this->view->assign('locations', $locations);
+        }
     }
 
     /**
@@ -247,13 +268,22 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         return $center;
     }
 
+    /**
+     * Add default constraints configured in typoscript and only set if property
+     * in search is empty
+     *
+     * @param Model\Constraint $search
+     *
+     * @return Model\Constraint
+     */
     protected function addDefaultConstraint(Model\Constraint $search): Model\Constraint
     {
         $defaultConstraint = $this->settings['defaultConstraint'];
 
         foreach ($defaultConstraint as $property => $value) {
+            $getter = 'get' . ucfirst($property);
             $setter = 'set' . ucfirst($property);
-            if (method_exists($search, $setter)) {
+            if (method_exists($search, $setter) && !$search->{$getter}()) {
                 $search->{$setter}($value);
             }
         }
