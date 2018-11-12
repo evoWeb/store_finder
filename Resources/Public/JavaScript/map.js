@@ -2,7 +2,7 @@
 (function (factory) {
   'function' === typeof define && define.amd ? define('map', ['jquery', 'window'], factory) : factory(jQuery, window)
 })(function ($, root) {
-  var module = {};
+  var StoreFinderMap = {};
 
   var map,
     mapConfiguration = root.mapConfiguration || {
@@ -22,8 +22,7 @@
    *
    * @return void
    */
-  module.initializeLayer = function () {
-    'use strict';
+  StoreFinderMap.initializeLayer = function () {'use strict';
     if (mapConfiguration.apiV3Layers.indexOf('traffic') > -1) {
       var trafficLayer = new google.maps.TrafficLayer();
       trafficLayer.setMap(map);
@@ -55,7 +54,7 @@
   /**
    * Initialize info window template
    */
-  module.initializeTemplates = function () {
+  StoreFinderMap.initializeTemplates = function () {
     'use strict';
 
     var source = $('#templateInfoWindow').html();
@@ -77,7 +76,7 @@
   /**
    * Initialize instance of map infoWindow
    */
-  module.initializeInfoWindow = function () {
+  StoreFinderMap.initializeInfoWindow = function () {
     'use strict';
 
     infoWindow = new google.maps.InfoWindow();
@@ -86,7 +85,7 @@
   /**
    * Close previously open info window, renders new content and opens the window
    */
-  module.showInformation = function () {
+  StoreFinderMap.showInformation = function () {
     'use strict';
 
     var marker = this,
@@ -109,7 +108,7 @@
    *
    * @param {Integer} index
    */
-  module.openInfoWindow = function (index) {
+  StoreFinderMap.openInfoWindow = function (index) {
     'use strict';
 
     google.maps.event.trigger(locations[index].marker, 'click');
@@ -118,7 +117,7 @@
   /**
    * Initialize location marker on map
    */
-  module.initializeLocation = function () {
+  StoreFinderMap.initializeLocation = function () {
     'use strict';
 
     var index, location;
@@ -142,7 +141,7 @@
         var marker = new google.maps.Marker(markerArguments);
         marker.sfLocation = location;
 
-        google.maps.event.addListener(marker, 'click', module.showInformation);
+        google.maps.event.addListener(marker, 'click', StoreFinderMap.showInformation);
 
         // attach marker to location to be able to close it later
         location.marker = marker;
@@ -153,7 +152,7 @@
   /**
    * Initialize map
    */
-  module.initializeMap = function () {
+  StoreFinderMap.initializeMap = function () {
     'use strict';
 
     var center;
@@ -193,32 +192,32 @@
   /**
    * Initialize list click events
    */
-  module.initializeListEvents = function () {
+  StoreFinderMap.initializeListEvents = function () {
     'use strict';
 
     $(document).on('click', '.tx-storefinder .resultList > li', function () {
-      module.openInfoWindow($(this).data('index'));
+      StoreFinderMap.openInfoWindow($(this).data('index'));
     });
   };
 
   /**
    * Initialize map
    */
-  module.postLoadScript = function () {
+  StoreFinderMap.postLoadScript = function () {
     'use strict';
 
-    module.initializeMap();
-    module.initializeLayer();
-    module.initializeLocation();
-    module.initializeInfoWindow();
-    module.initializeTemplates();
-    module.initializeListEvents();
+    StoreFinderMap.initializeMap();
+    StoreFinderMap.initializeLayer();
+    StoreFinderMap.initializeLocation();
+    StoreFinderMap.initializeInfoWindow();
+    StoreFinderMap.initializeTemplates();
+    StoreFinderMap.initializeListEvents();
   };
 
   /**
    * Load google map script
    */
-  module.loadScript = function () {
+  StoreFinderMap.loadScript = function () {
     'use strict';
 
     var apiUrl = 'https://maps.googleapis.com/maps/api/js?v=3.exp',
@@ -235,19 +234,19 @@
 
     $.when(
       $.getScript(apiUrl + parameter)
-    ).done(module.postLoadScript);
+    ).done(StoreFinderMap.postLoadScript);
   };
 
   $(document).ready(function () {
     'use strict';
 
-    // make module public to be available for callback after load
-    root.StoreFinder = module;
+    // make StoreFinderMap public to be available for callback after load
+    root.StoreFinder = StoreFinderMap;
 
     if (mapConfiguration.active) {
-      module.loadScript();
+      StoreFinderMap.loadScript();
     }
   });
 
-  return module;
+  return StoreFinderMap;
 });
