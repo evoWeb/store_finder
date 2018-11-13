@@ -2,7 +2,10 @@
 (function (factory) {
   'function' === typeof define && define.amd ? define('map', ['jquery', 'window'], factory) : factory(jQuery, window)
 })(function ($, root) {
-  var L; function StoreFinderMap(mapConfiguration, locations) {
+  'use strict';
+  var L = root.L;
+
+  function StoreFinderMap(mapConfiguration, locations) {
     this.map = null;
     this.mapConfiguration = mapConfiguration || {
       active: false,
@@ -27,7 +30,6 @@
    * Initialize information layer on map
    */
   StoreFinderMap.initializeLayer = function () {
-    'use strict';
     if (this.mapConfiguration.apiV3Layers.indexOf('traffic') > -1) {
       var trafficLayer = new google.maps.TrafficLayer();
       trafficLayer.setMap(this.map);
@@ -60,8 +62,6 @@
    * Initialize info window template
    */
   StoreFinderMap.prototype.initializeTemplates = function () {
-    'use strict';
-
     var self = this;
     self.infoWindowTemplate = Hogan.compile($('#templateInfoWindow').html());
 
@@ -80,8 +80,6 @@
    * Initialize instance of map infoWindow
    */
   StoreFinderMap.prototype.initializeInfoWindow = function () {
-    'use strict';
-
     this.infoWindow = L.popup();
   };
 
@@ -91,8 +89,6 @@
    * @param {object} marker
    */
   StoreFinderMap.prototype.showInformation = function (marker) {
-    'use strict';
-
     var location = marker.sfLocation;
 
     if (typeof this.mapConfiguration.renderSingleViewCallback === 'function') {
@@ -115,8 +111,6 @@
    * @param {number} index
    */
   StoreFinderMap.prototype.openInfoWindow = function (index) {
-    'use strict';
-
     this.locations[index].marker.click();
   };
 
@@ -124,8 +118,6 @@
    * Initialize location marker on map
    */
   StoreFinderMap.prototype.initializeLocation = function () {
-    'use strict';
-
     var self = this;
     self.locations.map(function (location, index) {
       location['information']['index'] = index;
@@ -147,9 +139,8 @@
    * Initialize map
    */
   StoreFinderMap.prototype.initializeMap = function () {
-    'use strict';
     var self = this;
-    L = root.L;
+
     self.map = L.map('tx_storefinder_map');
 
     if (typeof mapConfiguration.center !== 'undefined') {
@@ -174,7 +165,6 @@
    * Initialize list click events
    */
   StoreFinderMap.prototype.initializeListEvents = function () {
-    'use strict';
     var self = this;
     $(document).on('click', '.tx-storefinder .resultList > li', function () {
       self.openInfoWindow($(this).data('index'));
@@ -185,7 +175,6 @@
    * Initialize map
    */
   StoreFinderMap.prototype.postLoadScript = function () {
-    'use strict';
     this.initializeMap();
     this.initializeLayer();
     this.initializeLocation();
@@ -198,8 +187,6 @@
    * Load open street map leaflet script
    */
   StoreFinderMap.prototype.loadScript = function () {
-    'use strict';
-
     var self = this;
     var $css = $.Deferred(),
       $cssFile = $('<link/>', {
@@ -235,8 +222,6 @@
   };
 
   $(document).ready(function () {
-    'use strict';
-
     if (root.mapConfiguration.active) {
       // make module public to be available for callback after load
       root.StoreFinder = new StoreFinderMap(root.mapConfiguration, root.locations);
