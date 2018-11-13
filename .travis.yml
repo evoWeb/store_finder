@@ -44,12 +44,13 @@ script:
 jobs:
   fast_finish: true
   allow_failures:
-    - env: TYPO3_VERSION="dev-master as 9.3.0" TESTING_FRAMEWORK="^3.2"
+    - env: TYPO3_VERSION="dev-master as 10.0.0" TESTING_FRAMEWORK="~4.10.0" DB_DRIVER="pdo_sqlite"
 
   include:
     - &lint
       stage: test
       php: 7.2
+      env: TASK="PHP Lint"
       before_install: skip
       install: skip
       before_script: skip
@@ -63,6 +64,7 @@ jobs:
 
     - stage: test
       php: 7.2
+      env: TASK="XML Lint (Xliff)"
       before_install: skip
       install: skip
       before_script: skip

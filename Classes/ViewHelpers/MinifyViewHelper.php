@@ -19,6 +19,16 @@ class MinifyViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelp
 {
     use CompileWithRenderStatic;
 
+    /**
+     * @var boolean
+     */
+    protected $escapeChildren = false;
+
+    /**
+     * @var boolean
+     */
+    protected $escapeOutput = false;
+
     public function initializeArguments()
     {
         parent::initializeArguments();

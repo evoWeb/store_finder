@@ -20,10 +20,10 @@ runFunctionalTests () {
     ${PHP} --version
     ${PHP} ${COMPOSER} --version
 
-    export TYPO3_PATH_WEB=$PWD/.Build/Web; \
-        ${PHP} ${COMPOSER} require typo3/minimal="$TYPO3_VERSION"; \
-        ${PHP} ${COMPOSER} require --dev typo3/testing-framework="$TESTING_FRAMEWORK"; \
-        git checkout composer.json;
+    export TYPO3_PATH_WEB=$PWD/.Build/Web;
+    ${PHP} ${COMPOSER} require typo3/minimal="$TYPO3_VERSION";
+    ${PHP} ${COMPOSER} require --dev typo3/testing-framework="$TESTING_FRAMEWORK";
+    git checkout composer.json;
 
     mkdir -p .Build/Web/typo3conf/ext/
     [ -L ".Build/Web/typo3conf/ext/$T3EXTENSION" ] || ln -snvf ../../../../. ".Build/Web/typo3conf/ext/$T3EXTENSION"
@@ -34,15 +34,15 @@ runFunctionalTests () {
     echo "Running xmllint (Xliff) (Remember to install libxml2-utils)";
     find Resources/Private/Language/ -name '*.xlf' -type f | xargs xmllint --noout --schema Tests/Fixtures/xliff-core-1.2-strict.xsd
 
-    echo "Running functional tests"; \
-        export typo3DatabaseName="typo3"; \
-        export typo3DatabaseHost="localhost"; \
-        export typo3DatabaseUsername="root"; \
-        export typo3DatabasePassword=""; \
-        export typo3DatabaseDriver="pdo_sqlite"; \
-        ${PHP} .Build/bin/phpunit \
-            --colors \
-            -c .Build/Web/vendor/typo3/testing-framework/Resources/Core/Build/FunctionalTests.xml Tests/Functional/;
+    echo "Running functional tests";
+    export typo3DatabaseName="typo3";
+    export typo3DatabaseHost="localhost";
+    export typo3DatabaseUsername="root";
+    export typo3DatabasePassword="";
+    export typo3DatabaseDriver="$DB_DRIVER";
+    ${PHP} .Build/bin/phpunit \
+        --colors \
+        -c .Build/Web/vendor/typo3/testing-framework/Resources/Core/Build/FunctionalTests.xml Tests/Functional/;
 
     rm composer.lock
     rm -rf .Build/Web/

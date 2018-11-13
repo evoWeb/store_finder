@@ -3,34 +3,34 @@
 			data-namespace-typo3-fluid="true">
 
 <f:section name="content"><sf:minify>{
-		name: '{location.name}',
-		lat: {location.latitude},
-		lng: {location.longitude},
-		information: <f:format.raw/>{
-			<f:format.raw/>uid: '{location.uid}',
-			lat: '{location.latitude}',
-			lng: '{location.longitude}',
-			name: '{location.name}',
-			storeid: '{location.storeid}',
-			address: '{location.address}',
-			additionaladdress: '{location.additionaladdress}',
-			city: '{location.city}',
-			person: '{location.person}',
-			zipcode: '{location.zipcode}',
-			products: '{location.products}',
-			email: '{location.email}',
-			phone: '{location.phone}',
-			mobile: '{location.mobile}',
-			fax: '{location.fax}',
-			hours: '{location.hours}',
-			url: '{location.url}',
-			notes: '{location.notes}',
-			icon: '{location.icon}',
-			state: '{location.state}',
-			country: '{location.country}',
-			media: '{location. media}'<f:if condition="{settings.showStoreImage}">,
-			image: '<f:for each="{location.image}" as="image">{f:uri.image(src: image.uid, width: 70, treatIdAsReference: 1)}</f:for>'</f:if>
-		}
-	}</sf:minify></f:section>
+	name: '{location.name}',
+	lat: {location.latitude},
+	lng: {location.longitude},
+	information: {<f:format.raw/>
+		uid: '{location.uid}',
+		lat: '{location.latitude}',
+		lng: '{location.longitude}',
+		name: {location.name -> f:format.json()},
+		storeid: '{location.storeid}',
+		address: {location.address -> f:format.json()},
+		additionaladdress: {location.additionaladdress -> f:format.json()},
+		city: {location.city -> f:format.json()},
+		person: '{location.person}',
+		zipcode: '{location.zipcode}',
+		products: {location.products -> f:format.json()},
+		email: '{location.email}',
+		phone: '{location.phone}',
+		mobile: '{location.mobile}',
+		fax: '{location.fax}',
+		hours: '{location.hours}',
+		url: '{location.url}',
+		notes: {location.notes -> f:format.json()},
+		icon: '{location.icon}',
+		state: '{location.state}',
+		country: '{location.country}',
+		media: '<f:for each="{location.media}" as="media">{f:uri.image(src: media.uid, width: 70, treatIdAsReference: 1)}</f:for>',
+		image: '<f:if condition="{settings.showStoreImage}"><f:for each="{location.image}" as="image">{f:uri.image(src: image.uid, width: 70, treatIdAsReference: 1)}</f:for></f:if>'
+	}
+}</sf:minify></f:section>
 
 </html>

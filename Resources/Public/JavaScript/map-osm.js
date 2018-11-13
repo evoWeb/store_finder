@@ -2,7 +2,7 @@
 (function(factory) {
 	'function' === typeof define && define.amd ? define('map', ['jquery', 'window'], factory) : factory(jQuery, window)
 })(function($, root) {
-	var module = {};
+	var StoreFinderMap = {};
 
 	var L,
 		map,
@@ -23,7 +23,7 @@
 	 *
 	 * @return void
 	 */
-	module.initializeLayer = function() {
+	StoreFinderMap.initializeLayer = function() {
 		'use strict';
 		if (mapConfiguration.apiV3Layers.indexOf('traffic') > -1) {
 			var trafficLayer = new google.maps.TrafficLayer();
@@ -56,7 +56,7 @@
 	/**
 	 * Initialize info window template
 	 */
-	module.initializeTemplates = function() {
+	StoreFinderMap.initializeTemplates = function() {
 		'use strict';
 
 		var source = $('#templateInfoWindow').html();
@@ -78,7 +78,7 @@
 	/**
 	 * Initialize instance of map infoWindow
 	 */
-	module.initializeInfoWindow = function() {
+	StoreFinderMap.initializeInfoWindow = function() {
 		'use strict';
 
 		infoWindow = L.popup();
@@ -87,7 +87,7 @@
 	/**
 	 * Close previously open info window, renders new content and opens the window
 	 */
-	module.showInformation = function() {
+	StoreFinderMap.showInformation = function() {
 		'use strict';
 
 		var marker = this,
@@ -114,7 +114,7 @@
 	 *
 	 * @param {Integer} index
 	 */
-	module.openInfoWindow = function(index) {
+	StoreFinderMap.openInfoWindow = function(index) {
 		'use strict';
 
 		locations[index].marker.click();
@@ -123,7 +123,7 @@
 	/**
 	 * Initialize location marker on map
 	 */
-	module.initializeLocation = function() {
+	StoreFinderMap.initializeLocation = function() {
 		'use strict';
 
 		var index, location;
@@ -138,7 +138,7 @@
 
 				marker.sfLocation = location;
 
-				marker.on('click', module.showInformation);
+				marker.on('click', StoreFinderMap.showInformation);
 
 				// attach marker to location to be able to close it later
 				location.marker = marker;
@@ -149,7 +149,7 @@
 	/**
 	 * Initialize map
 	 */
-	module.initializeMap = function() {
+	StoreFinderMap.initializeMap = function() {
 		'use strict';
 
 		L = root.L;
@@ -176,32 +176,32 @@
 	/**
 	 * Initialize list click events
 	 */
-	module.initializeListEvents = function() {
+	StoreFinderMap.initializeListEvents = function() {
 		'use strict';
 
 		$(document).on('click', '.tx-storefinder .resultList > li', function() {
-			module.openInfoWindow($(this).data('index'));
+			StoreFinderMap.openInfoWindow($(this).data('index'));
 		});
 	};
 
 	/**
 	 * Initialize map
 	 */
-	module.postLoadScript = function() {
+	StoreFinderMap.postLoadScript = function() {
 		'use strict';
 
-		module.initializeMap();
-		//module.initializeLayer();
-		module.initializeLocation();
-		module.initializeInfoWindow();
-		module.initializeTemplates();
-		module.initializeListEvents();
+		StoreFinderMap.initializeMap();
+		//StoreFinderMap.initializeLayer();
+		StoreFinderMap.initializeLocation();
+		StoreFinderMap.initializeInfoWindow();
+		StoreFinderMap.initializeTemplates();
+		StoreFinderMap.initializeListEvents();
 	};
 
 	/**
 	 * Load open street map leaflet script
 	 */
-	module.loadScript = function() {
+	StoreFinderMap.loadScript = function() {
 		'use strict';
 
 		var $css = $.Deferred();
@@ -227,7 +227,7 @@
 				var interval = setInterval(function() {
 					if (typeof root.L !== 'undefined') {
 						root.clearInterval(interval);
-						module.postLoadScript();
+						StoreFinderMap.postLoadScript();
 					}
 				}, 10);
 			},
@@ -240,13 +240,13 @@
 	$(document).ready(function() {
 		'use strict';
 
-		// make module public to be available for callback after load
-		root.StoreFinder = module;
+		// make StoreFinderMap public to be available for callback after load
+		root.StoreFinder = StoreFinderMap;
 
 		if (mapConfiguration.active) {
-			module.loadScript();
+			StoreFinderMap.loadScript();
 		}
 	});
 
-	return module;
+	return StoreFinderMap;
 });

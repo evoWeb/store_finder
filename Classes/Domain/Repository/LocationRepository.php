@@ -14,6 +14,9 @@ namespace Evoweb\StoreFinder\Domain\Repository;
 
 use Evoweb\StoreFinder\Domain\Model\Constraint;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
+use TYPO3\CMS\Core\Database\Query\Restriction\EndTimeRestriction;
+use TYPO3\CMS\Core\Database\Query\Restriction\HiddenRestriction;
+use TYPO3\CMS\Core\Database\Query\Restriction\StartTimeRestriction;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\Query;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
@@ -48,6 +51,44 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     public function setSettings(array $settings)
     {
         $this->settings = $settings;
+    }
+
+    public function findByUidInBackend(int $uid): \Evoweb\StoreFinder\Domain\Model\Location
+    {
+        /** @var \TYPO3\CMS\Extbase\Persistence\Generic\Query $query */
+        $query = $this->createQuery();
+
+        $queryBuilder = $this->getQueryBuilderForTable('tx_storefinder_domain_model_location');
+        $queryBuilder
+            ->getRestrictions()
+                ->removeByType(HiddenRestriction::class)
+                ->removeByType(StartTimeRestriction::class)
+                ->removeByType(EndTimeRestriction::class);
+
+        $queryBuilder
+            ->select('*')
+            ->from('tx_storefinder_domain_model_location')
+            ->where($queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter($uid)));
+
+        $sql = $queryBuilder->getSQL();
+
+        $parameters = $queryBuilder->getParameters();
+        $parameterType = $queryBuilder->getParameterTypes();
+        array_walk($parameters, function ($value, $key) use (&$sql, $parameterType) {
+            if ($parameterType[$key] == 2) {
+                $sql = str_replace(':' . $key, '\'' . $value . '\'', $sql);
+            } elseif ($parameterType[$key] == 101) {
+                $sql = str_replace(':' . $key, implode(',', $value), $sql);
+            } else {
+                $sql = str_replace(':' .  $key, $value, $sql);
+            }
+        });
+
+        $query->statement($sql);
+
+        /** @var \Evoweb\StoreFinder\Domain\Model\Location $location */
+        $location = $query->execute()->getFirst();
+        return $location;
     }
 
     /**

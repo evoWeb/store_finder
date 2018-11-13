@@ -83,9 +83,7 @@ class TceMainHook
 
     protected function fetchLocation(int $uid): Location
     {
-        /** @var Location $location */
-        $location = $this->getRepository()->findByUid($uid);
-        return $location;
+        return $this->getRepository()->findByUidInBackend($uid);
     }
 
     protected function getRepository(): \Evoweb\StoreFinder\Domain\Repository\LocationRepository
