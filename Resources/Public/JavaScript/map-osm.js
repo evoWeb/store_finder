@@ -2,8 +2,7 @@
 (function (factory) {
   'function' === typeof define && define.amd ? define('map', ['jquery', 'window'], factory) : factory(jQuery, window)
 })(function ($, root) {
-  'use strict';
-  var L = root.L;
+  'use strict'; var L = root.L;
 
   function StoreFinderMap(mapConfiguration, locations) {
     this.map = null;
@@ -29,7 +28,7 @@
   /**
    * Initialize information layer on map
    */
-  StoreFinderMap.initializeLayer = function () {
+  StoreFinderMap.prototype.initializeLayer = function () {
     if (this.mapConfiguration.apiV3Layers.indexOf('traffic') > -1) {
       var trafficLayer = new google.maps.TrafficLayer();
       trafficLayer.setMap(this.map);
