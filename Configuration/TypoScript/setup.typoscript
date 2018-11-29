@@ -43,8 +43,20 @@ plugin.tx_storefinder.settings {
   }
   geocodeDefaultConstraint = 1
 
+  fulltextSearchFields {
+    10 = name
+    20 = storeid
+    30 = address
+    40 = additionaladdress
+    50 = city
+    60 = products
+    70 = hours
+    80 = notes
+  }
+  fulltextSearchWordWrap = |%
+
   mapConfiguration {
-    # traffic, weather, bicycling,  panoramio, kml
+    # traffic, weather, bicycling, panoramio, kml
     apiV3Layers =
     language = en
     allowSensors = 1
