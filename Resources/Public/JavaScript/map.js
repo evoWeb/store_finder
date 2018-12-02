@@ -117,22 +117,28 @@
     self.locations.map(function (location, index) {
       location['information']['index'] = index;
 
-      var markerArguments = {
-        map: self.map,
-        title: location.name,
-        position: new google.maps.LatLng(location.lat, location.lng)
-      };
+      var icon,
+        markerArguments = {
+          title: location.name,
+          position: new google.maps.LatLng(location.lat, location.lng)
+        };
 
       if (location.information.icon) {
-        markerArguments.icon = location.information.icon;
+        icon = location.information.icon;
       } else if (self.mapConfiguration.hasOwnProperty('markerIcon')) {
-        markerArguments.icon = self.mapConfiguration.markerIcon;
+        icon = self.mapConfiguration.markerIcon;
       }
 
-      var marker = new google.maps.Marker(markerArguments);
+      if (icon) {
+        markerArguments.icon = icon;
+      }
+
+      var marker = new google.maps.Marker(markerArguments).setMap(self.map);
       marker.sfLocation = location;
 
-      google.maps.event.addListener(marker, 'click', function () { self.showInformation(this); });
+      google.maps.event.addListener(marker, 'click', function () {
+        self.showInformation(this);
+      });
 
       // attach marker to location to be able to close it later
       location.marker = marker;
@@ -218,7 +224,16 @@
 
     $.when(
       $.getScript(apiUrl + parameter)
-    ).done(function() { self.postLoadScript(); });
+    ).done(function () {
+      var interval = setInterval(function () {
+        if (typeof root.google !== 'undefined') {
+          root.clearInterval(interval);
+          self.postLoadScript();
+        }
+      }, 10);
+    }).fail(function () {
+      console.log('Failed loading google maps resources.');
+    });
   };
 
   $(document).ready(function () {

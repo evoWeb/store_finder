@@ -2,7 +2,8 @@
 (function (factory) {
   'function' === typeof define && define.amd ? define('map', ['jquery', 'window'], factory) : factory(jQuery, window)
 })(function ($, root) {
-  'use strict'; var L = root.L;
+  'use strict';
+  var L = root.L;
 
   function StoreFinderMap(mapConfiguration, locations) {
     this.map = null;
@@ -121,13 +122,27 @@
     self.locations.map(function (location, index) {
       location['information']['index'] = index;
 
-      var marker = L.marker([location.lat, location.lng], {
-        title: location.name
-      }).bindPopup('').addTo(self.map);
+      var icon,
+        markerArguments = {
+          title: location.name
+        };
 
+      if (location.information.icon) {
+        icon = location.information.icon;
+      } else if (self.mapConfiguration.hasOwnProperty('markerIcon')) {
+        icon = self.mapConfiguration.markerIcon;
+      }
+
+      if (icon) {
+        markerConfiguration.icon = L.icon({ iconUrl: icon });
+      }
+
+      var marker = L.marker([location.lat, location.lng], markerArguments).bindPopup('').addTo(map);
       marker.sfLocation = location;
 
-      marker.on('click', function () { self.showInformation(this); });
+      marker.on('click', function () {
+        self.showInformation(this);
+      });
 
       // attach marker to location to be able to close it later
       location.marker = marker;
@@ -186,28 +201,28 @@
    * Load open street map leaflet script
    */
   StoreFinderMap.prototype.loadScript = function () {
-    var self = this;
-    var $css = $.Deferred(),
+    var self = this,
+      $cssDeferred = $.Deferred(),
       $cssFile = $('<link/>', {
         rel: 'stylesheet',
         type: 'text/css',
-        href: 'https://unpkg.com/leaflet@1.3.1/dist/leaflet.css',
-        integrity: 'sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==',
+        href: 'https://unpkg.com/leaflet@1.3.4/dist/leaflet.css',
+        integrity: 'sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==',
         crossorigin: ''
-      }).appendTo('head');
-    $css.resolve($cssFile);
-
-    var $js = $.Deferred(),
+      }).appendTo('head'),
+      $jsDeferred = $.Deferred(),
       $jsFile = $('<script/>', {
-        src: 'https://unpkg.com/leaflet@1.3.1/dist/leaflet.js',
-        integrity: 'sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw==',
+        src: 'https://unpkg.com/leaflet@1.3.4/dist/leaflet.js',
+        integrity: 'sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA==',
         crossorigin: ''
       }).appendTo('head');
-    $js.resolve($jsFile);
+
+    $cssDeferred.resolve($cssFile);
+    $jsDeferred.resolve($jsFile);
 
     $.when(
-      $css.promise(),
-      $js.promise()
+      $cssDeferred.promise(),
+      $jsDeferred.promise()
     ).done(function () {
       var interval = setInterval(function () {
         if (typeof root.L !== 'undefined') {
@@ -216,7 +231,7 @@
         }
       }, 10);
     }).fail(function () {
-        console.log('Failed loading osm resources.');
+      console.log('Failed loading osm resources.');
     });
   };
 
