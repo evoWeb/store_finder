@@ -121,7 +121,7 @@ class Constraint extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 
     public function getCategory(): array
     {
-        return $this->category;
+        return array_filter($this->category);
     }
 
     public function setCity(string $city)
