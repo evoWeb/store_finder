@@ -17,6 +17,11 @@ class Constraint extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * @var string
      */
+    protected $search = '';
+
+    /**
+     * @var string
+     */
     protected $name = '';
 
     /**
@@ -89,6 +94,16 @@ class Constraint extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $page = 0;
 
+    public function getSearch(): string
+    {
+        return $this->search;
+    }
+
+    public function setSearch(string $search)
+    {
+        $this->search = $search;
+    }
+
     public function setAddress(string $address)
     {
         $this->address = $address;
@@ -106,7 +121,7 @@ class Constraint extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 
     public function getCategory(): array
     {
-        return $this->category;
+        return array_filter($this->category);
     }
 
     public function setCity(string $city)

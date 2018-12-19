@@ -2,73 +2,75 @@
 (function (factory) {
   'function' === typeof define && define.amd ? define('map', ['jquery', 'window'], factory) : factory(jQuery, window)
 })(function ($, root) {
-  var StoreFinderMap = {};
+  'use strict';
 
-  var map,
-    mapConfiguration = root.mapConfiguration || {
+  function StoreFinderMap(mapConfiguration, locations) {
+    this.map = null;
+    this.mapConfiguration = mapConfiguration || {
       active: false,
+      afterSearch: 0,
+      apiConsoleKey: '',
+      apiUrl: '',
       apiV3Layers: '',
+      kmlUrl: '',
       language: 'en',
       allowSensors: false,
       renderSingleViewCallback: null,
       handleCloseButtonCallback: null
-    },
-    locations = root.locations || [],
-    infoWindow = null,
-    infoWindowTemplate;
+    };
+    this.locations = locations || [];
+    this.infoWindow = null;
+    this.infoWindowTemplate = null;
+
+    this.loadScript();
+  }
 
   /**
    * Initialize information layer on map
-   *
-   * @return void
    */
-  StoreFinderMap.initializeLayer = function () {'use strict';
-    if (mapConfiguration.apiV3Layers.indexOf('traffic') > -1) {
+  StoreFinderMap.prototype.initializeLayer = function () {
+    if (this.mapConfiguration.apiV3Layers.indexOf('traffic') > -1) {
       var trafficLayer = new google.maps.TrafficLayer();
-      trafficLayer.setMap(map);
+      trafficLayer.setMap(this.map);
     }
 
-    if (mapConfiguration.apiV3Layers.indexOf('bicycling') > -1) {
+    if (this.mapConfiguration.apiV3Layers.indexOf('bicycling') > -1) {
       var bicyclingLayer = new google.maps.BicyclingLayer();
-      bicyclingLayer.setMap(map);
+      bicyclingLayer.setMap(this.map);
     }
 
-    if (mapConfiguration.apiV3Layers.indexOf('panoramio') > -1) {
+    if (this.mapConfiguration.apiV3Layers.indexOf('panoramio') > -1) {
       var panoramioLayer = new google.maps.panoramio.PanoramioLayer();
-      panoramioLayer.setMap(map);
+      panoramioLayer.setMap(this.map);
     }
 
-    if (mapConfiguration.apiV3Layers.indexOf('weather') > -1) {
+    if (this.mapConfiguration.apiV3Layers.indexOf('weather') > -1) {
       var weatherLayer = new google.maps.weather.WeatherLayer({
         temperatureUnits: google.maps.weather.TemperatureUnit.DEGREE
       });
-      weatherLayer.setMap(map);
+      weatherLayer.setMap(this.map);
     }
 
-    if (mapConfiguration.apiV3Layers.indexOf('kml') > -1) {
-      var kmlLayer = new google.maps.KmlLayer(mapConfiguration.kmlUrl);
-      kmlLayer.setMap(map);
+    if (this.mapConfiguration.apiV3Layers.indexOf('kml') > -1) {
+      var kmlLayer = new google.maps.KmlLayer(this.mapConfiguration.kmlUrl);
+      kmlLayer.setMap(this.map);
     }
   };
 
   /**
    * Initialize info window template
    */
-  StoreFinderMap.initializeTemplates = function () {
-    'use strict';
-
-    var source = $('#templateInfoWindow').html();
-    infoWindowTemplate = Hogan.compile(source);
+  StoreFinderMap.prototype.initializeTemplates = function () {
+    var self = this;
+    self.infoWindowTemplate = Hogan.compile($('#templateInfoWindow').html());
 
     $(document).on('click', '.tx-storefinder .infoWindow .close', function () {
       var $closeButton = $(this);
 
-      if (typeof mapConfiguration.insertSingleViewInto !== 'undefined') {
-        alert('Using configuration.insertSingleViewInto is deprecated please use configuration.handleCloseButtonCallback instead');
-      } else if (typeof configuration.renderSingleViewCallback === 'function') {
-        configuration.handleCloseButtonCallback($closeButton);
+      if (typeof self.mapConfiguration.renderSingleViewCallback === 'function') {
+        self.mapConfiguration.handleCloseButtonCallback($closeButton);
       } else {
-        infoWindow.close();
+        self.infoWindow.close();
       }
     });
   };
@@ -76,97 +78,89 @@
   /**
    * Initialize instance of map infoWindow
    */
-  StoreFinderMap.initializeInfoWindow = function () {
-    'use strict';
-
-    infoWindow = new google.maps.InfoWindow();
+  StoreFinderMap.prototype.initializeInfoWindow = function () {
+    this.infoWindow = new google.maps.InfoWindow();
   };
 
   /**
    * Close previously open info window, renders new content and opens the window
+   *
+   * @param {object} marker
    */
-  StoreFinderMap.showInformation = function () {
-    'use strict';
+  StoreFinderMap.prototype.showInformation = function (marker) {
+    var location = marker.sfLocation;
 
-    var marker = this,
-      location = this.sfLocation;
-
-    if (typeof mapConfiguration.insertSingleViewInto !== 'undefined') {
-      alert('Using configuration.insertSingleViewInto is deprecated please use configuration.renderSingleViewCallback instead');
-    } else if (typeof mapConfiguration.renderSingleViewCallback === 'function') {
-      mapConfiguration.renderSingleViewCallback(location, infoWindowTemplate);
+    if (typeof this.mapConfiguration.renderSingleViewCallback === 'function') {
+      this.mapConfiguration.renderSingleViewCallback(location, this.infoWindowTemplate);
     } else {
-      infoWindow.close();
-      infoWindow.setContent(infoWindowTemplate.render(location.information));
-      infoWindow.setPosition(marker.getPosition());
-      infoWindow.open(map, marker);
+      this.infoWindow.close();
+      this.infoWindow.setContent(this.infoWindowTemplate.render(location.information));
+      this.infoWindow.setPosition(marker.getPosition());
+      this.infoWindow.open(this.map, marker);
     }
   };
 
   /**
    * Trigger click event on marker on click in result list
    *
-   * @param {Integer} index
+   * @param {number} index
    */
-  StoreFinderMap.openInfoWindow = function (index) {
-    'use strict';
-
-    google.maps.event.trigger(locations[index].marker, 'click');
+  StoreFinderMap.prototype.openInfoWindow = function (index) {
+    google.maps.event.trigger(this.locations[index].marker, 'click');
   };
 
   /**
    * Initialize location marker on map
    */
-  StoreFinderMap.initializeLocation = function () {
-    'use strict';
+  StoreFinderMap.prototype.initializeLocation = function () {
+    var self = this;
+    self.locations.map(function (location, index) {
+      location['information']['index'] = index;
 
-    var index, location;
-    if (locations.length) {
-      for (index = 0; index < locations.length; index++) {
-        location = locations[index];
-        location['information']['index'] = index;
-
-        var markerArguments = {
-          map: map,
+      var icon,
+        markerArguments = {
           title: location.name,
           position: new google.maps.LatLng(location.lat, location.lng)
         };
 
-        if (location.information.icon) {
-          markerArguments.icon = location.information.icon;
-        } else if (mapConfiguration.hasOwnProperty('markerIcon')) {
-          markerArguments.icon = mapConfiguration.markerIcon;
-        }
-
-        var marker = new google.maps.Marker(markerArguments);
-        marker.sfLocation = location;
-
-        google.maps.event.addListener(marker, 'click', StoreFinderMap.showInformation);
-
-        // attach marker to location to be able to close it later
-        location.marker = marker;
+      if (location.information.icon) {
+        icon = location.information.icon;
+      } else if (self.mapConfiguration.hasOwnProperty('markerIcon')) {
+        icon = self.mapConfiguration.markerIcon;
       }
-    }
+
+      if (icon) {
+        markerArguments.icon = icon;
+      }
+
+      var marker = new google.maps.Marker(markerArguments).setMap(self.map);
+      marker.sfLocation = location;
+
+      google.maps.event.addListener(marker, 'click', function () {
+        self.showInformation(this);
+      });
+
+      // attach marker to location to be able to close it later
+      location.marker = marker;
+    });
   };
 
   /**
    * Initialize map
    */
-  StoreFinderMap.initializeMap = function () {
-    'use strict';
-
-    var center;
+  StoreFinderMap.prototype.initializeMap = function () {
+    var self = this, center;
 
     google.maps.visualRefresh = true;
 
-    if (typeof mapConfiguration.center !== 'undefined') {
-      center = new google.maps.LatLng(mapConfiguration.center.lat, mapConfiguration.center.lng);
+    if (typeof self.mapConfiguration.center !== 'undefined') {
+      center = new google.maps.LatLng(self.mapConfiguration.center.lat, self.mapConfiguration.center.lng);
     } else {
       center = new google.maps.LatLng(0, 0);
     }
 
     var mapOptions = {
-      zoom: parseInt(mapConfiguration.zoom, 10),
+      zoom: parseInt(self.mapConfiguration.zoom, 10),
       center: center,
       disableDefaultUI: true, // a way to quickly hide all controls
       zoomControl: true,
@@ -175,16 +169,16 @@
       }
     };
 
-    map = new google.maps.Map($('#tx_storefinder_map')[0], mapOptions);
+    self.map = new google.maps.Map($('#tx_storefinder_map')[0], mapOptions);
 
-    if (mapConfiguration['afterSearch'] === 0 && navigator.geolocation) {
+    if (self.mapConfiguration.afterSearch === 0 && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function (position) {
         var pos = {
           lat: position.coords.latitude,
           lng: position.coords.longitude
         };
 
-        map.setCenter(pos);
+        self.map.setCenter(pos);
       });
     }
   };
@@ -192,59 +186,60 @@
   /**
    * Initialize list click events
    */
-  StoreFinderMap.initializeListEvents = function () {
-    'use strict';
-
+  StoreFinderMap.prototype.initializeListEvents = function () {
+    var self = this;
     $(document).on('click', '.tx-storefinder .resultList > li', function () {
-      StoreFinderMap.openInfoWindow($(this).data('index'));
+      self.openInfoWindow($(this).data('index'));
     });
   };
 
   /**
    * Initialize map
    */
-  StoreFinderMap.postLoadScript = function () {
-    'use strict';
-
-    StoreFinderMap.initializeMap();
-    StoreFinderMap.initializeLayer();
-    StoreFinderMap.initializeLocation();
-    StoreFinderMap.initializeInfoWindow();
-    StoreFinderMap.initializeTemplates();
-    StoreFinderMap.initializeListEvents();
+  StoreFinderMap.prototype.postLoadScript = function () {
+    this.initializeMap();
+    this.initializeLayer();
+    this.initializeLocation();
+    this.initializeInfoWindow();
+    this.initializeTemplates();
+    this.initializeListEvents();
   };
 
   /**
    * Load google map script
    */
-  StoreFinderMap.loadScript = function () {
-    'use strict';
+  StoreFinderMap.prototype.loadScript = function () {
+    var self = this,
+      apiUrl = 'https://maps.googleapis.com/maps/api/js?v=3.exp',
+      parameter = '&key=' + self.mapConfiguration.apiConsoleKey
+        + '&sensor=' + (self.mapConfiguration.allowSensors ? 'true' : 'false');
 
-    var apiUrl = 'https://maps.googleapis.com/maps/api/js?v=3.exp',
-      parameter = '&key=' + mapConfiguration.apiConsoleKey;
-    parameter += '&sensor=' + (mapConfiguration.allowSensors ? 'true' : 'false');
-
-    if (mapConfiguration.language !== '') {
-      parameter += '&language=' + mapConfiguration.language;
+    if (self.mapConfiguration.language !== '') {
+      parameter += '&language=' + self.mapConfiguration.language;
     }
 
-    if (mapConfiguration.hasOwnProperty('apiUrl')) {
-      apiUrl = mapConfiguration.apiUrl;
+    if (self.mapConfiguration.hasOwnProperty('apiUrl')) {
+      apiUrl = self.mapConfiguration.apiUrl;
     }
 
     $.when(
       $.getScript(apiUrl + parameter)
-    ).done(StoreFinderMap.postLoadScript);
+    ).done(function () {
+      var interval = setInterval(function () {
+        if (typeof root.google !== 'undefined') {
+          root.clearInterval(interval);
+          self.postLoadScript();
+        }
+      }, 10);
+    }).fail(function () {
+      console.log('Failed loading google maps resources.');
+    });
   };
 
   $(document).ready(function () {
-    'use strict';
-
-    // make StoreFinderMap public to be available for callback after load
-    root.StoreFinder = StoreFinderMap;
-
-    if (mapConfiguration.active) {
-      StoreFinderMap.loadScript();
+    if (root.mapConfiguration.active) {
+      // make module public to be available for callback after load
+      root.StoreFinder = new StoreFinderMap(root.mapConfiguration, root.locations);
     }
   });
 

@@ -157,6 +157,7 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             $queryBuilder = $this->addCategoryQueryPart($constraint, $queryBuilder);
             $queryBuilder = $this->addRadiusQueryPart($constraint, $queryBuilder);
             $queryBuilder = $this->addLimitQueryParts($constraint, $queryBuilder);
+            $queryBuilder = $this->addFulltextSearchQueryParts($constraint, $queryBuilder);
         }
 
         $sql = $queryBuilder->getSQL();
@@ -273,6 +274,30 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         if ($limit) {
             $queryBuilder->setMaxResults($limit);
             $queryBuilder->setFirstResult($page);
+        }
+
+        return $queryBuilder;
+    }
+
+    protected function addFulltextSearchQueryParts(Constraint $constraint, QueryBuilder $queryBuilder): QueryBuilder
+    {
+        if ($constraint->getSearch()
+            && isset($this->settings['fulltextSearchFields'])
+            && is_array($this->settings['fulltextSearchFields'])
+        ) {
+            $fullTextSearchConstraint = [];
+            $searchWordWrap = $this->settings['fulltextSearchWordWrap'] ?? '|';
+
+            foreach ($this->settings['fulltextSearchFields'] as $searchField) {
+                $fullTextSearchConstraint[] = $queryBuilder->expr()->like(
+                    $searchField,
+                    $queryBuilder->createNamedParameter(str_replace('|', $constraint->getSearch(), $searchWordWrap))
+                );
+            }
+
+            if (count($fullTextSearchConstraint)) {
+                $queryBuilder->andWhere($queryBuilder->expr()->orX($fullTextSearchConstraint));
+            }
         }
 
         return $queryBuilder;
