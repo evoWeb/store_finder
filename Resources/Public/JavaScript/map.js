@@ -119,6 +119,7 @@
 
       var icon,
         markerArguments = {
+          map: self.map,
           title: location.name,
           position: new google.maps.LatLng(location.lat, location.lng)
         };
@@ -133,7 +134,7 @@
         markerArguments.icon = icon;
       }
 
-      var marker = new google.maps.Marker(markerArguments).setMap(self.map);
+      var marker = new google.maps.Marker(markerArguments);
       marker.sfLocation = location;
 
       google.maps.event.addListener(marker, 'click', function () {
