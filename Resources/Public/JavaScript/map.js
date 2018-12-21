@@ -133,8 +133,9 @@
         markerArguments.icon = icon;
       }
 
-      var marker = new google.maps.Marker(markerArguments).setMap(self.map);
+      var marker = new google.maps.Marker(markerArguments);
       marker.sfLocation = location;
+      marker.setMap(self.map);
 
       google.maps.event.addListener(marker, 'click', function () {
         self.showInformation(this);
@@ -237,7 +238,7 @@
   };
 
   $(document).ready(function () {
-    if (root.mapConfiguration.active) {
+    if (typeof root.mapConfiguration == 'object' && root.mapConfiguration.active) {
       // make module public to be available for callback after load
       root.StoreFinder = new StoreFinderMap(root.mapConfiguration, root.locations);
     }

@@ -137,8 +137,9 @@
         markerConfiguration.icon = L.icon({ iconUrl: icon });
       }
 
-      var marker = L.marker([location.lat, location.lng], markerArguments).bindPopup('').addTo(map);
+      var marker = L.marker([location.lat, location.lng], markerArguments);
       marker.sfLocation = location;
+      marker.bindPopup('').addTo(map);
 
       marker.on('click', function () {
         self.showInformation(this);
@@ -236,7 +237,7 @@
   };
 
   $(document).ready(function () {
-    if (root.mapConfiguration.active) {
+    if (typeof root.mapConfiguration == 'object' && root.mapConfiguration.active) {
       // make module public to be available for callback after load
       root.StoreFinder = new StoreFinderMap(root.mapConfiguration, root.locations);
     }
