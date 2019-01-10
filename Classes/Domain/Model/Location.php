@@ -219,7 +219,7 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 
     public function getAddress(): string
     {
-        return $this->escapeJsonString($this->address);
+        return $this->address;
     }
 
     public function setAddress(string $address)
@@ -254,11 +254,6 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     public function getCity(): string
-    {
-        return $this->escapeJsonString($this->city);
-    }
-
-    public function getCityRaw(): string
     {
         return $this->city;
     }
@@ -351,7 +346,7 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 
     public function getHours(): string
     {
-        return $this->escapeJsonString($this->hours);
+        return $this->hours;
     }
 
     public function setHours(string $hours)
@@ -407,7 +402,7 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 
     public function getNotes(): string
     {
-        return $this->escapeJsonString($this->notes);
+        return $this->notes;
     }
 
     public function setNotes(string $notes)
@@ -481,7 +476,7 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 
     public function getName(): string
     {
-        return $this->escapeJsonString($this->name);
+        return $this->name;
     }
 
     public function getNameRaw(): string
@@ -557,15 +552,6 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function isGeocoded(): bool
     {
         return $this->getLatitude() && $this->getLongitude() && !$this->getGeocode();
-    }
-
-    protected function escapeJsonString(string $value): string
-    {
-        $escapers = ['\\', '/', '"', "\n", "\r", "\t", "\x08", "\x0c", "'"];
-        $replacements = ['\\\\', '\\/', '\\"', "\\n", "\\r", "\\t", "\\f", '\\b', "\'"];
-        $result = str_replace($escapers, $replacements, $value);
-
-        return $result;
     }
 
     public function getDistance(): float

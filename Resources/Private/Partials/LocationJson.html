@@ -3,7 +3,7 @@
 			data-namespace-typo3-fluid="true">
 
 <f:section name="content"><sf:minify>{
-	name: '{location.name}',
+	name: {location.name -> f:format.json()},
 	lat: {location.latitude},
 	lng: {location.longitude},
 	information: {<f:format.raw/>
@@ -22,7 +22,7 @@
 		phone: '{location.phone}',
 		mobile: '{location.mobile}',
 		fax: '{location.fax}',
-		hours: '{location.hours}',
+		hours: {location.hours -> f:format.json()},
 		url: '{location.url}',
 		notes: {location.notes -> f:format.json()},
 		icon: '{location.icon}',
