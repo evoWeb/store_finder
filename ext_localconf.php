@@ -42,9 +42,7 @@ call_user_func(function () {
         ['Map' => 'map']
     );
 
-    $scOptions =& $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS'];
-
-    $scOptions['t3lib/class.t3lib_tcemain.php']['processDatamapClass']['store_finder'] =
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass']['store_finder'] =
         \Evoweb\StoreFinder\Hook\TceMainHook::class;
 
     // @deprecated and with be removed with support for TYPO3 8.7

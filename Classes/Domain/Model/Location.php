@@ -186,12 +186,12 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     public function __construct()
     {
-        $this->attributes =
-            $this->categories =
-            $this->content =
-            $this->related =
-            $this->image =
-            $this->media = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        $this->attributes = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        $this->categories = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        $this->content = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        $this->related = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        $this->image = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        $this->media = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
     }
 
     /**

@@ -1,6 +1,11 @@
 <?php
 namespace Evoweb\StoreFinder\Command;
 
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
  * This file is developed by evoWeb.
  *
@@ -15,21 +20,6 @@ namespace Evoweb\StoreFinder\Command;
 class GeocodeLocationsCommand extends \Symfony\Component\Console\Command\Command
 {
     /**
-     * @var \Evoweb\StoreFinder\Domain\Repository\LocationRepository
-     */
-    protected $locationRepository;
-
-    /**
-     * @var \Evoweb\StoreFinder\Service\GeocodeService
-     */
-    protected $geocodeService;
-
-    /**
-     * @var \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager
-     */
-    protected $persistenceManager;
-
-    /**
      * Configure the command by defining the name, options and arguments
      */
     protected function configure()
@@ -38,70 +28,60 @@ class GeocodeLocationsCommand extends \Symfony\Component\Console\Command\Command
         $this->setDescription('Query google geocode service to get lat/lon for locations that are not geocode already');
     }
 
-    public function injectGeocodeService(
-        \Evoweb\StoreFinder\Service\GeocodeService $geocodeService
-    ) {
-        $this->geocodeService = $geocodeService;
+    protected function getGeocodeService(): \Evoweb\StoreFinder\Service\GeocodeService
+    {
+        /** @var \Evoweb\StoreFinder\Service\GeocodeService $geocodeService */
+        $geocodeService = GeneralUtility::makeInstance(\Evoweb\StoreFinder\Service\GeocodeService::class);
+        /** @var \Evoweb\StoreFinder\Cache\CoordinatesCache $coordinatesCache */
+        $coordinatesCache = GeneralUtility::makeInstance(\Evoweb\StoreFinder\Cache\CoordinatesCache::class);
+        $geocodeService->injectCoordinatesCache($coordinatesCache);
+        $geocodeService->setSettings(
+            \Evoweb\StoreFinder\Utility\ExtensionConfigurationUtility::getConfiguration()
+        );
+        return $geocodeService;
     }
 
-    public function geocodeCommand(): bool
+    public function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->geocodeService->setSettings(
-            \Evoweb\StoreFinder\Utility\ExtensionConfigurationUtility::getConfiguration()
+        $io = new SymfonyStyle($input, $output);
+
+        $geocodeService = $this->getGeocodeService();
+        /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
+        $objectManager = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Object\ObjectManager::class);
+        /** @var \Evoweb\StoreFinder\Domain\Repository\LocationRepository $locationRepository */
+        $locationRepository = $objectManager->get(
+            \Evoweb\StoreFinder\Domain\Repository\LocationRepository::class
+        );
+        /** @var \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager $persistenceManager */
+        $persistenceManager = $objectManager->get(
+            \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager::class
         );
 
         $loopCount = 0;
-        $locationsToGeocode = $this->findAllWithoutLatLon();
-        /** @var array $location */
+        $locationsToGeocode = $locationRepository->findAllWithoutLatLon();
+        /** @var \Evoweb\StoreFinder\Domain\Model\Location $location */
         foreach ($locationsToGeocode as $location) {
-            $location = $this->geocodeService->geocodeAddress($location);
+            $location = $geocodeService->geocodeAddress($location);
 
             if ($location->getLatitude() && $location->getLongitude()) {
                 $location->setGeocode(0);
+            } else {
+                $location->setGeocode(1);
             }
 
-            $this->locationRepository->update($location);
+            $locationRepository->update($location);
             $loopCount++;
 
             if ($loopCount > 9) {
-                $this->persistenceManager->persistAll();
+                $persistenceManager->persistAll();
                 $loopCount = 0;
             }
         }
 
         if ($loopCount) {
-            $this->persistenceManager->persistAll();
+            $persistenceManager->persistAll();
         }
 
-        return true;
-    }
-
-    protected function findAllWithoutLatLon()
-    {
-        $queryBuilder = $this->getQueryBuilderForTable('tx_storefinder_domain_model_location');
-        $queryBuilder
-            ->select('*')
-            ->from('tx_storefinder_domain_model_location')
-            ->where(
-                $queryBuilder->expr()->orX(
-                    $queryBuilder->expr()->eq(
-                        'latitude',
-                        $queryBuilder->createNamedParameter('0.0000000', \PDO::PARAM_STR)
-                    ),
-                    $queryBuilder->expr()->eq(
-                        'longitude',
-                        $queryBuilder->createNamedParameter('0.0000000', \PDO::PARAM_STR)
-                    )
-                )
-            );
-
-        return $queryBuilder->execute();
-    }
-
-    protected function getQueryBuilderForTable(string $table): \TYPO3\CMS\Core\Database\Query\QueryBuilder
-    {
-        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-            \TYPO3\CMS\Core\Database\ConnectionPool::class
-        )->getQueryBuilderForTable($table);
+        $io->comment('All locations geocoded');
     }
 }

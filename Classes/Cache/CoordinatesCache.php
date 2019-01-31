@@ -209,8 +209,10 @@ class CoordinatesCache
      */
     public function flushSessionCache()
     {
-        $this->frontendUser->setKey('ses', 'tx_storefinder_coordinates', []);
-        $this->frontendUser->storeSessionData();
+        if ($this->frontendUser != null) {
+            $this->frontendUser->setKey('ses', 'tx_storefinder_coordinates', []);
+            $this->frontendUser->storeSessionData();
+        }
     }
 
 
