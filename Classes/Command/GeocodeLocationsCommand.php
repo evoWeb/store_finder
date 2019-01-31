@@ -2,7 +2,7 @@
 namespace Evoweb\StoreFinder\Command;
 
 /**
- * This file is developed by evoweb.
+ * This file is developed by evoWeb.
  *
  * It is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, either version 2
@@ -12,12 +12,7 @@ namespace Evoweb\StoreFinder\Command;
  * LICENSE.txt file that was distributed with this source code.
  */
 
-/**
- * Class GeocodeLocationsCommandController
- *
- * @deprecated and with be removed with support for TYPO3 8.7
- */
-class GeocodeLocationsCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\CommandController
+class GeocodeLocationsCommand extends \Symfony\Component\Console\Command\Command
 {
     /**
      * @var \Evoweb\StoreFinder\Domain\Repository\LocationRepository
@@ -34,22 +29,19 @@ class GeocodeLocationsCommandController extends \TYPO3\CMS\Extbase\Mvc\Controlle
      */
     protected $persistenceManager;
 
+    /**
+     * Configure the command by defining the name, options and arguments
+     */
+    protected function configure()
+    {
+        $this->setAliases(['storefinder:geocode']);
+        $this->setDescription('Query google geocode service to get lat/lon for locations that are not geocode already');
+    }
+
     public function injectGeocodeService(
         \Evoweb\StoreFinder\Service\GeocodeService $geocodeService
     ) {
         $this->geocodeService = $geocodeService;
-    }
-
-    public function injectLocationRepository(
-        \Evoweb\StoreFinder\Domain\Repository\LocationRepository $locationRepository
-    ) {
-        $this->locationRepository = $locationRepository;
-    }
-
-    public function injectPersistenceManager(
-        \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager $persistenceManager
-    ) {
-        $this->persistenceManager = $persistenceManager;
     }
 
     public function geocodeCommand(): bool
@@ -59,8 +51,8 @@ class GeocodeLocationsCommandController extends \TYPO3\CMS\Extbase\Mvc\Controlle
         );
 
         $loopCount = 0;
-        $locationsToGeocode = $this->locationRepository->findAllWithoutLatLon();
-        /** @var \Evoweb\StoreFinder\Domain\Model\Constraint $location */
+        $locationsToGeocode = $this->findAllWithoutLatLon();
+        /** @var array $location */
         foreach ($locationsToGeocode as $location) {
             $location = $this->geocodeService->geocodeAddress($location);
 
@@ -82,5 +74,34 @@ class GeocodeLocationsCommandController extends \TYPO3\CMS\Extbase\Mvc\Controlle
         }
 
         return true;
+    }
+
+    protected function findAllWithoutLatLon()
+    {
+        $queryBuilder = $this->getQueryBuilderForTable('tx_storefinder_domain_model_location');
+        $queryBuilder
+            ->select('*')
+            ->from('tx_storefinder_domain_model_location')
+            ->where(
+                $queryBuilder->expr()->orX(
+                    $queryBuilder->expr()->eq(
+                        'latitude',
+                        $queryBuilder->createNamedParameter('0.0000000', \PDO::PARAM_STR)
+                    ),
+                    $queryBuilder->expr()->eq(
+                        'longitude',
+                        $queryBuilder->createNamedParameter('0.0000000', \PDO::PARAM_STR)
+                    )
+                )
+            );
+
+        return $queryBuilder->execute();
+    }
+
+    protected function getQueryBuilderForTable(string $table): \TYPO3\CMS\Core\Database\Query\QueryBuilder
+    {
+        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+            \TYPO3\CMS\Core\Database\ConnectionPool::class
+        )->getQueryBuilderForTable($table);
     }
 }

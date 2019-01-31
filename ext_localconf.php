@@ -47,13 +47,7 @@ call_user_func(function () {
     $scOptions['t3lib/class.t3lib_tcemain.php']['processDatamapClass']['store_finder'] =
         \Evoweb\StoreFinder\Hook\TceMainHook::class;
 
-    // Add location geocodeing task
-    $scOptions['scheduler']['tasks'][\Evoweb\StoreFinder\Task\GeocodeLocationsTask::class] = [
-        'extension' => 'store_finder',
-        'title' => 'Switch to the extbase command controller task: "StoreFinder GeocodeLocations: geocode"',
-        'description' => 'Switch to the extbase command controller task: "StoreFinder GeocodeLocations: geocode"',
-    ];
-
+    // @deprecated and with be removed with support for TYPO3 8.7
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['extbase']['commandControllers']['GeocodeLocationsCommandController'] =
         \Evoweb\StoreFinder\Command\GeocodeLocationsCommandController::class;
 });
