@@ -15,7 +15,7 @@ namespace Evoweb\StoreFinder\ViewHelpers;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
 
-class MinifyViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
+class MinifyViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper
 {
     use CompileWithRenderStatic;
 
@@ -66,7 +66,7 @@ class MinifyViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelp
 
         /* remove tabs, spaces, newlines, etc. */
         $content = str_replace(
-            [CRLF, CR, LF, TAB, '     ', '    ', '  ', ': '],
+            [CRLF, CR, LF, "\t", '     ', '    ', '  ', ': '],
             ['', '', '', '', '', '', '', ':'],
             $content
         );

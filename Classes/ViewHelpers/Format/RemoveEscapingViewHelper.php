@@ -24,22 +24,37 @@ namespace Evoweb\StoreFinder\ViewHelpers\Format;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
+
 /**
  * Class RemoveEscapingViewHelper
  *
  * @package Evoweb\StoreFinder\ViewHelpers\Format
  */
-class RemoveEscapingViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
+class RemoveEscapingViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper
 {
+    public function initializeArguments()
+    {
+        parent::initializeArguments();
+
+        $this->registerArgument('content', 'string', 'Content to be modified', true);
+    }
+
     /**
-     * Make an binary additon and return the result
+     * Replace escaping of curly braces
      *
-     * @param integer $content
+     * @param array $arguments
+     * @param \Closure $renderChildrenClosure
+     * @param RenderingContextInterface $renderingContext
      *
      * @return string
      */
-    public function render($content = 0)
-    {
-        return str_replace('\{', '{', str_replace('\}', '}', $content ?: $this->renderChildren()));
+    public static function renderStatic(
+        array $arguments,
+        \Closure $renderChildrenClosure,
+        RenderingContextInterface $renderingContext
+    ): string {
+        $content = $arguments['content'] ? $arguments['content'] : $renderChildrenClosure();
+        return str_replace(['\{', '\}'], ['{', '}'], $content);
     }
 }

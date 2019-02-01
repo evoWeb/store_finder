@@ -177,6 +177,12 @@ class GeocodeService
                     }
                     break;
 
+                case 'state':
+                    if ($value instanceof \SJBR\StaticInfoTables\Domain\Model\CountryZone) {
+                        $value = $value->getLocalName();
+                    }
+                    break;
+
                 default:
             }
 
