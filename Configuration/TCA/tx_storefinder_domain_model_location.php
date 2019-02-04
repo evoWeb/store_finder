@@ -384,22 +384,17 @@ return [
             'l10n_mode' => 'exclude',
             'label' => $languageFile . 'tx_storefinder_domain_model_location.related',
             'config' => [
-                'type' => 'select',
-                'renderType' => 'selectSingle',
-                'items' => [
-                    ['', 0]
-                ],
+                'type' => 'group',
+                'internal_type' => 'db',
+                'allowed' => 'tx_storefinder_domain_model_location',
                 'foreign_table' => 'tx_storefinder_domain_model_location',
                 'foreign_table_where' => 'AND tx_storefinder_domain_model_location.uid != ###THIS_UID###
                     ORDER BY tx_storefinder_domain_model_location.name',
-                'MM' => 'sys_category_record_mm',
+                'MM' => 'tx_storefinder_location_location_mm',
                 'MM_match_fields' => [
                     'tablenames' => 'tx_storefinder_domain_model_location',
                     'fieldname' => 'related',
                 ],
-                'minitems' => 0,
-                'maxitems' => 1,
-                'default' => 0,
             ]
         ],
 
