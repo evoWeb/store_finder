@@ -127,6 +127,10 @@
 				<source>Calculated value by search query</source>
 				<target>Berechnete Entfernung</target>
 			</trans-unit>
+			<trans-unit id="tx_storefinder_domain_model_location.modifyLocationMap" xml:space="preserve">
+				<source>Modify location coordinate</source>
+				<target>Location Koordinaten anpassen</target>
+			</trans-unit>
 			<trans-unit id="sys_category.add" xml:space="preserve" approved="yes">
 				<source>Add category</source>
 				<target>Kategorie hinzufügen</target>

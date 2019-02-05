@@ -10,8 +10,7 @@ call_user_func(function () {
         ];
     }
 
-    $GLOBALS['TYPO3_CONF_VARS']['SYS']['livesearch']['location'] = 'tx_storefinder_domain_model_location';
-
+    /** @var \TYPO3\CMS\Core\Imaging\IconRegistry $iconRegistry */
     $iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class);
     $iconRegistry->registerIcon(
         'store-finder-plugin',
@@ -42,10 +41,18 @@ call_user_func(function () {
         ['Map' => 'map']
     );
 
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['livesearch']['location'] = 'tx_storefinder_domain_model_location';
+
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass']['store_finder'] =
         \Evoweb\StoreFinder\Hook\TceMainHook::class;
 
     // @deprecated and with be removed with support for TYPO3 8.7
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['extbase']['commandControllers']['GeocodeLocationsCommandController'] =
         \Evoweb\StoreFinder\Command\GeocodeLocationsCommandController::class;
+
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1549261866] = [
+        'nodeName' => 'modifyLocationMap',
+        'priority' => '70',
+        'class' => \Evoweb\StoreFinder\Form\Element\ModifyLocationMap::class,
+    ];
 });
