@@ -66,6 +66,7 @@
 							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.apiV3Layers</label>
 							<config>
 								<type>select</type>
+								<renderType>selectSingle</renderType>
 								<items type="array">
 									<numIndex index="0" type="array">
 										<numIndex index="0">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.apiV3Layers.trafficOverlay</numIndex>
@@ -98,43 +99,31 @@
 						<TCEforms>
 							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.allowedCountries</label>
 							<config>
-								<type>group</type>
 								<type>input</type>
-								<internal_type>folder</internal_type>
-								<size>1</size>
 								<size>40</size>
-								<maxitems>1</maxitems>
 							</config>
 						</TCEforms>
 					</settings.allowedCountries>
 
-					<view.templateRootPath>
+					<view.templateRootPaths.1>
 						<TCEforms>
 							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.templateRootPath</label>
 							<config>
-								<type>group</type>
 								<type>input</type>
-								<internal_type>folder</internal_type>
-								<size>1</size>
 								<size>40</size>
-								<maxitems>1</maxitems>
 							</config>
 						</TCEforms>
-					</view.templateRootPath>
+					</view.templateRootPaths.1>
 
-					<view.partialRootPath>
+					<view.partialRootPaths.1>
 						<TCEforms>
 							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.partialRootPath</label>
 							<config>
-								<type>group</type>
 								<type>input</type>
-								<internal_type>folder</internal_type>
-								<size>1</size>
 								<size>40</size>
-								<maxitems>1</maxitems>
 							</config>
 						</TCEforms>
-					</view.partialRootPath>
+					</view.partialRootPaths.1>
 
 					<settings.showStoreImage>
 						<TCEforms>
@@ -162,11 +151,10 @@
 							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.categories</label>
 							<config>
 								<type>select</type>
-								<autoSizeMax>50</autoSizeMax>
+								<renderType>selectTree</renderType>
 								<foreign_table>sys_category</foreign_table>
 								<foreign_table_where>AND sys_category.sys_language_uid IN (-1, 0) ORDER BY sys_category.sorting ASC</foreign_table_where>
-								<maxitems>9999</maxitems>
-								<renderMode>tree</renderMode>
+								<maxitems>200</maxitems>
 								<size>10</size>
 								<treeConfig>
 									<parentField>parent</parentField>
@@ -184,6 +172,7 @@
 							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.categoryPriority</label>
 							<config>
 								<type>select</type>
+								<renderType>selectSingle</renderType>
 								<items type="array">
 									<numIndex index="0" type="array">
 										<numIndex index="0">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.categoryPriority.useAsFilterInFrontend</numIndex>
@@ -212,7 +201,6 @@
 								<size>1</size>
 								<maxitems>1</maxitems>
 								<minitems>0</minitems>
-								<show_thumbs>0</show_thumbs>
 							</config>
 						</TCEforms>
 					</settings.singleLocationId>
@@ -227,7 +215,6 @@
 								<size>1</size>
 								<maxitems>1</maxitems>
 								<minitems>0</minitems>
-								<show_thumbs>0</show_thumbs>
 							</config>
 						</TCEforms>
 					</settings.resultPageId>
@@ -242,7 +229,6 @@
 								<size>1</size>
 								<maxitems>1</maxitems>
 								<minitems>0</minitems>
-								<show_thumbs>0</show_thumbs>
 							</config>
 						</TCEforms>
 					</settings.routePageId>
