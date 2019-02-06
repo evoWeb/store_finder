@@ -8,6 +8,7 @@ define(['jquery', 'TYPO3/CMS/StoreFinder/Leaflet'],
 			this.initializeMap();
 			this.addMarker();
 			this.triggerResizeOnActive();
+      setTimeout(function () { this.invalidateSize(); }.bind(this.map), 10);
 		}
 
 		LocationMap.prototype.initializeMap = function ()

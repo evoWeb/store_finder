@@ -16,14 +16,18 @@ class ModifyLocationMap extends \TYPO3\CMS\Backend\Form\Element\AbstractFormElem
         /** @var PageRenderer $pageRenderer */
         $pageRenderer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(PageRenderer::class);
         $pageRenderer->addRequireJsConfiguration(['paths' => [
-            'TYPO3/CMS/StoreFinder/Leaflet' => 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.4.0/leaflet'
+            'TYPO3/CMS/StoreFinder/Leaflet' => rtrim($this->getRelativeFilePath(
+                'EXT:store_finder/Resources/Public/JavaScript/leaflet.js'
+            ), '.js/')
         ]]);
 
         $row = $this->data['databaseRow'];
         $latitude = !empty($row['latitude']) ? $row['latitude'] : '51.4583912';
         $longitude = !empty($row['longitude']) ? $row['longitude'] : '7.0157931';
 
-        $resultArray['stylesheetFiles'][] = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.4.0/leaflet.css';
+        $resultArray['stylesheetFiles'][] = rtrim($this->getRelativeFilePath(
+            'EXT:store_finder/Resources/Public/Stylesheet/leaflet.css'
+        ), '/');
         $resultArray['requireJsModules']['modifyLocationMap'] = [
             'TYPO3/CMS/StoreFinder/FormEngine/Element/LocationMap' => 'function(LocationMap) {
                 new LocationMap({
@@ -36,5 +40,13 @@ class ModifyLocationMap extends \TYPO3\CMS\Backend\Form\Element\AbstractFormElem
         $resultArray['html'] = '<div id="map" style="height: 240px; width: 100%;"></div>';
 
         return $resultArray;
+    }
+
+    protected function getRelativeFilePath(string $filePath): string
+    {
+        return \TYPO3\CMS\Core\Utility\PathUtility::getRelativePath(
+            PATH_typo3,
+            \TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName($filePath)
+        );
     }
 }
