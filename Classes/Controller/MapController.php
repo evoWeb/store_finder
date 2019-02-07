@@ -12,6 +12,7 @@ namespace Evoweb\StoreFinder\Controller;
  * LICENSE.txt file that was distributed with this source code.
  */
 
+use Evoweb\SfRegister\Validation\Validator\SettableInterface;
 use Evoweb\StoreFinder\Domain\Model;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
@@ -57,6 +58,80 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         \TYPO3\CMS\Extbase\SignalSlot\Dispatcher $signalSlotDispatcher
     ) {
         $this->signalSlotDispatcher = $signalSlotDispatcher;
+    }
+
+    protected function initializeActionMethodValidators()
+    {
+        if ($this->arguments->hasArgument('search')) {
+            $this->modifyValidatorsBasedOnSettings(
+                $this->arguments->getArgument('search'),
+                $this->settings['validation'] ?? []
+            );
+        } else {
+            parent::initializeActionMethodValidators();
+        }
+    }
+
+    protected function modifyValidatorsBasedOnSettings(
+        \TYPO3\CMS\Extbase\Mvc\Controller\Argument $argument,
+        array $configuredValidators
+    ) {
+        /** @var \Evoweb\StoreFinder\Validation\ValidatorResolver $validatorResolver */
+        $validatorResolver = $this->objectManager->get(\Evoweb\StoreFinder\Validation\ValidatorResolver::class);
+
+        /** @var \Evoweb\StoreFinder\Validation\Validator\ConstraintValidator $validator */
+        $validator = $this->objectManager->get(\Evoweb\StoreFinder\Validation\Validator\ConstraintValidator::class);
+        foreach ($configuredValidators as $fieldName => $configuredValidator) {
+            if (!is_array($configuredValidator)) {
+                $validatorInstance = $this->getValidatorByConfiguration(
+                    $configuredValidator,
+                    $validatorResolver
+                );
+
+                if ($validatorInstance instanceof SettableInterface) {
+                    $validatorInstance->setPropertyName($fieldName);
+                }
+            } else {
+                $validatorInstance = $this->objectManager->get(
+                    \Evoweb\SfRegister\Validation\Validator\ConjunctionValidator::class
+                );
+                foreach ($configuredValidator as $individualConfiguredValidator) {
+                    $individualValidatorInstance = $this->getValidatorByConfiguration(
+                        $individualConfiguredValidator,
+                        $validatorResolver
+                    );
+
+                    if ($individualValidatorInstance instanceof SettableInterface) {
+                        $individualValidatorInstance->setPropertyName($fieldName);
+                    }
+
+                    $validatorInstance->addValidator($individualValidatorInstance);
+                }
+            }
+
+            $validator->addPropertyValidator($fieldName, $validatorInstance);
+        }
+
+        $argument->setValidator($validator);
+    }
+
+    /**
+     * @param string $configuration
+     * @param \Evoweb\StoreFinder\Validation\ValidatorResolver $validatorResolver
+     *
+     * @return \TYPO3\CMS\Extbase\Validation\Validator\ValidatorInterface
+     */
+    protected function getValidatorByConfiguration(string $configuration, $validatorResolver)
+    {
+        $validateAnnotation = $validatorResolver->getParsedValidatorAnnotation($configuration);
+        $currentValidator = current($validateAnnotation['validators']);
+
+        $validatorObject = $validatorResolver->createValidator(
+            $currentValidator['validatorName'],
+            (array) $currentValidator['validatorOptions']
+        );
+
+        return $validatorObject;
     }
 
     protected function setTypeConverter()

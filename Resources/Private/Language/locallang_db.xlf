@@ -96,6 +96,9 @@
 			<trans-unit id="tx_storefinder_domain_model_location.distance" xml:space="preserve">
 				<source>Calculated value by search query</source>
 			</trans-unit>
+			<trans-unit id="tx_storefinder_domain_model_location.modifyLocationMap" xml:space="preserve">
+				<source>Modify location coordinate</source>
+			</trans-unit>
 			<trans-unit id="sys_category.add" xml:space="preserve">
 				<source>Add category</source>
 			</trans-unit>

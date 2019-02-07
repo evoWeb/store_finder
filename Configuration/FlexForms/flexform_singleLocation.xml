@@ -41,6 +41,7 @@
 							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.zoom</label>
 							<config>
 								<type>select</type>
+								<renderType>selectSingle</renderType>
 								<size>1</size>
 								<maxitems>1</maxitems>
 								<default>15</default>
@@ -136,39 +137,32 @@
 						</TCEforms>
 					</settings.showStoreImage>
 
-					<view.templateRootPath>
+					<view.templateRootPaths.1>
 						<TCEforms>
 							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.templateRootPath</label>
 							<config>
-								<type>group</type>
 								<type>input</type>
-								<internal_type>folder</internal_type>
-								<size>1</size>
 								<size>40</size>
-								<maxitems>1</maxitems>
 							</config>
 						</TCEforms>
-					</view.templateRootPath>
+					</view.templateRootPaths.1>
 
-					<view.partialRootPath>
+					<view.partialRootPaths.1>
 						<TCEforms>
 							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.partialRootPath</label>
 							<config>
-								<type>group</type>
 								<type>input</type>
-								<internal_type>folder</internal_type>
-								<size>1</size>
 								<size>40</size>
-								<maxitems>1</maxitems>
 							</config>
 						</TCEforms>
-					</view.partialRootPath>
+					</view.partialRootPaths.1>
 
 					<settings.mapConfiguration.apiV3Layers>
 						<TCEforms>
 							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.apiV3Layers</label>
 							<config>
 								<type>select</type>
+								<renderType>selectSingle</renderType>
 								<items type="array">
 									<numIndex index="0" type="array">
 										<numIndex index="0">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.apiV3Layers.trafficOverlay</numIndex>

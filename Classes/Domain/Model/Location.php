@@ -186,25 +186,16 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     public function __construct()
     {
-        $this->attributes =
-            $this->categories =
-            $this->content =
-            $this->related =
-            $this->image =
-            $this->media = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
-    }
+        $this->objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+            \TYPO3\CMS\Extbase\Object\ObjectManager::class
+        );
 
-    /**
-     * @return \TYPO3\CMS\Extbase\Object\ObjectManager
-     */
-    protected function getObjectManager()
-    {
-        if (is_null($this->objectManager)) {
-            $this->objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-                \TYPO3\CMS\Extbase\Object\ObjectManager::class
-            );
-        }
-        return $this->objectManager;
+        $this->attributes = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        $this->categories = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        $this->content = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        $this->related = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        $this->image = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        $this->media = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
     }
 
     public function getAdditionaladdress(): string
@@ -295,7 +286,7 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         if (is_null($this->_country)) {
             /** @var \Evoweb\StoreFinder\Domain\Repository\CountryRepository $repository */
-            $repository = $this->getObjectManager()->get(
+            $repository = $this->objectManager->get(
                 \Evoweb\StoreFinder\Domain\Repository\CountryRepository::class
             );
 

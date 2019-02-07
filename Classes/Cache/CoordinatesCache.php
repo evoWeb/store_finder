@@ -2,7 +2,7 @@
 namespace Evoweb\StoreFinder\Cache;
 
 /**
- * This file is developed by evoweb.
+ * This file is developed by evoWeb.
  *
  * It is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, either version 2
@@ -209,8 +209,10 @@ class CoordinatesCache
      */
     public function flushSessionCache()
     {
-        $this->frontendUser->setKey('ses', 'tx_storefinder_coordinates', []);
-        $this->frontendUser->storeSessionData();
+        if ($this->frontendUser != null) {
+            $this->frontendUser->setKey('ses', 'tx_storefinder_coordinates', []);
+            $this->frontendUser->storeSessionData();
+        }
     }
 
 

@@ -161,7 +161,9 @@ class GeocodeService
                             \TYPO3\CMS\Extbase\Object\ObjectManager::class
                         );
                         /** @var \Evoweb\StoreFinder\Domain\Repository\CountryRepository $repository */
-                        $repository = $objectManager->get(\Evoweb\StoreFinder\Domain\Repository\CountryRepository::class);
+                        $repository = $objectManager->get(
+                            \Evoweb\StoreFinder\Domain\Repository\CountryRepository::class
+                        );
 
                         if (is_numeric($value)) {
                             $value = $repository->findByUid($value);
@@ -172,6 +174,12 @@ class GeocodeService
 
                     if ($value instanceof \SJBR\StaticInfoTables\Domain\Model\Country) {
                         $value = $value->getIsoCodeA2();
+                    }
+                    break;
+
+                case 'state':
+                    if ($value instanceof \SJBR\StaticInfoTables\Domain\Model\CountryZone) {
+                        $value = $value->getLocalName();
                     }
                     break;
 
@@ -191,7 +199,8 @@ class GeocodeService
     protected function getCoordinateByApiCall(array $queryValues): \stdClass
     {
         if (strpos($this->settings['apiProvider'], '\\') === false) {
-            $providerClass = 'Evoweb\\StoreFinder\\Service\\Provider\\' . ucfirst($this->settings['apiProvider']) . 'Provider';
+            $providerClass = 'Evoweb\\StoreFinder\\Service\\Provider\\'
+                . ucfirst($this->settings['apiProvider']) . 'Provider';
         } else {
             $providerClass = $this->settings['apiProvider'];
         }

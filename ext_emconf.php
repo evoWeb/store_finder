@@ -8,20 +8,12 @@ $EM_CONF['store_finder'] = [
     'author_email' => 'typo3@evoweb.de',
     'author_company' => 'evoweb',
     'state' => 'stable',
-    'uploadfolder' => 1,
-    'clearcacheonload' => 0,
+    'clearCacheOnLoad' => 1,
     'version' => '2.2.0',
     'constraints' => [
         'depends' => [
             'typo3' => '8.7.0-9.5.99',
-            'static_info_tables' => '6.5.1-',
-        ],
-        'conflicts' => [],
-        'suggests' => [],
-    ],
-    "autoload-dev" => [
-        "psr-4" => [
-            "Evoweb\\StoreFinder\\Tests\\" => "Tests/",
+            'static_info_tables' => '6.7.4-',
         ],
     ],
 ];

@@ -35,9 +35,7 @@ $overrideChildTca = [
     ],
 ];
 
-$table = 'tx_storefinder_domain_model_location';
-$attributeTable = 'tx_storefinder_domain_model_attribute';
-$languageFile = 'LLL:EXT:store_finder/Resources/Private/Language/locallang_db.xlf' . ':';
+$languageFile = 'LLL:EXT:store_finder/Resources/Private/Language/locallang_db.xlf:';
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages(
     'tx_storefinder_domain_model_location'
@@ -176,9 +174,10 @@ return [
                         0
                     ]
                 ],
-                'foreign_table' => $table,
+                'foreign_table' => 'tx_storefinder_domain_model_location',
                 'foreign_table_where' =>
-                    'AND ' . $table . '.pid = ###CURRENT_PID### AND ' . $table . '.sys_language_uid IN (-1, 0)',
+                    'AND tx_storefinder_domain_model_location.pid = ###CURRENT_PID### '
+                    . 'AND tx_storefinder_domain_model_location.sys_language_uid IN (-1, 0)',
                 'default' => 0
             ]
         ],
@@ -384,22 +383,17 @@ return [
             'l10n_mode' => 'exclude',
             'label' => $languageFile . 'tx_storefinder_domain_model_location.related',
             'config' => [
-                'type' => 'select',
-                'renderType' => 'selectSingle',
-                'items' => [
-                    ['', 0]
-                ],
+                'type' => 'group',
+                'internal_type' => 'db',
+                'allowed' => 'tx_storefinder_domain_model_location',
                 'foreign_table' => 'tx_storefinder_domain_model_location',
                 'foreign_table_where' => 'AND tx_storefinder_domain_model_location.uid != ###THIS_UID###
                     ORDER BY tx_storefinder_domain_model_location.name',
-                'MM' => 'sys_category_record_mm',
+                'MM' => 'tx_storefinder_location_location_mm',
                 'MM_match_fields' => [
                     'tablenames' => 'tx_storefinder_domain_model_location',
                     'fieldname' => 'related',
                 ],
-                'minitems' => 0,
-                'maxitems' => 1,
-                'default' => 0,
             ]
         ],
 
@@ -447,8 +441,9 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectMultipleSideBySide',
                 'foreign_table' => 'tx_storefinder_domain_model_attribute',
-                'foreign_table_where' => ' AND ' . $attributeTable . '.sys_language_uid IN (-1,0) AND ' .
-                    $attributeTable . '.pid = ###CURRENT_PID###',
+                'foreign_table_where' =>
+                    'AND tx_storefinder_domain_model_attribute.sys_language_uid IN (-1,0) AND '
+                    . 'tx_storefinder_domain_model_attribute.pid = ###CURRENT_PID###',
                 'MM' => 'tx_storefinder_location_attribute_mm',
                 'MM_match_fields' => [
                     'tablenames' => 'tx_storefinder_domain_model_attribute',
@@ -484,7 +479,7 @@ return [
             'label' => $languageFile . 'tx_storefinder_domain_model_location.latitude',
             'config' => [
                 'type' => 'input',
-                'readOnly' => 1,
+                // 'readOnly' => 1,
                 'size' => 10,
             ]
         ],
@@ -494,7 +489,7 @@ return [
             'label' => $languageFile . 'tx_storefinder_domain_model_location.longitude',
             'config' => [
                 'type' => 'input',
-                'readOnly' => 1,
+                // 'readOnly' => 1,
                 'size' => 10,
             ]
         ],
@@ -524,8 +519,17 @@ return [
                 'type' => 'check',
             ]
         ],
+        'map' => [
+            'l10n_mode' => 'exclude',
+            'exclude' => true,
+            'label' => $languageFile . 'tx_storefinder_domain_model_location.modifyLocationMap',
+            'config' => [
+                'type' => 'check',
+                'renderType' => 'modifyLocationMap',
+            ]
+        ],
 
-        // informations
+        // information
         'products' => [
             'label' => $languageFile . 'tx_storefinder_domain_model_location.products',
             'config' => [
@@ -641,18 +645,18 @@ return [
                     --palette--;;contact,
                     url,
                     hours,
-                --div--;' . $languageFile . 'div-relations,
-                    categories,
-                    attributes,
-                    icon,
-                    related,
-                    --palette--;;coordinates,
                 --div--;' . $languageFile . 'div-informations,
                     products,
                     notes,
+                    icon,
                     image,
                     media,
                     content,
+                --div--;' . $languageFile . 'div-relations,
+                    --palette--;;coordinates,
+                    related,
+                    attributes,
+                    categories,
                 --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,
                     --palette--;;hidden,
                     --palette--;;access,
@@ -689,6 +693,8 @@ return [
             'label' => $languageFile . 'palette-coordinates',
             'showitem' => '
                 latitude, longitude,
+                --linebreak--,
+                map,
                 --linebreak--,
                 geocode, center
             '

@@ -43,8 +43,8 @@ class GoogleMapsProvider implements EncodeProviderInterface
         }
 
         $addressData = json_decode(utf8_encode(
-            \TYPO3\CMS\Core\Utility\GeneralUtility::getUrl(str_replace('?&', '?', $apiUrl)))
-        );
+            \TYPO3\CMS\Core\Utility\GeneralUtility::getUrl(str_replace('?&', '?', $apiUrl))
+        ));
 
         $hasMultipleResults = false;
         $result = new \stdClass();

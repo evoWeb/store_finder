@@ -33,6 +33,11 @@ class TceMainHook
      */
     protected $repository;
 
+    public function __construct()
+    {
+        $this->objectManager = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Object\ObjectManager::class);
+    }
+
     /**
      * After database operations hook
      *
@@ -89,22 +94,13 @@ class TceMainHook
     protected function getRepository(): \Evoweb\StoreFinder\Domain\Repository\LocationRepository
     {
         if ($this->repository === null) {
-            $this->repository = $this->getObjectManager()
-                ->get(\Evoweb\StoreFinder\Domain\Repository\LocationRepository::class);
+            $this->repository = $this->objectManager->get(
+                \Evoweb\StoreFinder\Domain\Repository\LocationRepository::class
+            );
         }
 
         return $this->repository;
     }
-
-    protected function getObjectManager(): \TYPO3\CMS\Extbase\Object\ObjectManager
-    {
-        if ($this->objectManager === null) {
-            $this->objectManager = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Object\ObjectManager::class);
-        }
-
-        return $this->objectManager;
-    }
-
 
     /**
      * Sets coordinates by using geo coding service
@@ -116,8 +112,10 @@ class TceMainHook
     protected function setCoordinates(Location $location): Location
     {
         /** @var \Evoweb\StoreFinder\Service\GeocodeService $geocodeService */
-        $geocodeService = $this->getObjectManager()
-            ->get(\Evoweb\StoreFinder\Service\GeocodeService::class, $this->configuration);
+        $geocodeService = $this->objectManager->get(
+            \Evoweb\StoreFinder\Service\GeocodeService::class,
+            $this->configuration
+        );
         $location = $geocodeService->geocodeAddress($location);
 
         return $location;
@@ -133,8 +131,7 @@ class TceMainHook
         $this->getRepository()->update($location);
 
         /** @var PersistenceManager $persistenceManager */
-        $persistenceManager = $this->getObjectManager()
-            ->get(\TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager::class);
+        $persistenceManager = $this->objectManager->get(PersistenceManager::class);
         $persistenceManager->persistAll();
     }
 }

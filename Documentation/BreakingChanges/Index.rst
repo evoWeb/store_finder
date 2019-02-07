@@ -10,6 +10,14 @@
 Breaking Changes
 ----------------
 
+31. January 2019
+================
+Drop already deprecated GeocodeLocationsTask in favor of GeocodeLocationsCommandController
+
+Deprecate GeocodeLocationsCommandController to be replaced with GeocodeLocationsCommand once support for
+TYPO3 8.7 gets dropped.
+
+
 10. January 2019
 ================
 As of the location model does not escapeJsonString any properties anymore. With this getNameRaw and

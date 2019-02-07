@@ -12,6 +12,11 @@ namespace Evoweb\StoreFinder\Command;
  * LICENSE.txt file that was distributed with this source code.
  */
 
+/**
+ * Class GeocodeLocationsCommandController
+ *
+ * @deprecated and with be removed with support for TYPO3 8.7
+ */
 class GeocodeLocationsCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\CommandController
 {
     /**
