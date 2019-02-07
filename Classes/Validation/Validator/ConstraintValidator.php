@@ -12,7 +12,6 @@ namespace Evoweb\StoreFinder\Validation\Validator;
  * LICENSE.txt file that was distributed with this source code.
  */
 
-use Evoweb\SfRegister\Validation\Validator\SettableInterface;
 use TYPO3\CMS\Extbase\Validation\Validator\GenericObjectValidator;
 use TYPO3\CMS\Extbase\Validation\Validator\ObjectValidatorInterface;
 
@@ -35,7 +34,7 @@ class ConstraintValidator extends GenericObjectValidator
     /**
      * Model that gets validated currently
      *
-     * @var \object
+     * @var \Evoweb\StoreFinder\Domain\Model\Constraint
      */
     protected $model;
 

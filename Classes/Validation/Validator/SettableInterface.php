@@ -29,7 +29,7 @@ interface SettableInterface
     /**
      * Setter for model
      *
-     * @param \Evoweb\SfRegister\Domain\Model\FrontendUser|\Evoweb\SfRegister\Domain\Model\Password $model
+     * @param \Evoweb\StoreFinder\Domain\Model\Constraint $model
      */
     public function setModel($model);
 
