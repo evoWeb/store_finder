@@ -20,7 +20,7 @@ class MapQuestProvider implements EncodeProviderInterface
     public function encodeAddress(array $parameter, array $settings): array
     {
         $apiUrl = $settings['geocodeUrl'] .
-            (!empty($settings['apiConsoleKey']) ? '&key=' . $settings['apiConsoleKey'] : '') .
+            (!empty($settings['apiConsoleKeyGeocoding']) ? '&key=' . $settings['apiConsoleKeyGeocoding'] : '') .
             '&location=' . implode(',', $parameter);
 
         $addressData = json_decode(utf8_encode(

@@ -42,6 +42,7 @@ plugin.tx_storefinder.settings
   geocodeUrl_                                           :ref:`data-type-string`                           yes                   no         service url
   useConsoleKeyForGeocoding_                            :ref:`data-type-boolean`                          yes        no         no         0
   apiConsoleKey_                                        :ref:`data-type-string`                           yes        no         no         -
+  apiConsoleKeyGeocoding_                               :ref:`data-type-string`                           yes        no         no         -
   distanceUnit_                                         :ref:`data-type-string`                           yes                   no         miles
   `mapConfiguration.language <mc-language_>`_           :ref:`data-type-string`                           yes                   no         en
   `mapConfiguration.allowSensors <mc-allowSensors_>`_   :ref:`data-type-boolean`                          yes                   no         1
@@ -292,12 +293,26 @@ plugin.tx_storefinder.persistence
          string
 
    Description
-         If you want to use static maps in the map output or premium geo coding you need
-         to register an geo code api key at google.
-         https://developers.google.com/maps/documentation/javascript/get-api-key
+         Used for geocoding and reverse geocoding of addresses via Google Maps Geocoding API. Must have access for Google Maps Geocoding API and can only be restricted by ip addresses.
 
    Default
 
+
+.. _apiConsoleKeyGeocoding:
+.. ### BEGIN~OF~TABLE ###
+
+.. container:: table-row
+
+   Property
+         apiConsoleKeyGeocoding
+
+   Data type
+         string
+
+   Description
+         Used for output map via Google Maps JavaScript API. Must have access for Google Maps JavaScript API and can only be restricted by domains.
+
+   Default
 
 
 .. _distanceUnit:

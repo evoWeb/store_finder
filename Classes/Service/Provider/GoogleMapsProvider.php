@@ -35,7 +35,7 @@ class GoogleMapsProvider implements EncodeProviderInterface
         }
 
         $apiUrl = $settings['geocodeUrl'] .
-            (!empty($settings['apiConsoleKey']) ? '&key=' . $settings['apiConsoleKey'] : '') .
+            (!empty($settings['apiConsoleKeyGeocoding']) ? '&key=' . $settings['apiConsoleKeyGeocoding'] : '') .
             '&address=' . implode('+', $parameter) .
             (!empty($components) ? '&components=' . implode('|', $components) : '');
         if (TYPO3_MODE == 'FE' && isset($this->getTypoScriptFrontendController()->lang)) {
