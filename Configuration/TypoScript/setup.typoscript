@@ -9,7 +9,10 @@ plugin.tx_storefinder.settings {
   # needed for google or mapQuest accounts
   # starting with June 2018 google map only provides premium access.
   # https://mapsplatform.googleblog.com/2018/05/introducing-google-maps-platform.html
+  # Used for https://developers.google.com/maps/documentation/geocoding/start
   apiConsoleKey =
+  # used for https://developers.google.com/maps/documentation/javascript/tutorial
+  apiConsoleKeyGeocoding =
 
   categories =
 

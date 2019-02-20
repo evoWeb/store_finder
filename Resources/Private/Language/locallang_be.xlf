@@ -4,7 +4,10 @@
 		<header/>
 		<body>
 			<trans-unit id="apiConsoleKey">
-				<source>Api Console Key: (Google Maps API [https://developers.google.com/maps/documentation/javascript/get-api-key])</source>
+				<source>Api Console Key for Maps: (Google Maps JavaScript API [https://developers.google.com/maps/documentation/javascript/get-api-key])</source>
+			</trans-unit>
+			<trans-unit id="apiConsoleKeyGeocoding">
+				<source>Api Console Key for Geocoding: (Google Maps Geocoding API [https://developers.google.com/maps/documentation/geocoding/get-api-key])</source>
 			</trans-unit>
 			<trans-unit id="apiProvider">
 				<source>Name of API to use (mapQuest, googleMaps or fully qualified classname)</source>
