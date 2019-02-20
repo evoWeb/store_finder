@@ -34,8 +34,13 @@ class GoogleMapsProvider implements EncodeProviderInterface
             return [false, new \stdClass()];
         }
 
+        $apiConsoleKeyGeocoding = $settings['apiConsoleKeyGeocoding'];
+        if (empty($apiConsoleKeyGeocoding)) {
+            $apiConsoleKeyGeocoding = $settings['apiConsoleKey'];
+        }
+
         $apiUrl = $settings['geocodeUrl'] .
-            (!empty($settings['apiConsoleKeyGeocoding']) ? '&key=' . $settings['apiConsoleKeyGeocoding'] : '') .
+            (!empty($apiConsoleKeyGeocoding) ? '&key=' . $apiConsoleKeyGeocoding : '') .
             '&address=' . implode('+', $parameter) .
             (!empty($components) ? '&components=' . implode('|', $components) : '');
         if (TYPO3_MODE == 'FE' && isset($this->getTypoScriptFrontendController()->lang)) {
