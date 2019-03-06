@@ -186,6 +186,11 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     public function __construct()
     {
+        $this->initializeObject();
+    }
+
+    public function initializeObject()
+    {
         $this->objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             \TYPO3\CMS\Extbase\Object\ObjectManager::class
         );

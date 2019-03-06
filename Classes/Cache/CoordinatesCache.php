@@ -127,10 +127,11 @@ class CoordinatesCache
 
         foreach ($fields as $field) {
             $methodName = 'get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $field)));
-            $value = $address->{$methodName}();
-
-            if ($value) {
-                $values[$field] = $value;
+            if ($address !== null && method_exists($address, $methodName)) {
+                $value = $address->{$methodName}();
+                if ($value) {
+                    $values[$field] = $value;
+                }
             }
         }
 
