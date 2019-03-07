@@ -86,8 +86,8 @@ config.tx_extbase.persistence {
   classes {
     Evoweb\StoreFinder\Domain\Model\Country.mapping.tableName = static_countries
     Evoweb\StoreFinder\Domain\Model\CountryZone.mapping.tableName = static_country_zones
-
     Evoweb\StoreFinder\Domain\Model\Category.mapping.tableName = sys_category
+    Evoweb\StoreFinder\Domain\Model\Content.mapping.tableName = tt_content
   }
 }
 
