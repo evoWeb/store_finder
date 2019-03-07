@@ -137,7 +137,7 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $categories;
 
     /**
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Evoweb\StoreFinder\Domain\Model\Location>
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Evoweb\StoreFinder\Domain\Model\Content>
      * @lazy
      */
     protected $content;
@@ -269,12 +269,15 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->person = $person;
     }
 
-    public function getContent(): string
+    /**
+     * @return Content[]|\TYPO3\CMS\Extbase\Persistence\ObjectStorage
+     */
+    public function getContent()
     {
         return $this->content;
     }
 
-    public function setContent(string $content)
+    public function setContent(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $content)
     {
         $this->content = $content;
     }

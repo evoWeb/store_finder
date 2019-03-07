@@ -12,7 +12,7 @@ namespace Evoweb\StoreFinder\Controller;
  * LICENSE.txt file that was distributed with this source code.
  */
 
-use Evoweb\SfRegister\Validation\Validator\SettableInterface;
+use Evoweb\StoreFinder\Validation\Validator\SettableInterface;
 use Evoweb\StoreFinder\Domain\Model;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
@@ -93,7 +93,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
                 }
             } else {
                 $validatorInstance = $this->objectManager->get(
-                    \Evoweb\SfRegister\Validation\Validator\ConjunctionValidator::class
+                    \Evoweb\StoreFinder\Validation\Validator\ConstraintValidator::class
                 );
                 foreach ($configuredValidator as $individualConfiguredValidator) {
                     $individualValidatorInstance = $this->getValidatorByConfiguration(
