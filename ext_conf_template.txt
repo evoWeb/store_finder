@@ -1,6 +1,9 @@
 # cat=basic/enable/100; type=input; label=LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:apiConsoleKey
 apiConsoleKey =
 
+# cat=basic/enable/100; type=input; label=LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:apiConsoleKeyGeocoding
+apiConsoleKeyGeocoding =
+
 # cat=basic/enable/100; type=input; label=LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:apiProvider
 apiProvider = googleMaps
 

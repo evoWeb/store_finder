@@ -35,7 +35,7 @@ CREATE TABLE tx_storefinder_domain_model_location (
 	fax varchar(255) DEFAULT '' NOT NULL,
 	hours tinytext,
 	email varchar(255) DEFAULT '' NOT NULL,
-	url varchar(255) DEFAULT '' NOT NULL,
+	url varchar(2048) DEFAULT '' NOT NULL,
 	notes text,
 
 	attributes int(11) unsigned DEFAULT '0' NOT NULL,
