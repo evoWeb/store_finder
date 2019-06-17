@@ -59,7 +59,7 @@ return [
         'languageField' => 'sys_language_uid',
         'translationSource' => 'l10n_source',
 
-        'searchFields' => 'name, zipcode, city, address, country, notes',
+        'searchFields' => 'name, storeid, zipcode, city, address, country, notes',
         'enablecolumns' => [
             'disabled' => 'hidden',
             'starttime' => 'starttime',
