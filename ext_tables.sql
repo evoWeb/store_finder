@@ -21,7 +21,7 @@ CREATE TABLE tx_storefinder_domain_model_location (
 	l18n_diffsource mediumtext,
 
 	name varchar(255) DEFAULT '' NOT NULL,
-	storeid varchar(25) DEFAULT '' NOT NULL,
+	storeid varchar(60) DEFAULT '' NOT NULL,
 	address varchar(255) DEFAULT '' NOT NULL,
 	additionaladdress varchar(255) DEFAULT '' NOT NULL,
 	person varchar(255) DEFAULT '' NOT NULL,
