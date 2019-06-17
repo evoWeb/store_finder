@@ -19,7 +19,7 @@
 	</sf:minify>};
 
 	var locations = [<f:for each="{locations}" as="location" iteration="loop">
-		{f:render(partial: 'LocationJson', arguments: _all)}<f:if condition="{loop.isLast}"><f:then/><f:else>,</f:else></f:if></f:for>
+		{f:render(partial: 'LocationJson', section: 'content', arguments: _all)}<f:if condition="{loop.isLast}"><f:then/><f:else>,</f:else></f:if></f:for>
 	];
 </script>
 
