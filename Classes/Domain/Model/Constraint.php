@@ -77,7 +77,7 @@ class Constraint extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * @var int
      */
-    protected $zoom = 1;
+    protected $zoom = 0;
 
     /**
      * @var int
