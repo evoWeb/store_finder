@@ -18,7 +18,8 @@ runFunctionalTests () {
     ${PHP} ${COMPOSER} --version
 
     export TYPO3_PATH_WEB=$PWD/.Build/Web;
-    ${PHP} ${COMPOSER} require typo3/minimal="$TYPO3_VERSION";
+    ${PHP} ${COMPOSER} require typo3/cms-core="$TYPO3_VERSION";
+    ${PHP} ${COMPOSER} require typo3/cms-extensionmanager="$TYPO3_VERSION";
     ${PHP} ${COMPOSER} require --dev typo3/testing-framework="$TESTING_FRAMEWORK";
     git checkout composer.json;
 
@@ -45,14 +46,9 @@ runFunctionalTests () {
     rm -rf .Build/Web/
     rm -rf .Build/bin/
     rm -rf var/
-
-    cd ../
 }
 
 cd ../;
 
-#runFunctionalTests "/usr/bin/php7.0" "^8.7.0" "~1.3.0" "mysqli";
-#runFunctionalTests "/usr/bin/php7.1" "^8.7.0" "~1.3.0" "mysqli";
-#runFunctionalTests "/usr/bin/php7.2" "^8.7.0" "~1.3.0" "mysqli";
 runFunctionalTests "/usr/bin/php7.2" "^9.5.0" "~4.10.0" "pdo_sqlite";
-#runFunctionalTests "/usr/bin/php7.2" "dev-master as 10.0.0" "~4.10.0" "pdo_sqlite";
+runFunctionalTests "/usr/bin/php7.2" "^10.0.0" "~5.0.11" "pdo_sqlite";

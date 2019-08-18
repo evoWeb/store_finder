@@ -43,8 +43,8 @@ class GoogleMapsProvider implements EncodeProviderInterface
             (!empty($apiConsoleKeyGeocoding) ? '&key=' . $apiConsoleKeyGeocoding : '') .
             '&address=' . implode('+', $parameter) .
             (!empty($components) ? '&components=' . implode('|', $components) : '');
-        if (TYPO3_MODE == 'FE' && isset($this->getTypoScriptFrontendController()->lang)) {
-            $apiUrl .= '&language=' . $this->getTypoScriptFrontendController()->lang;
+        if (TYPO3_MODE == 'FE') {
+            $apiUrl .= '&language=' . $this->getLanguageKey();
         }
 
         $addressData = json_decode(utf8_encode(
@@ -68,6 +68,17 @@ class GoogleMapsProvider implements EncodeProviderInterface
         }
 
         return [$hasMultipleResults, $result];
+    }
+
+    protected function getLanguageKey(): string
+    {
+        $controller = $this->getTypoScriptFrontendController();
+        if (method_exists($controller, 'getLanguage')) {
+            $languageKey = $controller->getLanguage()->getTwoLetterIsoCode();
+        } else {
+            $languageKey = $controller->lang;
+        }
+        return $languageKey;
     }
 
     /**

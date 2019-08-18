@@ -4,8 +4,10 @@ namespace Evoweb\StoreFinder\Updates;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Registry;
+use TYPO3\CMS\Install\Updates\DatabaseUpdatedPrerequisite;
+use TYPO3\CMS\Install\Updates\UpgradeWizardInterface;
 
-class LocationMigrationWizard extends \TYPO3\CMS\Install\Updates\AbstractUpdate
+class LocationMigrationWizard implements UpgradeWizardInterface
 {
     /**
      * Number of records fetched per database query
@@ -16,7 +18,7 @@ class LocationMigrationWizard extends \TYPO3\CMS\Install\Updates\AbstractUpdate
     /**
      * @var string
      */
-    protected $title = 'Migrate all location records from EXT:location to EXT:store_finder tables';
+    protected $title = 'Migrate all location records from EXT:locator to EXT:store_finder tables';
 
     /**
      * @var array
@@ -72,6 +74,68 @@ class LocationMigrationWizard extends \TYPO3\CMS\Install\Updates\AbstractUpdate
         }
     }
 
+    /**
+     * @return string Unique identifier of this updater
+     */
+    public function getIdentifier(): string
+    {
+        return 'storeFinderLocationMigration';
+    }
+
+    /**
+     * @return string Title of this updater
+     */
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    /**
+     * @return string Longer description of this updater
+     */
+    public function getDescription(): string
+    {
+        return 'This update wizard goes through all files that are referenced in the hw_fewo'
+            . ' extension and adds the files to the FAL File Index.<br />'
+            . 'It also moves the files from uploads/ to the fileadmin/_migrated/ path.';
+    }
+
+    /**
+     * Checks if an update is needed
+     *
+     * @return bool Whether an update is needed (TRUE) or not (FALSE)
+     */
+    public function updateNecessary(): bool
+    {
+        return $this->table !== '';
+    }
+
+    /**
+     * @return string[] All new fields and tables must exist
+     */
+    public function getPrerequisites(): array
+    {
+        return [
+            DatabaseUpdatedPrerequisite::class
+        ];
+    }
+
+    public function executeUpdate(): bool
+    {
+        $customMessage = '';
+        try {
+            $this->initialize();
+
+            $this->migrateAttributes();
+            $this->migrateCategories();
+            $this->migrateLocationsWithRelations();
+        } catch (\Exception $e) {
+            $customMessage .= PHP_EOL . $e->getMessage();
+        }
+
+        return empty($customMessage);
+    }
+
     protected function initialize()
     {
         $this->registry = GeneralUtility::makeInstance(Registry::class);
@@ -82,62 +146,18 @@ class LocationMigrationWizard extends \TYPO3\CMS\Install\Updates\AbstractUpdate
         $this->fieldMapper->checkPrerequisites();
     }
 
-    public function checkForUpdate(&$description): bool
-    {
-        if ($this->isWizardDone()) {
-            return false;
-        }
-
-        $description = 'This update wizard goes through all files that are referenced in the hw_fewo'
-            . ' extension and adds the files to the FAL File Index.<br />'
-            . 'It also moves the files from uploads/ to the fileadmin/_migrated/ path.';
-
-        $this->initialize();
-
-        return $this->table !== '';
-    }
-
-    public function performUpdate(array &$dbQueries, &$customMessage): bool
-    {
-        $customMessage = '';
-        try {
-            $this->initialize();
-
-            $this->migrateAttributes();
-            $this->migrateCategories();
-            $this->migrateLocations();
-        } catch (\Exception $e) {
-            $customMessage .= PHP_EOL . $e->getMessage();
-        }
-
-        return empty($customMessage);
-    }
-
     /**
      * Marks some wizard as being "seen" so that it not shown again.
      *
      * @param mixed $confValue The configuration is set to this value
      */
-    protected function markWizardAsDone($confValue = 1)
+    protected function markTablesAsDone($confValue = 1)
     {
         $wizardClassName = static::class . '/' . $this->table;
-        GeneralUtility::makeInstance(Registry::class)->set('migrateLocations', $wizardClassName, $confValue);
+        $this->registry->set('migrateLocations', $wizardClassName, $confValue);
+        $this->registry->remove('migrateLocations', 'recordOffset');
     }
 
-    /**
-     * Checks if this wizard has been "done" before
-     *
-     * @return bool TRUE if wizard has been done before, FALSE otherwise
-     */
-    protected function isWizardDone(): bool
-    {
-        return $this->table !== '';
-    }
-
-
-    /**
-     * Migrate attributes
-     */
     protected function migrateAttributes()
     {
         if (!isset($this->recordOffset['attributes'])) {
@@ -174,15 +194,11 @@ class LocationMigrationWizard extends \TYPO3\CMS\Install\Updates\AbstractUpdate
         } while ($attributes->rowCount() === self::RECORDS_PER_QUERY);
 
         $this->table = 'attributes';
-        $this->markWizardAsDone();
-        $this->registry->remove('migrateLocations', 'recordOffset');
+        $this->markTablesAsDone();
 
         $this->messageArray[] = ['message' => count($this->records['attributes']) . ' attributes migrated'];
     }
 
-    /**
-     * Migrate categories
-     */
     protected function migrateCategories()
     {
         if (!isset($this->recordOffset['categories'])) {
@@ -217,16 +233,12 @@ class LocationMigrationWizard extends \TYPO3\CMS\Install\Updates\AbstractUpdate
         } while ($categories->rowCount() === self::RECORDS_PER_QUERY);
 
         $this->table = 'categories';
-        $this->markWizardAsDone();
-        $this->registry->remove('migrateLocations', 'recordOffset');
+        $this->markTablesAsDone();
 
         $this->messageArray[] = ['message' => count($this->records['categories']) . ' categories migrated'];
     }
 
-    /**
-     * Migrate locations with relations
-     */
-    protected function migrateLocations()
+    protected function migrateLocationsWithRelations()
     {
         if (!isset($this->recordOffset['locations'])) {
             $this->recordOffset['locations'] = 0;
@@ -266,8 +278,7 @@ class LocationMigrationWizard extends \TYPO3\CMS\Install\Updates\AbstractUpdate
         } while ($locations->rowCount() === self::RECORDS_PER_QUERY);
 
         $this->table = 'locations';
-        $this->markWizardAsDone();
-        $this->registry->remove('migrateLocations', 'recordOffset');
+        $this->markTablesAsDone();
 
         $queryBuilder = $this->getQueryBuilderForTable('tx_storefinder_domain_model_location');
         $queryBuilder->getConnection()->query('

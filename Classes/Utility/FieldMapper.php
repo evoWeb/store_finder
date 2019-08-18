@@ -1,6 +1,7 @@
 <?php
 namespace Evoweb\StoreFinder\Utility;
 
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -266,7 +267,8 @@ class FieldMapper
             $this->fileIndexRepository = GeneralUtility::makeInstance(
                 \TYPO3\CMS\Core\Resource\Index\FileIndexRepository::class
             );
-            $this->targetDirectory = PATH_site . $fileadminDirectory . self::FILE_MIGRATION_FOLDER;
+            $this->targetDirectory = Environment::getPublicPath() . '/'
+                . $fileadminDirectory . self::FILE_MIGRATION_FOLDER;
         }
     }
 
@@ -512,7 +514,7 @@ class FieldMapper
     public function migrateFilesToFal(array $source, array $destination, string $type, string $field)
     {
         $configuration = $this->fileMapping[$type][$field];
-        $path = PATH_site . $configuration['sourcePath'];
+        $path = Environment::getPublicPath() . '/' . $configuration['sourcePath'];
         $files = GeneralUtility::trimExplode(',', $source[$configuration['sourceField']], true);
 
         $i = 1;

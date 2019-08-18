@@ -18,7 +18,7 @@ class Attribute extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * Image
      *
      * @var \TYPO3\CMS\Extbase\Domain\Model\FileReference
-     * @lazy
+     * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
      */
     protected $icon;
 

@@ -9,10 +9,10 @@ $EM_CONF['store_finder'] = [
     'author_company' => 'evoweb',
     'state' => 'stable',
     'clearCacheOnLoad' => 1,
-    'version' => '2.3.5',
+    'version' => '3.0.0',
     'constraints' => [
         'depends' => [
-            'typo3' => '8.7.0-9.5.99',
+            'typo3' => '9.5.99-10.4.99',
             'static_info_tables' => '6.7.4-',
         ],
     ],

@@ -45,7 +45,7 @@ class ModifyLocationMap extends \TYPO3\CMS\Backend\Form\Element\AbstractFormElem
     protected function getRelativeFilePath(string $filePath): string
     {
         return \TYPO3\CMS\Core\Utility\PathUtility::getRelativePath(
-            PATH_typo3,
+            \TYPO3\CMS\Core\Core\Environment::getPublicPath() . '/typo3/',
             \TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName($filePath)
         );
     }

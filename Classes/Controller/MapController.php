@@ -76,8 +76,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         \TYPO3\CMS\Extbase\Mvc\Controller\Argument $argument,
         array $configuredValidators
     ) {
-        /** @var \Evoweb\StoreFinder\Validation\ValidatorResolver $validatorResolver */
-        $validatorResolver = $this->objectManager->get(\Evoweb\StoreFinder\Validation\ValidatorResolver::class);
+        $parser = new \Doctrine\Common\Annotations\DocParser();
 
         /** @var \Evoweb\StoreFinder\Validation\Validator\ConstraintValidator $validator */
         $validator = $this->objectManager->get(\Evoweb\StoreFinder\Validation\Validator\ConstraintValidator::class);
@@ -85,7 +84,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             if (!is_array($configuredValidator)) {
                 $validatorInstance = $this->getValidatorByConfiguration(
                     $configuredValidator,
-                    $validatorResolver
+                    $parser
                 );
 
                 if ($validatorInstance instanceof SettableInterface) {
@@ -98,7 +97,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
                 foreach ($configuredValidator as $individualConfiguredValidator) {
                     $individualValidatorInstance = $this->getValidatorByConfiguration(
                         $individualConfiguredValidator,
-                        $validatorResolver
+                        $parser
                     );
 
                     if ($individualValidatorInstance instanceof SettableInterface) {
@@ -117,21 +116,30 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
     /**
      * @param string $configuration
-     * @param \Evoweb\StoreFinder\Validation\ValidatorResolver $validatorResolver
+     * @param \Doctrine\Common\Annotations\DocParser $parser
      *
      * @return \TYPO3\CMS\Extbase\Validation\Validator\ValidatorInterface
      */
-    protected function getValidatorByConfiguration(string $configuration, $validatorResolver)
+    protected function getValidatorByConfiguration($configuration, $parser)
     {
-        $validateAnnotation = $validatorResolver->getParsedValidatorAnnotation($configuration);
-        $currentValidator = current($validateAnnotation['validators']);
+        if (strpos($configuration, '"') === false && strpos($configuration, '(') === false) {
+            $configuration = '"' . $configuration . '"';
+        }
 
-        $validatorObject = $validatorResolver->createValidator(
-            $currentValidator['validatorName'],
-            (array) $currentValidator['validatorOptions']
-        );
-
-        return $validatorObject;
+        /** @var \TYPO3\CMS\Extbase\Annotation\Validate $validateAnnotation */
+        $validateAnnotation = current($parser->parse(
+            '@TYPO3\CMS\Extbase\Annotation\Validate(' . $configuration . ')'
+        ));
+        if (class_exists(\TYPO3\CMS\Extbase\Validation\ValidatorClassNameResolver::class)) {
+            $validatorObjectName = \TYPO3\CMS\Extbase\Validation\ValidatorClassNameResolver::resolve(
+                $validateAnnotation->validator
+            );
+        } else {
+            /** @var \TYPO3\CMS\Extbase\Validation\ValidatorResolver $validatorResolver */
+            $validatorResolver = $this->objectManager->get(\TYPO3\CMS\Extbase\Validation\ValidatorResolver::class);
+            $validatorObjectName = $validatorResolver->resolveValidatorObjectName($validateAnnotation->validator);
+        }
+        return $this->objectManager->get($validatorObjectName, $validateAnnotation->options);
     }
 
     protected function setTypeConverter()

@@ -24,7 +24,7 @@ class AddLocationToCacheTest extends \TYPO3\TestingFramework\Core\Functional\Fun
     /**
      * @var array
      */
-    protected $testExtensionsToLoad = ['typo3conf/ext/store_finder'];
+    protected $testExtensionsToLoad = ['typo3conf/ext/store_finder', 'typo3conf/ext/static_info_tables'];
 
     /**
      * @var array
@@ -36,7 +36,7 @@ class AddLocationToCacheTest extends \TYPO3\TestingFramework\Core\Functional\Fun
      */
     protected $coordinatesCache;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
