@@ -60,7 +60,6 @@ return [
         'translationSource' => 'l10n_source',
 
         'selicon_field' => 'icon',
-        'selicon_field_path' => 'uploads/tx_storefinder',
 
         'enablecolumns' => [
             'disabled' => 'hidden',

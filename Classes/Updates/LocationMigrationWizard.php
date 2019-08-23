@@ -4,10 +4,8 @@ namespace Evoweb\StoreFinder\Updates;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Registry;
-use TYPO3\CMS\Install\Updates\DatabaseUpdatedPrerequisite;
-use TYPO3\CMS\Install\Updates\UpgradeWizardInterface;
 
-class LocationMigrationWizard implements UpgradeWizardInterface
+class LocationMigrationWizard implements \TYPO3\CMS\Install\Updates\UpgradeWizardInterface
 {
     /**
      * Number of records fetched per database query
@@ -116,7 +114,7 @@ class LocationMigrationWizard implements UpgradeWizardInterface
     public function getPrerequisites(): array
     {
         return [
-            DatabaseUpdatedPrerequisite::class
+            \TYPO3\CMS\Install\Updates\DatabaseUpdatedPrerequisite::class
         ];
     }
 
