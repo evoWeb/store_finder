@@ -76,6 +76,7 @@ class GoogleMapsProvider implements EncodeProviderInterface
         if (method_exists($controller, 'getLanguage')) {
             $languageKey = $controller->getLanguage()->getTwoLetterIsoCode();
         } else {
+            // @todo remove once TYPO3 9.5.x support is dropped
             $languageKey = $controller->lang;
         }
         return $languageKey;
