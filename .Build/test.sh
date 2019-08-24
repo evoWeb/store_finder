@@ -1,26 +1,21 @@
-
 #!/usr/bin/env bash
 
-export PACKAGE="evoWeb/store_finder";
+export PACKAGE="evoWeb/store-finder";
 export T3EXTENSION="store_finder";
 
-runFunctionalTests () {
+runUnitTests () {
     local PHP=${1};
     local TYPO3_VERSION=${2};
     local TESTING_FRAMEWORK=${3};
-    local DB_DRIVER=${4};
     local COMPOSER="/usr/local/bin/composer";
-
-    rm -rf .Build/Web
-    rm -rf .Build/bin
 
     ${PHP} --version
     ${PHP} ${COMPOSER} --version
 
-    export TYPO3_PATH_WEB=$PWD/.Build/Web;
-    ${PHP} ${COMPOSER} require typo3/cms-core="$TYPO3_VERSION";
-    ${PHP} ${COMPOSER} require typo3/cms-extensionmanager="$TYPO3_VERSION";
-    ${PHP} ${COMPOSER} require --dev typo3/testing-framework="$TESTING_FRAMEWORK";
+    export TYPO3_PATH_WEB=${PWD}/.Build/Web;
+    ${PHP} ${COMPOSER} require -n --dev typo3/cms-core="${TYPO3_VERSION}";
+    ${PHP} ${COMPOSER} require -n --dev typo3/cms-extensionmanager="${TYPO3_VERSION}";
+    if [ ! -z "${TESTING_FRAMEWORK}" ]; then ${PHP} ${COMPOSER} require -n -q --dev typo3/testing-framework="${TESTING_FRAMEWORK}"; fi;
     git checkout composer.json;
 
     mkdir -p .Build/Web/typo3conf/ext/
@@ -29,26 +24,18 @@ runFunctionalTests () {
     echo "Running php lint";
     errors=$(find . -name \*.php ! -path "./.Build/*" -exec ${PHP} -d display_errors=stderr -l {} 2>&1 >/dev/null \;) && echo "$errors" && test -z "$errors"
 
-    echo "Running xmllint (Xliff) (Remember to install libxml2-utils)";
-    find Resources/Private/Language/ -name '*.xlf' -type f | xargs xmllint --noout --schema Tests/Fixtures/xliff-core-1.2-strict.xsd
-
-    echo "Running functional tests";
-    export typo3DatabaseName="typo3";
-    export typo3DatabaseHost="localhost";
-    export typo3DatabaseUsername="root";
-    export typo3DatabasePassword="";
-    export typo3DatabaseDriver="$DB_DRIVER";
-    ${PHP} .Build/bin/phpunit \
-        --colors \
-        -c .Build/Web/vendor/typo3/testing-framework/Resources/Core/Build/FunctionalTests.xml Tests/Functional/;
-
+    echo "Running $TYPO3_VERSION functional tests";
+    export typo3DatabaseDriver="pdo_sqlite";
+    ${PHP} .Build/bin/phpunit --colors -c .Build/vendor/typo3/testing-framework/Resources/Core/Build/FunctionalTests.xml Tests/Functional/;
+exit
     rm composer.lock
     rm -rf .Build/Web/
     rm -rf .Build/bin/
-    rm -rf var/
+    rm -rf .Build/vendor/
 }
 
 cd ../;
 
-runFunctionalTests "/usr/bin/php7.2" "^9.5.0" "~4.10.0" "pdo_sqlite";
-runFunctionalTests "/usr/bin/php7.2" "^10.0.0" "~5.0.11" "pdo_sqlite";
+runUnitTests "/usr/bin/php7.2" "^9.5.0" "~4.10.0";
+runUnitTests "/usr/bin/php7.2" "^10.0.0" "~5.0.11";
+runUnitTests "/usr/bin/php7.2" "dev-master as 10.0.0" "~5.0.11";
