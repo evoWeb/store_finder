@@ -1,7 +1,5 @@
 <?php
 
-use TYPO3\CMS\Core\Utility\VersionNumberUtility;
-
 defined('TYPO3_MODE') || die('Access denied.');
 
 call_user_func(function () {
@@ -36,23 +34,20 @@ call_user_func(function () {
         options.saveDocNew.tx_storefinder_domain_model_attribute = 1
     ');
 
-    if (\TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(
-        TYPO3\CMS\Core\Utility\VersionNumberUtility::getNumericTypo3Version()
-    ) < 10000000) {
-        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-            'Evoweb.StoreFinder',
-            'Map',
-            ['Map' => 'map'],
-            ['Map' => 'map']
-        );
+    if (\TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch)
+        < 10000000) {
+        $extensionName = 'Evoweb.StoreFinder';
+        $mapController = 'Map';
     } else {
-        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-            'StoreFinder',
-            'Map',
-            [\Evoweb\StoreFinder\Controller\MapController::class => 'map'],
-            [\Evoweb\StoreFinder\Controller\MapController::class => 'map']
-        );
+        $extensionName = 'StoreFinder';
+        $mapController = \Evoweb\StoreFinder\Controller\MapController::class;
     }
+    \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+        $extensionName,
+        'Map',
+        [$mapController => 'map'],
+        [$mapController => 'map']
+    );
 
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['livesearch']['location'] = 'tx_storefinder_domain_model_location';
 
