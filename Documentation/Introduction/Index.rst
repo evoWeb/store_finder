@@ -1,9 +1,5 @@
-.. ==================================================
-.. FOR YOUR INFORMATION
-.. --------------------------------------------------
-.. -*- coding: utf-8 -*- with BOM.
-
 .. include:: ../Includes.txt
+
 
 .. _introduction:
 
@@ -23,7 +19,7 @@ marker an info window with additional informations get shown.
 Search form:
 ============
 
-.. figure:: ../Images/introduction_search.png
+.. figure:: Images/introduction_search.png
    :alt: Search form
    :width: 711px
    :align: left
@@ -32,7 +28,7 @@ Search form:
 Result map and list:
 ====================
 
-.. figure:: ../Images/introduction_result.png
+.. figure:: Images/introduction_result.png
    :alt: Result map and list
    :width: 711px
    :align: left
