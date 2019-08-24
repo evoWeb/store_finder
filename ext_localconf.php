@@ -21,11 +21,8 @@ call_user_func(function () {
         ]
     );
 
-    /**
-     * Default PageTSConfig
-     */
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
-        '@import \'store_finder/Configuration/PageTSconfig/NewContentElementWizard.typoscript\''
+        '@import \'EXT:store_finder/Configuration/TSconfig/NewContentElementWizard.typoscript\''
     );
 
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addUserTSConfig('
