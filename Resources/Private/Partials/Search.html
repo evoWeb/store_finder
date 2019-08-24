@@ -38,7 +38,8 @@
 			<dt><f:translate key="country" /></dt>
 			<dd>
 				<f:render partial="FieldError" section="Main" arguments="{field: 'country'}" />
-				<sf:form.selectCountries property="country" id="sfrCountry" optionValueField="{settings.countryValueType}" allowedCountries="{settings.allowedCountries}" />
+				<sf:form.selectCountries property="country" id="sfrCountry"
+					optionValueField="{settings.countryValueType}" allowedCountries="{settings.allowedCountries}" />
 			</dd>
 		</f:if>
 

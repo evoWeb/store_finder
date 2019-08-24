@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace Evoweb\StoreFinder\ViewHelpers\Format;
 
 /***************************************************************
@@ -54,7 +55,7 @@ class RemoveEscapingViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\Abstrac
         \Closure $renderChildrenClosure,
         RenderingContextInterface $renderingContext
     ): string {
-        $content = $arguments['content'] ? $arguments['content'] : $renderChildrenClosure();
+        $content = $arguments['content'] ?? $renderChildrenClosure();
         return str_replace(['\{', '\}'], ['{', '}'], $content);
     }
 }

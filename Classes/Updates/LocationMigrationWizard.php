@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace Evoweb\StoreFinder\Updates;
 
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
@@ -144,15 +145,10 @@ class LocationMigrationWizard implements \TYPO3\CMS\Install\Updates\UpgradeWizar
         $this->fieldMapper->checkPrerequisites();
     }
 
-    /**
-     * Marks some wizard as being "seen" so that it not shown again.
-     *
-     * @param mixed $confValue The configuration is set to this value
-     */
-    protected function markTablesAsDone($confValue = 1)
+    protected function markTablesAsDone()
     {
         $wizardClassName = static::class . '/' . $this->table;
-        $this->registry->set('migrateLocations', $wizardClassName, $confValue);
+        $this->registry->set('migrateLocations', $wizardClassName, 1);
         $this->registry->remove('migrateLocations', 'recordOffset');
     }
 

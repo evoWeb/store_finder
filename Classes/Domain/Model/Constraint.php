@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace Evoweb\StoreFinder\Domain\Model;
 
 /**
@@ -12,57 +13,12 @@ namespace Evoweb\StoreFinder\Domain\Model;
  * LICENSE.txt file that was distributed with this source code.
  */
 
-class Constraint extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
+class Constraint extends Location
 {
     /**
      * @var string
      */
     protected $search = '';
-
-    /**
-     * @var string
-     */
-    protected $name = '';
-
-    /**
-     * @var string
-     */
-    protected $address = '';
-
-    /**
-     * @var string
-     */
-    protected $zipcode = '';
-
-    /**
-     * @var string
-     */
-    protected $city = '';
-
-    /**
-     * @var string
-     */
-    protected $state = '';
-
-    /**
-     * @var string
-     */
-    protected $country = '';
-
-    /**
-     * @var string
-     */
-    protected $latitude = 0.0000000;
-
-    /**
-     * @var string
-     */
-    protected $longitude = 0.0000000;
-
-    /**
-     * @var string
-     */
-    protected $products = '';
 
     /**
      * @var array
@@ -73,16 +29,6 @@ class Constraint extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @var int
      */
     protected $radius = 0;
-
-    /**
-     * @var int
-     */
-    protected $zoom = 0;
-
-    /**
-     * @var int
-     */
-    protected $geocode = 0;
 
     /**
      * @var int
@@ -104,16 +50,6 @@ class Constraint extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->search = $search;
     }
 
-    public function setAddress(string $address)
-    {
-        $this->address = $address;
-    }
-
-    public function getAddress(): string
-    {
-        return $this->address;
-    }
-
     public function setCategory(array $category)
     {
         $this->category = (array) $category;
@@ -124,76 +60,6 @@ class Constraint extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return array_filter($this->category);
     }
 
-    public function setCity(string $city)
-    {
-        $this->city = $city;
-    }
-
-    public function getCity(): string
-    {
-        return $this->city;
-    }
-
-    public function setState(string $state)
-    {
-        $this->state = $state;
-    }
-
-    public function getState(): string
-    {
-        return $this->state;
-    }
-
-    public function setCountry(string $country)
-    {
-        $this->country = $country;
-    }
-
-    public function getCountry(): string
-    {
-        return $this->country;
-    }
-
-    public function setLatitude(string $latitude)
-    {
-        $this->latitude = $latitude;
-    }
-
-    public function getLatitude(): string
-    {
-        return $this->latitude ?: '';
-    }
-
-    public function setLongitude(string $longitude)
-    {
-        $this->longitude = $longitude;
-    }
-
-    public function getLongitude(): string
-    {
-        return $this->longitude ?: '';
-    }
-
-    public function setName(string $name)
-    {
-        $this->name = $name;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function setProducts(string $products)
-    {
-        $this->products = $products;
-    }
-
-    public function getProducts(): string
-    {
-        return $this->products;
-    }
-
     public function setRadius(int $radius)
     {
         $this->radius = $radius;
@@ -202,36 +68,6 @@ class Constraint extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function getRadius(): int
     {
         return $this->radius;
-    }
-
-    public function setZipcode(string $zipCode)
-    {
-        $this->zipcode = $zipCode;
-    }
-
-    public function getZipcode(): string
-    {
-        return $this->zipcode;
-    }
-
-    public function setZoom(int $zoom)
-    {
-        $this->zoom = $zoom;
-    }
-
-    public function getZoom(): int
-    {
-        return $this->zoom;
-    }
-
-    public function setGeocode(int $geocode)
-    {
-        $this->geocode = $geocode;
-    }
-
-    public function getGeocode(): int
-    {
-        return $this->geocode;
     }
 
     public function setLimit(int $limit)
@@ -252,11 +88,5 @@ class Constraint extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function getPage(): int
     {
         return $this->page;
-    }
-
-
-    public function isGeocoded(): bool
-    {
-        return $this->getLatitude() && $this->getLongitude() && !$this->getGeocode();
     }
 }

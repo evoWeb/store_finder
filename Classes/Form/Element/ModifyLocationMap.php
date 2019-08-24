@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace Evoweb\StoreFinder\Form\Element;
 
 use TYPO3\CMS\Core\Page\PageRenderer;

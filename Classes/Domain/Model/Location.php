@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace Evoweb\StoreFinder\Domain\Model;
 
 /**
@@ -115,14 +116,14 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $geocode = 0;
 
     /**
-     * @var integer
+     * @var bool
      */
-    protected $center = 0;
+    protected $center = false;
 
     /**
      * @var integer
      */
-    protected $zoom = 1;
+    protected $zoom = 0;
 
     /**
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Evoweb\StoreFinder\Domain\Model\Attribute>
@@ -287,12 +288,9 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->getCountry() ? $this->getCountry()->getShortNameEn() : '';
     }
 
-    /**
-     * @return \SJBR\StaticInfoTables\Domain\Model\Country
-     */
-    public function getCountry()
+    public function getCountry(): ?\SJBR\StaticInfoTables\Domain\Model\Country
     {
-        if (is_null($this->_country)) {
+        if (is_null($this->_country) && $this->country) {
             /** @var \Evoweb\StoreFinder\Domain\Repository\CountryRepository $repository */
             $repository = $this->objectManager->get(
                 \Evoweb\StoreFinder\Domain\Repository\CountryRepository::class

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace Evoweb\StoreFinder\Domain\Repository;
 
 /**
@@ -13,6 +14,7 @@ namespace Evoweb\StoreFinder\Domain\Repository;
  */
 
 use Evoweb\StoreFinder\Domain\Model\Constraint;
+use Evoweb\StoreFinder\Domain\Model\Location;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Database\Query\Restriction\EndTimeRestriction;
 use TYPO3\CMS\Core\Database\Query\Restriction\HiddenRestriction;
@@ -53,7 +55,7 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $this->settings = $settings;
     }
 
-    public function findByUidInBackend(int $uid): \Evoweb\StoreFinder\Domain\Model\Location
+    public function findByUidInBackend(int $uid): Location
     {
         /** @var \TYPO3\CMS\Extbase\Persistence\Generic\Query $query */
         $query = $this->createQuery();
@@ -86,18 +88,11 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
         $query->statement($sql);
 
-        /** @var \Evoweb\StoreFinder\Domain\Model\Location $location */
+        /** @var Location $location */
         $location = $query->execute()->getFirst();
         return $location;
     }
 
-    /**
-     * Finds an object matching the given identifier.
-     *
-     * @param int $uid The identifier of the object to find
-     *
-     * @return QueryResultInterface
-     */
     public function findOneByUid(int $uid): QueryResultInterface
     {
         /** @var Query $query */
@@ -108,12 +103,7 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $query->execute();
     }
 
-    /**
-     * @param Constraint $constraint
-     *
-     * @return array|QueryResultInterface
-     */
-    public function findByConstraint(Constraint $constraint)
+    public function findByConstraint(Constraint $constraint): QueryResultInterface
     {
         /** @var \TYPO3\CMS\Extbase\Persistence\Generic\Query $query */
         $query = $this->createQuery();
@@ -222,7 +212,7 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 'l',
                 'sys_category_record_mm',
                 'c',
-                $expression->andX(
+                (string) $expression->andX(
                     $expression->eq('l.uid', 'c.uid_foreign'),
                     $expression->eq(
                         'c.tablenames',
@@ -248,7 +238,7 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     protected function addRadiusQueryPart(Constraint $constraint, QueryBuilder $queryBuilder): QueryBuilder
     {
         if ($this->settings['distanceUnit'] == 'miles') {
-            $constraint->setRadius(max($constraint->getRadius(), 1) * 1.6);
+            $constraint->setRadius(intval(max($constraint->getRadius(), 1) * 1.6));
         }
 
         $queryBuilder->having(
@@ -323,13 +313,13 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return array_unique($categories);
     }
 
-    public function findCenterByLatitudeAndLongitude(): \Evoweb\StoreFinder\Domain\Model\Location
+    public function findCenterByLatitudeAndLongitude(): Location
     {
         /** @var \TYPO3\CMS\Extbase\Persistence\Generic\Query $query */
         $query = $this->createQuery();
 
         $query->setOrderings(['latitude' => QueryInterface::ORDER_ASCENDING]);
-        /** @var \Evoweb\StoreFinder\Domain\Model\Location $minLatitude south */
+        /** @var Location $minLatitude south */
         $minLatitude = $query->execute()->getFirst();
 
         // only search for the other locations if first succed or else we have no
@@ -338,20 +328,20 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             $maxLatitude = $minLongitude = $maxLongitude = null;
         } else {
             $query->setOrderings(['latitude' => QueryInterface::ORDER_DESCENDING]);
-            /** @var \Evoweb\StoreFinder\Domain\Model\Location $maxLatitude north */
+            /** @var Location $maxLatitude north */
             $maxLatitude = $query->execute()->getFirst();
 
             $query->setOrderings(['longitude' => QueryInterface::ORDER_ASCENDING]);
-            /** @var \Evoweb\StoreFinder\Domain\Model\Location $minLongitude west */
+            /** @var Location $minLongitude west */
             $minLongitude = $query->execute()->getFirst();
 
             $query->setOrderings(['longitude' => QueryInterface::ORDER_DESCENDING]);
-            /** @var \Evoweb\StoreFinder\Domain\Model\Location $maxLongitude east */
+            /** @var Location $maxLongitude east */
             $maxLongitude = $query->execute()->getFirst();
         }
 
-        /** @var \Evoweb\StoreFinder\Domain\Model\Location $location */
-        $location = $this->objectManager->get(\Evoweb\StoreFinder\Domain\Model\Location::class);
+        /** @var Location $location */
+        $location = $this->objectManager->get(Location::class);
         $latitudeZoom = $longitudeZoom = 0;
 
         /**
@@ -381,10 +371,7 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $location;
     }
 
-    /**
-     * @return \Evoweb\StoreFinder\Domain\Model\Location|null
-     */
-    public function findOneByCenter()
+    public function findOneByCenter(): ?Location
     {
         /** @var \TYPO3\CMS\Extbase\Persistence\Generic\Query $query */
         $query = $this->createQuery();
@@ -392,7 +379,7 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $query->setOrderings(['sorting' => QueryInterface::ORDER_ASCENDING]);
         $query->matching($query->equals('center', 1));
 
-        /** @var \Evoweb\StoreFinder\Domain\Model\Location $location */
+        /** @var Location $location */
         $location = $query->execute()->getFirst();
         return $location;
     }

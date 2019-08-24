@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace Evoweb\StoreFinder\Service\Provider;
 
 /**
@@ -82,10 +83,7 @@ class GoogleMapsProvider implements EncodeProviderInterface
         return $languageKey;
     }
 
-    /**
-     * @return \TYPO3\CMS\Core\Authentication\BackendUserAuthentication
-     */
-    protected function getBeUser()
+    protected function getBeUser(): ?\TYPO3\CMS\Core\Authentication\BackendUserAuthentication
     {
         return isset($GLOBALS['BE_USER']) ? $GLOBALS['BE_USER'] : null;
     }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace Evoweb\StoreFinder\Hook;
 
 /**
@@ -85,7 +86,6 @@ class TceMainHook
         $this->configuration = \Evoweb\StoreFinder\Utility\ExtensionConfigurationUtility::getConfiguration();
     }
 
-
     protected function fetchLocation(int $uid): Location
     {
         return $this->getRepository()->findByUidInBackend($uid);
@@ -103,7 +103,7 @@ class TceMainHook
     }
 
     /**
-     * Sets coordinates by using geo coding service
+     * Sets coordinates by using geocoding service
      *
      * @param Location $location
      *
@@ -121,11 +121,6 @@ class TceMainHook
         return $location;
     }
 
-    /**
-     * Stores location
-     *
-     * @param Location $location
-     */
     protected function storeLocation(Location $location)
     {
         $this->getRepository()->update($location);

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace Evoweb\StoreFinder\ViewHelpers\Format;
 
 /**
@@ -45,13 +46,13 @@ class BinaryAndViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractView
      * @param \Closure $renderChildrenClosure
      * @param RenderingContextInterface $renderingContext
      *
-     * @return string
+     * @return string|int
      */
     public static function renderStatic(
         array $arguments,
         \Closure $renderChildrenClosure,
         RenderingContextInterface $renderingContext
-    ): string {
+    ) {
         $content = $arguments['content'];
         $base = $arguments['base'];
         return ($content ?: $renderChildrenClosure()) & $base;

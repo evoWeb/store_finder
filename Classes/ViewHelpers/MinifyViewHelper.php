@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace Evoweb\StoreFinder\ViewHelpers;
 
 /**
@@ -61,7 +62,7 @@ class MinifyViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHel
 
         /* remove comments */
         $content = str_replace('://', "\xff", $content);
-        $content = preg_replace('@((?:\/\*(?:[^*]|(?:\*+[^*\/]))*\*+\/)|(?:\/\/.*))@', '', $content);
+        $content = preg_replace('@((?:/\*(?:[^*]|(?:\*+[^*/]))*\*+/)|(?://.*))@', '', $content);
         $content = str_replace("\xff", '://', $content);
 
         /* remove tabs, spaces, newlines, etc. */

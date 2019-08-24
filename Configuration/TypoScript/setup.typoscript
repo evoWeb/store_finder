@@ -4,7 +4,7 @@ plugin.tx_storefinder.settings {
   #geocodeUrl = http://www.mapquestapi.com/geocoding/v1/address?thumbMaps=false&outFormat=json
 
   # googleMaps, mapQuest, nominatim or custom provider implementing EncodeProviderInterface
-  apiProvider =
+  apiProvider = {$plugin.tx_storefinder.apiProvider}
 
   # needed for google or mapQuest accounts
   # starting with June 2018 google map only provides premium access.
@@ -71,15 +71,21 @@ plugin.tx_storefinder.settings {
   }
 
   validation {
-    zipcode = Evoweb\StoreFinder\Validation\Validator\RequiredValidator
-    city = Evoweb\StoreFinder\Validation\Validator\RequiredValidator
-    country = Evoweb\StoreFinder\Validation\Validator\RequiredValidator
+    zipcode = "Evoweb.StoreFinder:Required"
+    city = "Evoweb.StoreFinder:Required"
+    country = "Evoweb.StoreFinder:Required"
   }
 }
+
 plugin.tx_storefinder.view {
   templateRootPaths.0 = EXT:store_finder/Resources/Private/Templates/
+  templateRootPaths.1 = {$plugin.tx_storefinder.templateRootPaths}
+
   partialRootPaths.0 = EXT:store_finder/Resources/Private/Partials/
+  partialRootPaths.1 = {$plugin.tx_storefinder.partialRootPaths}
+
   layoutRootPaths.0 = EXT:store_finder/Resources/Private/Layouts/
+  layoutRootPaths.1 = {$plugin.tx_storefinder.layoutRootPaths}
 }
 
 config.tx_extbase.persistence {
