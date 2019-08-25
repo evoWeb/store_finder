@@ -3,25 +3,29 @@
 			data-namespace-typo3-fluid="true">
 
 <f:section name="content">
+<sf:minify>
 <script type="text/javascript">
-	var mapConfiguration = {<sf:minify>
+	var mapConfiguration = {
 		active: true,
 		zoom: '{center.zoom}',
-        apiConsoleKey: '{settings.apiConsoleKey}',
+		apiConsoleKey: '{settings.apiConsoleKey}',
 		<f:for each="{settings.mapConfiguration}" as="configuration" key="name">{name}: '{configuration}',</f:for>
 		<f:if condition="{center.latitude}">
-		center: {
-			lat: <f:format.number decimals="7">{center.latitude}</f:format.number>,
-			lng: <f:format.number decimals="7">{center.longitude}</f:format.number>
+		center: {<f:format.raw/>
+			lat: {center.latitude -> f:format.number(decimals: 7)},
+			lng: {center.longitude -> f:format.number(decimals: 7)}
 		},
 		</f:if>
 		afterSearch: '{afterSearch}'
-	</sf:minify>};
+	};
 
-	var locations = [<f:for each="{locations}" as="location" iteration="loop">
-		{f:render(partial: 'LocationJson', section: 'content', arguments: _all)}<f:if condition="{loop.isLast}"><f:then/><f:else>,</f:else></f:if></f:for>
+	var locations = [
+		<f:for each="{locations}" as="location" iteration="loop">
+			{f:render(partial: 'LocationJson', section: 'content', arguments: _all)}
+			<f:if condition="{loop.isLast}"><f:then/><f:else>,</f:else></f:if>
+		</f:for>
 	];
-</script>
+</script></sf:minify>
 
 <f:spaceless><f:render partial="InfoWindow"/></f:spaceless>
 
