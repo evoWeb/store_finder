@@ -1,0 +1,27 @@
+{parsing off}
+<script id="templateInfoWindow" type="text/html">
+	<div class="infoWindow group" style="width: 320px; height: 180px;" data-uid="{{uid}}">
+		<div class="storename"><strong>{{title}}</strong></div>
+		<div class="right">
+			<div class="image">{{#image}}<img src="{{image}}"/>{{/image}}</div>
+			<div class="displayRoute">
+				<a href="https://maps.google.com/?daddr={{lat}},{{lng}}" target="_blank">Route</a>
+			</div>
+		</div>
+		<div class="left">
+			<div class="company">{{company}}</div>
+			<div class="firstName">{{firstname}}</div>
+			<div class="lastName">{{lastname}}</div>
+			<div class="address">{{address}}</div>
+			<div class="city">{{zipcode}} {{city}}</div>
+			<div class="country">{{country}}</div>
+			<div class="phone">{{phone}}</div>
+			<div class="mobile">{{mobile}}</div>
+			<div class="fax">{{fax}}</div>
+			<div class="email">{{email}}</div>
+			<div class="hours">{{hours}}</div>
+			<div class="url">{{url}}</div>
+		</div>
+		<div class="clearfix"></div>
+	</div>
+</script>

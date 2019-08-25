@@ -23,32 +23,7 @@
 	];
 </script>
 
-<script id="templateInfoWindow" type="text/html">
-	<div class="infoWindow group" style="width: 320px; height: 180px;" data-uid="{{<f:format.raw/>uid}}">
-		<div class="storename"><strong>{{<f:format.raw/>title}}</strong></div>
-		<div class="right">
-			<div class="image">{{<f:format.raw/>#image}}<img src="{{<f:format.raw/>image}}"/>{{<f:format.raw/>/image}}</div>
-			<div class="displayRoute">
-				<a href="https://maps.google.com/?daddr={{<f:format.raw/>lat}},{{<f:format.raw/>lng}}" target="_blank"><f:translate key="route"/></a>
-			</div>
-		</div>
-		<div class="left">
-			<div class="company">{{<f:format.raw/>company}}</div>
-			<div class="firstName">{{<f:format.raw/>firstname}}</div>
-			<div class="lastName">{{<f:format.raw/>lastname}}</div>
-			<div class="address">{{<f:format.raw/>address}}</div>
-			<div class="city">{{<f:format.raw/>zipcode}} {{<f:format.raw/>city}}</div>
-			<div class="country">{{<f:format.raw/>country}}</div>
-			<div class="phone">{{<f:format.raw/>phone}}</div>
-			<div class="mobile">{{<f:format.raw/>mobile}}</div>
-			<div class="fax">{{<f:format.raw/>fax}}</div>
-			<div class="email">{{<f:format.raw/>email}}</div>
-			<div class="hours">{{<f:format.raw/>hours}}</div>
-			<div class="url">{{<f:format.raw/>url}}</div>
-		</div>
-		<div class="clearfix"></div>
-	</div>
-</script>
+<f:spaceless><f:render partial="InfoWindow"/></f:spaceless>
 
 <h3>{settings.storeTitle} <f:translate key="foundText" arguments="{0: 2}"/></h3>
 
