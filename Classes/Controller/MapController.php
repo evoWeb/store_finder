@@ -321,28 +321,38 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      */
     protected function getCenterOfQueryResult(Constraint $constraint, QueryResultInterface $queryResult): Location
     {
+        $count = $queryResult->count();
         /** @var Location $center */
-        if ($queryResult->count() == 1) {
+        if ($count == 1) {
             $center = $queryResult->getFirst();
         } elseif (!$queryResult->count()) {
             $center = $this->getCenter($constraint);
         } else {
-            $center = $this->objectManager->get(Location::class);
+            $x = 0;
+            $y = 0;
+            $z = 0;
 
-            $x = $y = $z = 0;
             /** @var Location $location */
             foreach ($queryResult as $location) {
-                $x += cos($location->getLatitude()) * cos($location->getLongitude());
-                $y += cos($location->getLatitude()) * sin($location->getLongitude());
-                $z += sin($location->getLatitude());
+                $latitude = $location->getLatitude() * M_PI / 180;
+                $longitude = $location->getLongitude() * M_PI / 180;
+
+                $x += cos($latitude) * cos($longitude);
+                $y += cos($latitude) * sin($longitude);
+                $z += sin($latitude);
             }
 
-            $x /= $queryResult->count();
-            $y /= $queryResult->count();
-            $z /= $queryResult->count();
+            $x /= $count;
+            $y /= $count;
+            $z /= $count;
 
-            $center->setLongitude(atan2($y, $x));
-            $center->setLatitude(atan2($z, sqrt($x * $x + $y * $y)));
+            $centralLongitude = atan2($y, $x);
+            $centralSquareRoot = sqrt($x * $x + $y * $y);
+            $centralLatitude = atan2($z, $centralSquareRoot);
+
+            $center = $this->objectManager->get(Location::class);
+            $center->setLatitude($centralLatitude * 180 / M_PI);
+            $center->setLongitude($centralLongitude * 180 / M_PI);
         }
 
         return $center;
