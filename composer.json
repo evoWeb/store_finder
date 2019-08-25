@@ -4,9 +4,7 @@
 	"description": "Store Finder",
 	"homepage": "http://www.evoweb.de/",
 
-	"license": [
-		"GPL-2.0-or-later"
-	],
+	"license": "GPL-2.0-or-later",
 
 	"support": {
 		"issues": "https://github.com/evoWeb/store_finder/issues"
@@ -20,6 +18,12 @@
 		"google map"
 	],
 
+	"repositories": [
+		{
+			"url": "https://github.com/garbast/static_info_tables.git",
+			"type": "git"
+		}
+	],
 	"require": {
 		"typo3/cms-core": "^8.7 || ^9.5 || ^10.0",
 		"sjbr/static-info-tables": "^6.7"
@@ -32,8 +36,7 @@
 	},
 	"autoload-dev": {
 		"psr-4": {
-			"Evoweb\\StoreFinder\\Tests\\": "Tests/",
-			"TYPO3\\CMS\\Core\\Tests\\": ".Build/Web/typo3/sysext/core/Tests/"
+			"Evoweb\\StoreFinder\\Tests\\": "Tests/"
 		}
 	},
 
