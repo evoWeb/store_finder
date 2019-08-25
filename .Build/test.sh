@@ -27,11 +27,12 @@ runUnitTests () {
     echo "Running $TYPO3_VERSION functional tests";
     export typo3DatabaseDriver="pdo_sqlite";
     ${PHP} .Build/bin/phpunit --colors -c .Build/vendor/typo3/testing-framework/Resources/Core/Build/FunctionalTests.xml Tests/Functional/;
-exit
+
     rm composer.lock
     rm -rf .Build/Web/
     rm -rf .Build/bin/
     rm -rf .Build/vendor/
+    rm -rf var
 }
 
 cd ../;
