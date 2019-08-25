@@ -1,0 +1,28 @@
+/* layout styles for store_finder extension */
+
+.group:after {
+    content: '';
+    display: table;
+    clear: both;
+}
+
+.tx-storefinder {
+    position: relative;
+
+    #tx_storefinder_map {
+        height: 400px;
+        width: 100% !important;
+    }
+
+    .infoWindow {
+        .right {
+            float: right;
+            width: 40%;
+        }
+
+        .left {
+            float: left;
+            width: 60%;
+        }
+    }
+}
