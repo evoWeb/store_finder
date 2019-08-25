@@ -15,6 +15,7 @@ namespace Evoweb\StoreFinder\Service;
 
 use Evoweb\StoreFinder\Domain\Model\Constraint;
 use Evoweb\StoreFinder\Domain\Model\Location;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class GeocodeService
 {
@@ -122,7 +123,7 @@ class GeocodeService
         // for url encoding
         $queryValues = [];
         foreach ($fields as $field) {
-            $methodName = 'get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $field)));
+            $methodName = 'get' . GeneralUtility::underscoredToUpperCamelCase($field);
             $value = $location->{$methodName}();
 
             switch ($field) {
