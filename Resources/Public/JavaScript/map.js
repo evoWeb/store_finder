@@ -125,7 +125,7 @@
 	StoreFinderMap.prototype.processLocation = function (location) {
 		var self = this;
 		this.locationIndex++;
-		location['information']['index'] = index;
+		location['information']['index'] = this.locationIndex;
 
 		var icon,
 			markerArguments = {
