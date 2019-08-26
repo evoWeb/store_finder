@@ -13,6 +13,7 @@ namespace Evoweb\StoreFinder\Controller;
  * LICENSE.txt file that was distributed with this source code.
  */
 
+use Doctrine\Common\Annotations\DocParser;
 use Evoweb\StoreFinder\Domain\Repository\CountryRepository;
 use Evoweb\StoreFinder\Validation\Validator\SettableInterface;
 use Evoweb\StoreFinder\Domain\Model\Constraint;
@@ -81,7 +82,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         \TYPO3\CMS\Extbase\Mvc\Controller\Argument $argument,
         array $configuredValidators
     ) {
-        $parser = new \Doctrine\Common\Annotations\DocParser();
+        $parser = new DocParser();
 
         /** @var \Evoweb\StoreFinder\Validation\Validator\ConstraintValidator $validator */
         $validator = $this->objectManager->get(\Evoweb\StoreFinder\Validation\Validator\ConstraintValidator::class);
@@ -121,11 +122,11 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
     /**
      * @param string $configuration
-     * @param \Doctrine\Common\Annotations\DocParser $parser
+     * @param DocParser $parser
      *
      * @return \TYPO3\CMS\Extbase\Validation\Validator\ValidatorInterface
      */
-    protected function getValidatorByConfiguration($configuration, $parser)
+    protected function getValidatorByConfiguration(string $configuration, DocParser $parser)
     {
         if (strpos($configuration, '"') === false && strpos($configuration, '(') === false) {
             $configuration = '"' . $configuration . '"';
@@ -140,9 +141,13 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
                 $validateAnnotation->validator
             );
         } else {
+            $validatorObjectName = '';
+            // @todo remove once 9.x support is dropped
             /** @var \TYPO3\CMS\Extbase\Validation\ValidatorResolver $validatorResolver */
             $validatorResolver = $this->objectManager->get(\TYPO3\CMS\Extbase\Validation\ValidatorResolver::class);
-            $validatorObjectName = $validatorResolver->resolveValidatorObjectName($validateAnnotation->validator);
+            if (method_exists($validatorResolver, 'resolveValidatorObjectName')) {
+                $validatorObjectName = $validatorResolver->resolveValidatorObjectName($validateAnnotation->validator);
+            }
         }
         return $this->objectManager->get($validatorObjectName, $validateAnnotation->options);
     }
