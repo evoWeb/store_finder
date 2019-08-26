@@ -67,6 +67,10 @@ class FrontendMap {
     this.loadScript();
   }
 
+  postLoadScript() {
+
+  }
+
   loadScript() {
     let self = this,
       apiUrl = 'https://maps.googleapis.com/maps/api/js?v=3.exp',
@@ -84,14 +88,14 @@ class FrontendMap {
     $.when(
       $.getScript(apiUrl + parameter)
     ).done(function () {
-      function wait() {
+      function wait(this: FrontendMap) {
         if (typeof window.google !== 'undefined') {
           this.postLoadScript();
         } else {
-          window.requestAnimationFrame(wait().bind(this));
+          window.requestAnimationFrame(wait.bind(this));
         }
       }
-      window.requestAnimationFrame(wait().bind(self));
+      window.requestAnimationFrame(wait.bind(self));
     }).fail(function () {
       console.log('Failed loading google maps resources.');
     });
