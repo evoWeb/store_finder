@@ -9,6 +9,7 @@
  * LICENSE.txt file that was distributed with this source code.
  */
 
+/// <reference types="@types/googlemaps" />
 import * as $ from 'jquery';
 
 interface MapConfiguration {
@@ -32,12 +33,43 @@ interface MapConfiguration {
   handleCloseButtonCallback(button: object): void,
 }
 
+interface Map {
+
+}
+
+interface Location {
+  name: string,
+  lat: number,
+  lng: number,
+  information: {
+    index: number,
+    icon: string,
+  },
+  marker: object
+}
+
+interface Marker {
+  sfLocation: Location,
+  getPosition(): Location,
+}
+
+interface InfoWindow {
+  close(): void,
+  open(map: object, marker: Marker): void,
+  setContent(content: string): void,
+  setPosition(location: Location): void
+}
+
+interface Template {
+  render(information: object): string
+}
+
 declare global {
   interface Window {
     google: any;
     Hogan: any;
     mapConfiguration: MapConfiguration,
-    locations: Array<object>
+    locations: Array<Location>
     StoreFinder: object
   }
 }
@@ -48,17 +80,17 @@ declare global {
  * @exports TYPO3/CMS/StoreFinder/FrontendMap
  */
 class FrontendMap {
-  private map: object;
+  private map: google.maps.Map;
   private mapConfiguration: MapConfiguration;
-  private locations: Array<object>;
+  private locations: Array<Location>;
   private locationIndex: number = 0;
-  private infoWindow: object;
-  private infoWindowTemplate: object;
+  private infoWindow: InfoWindow;
+  private infoWindowTemplate: Template;
 
   /**
    * The constructor, set the class properties default values
    */
-  constructor(mapConfiguration: MapConfiguration, locations: Array<object>) {
+  constructor(mapConfiguration: MapConfiguration, locations: Array<Location>) {
     this.mapConfiguration = mapConfiguration || {
       active: false,
       afterSearch: 0,
@@ -83,8 +115,7 @@ class FrontendMap {
    * Initialize map
    */
   initializeMap = function (this: FrontendMap) {
-    let self = this,
-      center;
+    let center;
 
     window.google.maps.visualRefresh = true;
 
@@ -107,13 +138,13 @@ class FrontendMap {
     this.map = new window.google.maps.Map($('#tx_storefinder_map')[0], mapOptions);
 
     if (this.mapConfiguration.afterSearch === 0 && navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function (position) {
+      navigator.geolocation.getCurrentPosition((position) => {
         let pos = {
           lat: position.coords.latitude,
           lng: position.coords.longitude
         };
 
-        self.map.setCenter(pos);
+        this.map.setCenter(pos);
       });
     }
   };
@@ -153,7 +184,7 @@ class FrontendMap {
   /**
    * Close previously open info window, renders new content and opens the window
    */
-  showInformation = function (this: FrontendMap, marker) {
+  showInformation = function (this: FrontendMap, marker: Marker) {
     let location = marker.sfLocation;
 
     if (typeof this.mapConfiguration.renderSingleViewCallback === 'function') {
@@ -169,33 +200,28 @@ class FrontendMap {
   /**
    * Process single location
    */
-  processLocation = function (this: FrontendMap, location) {
-    let self = this,
-      icon,
-      markerArguments = {
+  processLocation = function (this: FrontendMap, location: Location) {
+    let markerArguments = {
         title: location.name,
-        position: new window.google.maps.LatLng(location.lat, location.lng)
+        position: new window.google.maps.LatLng(location.lat, location.lng),
+        icon: '',
       };
 
     this.locationIndex++;
-    location['information']['index'] = this.locationIndex;
+    location.information.index = this.locationIndex;
 
     if (location.information.icon) {
-      icon = location.information.icon;
+      markerArguments.icon = location.information.icon;
     } else if (this.mapConfiguration.hasOwnProperty('markerIcon')) {
-      icon = this.mapConfiguration.markerIcon;
-    }
-
-    if (icon) {
-      markerArguments.icon = icon;
+      markerArguments.icon = this.mapConfiguration.markerIcon;
     }
 
     let marker = new window.google.maps.Marker(markerArguments);
     marker.sfLocation = location;
     marker.setMap(this.map);
 
-    window.google.maps.event.addListener(marker, 'click', function () {
-      self.showInformation(this);
+    window.google.maps.event.addListener(marker, 'click', (event: Event, marker: Marker): void => {
+      this.showInformation(marker);
     });
 
     // attach marker to location to be able to close it later

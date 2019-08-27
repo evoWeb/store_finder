@@ -28,8 +28,8 @@ gulp.task('typescript', function () {
 	return gulp.src(path.join(paths.src, tasks.typescript.src))
 		.pipe(sourcemaps.init())
 		.pipe(ts({
-			target: "es5",
-			module: "amd",
+			target: 'es5',
+			module: 'amd',
 			alwaysStrict: true,
 			downlevelIteration: true,
 			experimentalDecorators: true,
@@ -37,6 +37,7 @@ gulp.task('typescript', function () {
 			noImplicitThis: true,
 			noImplicitReturns: true,
 			pretty: true,
+			typeRoots: ['./node_modules/@types/']
 		}))
 		.pipe(sourcemaps.write('./'))
 		.pipe(gulp.dest(path.join(paths.dest, tasks.typescript.dest)));

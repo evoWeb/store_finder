@@ -13,7 +13,8 @@
     "yarn": "^1.10.0"
   },
   "dependencies": {
-    "@types/jquery": "2.0.47"
+    "@types/jquery": "2.0.47",
+    "@types/googlemaps": "^3.37.4"
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",
