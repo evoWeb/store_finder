@@ -14,21 +14,28 @@ import * as $ from 'jquery';
 interface MapConfiguration {
   active: boolean,
   afterSearch: number;
+  center?: {
+    lat: number,
+    lng: number
+  };
+  zoom?: string;
 
   apiConsoleKey: string,
-  language: string,
   apiUrl: string,
+  allowSensors: boolean,
+  language: string,
 
+  markerIcon: string,
   apiV3Layers: string,
   kmlUrl: string,
-  allowSensors: boolean,
-  renderSingleViewCallback: object,
-  handleCloseButtonCallback: object,
+  renderSingleViewCallback(location: object, template: object): void,
+  handleCloseButtonCallback(button: object): void,
 }
 
 declare global {
   interface Window {
     google: any;
+    Hogan: any;
     mapConfiguration: MapConfiguration,
     locations: Array<object>
     StoreFinder: object
@@ -44,6 +51,7 @@ class FrontendMap {
   private map: object;
   private mapConfiguration: MapConfiguration;
   private locations: Array<object>;
+  private locationIndex: number = 0;
   private infoWindow: object;
   private infoWindowTemplate: object;
 
@@ -54,23 +62,206 @@ class FrontendMap {
     this.mapConfiguration = mapConfiguration || {
       active: false,
       afterSearch: 0,
+
       apiConsoleKey: '',
       apiUrl: '',
+      allowSensors: false,
+      language: 'en',
+
+      markerIcon: '',
       apiV3Layers: '',
       kmlUrl: '',
-      language: 'en',
-      allowSensors: false,
       renderSingleViewCallback: null,
       handleCloseButtonCallback: null
     };
+    this.locations = locations;
 
     this.loadScript();
   }
 
-  postLoadScript() {
+  /**
+   * Initialize map
+   */
+  initializeMap = function (this: FrontendMap) {
+    let self = this,
+      center;
 
+    window.google.maps.visualRefresh = true;
+
+    if (typeof this.mapConfiguration.center !== 'undefined') {
+      center = new window.google.maps.LatLng(this.mapConfiguration.center.lat, this.mapConfiguration.center.lng);
+    } else {
+      center = new window.google.maps.LatLng(0, 0);
+    }
+
+    let mapOptions = {
+      zoom: parseInt(this.mapConfiguration.zoom, 10),
+      center: center,
+      disableDefaultUI: true, // a way to quickly hide all controls
+      zoomControl: true,
+      zoomControlOptions: {
+        style: window.google.maps.ZoomControlStyle.LARGE
+      }
+    };
+
+    this.map = new window.google.maps.Map($('#tx_storefinder_map')[0], mapOptions);
+
+    if (this.mapConfiguration.afterSearch === 0 && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function (position) {
+        let pos = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+
+        self.map.setCenter(pos);
+      });
+    }
+  };
+
+  /**
+   * Initialize information layer on map
+   */
+  initializeLayer = function (this: FrontendMap) {
+    if (this.mapConfiguration.apiV3Layers.indexOf('traffic') > -1) {
+      let trafficLayer = new window.google.maps.TrafficLayer();
+      trafficLayer.setMap(this.map);
+    }
+
+    if (this.mapConfiguration.apiV3Layers.indexOf('bicycling') > -1) {
+      let bicyclingLayer = new window.google.maps.BicyclingLayer();
+      bicyclingLayer.setMap(this.map);
+    }
+
+    if (this.mapConfiguration.apiV3Layers.indexOf('panoramio') > -1) {
+      let panoramioLayer = new window.google.maps.panoramio.PanoramioLayer();
+      panoramioLayer.setMap(this.map);
+    }
+
+    if (this.mapConfiguration.apiV3Layers.indexOf('weather') > -1) {
+      let weatherLayer = new window.google.maps.weather.WeatherLayer({
+        temperatureUnits: window.google.maps.weather.TemperatureUnit.DEGREE
+      });
+      weatherLayer.setMap(this.map);
+    }
+
+    if (this.mapConfiguration.apiV3Layers.indexOf('kml') > -1) {
+      let kmlLayer = new window.google.maps.KmlLayer(this.mapConfiguration.kmlUrl);
+      kmlLayer.setMap(this.map);
+    }
+  };
+
+  /**
+   * Close previously open info window, renders new content and opens the window
+   */
+  showInformation = function (this: FrontendMap, marker) {
+    let location = marker.sfLocation;
+
+    if (typeof this.mapConfiguration.renderSingleViewCallback === 'function') {
+      this.mapConfiguration.renderSingleViewCallback(location, this.infoWindowTemplate);
+    } else {
+      this.infoWindow.close();
+      this.infoWindow.setContent(this.infoWindowTemplate.render(location.information));
+      this.infoWindow.setPosition(marker.getPosition());
+      this.infoWindow.open(this.map, marker);
+    }
+  };
+
+  /**
+   * Process single location
+   */
+  processLocation = function (this: FrontendMap, location) {
+    let self = this,
+      icon,
+      markerArguments = {
+        title: location.name,
+        position: new window.google.maps.LatLng(location.lat, location.lng)
+      };
+
+    this.locationIndex++;
+    location['information']['index'] = this.locationIndex;
+
+    if (location.information.icon) {
+      icon = location.information.icon;
+    } else if (this.mapConfiguration.hasOwnProperty('markerIcon')) {
+      icon = this.mapConfiguration.markerIcon;
+    }
+
+    if (icon) {
+      markerArguments.icon = icon;
+    }
+
+    let marker = new window.google.maps.Marker(markerArguments);
+    marker.sfLocation = location;
+    marker.setMap(this.map);
+
+    window.google.maps.event.addListener(marker, 'click', function () {
+      self.showInformation(this);
+    });
+
+    // attach marker to location to be able to close it later
+    location.marker = marker;
+  };
+
+  /**
+   * Initialize location marker on map
+   */
+  initializeLocations = function (this: FrontendMap) {
+    this.locations.map(this.processLocation.bind(this));
+  };
+
+  /**
+   * Initialize instance of map infoWindow
+   */
+  initializeInfoWindow = function (this: FrontendMap) {
+    this.infoWindow = new window.google.maps.InfoWindow();
+  };
+
+  /**
+   * Initialize info window template
+   */
+  initializeTemplates = function (this: FrontendMap) {
+    this.infoWindowTemplate = window.Hogan.compile($('#templateInfoWindow').html());
+
+    $(document).on('click', '.tx-storefinder .infoWindow .close', (event: Event, $closeButton: JQuery): void => {
+      if (typeof this.mapConfiguration.renderSingleViewCallback === 'function') {
+        this.mapConfiguration.handleCloseButtonCallback($closeButton);
+      } else {
+        this.infoWindow.close();
+      }
+    });
+  };
+
+  /**
+   * Trigger click event on marker on click in result list
+   */
+  openInfoWindow = function (this: FrontendMap, index: number) {
+    window.google.maps.event.trigger(this.locations[index].marker, 'click');
+  };
+
+  /**
+   * Initialize list click events
+   */
+  initializeListEvents = function (this: FrontendMap) {
+    $(document).on('click', '.tx-storefinder .resultList > li', (event: Event, $field: JQuery): void => {
+      this.openInfoWindow($field.data('index'));
+    });
+  };
+
+  /**
+   * Post load google map script processing
+   */
+  postLoadScript() {
+    this.initializeMap();
+    this.initializeLayer();
+    this.initializeLocations();
+    this.initializeInfoWindow();
+    this.initializeTemplates();
+    this.initializeListEvents();
   }
 
+  /**
+   * Load google map script
+   */
   loadScript() {
     let self = this,
       apiUrl = 'https://maps.googleapis.com/maps/api/js?v=3.exp',
@@ -105,10 +296,7 @@ class FrontendMap {
 $(document).ready(function () {
   if (typeof window.mapConfiguration == 'object' && window.mapConfiguration.active) {
     // make module public to be available for callback after load
-    window.StoreFinder = new FrontendMap(
-      window.mapConfiguration,
-      window.locations
-    );
+    window.StoreFinder = new FrontendMap(window.mapConfiguration, window.locations);
   }
 });
 
