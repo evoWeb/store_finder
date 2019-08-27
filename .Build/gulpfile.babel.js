@@ -28,7 +28,7 @@ gulp.task('typescript', function () {
 	return gulp.src(path.join(paths.src, tasks.typescript.src))
 		.pipe(sourcemaps.init())
 		.pipe(ts({
-			target: 'es5',
+			//target: 'es5',
 			module: 'amd',
 			alwaysStrict: true,
 			downlevelIteration: true,
