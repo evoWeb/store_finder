@@ -13,35 +13,43 @@
 	<sf:fileInclude file="EXT:store_finder/Resources/Public/JavaScript/InfoBubble.js"/>
 	<sf:fileInclude file="EXT:store_finder/Resources/Public/JavaScript/FrontendMap.js"/>
 
-<sf:minify>
-<script type="text/javascript">
-	var mapConfiguration = {
+	<f:variable name="mapConfiguration">
+		var mapConfiguration = {
 		active: true,
 		zoom: "{center.zoom}",
 		apiConsoleKey: "{settings.apiConsoleKey}",
 		<f:for each="{settings.mapConfiguration}" as="configuration" key="name">{name}: "{configuration}",</f:for>
 		<f:if condition="{center.latitude}">
-		center: {<f:format.raw/>
+			center: {<f:format.raw/>
 			lat: {center.latitude -> f:format.number(decimals: 7)},
 			lng: {center.longitude -> f:format.number(decimals: 7)}
-		},
+			},
 		</f:if>
 		afterSearch: "{afterSearch}"
-	};
+		};
+	</f:variable>
 
-	var locations = [
+	<f:variable name="locationRows">
+		var locations = [
 		<f:for each="{locations}" as="location" iteration="loop">
 			{f:render(partial: 'LocationJson', section: 'content', arguments: _all)}
 			<f:if condition="{loop.isLast}"><f:then/><f:else>,</f:else></f:if>
 		</f:for>
-	];
-</script></sf:minify>
+		];
+	</f:variable>
 
-<f:spaceless><f:render partial="InfoWindow"/></f:spaceless>
+	<sf:minify>
+	<script type="text/javascript">
+		{mapConfiguration}
+		{locationRows}
+	</script>
+	</sf:minify>
 
-<h3>{settings.storeTitle} <f:translate key="foundText" arguments="{0: 2}"/></h3>
+	<f:spaceless><f:render partial="InfoWindow"/></f:spaceless>
 
-<div id="tx_storefinder_map"></div>
+	<h3>{settings.storeTitle} <f:translate key="foundText" arguments="{0: }"/></h3>
+
+	<div id="tx_storefinder_map"></div>
 </f:section>
 
 </html>

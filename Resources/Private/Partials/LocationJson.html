@@ -1,8 +1,6 @@
-<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
-			xmlns:sf="http://typo3.org/ns/Evoweb/StoreFinder/ViewHelpers"
-			data-namespace-typo3-fluid="true">
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
 
-<f:section name="content"><sf:minify>{
+<f:section name="content">{
 	name: {location.name -> f:format.json()},
 	lat: {location.latitude},
 	lng: {location.longitude},
@@ -31,6 +29,6 @@
 		media: <f:format.json><f:for each="{location.media}" as="media">{f:uri.image(src: media.0.uid, width: 70, treatIdAsReference: 1)}</f:for></f:format.json>,
 		image: <f:format.json><f:if condition="{settings.showStoreImage}"><f:for each="{location.image}" as="image">{f:uri.image(src: image.uid, width: 70, treatIdAsReference: 1)}</f:for></f:if></f:format.json>
 	}
-}</sf:minify></f:section>
+}</f:section>
 
 </html>
