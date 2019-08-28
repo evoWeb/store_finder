@@ -216,7 +216,7 @@ class FrontendMap {
     marker.sfLocation = location;
     marker.setMap(this.map);
 
-    window.google.maps.event.addListener(marker, 'click', (event: Event, marker: Marker): void => {
+    window.google.maps.event.addListener(marker, 'click', () => {
       this.showInformation(marker);
     });
 

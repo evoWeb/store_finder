@@ -133,7 +133,7 @@
             var marker = new window.google.maps.Marker(markerArguments);
             marker.sfLocation = location;
             marker.setMap(this.map);
-            window.google.maps.event.addListener(marker, 'click', function (event, marker) {
+            window.google.maps.event.addListener(marker, 'click', function () {
                 _this.showInformation(marker);
             });
             // attach marker to location to be able to close it later
