@@ -25,19 +25,11 @@ const tasks = {
 };
 
 gulp.task('typescript', function () {
+	let tsProject = ts.createProject('tsconfig.json');
+
 	return gulp.src(path.join(paths.src, tasks.typescript.src))
 		.pipe(sourcemaps.init())
-		.pipe(ts({
-			module: 'amd',
-			alwaysStrict: true,
-			downlevelIteration: true,
-			experimentalDecorators: true,
-			noImplicitAny: true,
-			noImplicitThis: true,
-			noImplicitReturns: true,
-			pretty: true,
-			typeRoots: ['./node_modules/@types/', 'types']
-		}))
+		.pipe(tsProject())
 		.pipe(sourcemaps.write('./'))
 		.pipe(gulp.dest(path.join(paths.dest, tasks.typescript.dest)));
 });
