@@ -44,7 +44,7 @@ CREATE TABLE tx_storefinder_domain_model_location (
 	related int(11) unsigned DEFAULT '0' NOT NULL,
 	image int(11) unsigned DEFAULT '0' NOT NULL,
 	media int(11) unsigned DEFAULT '0' NOT NULL,
-	icon varchar(255) DEFAULT '' NOT NULL,
+	icon int(11) unsigned DEFAULT '0' NOT NULL,
 
 	latitude double(11,7) DEFAULT '0.0000000' NOT NULL,
 	longitude double(11,7) DEFAULT '0.0000000' NOT NULL,

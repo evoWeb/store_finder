@@ -17,16 +17,16 @@
 <script type="text/javascript">
 	var mapConfiguration = {
 		active: true,
-		zoom: '{center.zoom}',
-		apiConsoleKey: '{settings.apiConsoleKey}',
-		<f:for each="{settings.mapConfiguration}" as="configuration" key="name">{name}: '{configuration}',</f:for>
+		zoom: "{center.zoom}",
+		apiConsoleKey: "{settings.apiConsoleKey}",
+		<f:for each="{settings.mapConfiguration}" as="configuration" key="name">{name}: "{configuration}",</f:for>
 		<f:if condition="{center.latitude}">
 		center: {<f:format.raw/>
 			lat: {center.latitude -> f:format.number(decimals: 7)},
 			lng: {center.longitude -> f:format.number(decimals: 7)}
 		},
 		</f:if>
-		afterSearch: '{afterSearch}'
+		afterSearch: "{afterSearch}"
 	};
 
 	var locations = [

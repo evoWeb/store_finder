@@ -25,7 +25,7 @@
 		hours: {location.hours -> f:format.json()},
 		url: {f:uri.typolink(parameter: location.url) -> f:format.json()},
 		notes: {location.notes -> f:format.json()},
-		icon: {location.icon -> f:format.json()},
+		icon: <f:if condition="{location.icon.0}"><f:then>{f:uri.image(src: location.icon.0, treatIdAsReference: 1) -> f:format.json()}</f:then><f:else>""</f:else></f:if>,
 		state: {location.state.localName -> f:format.json()},
 		country: {location.country.shortNameLocal -> f:format.json()},
 		media: <f:format.json><f:for each="{location.media}" as="media">{f:uri.image(src: media.0.uid, width: 70, treatIdAsReference: 1)}</f:for></f:format.json>,
