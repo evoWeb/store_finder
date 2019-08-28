@@ -32,7 +32,7 @@
 	<f:variable name="locationRows">
 		var locations = [
 		<f:for each="{locations}" as="location" iteration="loop">
-			{f:render(partial: 'LocationJson', section: 'content', arguments: _all)}
+			<f:render partial="LocationJson" section="content" arguments="{_all}"/>
 			<f:if condition="{loop.isLast}"><f:then/><f:else>,</f:else></f:if>
 		</f:for>
 		];
@@ -47,7 +47,7 @@
 
 	<f:spaceless><f:render partial="InfoWindow"/></f:spaceless>
 
-	<h3>{settings.storeTitle} <f:translate key="foundText" arguments="{0: }"/></h3>
+	<h3>{settings.storeTitle} <f:translate key="foundText" arguments="{0: '{locations -> f:count()}'}"/></h3>
 
 	<div id="tx_storefinder_map"></div>
 </f:section>
