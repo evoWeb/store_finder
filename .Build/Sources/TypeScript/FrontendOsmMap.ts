@@ -9,26 +9,26 @@
  * LICENSE.txt file that was distributed with this source code.
  */
 
-/// <reference types="@types/googlemaps" />
+/// <reference types="../types/index" />
 import * as $ from 'jquery';
-import {MapConfiguration, Template, Location, InfoWindow} from "./Interfaces";
+import * as L from 'leaflet';
+import {MapConfiguration, Template, Location} from "./Interfaces";
 
-interface Marker {
-  sfLocation: Location,
-  getPosition(): Location,
+class Marker extends L.Marker {
+  public sfLocation: Location;
 }
 
 /**
- * Module: TYPO3/CMS/StoreFinder/FrontendGoogleMap
+ * Module: TYPO3/CMS/StoreFinder/FrontendOsmMap
  * contains all logic for the frontend map output
- * @exports TYPO3/CMS/StoreFinder/FrontendGoogleMap
+ * @exports TYPO3/CMS/StoreFinder/FrontendOsmMap
  */
 class FrontendMap {
-  private map: google.maps.Map;
+  private map: L.Map;
   private mapConfiguration: MapConfiguration;
   private locations: Array<Location>;
   private locationIndex: number = 0;
-  private infoWindow: InfoWindow;
+  private infoWindow: L.Popup;
   private infoWindowTemplate: Template;
 
   /**
@@ -58,75 +58,78 @@ class FrontendMap {
   /**
    * Initialize map
    */
-  initializeMap(this: FrontendMap) {
-    let center;
+  initializeMap() {
+    let self = this;
 
-    window.google.maps.visualRefresh = true;
+    self.map = L.map('tx_storefinder_map');
 
     if (typeof this.mapConfiguration.center !== 'undefined') {
-      center = new window.google.maps.LatLng(this.mapConfiguration.center.lat, this.mapConfiguration.center.lng);
+      this.map.setView(
+        [self.mapConfiguration.center.lat, self.mapConfiguration.center.lng],
+        parseInt(self.mapConfiguration.zoom, 10)
+      );
     } else {
-      center = new window.google.maps.LatLng(0, 0);
+      this.map.setView([0, 0], 13);
     }
 
-    let mapOptions = {
-      zoom: parseInt(this.mapConfiguration.zoom, 10),
-      center: center,
-      disableDefaultUI: true, // a way to quickly hide all controls
-      zoomControl: true,
-      zoomControlOptions: {
-        style: window.google.maps.ZoomControlStyle.LARGE
+    // more providers can be found here http://leaflet-extras.github.io/leaflet-providers/preview/
+    L.tileLayer(
+      'https://korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}', {
+        maxZoom: 20,
+        attribution: 'Imagery from <a href="http://giscience.uni-hd.de/">GIScience Research Group @ University of Heidelberg</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
       }
-    };
-
-    this.map = new window.google.maps.Map($('#tx_storefinder_map')[0], mapOptions);
-
-    if (this.mapConfiguration.afterSearch === 0 && navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        let pos = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        };
-
-        this.map.setCenter(pos);
-      });
-    }
+    ).addTo(self.map);
   }
 
   /**
    * Initialize information layer on map
    */
   initializeLayer(this: FrontendMap) {
-    if (this.mapConfiguration.apiV3Layers.indexOf('traffic') > -1) {
-      let trafficLayer = new window.google.maps.TrafficLayer();
+    /*if (this.mapConfiguration.apiV3Layers.indexOf('traffic') > -1) {
+      let trafficLayer = new google.maps.TrafficLayer();
       trafficLayer.setMap(this.map);
     }
 
     if (this.mapConfiguration.apiV3Layers.indexOf('bicycling') > -1) {
-      let bicyclingLayer = new window.google.maps.BicyclingLayer();
+      let bicyclingLayer = new google.maps.BicyclingLayer();
       bicyclingLayer.setMap(this.map);
     }
 
     if (this.mapConfiguration.apiV3Layers.indexOf('panoramio') > -1) {
-      let panoramioLayer = new window.google.maps.panoramio.PanoramioLayer();
+      let panoramioLayer = new google.maps.panoramio.PanoramioLayer();
       panoramioLayer.setMap(this.map);
     }
 
     if (this.mapConfiguration.apiV3Layers.indexOf('weather') > -1) {
-      let weatherLayer = new window.google.maps.weather.WeatherLayer({
-        temperatureUnits: window.google.maps.weather.TemperatureUnit.DEGREE
+      let weatherLayer = new google.maps.weather.WeatherLayer({
+        temperatureUnits: google.maps.weather.TemperatureUnit.DEGREE
       });
       weatherLayer.setMap(this.map);
-    }
+    }*/
 
     if (this.mapConfiguration.apiV3Layers.indexOf('kml') > -1) {
-      let kmlLayer = new window.google.maps.KmlLayer(this.mapConfiguration.kmlUrl);
-      kmlLayer.setMap(this.map);
+      let $jsDeferred = $.Deferred(),
+        $jsFile = $('<script/>', {
+          src: 'https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js',
+          crossorigin: ''
+        }).appendTo('head');
+
+      $jsDeferred.resolve($jsFile);
+
+      let self = this;
+      $.when($jsDeferred.promise()).done(function () {
+        let kmlLayer = omnivore.kml(self.mapConfiguration.kmlUrl);
+        kmlLayer.setMap(self.map);
+      }).fail(function () {
+        console.log('Failed loading resources.');
+      });
     }
   }
 
   /**
    * Close previously open info window, renders new content and opens the window
+   *
+   * @param {object} marker
    */
   showInformation(this: FrontendMap, marker: Marker) {
     let location = marker.sfLocation;
@@ -134,15 +137,21 @@ class FrontendMap {
     if (typeof this.mapConfiguration.renderSingleViewCallback === 'function') {
       this.mapConfiguration.renderSingleViewCallback(location, this.infoWindowTemplate);
     } else {
-      this.infoWindow.close();
-      this.infoWindow.setContent(this.infoWindowTemplate.render(location.information));
-      this.infoWindow.setPosition(marker.getPosition());
-      this.infoWindow.open(this.map, marker);
+      if (this.infoWindow.isOpen()) {
+        this.infoWindow.closePopup();
+      }
+
+      this.infoWindow = marker.getPopup()
+        .setContent(this.infoWindowTemplate.render(location.information))
+        .setLatLng(L.latLng(location.lat, location.lng))
+        .openOn(this.map);
     }
   }
 
   /**
    * Process single location
+   *
+   * @param location
    */
   processLocation(this: FrontendMap, location: Location) {
     let icon = '';
@@ -155,15 +164,14 @@ class FrontendMap {
     this.locationIndex++;
     location.information.index = this.locationIndex;
 
-    let marker = new window.google.maps.Marker({
+    let marker = new Marker([location.lat, location.lng], {
       title: location.name,
-      position: new window.google.maps.LatLng(location.lat, location.lng),
-      icon: icon,
+      icon: L.icon({iconUrl: icon}),
     });
     marker.sfLocation = location;
-    marker.setMap(this.map);
+    marker.bindPopup('').addTo(this.map);
 
-    window.google.maps.event.addListener(marker, 'click', () => {
+    marker.on('click', () => {
       this.showInformation(marker);
     });
 
@@ -181,8 +189,8 @@ class FrontendMap {
   /**
    * Initialize instance of map infoWindow
    */
-  initializeInfoWindow(this: FrontendMap) {
-    this.infoWindow = new window.google.maps.InfoWindow();
+  initializeInfoWindow() {
+    this.infoWindow = L.popup();
   }
 
   /**
@@ -195,7 +203,7 @@ class FrontendMap {
       if (typeof this.mapConfiguration.renderSingleViewCallback === 'function') {
         this.mapConfiguration.handleCloseButtonCallback($closeButton);
       } else {
-        this.infoWindow.close();
+        this.infoWindow.closePopup();
       }
     });
   }
@@ -204,7 +212,7 @@ class FrontendMap {
    * Trigger click event on marker on click in result list
    */
   openInfoWindow(this: FrontendMap, index: number) {
-    window.google.maps.event.trigger(this.locations[index].marker, 'click');
+    this.locations[index].marker.fire('click');
   }
 
   /**
@@ -229,35 +237,34 @@ class FrontendMap {
   }
 
   /**
-   * Load google map script
+   * Load open street map leaflet script
    */
   loadScript() {
     let self = this,
-      apiUrl = 'https://maps.googleapis.com/maps/api/js?v=3.exp',
-      parameter = '&key=' + this.mapConfiguration.apiConsoleKey
-        + '&sensor=' + (this.mapConfiguration.allowSensors ? 'true' : 'false');
-
-    if (self.mapConfiguration.language !== '') {
-      parameter += '&language=' + self.mapConfiguration.language;
-    }
-
-    if (self.mapConfiguration.hasOwnProperty('apiUrl')) {
-      apiUrl = self.mapConfiguration.apiUrl;
-    }
-
-    let $jsDeferred = $.Deferred(),
+      $cssDeferred = $.Deferred(),
+      $cssFile = $('<link/>', {
+        rel: 'stylesheet',
+        type: 'text/css',
+        href: 'https://unpkg.com/leaflet@1.3.4/dist/leaflet.css',
+        integrity: 'sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==',
+        crossorigin: ''
+      }).appendTo('head'),
+      $jsDeferred = $.Deferred(),
       $jsFile = $('<script/>', {
-        src: apiUrl + parameter,
+        src: 'https://unpkg.com/leaflet@1.3.4/dist/leaflet.js',
+        integrity: 'sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA==',
         crossorigin: ''
       }).appendTo('head');
 
+    $cssDeferred.resolve($cssFile);
     $jsDeferred.resolve($jsFile);
 
     $.when(
+      $cssDeferred.promise(),
       $jsDeferred.promise()
     ).done(function () {
       function wait(this: FrontendMap) {
-        if (typeof window.google !== 'undefined') {
+        if (typeof window.L !== 'undefined') {
           this.postLoadScript();
         } else {
           window.requestAnimationFrame(wait.bind(this));

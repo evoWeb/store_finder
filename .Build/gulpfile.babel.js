@@ -15,7 +15,7 @@ const paths = {
 
 const tasks = {
 	typescript: {
-		src: 'TypeScript/*.ts',
+		src: 'TypeScript/F*.ts',
 		dest: 'JavaScript'
 	},
 	scss: {

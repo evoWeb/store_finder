@@ -8,12 +8,32 @@
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  */
-(function (factory) { 'function' === typeof define && define.amd ? define('map', ['jquery'], factory) : factory(jQuery) })(function ($) {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+(function (factory) { 'function' === typeof define && define.amd ? define('map', ['jquery', 'leaflet'], factory) : factory(jQuery, L) })(function ($, L) {
     "use strict";
+    var Marker = /** @class */ (function (_super) {
+        __extends(Marker, _super);
+        function Marker() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        return Marker;
+    }(L.Marker));
     /**
-     * Module: TYPO3/CMS/StoreFinder/FrontendGoogleMap
+     * Module: TYPO3/CMS/StoreFinder/FrontendOsmMap
      * contains all logic for the frontend map output
-     * @exports TYPO3/CMS/StoreFinder/FrontendGoogleMap
+     * @exports TYPO3/CMS/StoreFinder/FrontendOsmMap
      */
     var FrontendMap = /** @class */ (function () {
         /**
@@ -41,64 +61,64 @@
          * Initialize map
          */
         FrontendMap.prototype.initializeMap = function () {
-            var _this = this;
-            var center;
-            window.google.maps.visualRefresh = true;
+            var self = this;
+            self.map = L.map('tx_storefinder_map');
             if (typeof this.mapConfiguration.center !== 'undefined') {
-                center = new window.google.maps.LatLng(this.mapConfiguration.center.lat, this.mapConfiguration.center.lng);
+                this.map.setView([self.mapConfiguration.center.lat, self.mapConfiguration.center.lng], parseInt(self.mapConfiguration.zoom, 10));
             }
             else {
-                center = new window.google.maps.LatLng(0, 0);
+                this.map.setView([0, 0], 13);
             }
-            var mapOptions = {
-                zoom: parseInt(this.mapConfiguration.zoom, 10),
-                center: center,
-                disableDefaultUI: true,
-                zoomControl: true,
-                zoomControlOptions: {
-                    style: window.google.maps.ZoomControlStyle.LARGE
-                }
-            };
-            this.map = new window.google.maps.Map($('#tx_storefinder_map')[0], mapOptions);
-            if (this.mapConfiguration.afterSearch === 0 && navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function (position) {
-                    var pos = {
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude
-                    };
-                    _this.map.setCenter(pos);
-                });
-            }
+            // more providers can be found here http://leaflet-extras.github.io/leaflet-providers/preview/
+            L.tileLayer('https://korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}', {
+                maxZoom: 20,
+                attribution: 'Imagery from <a href="http://giscience.uni-hd.de/">GIScience Research Group @ University of Heidelberg</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(self.map);
         };
         /**
          * Initialize information layer on map
          */
         FrontendMap.prototype.initializeLayer = function () {
-            if (this.mapConfiguration.apiV3Layers.indexOf('traffic') > -1) {
-                var trafficLayer = new window.google.maps.TrafficLayer();
-                trafficLayer.setMap(this.map);
+            /*if (this.mapConfiguration.apiV3Layers.indexOf('traffic') > -1) {
+              let trafficLayer = new google.maps.TrafficLayer();
+              trafficLayer.setMap(this.map);
             }
+
             if (this.mapConfiguration.apiV3Layers.indexOf('bicycling') > -1) {
-                var bicyclingLayer = new window.google.maps.BicyclingLayer();
-                bicyclingLayer.setMap(this.map);
+              let bicyclingLayer = new google.maps.BicyclingLayer();
+              bicyclingLayer.setMap(this.map);
             }
+
             if (this.mapConfiguration.apiV3Layers.indexOf('panoramio') > -1) {
-                var panoramioLayer = new window.google.maps.panoramio.PanoramioLayer();
-                panoramioLayer.setMap(this.map);
+              let panoramioLayer = new google.maps.panoramio.PanoramioLayer();
+              panoramioLayer.setMap(this.map);
             }
+
             if (this.mapConfiguration.apiV3Layers.indexOf('weather') > -1) {
-                var weatherLayer = new window.google.maps.weather.WeatherLayer({
-                    temperatureUnits: window.google.maps.weather.TemperatureUnit.DEGREE
-                });
-                weatherLayer.setMap(this.map);
-            }
+              let weatherLayer = new google.maps.weather.WeatherLayer({
+                temperatureUnits: google.maps.weather.TemperatureUnit.DEGREE
+              });
+              weatherLayer.setMap(this.map);
+            }*/
             if (this.mapConfiguration.apiV3Layers.indexOf('kml') > -1) {
-                var kmlLayer = new window.google.maps.KmlLayer(this.mapConfiguration.kmlUrl);
-                kmlLayer.setMap(this.map);
+                var $jsDeferred = $.Deferred(), $jsFile = $('<script/>', {
+                    src: 'https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js',
+                    crossorigin: ''
+                }).appendTo('head');
+                $jsDeferred.resolve($jsFile);
+                var self_1 = this;
+                $.when($jsDeferred.promise()).done(function () {
+                    var kmlLayer = omnivore.kml(self_1.mapConfiguration.kmlUrl);
+                    kmlLayer.setMap(self_1.map);
+                }).fail(function () {
+                    console.log('Failed loading resources.');
+                });
             }
         };
         /**
          * Close previously open info window, renders new content and opens the window
+         *
+         * @param {object} marker
          */
         FrontendMap.prototype.showInformation = function (marker) {
             var location = marker.sfLocation;
@@ -106,14 +126,19 @@
                 this.mapConfiguration.renderSingleViewCallback(location, this.infoWindowTemplate);
             }
             else {
-                this.infoWindow.close();
-                this.infoWindow.setContent(this.infoWindowTemplate.render(location.information));
-                this.infoWindow.setPosition(marker.getPosition());
-                this.infoWindow.open(this.map, marker);
+                if (this.infoWindow.isOpen()) {
+                    this.infoWindow.closePopup();
+                }
+                this.infoWindow = marker.getPopup()
+                    .setContent(this.infoWindowTemplate.render(location.information))
+                    .setLatLng(L.latLng(location.lat, location.lng))
+                    .openOn(this.map);
             }
         };
         /**
          * Process single location
+         *
+         * @param location
          */
         FrontendMap.prototype.processLocation = function (location) {
             var _this = this;
@@ -126,14 +151,13 @@
             }
             this.locationIndex++;
             location.information.index = this.locationIndex;
-            var marker = new window.google.maps.Marker({
+            var marker = new Marker([location.lat, location.lng], {
                 title: location.name,
-                position: new window.google.maps.LatLng(location.lat, location.lng),
-                icon: icon
+                icon: L.icon({ iconUrl: icon })
             });
             marker.sfLocation = location;
-            marker.setMap(this.map);
-            window.google.maps.event.addListener(marker, 'click', function () {
+            marker.bindPopup('').addTo(this.map);
+            marker.on('click', function () {
                 _this.showInformation(marker);
             });
             // attach marker to location to be able to close it later
@@ -149,7 +173,7 @@
          * Initialize instance of map infoWindow
          */
         FrontendMap.prototype.initializeInfoWindow = function () {
-            this.infoWindow = new window.google.maps.InfoWindow();
+            this.infoWindow = L.popup();
         };
         /**
          * Initialize info window template
@@ -162,7 +186,7 @@
                     _this.mapConfiguration.handleCloseButtonCallback($closeButton);
                 }
                 else {
-                    _this.infoWindow.close();
+                    _this.infoWindow.closePopup();
                 }
             });
         };
@@ -170,7 +194,7 @@
          * Trigger click event on marker on click in result list
          */
         FrontendMap.prototype.openInfoWindow = function (index) {
-            window.google.maps.event.trigger(this.locations[index].marker, 'click');
+            this.locations[index].marker.fire('click');
         };
         /**
          * Initialize list click events
@@ -193,25 +217,25 @@
             this.initializeListEvents();
         };
         /**
-         * Load google map script
+         * Load open street map leaflet script
          */
         FrontendMap.prototype.loadScript = function () {
-            var self = this, apiUrl = 'https://maps.googleapis.com/maps/api/js?v=3.exp', parameter = '&key=' + this.mapConfiguration.apiConsoleKey
-                + '&sensor=' + (this.mapConfiguration.allowSensors ? 'true' : 'false');
-            if (self.mapConfiguration.language !== '') {
-                parameter += '&language=' + self.mapConfiguration.language;
-            }
-            if (self.mapConfiguration.hasOwnProperty('apiUrl')) {
-                apiUrl = self.mapConfiguration.apiUrl;
-            }
-            var $jsDeferred = $.Deferred(), $jsFile = $('<script/>', {
-                src: apiUrl + parameter,
+            var self = this, $cssDeferred = $.Deferred(), $cssFile = $('<link/>', {
+                rel: 'stylesheet',
+                type: 'text/css',
+                href: 'https://unpkg.com/leaflet@1.3.4/dist/leaflet.css',
+                integrity: 'sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==',
+                crossorigin: ''
+            }).appendTo('head'), $jsDeferred = $.Deferred(), $jsFile = $('<script/>', {
+                src: 'https://unpkg.com/leaflet@1.3.4/dist/leaflet.js',
+                integrity: 'sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA==',
                 crossorigin: ''
             }).appendTo('head');
+            $cssDeferred.resolve($cssFile);
             $jsDeferred.resolve($jsFile);
-            $.when($jsDeferred.promise()).done(function () {
+            $.when($cssDeferred.promise(), $jsDeferred.promise()).done(function () {
                 function wait() {
-                    if (typeof window.google !== 'undefined') {
+                    if (typeof window.L !== 'undefined') {
                         this.postLoadScript();
                     }
                     else {
@@ -234,4 +258,4 @@
     return FrontendMap;
 });
 
-//# sourceMappingURL=FrontendGoogleMap.js.map
+//# sourceMappingURL=FrontendOsmMap.js.map
