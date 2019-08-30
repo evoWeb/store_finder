@@ -44,15 +44,6 @@ export interface Location {
   marker: any
 }
 
-export interface InfoWindow {
-  close(): void,
-  isOpen(): boolean,
-  open(map: object, marker: any): void,
-  closePopup(): void,
-  setContent(content: string): void,
-  setPosition(location: Location): void
-}
-
 export interface Template {
   render(information: any): string
 }

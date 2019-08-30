@@ -11,11 +11,10 @@
 
 /// <reference types="@types/googlemaps" />
 import * as $ from 'jquery';
-import {MapConfiguration, Template, Location, InfoWindow} from "./Interfaces";
+import {MapConfiguration, Template, Location} from "./Interfaces";
 
-interface Marker {
-  sfLocation: Location,
-  getPosition(): Location,
+class Marker extends google.maps.Marker {
+  public sfLocation: Location;
 }
 
 /**
@@ -28,7 +27,7 @@ class FrontendMap {
   private mapConfiguration: MapConfiguration;
   private locations: Array<Location>;
   private locationIndex: number = 0;
-  private infoWindow: InfoWindow;
+  private infoWindow: google.maps.InfoWindow;
   private infoWindowTemplate: Template;
 
   /**
