@@ -29,7 +29,7 @@ export interface MapConfiguration {
   apiV3Layers: string,
   kmlUrl: string,
 
-  renderSingleViewCallback(location: object, template: object): void,
+  renderSingleViewCallback(location: object, template: string): void,
   handleCloseButtonCallback(button: object): void,
 }
 

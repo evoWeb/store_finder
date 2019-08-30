@@ -2,5 +2,6 @@
 .Build/bin
 .Build/Web
 .Build/node_modules
+.Build/package-lock.json
 var
 composer.lock

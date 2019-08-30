@@ -10,9 +10,10 @@
  */
 
 /// <reference types="../types/index" />
+import * as Mustache from 'mustache';
 import * as $ from 'jquery';
 import * as L from 'leaflet';
-import {MapConfiguration, Template, Location} from "./Interfaces";
+import {MapConfiguration, Location} from "./Interfaces";
 
 class Marker extends L.Marker {
   public sfLocation: Location;
@@ -29,7 +30,8 @@ class FrontendMap {
   private locations: Array<Location>;
   private locationIndex: number = 0;
   private infoWindow: L.Popup;
-  private infoWindowTemplate: Template;
+  private infoWindowTemplate: string;
+  private templateParser: any;
 
   /**
    * The constructor, set the class properties default values
@@ -142,7 +144,7 @@ class FrontendMap {
       }
 
       this.infoWindow = marker.getPopup()
-        .setContent(this.infoWindowTemplate.render(location.information))
+        .setContent(this.templateParser.render(location.information, this.infoWindowTemplate))
         .setLatLng(L.latLng(location.lat, location.lng))
         .openOn(this.map);
     }
@@ -197,7 +199,9 @@ class FrontendMap {
    * Initialize info window template
    */
   initializeTemplates(this: FrontendMap) {
-    this.infoWindowTemplate = window.Hogan.compile($('#templateInfoWindow').html());
+    this.infoWindowTemplate = $('#templateInfoWindow').html();
+    this.templateParser = Mustache;
+    this.templateParser.parse(this.infoWindowTemplate);
 
     $(document).on('click', '.tx-storefinder .infoWindow .close', (event: Event, $closeButton: JQuery): void => {
       if (typeof this.mapConfiguration.renderSingleViewCallback === 'function') {
