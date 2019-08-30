@@ -8,28 +8,8 @@
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  */
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 (function (factory) { 'function' === typeof define && define.amd ? define('map', ['mustache', 'jquery', 'leaflet'], factory) : factory(Mustache, jQuery) })(function (Mustache, $) {
     "use strict";
-    var Marker = /** @class */ (function (_super) {
-        __extends(Marker, _super);
-        function Marker() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return Marker;
-    }(window.google.maps.Marker));
     /**
      * Module: TYPO3/CMS/StoreFinder/FrontendGoogleMap
      * contains all logic for the frontend map output
@@ -127,7 +107,7 @@ var __extends = (this && this.__extends) || (function () {
             }
             else {
                 this.infoWindow.close();
-                this.infoWindow.setContent(this.templateParser.render(this.infoWindowTemplate, location.information));
+                this.infoWindow.setContent(Mustache.render(this.infoWindowTemplate, location.information));
                 this.infoWindow.setPosition(marker.getPosition());
                 this.infoWindow.open(this.map, marker);
             }
@@ -177,8 +157,7 @@ var __extends = (this && this.__extends) || (function () {
         FrontendMap.prototype.initializeTemplates = function () {
             var _this = this;
             this.infoWindowTemplate = $('#templateInfoWindow').html();
-            this.templateParser = Mustache.Writer;
-            this.templateParser.parse(this.infoWindowTemplate);
+            Mustache.parse(this.infoWindowTemplate);
             $(document).on('click', '.tx-storefinder .infoWindow .close', function (event, $closeButton) {
                 if (typeof _this.mapConfiguration.renderSingleViewCallback === 'function') {
                     _this.mapConfiguration.handleCloseButtonCallback($closeButton);

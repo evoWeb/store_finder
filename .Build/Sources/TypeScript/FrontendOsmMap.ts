@@ -31,7 +31,6 @@ class FrontendMap {
   private locationIndex: number = 0;
   private infoWindow: L.Popup;
   private infoWindowTemplate: string;
-  private templateParser: any;
 
   /**
    * The constructor, set the class properties default values
@@ -144,7 +143,7 @@ class FrontendMap {
       }
 
       this.infoWindow = marker.getPopup()
-        .setContent(this.templateParser.render(location.information, this.infoWindowTemplate))
+        .setContent(Mustache.render(this.infoWindowTemplate, location.information))
         .setLatLng(L.latLng(location.lat, location.lng))
         .openOn(this.map);
     }
@@ -200,8 +199,7 @@ class FrontendMap {
    */
   initializeTemplates(this: FrontendMap) {
     this.infoWindowTemplate = $('#templateInfoWindow').html();
-    this.templateParser = Mustache;
-    this.templateParser.parse(this.infoWindowTemplate);
+    Mustache.parse(this.infoWindowTemplate);
 
     $(document).on('click', '.tx-storefinder .infoWindow .close', (event: Event, $closeButton: JQuery): void => {
       if (typeof this.mapConfiguration.renderSingleViewCallback === 'function') {

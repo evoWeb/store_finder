@@ -15,8 +15,9 @@ import * as $ from 'jquery';
 
 import {MapConfiguration, Location} from "./Interfaces";
 
-class Marker extends google.maps.Marker {
-  public sfLocation: Location;
+interface Marker {
+  sfLocation: Location;
+  getPosition(): any;
 }
 
 /**
@@ -29,9 +30,8 @@ class FrontendMap {
   private mapConfiguration: MapConfiguration;
   private locations: Array<Location>;
   private locationIndex: number = 0;
-  private infoWindow: google.maps.InfoWindow;
+  private infoWindow: any;
   private infoWindowTemplate: string;
-  private templateParser: any;
 
   /**
    * The constructor, set the class properties default values
@@ -137,7 +137,7 @@ class FrontendMap {
       this.mapConfiguration.renderSingleViewCallback(location, this.infoWindowTemplate);
     } else {
       this.infoWindow.close();
-      this.infoWindow.setContent(this.templateParser.render(this.infoWindowTemplate, location.information));
+      this.infoWindow.setContent(Mustache.render(this.infoWindowTemplate, location.information));
       this.infoWindow.setPosition(marker.getPosition());
       this.infoWindow.open(this.map, marker);
     }
@@ -192,8 +192,7 @@ class FrontendMap {
    */
   initializeTemplates(this: FrontendMap) {
     this.infoWindowTemplate = $('#templateInfoWindow').html();
-    this.templateParser = Mustache.Writer;
-    this.templateParser.parse(this.infoWindowTemplate);
+    Mustache.parse(this.infoWindowTemplate);
 
     $(document).on('click', '.tx-storefinder .infoWindow .close', (event: Event, $closeButton: JQuery): void => {
       if (typeof this.mapConfiguration.renderSingleViewCallback === 'function') {

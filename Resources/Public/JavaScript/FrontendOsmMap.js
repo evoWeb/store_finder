@@ -21,7 +21,6 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-//define(["require", "exports", "mustache", "jquery", "leaflet"], function (require, exports, Mustache, $, L) {
 (function (factory) { 'function' === typeof define && define.amd ? define('map', ['mustache', 'jquery', 'leaflet'], factory) : factory(Mustache, jQuery, L) })(function (Mustache, $, L) {
     "use strict";
     var Marker = /** @class */ (function (_super) {
@@ -131,7 +130,7 @@ var __extends = (this && this.__extends) || (function () {
                     this.infoWindow.closePopup();
                 }
                 this.infoWindow = marker.getPopup()
-                    .setContent(this.templateParser.render(location.information, this.infoWindowTemplate))
+                    .setContent(Mustache.render(this.infoWindowTemplate, location.information))
                     .setLatLng(L.latLng(location.lat, location.lng))
                     .openOn(this.map);
             }
@@ -182,8 +181,7 @@ var __extends = (this && this.__extends) || (function () {
         FrontendMap.prototype.initializeTemplates = function () {
             var _this = this;
             this.infoWindowTemplate = $('#templateInfoWindow').html();
-            this.templateParser = Mustache;
-            this.templateParser.parse(this.infoWindowTemplate);
+            Mustache.parse(this.infoWindowTemplate);
             $(document).on('click', '.tx-storefinder .infoWindow .close', function (event, $closeButton) {
                 if (typeof _this.mapConfiguration.renderSingleViewCallback === 'function') {
                     _this.mapConfiguration.handleCloseButtonCallback($closeButton);
