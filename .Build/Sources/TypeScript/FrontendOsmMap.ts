@@ -60,18 +60,6 @@ class FrontendOsmMap extends FrontendMap {
     if (this.mapConfiguration.apiV3Layers.indexOf('bicycling') > -1) {
       let bicyclingLayer = new google.maps.BicyclingLayer();
       bicyclingLayer.setMap(this.map);
-    }
-
-    if (this.mapConfiguration.apiV3Layers.indexOf('panoramio') > -1) {
-      let panoramioLayer = new google.maps.panoramio.PanoramioLayer();
-      panoramioLayer.setMap(this.map);
-    }
-
-    if (this.mapConfiguration.apiV3Layers.indexOf('weather') > -1) {
-      let weatherLayer = new google.maps.weather.WeatherLayer({
-        temperatureUnits: google.maps.weather.TemperatureUnit.DEGREE
-      });
-      weatherLayer.setMap(this.map);
     }*/
 
     if (this.mapConfiguration.apiV3Layers.indexOf('kml') > -1) {
@@ -114,10 +102,11 @@ class FrontendOsmMap extends FrontendMap {
    * Create marker and add to map
    */
   createMarker(location: Location, icon: string): L.Marker {
-    let marker = new L.Marker([location.lat, location.lng], {
-      title: location.name,
-      icon: new L.Icon({iconUrl: icon}),
-    });
+    let options = {
+        title: location.name,
+        icon: new L.Icon({iconUrl: icon}),
+      },
+      marker = new L.Marker([location.lat, location.lng], options);
     marker.bindPopup('').addTo(this.map);
 
     marker.on('click', () => {
@@ -176,7 +165,7 @@ class FrontendOsmMap extends FrontendMap {
       $jsDeferred.promise()
     ).done(function () {
       function wait(this: FrontendMap) {
-        if (typeof window.L !== 'undefined') {
+        if (typeof L !== 'undefined') {
           this.postLoadScript();
         } else {
           window.requestAnimationFrame(wait.bind(this));

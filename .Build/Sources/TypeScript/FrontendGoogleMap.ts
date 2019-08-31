@@ -30,12 +30,10 @@ class FrontendGoogleMap extends FrontendMap {
   initializeMap(this: FrontendGoogleMap) {
     let center;
 
-    window.google.maps.visualRefresh = true;
-
     if (typeof this.mapConfiguration.center !== 'undefined') {
-      center = new window.google.maps.LatLng(this.mapConfiguration.center.lat, this.mapConfiguration.center.lng);
+      center = new google.maps.LatLng(this.mapConfiguration.center.lat, this.mapConfiguration.center.lng);
     } else {
-      center = new window.google.maps.LatLng(0, 0);
+      center = new google.maps.LatLng(0, 0);
     }
 
     let mapOptions = {
@@ -44,11 +42,11 @@ class FrontendGoogleMap extends FrontendMap {
       disableDefaultUI: true, // a way to quickly hide all controls
       zoomControl: true,
       zoomControlOptions: {
-        style: window.google.maps.ZoomControlStyle.LARGE
+        style: google.maps.ZoomControlStyle.LARGE
       }
     };
 
-    this.map = new window.google.maps.Map($('#tx_storefinder_map')[0], mapOptions);
+    this.map = new google.maps.Map($('#tx_storefinder_map')[0], mapOptions);
 
     if (this.mapConfiguration.afterSearch === 0 && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
@@ -67,29 +65,17 @@ class FrontendGoogleMap extends FrontendMap {
    */
   initializeLayer(this: FrontendGoogleMap) {
     if (this.mapConfiguration.apiV3Layers.indexOf('traffic') > -1) {
-      let trafficLayer = new window.google.maps.TrafficLayer();
+      let trafficLayer = new google.maps.TrafficLayer();
       trafficLayer.setMap(this.map);
     }
 
     if (this.mapConfiguration.apiV3Layers.indexOf('bicycling') > -1) {
-      let bicyclingLayer = new window.google.maps.BicyclingLayer();
+      let bicyclingLayer = new google.maps.BicyclingLayer();
       bicyclingLayer.setMap(this.map);
     }
 
-    if (this.mapConfiguration.apiV3Layers.indexOf('panoramio') > -1) {
-      let panoramioLayer = new window.google.maps.panoramio.PanoramioLayer();
-      panoramioLayer.setMap(this.map);
-    }
-
-    if (this.mapConfiguration.apiV3Layers.indexOf('weather') > -1) {
-      let weatherLayer = new window.google.maps.weather.WeatherLayer({
-        temperatureUnits: window.google.maps.weather.TemperatureUnit.DEGREE
-      });
-      weatherLayer.setMap(this.map);
-    }
-
     if (this.mapConfiguration.apiV3Layers.indexOf('kml') > -1) {
-      let kmlLayer = new window.google.maps.KmlLayer(this.mapConfiguration.kmlUrl);
+      let kmlLayer = new google.maps.KmlLayer({url : this.mapConfiguration.kmlUrl});
       kmlLayer.setMap(this.map);
     }
   }
@@ -112,14 +98,15 @@ class FrontendGoogleMap extends FrontendMap {
    * Create marker and add to map
    */
   createMarker(location: Location, icon: string): google.maps.Marker {
-    let marker = new window.google.maps.Marker({
-      title: location.name,
-      position: new window.google.maps.LatLng(location.lat, location.lng),
-      icon: icon,
-    });
+    let options = {
+        title: location.name,
+        position: new google.maps.LatLng(location.lat, location.lng),
+        icon: icon,
+      },
+      marker = new google.maps.Marker(options);
     marker.setMap(this.map);
 
-    window.google.maps.event.addListener(marker, 'click', () => {
+    google.maps.event.addListener(marker, 'click', () => {
       this.showInformation(location, marker);
     });
 
@@ -130,7 +117,7 @@ class FrontendGoogleMap extends FrontendMap {
    * Initialize instance of map infoWindow
    */
   initializeInfoWindow(this: FrontendGoogleMap) {
-    this.infoWindow = new window.google.maps.InfoWindow();
+    this.infoWindow = new google.maps.InfoWindow();
   }
 
   /**
@@ -144,7 +131,7 @@ class FrontendGoogleMap extends FrontendMap {
    * Trigger click event on marker on click in result list
    */
   openInfoWindow(this: FrontendMap, index: number) {
-    window.google.maps.event.trigger(this.locations[index].marker, 'click');
+    google.maps.event.trigger(this.locations[index].marker, 'click');
   }
 
   /**
@@ -176,7 +163,7 @@ class FrontendGoogleMap extends FrontendMap {
       $jsDeferred.promise()
     ).done(function () {
       function wait(this: FrontendMap) {
-        if (typeof window.google !== 'undefined') {
+        if (typeof google !== 'undefined') {
           this.postLoadScript();
         } else {
           window.requestAnimationFrame(wait.bind(this));

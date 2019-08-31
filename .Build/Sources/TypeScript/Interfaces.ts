@@ -50,9 +50,6 @@ export interface Template {
 
 declare global {
   interface Window {
-    google: any,
-    Hogan: any,
-    L: any,
     mapConfiguration: MapConfiguration,
     locations: Array<any>,
     StoreFinder: object

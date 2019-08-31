@@ -62,7 +62,7 @@ plugin.tx_storefinder.settings {
   fulltextSearchWordWrap = |%
 
   mapConfiguration {
-    # traffic, weather, bicycling, panoramio, kml
+    # traffic, bicycling, kml
     apiV3Layers =
     language = en
     allowSensors = 1
