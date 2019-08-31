@@ -21,50 +21,29 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-(function (factory) { 'function' === typeof define && define.amd ? define('map', ['mustache', 'jquery', 'leaflet'], factory) : factory(Mustache, jQuery, L) })(function (Mustache, $, L) {
+(function (factory) {
+    'function' === typeof define && define.amd ?
+        define('FrontendOsmMap', ['jquery', 'leaflet', 'FrontendMap'], factory) :
+        factory(window, jQuery, L, window.FrontendMap);
+})(function (window, $, L, FrontendMap_1) {
     "use strict";
-    var Marker = /** @class */ (function (_super) {
-        __extends(Marker, _super);
-        function Marker() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return Marker;
-    }(L.Marker));
     /**
      * Module: TYPO3/CMS/StoreFinder/FrontendOsmMap
      * contains all logic for the frontend map output
      * @exports TYPO3/CMS/StoreFinder/FrontendOsmMap
      */
-    var FrontendMap = /** @class */ (function () {
-        /**
-         * The constructor, set the class properties default values
-         */
-        function FrontendMap(mapConfiguration, locations) {
-            this.locationIndex = 0;
-            this.mapConfiguration = mapConfiguration || {
-                active: false,
-                afterSearch: 0,
-                apiConsoleKey: '',
-                apiUrl: '',
-                allowSensors: false,
-                language: 'en',
-                markerIcon: '',
-                apiV3Layers: '',
-                kmlUrl: '',
-                renderSingleViewCallback: null,
-                handleCloseButtonCallback: null
-            };
-            this.locations = locations;
-            this.loadScript();
+    var FrontendOsmMap = /** @class */ (function (_super) {
+        __extends(FrontendOsmMap, _super);
+        function FrontendOsmMap() {
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         /**
          * Initialize map
          */
-        FrontendMap.prototype.initializeMap = function () {
-            var self = this;
-            self.map = L.map('tx_storefinder_map');
+        FrontendOsmMap.prototype.initializeMap = function () {
+            this.map = L.map('tx_storefinder_map');
             if (typeof this.mapConfiguration.center !== 'undefined') {
-                this.map.setView([self.mapConfiguration.center.lat, self.mapConfiguration.center.lng], parseInt(self.mapConfiguration.zoom, 10));
+                this.map.setView([this.mapConfiguration.center.lat, this.mapConfiguration.center.lng], parseInt(this.mapConfiguration.zoom, 10));
             }
             else {
                 this.map.setView([0, 0], 13);
@@ -73,12 +52,12 @@ var __extends = (this && this.__extends) || (function () {
             L.tileLayer('https://korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}', {
                 maxZoom: 20,
                 attribution: 'Imagery from <a href="http://giscience.uni-hd.de/">GIScience Research Group @ University of Heidelberg</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-            }).addTo(self.map);
+            }).addTo(this.map);
         };
         /**
          * Initialize information layer on map
          */
-        FrontendMap.prototype.initializeLayer = function () {
+        FrontendOsmMap.prototype.initializeLayer = function () {
             /*if (this.mapConfiguration.apiV3Layers.indexOf('traffic') > -1) {
               let trafficLayer = new google.maps.TrafficLayer();
               trafficLayer.setMap(this.map);
@@ -117,11 +96,8 @@ var __extends = (this && this.__extends) || (function () {
         };
         /**
          * Close previously open info window, renders new content and opens the window
-         *
-         * @param {object} marker
          */
-        FrontendMap.prototype.showInformation = function (marker) {
-            var location = marker.sfLocation;
+        FrontendOsmMap.prototype.showInformation = function (location, marker) {
             if (typeof this.mapConfiguration.renderSingleViewCallback === 'function') {
                 this.mapConfiguration.renderSingleViewCallback(location, this.infoWindowTemplate);
             }
@@ -129,98 +105,49 @@ var __extends = (this && this.__extends) || (function () {
                 if (this.infoWindow.isOpen()) {
                     this.infoWindow.closePopup();
                 }
-                this.infoWindow = marker.getPopup()
-                    .setContent(Mustache.render(this.infoWindowTemplate, location.information))
-                    .setLatLng(L.latLng(location.lat, location.lng))
-                    .openOn(this.map);
+                this.infoWindow = marker.getPopup();
+                this.infoWindow.setContent(this.renderInfoWindowContent(location));
+                this.infoWindow.setLatLng(L.latLng(location.lat, location.lng));
+                this.infoWindow.openOn(this.map);
             }
         };
         /**
-         * Process single location
-         *
-         * @param location
+         * Create marker and add to map
          */
-        FrontendMap.prototype.processLocation = function (location) {
+        FrontendOsmMap.prototype.createMarker = function (location, icon) {
             var _this = this;
-            var icon = '';
-            if (location.information.icon) {
-                icon = location.information.icon;
-            }
-            else if (this.mapConfiguration.hasOwnProperty('markerIcon')) {
-                icon = this.mapConfiguration.markerIcon;
-            }
-            this.locationIndex++;
-            location.information.index = this.locationIndex;
-            var marker = new Marker([location.lat, location.lng], {
+            var marker = new L.Marker([location.lat, location.lng], {
                 title: location.name,
-                icon: L.icon({ iconUrl: icon })
+                icon: new L.Icon({ iconUrl: icon })
             });
-            marker.sfLocation = location;
             marker.bindPopup('').addTo(this.map);
             marker.on('click', function () {
-                _this.showInformation(marker);
+                _this.showInformation(location, marker);
             });
-            // attach marker to location to be able to close it later
-            location.marker = marker;
-        };
-        /**
-         * Initialize location marker on map
-         */
-        FrontendMap.prototype.initializeLocations = function () {
-            this.locations.map(this.processLocation.bind(this));
+            return marker;
         };
         /**
          * Initialize instance of map infoWindow
          */
-        FrontendMap.prototype.initializeInfoWindow = function () {
+        FrontendOsmMap.prototype.initializeInfoWindow = function () {
             this.infoWindow = L.popup();
         };
         /**
-         * Initialize info window template
+         * Close info window
          */
-        FrontendMap.prototype.initializeTemplates = function () {
-            var _this = this;
-            this.infoWindowTemplate = $('#templateInfoWindow').html();
-            Mustache.parse(this.infoWindowTemplate);
-            $(document).on('click', '.tx-storefinder .infoWindow .close', function (event, $closeButton) {
-                if (typeof _this.mapConfiguration.renderSingleViewCallback === 'function') {
-                    _this.mapConfiguration.handleCloseButtonCallback($closeButton);
-                }
-                else {
-                    _this.infoWindow.closePopup();
-                }
-            });
+        FrontendOsmMap.prototype.closeInfoWindow = function () {
+            this.infoWindow.closePopup();
         };
         /**
          * Trigger click event on marker on click in result list
          */
-        FrontendMap.prototype.openInfoWindow = function (index) {
+        FrontendOsmMap.prototype.openInfoWindow = function (index) {
             this.locations[index].marker.fire('click');
-        };
-        /**
-         * Initialize list click events
-         */
-        FrontendMap.prototype.initializeListEvents = function () {
-            var _this = this;
-            $(document).on('click', '.tx-storefinder .resultList > li', function (event, $field) {
-                _this.openInfoWindow($field.data('index'));
-            });
-        };
-        /**
-         * Post load javascript files
-         */
-        FrontendMap.prototype.postLoadScript = function () {
-            this.initializeMap();
-            this.initializeLayer();
-            this.initializeLocations();
-            this.initializeInfoWindow();
-            this.initializeTemplates();
-            this.initializeListEvents();
         };
         /**
          * Load open street map leaflet script
          */
-        FrontendMap.prototype.loadScript = function () {
+        FrontendOsmMap.prototype.loadScript = function () {
             var self = this, $cssDeferred = $.Deferred(), $cssFile = $('<link/>', {
                 rel: 'stylesheet',
                 type: 'text/css',
@@ -248,15 +175,16 @@ var __extends = (this && this.__extends) || (function () {
                 console.log('Failed loading resources.');
             });
         };
-        return FrontendMap;
-    }());
+        return FrontendOsmMap;
+    }(FrontendMap_1["default"]));
     $(document).ready(function () {
         if (typeof window.mapConfiguration == 'object' && window.mapConfiguration.active) {
             // make module public to be available for callback after load
-            window.StoreFinder = new FrontendMap(window.mapConfiguration, window.locations);
+            window.StoreFinder = new FrontendOsmMap(window.mapConfiguration, window.locations);
         }
     });
-    return FrontendMap;
+    window.FrontendOsmMap = {default: FrontendOsmMap};
+    return FrontendOsmMap;
 });
 
 //# sourceMappingURL=FrontendOsmMap.js.map

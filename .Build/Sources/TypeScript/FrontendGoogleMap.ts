@@ -10,57 +10,24 @@
  */
 
 /// <reference types="@types/googlemaps" />
-import * as Mustache from 'mustache';
 import * as $ from 'jquery';
 
-import {MapConfiguration, Location} from "./Interfaces";
-
-interface Marker {
-  sfLocation: Location;
-  getPosition(): any;
-}
+import FrontendMap from "./FrontendMap";
+import {Location} from "./Interfaces";
 
 /**
  * Module: TYPO3/CMS/StoreFinder/FrontendGoogleMap
  * contains all logic for the frontend map output
  * @exports TYPO3/CMS/StoreFinder/FrontendGoogleMap
  */
-class FrontendMap {
+class FrontendGoogleMap extends FrontendMap {
   private map: google.maps.Map;
-  private mapConfiguration: MapConfiguration;
-  private locations: Array<Location>;
-  private locationIndex: number = 0;
-  private infoWindow: any;
-  private infoWindowTemplate: string;
-
-  /**
-   * The constructor, set the class properties default values
-   */
-  constructor(mapConfiguration: MapConfiguration, locations: Array<Location>) {
-    this.mapConfiguration = mapConfiguration || {
-      active: false,
-      afterSearch: 0,
-
-      apiConsoleKey: '',
-      apiUrl: '',
-      allowSensors: false,
-      language: 'en',
-
-      markerIcon: '',
-      apiV3Layers: '',
-      kmlUrl: '',
-      renderSingleViewCallback: null,
-      handleCloseButtonCallback: null
-    };
-    this.locations = locations;
-
-    this.loadScript();
-  }
+  private infoWindow: google.maps.InfoWindow;
 
   /**
    * Initialize map
    */
-  initializeMap(this: FrontendMap) {
+  initializeMap(this: FrontendGoogleMap) {
     let center;
 
     window.google.maps.visualRefresh = true;
@@ -98,7 +65,7 @@ class FrontendMap {
   /**
    * Initialize information layer on map
    */
-  initializeLayer(this: FrontendMap) {
+  initializeLayer(this: FrontendGoogleMap) {
     if (this.mapConfiguration.apiV3Layers.indexOf('traffic') > -1) {
       let trafficLayer = new window.google.maps.TrafficLayer();
       trafficLayer.setMap(this.map);
@@ -130,77 +97,47 @@ class FrontendMap {
   /**
    * Close previously open info window, renders new content and opens the window
    */
-  showInformation(this: FrontendMap, marker: Marker) {
-    let location = marker.sfLocation;
-
+  showInformation(this: FrontendGoogleMap, location: Location, marker: any) {
     if (typeof this.mapConfiguration.renderSingleViewCallback === 'function') {
       this.mapConfiguration.renderSingleViewCallback(location, this.infoWindowTemplate);
     } else {
       this.infoWindow.close();
-      this.infoWindow.setContent(Mustache.render(this.infoWindowTemplate, location.information));
+      this.infoWindow.setContent(this.renderInfoWindowContent(location));
       this.infoWindow.setPosition(marker.getPosition());
       this.infoWindow.open(this.map, marker);
     }
   }
 
   /**
-   * Process single location
+   * Create marker and add to map
    */
-  processLocation(this: FrontendMap, location: Location) {
-    let icon = '';
-    if (location.information.icon) {
-      icon = location.information.icon;
-    } else if (this.mapConfiguration.hasOwnProperty('markerIcon')) {
-      icon = this.mapConfiguration.markerIcon;
-    }
-
-    this.locationIndex++;
-    location.information.index = this.locationIndex;
-
+  createMarker(location: Location, icon: string): google.maps.Marker {
     let marker = new window.google.maps.Marker({
       title: location.name,
       position: new window.google.maps.LatLng(location.lat, location.lng),
       icon: icon,
     });
-    marker.sfLocation = location;
     marker.setMap(this.map);
 
     window.google.maps.event.addListener(marker, 'click', () => {
-      this.showInformation(marker);
+      this.showInformation(location, marker);
     });
 
-    // attach marker to location to be able to close it later
-    location.marker = marker;
-  }
-
-  /**
-   * Initialize location marker on map
-   */
-  initializeLocations(this: FrontendMap) {
-    this.locations.map(this.processLocation.bind(this));
+    return marker;
   }
 
   /**
    * Initialize instance of map infoWindow
    */
-  initializeInfoWindow(this: FrontendMap) {
+  initializeInfoWindow(this: FrontendGoogleMap) {
     this.infoWindow = new window.google.maps.InfoWindow();
   }
 
   /**
-   * Initialize info window template
+   * Close info window
    */
-  initializeTemplates(this: FrontendMap) {
-    this.infoWindowTemplate = $('#templateInfoWindow').html();
-    Mustache.parse(this.infoWindowTemplate);
-
-    $(document).on('click', '.tx-storefinder .infoWindow .close', (event: Event, $closeButton: JQuery): void => {
-      if (typeof this.mapConfiguration.renderSingleViewCallback === 'function') {
-        this.mapConfiguration.handleCloseButtonCallback($closeButton);
-      } else {
-        this.infoWindow.close();
-      }
-    });
+  closeInfoWindow() {
+    this.infoWindow.close();
   }
 
   /**
@@ -208,27 +145,6 @@ class FrontendMap {
    */
   openInfoWindow(this: FrontendMap, index: number) {
     window.google.maps.event.trigger(this.locations[index].marker, 'click');
-  }
-
-  /**
-   * Initialize list click events
-   */
-  initializeListEvents(this: FrontendMap) {
-    $(document).on('click', '.tx-storefinder .resultList > li', (event: Event, $field: JQuery): void => {
-      this.openInfoWindow($field.data('index'));
-    });
-  }
-
-  /**
-   * Post load javascript files
-   */
-  postLoadScript() {
-    this.initializeMap();
-    this.initializeLayer();
-    this.initializeLocations();
-    this.initializeInfoWindow();
-    this.initializeTemplates();
-    this.initializeListEvents();
   }
 
   /**
@@ -276,9 +192,9 @@ class FrontendMap {
 $(document).ready(function () {
   if (typeof window.mapConfiguration == 'object' && window.mapConfiguration.active) {
     // make module public to be available for callback after load
-    window.StoreFinder = new FrontendMap(window.mapConfiguration, window.locations);
+    window.StoreFinder = new FrontendGoogleMap(window.mapConfiguration, window.locations);
   }
 });
 
 // return constructor
-export = FrontendMap;
+export = FrontendGoogleMap;

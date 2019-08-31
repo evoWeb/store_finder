@@ -10,64 +10,30 @@
  */
 
 /// <reference types="../types/index" />
-import * as Mustache from 'mustache';
 import * as $ from 'jquery';
 import * as L from 'leaflet';
-import {MapConfiguration, Location} from "./Interfaces";
-
-class Marker extends L.Marker {
-  public sfLocation: Location;
-}
+import FrontendMap from "./FrontendMap";
+import {Location} from "./Interfaces";
 
 /**
  * Module: TYPO3/CMS/StoreFinder/FrontendOsmMap
  * contains all logic for the frontend map output
  * @exports TYPO3/CMS/StoreFinder/FrontendOsmMap
  */
-class FrontendMap {
+class FrontendOsmMap extends FrontendMap {
   private map: L.Map;
-  private mapConfiguration: MapConfiguration;
-  private locations: Array<Location>;
-  private locationIndex: number = 0;
   private infoWindow: L.Popup;
-  private infoWindowTemplate: string;
-
-  /**
-   * The constructor, set the class properties default values
-   */
-  constructor(mapConfiguration: MapConfiguration, locations: Array<Location>) {
-    this.mapConfiguration = mapConfiguration || {
-      active: false,
-      afterSearch: 0,
-
-      apiConsoleKey: '',
-      apiUrl: '',
-      allowSensors: false,
-      language: 'en',
-
-      markerIcon: '',
-      apiV3Layers: '',
-      kmlUrl: '',
-      renderSingleViewCallback: null,
-      handleCloseButtonCallback: null
-    };
-    this.locations = locations;
-
-    this.loadScript();
-  }
 
   /**
    * Initialize map
    */
-  initializeMap() {
-    let self = this;
-
-    self.map = L.map('tx_storefinder_map');
+  initializeMap(this: FrontendOsmMap) {
+    this.map = L.map('tx_storefinder_map');
 
     if (typeof this.mapConfiguration.center !== 'undefined') {
       this.map.setView(
-        [self.mapConfiguration.center.lat, self.mapConfiguration.center.lng],
-        parseInt(self.mapConfiguration.zoom, 10)
+        [this.mapConfiguration.center.lat, this.mapConfiguration.center.lng],
+        parseInt(this.mapConfiguration.zoom, 10)
       );
     } else {
       this.map.setView([0, 0], 13);
@@ -79,13 +45,13 @@ class FrontendMap {
         maxZoom: 20,
         attribution: 'Imagery from <a href="http://giscience.uni-hd.de/">GIScience Research Group @ University of Heidelberg</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
       }
-    ).addTo(self.map);
+    ).addTo(this.map);
   }
 
   /**
    * Initialize information layer on map
    */
-  initializeLayer(this: FrontendMap) {
+  initializeLayer(this: FrontendOsmMap) {
     /*if (this.mapConfiguration.apiV3Layers.indexOf('traffic') > -1) {
       let trafficLayer = new google.maps.TrafficLayer();
       trafficLayer.setMap(this.map);
@@ -129,85 +95,50 @@ class FrontendMap {
 
   /**
    * Close previously open info window, renders new content and opens the window
-   *
-   * @param {object} marker
    */
-  showInformation(this: FrontendMap, marker: Marker) {
-    let location = marker.sfLocation;
-
+  showInformation(this: FrontendOsmMap, location: Location, marker: any) {
     if (typeof this.mapConfiguration.renderSingleViewCallback === 'function') {
       this.mapConfiguration.renderSingleViewCallback(location, this.infoWindowTemplate);
     } else {
       if (this.infoWindow.isOpen()) {
         this.infoWindow.closePopup();
       }
-
-      this.infoWindow = marker.getPopup()
-        .setContent(Mustache.render(this.infoWindowTemplate, location.information))
-        .setLatLng(L.latLng(location.lat, location.lng))
-        .openOn(this.map);
+      this.infoWindow = marker.getPopup();
+      this.infoWindow.setContent(this.renderInfoWindowContent(location));
+      this.infoWindow.setLatLng(L.latLng(location.lat, location.lng));
+      this.infoWindow.openOn(this.map);
     }
   }
 
   /**
-   * Process single location
-   *
-   * @param location
+   * Create marker and add to map
    */
-  processLocation(this: FrontendMap, location: Location) {
-    let icon = '';
-    if (location.information.icon) {
-      icon = location.information.icon;
-    } else if (this.mapConfiguration.hasOwnProperty('markerIcon')) {
-      icon = this.mapConfiguration.markerIcon;
-    }
-
-    this.locationIndex++;
-    location.information.index = this.locationIndex;
-
-    let marker = new Marker([location.lat, location.lng], {
+  createMarker(location: Location, icon: string): L.Marker {
+    let marker = new L.Marker([location.lat, location.lng], {
       title: location.name,
-      icon: L.icon({iconUrl: icon}),
+      icon: new L.Icon({iconUrl: icon}),
     });
-    marker.sfLocation = location;
     marker.bindPopup('').addTo(this.map);
 
     marker.on('click', () => {
-      this.showInformation(marker);
+      this.showInformation(location, marker);
     });
 
-    // attach marker to location to be able to close it later
-    location.marker = marker;
-  }
-
-  /**
-   * Initialize location marker on map
-   */
-  initializeLocations(this: FrontendMap) {
-    this.locations.map(this.processLocation.bind(this));
+    return marker;
   }
 
   /**
    * Initialize instance of map infoWindow
    */
-  initializeInfoWindow() {
+  initializeInfoWindow(this: FrontendOsmMap) {
     this.infoWindow = L.popup();
   }
 
   /**
-   * Initialize info window template
+   * Close info window
    */
-  initializeTemplates(this: FrontendMap) {
-    this.infoWindowTemplate = $('#templateInfoWindow').html();
-    Mustache.parse(this.infoWindowTemplate);
-
-    $(document).on('click', '.tx-storefinder .infoWindow .close', (event: Event, $closeButton: JQuery): void => {
-      if (typeof this.mapConfiguration.renderSingleViewCallback === 'function') {
-        this.mapConfiguration.handleCloseButtonCallback($closeButton);
-      } else {
-        this.infoWindow.closePopup();
-      }
-    });
+  closeInfoWindow() {
+    this.infoWindow.closePopup();
   }
 
   /**
@@ -215,27 +146,6 @@ class FrontendMap {
    */
   openInfoWindow(this: FrontendMap, index: number) {
     this.locations[index].marker.fire('click');
-  }
-
-  /**
-   * Initialize list click events
-   */
-  initializeListEvents(this: FrontendMap) {
-    $(document).on('click', '.tx-storefinder .resultList > li', (event: Event, $field: JQuery): void => {
-      this.openInfoWindow($field.data('index'));
-    });
-  }
-
-  /**
-   * Post load javascript files
-   */
-  postLoadScript() {
-    this.initializeMap();
-    this.initializeLayer();
-    this.initializeLocations();
-    this.initializeInfoWindow();
-    this.initializeTemplates();
-    this.initializeListEvents();
   }
 
   /**
@@ -282,9 +192,9 @@ class FrontendMap {
 $(document).ready(function () {
   if (typeof window.mapConfiguration == 'object' && window.mapConfiguration.active) {
     // make module public to be available for callback after load
-    window.StoreFinder = new FrontendMap(window.mapConfiguration, window.locations);
+    window.StoreFinder = new FrontendOsmMap(window.mapConfiguration, window.locations);
   }
 });
 
 // return constructor
-export = FrontendMap;
+export = FrontendOsmMap;

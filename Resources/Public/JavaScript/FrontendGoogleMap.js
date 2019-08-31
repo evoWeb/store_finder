@@ -8,39 +8,39 @@
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  */
-(function (factory) { 'function' === typeof define && define.amd ? define('map', ['mustache', 'jquery', 'leaflet'], factory) : factory(Mustache, jQuery) })(function (Mustache, $) {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+(function (factory) {
+    'function' === typeof define && define.amd ?
+        define('FrontendGoogleMap', ['jquery', 'FrontendMap'], factory) :
+        factory(window, jQuery, window.FrontendMap)
+})(function (window, $, FrontendMap_1) {
     "use strict";
     /**
      * Module: TYPO3/CMS/StoreFinder/FrontendGoogleMap
      * contains all logic for the frontend map output
      * @exports TYPO3/CMS/StoreFinder/FrontendGoogleMap
      */
-    var FrontendMap = /** @class */ (function () {
-        /**
-         * The constructor, set the class properties default values
-         */
-        function FrontendMap(mapConfiguration, locations) {
-            this.locationIndex = 0;
-            this.mapConfiguration = mapConfiguration || {
-                active: false,
-                afterSearch: 0,
-                apiConsoleKey: '',
-                apiUrl: '',
-                allowSensors: false,
-                language: 'en',
-                markerIcon: '',
-                apiV3Layers: '',
-                kmlUrl: '',
-                renderSingleViewCallback: null,
-                handleCloseButtonCallback: null
-            };
-            this.locations = locations;
-            this.loadScript();
+    var FrontendGoogleMap = /** @class */ (function (_super) {
+        __extends(FrontendGoogleMap, _super);
+        function FrontendGoogleMap() {
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         /**
          * Initialize map
          */
-        FrontendMap.prototype.initializeMap = function () {
+        FrontendGoogleMap.prototype.initializeMap = function () {
             var _this = this;
             var center;
             window.google.maps.visualRefresh = true;
@@ -73,7 +73,7 @@
         /**
          * Initialize information layer on map
          */
-        FrontendMap.prototype.initializeLayer = function () {
+        FrontendGoogleMap.prototype.initializeLayer = function () {
             if (this.mapConfiguration.apiV3Layers.indexOf('traffic') > -1) {
                 var trafficLayer = new window.google.maps.TrafficLayer();
                 trafficLayer.setMap(this.map);
@@ -100,103 +100,55 @@
         /**
          * Close previously open info window, renders new content and opens the window
          */
-        FrontendMap.prototype.showInformation = function (marker) {
-            var location = marker.sfLocation;
+        FrontendGoogleMap.prototype.showInformation = function (location, marker) {
             if (typeof this.mapConfiguration.renderSingleViewCallback === 'function') {
                 this.mapConfiguration.renderSingleViewCallback(location, this.infoWindowTemplate);
             }
             else {
                 this.infoWindow.close();
-                this.infoWindow.setContent(Mustache.render(this.infoWindowTemplate, location.information));
+                this.infoWindow.setContent(this.renderInfoWindowContent(location));
                 this.infoWindow.setPosition(marker.getPosition());
                 this.infoWindow.open(this.map, marker);
             }
         };
         /**
-         * Process single location
+         * Create marker and add to map
          */
-        FrontendMap.prototype.processLocation = function (location) {
+        FrontendGoogleMap.prototype.createMarker = function (location, icon) {
             var _this = this;
-            var icon = '';
-            if (location.information.icon) {
-                icon = location.information.icon;
-            }
-            else if (this.mapConfiguration.hasOwnProperty('markerIcon')) {
-                icon = this.mapConfiguration.markerIcon;
-            }
-            this.locationIndex++;
-            location.information.index = this.locationIndex;
             var marker = new window.google.maps.Marker({
                 title: location.name,
                 position: new window.google.maps.LatLng(location.lat, location.lng),
                 icon: icon
             });
-            marker.sfLocation = location;
             marker.setMap(this.map);
             window.google.maps.event.addListener(marker, 'click', function () {
-                _this.showInformation(marker);
+                _this.showInformation(location, marker);
             });
-            // attach marker to location to be able to close it later
-            location.marker = marker;
-        };
-        /**
-         * Initialize location marker on map
-         */
-        FrontendMap.prototype.initializeLocations = function () {
-            this.locations.map(this.processLocation.bind(this));
+            return marker;
         };
         /**
          * Initialize instance of map infoWindow
          */
-        FrontendMap.prototype.initializeInfoWindow = function () {
+        FrontendGoogleMap.prototype.initializeInfoWindow = function () {
             this.infoWindow = new window.google.maps.InfoWindow();
         };
         /**
-         * Initialize info window template
+         * Close info window
          */
-        FrontendMap.prototype.initializeTemplates = function () {
-            var _this = this;
-            this.infoWindowTemplate = $('#templateInfoWindow').html();
-            Mustache.parse(this.infoWindowTemplate);
-            $(document).on('click', '.tx-storefinder .infoWindow .close', function (event, $closeButton) {
-                if (typeof _this.mapConfiguration.renderSingleViewCallback === 'function') {
-                    _this.mapConfiguration.handleCloseButtonCallback($closeButton);
-                }
-                else {
-                    _this.infoWindow.close();
-                }
-            });
+        FrontendGoogleMap.prototype.closeInfoWindow = function () {
+            this.infoWindow.close();
         };
         /**
          * Trigger click event on marker on click in result list
          */
-        FrontendMap.prototype.openInfoWindow = function (index) {
+        FrontendGoogleMap.prototype.openInfoWindow = function (index) {
             window.google.maps.event.trigger(this.locations[index].marker, 'click');
-        };
-        /**
-         * Initialize list click events
-         */
-        FrontendMap.prototype.initializeListEvents = function () {
-            var _this = this;
-            $(document).on('click', '.tx-storefinder .resultList > li', function (event, $field) {
-                _this.openInfoWindow($field.data('index'));
-            });
-        };
-        /**
-         * Post load javascript files
-         */
-        FrontendMap.prototype.postLoadScript = function () {
-            this.initializeMap();
-            this.initializeLayer();
-            this.initializeLocations();
-            this.initializeInfoWindow();
-            this.initializeTemplates();
-            this.initializeListEvents();
         };
         /**
          * Load google map script
          */
-        FrontendMap.prototype.loadScript = function () {
+        FrontendGoogleMap.prototype.loadScript = function () {
             var self = this, apiUrl = 'https://maps.googleapis.com/maps/api/js?v=3.exp', parameter = '&key=' + this.mapConfiguration.apiConsoleKey
                 + '&sensor=' + (this.mapConfiguration.allowSensors ? 'true' : 'false');
             if (self.mapConfiguration.language !== '') {
@@ -224,15 +176,16 @@
                 console.log('Failed loading resources.');
             });
         };
-        return FrontendMap;
-    }());
+        return FrontendGoogleMap;
+    }(FrontendMap_1["default"]));
     $(document).ready(function () {
         if (typeof window.mapConfiguration == 'object' && window.mapConfiguration.active) {
             // make module public to be available for callback after load
-            window.StoreFinder = new FrontendMap(window.mapConfiguration, window.locations);
+            window.StoreFinder = new FrontendGoogleMap(window.mapConfiguration, window.locations);
         }
     });
-    return FrontendMap;
+    window.FrontendGoogleMap = {default: FrontendGoogleMap};
+    return FrontendGoogleMap;
 });
 
 //# sourceMappingURL=FrontendGoogleMap.js.map
