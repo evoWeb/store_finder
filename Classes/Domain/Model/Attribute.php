@@ -33,6 +33,9 @@ class Attribute extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     public function getIcon()
     {
+        if ($this->icon instanceof \TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy) {
+            $this->icon = $this->icon->_loadRealInstance();
+        }
         return $this->icon;
     }
 
