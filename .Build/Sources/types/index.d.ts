@@ -35,6 +35,13 @@ declare interface MapConfiguration {
   handleCloseButtonCallback(button: object): void,
 }
 
+declare interface BackendConfiguration {
+  uid: string,
+  latitude: number,
+  longitude: number,
+  zoom: number
+}
+
 declare interface Window {
     mapConfiguration: MapConfiguration,
     locations: Array<any>

@@ -10,6 +10,7 @@ import rename from 'gulp-rename';
 import source from 'vinyl-source-stream';
 import sourcemaps from 'gulp-sourcemaps';
 import tsify from 'tsify';
+import ts from 'gulp-typescript';
 import uglify from 'gulp-uglify';
 
 import postcss from 'gulp-postcss';
@@ -23,7 +24,7 @@ const paths = {
 
 const tasks = {
 	typescript: {
-		src: 'TypeScript/F*.ts',
+		src: 'TypeScript',
 		dest: 'JavaScript'
 	},
 	scss: {
@@ -34,7 +35,7 @@ const tasks = {
 
 gulp.task('typescript-gm', () => {
 	let b = browserify({
-		entries: [path.join(paths.src, 'TypeScript/FrontendGoogleMap.ts')],
+		entries: [path.join(paths.src, tasks.typescript.src, 'FrontendGoogleMap.ts')],
 		debug: true
 	});
 
@@ -61,7 +62,7 @@ gulp.task('typescript-gm', () => {
 
 gulp.task('typescript-osm', () => {
 	let b = browserify({
-		entries: [path.join(paths.src, 'TypeScript/FrontendOsmMap.ts')],
+		entries: [path.join(paths.src, tasks.typescript.src, 'FrontendOsmMap.ts')],
 		debug: true
 	});
 
@@ -86,7 +87,17 @@ gulp.task('typescript-osm', () => {
 		.pipe(gulp.dest(path.join(paths.dest, tasks.typescript.dest)));
 });
 
-gulp.task('typescript', gulp.series('typescript-gm', 'typescript-osm'));
+gulp.task('typescript-backend', () => {
+	let tsProject = ts.createProject('tsconfig.json', {module: 'amd'});
+
+	return gulp.src(path.join(paths.src, tasks.typescript.src, 'BackendOsmMap.ts'))
+		.pipe(sourcemaps.init())
+		.pipe(tsProject())
+		.pipe(sourcemaps.write('./'))
+		.pipe(gulp.dest(path.join(paths.dest, tasks.typescript.dest, 'FormEngine/Element')));
+});
+
+gulp.task('typescript', gulp.series('typescript-gm', 'typescript-osm', 'typescript-backend'));
 
 gulp.task('scss', () => {
 	return gulp.src(path.join(paths.src, tasks.scss.src))

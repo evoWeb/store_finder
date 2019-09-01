@@ -640,6 +640,7 @@ return [
                 --div--;' . $languageFile . 'div-address,
                     --palette--;;name,
                     --palette--;;address,
+                    --palette--;;coordinates,
                 --div--;' . $languageFile . 'div-contact,
                     person,
                     --palette--;;contact,
@@ -653,7 +654,6 @@ return [
                     media,
                     content,
                 --div--;' . $languageFile . 'div-relations,
-                    --palette--;;coordinates,
                     related,
                     attributes,
                     categories,
@@ -692,9 +692,9 @@ return [
         'coordinates' => [
             'label' => $languageFile . 'palette-coordinates',
             'showitem' => '
-                latitude, longitude,
-                --linebreak--,
                 map,
+                --linebreak--,
+                latitude, longitude,
                 --linebreak--,
                 geocode, center
             '
