@@ -12,3 +12,41 @@
 declare module omnivore {
   function kml(url: string): any;
 }
+
+declare interface MapConfiguration {
+  active: Boolean,
+  afterSearch: number;
+  center?: {
+    lat: number,
+    lng: number
+  };
+  zoom?: number;
+
+  apiConsoleKey: string,
+  apiUrl: string,
+  allowSensors: boolean,
+  language: string,
+
+  markerIcon: string,
+  apiV3Layers: string,
+  kmlUrl: string,
+
+  renderSingleViewCallback(location: object, template: string): void,
+  handleCloseButtonCallback(button: object): void,
+}
+
+declare interface Window {
+    mapConfiguration: MapConfiguration,
+    locations: Array<any>
+}
+
+declare interface Location {
+  name: string,
+  lat: number,
+  lng: number,
+  information: {
+    index: number,
+    icon: string,
+  },
+  marker: any
+}

@@ -10,37 +10,46 @@
  */
 
 import * as Mustache from 'mustache';
-import * as $ from 'jquery';
-import {MapConfiguration, Location} from "./Interfaces";
 
 export default class FrontendMap {
-  public mapConfiguration: MapConfiguration;
-  public locations: Array<Location>;
+  public mapConfiguration: MapConfiguration = {
+    active: false,
+    afterSearch: 0,
+    center: {
+      lat: 0,
+      lng: 0
+    },
+    zoom: 18,
+
+    apiConsoleKey: '',
+    apiUrl: '',
+    allowSensors: false,
+    language: '',
+
+    markerIcon: '',
+    apiV3Layers: '',
+    kmlUrl: '',
+
+    renderSingleViewCallback: null,
+    handleCloseButtonCallback: null
+  };
+  public locations: Array<Location> = [];
   public locationIndex: number = 0;
-  public infoWindowTemplate: string;
+  public infoWindowTemplate: string = '';
 
   /**
    * The constructor, set the class properties default values
    */
-  constructor(mapConfiguration: MapConfiguration, locations: Array<Location>) {
-    this.mapConfiguration = mapConfiguration || {
-      active: false,
-      afterSearch: 0,
-
-      apiConsoleKey: '',
-      apiUrl: '',
-      allowSensors: false,
-      language: '',
-
-      markerIcon: '',
-      apiV3Layers: '',
-      kmlUrl: '',
-      renderSingleViewCallback: null,
-      handleCloseButtonCallback: null
-    };
-    this.locations = locations;
-
-    this.loadScript();
+  constructor() {
+    if (typeof window.mapConfiguration == 'object' && window.mapConfiguration.active) {
+      this.mapConfiguration = window.mapConfiguration;
+    }
+    if (this.mapConfiguration) {
+      if (typeof window.locations == 'object') {
+        this.locations = window.locations;
+      }
+      this.loadScript();
+    }
   }
 
   initializeMap() {}
@@ -58,8 +67,6 @@ export default class FrontendMap {
 
   /**
    * Process single location
-   *
-   * @param location
    */
   processLocation(this: FrontendMap, location: Location) {
     let icon = '';

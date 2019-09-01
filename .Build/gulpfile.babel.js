@@ -1,12 +1,20 @@
 'use strict';
 
 import gulp from 'gulp';
-import ts from 'gulp-typescript';
+import log from 'gulplog';
+import path from 'path';
+
+import browserify from 'browserify';
+import buffer from 'vinyl-buffer';
+import rename from 'gulp-rename';
+import source from 'vinyl-source-stream';
+import sourcemaps from 'gulp-sourcemaps';
+import tsify from 'tsify';
+import uglify from 'gulp-uglify';
+
 import postcss from 'gulp-postcss';
 import autoprefixer from 'autoprefixer';
-import sourcemaps from 'gulp-sourcemaps';
 import sass from 'gulp-sass';
-import path from 'path';
 
 const paths = {
 	src: './Sources/',
@@ -24,17 +32,63 @@ const tasks = {
 	}
 };
 
-gulp.task('typescript', function () {
-	let tsProject = ts.createProject('tsconfig.json');
+gulp.task('typescript-gm', () => {
+	let b = browserify({
+		entries: [path.join(paths.src, 'TypeScript/FrontendGoogleMap.ts')],
+		debug: true
+	});
 
-	return gulp.src(path.join(paths.src, tasks.typescript.src))
-		.pipe(sourcemaps.init())
-		.pipe(tsProject())
-		.pipe(sourcemaps.write('./'))
+	return b
+		.plugin(tsify)
+		.bundle()
+		.pipe(source('FrontendGoogleMap.js'))
+		.pipe(buffer())
+		.pipe(sourcemaps.init({loadMaps: true}))
+		// This will output the non-minified version
+		.pipe(gulp.dest(path.join(paths.dest, tasks.typescript.dest)))
+		// Add transformation tasks to the pipeline here.
+		.pipe(uglify())
+		.on('error', log.error)
+		.pipe(rename({ extname: '.min.js' }))
+		.pipe(sourcemaps.write('./', {
+			mapFile: function(mapFilePath) {
+				// source map files are named *.map instead of *.js.map
+				return mapFilePath.replace('.min.js.map', '.js.map');
+			}
+		}))
 		.pipe(gulp.dest(path.join(paths.dest, tasks.typescript.dest)));
 });
 
-gulp.task('scss', function () {
+gulp.task('typescript-osm', () => {
+	let b = browserify({
+		entries: [path.join(paths.src, 'TypeScript/FrontendOsmMap.ts')],
+		debug: true
+	});
+
+	return b
+		.plugin(tsify)
+		.bundle()
+		.pipe(source('FrontendOsmMap.js'))
+		.pipe(buffer())
+		.pipe(sourcemaps.init({loadMaps: true}))
+		// This will output the non-minified version
+		.pipe(gulp.dest(path.join(paths.dest, tasks.typescript.dest)))
+		// Add transformation tasks to the pipeline here.
+		.pipe(uglify())
+		.on('error', log.error)
+		.pipe(rename({ extname: '.min.js' }))
+		.pipe(sourcemaps.write('./', {
+			mapFile: function(mapFilePath) {
+				// source map files are named *.map instead of *.js.map
+				return mapFilePath.replace('.min.js.map', '.js.map');
+			}
+		}))
+		.pipe(gulp.dest(path.join(paths.dest, tasks.typescript.dest)));
+});
+
+gulp.task('typescript', gulp.series('typescript-gm', 'typescript-osm'));
+
+gulp.task('scss', () => {
 	return gulp.src(path.join(paths.src, tasks.scss.src))
 		.pipe(sourcemaps.init())
 		.pipe(

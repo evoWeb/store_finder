@@ -9,11 +9,8 @@
  * LICENSE.txt file that was distributed with this source code.
  */
 
-/// <reference types="../types/index" />
-import * as $ from 'jquery';
 import * as L from 'leaflet';
-import FrontendMap from "./FrontendMap";
-import {Location} from "./Interfaces";
+import FrontendMap from './FrontendMap';
 
 /**
  * Module: TYPO3/CMS/StoreFinder/FrontendOsmMap
@@ -33,7 +30,7 @@ class FrontendOsmMap extends FrontendMap {
     if (typeof this.mapConfiguration.center !== 'undefined') {
       this.map.setView(
         [this.mapConfiguration.center.lat, this.mapConfiguration.center.lng],
-        parseInt(this.mapConfiguration.zoom, 10)
+        this.mapConfiguration.zoom
       );
     } else {
       this.map.setView([0, 0], 13);
@@ -146,13 +143,13 @@ class FrontendOsmMap extends FrontendMap {
       $cssFile = $('<link/>', {
         rel: 'stylesheet',
         type: 'text/css',
-        href: 'https://unpkg.com/leaflet@1.3.4/dist/leaflet.css',
+        href: 'https://unpkg.com/leaflet@1.5.1/dist/leaflet.css',
         integrity: 'sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==',
         crossorigin: ''
       }).appendTo('head'),
       $jsDeferred = $.Deferred(),
       $jsFile = $('<script/>', {
-        src: 'https://unpkg.com/leaflet@1.3.4/dist/leaflet.js',
+        src: 'https://unpkg.com/leaflet@1.5.1/dist/leaflet.js',
         integrity: 'sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA==',
         crossorigin: ''
       }).appendTo('head');
@@ -178,12 +175,5 @@ class FrontendOsmMap extends FrontendMap {
   }
 }
 
-$(document).ready(function () {
-  if (typeof window.mapConfiguration == 'object' && window.mapConfiguration.active) {
-    // make module public to be available for callback after load
-    window.StoreFinder = new FrontendOsmMap(window.mapConfiguration, window.locations);
-  }
-});
-
-// return constructor
-export = FrontendOsmMap;
+// return instance
+new FrontendOsmMap();

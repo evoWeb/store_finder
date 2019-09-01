@@ -9,11 +9,8 @@
  * LICENSE.txt file that was distributed with this source code.
  */
 
-/// <reference types="@types/googlemaps" />
-import * as $ from 'jquery';
 
-import FrontendMap from "./FrontendMap";
-import {Location} from "./Interfaces";
+import FrontendMap from './FrontendMap';
 
 /**
  * Module: TYPO3/CMS/StoreFinder/FrontendGoogleMap
@@ -37,7 +34,7 @@ class FrontendGoogleMap extends FrontendMap {
     }
 
     let mapOptions = {
-      zoom: parseInt(this.mapConfiguration.zoom, 10),
+      zoom: this.mapConfiguration.zoom,
       center: center,
       disableDefaultUI: true, // a way to quickly hide all controls
       zoomControl: true,
@@ -106,7 +103,7 @@ class FrontendGoogleMap extends FrontendMap {
       marker = new google.maps.Marker(options);
     marker.setMap(this.map);
 
-    google.maps.event.addListener(marker, 'click', () => {
+    marker.addListener('click', () => {
       this.showInformation(location, marker);
     });
 
@@ -176,12 +173,5 @@ class FrontendGoogleMap extends FrontendMap {
   }
 }
 
-$(document).ready(function () {
-  if (typeof window.mapConfiguration == 'object' && window.mapConfiguration.active) {
-    // make module public to be available for callback after load
-    window.StoreFinder = new FrontendGoogleMap(window.mapConfiguration, window.locations);
-  }
-});
-
-// return constructor
-export = FrontendGoogleMap;
+// return instance
+new FrontendGoogleMap();

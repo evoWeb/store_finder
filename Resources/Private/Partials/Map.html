@@ -9,14 +9,13 @@
 	<f:if condition="{settings.includeJquery}">
 		<sf:fileInclude file="EXT:store_finder/Resources/Public/JavaScript/Vendor/jquery-1.10.2.min.js"/>
 	</f:if>
-	<sf:fileInclude file="EXT:store_finder/Resources/Public/JavaScript/Vendor/mustache-3.0.3.min.js"/>
 	<sf:fileInclude file="EXT:store_finder/Resources/Public/JavaScript/Vendor/InfoBubble.js"/>
 	<sf:fileInclude file="EXT:store_finder/Resources/Public/JavaScript/FrontendGoogleMap.js"/>
 
 	<f:variable name="mapConfiguration">
 		var mapConfiguration = {
 		active: true,
-		zoom: "{center.zoom}",
+		zoom: {center.zoom},
 		apiConsoleKey: "{settings.apiConsoleKey}",
 		<f:for each="{settings.mapConfiguration}" as="configuration" key="name">{name}: "{configuration}",</f:for>
 		<f:if condition="{center.latitude}">
