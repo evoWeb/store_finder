@@ -2,24 +2,6 @@
 # Table structure for table 'tx_storefinder_domain_model_location'
 #
 CREATE TABLE tx_storefinder_domain_model_location (
-	uid int(11) NOT NULL auto_increment,
-	pid int(11) DEFAULT '0' NOT NULL,
-	tstamp int(11) DEFAULT '0' NOT NULL,
-	crdate int(11) DEFAULT '0' NOT NULL,
-	cruser_id int(11) DEFAULT '0' NOT NULL,
-	sorting int(10) DEFAULT '0' NOT NULL,
-	deleted tinyint(4) DEFAULT '0' NOT NULL,
-	hidden tinyint(4) DEFAULT '0' NOT NULL,
-	starttime int(11) DEFAULT '0' NOT NULL,
-	endtime int(11) DEFAULT '0' NOT NULL,
-	fe_group int(11) DEFAULT '0' NOT NULL,
-
-	sys_language_uid int(11) DEFAULT '0' NOT NULL,
-	l18n_parent int(11) DEFAULT '0' NOT NULL,
-	l10n_source int(11) DEFAULT '0' NOT NULL,
-	l10n_state text,
-	l18n_diffsource mediumtext,
-
 	name varchar(255) DEFAULT '' NOT NULL,
 	storeid varchar(60) DEFAULT '' NOT NULL,
 	address varchar(255) DEFAULT '' NOT NULL,
@@ -46,6 +28,7 @@ CREATE TABLE tx_storefinder_domain_model_location (
 	media int(11) unsigned DEFAULT '0' NOT NULL,
 	icon int(11) unsigned DEFAULT '0' NOT NULL,
 
+	map int(11) unsigned DEFAULT '0' NOT NULL,
 	latitude double(11,7) DEFAULT '0.0000000' NOT NULL,
 	longitude double(11,7) DEFAULT '0.0000000' NOT NULL,
 	center int(4) DEFAULT '0' NOT NULL,
@@ -53,8 +36,6 @@ CREATE TABLE tx_storefinder_domain_model_location (
 
 	import_id int(11) DEFAULT '0' NOT NULL,
 
-	PRIMARY KEY (uid),
-	KEY parent (pid),
 	KEY import_id (import_id)
 );
 
@@ -63,28 +44,11 @@ CREATE TABLE tx_storefinder_domain_model_location (
 # Table structure for table 'tx_storefinder_domain_model_attribute'
 #
 CREATE TABLE tx_storefinder_domain_model_attribute (
-	uid int(11) NOT NULL auto_increment,
-	pid int(11) DEFAULT '0' NOT NULL,
-	tstamp int(11) DEFAULT '0' NOT NULL,
-	crdate int(11) DEFAULT '0' NOT NULL,
-	cruser_id int(11) DEFAULT '0' NOT NULL,
-	sorting int(10) DEFAULT '0' NOT NULL,
-	deleted tinyint(4) DEFAULT '0' NOT NULL,
-	hidden tinyint(4) DEFAULT '0' NOT NULL,
-
-	sys_language_uid int(11) DEFAULT '0' NOT NULL,
-	l18n_parent int(11) DEFAULT '0' NOT NULL,
-	l10n_source int(11) DEFAULT '0' NOT NULL,
-	l10n_state text,
-	l18n_diffsource mediumtext,
-
 	icon varchar(255) DEFAULT '' NOT NULL,
 	name varchar(255) DEFAULT '' NOT NULL,
 
 	import_id int(11) DEFAULT '0' NOT NULL,
 
-	PRIMARY KEY (uid),
-	KEY parent (pid),
 	KEY import_id (import_id)
 );
 
