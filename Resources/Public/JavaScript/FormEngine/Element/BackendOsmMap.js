@@ -21,17 +21,25 @@ define(["require", "exports", "jquery", "TYPO3/CMS/StoreFinder/Vendor/Leaflet/le
             };
             this.mapConfiguration = options;
             this.initializeMap();
+            this.initializeMarker();
             this.initializeEvents();
-            this.createMarker();
             setTimeout(function () { _this.map.invalidateSize(); }, 10);
         }
         BackendOsmMap.prototype.initializeMap = function () {
             this.map = L.map('map');
             this.map.setView([this.mapConfiguration.latitude, this.mapConfiguration.longitude], this.mapConfiguration.zoom);
+            this.map.doubleClickZoom.disable();
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 19,
                 attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
             }).addTo(this.map);
+        };
+        BackendOsmMap.prototype.initializeMarker = function () {
+            var options = {
+                draggable: true
+            };
+            this.marker = new L.Marker([this.mapConfiguration.latitude, this.mapConfiguration.longitude], options);
+            this.marker.bindPopup('').addTo(this.map);
         };
         BackendOsmMap.prototype.initializeEvents = function () {
             var _this = this;
@@ -41,17 +49,19 @@ define(["require", "exports", "jquery", "TYPO3/CMS/StoreFinder/Vendor/Leaflet/le
             $('#map').parents('.tab-pane').on('cssActiveAdded', function () {
                 setTimeout(function () { _this.map.invalidateSize(); }, 10);
             });
+            this.map.on('dblclick', function (event) {
+                var coordinates = event.latlng;
+                _this.marker.setLatLng(coordinates);
+                _this.updateCoordinateFields(coordinates, _this);
+                return false;
+            });
+            this.marker.on('moveend', function (event) {
+                var coordinates = event.target.getLatLng();
+                _this.updateCoordinateFields(coordinates, _this);
+            });
         };
-        BackendOsmMap.prototype.createMarker = function () {
-            var _this = this;
-            var options = {
-                draggable: true
-            }, marker = new L.Marker([this.mapConfiguration.latitude, this.mapConfiguration.longitude], options);
-            marker.bindPopup('').addTo(this.map);
-            marker.on('moveend', function (event) { _this.updateCoordinateFields(event.target, _this); });
-        };
-        BackendOsmMap.prototype.updateCoordinateFields = function (movedMarker, backend) {
-            var coordinates = movedMarker.getLatLng(), fieldPrefix = 'data[tx_storefinder_domain_model_location][' + backend.mapConfiguration.uid + ']', $latitudeField = $('*[data-formengine-input-name="' + fieldPrefix + '[latitude]"]'), $longitudeField = $('*[data-formengine-input-name="' + fieldPrefix + '[longitude]"]');
+        BackendOsmMap.prototype.updateCoordinateFields = function (coordinates, backend) {
+            var fieldPrefix = 'data[tx_storefinder_domain_model_location][' + backend.mapConfiguration.uid + ']', $latitudeField = $('*[data-formengine-input-name="' + fieldPrefix + '[latitude]"]'), $longitudeField = $('*[data-formengine-input-name="' + fieldPrefix + '[longitude]"]');
             $latitudeField.val(coordinates.lat).trigger('change');
             $longitudeField.val(coordinates.lng).trigger('change');
         };

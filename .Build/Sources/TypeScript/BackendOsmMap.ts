@@ -17,6 +17,7 @@ import * as L from 'TYPO3/CMS/StoreFinder/Vendor/Leaflet/leaflet';
 
 class BackendOsmMap {
   private map: L.Map;
+  private marker: L.Marker;
   private mapConfiguration: BackendConfiguration = {
     uid: '0',
     latitude: 0,
@@ -28,8 +29,8 @@ class BackendOsmMap {
     this.mapConfiguration = options;
 
     this.initializeMap();
+    this.initializeMarker();
     this.initializeEvents();
-    this.createMarker();
     setTimeout(()  => { this.map.invalidateSize(); }, 10);
   }
 
@@ -40,11 +41,21 @@ class BackendOsmMap {
       [this.mapConfiguration.latitude, this.mapConfiguration.longitude],
       this.mapConfiguration.zoom
     );
+    this.map.doubleClickZoom.disable();
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(this.map);
+  }
+
+  initializeMarker(this: BackendOsmMap)
+  {
+    let options = {
+      draggable: true
+    };
+    this.marker = new L.Marker([this.mapConfiguration.latitude, this.mapConfiguration.longitude], options);
+    this.marker.bindPopup('').addTo(this.map);
   }
 
   initializeEvents(this: BackendOsmMap)
@@ -56,23 +67,23 @@ class BackendOsmMap {
     $('#map').parents('.tab-pane').on('cssActiveAdded', () => {
       setTimeout(() => { this.map.invalidateSize(); }, 10);
     });
+
+    this.map.on('dblclick', (event: L.LeafletEvent) => {
+      let coordinates = event.latlng;
+      this.marker.setLatLng(coordinates);
+      this.updateCoordinateFields(coordinates, this);
+      return false;
+    });
+
+    this.marker.on('moveend', (event: L.LeafletEvent) => {
+      let coordinates = event.target.getLatLng();
+      this.updateCoordinateFields(coordinates, this);
+    });
   }
 
-  createMarker(this: BackendOsmMap)
+  updateCoordinateFields(coordinates: L.LatLng, backend: BackendOsmMap)
   {
-    let options = {
-        draggable: true
-      },
-      marker = new L.Marker([this.mapConfiguration.latitude, this.mapConfiguration.longitude], options);
-    marker.bindPopup('').addTo(this.map);
-
-    marker.on('moveend', (event: L.LeafletEvent) => { this.updateCoordinateFields(event.target, this) })
-  }
-
-  updateCoordinateFields(movedMarker: L.Marker, backend: BackendOsmMap)
-  {
-    let coordinates = movedMarker.getLatLng(),
-      fieldPrefix = 'data[tx_storefinder_domain_model_location][' + backend.mapConfiguration.uid + ']',
+    let fieldPrefix = 'data[tx_storefinder_domain_model_location][' + backend.mapConfiguration.uid + ']',
       $latitudeField = $('*[data-formengine-input-name="' + fieldPrefix + '[latitude]"]'),
       $longitudeField = $('*[data-formengine-input-name="' + fieldPrefix + '[longitude]"]');
 
