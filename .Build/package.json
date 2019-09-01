@@ -50,7 +50,7 @@
     ]
   },
   "scripts": {
-    "css": "gulp css",
+    "css": "gulp scss",
     "js": "gulp typescript",
     "build": "gulp build"
   }
