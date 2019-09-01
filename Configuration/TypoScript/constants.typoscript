@@ -1,0 +1,8 @@
+plugin.tx_storefinder {
+  templateRootPaths = EXT:store_finder/Resources/Private/Templates/
+  partialRootPaths = EXT:store_finder/Resources/Private/Partials/
+  layoutRootPaths = EXT:store_finder/Resources/Private/Layouts/
+
+  #cat=store_finder//a; type=options[googleMaps, mapQuest, nominatim]; label=Geocoding provider
+  apiProvider = googleMaps
+}

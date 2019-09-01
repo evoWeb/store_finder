@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace Evoweb\StoreFinder\Domain\Model;
 
 /**
@@ -16,7 +17,7 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
 {
     /**
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Evoweb\StoreFinder\Domain\Model\Category>
-     * @lazy
+     * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
      */
     protected $children;
 
@@ -24,6 +25,11 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
      * Constructor
      */
     public function __construct()
+    {
+        $this->initializeObject();
+    }
+
+    public function initializeObject()
     {
         $this->children = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
     }

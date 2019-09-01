@@ -1,10 +1,13 @@
 plugin.tx_storefinder.settings {
+  includeStyleSheet = true
+  includeJquery = true
+
   geocodeUrl = https://maps.googleapis.com/maps/api/geocode/json?sensor=false
   #geocodeUrl = https://nominatim.openstreetmap.org/search/?format=json
   #geocodeUrl = http://www.mapquestapi.com/geocoding/v1/address?thumbMaps=false&outFormat=json
 
   # googleMaps, mapQuest, nominatim or custom provider implementing EncodeProviderInterface
-  apiProvider =
+  apiProvider = {$plugin.tx_storefinder.apiProvider}
 
   # needed for google or mapQuest accounts
   # starting with June 2018 google map only provides premium access.
@@ -59,7 +62,7 @@ plugin.tx_storefinder.settings {
   fulltextSearchWordWrap = |%
 
   mapConfiguration {
-    # traffic, weather, bicycling, panoramio, kml
+    # traffic, bicycling, kml
     apiV3Layers =
     language = en
     allowSensors = 1
@@ -71,21 +74,25 @@ plugin.tx_storefinder.settings {
   }
 
   validation {
-    zipcode = Evoweb\StoreFinder\Validation\Validator\RequiredValidator
-    city = Evoweb\StoreFinder\Validation\Validator\RequiredValidator
-    country = Evoweb\StoreFinder\Validation\Validator\RequiredValidator
+    zipcode = "Evoweb.StoreFinder:Required"
+    city = "Evoweb.StoreFinder:Required"
+    country = "Evoweb.StoreFinder:Required"
   }
 }
+
 plugin.tx_storefinder.view {
   templateRootPaths.0 = EXT:store_finder/Resources/Private/Templates/
+  templateRootPaths.1 = {$plugin.tx_storefinder.templateRootPaths}
+
   partialRootPaths.0 = EXT:store_finder/Resources/Private/Partials/
+  partialRootPaths.1 = {$plugin.tx_storefinder.partialRootPaths}
+
   layoutRootPaths.0 = EXT:store_finder/Resources/Private/Layouts/
+  layoutRootPaths.1 = {$plugin.tx_storefinder.layoutRootPaths}
 }
 
 config.tx_extbase.persistence {
   classes {
-    Evoweb\StoreFinder\Domain\Model\Country.mapping.tableName = static_countries
-    Evoweb\StoreFinder\Domain\Model\CountryZone.mapping.tableName = static_country_zones
     Evoweb\StoreFinder\Domain\Model\Category.mapping.tableName = sys_category
     Evoweb\StoreFinder\Domain\Model\Content.mapping.tableName = tt_content
   }
@@ -114,15 +121,4 @@ plugin.tx_storefinder.fieldError {
 }
 
 plugin.tx_storefinder._LOCAL_LANG.default {
-}
-
-page.includeCSS {
-  storeFinderLayout = EXT:store_finder/Resources/Public/Stylesheet/layout.css
-}
-
-page.includeJSFooter {
-  jquery = EXT:store_finder/Resources/Public/JavaScript/jquery-1.10.2.min.js
-  storeFinderhogan = EXT:store_finder/Resources/Public/JavaScript/hogan-3.0.2.min.js
-  storeFinderInfobubble = EXT:store_finder/Resources/Public/JavaScript/InfoBubble.js
-  storeFinderMap = EXT:store_finder/Resources/Public/JavaScript/map.js
 }

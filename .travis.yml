@@ -24,8 +24,9 @@ notifications:
 install:
   - >
     export TYPO3_PATH_WEB=$PWD/.Build/Web;
-    composer require typo3/minimal="$TYPO3_VERSION" $PREFER_LOWEST;
-    composer require --dev typo3/testing-framework="$TESTING_FRAMEWORK";
+    composer require typo3/cms-core="$TYPO3_VERSION" $PREFER_LOWEST;
+    composer require typo3/cms-extensionmanager="${TYPO3_VERSION}" $PREFER_LOWEST;
+    if [ ! -z "$TESTING_FRAMEWORK" ]; then composer require --dev typo3/testing-framework="$TESTING_FRAMEWORK"; fi;
     git checkout composer.json;
 
 before_script:
@@ -34,34 +35,16 @@ before_script:
 script:
   - >
     echo "Running functional tests";
-    export typo3DatabaseName="typo3";
-    export typo3DatabaseHost="localhost";
-    export typo3DatabaseUsername="root";
-    export typo3DatabasePassword="";
-    export typo3DatabaseDriver="$DB_DRIVER";
-    php .Build/bin/phpunit --colors -c .Build/Web/vendor/typo3/testing-framework/Resources/Core/Build/FunctionalTests.xml Tests/Functional/;
+    export typo3DatabaseDriver="pdo_sqlite";
+    php .Build/bin/phpunit --colors -c .Build/vendor/typo3/testing-framework/Resources/Core/Build/FunctionalTests.xml Tests/Functional/;
 
 jobs:
   fast_finish: true
   allow_failures:
-    - env: TYPO3_VERSION="dev-master as 10.0.0" TESTING_FRAMEWORK="~4.10.0" DB_DRIVER="pdo_sqlite"
+    - env:
+        - TYPO3_VERSION="dev-master as 10.0.0" TESTING_FRAMEWORK="~4.10.0"
 
   include:
-    - &lint
-      stage: test
-      php: 7.2
-      env: TASK="PHP Lint"
-      before_install: skip
-      install: skip
-      before_script: skip
-      script:
-        - echo "Running php lint";
-          errors=$(find . -name \*.php ! -path "./.Build/*" -exec php -d display_errors=stderr -l {} 2>&1 >/dev/null \;) && echo "$errors" && test -z "$errors"
-    - <<: *lint
-      php: 7.1
-    - <<: *lint
-      php: 7.0
-
     - stage: test
       php: 7.2
       env: TASK="XML Lint (Xliff)"
@@ -72,25 +55,43 @@ jobs:
         - echo "Running xmllint (Xliff)";
           find Resources/Private/Language/ -name '*.xlf' -type f | xargs xmllint --noout --schema Tests/Fixtures/xliff-core-1.2-strict.xsd
 
+    - &lint
+      stage: test
+      php: 7.3
+      env: TASK="PHP Lint"
+      before_install: skip
+      install: skip
+      before_script: skip
+      script:
+        - echo "Running php lint";
+          errors=$(find . -name \*.php ! -path "./.Build/*" -exec php -d display_errors=stderr -l {} 2>&1 >/dev/null \;) && echo "$errors" && test -z "$errors"
+    - <<: *lint
+      php: 7.2
+
     - stage: test
-      php: 7.0
-      env: TYPO3_VERSION="^8.7" TESTING_FRAMEWORK="~1.3.0" DB_DRIVER="mysqli"
-    - stage: test
-      php: 7.1
-      env: TYPO3_VERSION="^8.7" TESTING_FRAMEWORK="~1.3.0" DB_DRIVER="mysqli"
+      php: 7.3
+      env:
+        - TYPO3_VERSION="^9.5.0" TESTING_FRAMEWORK="~4.10.0"
     - stage: test
       php: 7.2
-      env: TYPO3_VERSION="^8.7" TESTING_FRAMEWORK="~1.3.0" DB_DRIVER="mysqli"
+      env:
+        - TYPO3_VERSION="^9.5.0" TESTING_FRAMEWORK="~4.10.0"
+    - stage: test
+      php: 7.3
+      env:
+        - TYPO3_VERSION="^10.0.0" TESTING_FRAMEWORK="~5.0.11"
     - stage: test
       php: 7.2
-      env: TYPO3_VERSION="^9.5.0" TESTING_FRAMEWORK="~4.10.0" DB_DRIVER="pdo_sqlite"
+      env:
+        - TYPO3_VERSION="^10.0.0" TESTING_FRAMEWORK="~5.0.11"
     - stage: test
       php: 7.2
-      env: TYPO3_VERSION="dev-master as 10.0.0" TESTING_FRAMEWORK="~4.10.0" DB_DRIVER="pdo_sqlite"
+      env:
+        - TYPO3_VERSION="dev-master as 10.0.0" TESTING_FRAMEWORK="~5.0.11"
 
     - stage: publish in ter
       if: tag IS present
-      php: 7.0
+      php: 7.1
       before_install: skip
       install: skip
       before_script: skip

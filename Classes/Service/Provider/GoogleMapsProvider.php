@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace Evoweb\StoreFinder\Service\Provider;
 
 /**
@@ -43,8 +44,8 @@ class GoogleMapsProvider implements EncodeProviderInterface
             (!empty($apiConsoleKeyGeocoding) ? '&key=' . $apiConsoleKeyGeocoding : '') .
             '&address=' . implode('+', $parameter) .
             (!empty($components) ? '&components=' . implode('|', $components) : '');
-        if (TYPO3_MODE == 'FE' && isset($this->getTypoScriptFrontendController()->lang)) {
-            $apiUrl .= '&language=' . $this->getTypoScriptFrontendController()->lang;
+        if (TYPO3_MODE == 'FE') {
+            $apiUrl .= '&language=' . $this->getLanguageKey();
         }
 
         $addressData = json_decode(utf8_encode(
@@ -70,10 +71,19 @@ class GoogleMapsProvider implements EncodeProviderInterface
         return [$hasMultipleResults, $result];
     }
 
-    /**
-     * @return \TYPO3\CMS\Core\Authentication\BackendUserAuthentication
-     */
-    protected function getBeUser()
+    protected function getLanguageKey(): string
+    {
+        $controller = $this->getTypoScriptFrontendController();
+        if (method_exists($controller, 'getLanguage')) {
+            $languageKey = $controller->getLanguage()->getTwoLetterIsoCode();
+        } else {
+            // @todo remove once TYPO3 9.5.x support is dropped
+            $languageKey = $controller->lang;
+        }
+        return $languageKey;
+    }
+
+    protected function getBeUser(): ?\TYPO3\CMS\Core\Authentication\BackendUserAuthentication
     {
         return isset($GLOBALS['BE_USER']) ? $GLOBALS['BE_USER'] : null;
     }

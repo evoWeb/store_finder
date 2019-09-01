@@ -1,9 +1,5 @@
-.. ==================================================
-.. FOR YOUR INFORMATION
-.. --------------------------------------------------
-.. -*- coding: utf-8 -*- with BOM.
-
 .. include:: ../Includes.txt
+
 
 .. _administration:
 
@@ -25,7 +21,7 @@ in the field Url used for geocode.
 Configuration:
 ==============
 
-.. figure:: ../Images/admin_config.png
+.. figure:: Images/admin_config.png
    :alt: Search form
    :align: left
 

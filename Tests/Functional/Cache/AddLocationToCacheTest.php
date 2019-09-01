@@ -14,7 +14,9 @@ namespace Evoweb\StoreFinder\Tests\Functional\Cache;
 
 use Evoweb\StoreFinder\Domain\Model\Constraint;
 use PHPUnit\Framework\MockObject\MockObject;
+use SJBR\StaticInfoTables\Domain\Model\Country;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Coordinate cache test
@@ -24,7 +26,7 @@ class AddLocationToCacheTest extends \TYPO3\TestingFramework\Core\Functional\Fun
     /**
      * @var array
      */
-    protected $testExtensionsToLoad = ['typo3conf/ext/store_finder'];
+    protected $testExtensionsToLoad = ['typo3conf/ext/store_finder', 'typo3conf/ext/static_info_tables'];
 
     /**
      * @var array
@@ -36,7 +38,7 @@ class AddLocationToCacheTest extends \TYPO3\TestingFramework\Core\Functional\Fun
      */
     protected $coordinatesCache;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -127,7 +129,7 @@ class AddLocationToCacheTest extends \TYPO3\TestingFramework\Core\Functional\Fun
             'zipcode' => substr(mktime(), -5),
             'city' => uniqid('City'),
             'state' => '',
-            'country' => uniqid('Country'),
+            'country' => GeneralUtility::makeInstance(Country::class),
         ];
 
         $constraint = $this->getConstraintStub($data);
@@ -156,7 +158,7 @@ class AddLocationToCacheTest extends \TYPO3\TestingFramework\Core\Functional\Fun
             'zipcode' => substr(mktime(), -5),
             'city' => uniqid('City'),
             'state' => '',
-            'country' => uniqid('Country'),
+            'country' => GeneralUtility::makeInstance(Country::class),
         ];
 
         $constraint = $this->getConstraintStub($data);
@@ -180,8 +182,12 @@ class AddLocationToCacheTest extends \TYPO3\TestingFramework\Core\Functional\Fun
 
         foreach ($data as $field => $value) {
             $setter = 'set' . ucfirst($field);
-            if (method_exists($constraint, $setter)) {
-                $constraint->{$setter}($value);
+            if (method_exists($constraint, $setter) && !empty($value)) {
+                if (($field !== 'country' && !is_string($value))
+                    || ($field !== 'state' && !is_string($value))
+                    || ($field !== 'country' && $field !== 'state')) {
+                    $constraint->{$setter}($value);
+                }
             }
         }
 

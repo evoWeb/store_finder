@@ -249,14 +249,8 @@
 			<trans-unit id="pi_flexform.apiV3Layers.trafficOverlay">
 				<source>traffic</source>
 			</trans-unit>
-			<trans-unit id="pi_flexform.apiV3Layers.weatherOverlay">
-				<source>weather</source>
-			</trans-unit>
 			<trans-unit id="pi_flexform.apiV3Layers.bicyclingOverlay">
 				<source>bicycling</source>
-			</trans-unit>
-			<trans-unit id="pi_flexform.apiV3Layers.panoramioOverlay">
-				<source>panoramio</source>
 			</trans-unit>
 			<trans-unit id="pi_flexform.apiV3Layers.kmlOverlay">
 				<source>kml</source>

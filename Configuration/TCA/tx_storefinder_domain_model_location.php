@@ -534,9 +534,9 @@ return [
             'label' => $languageFile . 'tx_storefinder_domain_model_location.products',
             'config' => [
                 'type' => 'input',
-                'size' => '50',
+                'size' => 50,
                 'eval' => 'trim',
-                'max' => '255',
+                'max' => 255,
             ]
         ],
 
@@ -544,8 +544,8 @@ return [
             'label' => $languageFile . 'tx_storefinder_domain_model_location.notes',
             'config' => [
                 'type' => 'text',
-                'cols' => '80',
-                'rows' => '15',
+                'cols' => 80,
+                'rows' => 15,
                 'enableRichtext' => true,
                 'softref' => 'rtehtmlarea_images,typolink_tag,images,email[subst],url',
             ]
@@ -640,6 +640,7 @@ return [
                 --div--;' . $languageFile . 'div-address,
                     --palette--;;name,
                     --palette--;;address,
+                    --palette--;;coordinates,
                 --div--;' . $languageFile . 'div-contact,
                     person,
                     --palette--;;contact,
@@ -653,7 +654,6 @@ return [
                     media,
                     content,
                 --div--;' . $languageFile . 'div-relations,
-                    --palette--;;coordinates,
                     related,
                     attributes,
                     categories,
@@ -692,9 +692,9 @@ return [
         'coordinates' => [
             'label' => $languageFile . 'palette-coordinates',
             'showitem' => '
-                latitude, longitude,
-                --linebreak--,
                 map,
+                --linebreak--,
+                latitude, longitude,
                 --linebreak--,
                 geocode, center
             '

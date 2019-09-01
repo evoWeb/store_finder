@@ -1,9 +1,5 @@
-.. ==================================================
-.. FOR YOUR INFORMATION
-.. --------------------------------------------------
-.. -*- coding: utf-8 -*- with BOM.
-
 .. include:: ../Includes.txt
+
 
 .. _configuration:
 
@@ -141,7 +137,7 @@ plugin.tx_storefinder.persistence
          none
 
    Possible values:
-         traffic, weather, bicycling, panoramio, kml
+         traffic, bicycling, kml
 
 
 .. _limit:

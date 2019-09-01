@@ -1,4 +1,5 @@
 <?php
+
 defined('TYPO3_MODE') || die('Access denied.');
 
 call_user_func(function () {
@@ -20,12 +21,8 @@ call_user_func(function () {
         ]
     );
 
-    /**
-     * Default PageTSConfig
-     */
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
-        '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:'
-        . 'store_finder/Configuration/PageTSconfig/NewContentElementWizard.typoscript">'
+        '@import \'EXT:store_finder/Configuration/TSconfig/NewContentElementWizard.typoscript\''
     );
 
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addUserTSConfig('
@@ -34,21 +31,26 @@ call_user_func(function () {
         options.saveDocNew.tx_storefinder_domain_model_attribute = 1
     ');
 
+    if (\TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch)
+        < 10000000) {
+        // @todo remove once TYPO3 9.5.x support is dropped
+        $extensionName = 'Evoweb.StoreFinder';
+        $mapController = 'Map';
+    } else {
+        $extensionName = 'StoreFinder';
+        $mapController = \Evoweb\StoreFinder\Controller\MapController::class;
+    }
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-        'Evoweb.store_finder',
+        $extensionName,
         'Map',
-        ['Map' => 'map'],
-        ['Map' => 'map']
+        [$mapController => 'map'],
+        [$mapController => 'map']
     );
 
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['livesearch']['location'] = 'tx_storefinder_domain_model_location';
 
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass']['store_finder'] =
         \Evoweb\StoreFinder\Hook\TceMainHook::class;
-
-    // @deprecated and with be removed with support for TYPO3 8.7
-    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['extbase']['commandControllers']['GeocodeLocationsCommandController'] =
-        \Evoweb\StoreFinder\Command\GeocodeLocationsCommandController::class;
 
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1549261866] = [
         'nodeName' => 'modifyLocationMap',

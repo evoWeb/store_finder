@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace Evoweb\StoreFinder\Utility;
 
 /**
@@ -25,13 +26,9 @@ class ExtensionConfigurationUtility implements \TYPO3\CMS\Core\SingletonInterfac
     public static function getConfiguration(): array
     {
         if (self::$configuration === null) {
-            if (class_exists(\TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class)) {
-                self::$configuration = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-                    \TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class
-                )->get('store_finder');
-            } else {
-                self::$configuration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['store_finder']);
-            }
+            self::$configuration = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                \TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class
+            )->get('store_finder');
         }
 
         return is_array(self::$configuration) ? self::$configuration : [];

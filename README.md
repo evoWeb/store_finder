@@ -14,3 +14,18 @@ composer require evoweb/store-finder
 
 Download and install the extension with the extension manger module or directly from the
 [TER](https://typo3.org/extensions/repository/view/store_finder).
+
+## TYPO3 10.x compatibility
+
+As long as there is no compatible sjbr/static-info-tables by the vendor a fork
+fork is provided at https://github.com/garbast/static_info_tables. To make use
+of it add the following to your project composer.json.
+
+```
+"repositories": [
+    {
+        "url": "https://github.com/garbast/static_info_tables.git",
+        "type": "git"
+    }
+],
+```

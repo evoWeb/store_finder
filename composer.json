@@ -4,9 +4,7 @@
 	"description": "Store Finder",
 	"homepage": "http://www.evoweb.de/",
 
-	"license": [
-		"GPL-2.0-or-later"
-	],
+	"license": "GPL-2.0-or-later",
 
 	"support": {
 		"issues": "https://github.com/evoWeb/store_finder/issues"
@@ -20,8 +18,14 @@
 		"google map"
 	],
 
+	"repositories": [
+		{
+			"url": "https://github.com/garbast/static_info_tables.git",
+			"type": "git"
+		}
+	],
 	"require": {
-		"typo3/cms-core": "^8.7 || ^9.5",
+		"typo3/cms-core": "^9.5 || ^10.0",
 		"sjbr/static-info-tables": "^6.7"
 	},
 
@@ -32,26 +36,23 @@
 	},
 	"autoload-dev": {
 		"psr-4": {
-			"Evoweb\\StoreFinder\\Tests\\": "Tests/",
-			"TYPO3\\CMS\\Core\\Tests\\": ".Build/Web/typo3/sysext/core/Tests/"
+			"Evoweb\\StoreFinder\\Tests\\": "Tests/"
 		}
 	},
 
 	"config": {
-		"vendor-dir": ".Build/Web/vendor",
+		"vendor-dir": ".Build/vendor",
 		"bin-dir": ".Build/bin"
 	},
 	"extra": {
 		"typo3/cms": {
+			"extension-key": "store_finder",
 			"cms-package-dir": "{$vendor-dir}/typo3/cms",
 			"web-dir": ".Build/Web"
 		}
 	},
 
 	"scripts": {
-		"post-autoload-dump": [
-			"mkdir -p .Build/Web/typo3conf/ext/",
-			"[ -L .Build/Web/typo3conf/ext/store_finder ] || ln -snvf ../../../../. .Build/Web/typo3conf/ext/store_finder"
-		]
+		"post-autoload-dump": "mkdir -p .Build/Web/typo3conf/ext/ && ln -snf ../../../.. .Build/Web/typo3conf/ext/store_finder"
 	}
 }

@@ -1,15 +1,5 @@
-.. ==================================================
-.. FOR YOUR INFORMATION
-.. --------------------------------------------------
-.. -*- coding: utf-8 -*- with BOM.
-
 .. This is 'Includes.txt'. It is included at the very top of each and
-   every ReST source file in this documentation project (= manual).
-
-
-.. ==================================================
-.. DEFINE SOME TEXTROLES
-.. --------------------------------------------------
+.. every ReST source file in this documentation project (= manual).
 
 .. role::   typoscript(code)
 
@@ -18,6 +8,6 @@
 
 .. role::   php(code)
 
-.. highlight:: typoscript
-
 .. highlight:: php
+
+.. default-role:: code

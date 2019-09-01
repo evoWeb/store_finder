@@ -9,79 +9,81 @@
 	<f:render partial="FormErrors" section="Main" arguments="{for: 'search'}" />
 	<f:render partial="FieldError" section="Main" arguments="{field: 'uid'}" />
 
-	<dl>
-		<dt><f:translate key="name" /></dt>
-		<dd>
+	<div class="form-row">
+		<div class="col-md-6 mb-3 name">
+			<label for="name"><f:translate key="name" /></label>
 			<f:render partial="FieldError" section="Main" arguments="{field: 'name'}" />
-			<f:form.textfield property="name" />
-		</dd>
+			<f:form.textfield property="name" id="name" class="form-control"/>
+		</div>
 
-		<dt><f:translate key="address" /></dt>
-		<dd>
+		<div class="col-md-6 mb-3 address">
+			<label for="address"><f:translate key="address" /></label>
 			<f:render partial="FieldError" section="Main" arguments="{field: 'address'}" />
-			<f:form.textfield property="address" />
-		</dd>
+			<f:form.textfield property="address" id="address" class="form-control"/>
+		</div>
 
-		<dt><f:translate key="zipcode" /></dt>
-		<dd>
+		<div class="col-md-6 mb-3 zipcode">
+			<label for="zipcode"><f:translate key="zipcode" /></label>
 			<f:render partial="FieldError" section="Main" arguments="{field: 'zipcode'}" />
-			<f:form.textfield property="zipcode" />
-		</dd>
+			<f:form.textfield property="zipcode" id="zipcode" class="form-control"/>
+		</div>
 
-		<dt><f:translate key="city" /></dt>
-		<dd>
+		<div class="col-md-6 mb-3 city">
+			<label for="city"><f:translate key="city" /></label>
 			<f:render partial="FieldError" section="Main" arguments="{field: 'city'}" />
-			<f:form.textfield property="city" />
-		</dd>
+			<f:form.textfield property="city" id="city" class="form-control"/>
+		</div>
 
 		<f:if condition="{static_info_tables}">
-			<dt><f:translate key="country" /></dt>
-			<dd>
+			<div class="col-md-6 mb-3 country">
+				<label for="country"><f:translate key="country" /></label>
 				<f:render partial="FieldError" section="Main" arguments="{field: 'country'}" />
-				<sf:form.selectCountries property="country" id="sfrCountry" optionValueField="{settings.countryValueType}" allowedCountries="{settings.allowedCountries}" />
-			</dd>
+				<sf:form.selectCountries property="country" id="country" class="form-control"
+					optionValueField="{settings.countryValueType}" allowedCountries="{settings.allowedCountries}" />
+			</div>
 		</f:if>
 
-		<dt><f:translate key="latitude" /></dt>
-		<dd>
+	</div>
+	<div class="form-row">
+
+		<div class="col-md-6 mb-3 latitude">
+			<label for="latitude"><f:translate key="latitude" /></label>
 			<f:render partial="FieldError" section="Main" arguments="{field: 'latitude'}" />
-			<f:form.textfield property="latitude" />
-		</dd>
+			<f:form.textfield property="latitude" id="latitude" class="form-control"/>
+		</div>
 
-		<dt><f:translate key="longitude" /></dt>
-		<dd>
+		<div class="col-md-6 mb-3 longitude">
+			<label for="longitude"><f:translate key="longitude" /></label>
 			<f:render partial="FieldError" section="Main" arguments="{field: 'longitude'}" />
-			<f:form.textfield property="longitude" />
-		</dd>
+			<f:form.textfield property="longitude" id="longitude" class="form-control"/>
+		</div>
 
-		<dt><f:translate key="products" /></dt>
-		<dd>
+		<div class="col-md-6 mb-3 products">
+			<label for="products"><f:translate key="products" /></label>
 			<f:render partial="FieldError" section="Main" arguments="{field: 'products'}" />
-			<f:form.textfield property="products" />
-		</dd>
+			<f:form.textfield property="products" id="products" class="form-control"/>
+		</div>
 
-		<f:if condition="{0:settings.categoryPriority}=={0:'limitResultsToCategories'}">
-		<f:then/>
+		<f:if condition="{settings.categoryPriority}!='limitResultsToCategories'">
 		<f:else>
-		<dt><f:translate key="category" /></dt>
-		<dd class="category-tree">
-			<f:render partial="FieldError" section="Main" arguments="{field: 'category'}" />
-			<f:render section="categoryTree" arguments="{categories: categories}" />
-		</dd>
+			<div class="col-md-6 mb-3 category">
+				<label><f:translate key="category" /></label>
+				<f:render partial="FieldError" section="Main" arguments="{field: 'category'}" />
+				<f:render section="categoryTree" arguments="{categories: categories}" />
+			</div>
 		</f:else>
 		</f:if>
 
-		<dt><f:translate key="radius" /></dt>
-		<dd>
+		<div class="col-md-6 mb-3 radius">
+			<label for="radius"><f:translate key="radius" /></label>
 			<f:render partial="FieldError" section="Main" arguments="{field: 'radius'}" />
-			<f:form.select property="radius" options="{settings.radius}"/>
-		</dd>
+			<f:form.select property="radius" id="radius" options="{settings.radius}" class="form-control"/>
+		</div>
 
-		<dt>&nbsp;</dt>
-		<dd>
-			<f:form.submit class="submit" value="{f:translate(key: 'submit_find')}" />
-		</dd>
-	</dl>
+		<div class="col-6 offset-md-6 text-md-right mb-3">
+			<f:form.submit value="{f:translate(key: 'submit_find')}" class="btn btn-primary" />
+		</div>
+	</div>
 </f:form>
 </f:section>
 

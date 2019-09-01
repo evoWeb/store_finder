@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace Evoweb\StoreFinder\Cache;
 
 /**
@@ -13,6 +14,7 @@ namespace Evoweb\StoreFinder\Cache;
  */
 
 use Evoweb\StoreFinder\Domain\Model;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class CoordinatesCache
 {
@@ -126,7 +128,7 @@ class CoordinatesCache
         $values = [];
 
         foreach ($fields as $field) {
-            $methodName = 'get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $field)));
+            $methodName = 'get' . GeneralUtility::underscoredToUpperCamelCase($field);
             if ($address !== null && method_exists($address, $methodName)) {
                 $value = $address->{$methodName}();
                 if ($value) {
