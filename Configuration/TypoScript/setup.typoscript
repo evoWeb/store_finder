@@ -121,3 +121,10 @@ plugin.tx_storefinder.fieldError {
 
 plugin.tx_storefinder._LOCAL_LANG.default {
 }
+
+lib.tx_storefinder.contentElementRendering = RECORDS
+lib.tx_storefinder.contentElementRendering {
+  tables = tt_content
+  source.current = 1
+  dontCheckPid = 1
+}

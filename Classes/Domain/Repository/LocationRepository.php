@@ -171,8 +171,14 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
     protected function addCountryQueryPart(Constraint $constraint, QueryBuilder $queryBuilder): QueryBuilder
     {
-        if ($constraint->getCountry()) {
-            if (is_numeric($constraint->getCountry())) {
+        $value = $constraint->getCountry();
+        if ($value) {
+            if ($value instanceof \SJBR\StaticInfoTables\Domain\Model\Country) {
+                $value = $value->getUid();
+                $on = '(l.country = sc.uid)';
+                $field = 'uid';
+                $type = \PDO::PARAM_INT;
+            } elseif (is_numeric($value)) {
                 $on = '(l.country = sc.uid)';
                 $field = 'uid';
                 $type = \PDO::PARAM_INT;
@@ -184,10 +190,10 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
             $queryBuilder->innerJoin('l', 'static_countries', 'sc', $on);
             $queryBuilder->andWhere(
-                $queryBuilder->expr()->eq('sc.' . $field, $queryBuilder->createNamedParameter(
-                    $constraint->getCountry(),
-                    $type
-                ))
+                $queryBuilder->expr()->eq(
+                    'sc.' . $field,
+                    $queryBuilder->createNamedParameter($value, $type)
+                )
             );
         }
 
