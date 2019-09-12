@@ -340,10 +340,14 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->_country;
     }
 
-    public function setCountry(\SJBR\StaticInfoTables\Domain\Model\Country $country)
+    public function setCountry($country)
     {
-        $this->_country = $country;
-        $this->country = $country->getUid();
+        if ($country instanceof \SJBR\StaticInfoTables\Domain\Model\Country) {
+            $this->_country = $country;
+            $this->country = $country->getUid();
+        } else {
+            $this->country = $country;
+        }
     }
 
     public function getCountryName(): string
@@ -541,7 +545,7 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->latitude;
     }
 
-    public function setLatitude(float $latitude)
+    public function setLatitude(?float $latitude)
     {
         $this->latitude = $latitude;
     }
@@ -551,7 +555,7 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->longitude;
     }
 
-    public function setLongitude(float $longitude)
+    public function setLongitude(?float $longitude)
     {
         $this->longitude = $longitude;
     }
