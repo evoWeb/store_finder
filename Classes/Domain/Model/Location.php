@@ -547,7 +547,7 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 
     public function setLatitude(?float $latitude)
     {
-        $this->latitude = $latitude;
+        $this->latitude = (float)$latitude;
     }
 
     public function getLongitude(): float
@@ -557,7 +557,7 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 
     public function setLongitude(?float $longitude)
     {
-        $this->longitude = $longitude;
+        $this->longitude = (float)$longitude;
     }
 
     public function isGeocoded(): bool
