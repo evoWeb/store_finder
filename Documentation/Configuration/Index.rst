@@ -39,7 +39,7 @@ plugin.tx_storefinder.settings
   useConsoleKeyForGeocoding_                            :ref:`data-type-boolean`                          yes        no         no         0
   apiConsoleKey_                                        :ref:`data-type-string`                           yes        no         no         -
   apiConsoleKeyGeocoding_                               :ref:`data-type-string`                           yes        no         no         -
-  distanceUnit_                                         :ref:`data-type-string`                           yes                   no         miles
+  distanceUnit_                                         :ref:`data-type-string`                           yes                   no         kilometer
   `mapConfiguration.language <mc-language_>`_           :ref:`data-type-string`                           yes                   no         en
 
   showStoreImage_                                       :ref:`data-type-boolean`                          yes        yes        no         1
@@ -325,7 +325,7 @@ plugin.tx_storefinder.persistence
          Base of distance values given in range select of search form. If miles is set the range gets multiplied with 1.6
 
    Default
-         miles
+         kilometer
 
    Possible values:
          miles, kilometer
