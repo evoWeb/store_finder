@@ -41,7 +41,6 @@ plugin.tx_storefinder.settings
   apiConsoleKeyGeocoding_                               :ref:`data-type-string`                           yes        no         no         -
   distanceUnit_                                         :ref:`data-type-string`                           yes                   no         miles
   `mapConfiguration.language <mc-language_>`_           :ref:`data-type-string`                           yes                   no         en
-  `mapConfiguration.allowSensors <mc-allowSensors_>`_   :ref:`data-type-boolean`                          yes                   no         1
 
   showStoreImage_                                       :ref:`data-type-boolean`                          yes        yes        no         1
   resultPageId_                                         :ref:`data-type-integer`                          yes        yes        no         -
@@ -249,7 +248,7 @@ plugin.tx_storefinder.persistence
          This setting only works for frontend actions. To encode locations on save in backend please refere to extension manager setting with same key.
 
    Default
-         http://maps.googleapis.com/maps/api/geocode/json?sensor=false
+         http://maps.googleapis.com/maps/api/geocode/json
 
 
 
@@ -348,24 +347,6 @@ plugin.tx_storefinder.persistence
 
    Default
          en
-
-
-.. _mc-allowSensors:
-.. ### BEGIN~OF~TABLE ###
-
-.. container:: table-row
-
-   Property
-         mapConfiguration.allowSensors
-
-   Data type
-         boolean
-
-   Description
-         Defines if browser sensors may get used or not
-
-   Default
-         1
 
 
 .. _showStoreImage:

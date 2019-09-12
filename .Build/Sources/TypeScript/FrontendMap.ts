@@ -23,7 +23,6 @@ export default class FrontendMap {
 
     apiConsoleKey: '',
     apiUrl: '',
-    allowSensors: false,
     language: '',
 
     markerIcon: '',

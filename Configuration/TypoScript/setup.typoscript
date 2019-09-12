@@ -2,7 +2,7 @@ plugin.tx_storefinder.settings {
   includeStyleSheet = true
   includeJquery = true
 
-  geocodeUrl = https://maps.googleapis.com/maps/api/geocode/json?sensor=false
+  geocodeUrl = https://maps.googleapis.com/maps/api/geocode/json
   #geocodeUrl = https://nominatim.openstreetmap.org/search/?format=json
   #geocodeUrl = http://www.mapquestapi.com/geocoding/v1/address?thumbMaps=false&outFormat=json
 
@@ -65,7 +65,6 @@ plugin.tx_storefinder.settings {
     # traffic, bicycling, kml
     apiV3Layers =
     language = en
-    allowSensors = 1
   }
 
   mapSize {

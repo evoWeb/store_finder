@@ -136,8 +136,7 @@ var FrontendGoogleMap = /** @class */ (function (_super) {
      * Load google map script
      */
     FrontendGoogleMap.prototype.loadScript = function () {
-        var self = this, apiUrl = 'https://maps.googleapis.com/maps/api/js?v=3.exp', parameter = '&key=' + this.mapConfiguration.apiConsoleKey
-            + '&sensor=' + (this.mapConfiguration.allowSensors ? 'true' : 'false');
+        var self = this, apiUrl = 'https://maps.googleapis.com/maps/api/js?v=3.exp', parameter = '&key=' + this.mapConfiguration.apiConsoleKey;
         if (self.mapConfiguration.language !== '') {
             parameter += '&language=' + self.mapConfiguration.language;
         }
@@ -197,7 +196,6 @@ var FrontendMap = /** @class */ (function () {
             zoom: 18,
             apiConsoleKey: '',
             apiUrl: '',
-            allowSensors: false,
             language: '',
             markerIcon: '',
             apiV3Layers: '',

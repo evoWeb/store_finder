@@ -78,7 +78,7 @@ _______________
 
 ::
 
-    var mapConfiguration = {active:true,apiV3Layers:'',language:'de',allowSensors:'1',center:{lat:50.1125089,lng:8.6521548},zoom:'11'}
+    var mapConfiguration = {active:true,apiV3Layers:'',language:'de',center:{lat:50.1125089,lng:8.6521548},zoom:'11'}
 
 
 format.binaryAnd Viewhelper
