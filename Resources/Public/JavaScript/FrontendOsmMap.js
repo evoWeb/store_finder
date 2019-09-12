@@ -27,7 +27,6 @@ var FrontendMap = /** @class */ (function () {
             zoom: 18,
             apiConsoleKey: '',
             apiUrl: '',
-            allowSensors: false,
             language: '',
             markerIcon: '',
             apiV3Layers: '',

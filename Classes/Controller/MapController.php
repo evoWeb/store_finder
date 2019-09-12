@@ -213,7 +213,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         }
 
         $this->addCategoryFromSettingsToView();
-        $this->view->assign('search', $constraint);
+        $this->view->assign('constraint', $constraint);
         $this->view->assign(
             'static_info_tables',
             \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('static_info_tables') ? 1 : 0

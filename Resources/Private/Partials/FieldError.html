@@ -2,7 +2,7 @@
 
 <f:section name="Main">
 
-	<f:form.validationResults for="search">
+	<f:form.validationResults for="constraint">
 		<f:if condition="{validationResults.flattenedErrors}">
 			<f:for each="{validationResults.flattenedErrors}" key="fieldName" as="propertyErrors">
 				<f:if condition="{fieldName}=={field}">

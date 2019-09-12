@@ -24,7 +24,6 @@ declare interface MapConfiguration {
 
   apiConsoleKey: string,
   apiUrl: string,
-  allowSensors: boolean,
   language: string,
 
   markerIcon: string,

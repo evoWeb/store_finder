@@ -131,7 +131,9 @@ class CoordinatesCache
             $methodName = 'get' . GeneralUtility::underscoredToUpperCamelCase($field);
             if ($address !== null && method_exists($address, $methodName)) {
                 $value = $address->{$methodName}();
-                if ($value) {
+                if ($value instanceof \SJBR\StaticInfoTables\Domain\Model\Country) {
+                    $values[$field] = $value->getShortNameEn();
+                } elseif ($value) {
                     $values[$field] = $value;
                 }
             }

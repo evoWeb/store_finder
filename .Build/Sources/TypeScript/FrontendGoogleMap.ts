@@ -137,8 +137,7 @@ class FrontendGoogleMap extends FrontendMap {
   loadScript() {
     let self = this,
       apiUrl = 'https://maps.googleapis.com/maps/api/js?v=3.exp',
-      parameter = '&key=' + this.mapConfiguration.apiConsoleKey
-        + '&sensor=' + (this.mapConfiguration.allowSensors ? 'true' : 'false');
+      parameter = '&key=' + this.mapConfiguration.apiConsoleKey;
 
     if (self.mapConfiguration.language !== '') {
       parameter += '&language=' + self.mapConfiguration.language;
