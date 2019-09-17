@@ -42,26 +42,13 @@
 					optionValueField="{settings.countryValueType}" allowedCountries="{settings.allowedCountries}" />
 			</div>
 		</f:if>
-
 	</div>
+
 	<div class="form-row">
-
-		<div class="col-md-6 mb-3 latitude">
-			<label for="latitude"><f:translate key="latitude" /></label>
-			<f:render partial="FieldError" section="Main" arguments="{field: 'latitude'}" />
-			<f:form.textfield property="latitude" id="latitude" class="form-control"/>
-		</div>
-
-		<div class="col-md-6 mb-3 longitude">
-			<label for="longitude"><f:translate key="longitude" /></label>
-			<f:render partial="FieldError" section="Main" arguments="{field: 'longitude'}" />
-			<f:form.textfield property="longitude" id="longitude" class="form-control"/>
-		</div>
-
-		<div class="col-md-6 mb-3 products">
-			<label for="products"><f:translate key="products" /></label>
-			<f:render partial="FieldError" section="Main" arguments="{field: 'products'}" />
-			<f:form.textfield property="products" id="products" class="form-control"/>
+		<div class="col-md-6 mb-3 radius">
+			<label for="radius"><f:translate key="radius" /></label>
+			<f:render partial="FieldError" section="Main" arguments="{field: 'radius'}" />
+			<f:form.select property="radius" id="radius" options="{settings.radius}" class="form-control"/>
 		</div>
 
 		<f:if condition="{settings.categoryPriority}!='limitResultsToCategories'">
@@ -74,10 +61,10 @@
 		</f:else>
 		</f:if>
 
-		<div class="col-md-6 mb-3 radius">
-			<label for="radius"><f:translate key="radius" /></label>
-			<f:render partial="FieldError" section="Main" arguments="{field: 'radius'}" />
-			<f:form.select property="radius" id="radius" options="{settings.radius}" class="form-control"/>
+		<div class="col-md-6 mb-3 products">
+			<label for="products"><f:translate key="products" /></label>
+			<f:render partial="FieldError" section="Main" arguments="{field: 'products'}" />
+			<f:form.textfield property="products" id="products" class="form-control"/>
 		</div>
 
 		<div class="col-6 offset-md-6 text-md-right mb-3">

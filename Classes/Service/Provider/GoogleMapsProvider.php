@@ -40,17 +40,17 @@ class GoogleMapsProvider implements EncodeProviderInterface
             $apiConsoleKeyGeocoding = $settings['apiConsoleKey'];
         }
 
-        $apiUrl = $settings['geocodeUrl'] .
-            (!empty($apiConsoleKeyGeocoding) ? '&key=' . $apiConsoleKeyGeocoding : '') .
-            '&address=' . implode('+', $parameter) .
-            (!empty($components) ? '&components=' . implode('|', $components) : '');
+        $apiUrl = $settings['geocodeUrl']
+            . (strpos($settings['geocodeUrl'], '?') === false ? '?' : '')
+            . (!empty($apiConsoleKeyGeocoding) ? '&key=' . $apiConsoleKeyGeocoding : '')
+            . '&address=' . implode('+', $parameter)
+            . (!empty($components) ? '&components=' . implode('|', $components) : '');
         if (TYPO3_MODE == 'FE') {
             $apiUrl .= '&language=' . $this->getLanguageKey();
         }
 
-        $addressData = json_decode(utf8_encode(
-            \TYPO3\CMS\Core\Utility\GeneralUtility::getUrl(str_replace('?&', '?', $apiUrl))
-        ));
+        $response = \TYPO3\CMS\Core\Utility\GeneralUtility::getUrl(str_replace('?&', '?', $apiUrl));
+        $addressData = json_decode(utf8_encode($response));
 
         $hasMultipleResults = false;
         $result = new \stdClass();
