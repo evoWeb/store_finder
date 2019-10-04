@@ -14,10 +14,19 @@ namespace Evoweb\StoreFinder\Service;
  */
 
 use Evoweb\StoreFinder\Domain\Model\Location;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class GeocodeService
 {
+    /**
+     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
+     */
+    protected $objectManager;
+
+    /**
+     * @var \Evoweb\StoreFinder\Cache\CoordinatesCache
+     */
+    protected $coordinatesCache;
+
     /**
      * @var array
      */
@@ -27,11 +36,6 @@ class GeocodeService
      * @var array
      */
     protected $fields = ['address', 'zipcode', 'city', 'state', 'country'];
-
-    /**
-     * @var \Evoweb\StoreFinder\Cache\CoordinatesCache
-     */
-    protected $coordinatesCache;
 
     /**
      * @var bool
@@ -46,6 +50,11 @@ class GeocodeService
     public function __construct(array $settings = [])
     {
         $this->setSettings($settings);
+    }
+
+    public function injectObjectManager(\TYPO3\CMS\Extbase\Object\ObjectManager $objectManager)
+    {
+        $this->objectManager = $objectManager;
     }
 
     public function injectCoordinatesCache(\Evoweb\StoreFinder\Cache\CoordinatesCache $coordinatesCache)
@@ -112,7 +121,7 @@ class GeocodeService
         // for url encoding
         $queryValues = [];
         foreach ($fields as $field) {
-            $methodName = 'get' . GeneralUtility::underscoredToUpperCamelCase($field);
+            $methodName = 'get' . \TYPO3\CMS\Core\Utility\GeneralUtility::underscoredToUpperCamelCase($field);
             $value = $location->{$methodName}();
 
             switch ($field) {
@@ -120,12 +129,8 @@ class GeocodeService
                 // to enhance the map api query result
                 case 'country':
                     if (is_numeric($value) || strlen((string) $value) == 3) {
-                        /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
-                        $objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-                            \TYPO3\CMS\Extbase\Object\ObjectManager::class
-                        );
                         /** @var \Evoweb\StoreFinder\Domain\Repository\CountryRepository $repository */
-                        $repository = $objectManager->get(
+                        $repository = $this->objectManager->get(
                             \Evoweb\StoreFinder\Domain\Repository\CountryRepository::class
                         );
 
@@ -166,7 +171,7 @@ class GeocodeService
         }
 
         $httpClient = new \Http\Adapter\Guzzle6\Client();
-        $provider = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+        $provider = $this->objectManager->get(
             $providerClass,
             $httpClient,
             null,

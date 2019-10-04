@@ -27,7 +27,6 @@ call_user_func(function () {
 
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addUserTSConfig('
         options.saveDocNew.tx_storefinder_domain_model_location = 1
-        options.saveDocNew.tx_storefinder_domain_model_category = 1
         options.saveDocNew.tx_storefinder_domain_model_attribute = 1
     ');
 

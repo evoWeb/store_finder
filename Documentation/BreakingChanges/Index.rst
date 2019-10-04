@@ -8,6 +8,13 @@ Breaking Changes
 
 03. October 2019
 ================
+Drop migration wizard
+_____________________
+Dropped support of LocationMigrationWizard. It's now more then three years that locator is not really supported
+anymore. Who every wants to migrate locations should use version 3.x and upgrade afterwards.
+
+Change geocoding
+________________
 Change to use geocoder-php/geocoder for geocoding locations. By this a hole spectrum of providers/geocoders
 are available now [ https://github.com/geocoder-php/Geocoder#world ]
 
