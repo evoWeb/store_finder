@@ -94,7 +94,7 @@ class LocationMigrationWizard implements \TYPO3\CMS\Install\Updates\UpgradeWizar
      */
     public function getDescription(): string
     {
-        return 'This update wizard goes through all files that are referenced in the hw_fewo'
+        return 'This update wizard goes through all files that are referenced in the location'
             . ' extension and adds the files to the FAL File Index.<br />'
             . 'It also moves the files from uploads/ to the fileadmin/_migrated/ path.';
     }

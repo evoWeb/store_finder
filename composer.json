@@ -28,7 +28,8 @@
 		"typo3/cms-core": "^9.5 || ^10.0",
 		"sjbr/static-info-tables": "^6.7",
 		"geocoder-php/google-maps-provider": "^4.4.0",
-		"php-http/guzzle6-adapter": "^2.0.1"
+		"php-http/guzzle6-adapter": "^2.0.1",
+		"php-http/message": "^1.8.0"
 	},
 
 	"autoload": {

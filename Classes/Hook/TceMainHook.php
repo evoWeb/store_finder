@@ -13,7 +13,6 @@ namespace Evoweb\StoreFinder\Hook;
  * LICENSE.txt file that was distributed with this source code.
  */
 
-use Evoweb\StoreFinder\Domain\Model\Location;
 use Evoweb\StoreFinder\Domain\Repository\LocationRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
@@ -53,13 +52,13 @@ class TceMainHook
     /**
      * After database operations hook
      *
-     * @param string $status
+     * @param string $_1
      * @param string $table
      * @param string $id
      * @param array $fieldArray
      * @param \TYPO3\CMS\Core\DataHandling\DataHandler $parentObject
      */
-    public function processDatamap_afterDatabaseOperations($status, $table, $id, $fieldArray, $parentObject)
+    public function processDatamap_afterDatabaseOperations($_1, $table, $id, $fieldArray, $parentObject)
     {
         if ($table === 'tx_storefinder_domain_model_location') {
             $locationRepository = $this->getLocationRepository();

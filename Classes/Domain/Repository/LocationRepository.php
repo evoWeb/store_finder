@@ -328,8 +328,7 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         /** @var Location $minLatitude south */
         $minLatitude = $query->execute()->getFirst();
 
-        // only search for the other locations if first succed or else we have no
-        // locations at all
+        // only search for the other locations if first succeed or else we have no locations at all
         if ($minLatitude === null) {
             $maxLatitude = $minLongitude = $maxLongitude = null;
         } else {
