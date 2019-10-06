@@ -14,7 +14,7 @@ namespace Evoweb\StoreFinder\ViewHelpers\Form;
  */
 
 /**
- * Viewhelper to render a selectbox with values of static info tables countries
+ * Viewhelper to render a select element with values of static info tables countries
  * <code title="Usage">
  * {namespace evoweb=Evoweb\StoreFinder\ViewHelpers}
  * <evoweb:form.SelectStaticCountries name="country" optionLabelField="cnShortDe"/>

@@ -13,53 +13,21 @@ namespace Evoweb\StoreFinder\Hook;
  * LICENSE.txt file that was distributed with this source code.
  */
 
+use Evoweb\StoreFinder\Domain\Repository\LocationRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use Evoweb\StoreFinder\Domain\Model\Location;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 
 class TceMainHook
 {
     /**
-     * @var array
-     */
-    protected $configuration = [];
-
-    /**
-     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
-    /**
-     * @var \Evoweb\StoreFinder\Domain\Repository\LocationRepository
-     */
-    protected $repository;
-
     public function __construct()
     {
-        $this->objectManager = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Object\ObjectManager::class);
-    }
-
-    /**
-     * After database operations hook
-     *
-     * @param string $status
-     * @param string $table
-     * @param string $id
-     * @param array $fieldArray
-     * @param \TYPO3\CMS\Core\DataHandling\DataHandler $parentObject
-     */
-    public function processDatamap_afterDatabaseOperations($status, $table, $id, $fieldArray, $parentObject)
-    {
-        if ($table === 'tx_storefinder_domain_model_location') {
-            $locationId = $this->remapId($id, $table, $parentObject);
-
-            $this->initializeConfiguration();
-            $location = $this->fetchLocation($locationId);
-
-            if ($location !== null && $location->getGeocode()) {
-                $this->storeLocation($this->setCoordinates($location));
-            }
-        }
+        $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
     }
 
     /**
@@ -81,52 +49,49 @@ class TceMainHook
         return $id;
     }
 
-    protected function initializeConfiguration()
-    {
-        $this->configuration = \Evoweb\StoreFinder\Utility\ExtensionConfigurationUtility::getConfiguration();
-    }
-
-    protected function fetchLocation(int $uid): Location
-    {
-        return $this->getRepository()->findByUidInBackend($uid);
-    }
-
-    protected function getRepository(): \Evoweb\StoreFinder\Domain\Repository\LocationRepository
-    {
-        if ($this->repository === null) {
-            $this->repository = $this->objectManager->get(
-                \Evoweb\StoreFinder\Domain\Repository\LocationRepository::class
-            );
-        }
-
-        return $this->repository;
-    }
-
     /**
-     * Sets coordinates by using geocoding service
+     * After database operations hook
      *
-     * @param Location $location
-     *
-     * @return Location
+     * @param string $_1
+     * @param string $table
+     * @param string $id
+     * @param array $fieldArray
+     * @param \TYPO3\CMS\Core\DataHandling\DataHandler $parentObject
      */
-    protected function setCoordinates(Location $location): Location
+    public function processDatamap_afterDatabaseOperations($_1, $table, $id, $fieldArray, $parentObject)
+    {
+        if ($table === 'tx_storefinder_domain_model_location') {
+            $locationRepository = $this->getLocationRepository();
+
+            $locationId = $this->remapId($id, $table, $parentObject);
+            $location = $locationRepository->findByUidInBackend($locationId);
+
+            if ($location !== null && $location->getGeocode()) {
+                $location = $this->getGeocodeService()->geocodeAddress($location);
+
+                $locationRepository->update($location);
+
+                /** @var PersistenceManager $persistenceManager */
+                $persistenceManager = $this->objectManager->get(PersistenceManager::class);
+                $persistenceManager->persistAll();
+            }
+        }
+    }
+
+    protected function getGeocodeService(): \Evoweb\StoreFinder\Service\GeocodeService
     {
         /** @var \Evoweb\StoreFinder\Service\GeocodeService $geocodeService */
         $geocodeService = $this->objectManager->get(
             \Evoweb\StoreFinder\Service\GeocodeService::class,
-            $this->configuration
+            \Evoweb\StoreFinder\Utility\ExtensionConfigurationUtility::getConfiguration()
         );
-        $location = $geocodeService->geocodeAddress($location);
-
-        return $location;
+        return $geocodeService;
     }
 
-    protected function storeLocation(Location $location)
+    protected function getLocationRepository(): LocationRepository
     {
-        $this->getRepository()->update($location);
-
-        /** @var PersistenceManager $persistenceManager */
-        $persistenceManager = $this->objectManager->get(PersistenceManager::class);
-        $persistenceManager->persistAll();
+        /** @var LocationRepository $repository */
+        $repository = $this->objectManager->get(LocationRepository::class);
+        return $repository;
     }
 }

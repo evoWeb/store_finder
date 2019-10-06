@@ -2,7 +2,7 @@
 	"name": "evoweb/store-finder",
 	"type": "typo3-cms-extension",
 	"description": "Store Finder",
-	"homepage": "http://www.evoweb.de/",
+	"homepage": "https://github.com/evoWeb/store_finder/",
 
 	"license": "GPL-2.0-or-later",
 
@@ -26,7 +26,11 @@
 	],
 	"require": {
 		"typo3/cms-core": "^9.5 || ^10.0",
-		"sjbr/static-info-tables": "^6.7"
+		"sjbr/static-info-tables": "^6.7",
+		"geocoder-php/google-maps-provider": "^4.4.0",
+		"php-http/guzzle6-adapter": "^2.0.1",
+		"php-http/message": "^1.8.0",
+		"phpoffice/phpspreadsheet": "^1.9.0"
 	},
 
 	"autoload": {
