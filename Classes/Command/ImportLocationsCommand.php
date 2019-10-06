@@ -73,7 +73,7 @@ class ImportLocationsCommand extends \Symfony\Component\Console\Command\Command
                 1
             )
             ->addArgument(
-                'truncateStorage',
+                'clearStorageFolder',
                 InputArgument::OPTIONAL,
                 'Page id to store locations in',
                 0
@@ -102,7 +102,7 @@ class ImportLocationsCommand extends \Symfony\Component\Console\Command\Command
 
         $fileName = $input->getArgument('fileName');
         $storagePid = (int) $input->getArgument('storagePid');
-        $truncateStorage = (bool) $input->getArgument('truncateStorage');
+        $clearStorageFolder = (bool) $input->getArgument('clearStorageFolder');
 
         if ($input->hasArgument('columnMap') && $input->getArgument('columnMap') !== '') {
             $this->columnMap = json_decode($input->getArgument('columnMap'));
@@ -115,7 +115,7 @@ class ImportLocationsCommand extends \Symfony\Component\Console\Command\Command
         }
 
         $file = $this->getFile($fileName);
-        $this->processFile($file, $storagePid, $truncateStorage);
+        $this->processFile($file, $storagePid, $clearStorageFolder);
     }
 
     protected function getFile(string $fileName): File
@@ -124,10 +124,10 @@ class ImportLocationsCommand extends \Symfony\Component\Console\Command\Command
         return $resourceFactory->getFileObjectFromCombinedIdentifier($fileName);
     }
 
-    protected function processFile(File $file, int $storagePid, bool $truncateStorage)
+    protected function processFile(File $file, int $storagePid, bool $clearStorageFolder)
     {
-        if ($truncateStorage) {
-            $this->clearTable($storagePid);
+        if ($clearStorageFolder) {
+            $this->clearStorageFolder($storagePid);
         }
 
         $filePath = $file->getForLocalProcessing();
@@ -143,7 +143,7 @@ class ImportLocationsCommand extends \Symfony\Component\Console\Command\Command
         unlink($filePath);
     }
 
-    protected function clearTable(int $storagePid)
+    protected function clearStorageFolder(int $storagePid)
     {
         $tableMm = 'tx_storefinder_location_attribute_mm';
         $fileMm = 'sys_file_reference';
@@ -217,13 +217,15 @@ class ImportLocationsCommand extends \Symfony\Component\Console\Command\Command
             switch (true) {
                 case isset($this->attributeMap[$sourceColumn]):
                     if ($this->attributeMap[$sourceColumn][$value]) {
-                        $attributes[] = (string)$this->attributeMap[$sourceColumn][$value];
+                        $attributes[] = $this->attributeMap[$sourceColumn][$value];
+                        $location['attributes']++;
                     }
                     break;
 
                 case isset($this->categoryMap[$sourceColumn]):
                     if ($this->categoryMap[$sourceColumn][$value]) {
-                        $categories[] = (string)$this->categoryMap[$sourceColumn][$value];
+                        $categories[] = $this->categoryMap[$sourceColumn][$value];
+                        $location['categories']++;
                     }
                     break;
 
@@ -231,7 +233,7 @@ class ImportLocationsCommand extends \Symfony\Component\Console\Command\Command
                     $targetColumn = $this->columnMap[$sourceColumn];
                     if (is_array($targetColumn)) {
                         foreach ($targetColumn as $targetSubColumn) {
-                            $location[$targetSubColumn] = (string)$value;
+                            $location[$targetSubColumn] = $value;
                         }
                     } elseif ($targetColumn == 'country') {
                         $location[$targetColumn] = $this->fetchCountry($value);
@@ -240,18 +242,18 @@ class ImportLocationsCommand extends \Symfony\Component\Console\Command\Command
                     } elseif (in_array($targetColumn, ['image', 'media', 'icon'])) {
                         if ($fileUid = $this->fetchFile($value)) {
                             $files[$fileUid] = $targetColumn;
+                            $location[$targetColumn]++;
                         }
                     } else {
-                        $location[$targetColumn] = (string)$value;
+                        $location[$targetColumn] = $value;
                     }
                     break;
             }
         }
 
-        $locationUid = $this->processLocation($location);
-        $location['uid'] = $locationUid;
-        $this->processAttributes($locationUid, $attributes);
-        $this->processCategories($locationUid, $categories);
+        $location = $this->processLocation($location);
+        $this->processAttributes($location['uid'], $attributes);
+        $this->processCategories($location['uid'], $categories);
         $this->processFiles($location, $files);
     }
 
@@ -300,7 +302,7 @@ class ImportLocationsCommand extends \Symfony\Component\Console\Command\Command
         return (string)$uid;
     }
 
-    protected function processLocation(array $location): string
+    protected function processLocation(array $location): array
     {
         $table = 'tx_storefinder_domain_model_location';
         $connection = $this->getQueryBuilderForTable($table)->getConnection();
@@ -311,17 +313,18 @@ class ImportLocationsCommand extends \Symfony\Component\Console\Command\Command
         } else {
             $location['crdate'] = $location['tstamp'];
             $connection->insert($table, $location);
-            $locationUid = $connection->lastInsertId($table);
+            $locationUid = (int)$connection->lastInsertId($table);
         }
-        return $locationUid;
+        $location['uid'] = $locationUid;
+        return $location;
     }
 
-    protected function processAttributes(string $locationUid, array $attributes)
+    protected function processAttributes(int $locationUid, array $attributes)
     {
         $table = 'tx_storefinder_location_attribute_mm';
         $tableName = 'tx_storefinder_domain_model_attribute';
 
-        $references = $this->getReferences($table, $tableName, $locationUid);
+        $references = $this->getReferences($table, $tableName, $locationUid, 0);
 
         foreach ($references as $reference) {
             if (!in_array($reference['uid_foreign'], $attributes)) {
@@ -344,12 +347,12 @@ class ImportLocationsCommand extends \Symfony\Component\Console\Command\Command
         }
     }
 
-    protected function processCategories(string $locationUid, array $currentCategories)
+    protected function processCategories(int $locationUid, array $currentCategories)
     {
         $table = 'sys_category_record_mm';
         $tableName = 'tx_storefinder_domain_model_location';
 
-        $references = $this->getReferences($table, $tableName, '0', $locationUid);
+        $references = $this->getReferences($table, $tableName, 0, $locationUid);
 
         foreach ($references as $reference) {
             if (!in_array($reference['uid_local'], $currentCategories)) {
@@ -375,19 +378,15 @@ class ImportLocationsCommand extends \Symfony\Component\Console\Command\Command
     protected function processFiles(array $location, array $files)
     {
         $table = 'sys_file_reference';
-        $references = $this->getReferences(
-            $table,
-            'tx_storefinder_domain_model_location',
-            '',
-            '0',
-            $location['uid']
-        );
+        $tableName = 'tx_storefinder_domain_model_location';
+
+        $references = $this->getReferences($table, $tableName, 0, $location['uid']);
 
         foreach ($references as $reference) {
             if (!isset($files[$reference['uid_local']])) {
                 $this->removeReference(
                     $table,
-                    'tx_storefinder_domain_model_location',
+                    $tableName,
                     $reference['fieldname'],
                     $reference['uid_local'],
                     $location['uid']
@@ -403,7 +402,8 @@ class ImportLocationsCommand extends \Symfony\Component\Console\Command\Command
                     $table,
                     $data,
                     [
-                        'tablenames' => 'tx_storefinder_domain_model_location',
+                        'tablenames' => $tableName,
+                        'fieldname' => $files[$reference['uid_local']],
                         'uid_local' => $reference['uid_local'],
                         'uid_foreign' => $location['uid']
                     ]
@@ -418,23 +418,17 @@ class ImportLocationsCommand extends \Symfony\Component\Console\Command\Command
                 'tstamp' => time(),
                 'crdate' => time(),
                 'table_local' => 'sys_file',
-                'uid_local' => $uid,
-                'uid_foreign' => $location['uid'],
-                'tablenames' => 'tx_storefinder_domain_model_location',
-                'fieldname' => $fieldName,
                 'description' => $location['name']
             ];
 
-            /** @var \TYPO3\CMS\Core\Database\Connection $connectionPool */
-            $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable($table);
-            $connection->insert($table, $data);
+            $this->addReference($table, $tableName, $fieldName, $uid, $location['uid'], $data);
         }
     }
 
-    protected function getCurrentRecordUid(array $location, string $table): string
+    protected function getCurrentRecordUid(array $location, string $table): int
     {
         $queryBuilder = $this->getQueryBuilderForTable($table);
-        $result = (string)$queryBuilder
+        $result = (int)$queryBuilder
             ->select('uid')
             ->from($table)
             ->where(
@@ -455,9 +449,8 @@ class ImportLocationsCommand extends \Symfony\Component\Console\Command\Command
     protected function getReferences(
         string $table,
         string $tableName,
-        string $fieldName = '',
-        string $uidLocal = '0',
-        string $uidForeign = '0'
+        int $uidLocal,
+        int $uidForeign
     ): array {
         $queryBuilder = $this->getQueryBuilderForTable($table);
         $queryBuilder
@@ -470,14 +463,6 @@ class ImportLocationsCommand extends \Symfony\Component\Console\Command\Command
                 )
             );
 
-        if ($fieldName) {
-            $queryBuilder->andWhere(
-                $queryBuilder->expr()->eq(
-                    'fieldname',
-                    $queryBuilder->createNamedParameter($fieldName, \PDO::PARAM_STR)
-                )
-            );
-        }
         if ($uidLocal) {
             $queryBuilder->andWhere(
                 $queryBuilder->expr()->eq(
@@ -494,6 +479,14 @@ class ImportLocationsCommand extends \Symfony\Component\Console\Command\Command
                 )
             );
         }
+        if ($table === 'sys_file_reference') {
+            $queryBuilder->andWhere(
+                $queryBuilder->expr()->eq(
+                    'deleted',
+                    $queryBuilder->createNamedParameter(0, \PDO::PARAM_INT)
+                )
+            );
+        }
 
         return $queryBuilder
             ->execute()
@@ -503,9 +496,10 @@ class ImportLocationsCommand extends \Symfony\Component\Console\Command\Command
     protected function addReference(
         string $table,
         string $tableName,
-        string $fieldName = '',
-        string $uidLocal = '0',
-        string $uidForeign = '0'
+        string $fieldName,
+        int $uidLocal,
+        int $uidForeign,
+        array $additionalData = []
     ) {
         $data = [
             'uid_local' => $uidLocal,
@@ -513,6 +507,10 @@ class ImportLocationsCommand extends \Symfony\Component\Console\Command\Command
             'tablenames' => $tableName,
             'fieldname' => $fieldName,
         ];
+
+        if (!empty($additionalData)) {
+            $data = array_merge($additionalData, $data);
+        }
 
         /** @var \TYPO3\CMS\Core\Database\Connection $connectionPool */
         $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable($table);
@@ -522,9 +520,9 @@ class ImportLocationsCommand extends \Symfony\Component\Console\Command\Command
     protected function removeReference(
         string $table,
         string $tableName,
-        string $fieldName = '',
-        string $uidLocal = '0',
-        string $uidForeign = '0'
+        string $fieldName,
+        int $uidLocal,
+        int $uidForeign
     ) {
         $queryBuilder = $this->getQueryBuilderForTable($table);
         $queryBuilder
