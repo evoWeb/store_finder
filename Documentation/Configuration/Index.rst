@@ -35,8 +35,7 @@ plugin.tx_storefinder.settings
   categoryPriority_                                     :ref:`data-type-string`                           yes        yes        no         useAsFilterInFrontend
   singleLocationId_                                     :ref:`data-type-integer`                          yes        yes        no         -
 
-  geocodeUrl_                                           :ref:`data-type-string`                           yes                   no         service url
-  useConsoleKeyForGeocoding_                            :ref:`data-type-boolean`                          yes        no         no         0
+  geocoderProvider_                                     :ref:`data-type-string`                           yes        no         no         -
   apiConsoleKey_                                        :ref:`data-type-string`                           yes        no         no         -
   apiConsoleKeyGeocoding_                               :ref:`data-type-string`                           yes        no         no         -
   distanceUnit_                                         :ref:`data-type-string`                           yes                   no         kilometer
@@ -232,48 +231,21 @@ plugin.tx_storefinder.persistence
          none
 
 
-.. _geocodeUrl:
+.. _geocoderProvider:
 .. ### BEGIN~OF~TABLE ###
 
 .. container:: table-row
 
    Property
-         geocodeUrl
+         geocoderProvider
 
    Data type
          string
 
    Description
-         If google changes the service url with this configuration its possible to query the service again.
-         This setting only works for frontend actions. To encode locations on save in backend please refere to extension manager setting with same key.
+         Contains class name of geocoding provider to enable changing to different services
 
    Default
-         http://maps.googleapis.com/maps/api/geocode/json
-
-
-
-.. _useConsoleKeyForGeocoding:
-.. ### BEGIN~OF~TABLE ###
-
-.. container:: table-row
-
-   Property
-         useConsoleKeyForGeocoding
-
-   Data type
-         boolean
-
-   Description
-         If activate the api console key gets used while geo coding addresses.
-         This is only useful if the key was activated for google premium accounting.
-         To active please visit the following url
-         https://developers.google.com/maps/documentation/javascript/get-api-key
-         Warning: if activated but the key is not an geo code premium service key the
-         response of the service will be empty.
-
-   Default
-         0
-
 
 
 .. _apiConsoleKey:

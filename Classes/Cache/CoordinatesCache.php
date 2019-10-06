@@ -14,7 +14,6 @@ namespace Evoweb\StoreFinder\Cache;
  */
 
 use Evoweb\StoreFinder\Domain\Model;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class CoordinatesCache
 {
@@ -31,12 +30,7 @@ class CoordinatesCache
     /**
      * @var array
      */
-    protected $fieldCombinations = [
-        ['address', 'zipcode', 'city', 'state', 'country'],
-        ['zipcode', 'city', 'country'],
-        ['zipcode', 'country'],
-        ['city', 'country'],
-    ];
+    protected $fields = ['address', 'zipcode', 'city', 'state', 'country'];
 
     public function __construct(\TYPO3\CMS\Core\Cache\Frontend\FrontendInterface $cacheFrontend = null)
     {
@@ -65,17 +59,18 @@ class CoordinatesCache
     /**
      * Add calculated coordinate for hash
      *
-     * @param Model\Constraint|Model\Location $address
-     * @param array $fields
+     * @param Model\Location $address
+     * @param array $queryValues
      */
-    public function addCoordinateForAddress($address, array $fields)
+    public function addCoordinateForAddress($address, array $queryValues)
     {
         $coordinate = [
             'latitude' => $address->getLatitude(),
             'longitude' => $address->getLongitude()
         ];
 
-        $hash = $this->getHashForAddressWithFields($address, $fields);
+        $fields = array_keys($queryValues);
+        $hash = md5(serialize(array_values($queryValues)));
         if (count($fields) == 2 || count($fields) == 3) {
             $this->setValueInCacheTable($hash, $coordinate);
         } elseif (count($fields) > 3) {
@@ -86,63 +81,30 @@ class CoordinatesCache
     /**
      * Get coordinate by address
      *
-     * @param Model\Constraint|Model\Location $address
+     * @param Model\Location $address
+     * @param array $queryValues
      *
-     * @return Model\Constraint|Model\Location
+     * @return Model\Location
      */
-    public function getCoordinateByAddress($address)
+    public function getCoordinateByAddress($address, array $queryValues)
     {
-        $coordinate = null;
+        if ($queryValues) {
+            $fields = array_keys($queryValues);
+            $hash = md5(serialize(array_values($queryValues)));
 
-        foreach ($this->fieldCombinations as $fields) {
-            $hash = $this->getHashForAddressWithFields($address, $fields);
+            $coordinate = null;
+            if (count($fields) <= 3) {
+                $coordinate = $this->getValueFromCacheTable($hash);
+            } elseif ($this->sessionHasKey($hash)) {
+                $coordinate = $this->getValueFromSession($hash);
+            }
 
-            if ($hash) {
-                if (count($fields) <= 3) {
-                    $coordinate = $this->getValueFromCacheTable($hash);
-                } elseif ($this->sessionHasKey($hash)) {
-                    $coordinate = $this->getValueFromSession($hash);
-                }
-
-                if (is_array($coordinate)) {
-                    $address->setLatitude($coordinate['latitude']);
-                    $address->setLongitude($coordinate['longitude']);
-                    break;
-                }
+            if (is_array($coordinate)) {
+                $address->setLatitude($coordinate['latitude']);
+                $address->setLongitude($coordinate['longitude']);
             }
         }
-
         return $address;
-    }
-
-    /**
-     * Get hash for address with field values
-     *
-     * @param Model\Constraint|Model\Location $address
-     * @param array &$fields
-     *
-     * @return string
-     */
-    public function getHashForAddressWithFields($address, array &$fields): string
-    {
-        $values = [];
-
-        foreach ($fields as $field) {
-            $methodName = 'get' . GeneralUtility::underscoredToUpperCamelCase($field);
-            if ($address !== null && method_exists($address, $methodName)) {
-                $value = $address->{$methodName}();
-                if ($value instanceof \SJBR\StaticInfoTables\Domain\Model\Country) {
-                    $values[$field] = $value->getShortNameEn();
-                } elseif ($value) {
-                    $values[$field] = $value;
-                }
-            }
-        }
-
-        asort($values);
-        $fields = array_keys($values);
-
-        return md5(serialize(array_values($values)));
     }
 
     /**

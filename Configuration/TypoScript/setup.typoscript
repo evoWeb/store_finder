@@ -2,20 +2,12 @@ plugin.tx_storefinder.settings {
   includeStyleSheet = true
   includeJquery = true
 
-  geocodeUrl = https://maps.googleapis.com/maps/api/geocode/json
-  #geocodeUrl = https://nominatim.openstreetmap.org/search/?format=json
-  #geocodeUrl = http://www.mapquestapi.com/geocoding/v1/address?thumbMaps=false&outFormat=json
-
-  # googleMaps, mapQuest, nominatim or custom provider implementing EncodeProviderInterface
-  apiProvider = {$plugin.tx_storefinder.apiProvider}
-
-  # needed for google or mapQuest accounts
-  # starting with June 2018 google map only provides premium access.
-  # https://mapsplatform.googleblog.com/2018/05/introducing-google-maps-platform.html
+  geocoderProvider = {$plugin.tx_storefinder.geocoderProvider}
   # Used for https://developers.google.com/maps/documentation/geocoding/start
-  apiConsoleKey =
   # used for https://developers.google.com/maps/documentation/javascript/tutorial
-  apiConsoleKeyGeocoding =
+  apiConsoleKey = {$plugin.tx_storefinder.apiConsoleKey}
+  # starting with June 2018 google map only provides premium access.
+  apiConsoleKeyGeocoding = {$plugin.tx_storefinder.apiConsoleKeyGeocoding}
 
   categories =
 

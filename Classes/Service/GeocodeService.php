@@ -13,16 +13,19 @@ namespace Evoweb\StoreFinder\Service;
  * LICENSE.txt file that was distributed with this source code.
  */
 
-use Evoweb\StoreFinder\Domain\Model\Constraint;
 use Evoweb\StoreFinder\Domain\Model\Location;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class GeocodeService
 {
     /**
-     * @var string
+     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
      */
-    protected $defaultApiUrl = 'https://maps.googleapis.com/maps/api/geocode/json?';
+    protected $objectManager;
+
+    /**
+     * @var \Evoweb\StoreFinder\Cache\CoordinatesCache
+     */
+    protected $coordinatesCache;
 
     /**
      * @var array
@@ -30,9 +33,9 @@ class GeocodeService
     protected $settings = [];
 
     /**
-     * @var \Evoweb\StoreFinder\Cache\CoordinatesCache
+     * @var array
      */
-    protected $coordinatesCache;
+    protected $fields = ['address', 'zipcode', 'city', 'state', 'country'];
 
     /**
      * @var bool
@@ -46,12 +49,12 @@ class GeocodeService
      */
     public function __construct(array $settings = [])
     {
-        if (count($settings)) {
-            $this->setSettings($settings);
-        } else {
-            $this->settings['geocodeUrl'] = $this->defaultApiUrl;
-            $this->settings['geocodeLimit'] = 2500;
-        }
+        $this->setSettings($settings);
+    }
+
+    public function injectObjectManager(\TYPO3\CMS\Extbase\Object\ObjectManager $objectManager)
+    {
+        $this->objectManager = $objectManager;
     }
 
     public function injectCoordinatesCache(\Evoweb\StoreFinder\Cache\CoordinatesCache $coordinatesCache)
@@ -59,28 +62,25 @@ class GeocodeService
         $this->coordinatesCache = $coordinatesCache;
     }
 
-    public function setSettings(array &$settings)
+    public function setSettings(array $settings)
     {
-        $this->settings = &$settings;
-
-        $this->settings['geocodeLimit'] = (int) $this->settings['geocodeLimit'] ?? 2500;
-        $this->settings['geocodeUrl'] = $this->settings['geocodeUrl'] ?? $this->defaultApiUrl;
+        $this->settings = $settings;
     }
 
     /**
      * @param Location $address
      * @param bool $forceGeoCoding
      *
-     * @return Constraint|Location
+     * @return Location
      */
     public function geocodeAddress(Location $address, bool $forceGeoCoding = false)
     {
-        $geoCodedAddress = $this->coordinatesCache->getCoordinateByAddress($address);
+        $queryValues = $this->prepareValuesForQuery($address, $this->fields);
+        $geoCodedAddress = $this->coordinatesCache->getCoordinateByAddress($address, $queryValues);
         if ($forceGeoCoding || !$geoCodedAddress->isGeocoded()) {
-            $fieldsHit = [];
-            $geoCodedAddress = $this->processAddress($address, $fieldsHit);
+            $geoCodedAddress = $this->processAddress($address, $queryValues);
             if (!$this->hasMultipleResults) {
-                $this->coordinatesCache->addCoordinateForAddress($geoCodedAddress, $fieldsHit);
+                $this->coordinatesCache->addCoordinateForAddress($geoCodedAddress, $queryValues);
             }
         }
 
@@ -93,37 +93,35 @@ class GeocodeService
         return $geoCodedAddress;
     }
 
-    protected function processAddress(Location $location, array &$fields): Location
+    protected function processAddress(Location $location, array $queryValues): Location
     {
         // Main geo coder
-        $fields = ['address', 'zipcode', 'city', 'state', 'country'];
-        $queryValues = $this->prepareValuesForQuery($location, $fields);
-        $coordinate = $this->getCoordinateByApiCall($queryValues);
+        $coordinate = $this->getCoordinatesFromProvider($queryValues);
 
         // If there is no coordinate yet, we assume it's international and attempt
         // to find it based on just the city and country.
-        if (!$coordinate->lat && !$coordinate->lng) {
+        if (!$coordinate->getLatitude() && !$coordinate->getLongitude()) {
             $fields = ['city', 'country'];
             $queryValues = $this->prepareValuesForQuery($location, $fields);
-            $coordinate = $this->getCoordinateByApiCall($queryValues);
+            $coordinate = $this->getCoordinatesFromProvider($queryValues);
         }
 
         // We should have coordinates by now and add them to location
-        if ($coordinate->lat && $coordinate->lng) {
-            $location->setLatitude($coordinate->lat);
-            $location->setLongitude($coordinate->lng);
+        if ($coordinate->getLatitude() && $coordinate->getLongitude()) {
+            $location->setLatitude($coordinate->getLatitude());
+            $location->setLongitude($coordinate->getLongitude());
             $location->setGeocode(0);
         }
 
         return $location;
     }
 
-    protected function prepareValuesForQuery(Location $location, array &$fields): array
+    protected function prepareValuesForQuery(Location $location, array $fields): array
     {
         // for url encoding
         $queryValues = [];
         foreach ($fields as $field) {
-            $methodName = 'get' . GeneralUtility::underscoredToUpperCamelCase($field);
+            $methodName = 'get' . \TYPO3\CMS\Core\Utility\GeneralUtility::underscoredToUpperCamelCase($field);
             $value = $location->{$methodName}();
 
             switch ($field) {
@@ -131,12 +129,8 @@ class GeocodeService
                 // to enhance the map api query result
                 case 'country':
                     if (is_numeric($value) || strlen((string) $value) == 3) {
-                        /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
-                        $objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-                            \TYPO3\CMS\Extbase\Object\ObjectManager::class
-                        );
                         /** @var \Evoweb\StoreFinder\Domain\Repository\CountryRepository $repository */
-                        $repository = $objectManager->get(
+                        $repository = $this->objectManager->get(
                             \Evoweb\StoreFinder\Domain\Repository\CountryRepository::class
                         );
 
@@ -165,26 +159,31 @@ class GeocodeService
                 $queryValues[$field] = urlencode($value);
             }
         }
-
-        $fields = array_keys($queryValues);
-
         return $queryValues;
     }
 
-    protected function getCoordinateByApiCall(array $queryValues): \stdClass
+    protected function getCoordinatesFromProvider(array $queryValues): \Geocoder\Model\Coordinates
     {
-        if (strpos($this->settings['apiProvider'], '\\') === false) {
-            $providerClass = 'Evoweb\\StoreFinder\\Service\\Provider\\'
-                . ucfirst($this->settings['apiProvider']) . 'Provider';
+        if (strpos($this->settings['geocoderProvider'], '\\') === false) {
+            $providerClass = 'Geocoder\\Provider\\GoogleMaps\\GoogleMaps';
         } else {
-            $providerClass = $this->settings['apiProvider'];
+            $providerClass = $this->settings['geocoderProvider'];
         }
 
-        $provider = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($providerClass);
-        if ($provider instanceof \Evoweb\StoreFinder\Service\Provider\EncodeProviderInterface) {
-            list($this->hasMultipleResults, $result) = $provider->encodeAddress($queryValues, $this->settings);
+        $httpClient = new \Http\Adapter\Guzzle6\Client();
+        $provider = $this->objectManager->get(
+            $providerClass,
+            $httpClient,
+            null,
+            $this->settings['apiConsoleKeyGeocoding']
+        );
+        if ($provider instanceof \Geocoder\Provider\Provider) {
+            $geoCoder = new \Geocoder\StatefulGeocoder($provider, 'en');
+            $results = $geoCoder->geocodeQuery(\Geocoder\Query\GeocodeQuery::create(implode(',', $queryValues)));
+            $this->hasMultipleResults = $results->count() > 1;
+            $result = $results->get(0)->getCoordinates();
         } else {
-            $result = new \stdClass();
+            $result = new \Geocoder\Model\Coordinates(0, 0);
         }
 
         return $result;

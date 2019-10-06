@@ -6,25 +6,30 @@
 Breaking Changes
 ----------------
 
+03. October 2019
+================
+Drop migration wizard
+_____________________
+Dropped support of LocationMigrationWizard. It's now more then three years that locator is not really supported
+anymore. Who every wants to migrate locations should use version 3.x and upgrade afterwards.
+
+Change geocoding
+________________
+Change to use geocoder-php/geocoder for geocoding locations. By this a hole spectrum of providers/geocoders
+are available now [ https://github.com/geocoder-php/Geocoder#world ]
+
+Migration steps:
+________________
+
+Please check the extension configuration whether the api key assignment still works
+
+
 31. January 2019
 ================
 Drop already deprecated GeocodeLocationsTask in favor of GeocodeLocationsCommandController
 
 Deprecate GeocodeLocationsCommandController to be replaced with GeocodeLocationsCommand once support for
 TYPO3 8.7 gets dropped.
-
-
-10. January 2019
-================
-As of the location model does not escapeJsonString any properties anymore. With this getNameRaw and
-getCityRaw are dropped.
-
-Migration steps:
-________________
-Check for {location.nameRaw} and {location.cityRaw} and replace it with
-{location.nameRaw -> f:format.json()} and {location.cityRaw -> f:format.json()}
-
-All {location.* -> f:format.json()} usage may not be wrapped in " or '. If present remove those.
 
 
 18. May 2019
@@ -63,3 +68,16 @@ Example:
          $singleView.hide();
          $singleView.removeClass('show');
    }
+
+
+10. January 2019
+================
+As of the location model does not escapeJsonString any properties anymore. With this getNameRaw and
+getCityRaw are dropped.
+
+Migration steps:
+________________
+Check for {location.nameRaw} and {location.cityRaw} and replace it with
+{location.nameRaw -> f:format.json()} and {location.cityRaw -> f:format.json()}
+
+All {location.* -> f:format.json()} usage may not be wrapped in " or '. If present remove those.

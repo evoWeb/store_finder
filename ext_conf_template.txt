@@ -1,11 +1,8 @@
-# cat=basic/enable/100; type=input; label=LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:apiConsoleKey
+# cat=store_finder//100; type=input; label=LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:geocoderProvider
+geocoderProvider = Geocoder\Provider\GoogleMaps\GoogleMaps
+
+# cat=store_finder//110; type=input; label=LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:apiConsoleKey
 apiConsoleKey =
 
-# cat=basic/enable/100; type=input; label=LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:apiConsoleKeyGeocoding
+# cat=store_finder//120; type=input; label=LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:apiConsoleKeyGeocoding
 apiConsoleKeyGeocoding =
-
-# cat=basic/enable/100; type=input; label=LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:apiProvider
-apiProvider = googleMaps
-
-# cat=basic/enable/100; type=input; label=LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:geocodeUrl
-geocodeUrl = https://maps.googleapis.com/maps/api/geocode/json
