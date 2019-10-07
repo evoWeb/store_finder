@@ -18,11 +18,6 @@ use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
     /**
-     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
-     */
-    protected $objectManager;
-
-    /**
      * @var string
      */
     protected $name = '';
@@ -195,10 +190,6 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 
     public function initializeObject()
     {
-        $this->objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-            \TYPO3\CMS\Extbase\Object\ObjectManager::class
-        );
-
         $this->attributes = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
         $this->categories = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
         $this->content = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
