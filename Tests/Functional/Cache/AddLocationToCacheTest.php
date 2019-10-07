@@ -38,6 +38,11 @@ class AddLocationToCacheTest extends \TYPO3\TestingFramework\Core\Functional\Fun
      */
     protected $coordinatesCache;
 
+    /**
+     * @var \Evoweb\StoreFinder\Service\GeocodeService
+     */
+    protected $geocodeService;
+
     public function setUp(): void
     {
         parent::setUp();
@@ -56,125 +61,80 @@ class AddLocationToCacheTest extends \TYPO3\TestingFramework\Core\Functional\Fun
 
         $this->coordinatesCache = new \Evoweb\StoreFinder\Cache\CoordinatesCache($cacheFrontend);
         $this->coordinatesCache->injectFrontendUser($frontendUser);
+
+        $this->geocodeService = new \Evoweb\StoreFinder\Service\GeocodeService();
     }
 
-
-    /**
-     * @test
-     */
-    public function locationWithZipCityCountryOnlyGetStoredInCacheTable()
+    public function cacheDataProvider(): array
     {
-        $this->coordinatesCache->flushCache();
-
-        $data = [
-            'address' => '',
-            'zipcode' => substr(mktime(), -5),
-            'city' => uniqid('City'),
-            'state' => '',
-            'country' => uniqid('Country'),
+        return [
+            'zip city country only' => [
+                [
+                    'address' => '',
+                    'zipcode' => substr(mktime(), -5),
+                    'city' => uniqid('City'),
+                    'state' => '',
+                    'country' => uniqid('Country'),
+                ],
+                ['zipcode', 'city', 'country'],
+                ['zipcode', 'city', 'country'],
+            ],
+            'address zip city state country if street and state empty' => [
+                [
+                    'address' => '',
+                    'zipcode' => substr(mktime(), -5),
+                    'city' => uniqid('City'),
+                    'state' => '',
+                    'country' => uniqid('Country'),
+                ],
+                ['address', 'zipcode', 'city', 'state', 'country'],
+                ['zipcode', 'city', 'country'],
+            ],
+            'address zip city country' => [
+                [
+                    'address' => uniqid('Address'),
+                    'zipcode' => substr(mktime(), -5),
+                    'city' => uniqid('City'),
+                    'state' => '',
+                    'country' => GeneralUtility::makeInstance(Country::class),
+                ],
+                ['address', 'zipcode', 'city', 'state', 'country'],
+                ['address', 'zipcode', 'city', 'country'],
+            ],
+            'address zip city state country' => [
+                [
+                    'address' => uniqid('Address'),
+                    'zipcode' => substr(mktime(), -5),
+                    'city' => uniqid('City'),
+                    'state' => '',
+                    'country' => GeneralUtility::makeInstance(Country::class),
+                ],
+                ['address', 'zipcode', 'city', 'state', 'country'],
+                ['address', 'zipcode', 'city', 'state', 'country'],
+            ],
         ];
-
-        $constraint = $this->getConstraintStub($data);
-        $coordinate = [
-            'latitude' => $constraint->getLatitude(),
-            'longitude' => $constraint->getLongitude(),
-        ];
-
-        $fields = ['zipcode', 'city', 'country'];
-        $this->coordinatesCache->addCoordinateForAddress($constraint, $fields);
-
-        $fields = ['zipcode', 'city', 'country'];
-        $hash = $this->coordinatesCache->getHashForAddressWithFields($constraint, $fields);
-        $this->assertEquals($coordinate, $this->coordinatesCache->getValueFromCacheTable($hash));
-    }
-
-    /**
-     * @test
-     */
-    public function locationWithAddressZipCityStateCountryGetStoredInCacheTableIfStreetAndStateIsEmpty()
-    {
-        $this->coordinatesCache->flushCache();
-
-        $data = [
-            'address' => '',
-            'zipcode' => substr(mktime(), -5),
-            'city' => uniqid('City'),
-            'state' => '',
-            'country' => uniqid('Country'),
-        ];
-
-        $constraint = $this->getConstraintStub($data);
-        $coordinate = [
-            'latitude' => $constraint->getLatitude(),
-            'longitude' => $constraint->getLongitude(),
-        ];
-
-        $fields = ['address', 'zipcode', 'city', 'state', 'country'];
-        $this->coordinatesCache->addCoordinateForAddress($constraint, $fields);
-
-        $fields = ['zipcode', 'city', 'country'];
-        $hash = $this->coordinatesCache->getHashForAddressWithFields($constraint, $fields);
-        $this->assertEquals($coordinate, $this->coordinatesCache->getValueFromCacheTable($hash));
     }
 
     /**
      * @test
+     * @dataProvider cacheDataProvider
+     *
+     * @param array $data
+     * @param array $addFields
+     * @param array $getFields
      */
-    public function locationWithAddressZipCityCountryGetStoredInSessionCache()
+    public function locationStoredInCacheTable(array $data, array $addFields, array $getFields)
     {
         $this->coordinatesCache->flushCache();
 
-        $data = [
-            'address' => uniqid('Address'),
-            'zipcode' => substr(mktime(), -5),
-            'city' => uniqid('City'),
-            'state' => '',
-            'country' => GeneralUtility::makeInstance(Country::class),
-        ];
-
         $constraint = $this->getConstraintStub($data);
-        $coordinate = [
-            'latitude' => $constraint->getLatitude(),
-            'longitude' => $constraint->getLongitude(),
-        ];
 
-        $fields = ['address', 'zipcode', 'city', 'state', 'country'];
-        $this->coordinatesCache->addCoordinateForAddress($constraint, $fields);
+        $queryValues = $this->geocodeService->prepareValuesForQuery($constraint, $addFields);
+        $this->coordinatesCache->addCoordinateForAddress($constraint, $queryValues);
 
-        $fields = ['address', 'zipcode', 'city', 'country'];
-        $hash = $this->coordinatesCache->getHashForAddressWithFields($constraint, $fields);
-        $this->assertEquals($coordinate, $this->coordinatesCache->getValueFromSession($hash));
+        $queryValues = $this->geocodeService->prepareValuesForQuery($constraint, $getFields);
+        $this->assertEquals($constraint, $this->coordinatesCache->getCoordinateByAddress($constraint, $queryValues));
     }
-
-    /**
-     * @test
-     */
-    public function locationWithAddressZipCityStateCountryGetStoredInSessionCache()
-    {
-        $this->coordinatesCache->flushCache();
-
-        $data = [
-            'address' => uniqid('Address'),
-            'zipcode' => substr(mktime(), -5),
-            'city' => uniqid('City'),
-            'state' => '',
-            'country' => GeneralUtility::makeInstance(Country::class),
-        ];
-
-        $constraint = $this->getConstraintStub($data);
-        $coordinate = [
-            'latitude' => $constraint->getLatitude(),
-            'longitude' => $constraint->getLongitude(),
-        ];
-
-        $fields = ['address', 'zipcode', 'city', 'state', 'country'];
-        $this->coordinatesCache->addCoordinateForAddress($constraint, $fields);
-
-        $fields = ['address', 'zipcode', 'city', 'state', 'country'];
-        $hash = $this->coordinatesCache->getHashForAddressWithFields($constraint, $fields);
-        $this->assertEquals($coordinate, $this->coordinatesCache->getValueFromSession($hash));
-    }
-
 
     public function getConstraintStub(array $data): Constraint
     {
