@@ -71,7 +71,7 @@ class AddLocationToCacheTest extends \TYPO3\TestingFramework\Core\Functional\Fun
             'zip city country only' => [
                 [
                     'address' => '',
-                    'zipcode' => substr(mktime(), -5),
+                    'zipcode' => substr(time(), -5),
                     'city' => uniqid('City'),
                     'state' => '',
                     'country' => uniqid('Country'),
@@ -82,7 +82,7 @@ class AddLocationToCacheTest extends \TYPO3\TestingFramework\Core\Functional\Fun
             'address zip city state country if street and state empty' => [
                 [
                     'address' => '',
-                    'zipcode' => substr(mktime(), -5),
+                    'zipcode' => substr(time(), -5),
                     'city' => uniqid('City'),
                     'state' => '',
                     'country' => uniqid('Country'),
@@ -93,7 +93,7 @@ class AddLocationToCacheTest extends \TYPO3\TestingFramework\Core\Functional\Fun
             'address zip city country' => [
                 [
                     'address' => uniqid('Address'),
-                    'zipcode' => substr(mktime(), -5),
+                    'zipcode' => substr(time(), -5),
                     'city' => uniqid('City'),
                     'state' => '',
                     'country' => GeneralUtility::makeInstance(Country::class),
@@ -104,7 +104,7 @@ class AddLocationToCacheTest extends \TYPO3\TestingFramework\Core\Functional\Fun
             'address zip city state country' => [
                 [
                     'address' => uniqid('Address'),
-                    'zipcode' => substr(mktime(), -5),
+                    'zipcode' => substr(time(), -5),
                     'city' => uniqid('City'),
                     'state' => '',
                     'country' => GeneralUtility::makeInstance(Country::class),

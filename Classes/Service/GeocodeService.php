@@ -116,7 +116,7 @@ class GeocodeService
         return $location;
     }
 
-    protected function prepareValuesForQuery(Location $location, array $fields): array
+    public function prepareValuesForQuery(Location $location, array $fields): array
     {
         // for url encoding
         $queryValues = [];
