@@ -160,14 +160,10 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $icon;
 
     /**
-     * @var string
-     */
-    protected $country = '';
-
-    /**
      * @var \SJBR\StaticInfoTables\Domain\Model\Country
+     * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
      */
-    protected $_country;
+    protected $country;
 
     /**
      * @var \SJBR\StaticInfoTables\Domain\Model\CountryZone
@@ -316,29 +312,15 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     public function getCountry()
     {
-        if (is_null($this->_country) && $this->country) {
-            /** @var \Evoweb\StoreFinder\Domain\Repository\CountryRepository $repository */
-            $repository = $this->objectManager->get(
-                \Evoweb\StoreFinder\Domain\Repository\CountryRepository::class
-            );
-
-            if (is_numeric($this->country)) {
-                $this->_country = $repository->findByUid($this->country);
-            } else {
-                $this->_country = $repository->findByIsoCodeA2([$this->country])->getFirst();
-            }
+	if ($this->country instanceof \TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy) {
+            $this->country = $this->country->_loadRealInstance();
         }
-        return $this->_country;
+        return $this->country;
     }
 
-    public function setCountry($country)
+    public function setCountry(\SJBR\StaticInfoTables\Domain\Model\Country $country)
     {
-        if ($country instanceof \SJBR\StaticInfoTables\Domain\Model\Country) {
-            $this->_country = $country;
-            $this->country = $country->getUid();
-        } else {
-            $this->country = $country;
-        }
+        $this->country = $country;
     }
 
     public function getCountryName(): string
