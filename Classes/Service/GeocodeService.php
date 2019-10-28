@@ -156,7 +156,7 @@ class GeocodeService
             }
 
             if (!empty($value) && !is_object($value) && !is_array($value)) {
-                $queryValues[$field] = urlencode($value);
+                $queryValues[$field] =  iconv('UTF-8', 'ASCII//TRANSLIT', $value);
             }
         }
         return $queryValues;
@@ -181,7 +181,11 @@ class GeocodeService
             $geoCoder = new \Geocoder\StatefulGeocoder($provider, 'en');
             $results = $geoCoder->geocodeQuery(\Geocoder\Query\GeocodeQuery::create(implode(',', $queryValues)));
             $this->hasMultipleResults = $results->count() > 1;
-            $result = $results->get(0)->getCoordinates();
+            if($results->count() > 0){
+                $result = $results->get(0)->getCoordinates();
+            } else {
+                $result = new \Geocoder\Model\Coordinates(0, 0);
+            }
         } else {
             $result = new \Geocoder\Model\Coordinates(0, 0);
         }
