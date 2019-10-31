@@ -6,12 +6,12 @@ plugin.tx_storefinder {
   # cat=store_finder//100; type=input; label=LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:geocoderProvider
   geocoderProvider = Geocoder\Provider\GoogleMaps\GoogleMaps
 
-  # cat=store_finder//120; type=input; label=LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:geocoderLocale
+  # cat=store_finder//110; type=input; label=LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:geocoderLocale
   geocoderLocale = en
 
-  # cat=store_finder//110; type=input; label=LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:apiConsoleKey
+  # cat=store_finder//120; type=input; label=LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:apiConsoleKey
   apiConsoleKey =
 
-  # cat=store_finder//120; type=input; label=LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:apiConsoleKeyGeocoding
+  # cat=store_finder//130; type=input; label=LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:apiConsoleKeyGeocoding
   apiConsoleKeyGeocoding =
 }
