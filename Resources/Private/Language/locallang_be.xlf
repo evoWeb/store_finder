@@ -6,6 +6,9 @@
 			<trans-unit id="geocoderProvider">
 				<source>Class of the geocoder to use, leave as is if now extra geocoder is installed</source>
 			</trans-unit>
+			<trans-unit id="geocoderLocale">
+				<source>Locale for geocoder</source>
+			</trans-unit>
 			<trans-unit id="apiConsoleKey">
 				<source>Public key for map rendering</source>
 			</trans-unit>

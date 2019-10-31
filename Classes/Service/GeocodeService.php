@@ -178,7 +178,7 @@ class GeocodeService
             $this->settings['apiConsoleKeyGeocoding']
         );
         if ($provider instanceof \Geocoder\Provider\Provider) {
-            $geoCoder = new \Geocoder\StatefulGeocoder($provider, 'en');
+            $geoCoder = new \Geocoder\StatefulGeocoder($provider, $this->settings['geocoderLocale']);
             $results = $geoCoder->geocodeQuery(\Geocoder\Query\GeocodeQuery::create(implode(',', $queryValues)));
             $this->hasMultipleResults = $results->count() > 1;
             if($results->count() > 0){
