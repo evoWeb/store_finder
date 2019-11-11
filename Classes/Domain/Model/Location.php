@@ -312,7 +312,7 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     public function getCountry()
     {
-	if ($this->country instanceof \TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy) {
+        if ($this->country instanceof \TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy) {
             $this->country = $this->country->_loadRealInstance();
         }
         return $this->country;

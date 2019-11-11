@@ -181,7 +181,7 @@ class GeocodeService
             $geoCoder = new \Geocoder\StatefulGeocoder($provider, $this->settings['geocoderLocale']);
             $results = $geoCoder->geocodeQuery(\Geocoder\Query\GeocodeQuery::create(implode(',', $queryValues)));
             $this->hasMultipleResults = $results->count() > 1;
-            if($results->count() > 0){
+            if ($results->count() > 0) {
                 $result = $results->get(0)->getCoordinates();
             } else {
                 $result = new \Geocoder\Model\Coordinates(0, 0);
