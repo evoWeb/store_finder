@@ -95,6 +95,10 @@ class GeocodeService
 
     protected function processAddress(Location $location, array $queryValues): Location
     {
+        if (empty($queryValues)) {
+            return $location;
+        }
+
         // Main geo coder
         $coordinate = $this->getCoordinatesFromProvider($queryValues);
 
