@@ -73,26 +73,25 @@ return [
 
     'columns' => [
         'sys_language_uid' => [
-            'exclude' => true,
-            'label' => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.language',
+            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
             'config' => [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
-                'special' => 'languages',
-                'items' => [
-                    [
-                        'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.allLanguages',
-                        -1,
-                        'flags-multiple'
+                'foreign_table' => 'sys_language',
+                'foreign_table_where' => 'ORDER BY sys_language.sorting',
+                'items' => [], // no default language here, as the pages table is always the default language
+                'default' => 0,
+                'fieldWizard' => [
+                    'selectIcons' => [
+                        'disabled' => false,
                     ],
                 ],
-                'default' => 0,
             ]
         ],
         'l18n_parent' => [
             'exclude' => true,
             'displayCond' => 'FIELD:sys_language_uid:>:0',
-            'label' => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
+            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
             'config' => [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
@@ -103,8 +102,9 @@ return [
                     ]
                 ],
                 'foreign_table' => $table,
+                // no sys_language_uid = -1 allowed explicitly!
                 'foreign_table_where' =>
-                    'AND ' . $table . '.pid = ###CURRENT_PID### AND ' . $table . '.sys_language_uid IN (-1, 0)',
+                    'AND ' . $table . '.pid = ###CURRENT_PID### AND ' . $table . '.sys_language_uid IN = 0',
                 'default' => 0
             ]
         ],

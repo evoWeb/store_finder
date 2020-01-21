@@ -26,6 +26,7 @@ CREATE TABLE tx_storefinder_domain_model_location (
 	related int(11) unsigned DEFAULT '0' NOT NULL,
 	image int(11) unsigned DEFAULT '0' NOT NULL,
 	media int(11) unsigned DEFAULT '0' NOT NULL,
+	layer int(11) unsigned DEFAULT '0' NOT NULL,
 	icon int(11) unsigned DEFAULT '0' NOT NULL,
 
 	map int(11) unsigned DEFAULT '0' NOT NULL,
