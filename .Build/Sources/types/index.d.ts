@@ -29,6 +29,7 @@ declare interface MapConfiguration {
   markerIcon: string,
   apiV3Layers: string,
   kmlUrl: string,
+  mapStyles?: array,
 
   renderSingleViewCallback(location: object, template: string): void,
   handleCloseButtonCallback(button: object): void,
