@@ -40,7 +40,8 @@ class FrontendGoogleMap extends FrontendMap {
       zoomControl: true,
       zoomControlOptions: {
         style: google.maps.ZoomControlStyle.LARGE
-      }
+      },
+      styles: ([] as Array<object>)
     };
 
     if (self.mapConfiguration.mapStyles) {
