@@ -3,6 +3,7 @@ plugin.tx_storefinder.settings {
   includeJquery = true
 
   geocoderProvider = {$plugin.tx_storefinder.geocoderProvider}
+  geocoderLocale = {$plugin.tx_storefinder.geocoderLocale}
   # Used for https://developers.google.com/maps/documentation/geocoding/start
   # used for https://developers.google.com/maps/documentation/javascript/tutorial
   apiConsoleKey = {$plugin.tx_storefinder.apiConsoleKey}

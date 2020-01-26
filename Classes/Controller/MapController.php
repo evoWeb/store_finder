@@ -380,6 +380,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             switch ($property) {
                 case 'limit':
                 case 'radius':
+                case 'zoom':
                     $value = (int)$value;
                     break;
 
