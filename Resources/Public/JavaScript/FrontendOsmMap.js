@@ -292,8 +292,8 @@ new FrontendOsmMap();
 
 },{"./FrontendMap":1,"leaflet":3}],3:[function(require,module,exports){
 /* @preserve
- * Leaflet 1.5.1+build.2e3e0ff, a JS library for interactive maps. http://leafletjs.com
- * (c) 2010-2018 Vladimir Agafonkin, (c) 2010-2011 CloudMade
+ * Leaflet 1.6.0, a JS library for interactive maps. http://leafletjs.com
+ * (c) 2010-2019 Vladimir Agafonkin, (c) 2010-2011 CloudMade
  */
 
 (function (global, factory) {
@@ -302,7 +302,7 @@ new FrontendOsmMap();
 	(factory((global.L = {})));
 }(this, (function (exports) { 'use strict';
 
-var version = "1.5.1+build.2e3e0ffb";
+var version = "1.6.0";
 
 /*
  * @namespace Util
@@ -420,8 +420,8 @@ function falseFn() { return false; }
 // @function formatNum(num: Number, digits?: Number): Number
 // Returns the number `num` rounded to `digits` decimals, or to 6 decimals by default.
 function formatNum(num, digits) {
-	digits = (digits === undefined ? 6 : digits);
-	return +(Math.round(num + ('e+' + digits)) + ('e-' + digits));
+	var pow = Math.pow(10, (digits === undefined ? 6 : digits));
+	return Math.round(num * pow) / pow;
 }
 
 // @function trim(str: String): String
@@ -2199,7 +2199,7 @@ var msPointer = !window.PointerEvent && window.MSPointerEvent;
 
 // @property pointer: Boolean
 // `true` for all browsers supporting [pointer events](https://msdn.microsoft.com/en-us/library/dn433244%28v=vs.85%29.aspx).
-var pointer = !!(window.PointerEvent || msPointer);
+var pointer = !webkit && !!(window.PointerEvent || msPointer);
 
 // @property touch: Boolean
 // `true` for all browsers supporting [touch events](https://developer.mozilla.org/docs/Web/API/Touch_events).
@@ -2220,6 +2220,23 @@ var mobileGecko = mobile && gecko;
 // `true` for browsers on a high-resolution "retina" screen or on any screen when browser's display zoom is more than 100%.
 var retina = (window.devicePixelRatio || (window.screen.deviceXDPI / window.screen.logicalXDPI)) > 1;
 
+// @property passiveEvents: Boolean
+// `true` for browsers that support passive events.
+var passiveEvents = (function () {
+	var supportsPassiveOption = false;
+	try {
+		var opts = Object.defineProperty({}, 'passive', {
+			get: function () {
+				supportsPassiveOption = true;
+			}
+		});
+		window.addEventListener('testPassiveEventSupport', falseFn, opts);
+		window.removeEventListener('testPassiveEventSupport', falseFn, opts);
+	} catch (e) {
+		// Errors can safely be ignored since this is only a browser support test.
+	}
+	return supportsPassiveOption;
+});
 
 // @property canvas: Boolean
 // `true` when the browser supports [`<canvas>`](https://developer.mozilla.org/docs/Web/API/Canvas_API).
@@ -2282,6 +2299,7 @@ var Browser = (Object.freeze || Object)({
 	mobileOpera: mobileOpera,
 	mobileGecko: mobileGecko,
 	retina: retina,
+	passiveEvents: passiveEvents,
 	canvas: canvas,
 	svg: svg,
 	vml: vml
@@ -2476,8 +2494,8 @@ function addDoubleTapListener(obj, handler, id) {
 	obj[_pre + _touchend + id] = onTouchEnd;
 	obj[_pre + 'dblclick' + id] = handler;
 
-	obj.addEventListener(_touchstart, onTouchStart, false);
-	obj.addEventListener(_touchend, onTouchEnd, false);
+	obj.addEventListener(_touchstart, onTouchStart, passiveEvents ? {passive: false} : false);
+	obj.addEventListener(_touchend, onTouchEnd, passiveEvents ? {passive: false} : false);
 
 	// On some platforms (notably, chrome<55 on win10 + touchscreen + mouse),
 	// the browser doesn't fire touchend/pointerup events but does fire
@@ -2493,8 +2511,8 @@ function removeDoubleTapListener(obj, id) {
 	    touchend = obj[_pre + _touchend + id],
 	    dblclick = obj[_pre + 'dblclick' + id];
 
-	obj.removeEventListener(_touchstart, touchstart, false);
-	obj.removeEventListener(_touchend, touchend, false);
+	obj.removeEventListener(_touchstart, touchstart, passiveEvents ? {passive: false} : false);
+	obj.removeEventListener(_touchend, touchend, passiveEvents ? {passive: false} : false);
 	if (!edge) {
 		obj.removeEventListener('dblclick', dblclick, false);
 	}
@@ -2969,7 +2987,7 @@ function addOne(obj, type, fn, context) {
 	} else if ('addEventListener' in obj) {
 
 		if (type === 'mousewheel') {
-			obj.addEventListener('onwheel' in obj ? 'wheel' : 'mousewheel', handler, false);
+			obj.addEventListener('onwheel' in obj ? 'wheel' : 'mousewheel', handler, passiveEvents ? {passive: false} : false);
 
 		} else if ((type === 'mouseenter') || (type === 'mouseleave')) {
 			handler = function (e) {
@@ -3014,7 +3032,7 @@ function removeOne(obj, type, fn, context) {
 	} else if ('removeEventListener' in obj) {
 
 		if (type === 'mousewheel') {
-			obj.removeEventListener('onwheel' in obj ? 'wheel' : 'mousewheel', handler, false);
+			obj.removeEventListener('onwheel' in obj ? 'wheel' : 'mousewheel', handler, passiveEvents ? {passive: false} : false);
 
 		} else {
 			obj.removeEventListener(
@@ -4904,18 +4922,21 @@ var Map = Evented.extend({
 			}
 		}, this);
 
-		this.on('load moveend', function () {
-			var c = this.getCenter(),
-			    z = this.getZoom();
-			setTransform(this._proxy, this.project(c, z), this.getZoomScale(z, 1));
-		}, this);
+		this.on('load moveend', this._animMoveEnd, this);
 
 		this._on('unload', this._destroyAnimProxy, this);
 	},
 
 	_destroyAnimProxy: function () {
 		remove(this._proxy);
+		this.off('load moveend', this._animMoveEnd, this);
 		delete this._proxy;
+	},
+
+	_animMoveEnd: function () {
+		var c = this.getCenter(),
+		    z = this.getZoom();
+		setTransform(this._proxy, this.project(c, z), this.getZoomScale(z, 1));
 	},
 
 	_catchTransitionEnd: function (e) {
@@ -4967,6 +4988,7 @@ var Map = Evented.extend({
 			addClass(this._mapPane, 'leaflet-zoom-anim');
 		}
 
+		// @section Other Events
 		// @event zoomanim: ZoomAnimEvent
 		// Fired at least once per zoom animation. For continuous zoom, like pinch zooming, fired once per frame during zoom.
 		this.fire('zoomanim', {
@@ -5600,7 +5622,7 @@ var Layers = Control.extend({
 
 
 // @factory L.control.layers(baselayers?: Object, overlays?: Object, options?: Control.Layers options)
-// Creates an attribution control with the given layers. Base layers will be switched with radio buttons, while overlays will be switched with checkboxes. Note that all base layers should be passed in the base layers object, but only one should be added to the map during map instantiation.
+// Creates a layers control with the given layers. Base layers will be switched with radio buttons, while overlays will be switched with checkboxes. Note that all base layers should be passed in the base layers object, but only one should be added to the map during map instantiation.
 var layers = function (baseLayers, overlays, options) {
 	return new Layers(baseLayers, overlays, options);
 };
@@ -7946,7 +7968,10 @@ var Marker = Layer.extend({
 	},
 
 	_setPos: function (pos) {
-		setPosition(this._icon, pos);
+
+		if (this._icon) {
+			setPosition(this._icon, pos);
+		}
 
 		if (this._shadow) {
 			setPosition(this._shadow, pos);
@@ -7958,7 +7983,9 @@ var Marker = Layer.extend({
 	},
 
 	_updateZIndex: function (offset) {
-		this._icon.style.zIndex = this._zIndex + offset;
+		if (this._icon) {
+			this._icon.style.zIndex = this._zIndex + offset;
+		}
 	},
 
 	_animateZoom: function (opt) {
@@ -8143,7 +8170,7 @@ var Path = Layer.extend({
 		setOptions(this, style);
 		if (this._renderer) {
 			this._renderer._updateStyle(this);
-			if (this.options.stroke && style.hasOwnProperty('weight')) {
+			if (this.options.stroke && style && style.hasOwnProperty('weight')) {
 				this._updateBounds();
 			}
 		}
@@ -8213,9 +8240,13 @@ var CircleMarker = Path.extend({
 	// @method setLatLng(latLng: LatLng): this
 	// Sets the position of a circle marker to a new location.
 	setLatLng: function (latlng) {
+		var oldLatLng = this._latlng;
 		this._latlng = toLatLng(latlng);
 		this.redraw();
-		return this.fire('move', {latlng: this._latlng});
+
+		// @event move: Event
+		// Fired when the marker is moved via [`setLatLng`](#circlemarker-setlatlng). Old and new coordinates are included in event arguments as `oldLatLng`, `latlng`.
+		return this.fire('move', {oldLatLng: oldLatLng, latlng: this._latlng});
 	},
 
 	// @method getLatLng(): LatLng
@@ -8962,6 +8993,9 @@ var GeoJSON = FeatureGroup.extend({
 	 * @option coordsToLatLng: Function = *
 	 * A `Function` that will be used for converting GeoJSON coordinates to `LatLng`s.
 	 * The default is the `coordsToLatLng` static method.
+	 *
+	 * @option markersInheritOptions: Boolean = false
+	 * Whether default Markers for "Point" type Features inherit from group options.
 	 */
 
 	initialize: function (geojson, options) {
@@ -9011,9 +9045,13 @@ var GeoJSON = FeatureGroup.extend({
 		return this.addLayer(layer);
 	},
 
-	// @method resetStyle( <Path> layer ): this
+	// @method resetStyle( <Path> layer? ): this
 	// Resets the given vector layer's style to the original GeoJSON style, useful for resetting style after hover events.
+	// If `layer` is omitted, the style of all features in the current layer is reset.
 	resetStyle: function (layer) {
+		if (layer === undefined) {
+			return this.eachLayer(this.resetStyle, this);
+		}
 		// reset any custom styles
 		layer.options = extend({}, layer.defaultOptions);
 		this._setLayerStyle(layer, this.options.style);
@@ -9061,12 +9099,12 @@ function geometryToLayer(geojson, options) {
 	switch (geometry.type) {
 	case 'Point':
 		latlng = _coordsToLatLng(coords);
-		return pointToLayer ? pointToLayer(geojson, latlng) : new Marker(latlng);
+		return _pointToLayer(pointToLayer, geojson, latlng, options);
 
 	case 'MultiPoint':
 		for (i = 0, len = coords.length; i < len; i++) {
 			latlng = _coordsToLatLng(coords[i]);
-			layers.push(pointToLayer ? pointToLayer(geojson, latlng) : new Marker(latlng));
+			layers.push(_pointToLayer(pointToLayer, geojson, latlng, options));
 		}
 		return new FeatureGroup(layers);
 
@@ -9097,6 +9135,12 @@ function geometryToLayer(geojson, options) {
 	default:
 		throw new Error('Invalid GeoJSON object.');
 	}
+}
+
+function _pointToLayer(pointToLayerFn, geojson, latlng, options) {
+	return pointToLayerFn ?
+		pointToLayerFn(geojson, latlng) :
+		new Marker(latlng, options && options.markersInheritOptions && options);
 }
 
 // @function coordsToLatLng(coords: Array): LatLng
@@ -9182,6 +9226,7 @@ var PointToGeoJSON = {
 };
 
 // @namespace Marker
+// @section Other methods
 // @method toGeoJSON(precision?: Number): Object
 // `precision` is the number of decimal places for coordinates.
 // The default value is 6 places.
@@ -9615,6 +9660,7 @@ var VideoOverlay = ImageOverlay.extend({
 
 		addClass(vid, 'leaflet-image-layer');
 		if (this._zoomAnimated) { addClass(vid, 'leaflet-zoom-animated'); }
+		if (this.options.className) { addClass(vid, this.options.className); }
 
 		vid.onselectstart = falseFn;
 		vid.onmousemove = falseFn;
@@ -9672,9 +9718,12 @@ function videoOverlay(video, bounds, options) {
  * @example
  *
  * ```js
- * var element = '<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><image xlink:href="https://mdn.mozillademos.org/files/6457/mdn_logo_only_color.png" height="200" width="200"/></svg>',
- * 		 elementBounds = [ [ 32, -130 ], [ 13, -100 ] ];
- * L.svgOverlay(element, elementBounds).addTo(map);
+ * var svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+ * svgElement.setAttribute('xmlns', "http://www.w3.org/2000/svg");
+ * svgElement.setAttribute('viewBox', "0 0 200 200");
+ * svgElement.innerHTML = '<rect width="200" height="200"/><rect x="75" y="23" width="50" height="50" style="fill:red"/><rect x="75" y="123" width="50" height="50" style="fill:#0013ff"/>';
+ * var svgElementBounds = [ [ 32, -130 ], [ 13, -100 ] ];
+ * L.svgOverlay(svgElement, svgElementBounds).addTo(map);
  * ```
  */
 
@@ -9684,6 +9733,7 @@ var SVGOverlay = ImageOverlay.extend({
 
 		addClass(el, 'leaflet-image-layer');
 		if (this._zoomAnimated) { addClass(el, 'leaflet-zoom-animated'); }
+		if (this.options.className) { addClass(el, this.options.className); }
 
 		el.onselectstart = falseFn;
 		el.onmousemove = falseFn;
@@ -12405,7 +12455,7 @@ var Canvas = Renderer.extend({
 	_initContainer: function () {
 		var container = this._container = document.createElement('canvas');
 
-		on(container, 'mousemove', throttle(this._onMouseMove, 32, this), this);
+		on(container, 'mousemove', this._onMouseMove, this);
 		on(container, 'click dblclick mousedown mouseup contextmenu', this._onClick, this);
 		on(container, 'mouseout', this._handleMouseOut, this);
 
@@ -12715,10 +12765,15 @@ var Canvas = Renderer.extend({
 			removeClass(this._container, 'leaflet-interactive');
 			this._fireEvent([layer], e, 'mouseout');
 			this._hoveredLayer = null;
+			this._mouseHoverThrottled = false;
 		}
 	},
 
 	_handleMouseHover: function (e, point) {
+		if (this._mouseHoverThrottled) {
+			return;
+		}
+
 		var layer, candidateHoveredLayer;
 
 		for (var order = this._drawFirst; order; order = order.next) {
@@ -12741,6 +12796,11 @@ var Canvas = Renderer.extend({
 		if (this._hoveredLayer) {
 			this._fireEvent([this._hoveredLayer], e);
 		}
+
+		this._mouseHoverThrottled = true;
+		setTimeout(L.bind(function () {
+			this._mouseHoverThrottled = false;
+		}, this), 32);
 	},
 
 	_fireEvent: function (layers, e, type) {
@@ -14313,23 +14373,17 @@ window.L = exports;
 
 
 },{}],4:[function(require,module,exports){
-/*!
- * mustache.js - Logic-less {{mustache}} templates with JavaScript
- * http://github.com/janl/mustache.js
- */
+// This file has been generated from mustache.mjs
+(function (global, factory) {
+  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+  typeof define === 'function' && define.amd ? define(factory) :
+  (global = global || self, global.Mustache = factory());
+}(this, (function () { 'use strict';
 
-/*global define: false Mustache: true*/
-
-(function defineMustache (global, factory) {
-  if (typeof exports === 'object' && exports && typeof exports.nodeName !== 'string') {
-    factory(exports); // CommonJS
-  } else if (typeof define === 'function' && define.amd) {
-    define(['exports'], factory); // AMD
-  } else {
-    global.Mustache = {};
-    factory(global.Mustache); // script, wsh, asp
-  }
-}(this, function mustacheFactory (mustache) {
+  /*!
+   * mustache.js - Logic-less {{mustache}} templates with JavaScript
+   * http://github.com/janl/mustache.js
+   */
 
   var objectToString = Object.prototype.toString;
   var isArray = Array.isArray || function isArrayPolyfill (object) {
@@ -14437,7 +14491,7 @@ window.L = exports;
   function parseTemplate (template, tags) {
     if (!template)
       return [];
-
+    var lineHasNonSpace = false;
     var sections = [];     // Stack to hold section tokens
     var tokens = [];       // Buffer to hold the tokens
     var spaces = [];       // Indices of whitespace tokens on the current line
@@ -14490,10 +14544,11 @@ window.L = exports;
 
           if (isWhitespace(chr)) {
             spaces.push(tokens.length);
-            if (!nonSpace)
-              indentation += chr;
+            indentation += chr;
           } else {
             nonSpace = true;
+            lineHasNonSpace = true;
+            indentation += ' ';
           }
 
           tokens.push([ 'text', chr, start, start + 1 ]);
@@ -14504,6 +14559,7 @@ window.L = exports;
             stripSpace();
             indentation = '';
             tagIndex = 0;
+            lineHasNonSpace = false;
           }
         }
       }
@@ -14537,7 +14593,7 @@ window.L = exports;
         throw new Error('Unclosed tag at ' + scanner.pos);
 
       if (type == '>') {
-        token = [ type, value, start, scanner.pos, indentation, tagIndex ];
+        token = [ type, value, start, scanner.pos, indentation, tagIndex, lineHasNonSpace ];
       } else {
         token = [ type, value, start, scanner.pos ];
       }
@@ -14846,7 +14902,7 @@ window.L = exports;
    */
   Writer.prototype.render = function render (template, view, partials, tags) {
     var tokens = this.parse(template, tags);
-    var context = (view instanceof Context) ? view : new Context(view);
+    var context = (view instanceof Context) ? view : new Context(view, undefined);
     return this.renderTokens(tokens, context, partials, template, tags);
   };
 
@@ -14925,11 +14981,11 @@ window.L = exports;
       return this.renderTokens(token[4], context, partials, originalTemplate);
   };
 
-  Writer.prototype.indentPartial = function indentPartial (partial, indentation) {
+  Writer.prototype.indentPartial = function indentPartial (partial, indentation, lineHasNonSpace) {
     var filteredIndentation = indentation.replace(/[^ \t]/g, '');
     var partialByNl = partial.split('\n');
     for (var i = 0; i < partialByNl.length; i++) {
-      if (partialByNl[i].length) {
+      if (partialByNl[i].length && (i > 0 || !lineHasNonSpace)) {
         partialByNl[i] = filteredIndentation + partialByNl[i];
       }
     }
@@ -14941,11 +14997,12 @@ window.L = exports;
 
     var value = isFunction(partials) ? partials(token[1]) : partials[token[1]];
     if (value != null) {
+      var lineHasNonSpace = token[6];
       var tagIndex = token[5];
       var indentation = token[4];
       var indentedValue = value;
       if (tagIndex == 0 && indentation) {
-        indentedValue = this.indentPartial(value, indentation);
+        indentedValue = this.indentPartial(value, indentation, lineHasNonSpace);
       }
       return this.renderTokens(this.parse(indentedValue, tags), context, partials, indentedValue);
     }
@@ -14967,9 +15024,19 @@ window.L = exports;
     return token[1];
   };
 
-  mustache.name = 'mustache.js';
-  mustache.version = '3.0.3';
-  mustache.tags = [ '{{', '}}' ];
+  var mustache = {
+    name: 'mustache.js',
+    version: '3.2.1',
+    tags: [ '{{', '}}' ],
+    clearCache: undefined,
+    escape: undefined,
+    parse: undefined,
+    render: undefined,
+    to_html: undefined,
+    Scanner: undefined,
+    Context: undefined,
+    Writer: undefined
+  };
 
   // All high-level mustache.* functions use this writer.
   var defaultWriter = new Writer();
@@ -15030,7 +15097,8 @@ window.L = exports;
   mustache.Writer = Writer;
 
   return mustache;
-}));
+
+})));
 
 },{}]},{},[2])
 

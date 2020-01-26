@@ -54,8 +54,12 @@ var FrontendGoogleMap = /** @class */ (function (_super) {
             zoomControl: true,
             zoomControlOptions: {
                 style: google.maps.ZoomControlStyle.LARGE
-            }
+            },
+            styles: []
         };
+        if (self.mapConfiguration.mapStyles) {
+            mapOptions.styles = self.mapConfiguration.mapStyles;
+        }
         this.map = new google.maps.Map($('#tx_storefinder_map')[0], mapOptions);
         if (this.mapConfiguration.afterSearch === 0 && navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function (position) {
@@ -291,23 +295,17 @@ var FrontendMap = /** @class */ (function () {
 exports.default = FrontendMap;
 
 },{"mustache":3}],3:[function(require,module,exports){
-/*!
- * mustache.js - Logic-less {{mustache}} templates with JavaScript
- * http://github.com/janl/mustache.js
- */
+// This file has been generated from mustache.mjs
+(function (global, factory) {
+  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+  typeof define === 'function' && define.amd ? define(factory) :
+  (global = global || self, global.Mustache = factory());
+}(this, (function () { 'use strict';
 
-/*global define: false Mustache: true*/
-
-(function defineMustache (global, factory) {
-  if (typeof exports === 'object' && exports && typeof exports.nodeName !== 'string') {
-    factory(exports); // CommonJS
-  } else if (typeof define === 'function' && define.amd) {
-    define(['exports'], factory); // AMD
-  } else {
-    global.Mustache = {};
-    factory(global.Mustache); // script, wsh, asp
-  }
-}(this, function mustacheFactory (mustache) {
+  /*!
+   * mustache.js - Logic-less {{mustache}} templates with JavaScript
+   * http://github.com/janl/mustache.js
+   */
 
   var objectToString = Object.prototype.toString;
   var isArray = Array.isArray || function isArrayPolyfill (object) {
@@ -415,7 +413,7 @@ exports.default = FrontendMap;
   function parseTemplate (template, tags) {
     if (!template)
       return [];
-
+    var lineHasNonSpace = false;
     var sections = [];     // Stack to hold section tokens
     var tokens = [];       // Buffer to hold the tokens
     var spaces = [];       // Indices of whitespace tokens on the current line
@@ -468,10 +466,11 @@ exports.default = FrontendMap;
 
           if (isWhitespace(chr)) {
             spaces.push(tokens.length);
-            if (!nonSpace)
-              indentation += chr;
+            indentation += chr;
           } else {
             nonSpace = true;
+            lineHasNonSpace = true;
+            indentation += ' ';
           }
 
           tokens.push([ 'text', chr, start, start + 1 ]);
@@ -482,6 +481,7 @@ exports.default = FrontendMap;
             stripSpace();
             indentation = '';
             tagIndex = 0;
+            lineHasNonSpace = false;
           }
         }
       }
@@ -515,7 +515,7 @@ exports.default = FrontendMap;
         throw new Error('Unclosed tag at ' + scanner.pos);
 
       if (type == '>') {
-        token = [ type, value, start, scanner.pos, indentation, tagIndex ];
+        token = [ type, value, start, scanner.pos, indentation, tagIndex, lineHasNonSpace ];
       } else {
         token = [ type, value, start, scanner.pos ];
       }
@@ -824,7 +824,7 @@ exports.default = FrontendMap;
    */
   Writer.prototype.render = function render (template, view, partials, tags) {
     var tokens = this.parse(template, tags);
-    var context = (view instanceof Context) ? view : new Context(view);
+    var context = (view instanceof Context) ? view : new Context(view, undefined);
     return this.renderTokens(tokens, context, partials, template, tags);
   };
 
@@ -903,11 +903,11 @@ exports.default = FrontendMap;
       return this.renderTokens(token[4], context, partials, originalTemplate);
   };
 
-  Writer.prototype.indentPartial = function indentPartial (partial, indentation) {
+  Writer.prototype.indentPartial = function indentPartial (partial, indentation, lineHasNonSpace) {
     var filteredIndentation = indentation.replace(/[^ \t]/g, '');
     var partialByNl = partial.split('\n');
     for (var i = 0; i < partialByNl.length; i++) {
-      if (partialByNl[i].length) {
+      if (partialByNl[i].length && (i > 0 || !lineHasNonSpace)) {
         partialByNl[i] = filteredIndentation + partialByNl[i];
       }
     }
@@ -919,11 +919,12 @@ exports.default = FrontendMap;
 
     var value = isFunction(partials) ? partials(token[1]) : partials[token[1]];
     if (value != null) {
+      var lineHasNonSpace = token[6];
       var tagIndex = token[5];
       var indentation = token[4];
       var indentedValue = value;
       if (tagIndex == 0 && indentation) {
-        indentedValue = this.indentPartial(value, indentation);
+        indentedValue = this.indentPartial(value, indentation, lineHasNonSpace);
       }
       return this.renderTokens(this.parse(indentedValue, tags), context, partials, indentedValue);
     }
@@ -945,9 +946,19 @@ exports.default = FrontendMap;
     return token[1];
   };
 
-  mustache.name = 'mustache.js';
-  mustache.version = '3.0.3';
-  mustache.tags = [ '{{', '}}' ];
+  var mustache = {
+    name: 'mustache.js',
+    version: '3.2.1',
+    tags: [ '{{', '}}' ],
+    clearCache: undefined,
+    escape: undefined,
+    parse: undefined,
+    render: undefined,
+    to_html: undefined,
+    Scanner: undefined,
+    Context: undefined,
+    Writer: undefined
+  };
 
   // All high-level mustache.* functions use this writer.
   var defaultWriter = new Writer();
@@ -1008,7 +1019,8 @@ exports.default = FrontendMap;
   mustache.Writer = Writer;
 
   return mustache;
-}));
+
+})));
 
 },{}]},{},[1])
 
