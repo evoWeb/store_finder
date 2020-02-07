@@ -213,7 +213,7 @@ var FrontendMap = /** @class */ (function () {
         if (typeof window.mapConfiguration == 'object' && window.mapConfiguration.active) {
             this.mapConfiguration = window.mapConfiguration;
         }
-        if (this.mapConfiguration) {
+        if (this.mapConfiguration.active) {
             if (typeof window.locations == 'object') {
                 this.locations = window.locations;
             }
