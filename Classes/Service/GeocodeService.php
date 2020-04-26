@@ -1,9 +1,11 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
+
 namespace Evoweb\StoreFinder\Service;
 
-/**
- * This file is developed by evoweb.
+/*
+ * This file is developed by evoWeb.
  *
  * It is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, either version 2
@@ -13,19 +15,22 @@ namespace Evoweb\StoreFinder\Service;
  * LICENSE.txt file that was distributed with this source code.
  */
 
+use Evoweb\StoreFinder\Cache\CoordinatesCache;
 use Evoweb\StoreFinder\Domain\Model\Location;
+use Evoweb\StoreFinder\Domain\Repository\CountryRepository;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class GeocodeService
 {
     /**
-     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
-     */
-    protected $objectManager;
-
-    /**
-     * @var \Evoweb\StoreFinder\Cache\CoordinatesCache
+     * @var CoordinatesCache
      */
     protected $coordinatesCache;
+
+    /**
+     * @var CountryRepository
+     */
+    protected $countryRepository;
 
     /**
      * @var array
@@ -42,24 +47,12 @@ class GeocodeService
      */
     public $hasMultipleResults;
 
-    /**
-     * Constructor
-     *
-     * @param array $settings
-     */
-    public function __construct(array $settings = [])
-    {
-        $this->setSettings($settings);
-    }
-
-    public function injectObjectManager(\TYPO3\CMS\Extbase\Object\ObjectManager $objectManager)
-    {
-        $this->objectManager = $objectManager;
-    }
-
-    public function injectCoordinatesCache(\Evoweb\StoreFinder\Cache\CoordinatesCache $coordinatesCache)
-    {
+    public function __construct(
+        CoordinatesCache $coordinatesCache,
+        CountryRepository $countryRepository
+    ) {
         $this->coordinatesCache = $coordinatesCache;
+        $this->countryRepository = $countryRepository;
     }
 
     public function setSettings(array $settings)
@@ -133,15 +126,10 @@ class GeocodeService
                 // to enhance the map api query result
                 case 'country':
                     if (is_numeric($value) || strlen((string) $value) == 3) {
-                        /** @var \Evoweb\StoreFinder\Domain\Repository\CountryRepository $repository */
-                        $repository = $this->objectManager->get(
-                            \Evoweb\StoreFinder\Domain\Repository\CountryRepository::class
-                        );
-
                         if (is_numeric($value)) {
-                            $value = $repository->findByUid($value);
+                            $value = $this->countryRepository->findByUid($value);
                         } else {
-                            $value = $repository->findByIsoCodeA3($value);
+                            $value = $this->countryRepository->findByIsoCodeA3($value);
                         }
                     }
 
@@ -175,7 +163,7 @@ class GeocodeService
         }
 
         $httpClient = new \Http\Adapter\Guzzle6\Client();
-        $provider = $this->objectManager->get(
+        $provider = GeneralUtility::makeInstance(
             $providerClass,
             $httpClient,
             null,

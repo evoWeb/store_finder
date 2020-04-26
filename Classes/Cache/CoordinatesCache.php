@@ -1,8 +1,10 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
+
 namespace Evoweb\StoreFinder\Cache;
 
-/**
+/*
  * This file is developed by evoWeb.
  *
  * It is free software; you can redistribute it and/or modify it under
@@ -14,16 +16,20 @@ namespace Evoweb\StoreFinder\Cache;
  */
 
 use Evoweb\StoreFinder\Domain\Model;
+use TYPO3\CMS\Core\Cache\CacheManager;
+use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 
 class CoordinatesCache
 {
     /**
-     * @var \TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication
+     * @var FrontendUserAuthentication
      */
     protected $frontendUser;
 
     /**
-     * @var \TYPO3\CMS\Core\Cache\Frontend\FrontendInterface
+     * @var FrontendInterface
      */
     protected $cacheFrontend;
 
@@ -32,28 +38,26 @@ class CoordinatesCache
      */
     protected $fields = ['address', 'zipcode', 'city', 'state', 'country'];
 
-    public function __construct(\TYPO3\CMS\Core\Cache\Frontend\FrontendInterface $cacheFrontend = null)
-    {
-        if (!is_null($cacheFrontend)) {
-            $this->cacheFrontend = $cacheFrontend;
-        } else {
-            $this->initializeCacheFrontend();
-        }
-    }
-
-    public function injectFrontendUser(
-        \TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication $frontendUser
+    public function __construct(
+        FrontendInterface $cacheFrontend,
+        FrontendUserAuthentication $frontendUser = null
     ) {
+        $this->cacheFrontend = $cacheFrontend;
         $this->frontendUser = $frontendUser;
     }
 
-    protected function initializeCacheFrontend()
+    public static function getInstance(): ?self
     {
-        /** @var \TYPO3\CMS\Core\Cache\CacheManager $cacheManager */
-        $cacheManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-            \TYPO3\CMS\Core\Cache\CacheManager::class
-        );
-        $this->cacheFrontend = $cacheManager->getCache('store_finder_coordinate');
+        /** @var CacheManager $cacheManager */
+        $cacheManager = GeneralUtility::getContainer()->get(CacheManager::class);
+        $cacheFrontend = $cacheManager->getCache('store_finder_coordinate');
+
+        /** @var FrontendUserAuthentication $frontendUser */
+        $frontendUser = ($GLOBALS['TSFE']) ? $GLOBALS['TSFE']->fe_user : null;
+
+        /** @var self $instance */
+        $instance = GeneralUtility::makeInstance(self::class, $cacheFrontend, $frontendUser);
+        return $instance;
     }
 
     /**

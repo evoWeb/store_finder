@@ -3,7 +3,8 @@
 defined('TYPO3_MODE') || die('Access denied.');
 
 call_user_func(function () {
-    if (!isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['store_finder_coordinate'])
+    if (
+        !isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['store_finder_coordinate'])
         || !is_array($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['store_finder_coordinate'])
     ) {
         $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['store_finder_coordinate'] = [
@@ -30,19 +31,11 @@ call_user_func(function () {
         options.saveDocNew.tx_storefinder_domain_model_attribute = 1
     ');
 
-    if (\TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) < 10000000) {
-        // @todo remove once TYPO3 9.5.x support is dropped
-        $extensionName = 'Evoweb.StoreFinder';
-        $mapController = 'Map';
-    } else {
-        $extensionName = 'StoreFinder';
-        $mapController = \Evoweb\StoreFinder\Controller\MapController::class;
-    }
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-        $extensionName,
+        'StoreFinder',
         'Map',
-        [$mapController => 'map'],
-        [$mapController => 'map']
+        [\Evoweb\StoreFinder\Controller\MapController::class => 'map'],
+        [\Evoweb\StoreFinder\Controller\MapController::class => 'map']
     );
 
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['livesearch']['location'] = 'tx_storefinder_domain_model_location';

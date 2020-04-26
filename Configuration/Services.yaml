@@ -1,0 +1,23 @@
+# Configuration/Services.yaml
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  Evoweb\StoreFinder\:
+    resource: '../Classes/*'
+
+  Evoweb\StoreFinder\Cache\CoordinatesCache:
+    factory: ['Evoweb\StoreFinder\Cache\CoordinatesCache', 'getInstance']
+    shared: false
+    autoconfigure: false
+    autowire: false
+
+  Evoweb\StoreFinder\Command\ImportLocationsCommand:
+    tags:
+      - { name: 'console.command', command: 'storefinder:import', schedulable: false }
+
+  Evoweb\StoreFinder\Command\GeocodeLocationsCommand:
+    tags:
+      - { name: 'console.command', command: 'storefinder:geocode', schedulable: false }

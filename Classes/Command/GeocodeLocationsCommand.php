@@ -1,8 +1,10 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
+
 namespace Evoweb\StoreFinder\Command;
 
-/**
+/*
  * This file is developed by evoWeb.
  *
  * It is free software; you can redistribute it and/or modify it under
@@ -14,24 +16,42 @@ namespace Evoweb\StoreFinder\Command;
  */
 
 use Evoweb\StoreFinder\Domain\Repository\LocationRepository;
+use Evoweb\StoreFinder\Service\GeocodeService;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 
-class GeocodeLocationsCommand extends \Symfony\Component\Console\Command\Command
+class GeocodeLocationsCommand extends Command
 {
     /**
-     * @var ObjectManager
+     * @var PersistenceManager
      */
-    protected $objectManager;
+    protected $persistenceManager;
 
-    public function __construct(string $name = null)
-    {
-        parent::__construct($name);
-        $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+    /**
+     * @var LocationRepository
+     */
+    protected $locationRepository;
+
+    /**
+     * @var GeocodeService
+     */
+    protected $geocodeService;
+
+    public function __construct(
+        LocationRepository $locationRepository,
+        PersistenceManager $persistenceManager,
+        GeocodeService $geocodeService,
+        ExtensionConfiguration $extensionConfiguration
+    ) {
+        $this->locationRepository = $locationRepository;
+        $this->persistenceManager = $persistenceManager;
+        $this->geocodeService = $geocodeService;
+        $this->geocodeService->setSettings($extensionConfiguration->get('store_finder') ?? []);
+        parent::__construct(null);
     }
 
     /**
@@ -45,45 +65,22 @@ class GeocodeLocationsCommand extends \Symfony\Component\Console\Command\Command
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var PersistenceManager $persistenceManager */
-        $persistenceManager = $this->objectManager->get(PersistenceManager::class);
-        $locationRepository = $this->getLocationRepository();
-        $geocodeService = $this->getGeocodeService();
-
-        $locationsToGeocode = $locationRepository->findAllWithoutLatLon();
+        $locationsToGeocode = $this->locationRepository->findAllWithoutLatLon();
         /** @var \Evoweb\StoreFinder\Domain\Model\Location $location */
         foreach ($locationsToGeocode as $index => $location) {
-            $location = $geocodeService->geocodeAddress($location);
-
+            $location = $this->geocodeService->geocodeAddress($location);
             $location->setGeocode(($location->getLatitude() && $location->getLongitude()) ? 0 : 1);
 
-            $locationRepository->update($location);
+            $this->locationRepository->update($location);
 
             if (($index % 50) == 0) {
-                $persistenceManager->persistAll();
+                $this->persistenceManager->persistAll();
             }
         }
 
-        $persistenceManager->persistAll();
+        $this->persistenceManager->persistAll();
 
         $io = new SymfonyStyle($input, $output);
         $io->comment('All locations geocoded');
-    }
-
-    protected function getGeocodeService(): \Evoweb\StoreFinder\Service\GeocodeService
-    {
-        /** @var \Evoweb\StoreFinder\Service\GeocodeService $geocodeService */
-        $geocodeService = $this->objectManager->get(
-            \Evoweb\StoreFinder\Service\GeocodeService::class,
-            \Evoweb\StoreFinder\Utility\ExtensionConfigurationUtility::getConfiguration()
-        );
-        return $geocodeService;
-    }
-
-    protected function getLocationRepository(): LocationRepository
-    {
-        /** @var LocationRepository $repository */
-        $repository = $this->objectManager->get(LocationRepository::class);
-        return $repository;
     }
 }

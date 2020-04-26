@@ -7,6 +7,7 @@
 	"license": "GPL-2.0-or-later",
 
 	"support": {
+		"docs": "https://docs.typo3.org/p/evoweb/store-finder/master/en-us/",
 		"issues": "https://github.com/evoWeb/store_finder/issues"
 	},
 
@@ -25,8 +26,13 @@
 		}
 	],
 	"require": {
-		"typo3/cms-core": "^9.5 || ^10.0",
+		"ext-iconv": "*",
+
+		"typo3/cms-core": "^10.4",
+		"typo3/cms-extbase": "^10.4",
+		"typo3/cms-fluid": "^10.4",
 		"sjbr/static-info-tables": "^6.7",
+
 		"geocoder-php/google-maps-provider": "^4.4.0",
 		"php-http/guzzle6-adapter": "^2.0.1",
 		"php-http/message": "^1.8.0",
@@ -45,8 +51,7 @@
 	},
 
 	"config": {
-		"vendor-dir": ".Build/vendor",
-		"bin-dir": ".Build/bin"
+		"vendor-dir": ".Build/Web/vendor"
 	},
 	"extra": {
 		"typo3/cms": {

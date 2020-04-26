@@ -1,6 +1,19 @@
 <?php
-declare(strict_types = 1);
-namespace Evoweb\StoreFinder\Form\Element;
+
+declare(strict_types=1);
+
+namespace Evoweb\StoreFinder\Domain\Model;
+
+/*
+ * This file is developed by evoWeb.
+ *
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ */
 
 class ModifyLocationMap extends \TYPO3\CMS\Backend\Form\Element\AbstractFormElement
 {

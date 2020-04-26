@@ -1,8 +1,10 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
+
 namespace Evoweb\StoreFinder\Command;
 
-/**
+/*
  * This file is developed by evoWeb.
  *
  * It is free software; you can redistribute it and/or modify it under
@@ -13,15 +15,17 @@ namespace Evoweb\StoreFinder\Command;
  * LICENSE.txt file that was distributed with this source code.
  */
 
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Resource\File;
+use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class ImportLocationsCommand extends \Symfony\Component\Console\Command\Command
+class ImportLocationsCommand extends Command
 {
     private $columnMap = [
         'A' => 'import_id',
@@ -51,6 +55,23 @@ class ImportLocationsCommand extends \Symfony\Component\Console\Command\Command
     private $countryCache = [];
 
     private $stateCache = [];
+
+    /**
+     * @var ConnectionPool
+     */
+    protected $connectionPool;
+
+    /**
+     * @var ResourceFactory
+     */
+    protected $resourceFactory;
+
+    public function __construct(ConnectionPool $connectionPool, ResourceFactory $resourceFactory)
+    {
+        $this->connectionPool = $connectionPool;
+        $this->resourceFactory = $resourceFactory;
+        parent::__construct(null);
+    }
 
     /**
      * Configure the command by defining the name, options and arguments
@@ -120,8 +141,7 @@ class ImportLocationsCommand extends \Symfony\Component\Console\Command\Command
 
     protected function getFile(string $fileName): File
     {
-        $resourceFactory = \TYPO3\CMS\Core\Resource\ResourceFactory::getInstance();
-        return $resourceFactory->getFileObjectFromCombinedIdentifier($fileName);
+        return $this->resourceFactory->getFileObjectFromCombinedIdentifier($fileName);
     }
 
     protected function processFile(File $file, int $storagePid, bool $clearStorageFolder)
@@ -294,8 +314,7 @@ class ImportLocationsCommand extends \Symfony\Component\Console\Command\Command
     protected function fetchFile(string $value): string
     {
         if ($value) {
-            $resourceFactory = \TYPO3\CMS\Core\Resource\ResourceFactory::getInstance();
-            $uid = $resourceFactory->getFileObjectFromCombinedIdentifier($value)->getUid();
+            $uid = $this->resourceFactory->getFileObjectFromCombinedIdentifier($value)->getUid();
         } else {
             $uid = 0;
         }
@@ -428,7 +447,7 @@ class ImportLocationsCommand extends \Symfony\Component\Console\Command\Command
     protected function getCurrentRecordUid(array $location, string $table): int
     {
         $queryBuilder = $this->getQueryBuilderForTable($table);
-        $result = (int)$queryBuilder
+        $result = $queryBuilder
             ->select('uid')
             ->from($table)
             ->where(
@@ -441,9 +460,8 @@ class ImportLocationsCommand extends \Symfony\Component\Console\Command\Command
                     $queryBuilder->createNamedParameter($location['import_id'])
                 )
             )
-            ->execute()
-            ->fetchColumn(0);
-        return $result;
+            ->execute();
+        return (int)$result->fetchColumn(0);
     }
 
     protected function getReferences(
@@ -554,14 +572,7 @@ class ImportLocationsCommand extends \Symfony\Component\Console\Command\Command
 
     protected function getQueryBuilderForTable(string $table): \TYPO3\CMS\Core\Database\Query\QueryBuilder
     {
-        /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
-        $objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-            \TYPO3\CMS\Extbase\Object\ObjectManager::class
-        );
-        /** @var \TYPO3\CMS\Core\Database\Query\QueryBuilder $queryBuilder */
-        $queryBuilder = $objectManager
-            ->get(ConnectionPool::class)
-            ->getQueryBuilderForTable($table);
+        $queryBuilder = $this->connectionPool->getQueryBuilderForTable($table);
         $queryBuilder->getRestrictions()->removeAll();
         return $queryBuilder;
     }
