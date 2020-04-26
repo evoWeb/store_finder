@@ -59,10 +59,17 @@ class AddLocationToCacheTest extends \TYPO3\TestingFramework\Core\Functional\Fun
 
         $this->createCacheTables($cacheFrontend);
 
-        $this->coordinatesCache = new \Evoweb\StoreFinder\Cache\CoordinatesCache($cacheFrontend);
-        $this->coordinatesCache->injectFrontendUser($frontendUser);
+        $this->coordinatesCache = new \Evoweb\StoreFinder\Cache\CoordinatesCache($cacheFrontend, $frontendUser);
 
-        $this->geocodeService = new \Evoweb\StoreFinder\Service\GeocodeService();
+        /** @var \Evoweb\StoreFinder\Domain\Repository\CountryRepository $categoryRepository */
+        $categoryRepository = GeneralUtility::makeInstance(
+            \Evoweb\StoreFinder\Domain\Repository\CountryRepository::class
+        );
+
+        $this->geocodeService = new \Evoweb\StoreFinder\Service\GeocodeService(
+            $this->coordinatesCache,
+            $categoryRepository
+        );
     }
 
     public function cacheDataProvider(): array
