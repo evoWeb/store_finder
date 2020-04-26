@@ -1,4 +1,4 @@
-# TYPO3 Extension ``store_finder`` 
+# TYPO3 Extension ``store_finder``
 [![Build Status](https://travis-ci.org/evoWeb/store_finder.svg?branch=master)](https://travis-ci.org/evoWeb/store_finder)
 [![Latest Stable Version](https://poser.pugx.org/evoweb/store-finder/v/stable)](https://packagist.org/packages/evoweb/store-finder)
 [![Monthly Downloads](https://poser.pugx.org/evoweb/store-finder/d/monthly)](https://packagist.org/packages/evoweb/store-finder)
@@ -12,7 +12,7 @@ The recommended way to install TYPO3 Console is by using [Composer](https://getc
 
     composer require evoweb/store-finder
 
-**Installation from TYPO3 Extension Repository**
+### Installation from TYPO3 Extension Repository
 
 Download and install the extension with the extension manager module or directly from the
 [TER](https://typo3.org/extensions/repository/view/store_finder).
