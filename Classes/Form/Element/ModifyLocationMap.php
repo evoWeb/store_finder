@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Evoweb\StoreFinder\Domain\Model;
+namespace Evoweb\StoreFinder\Form\Element;
 
 /*
  * This file is developed by evoWeb.
