@@ -34,7 +34,7 @@
 		"typo3/cms-extbase": "^10.4",
 		"typo3/cms-extensionmanager": "^10.4",
 		"typo3/cms-fluid": "^10.4",
-		"typo3/cms-Frontend": "^10.4",
+		"typo3/cms-frontend": "^10.4",
 		"sjbr/static-info-tables": "^6.8",
 
 		"geocoder-php/google-maps-provider": "^4.4.0",
