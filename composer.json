@@ -32,6 +32,7 @@
 
 		"typo3/cms-core": "^10.4",
 		"typo3/cms-extbase": "^10.4",
+		"typo3/cms-extensionmanager": "^10.4",
 		"typo3/cms-fluid": "^10.4",
 		"typo3/cms-Frontend": "^10.4",
 		"sjbr/static-info-tables": "^6.8",
