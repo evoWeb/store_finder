@@ -2,7 +2,7 @@
 namespace Evoweb\StoreFinder\Tests\Functional\Cache;
 
 /*
- * This file is developed by evoweb.
+ * This file is developed by evoWeb.
  *
  * It is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, either version 2
@@ -59,10 +59,17 @@ class AddLocationToCacheTest extends \TYPO3\TestingFramework\Core\Functional\Fun
 
         $this->createCacheTables($cacheFrontend);
 
-        $this->coordinatesCache = new \Evoweb\StoreFinder\Cache\CoordinatesCache($cacheFrontend);
-        $this->coordinatesCache->injectFrontendUser($frontendUser);
+        $this->coordinatesCache = new \Evoweb\StoreFinder\Cache\CoordinatesCache($cacheFrontend, $frontendUser);
 
-        $this->geocodeService = new \Evoweb\StoreFinder\Service\GeocodeService();
+        /** @var \Evoweb\StoreFinder\Domain\Repository\CountryRepository $categoryRepository */
+        $categoryRepository = GeneralUtility::makeInstance(
+            \Evoweb\StoreFinder\Domain\Repository\CountryRepository::class
+        );
+
+        $this->geocodeService = new \Evoweb\StoreFinder\Service\GeocodeService(
+            $this->coordinatesCache,
+            $categoryRepository
+        );
     }
 
     public function cacheDataProvider(): array
@@ -173,7 +180,6 @@ class AddLocationToCacheTest extends \TYPO3\TestingFramework\Core\Functional\Fun
         );
         $requiredTagTableStructures = str_replace('###TAGS_TABLE###', $cacheBackend->getTagsTable(), $tagsTableSql);
 
-        /** @noinspection PhpInternalEntityUsedInspection */
         /** @var \TYPO3\CMS\Core\Database\Schema\SchemaMigrator $schemaMigrator */
         $schemaMigrator = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             \TYPO3\CMS\Core\Database\Schema\SchemaMigrator::class

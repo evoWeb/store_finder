@@ -1,9 +1,11 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
+
 namespace Evoweb\StoreFinder\ViewHelpers\Form;
 
-/**
- * This file is developed by evoweb.
+/*
+ * This file is developed by evoWeb.
  *
  * It is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, either version 2
@@ -12,6 +14,8 @@ namespace Evoweb\StoreFinder\ViewHelpers\Form;
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  */
+
+use Evoweb\StoreFinder\Domain\Repository\CountryRepository;
 
 /**
  * Viewhelper to render a select element with values of static info tables countries
@@ -29,14 +33,14 @@ class SelectCountriesViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\Select
     /**
      * Repository that provides the country models
      *
-     * @var \Evoweb\StoreFinder\Domain\Repository\CountryRepository
+     * @var CountryRepository
      */
     protected $countryRepository;
 
-    public function injectCountryRepository(
-        \Evoweb\StoreFinder\Domain\Repository\CountryRepository $countryRepository
-    ) {
+    public function __construct(CountryRepository $countryRepository)
+    {
         $this->countryRepository = $countryRepository;
+        parent::__construct();
     }
 
     public function initializeArguments()

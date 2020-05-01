@@ -5,7 +5,7 @@
 		<body>
 			<trans-unit id="tx_storefinder_domain_model_location" xml:space="preserve" approved="yes">
 				<source>Store Location</source>
-				<target>Store</target>
+				<target>Filial Standort</target>
 			</trans-unit>
 			<trans-unit id="tx_storefinder_domain_model_location.hidden" xml:space="preserve" approved="yes">
 				<source>Visibility of location</source>

@@ -1,5 +1,5 @@
 /**
- * This file is developed by evoweb.
+ * This file is developed by evoWeb.
  *
  * It is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, either version 2
@@ -43,7 +43,7 @@ export default class FrontendMap {
     if (typeof window.mapConfiguration == 'object' && window.mapConfiguration.active) {
       this.mapConfiguration = window.mapConfiguration;
     }
-    if (this.mapConfiguration) {
+    if (this.mapConfiguration.active) {
       if (typeof window.locations == 'object') {
         this.locations = window.locations;
       }

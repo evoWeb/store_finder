@@ -3,7 +3,7 @@
 <f:section name="content">
 <f:for each="{locations}" as="location" iteration="loop">
 	<div class="mapHeader">
-		<div class="icon"><f:if condition="{location.icon -> f:count()}"><f:then>{f:uri.image(src: location.icon.0, treatIdAsReference: 1) -> f:format.json()}</f:then><f:else>""</f:else></f:if></div>
+		<f:if condition="{location.icon -> f:count()}"><div class="icon"><img src="{f:uri.image(src: location.icon.0, treatIdAsReference: 1) -> f:format.json()}"/></div></f:if>
 		<div class="storename">{location.name}</div>
 		<div class="url">{location.url}</div>
 		<div class="categories"><f:for each="{location.categories}" as="category">{category.name}</f:for></div>
@@ -21,11 +21,15 @@
 		<div class="hours">{location.hours}</div>
 		<div class="attributes"><f:for each="{location.attributes}" as="attribute">{attribute.name}</f:for></div>
 		<div class="storeId">{location.storeid}</div>
-		<div class="image"><f:for each="{location.image}" as="image">{f:uri.image(src: image.uid, width: 70, treatIdAsReference: 1)}</f:for></div>
-		<div class="media"><f:for each="{location.media}" as="media">{media}</f:for></div>
-		<div class="content"><f:cObject typoscriptObjectPath="lib.tx_storefinder.contentElementRendering">{location.content}</f:cObject></div>
-		<div class="related"><f:for each="{location.related}" as="related">{related}</f:for></div>
-		<div class="distance">{location.distance}</div>
+		<div class="image"><f:for each="{location.image}" as="image" iteration="iterator">
+			{f:uri.image(image: image, width: 70) -> f:format.json()}<f:if condition="!{iterator.isLast}">, </f:if>
+		</f:for></div>
+		<div class="media"><f:for each="{location.media}" as="image" iteration="iterator">
+			{f:uri.image(image: image, width: 70) -> f:format.json()}<f:if condition="!{iterator.isLast}">, </f:if>
+		</f:for></div>
+		<f:cObject typoscriptObjectPath="lib.tx_storefinder.contentElementRendering">{location.content}</f:cObject>
+		<f:if condition="{location.related}"><div class="related"><f:for each="{location.related}" as="related">{related}</f:for></div></f:if>
+		<f:if condition="{location.distance}"><div class="distance">{location.distance}</div></f:if>
 	</div>
 </f:for>
 </f:section>

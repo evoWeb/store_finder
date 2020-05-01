@@ -1,9 +1,11 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
+
 namespace Evoweb\StoreFinder\Domain\Repository;
 
-/**
- * This file is developed by evoweb.
+/*
+ * This file is developed by evoWeb.
  *
  * It is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, either version 2
@@ -15,11 +17,10 @@ namespace Evoweb\StoreFinder\Domain\Repository;
 
 use Evoweb\StoreFinder\Domain\Model\Constraint;
 use Evoweb\StoreFinder\Domain\Model\Location;
+use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
-use TYPO3\CMS\Core\Database\Query\Restriction\EndTimeRestriction;
-use TYPO3\CMS\Core\Database\Query\Restriction\HiddenRestriction;
-use TYPO3\CMS\Core\Database\Query\Restriction\StartTimeRestriction;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 use TYPO3\CMS\Extbase\Persistence\Generic\Query;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
@@ -31,24 +32,45 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      *
      * @var float
      */
-    const MATH_LN2 = 0.69314718055995;
+    public const MATH_LN2 = 0.69314718055995;
 
     /**
      * A constant in Google's map projection
      *
      * @var int
      */
-    const GLOBE_WIDTH = 256;
+    public const GLOBE_WIDTH = 256;
 
     /**
      * @var int
      */
-    const ZOOM_MAX = 21;
+    public const ZOOM_MAX = 21;
 
     /**
      * @var array
      */
     protected $settings = [];
+
+    /**
+     * @var ConnectionPool
+     */
+    protected $connectionPool;
+
+    /**
+     * @var CategoryRepository
+     */
+    protected $categoryRepository;
+
+    public function __construct(
+        ObjectManagerInterface $objectManager,
+        ConnectionPool $connectionPool,
+        CategoryRepository $categoryRepository
+    ) {
+        $this->connectionPool = $connectionPool;
+        $this->categoryRepository = $categoryRepository;
+        parent::__construct($objectManager);
+        $this->objectType = Location::class;
+    }
 
     public function setSettings(array $settings)
     {
@@ -59,37 +81,16 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     {
         /** @var \TYPO3\CMS\Extbase\Persistence\Generic\Query $query */
         $query = $this->createQuery();
-
-        $queryBuilder = $this->getQueryBuilderForTable('tx_storefinder_domain_model_location');
-        $queryBuilder
-            ->getRestrictions()
-                ->removeByType(HiddenRestriction::class)
-                ->removeByType(StartTimeRestriction::class)
-                ->removeByType(EndTimeRestriction::class);
-
-        $queryBuilder
-            ->select('*')
-            ->from('tx_storefinder_domain_model_location')
-            ->where($queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter($uid)));
-
-        $sql = $queryBuilder->getSQL();
-
-        $parameters = $queryBuilder->getParameters();
-        $parameterType = $queryBuilder->getParameterTypes();
-        array_walk($parameters, function ($value, $key) use (&$sql, $parameterType) {
-            if ($parameterType[$key] == 2) {
-                $sql = str_replace(':' . $key, '\'' . $value . '\'', $sql);
-            } elseif ($parameterType[$key] == 101) {
-                $sql = str_replace(':' . $key, implode(',', $value), $sql);
-            } else {
-                $sql = str_replace(':' .  $key, $value, $sql);
-            }
-        });
-
-        $query->statement($sql);
+        $query->getQuerySettings()
+            ->setEnableFieldsToBeIgnored(['hidden', 'starttime', 'endtime'])
+            ->setRespectStoragePage(false);
 
         /** @var Location $location */
-        $location = $query->execute()->getFirst();
+        $location = $query
+            ->matching($query->equals('uid', $uid))
+            ->execute()
+            ->getFirst();
+
         return $location;
     }
 
@@ -150,20 +151,7 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             $queryBuilder = $this->addFulltextSearchQueryParts($constraint, $queryBuilder);
         }
 
-        $sql = $queryBuilder->getSQL();
-
-        $parameters = $queryBuilder->getParameters();
-        $parameterType = $queryBuilder->getParameterTypes();
-        array_walk($parameters, function ($value, $key) use (&$sql, $parameterType) {
-            if ($parameterType[$key] == 2) {
-                $sql = str_replace(':' . $key, '\'' . $value . '\'', $sql);
-            } elseif ($parameterType[$key] == 101) {
-                $sql = str_replace(':' . $key, implode(',', $value), $sql);
-            } else {
-                $sql = str_replace(':' .  $key, $value, $sql);
-            }
-        });
-
+        $sql = $this->getStatement($queryBuilder);
         $query->statement($sql);
 
         return $query->execute();
@@ -204,13 +192,14 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     {
         if ($this->settings['categoryPriority'] == 'limitResultsToCategories') {
             $constraint->setCategory(GeneralUtility::intExplode(',', $this->settings['categories'], 1));
-        } elseif ($this->settings['categoryPriority'] == 'useSelectedCategoriesIfNoFilterSelected'
+        } elseif (
+            $this->settings['categoryPriority'] == 'useSelectedCategoriesIfNoFilterSelected'
             && !count($constraint->getCategory())
         ) {
             $constraint->setCategory(GeneralUtility::intExplode(',', $this->settings['categories'], 1));
         }
 
-        $categories = $this->fetchCategoriesRecursive($constraint->getCategory());
+        $categories = $this->categoryRepository->findByParentRecursive($constraint->getCategory());
 
         if (!empty($categories)) {
             $expression = $queryBuilder->expr();
@@ -277,7 +266,8 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
     protected function addFulltextSearchQueryParts(Constraint $constraint, QueryBuilder $queryBuilder): QueryBuilder
     {
-        if ($constraint->getSearch()
+        if (
+            $constraint->getSearch()
             && isset($this->settings['fulltextSearchFields'])
             && is_array($this->settings['fulltextSearchFields'])
         ) {
@@ -297,26 +287,6 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         }
 
         return $queryBuilder;
-    }
-
-    protected function fetchCategoriesRecursive(array $subcategories, array $categories = []): array
-    {
-        /** @var CategoryRepository $categoryRepository */
-        $categoryRepository = $this->objectManager->get(CategoryRepository::class);
-
-        /** @var \Evoweb\StoreFinder\Domain\Model\Category $subcategory */
-        foreach ($subcategories as $subcategory) {
-            $categories[] = $subcategoryUid = (int) (is_object($subcategory) ? $subcategory->getUid() : $subcategory);
-
-            /** @noinspection PhpUndefinedMethodInspection */
-            /** @var \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $foundCategories */
-            $foundCategories = $categoryRepository->findByParent($subcategoryUid);
-            $foundCategories->rewind();
-
-            $categories = $this->fetchCategoriesRecursive($foundCategories->toArray(), $categories);
-        }
-
-        return array_unique($categories);
     }
 
     public function findCenterByLatitudeAndLongitude(): Location
@@ -346,7 +316,7 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         }
 
         /** @var Location $location */
-        $location = $this->objectManager->get(Location::class);
+        $location = GeneralUtility::makeInstance(Location::class);
         $latitudeZoom = $longitudeZoom = 0;
 
         /**
@@ -358,7 +328,7 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             $latitudeFraction = (
                 $this->latRad($maxLatitude->getLatitude())
                 - $this->latRad($minLatitude->getLatitude())
-                ) / M_PI;
+            ) / M_PI;
             $latitudeZoom = $this->zoom($this->settings['mapSize']['height'], self::GLOBE_WIDTH, $latitudeFraction);
         }
 
@@ -446,10 +416,28 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $query->execute();
     }
 
+    protected function getStatement(QueryBuilder $queryBuilder): string
+    {
+        $sql = $queryBuilder->getSQL();
+
+        $parameters = $queryBuilder->getParameters();
+        $parameterType = $queryBuilder->getParameterTypes();
+
+        array_walk($parameters, function ($value, $key) use (&$sql, $parameterType) {
+            if ($parameterType[$key] == 2) {
+                $sql = str_replace(':' . $key, '\'' . $value . '\'', $sql);
+            } elseif ($parameterType[$key] == 101) {
+                $sql = str_replace(':' . $key, implode(',', $value), $sql);
+            } else {
+                $sql = str_replace(':' . $key, $value, $sql);
+            }
+        });
+
+        return $sql;
+    }
+
     protected function getQueryBuilderForTable(string $table): QueryBuilder
     {
-        return \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-            \TYPO3\CMS\Core\Database\ConnectionPool::class
-        )->getQueryBuilderForTable($table);
+        return $this->connectionPool->getQueryBuilderForTable($table);
     }
 }

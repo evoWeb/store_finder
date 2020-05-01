@@ -1,9 +1,11 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
+
 namespace Evoweb\StoreFinder\Controller;
 
-/**
- * This file is developed by evoweb.
+/*
+ * This file is developed by evoWeb.
  *
  * It is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, either version 2
@@ -14,7 +16,9 @@ namespace Evoweb\StoreFinder\Controller;
  */
 
 use Doctrine\Common\Annotations\DocParser;
+use Evoweb\StoreFinder\Controller\Event\MapGetLocationsByConstraintsEvent;
 use Evoweb\StoreFinder\Domain\Repository\CountryRepository;
+use Evoweb\StoreFinder\Validation\Validator\ConstraintValidator;
 use Evoweb\StoreFinder\Validation\Validator\SettableInterface;
 use Evoweb\StoreFinder\Domain\Model\Constraint;
 use Evoweb\StoreFinder\Domain\Model\Location;
@@ -24,6 +28,7 @@ use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Property\PropertyMappingConfiguration;
 use TYPO3\CMS\Extbase\Property\TypeConverter\PersistentObjectConverter;
+use TYPO3\CMS\Extbase\Validation\Validator\ValidatorInterface;
 
 class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
@@ -42,28 +47,14 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      */
     protected $geocodeService;
 
-    public function injectLocationRepository(
-        \Evoweb\StoreFinder\Domain\Repository\LocationRepository $locationRepository
-    ) {
-        $this->locationRepository = $locationRepository;
-    }
-
-    public function injectCategoryRepository(
-        \Evoweb\StoreFinder\Domain\Repository\CategoryRepository $categoryRepository
-    ) {
-        $this->categoryRepository = $categoryRepository;
-    }
-
-    public function injectGeocodeService(
+    public function __construct(
+        \Evoweb\StoreFinder\Domain\Repository\LocationRepository $locationRepository,
+        \Evoweb\StoreFinder\Domain\Repository\CategoryRepository $categoryRepository,
         \Evoweb\StoreFinder\Service\GeocodeService $geocodeService
     ) {
+        $this->locationRepository = $locationRepository;
+        $this->categoryRepository = $categoryRepository;
         $this->geocodeService = $geocodeService;
-    }
-
-    public function injectDispatcher(
-        \TYPO3\CMS\Extbase\SignalSlot\Dispatcher $signalSlotDispatcher
-    ) {
-        $this->signalSlotDispatcher = $signalSlotDispatcher;
     }
 
     protected function initializeActionMethodValidators()
@@ -84,8 +75,8 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     ) {
         $parser = new DocParser();
 
-        /** @var \Evoweb\StoreFinder\Validation\Validator\ConstraintValidator $validator */
-        $validator = $this->objectManager->get(\Evoweb\StoreFinder\Validation\Validator\ConstraintValidator::class);
+        /** @var ConstraintValidator $validator */
+        $validator = GeneralUtility::makeInstance(ConstraintValidator::class);
         foreach ($configuredValidators as $fieldName => $configuredValidator) {
             if (!is_array($configuredValidator)) {
                 $validatorInstance = $this->getValidatorByConfiguration(
@@ -97,9 +88,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
                     $validatorInstance->setPropertyName($fieldName);
                 }
             } else {
-                $validatorInstance = $this->objectManager->get(
-                    \Evoweb\StoreFinder\Validation\Validator\ConstraintValidator::class
-                );
+                $validatorInstance = GeneralUtility::makeInstance(ConstraintValidator::class);
                 foreach ($configuredValidator as $individualConfiguredValidator) {
                     $individualValidatorInstance = $this->getValidatorByConfiguration(
                         $individualConfiguredValidator,
@@ -124,32 +113,24 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      * @param string $configuration
      * @param DocParser $parser
      *
-     * @return \TYPO3\CMS\Extbase\Validation\Validator\ValidatorInterface
+     * @return ValidatorInterface
      */
     protected function getValidatorByConfiguration(string $configuration, DocParser $parser)
     {
         if (strpos($configuration, '"') === false && strpos($configuration, '(') === false) {
-            $configuration = '"' . $configuration . '"';
+            $configuration = sprintf('"%s"', $configuration);
         }
 
         /** @var \TYPO3\CMS\Extbase\Annotation\Validate $validateAnnotation */
         $validateAnnotation = current($parser->parse(
             '@TYPO3\CMS\Extbase\Annotation\Validate(' . $configuration . ')'
         ));
-        if (class_exists(\TYPO3\CMS\Extbase\Validation\ValidatorClassNameResolver::class)) {
-            $validatorObjectName = \TYPO3\CMS\Extbase\Validation\ValidatorClassNameResolver::resolve(
-                $validateAnnotation->validator
-            );
-        } else {
-            $validatorObjectName = '';
-            // @todo remove once 9.x support is dropped
-            /** @var \TYPO3\CMS\Extbase\Validation\ValidatorResolver $validatorResolver */
-            $validatorResolver = $this->objectManager->get(\TYPO3\CMS\Extbase\Validation\ValidatorResolver::class);
-            if (method_exists($validatorResolver, 'resolveValidatorObjectName')) {
-                $validatorObjectName = $validatorResolver->resolveValidatorObjectName($validateAnnotation->validator);
-            }
-        }
-        return $this->objectManager->get($validatorObjectName, $validateAnnotation->options);
+        $validatorObjectName = \TYPO3\CMS\Extbase\Validation\ValidatorClassNameResolver::resolve(
+            $validateAnnotation->validator
+        );
+        /** @var ValidatorInterface $validator */
+        $validator = GeneralUtility::makeInstance($validatorObjectName, $validateAnnotation->options);
+        return $validator;
     }
 
     protected function setTypeConverter()
@@ -229,12 +210,10 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
         $locations = $this->locationRepository->findByConstraint($constraint);
 
-        /** @var QueryResultInterface $locations */
-        list($constraint, $locations) = $this->signalSlotDispatcher->dispatch(
-            __CLASS__,
-            'mapActionWithConstraint',
-            [$constraint, $locations, $this]
-        );
+        $event = new MapGetLocationsByConstraintsEvent($this, $locations, $constraint);
+        $this->eventDispatcher->dispatch($event);
+        $locations = $event->getLocations();
+        $constraint = $event->getConstraint();
 
         if (count($locations) > 0) {
             $center = $this->getCenterOfQueryResult($constraint, $locations);
@@ -249,7 +228,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     protected function getLocationsByDefaultConstraints()
     {
         /** @var Constraint $constraint */
-        $constraint = $this->objectManager->get(Constraint::class);
+        $constraint = GeneralUtility::makeInstance(Constraint::class);
         $locations = [];
 
         if ($this->settings['showBeforeSearch'] & 2 && is_array($this->settings['defaultConstraint'])) {
@@ -356,7 +335,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             $centralSquareRoot = sqrt($x * $x + $y * $y);
             $centralLatitude = atan2($z, $centralSquareRoot);
 
-            $center = $this->objectManager->get(Location::class);
+            $center = GeneralUtility::makeInstance(Location::class);
             $center->setLatitude($centralLatitude * 180 / M_PI);
             $center->setLongitude($centralLongitude * 180 / M_PI);
         }
@@ -391,7 +370,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
                 case 'country':
                     /** @var CountryRepository $countryRepository */
-                    $countryRepository = $this->objectManager->get(CountryRepository::class);
+                    $countryRepository = GeneralUtility::getContainer()->get(CountryRepository::class);
                     /** @var Country $country */
                     if (intval($defaultConstraint['country'])) {
                         $value = $countryRepository->findByUid((int) $defaultConstraint['country']);
@@ -430,7 +409,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             }
 
             /** @var Location $center */
-            $center = $this->objectManager->get(Location::class);
+            $center = GeneralUtility::makeInstance(Location::class);
             $center->setLatitude($constraint->getLatitude());
             $center->setLongitude($constraint->getLongitude());
         }

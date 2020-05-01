@@ -6,6 +6,16 @@
 Breaking Changes
 ----------------
 
+
+01. Mai 2020
+============
+Refactor signal slots to PSR-14 events
+--------------------------------------
+All slots are replaced with events
+Evoweb\StoreFinder\Controller\MapController mapActionWithConstraint with MapGetLocationsByConstraintsEvent
+
+
+
 03. October 2019
 ================
 Drop migration wizard
@@ -24,12 +34,14 @@ ________________
 Please check the extension configuration whether the api key assignment still works
 
 
+
 31. January 2019
 ================
 Drop already deprecated GeocodeLocationsTask in favor of GeocodeLocationsCommandController
 
 Deprecate GeocodeLocationsCommandController to be replaced with GeocodeLocationsCommand once support for
 TYPO3 8.7 gets dropped.
+
 
 
 18. May 2019
@@ -68,6 +80,7 @@ Example:
          $singleView.hide();
          $singleView.removeClass('show');
    }
+
 
 
 10. January 2019
