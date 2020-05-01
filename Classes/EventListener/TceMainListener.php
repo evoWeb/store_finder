@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Evoweb\StoreFinder\Hook;
+namespace Evoweb\StoreFinder\EventListener;
 
 /*
  * This file is developed by evoWeb.
@@ -18,16 +18,10 @@ namespace Evoweb\StoreFinder\Hook;
 use Evoweb\StoreFinder\Domain\Repository\LocationRepository;
 use Evoweb\StoreFinder\Service\GeocodeService;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 
-class TceMainHook
+class TceMainListener
 {
-    /**
-     * @var ObjectManager
-     */
-    protected $objectManager;
-
     /**
      * @var LocationRepository
      */

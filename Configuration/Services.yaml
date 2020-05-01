@@ -14,6 +14,9 @@ services:
     autoconfigure: false
     autowire: false
 
+  Evoweb\StoreFinder\EventListener\TceMainListener:
+    public: true
+
   Evoweb\StoreFinder\Command\ImportLocationsCommand:
     tags:
       - { name: 'console.command', command: 'storefinder:import', schedulable: false }
@@ -21,3 +24,10 @@ services:
   Evoweb\StoreFinder\Command\GeocodeLocationsCommand:
     tags:
       - { name: 'console.command', command: 'storefinder:geocode', schedulable: false }
+
+  Evoweb\SfRegister\EventListener\TceMainListener:
+    tags:
+      - name: event.listener
+        identifier: 'sfregister_feusercontroller_processinitializeaction'
+        method: 'onAfterDatabaseOperations'
+        event: Evoweb\SfRegister\Controller\Event\ProcessInitializeActionEvent

@@ -17,12 +17,16 @@ namespace Evoweb\StoreFinder\Domain\Repository;
 
 class CategoryRepository extends \TYPO3\CMS\Extbase\Domain\Repository\CategoryRepository
 {
+    /**
+     * @var array
+     */
+    protected $defaultOrderings = ['sorting' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING];
+
     public function findByUids(array $uids): \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
     {
         $query = $this->createQuery();
-
         $query->getQuerySettings()->setRespectStoragePage(false);
-        $query->setOrderings(['sorting' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING]);
+
         $query->matching(
             $query->in('uid', $uids)
         );

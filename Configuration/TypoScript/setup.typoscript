@@ -120,4 +120,7 @@ lib.tx_storefinder.contentElementRendering {
   tables = tt_content
   source.current = 1
   dontCheckPid = 1
+
+  stdWrap.wrap = <div class="content">|</div>
+  stdWrap.required = 1
 }

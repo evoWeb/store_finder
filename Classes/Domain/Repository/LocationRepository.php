@@ -19,9 +19,6 @@ use Evoweb\StoreFinder\Domain\Model\Constraint;
 use Evoweb\StoreFinder\Domain\Model\Location;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
-use TYPO3\CMS\Core\Database\Query\Restriction\EndTimeRestriction;
-use TYPO3\CMS\Core\Database\Query\Restriction\HiddenRestriction;
-use TYPO3\CMS\Core\Database\Query\Restriction\StartTimeRestriction;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 use TYPO3\CMS\Extbase\Persistence\Generic\Query;
@@ -72,7 +69,7 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $this->connectionPool = $connectionPool;
         $this->categoryRepository = $categoryRepository;
         parent::__construct($objectManager);
-        $this->objectType = \SJBR\StaticInfoTables\Domain\Model\Country::class;
+        $this->objectType = Location::class;
     }
 
     public function setSettings(array $settings)
@@ -84,37 +81,16 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     {
         /** @var \TYPO3\CMS\Extbase\Persistence\Generic\Query $query */
         $query = $this->createQuery();
-
-        $queryBuilder = $this->getQueryBuilderForTable('tx_storefinder_domain_model_location');
-        $queryBuilder
-            ->getRestrictions()
-                ->removeByType(HiddenRestriction::class)
-                ->removeByType(StartTimeRestriction::class)
-                ->removeByType(EndTimeRestriction::class);
-
-        $queryBuilder
-            ->select('*')
-            ->from('tx_storefinder_domain_model_location')
-            ->where($queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter($uid)));
-
-        $sql = $queryBuilder->getSQL();
-
-        $parameters = $queryBuilder->getParameters();
-        $parameterType = $queryBuilder->getParameterTypes();
-        array_walk($parameters, function ($value, $key) use (&$sql, $parameterType) {
-            if ($parameterType[$key] == 2) {
-                $sql = str_replace(':' . $key, '\'' . $value . '\'', $sql);
-            } elseif ($parameterType[$key] == 101) {
-                $sql = str_replace(':' . $key, implode(',', $value), $sql);
-            } else {
-                $sql = str_replace(':' .  $key, $value, $sql);
-            }
-        });
-
-        $query->statement($sql);
+        $query->getQuerySettings()
+            ->setEnableFieldsToBeIgnored(['hidden', 'starttime', 'endtime'])
+            ->setRespectStoragePage(false);
 
         /** @var Location $location */
-        $location = $query->execute()->getFirst();
+        $location = $query
+            ->matching($query->equals('uid', $uid))
+            ->execute()
+            ->getFirst();
+
         return $location;
     }
 
@@ -175,20 +151,7 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             $queryBuilder = $this->addFulltextSearchQueryParts($constraint, $queryBuilder);
         }
 
-        $sql = $queryBuilder->getSQL();
-
-        $parameters = $queryBuilder->getParameters();
-        $parameterType = $queryBuilder->getParameterTypes();
-        array_walk($parameters, function ($value, $key) use (&$sql, $parameterType) {
-            if ($parameterType[$key] == 2) {
-                $sql = str_replace(':' . $key, '\'' . $value . '\'', $sql);
-            } elseif ($parameterType[$key] == 101) {
-                $sql = str_replace(':' . $key, implode(',', $value), $sql);
-            } else {
-                $sql = str_replace(':' .  $key, $value, $sql);
-            }
-        });
-
+        $sql = $this->getStatement($queryBuilder);
         $query->statement($sql);
 
         return $query->execute();
@@ -451,6 +414,26 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         );
 
         return $query->execute();
+    }
+
+    protected function getStatement(QueryBuilder $queryBuilder): string
+    {
+        $sql = $queryBuilder->getSQL();
+
+        $parameters = $queryBuilder->getParameters();
+        $parameterType = $queryBuilder->getParameterTypes();
+
+        array_walk($parameters, function ($value, $key) use (&$sql, $parameterType) {
+            if ($parameterType[$key] == 2) {
+                $sql = str_replace(':' . $key, '\'' . $value . '\'', $sql);
+            } elseif ($parameterType[$key] == 101) {
+                $sql = str_replace(':' . $key, implode(',', $value), $sql);
+            } else {
+                $sql = str_replace(':' . $key, $value, $sql);
+            }
+        });
+
+        return $sql;
     }
 
     protected function getQueryBuilderForTable(string $table): QueryBuilder

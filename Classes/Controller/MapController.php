@@ -16,6 +16,7 @@ namespace Evoweb\StoreFinder\Controller;
  */
 
 use Doctrine\Common\Annotations\DocParser;
+use Evoweb\StoreFinder\Controller\Event\MapGetLocationsByConstraintsEvent;
 use Evoweb\StoreFinder\Domain\Repository\CountryRepository;
 use Evoweb\StoreFinder\Validation\Validator\ConstraintValidator;
 use Evoweb\StoreFinder\Validation\Validator\SettableInterface;
@@ -49,12 +50,10 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     public function __construct(
         \Evoweb\StoreFinder\Domain\Repository\LocationRepository $locationRepository,
         \Evoweb\StoreFinder\Domain\Repository\CategoryRepository $categoryRepository,
-        \Evoweb\StoreFinder\Service\GeocodeService $geocodeService,
-        \TYPO3\CMS\Extbase\SignalSlot\Dispatcher $signalSlotDispatcher
+        \Evoweb\StoreFinder\Service\GeocodeService $geocodeService
     ) {
         $this->locationRepository = $locationRepository;
         $this->categoryRepository = $categoryRepository;
-        $this->signalSlotDispatcher = $signalSlotDispatcher;
         $this->geocodeService = $geocodeService;
     }
 
@@ -211,12 +210,10 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
         $locations = $this->locationRepository->findByConstraint($constraint);
 
-        /** @var QueryResultInterface $locations */
-        [$constraint, $locations] = $this->signalSlotDispatcher->dispatch(
-            __CLASS__,
-            'mapActionWithConstraint',
-            [$constraint, $locations, $this]
-        );
+        $event = new MapGetLocationsByConstraintsEvent($this, $locations, $constraint);
+        $this->eventDispatcher->dispatch($event);
+        $locations = $event->getLocations();
+        $constraint = $event->getConstraint();
 
         if (count($locations) > 0) {
             $center = $this->getCenterOfQueryResult($constraint, $locations);

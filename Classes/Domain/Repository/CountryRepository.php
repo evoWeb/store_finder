@@ -15,7 +15,6 @@ namespace Evoweb\StoreFinder\Domain\Repository;
  * LICENSE.txt file that was distributed with this source code.
  */
 
-use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
 /**
@@ -23,10 +22,14 @@ use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
  */
 class CountryRepository extends \SJBR\StaticInfoTables\Domain\Repository\CountryRepository
 {
-    public function __construct(ObjectManagerInterface $objectManager)
+    /**
+     * Returns the class name of this class.
+     *
+     * @return string Class name of the repository.
+     */
+    protected function getRepositoryClassName()
     {
-        parent::__construct($objectManager);
-        $this->objectType = \SJBR\StaticInfoTables\Domain\Model\Country::class;
+        return \SJBR\StaticInfoTables\Domain\Repository\CountryRepository::class;
     }
 
     public function findAll(): QueryResultInterface
@@ -51,10 +54,12 @@ class CountryRepository extends \SJBR\StaticInfoTables\Domain\Repository\Country
 
     public function findByIsoCodeA3($isoCodeA3): \SJBR\StaticInfoTables\Domain\Model\Country
     {
-        /** @var \TYPO3\CMS\Extbase\Persistence\Generic\Query $query */
         $query = $this->createQuery();
+        $query->getQuerySettings()->setRespectStoragePage(false);
 
-        $query->matching($query->equals('isoCodeA3', $isoCodeA3));
+        $query->matching(
+            $query->equals('isoCodeA3', $isoCodeA3)
+        );
 
         /** @var \SJBR\StaticInfoTables\Domain\Model\Country $result */
         $result = $query->execute()->getFirst();
