@@ -37,10 +37,9 @@ class SelectCountriesViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\Select
      */
     protected $countryRepository;
 
-    public function __construct(CountryRepository $countryRepository)
+    public function injectCountryRepository(CountryRepository $countryRepository)
     {
         $this->countryRepository = $countryRepository;
-        parent::__construct();
     }
 
     public function initializeArguments()
