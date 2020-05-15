@@ -32,8 +32,8 @@ its not possible to use the country selector which is used in the default templa
 Structure
 =========
 
-Location records can only be added in folders thats why you need to add atleast one folder for storage.
-Additionaly you need a page with the store_finder plugin. In the plugin configure your needs. To use
+Location records can only be added in folders that's why you need to add at least one folder for storage.
+Additionally you need a page with the store_finder plugin. In the plugin configure your needs. To use
 locations of the created folder choose it as record storage page on tab behaviour.
 
 
@@ -44,8 +44,41 @@ To change the frontend templates you most likely need to change the partials. Th
 and list part. Copy the folder from the extension to your local path like the fileadmin. To use these copies
 you can change the path either in the plugin field "Partial path" or via TypoScript:
 
+::
+
+	plugin.tx_storefinder.view.partialRootPaths.50 = ./yourpath/Partials/
+
+
+API Keys
+========
+
+If you need to geocode coordinates, either on saving a store record or in bulk with the geocode console command
+you need to add an additional key in TypoScript constants apiConsoleKeyGeocoding. This key will never be visible
+to any visitors of your page.
+
+There are two keys needed because the key used in geocoding may not be restricted at all. But you also dont
+want to deliver pages with an key that is not restricted to the domain in frontend rendering, because then it
+would be possible that others use the key and by that causes you to pay for usage that wasn't by your page.
+
+So, it's advised to have both keys
+ - apiConsoleKey (protected by restriction for your domains)
+ - apiConsoleKeyGeocoding (unrestricted for the usage in php)
+
+
+Set default coordinates
+=======================
+
+In TypoScript setup it's possible to set defaultConstraints these are filled in the contraints object if no
+search was requested. In the example below the zoom, latitude and longitude values are set and then the
+coordinates are used to render search results that are near of them.
 
 ::
 
-	plugin.tx_storefinder.view.partialRootPath = ./yourpath/Partials/
-
+	plugin.tx_storefinder.settings {
+		showLocationsForDefaultConstraint = 1
+		defaultConstraint {
+			zoom = 15
+			latitude = 51.5135
+			longitude = 7.464
+		}
+	}

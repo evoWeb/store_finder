@@ -97,7 +97,7 @@
 						</TCEforms>
 					</settings.allowedCountries>
 
-					<view.templateRootPaths.1>
+					<view.templateRootPaths.200>
 						<TCEforms>
 							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.templateRootPath</label>
 							<config>
@@ -105,9 +105,9 @@
 								<size>40</size>
 							</config>
 						</TCEforms>
-					</view.templateRootPaths.1>
+					</view.templateRootPaths.200>
 
-					<view.partialRootPaths.1>
+					<view.partialRootPaths.200>
 						<TCEforms>
 							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.partialRootPath</label>
 							<config>
@@ -115,7 +115,7 @@
 								<size>40</size>
 							</config>
 						</TCEforms>
-					</view.partialRootPaths.1>
+					</view.partialRootPaths.200>
 
 					<settings.showStoreImage>
 						<TCEforms>
