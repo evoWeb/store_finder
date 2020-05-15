@@ -38,8 +38,8 @@
 		"sjbr/static-info-tables": "^6.8.7",
 
 		"geocoder-php/google-maps-provider": "^4.4.0",
-		"php-http/guzzle6-adapter": "^2.0.1",
-		"php-http/message": "^1.8.0",
+		"php-http/guzzle6-adapter": "*",
+		"php-http/message": "*",
 		"phpoffice/phpspreadsheet": "^1.9.0"
 	},
 
