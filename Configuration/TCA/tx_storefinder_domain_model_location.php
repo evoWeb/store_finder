@@ -271,7 +271,7 @@ return [
                     ['', 0],
                 ],
                 'foreign_table' => 'static_country_zones',
-                'foreign_table_where' => 'AND zn_country_uid = ###REC_FIELD_country### 
+                'foreign_table_where' => 'AND zn_country_uid = ###REC_FIELD_country###
                     ORDER BY static_country_zones.zn_name_local',
                 'size' => 1,
                 'minitems' => 0,
@@ -479,8 +479,8 @@ return [
             'label' => $languageFile . 'tx_storefinder_domain_model_location.latitude',
             'config' => [
                 'type' => 'input',
-                // 'readOnly' => 1,
                 'size' => 10,
+                'default' => 0,
             ]
         ],
 
@@ -489,8 +489,8 @@ return [
             'label' => $languageFile . 'tx_storefinder_domain_model_location.longitude',
             'config' => [
                 'type' => 'input',
-                // 'readOnly' => 1,
                 'size' => 10,
+                'default' => 0,
             ]
         ],
 
