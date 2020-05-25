@@ -45,6 +45,13 @@ call_user_func(function () {
         [$mapController => 'map']
     );
 
+    \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+        'StoreFinder',
+        'Show',
+        [\Evoweb\StoreFinder\Controller\MapController::class => 'show'],
+        [\Evoweb\StoreFinder\Controller\MapController::class => 'show']
+    );
+
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['livesearch']['location'] = 'tx_storefinder_domain_model_location';
 
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass']['store_finder'] =
