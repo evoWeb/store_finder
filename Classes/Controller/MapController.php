@@ -275,7 +275,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         if ($location !== null) {
             /** @var Location $center */
             $center = $location;
-            $center->setZoom($this->settings['zoom'] ? $this->settings['zoom'] : 15);
+            $center->setZoom($this->settings['zoom'] ? (int)$this->settings['zoom'] : 15);
 
             $this->view->assign('center', $center);
             $this->view->assign('numberOfLocations', 1);
