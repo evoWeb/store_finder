@@ -72,7 +72,7 @@ jobs:
         with:
           php-version: ${{ matrix.env.php }}
           tools: composer
-          extensions: pdo, sqlite3
+          extensions: pdo, sqlite3, gd
 
       - name: Validate composer.json and composer.lock
         run: composer validate
