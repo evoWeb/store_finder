@@ -71,7 +71,7 @@ return [
 
     'interface' => [
         'showRecordFieldList' => 'hidden, endtime, fe_group, name, storeid, address, additionaladdress, person, city,
-            state, zipcode, country, area, products, phone, mobile, hours, url, notes, image, icon, content,
+            state, zipcode, country, attributes, products, phone, mobile, hours, url, notes, image, icon, content,
             use_coordinate, categories, latitude, longitude, geocode'
     ],
 
@@ -439,10 +439,10 @@ return [
             ]
         ],
 
-        'area' => [
+        'attributes' => [
             'l10n_mode' => 'exclude',
             'exclude' => true,
-            'label' => $languageFile . 'tx_storefinder_domain_model_location.area',
+            'label' => $languageFile . 'tx_storefinder_domain_model_location.attributes',
             'config' => [
                 'type' => 'select',
                 'renderType' => 'selectMultipleSideBySide',
@@ -453,7 +453,7 @@ return [
                 'MM' => 'tx_storefinder_location_attribute_mm',
                 'MM_match_fields' => [
                     'tablenames' => 'tx_storefinder_domain_model_attribute',
-                    'fieldname' => 'area',
+                    'fieldname' => 'attributes',
                 ],
                 'size' => 10,
                 'maxitems' => 30,
@@ -615,7 +615,7 @@ return [
                 [
                     'appearance' => [
                         'createNewRelationLinkTitle' =>
-                            $languageFile. 'tx_storefinder_domain_model_location.layer.addFileReference'
+                            $languageFile . 'tx_storefinder_domain_model_location.layer.addFileReference'
                     ],
                     'minitems' => 0,
                     'maxitems' => 1,
@@ -672,7 +672,7 @@ return [
                     content,
                 --div--;' . $languageFile . 'div-relations,
                     related,
-                    area,
+                    attributes,
                     categories,
                 --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,
                     --palette--;;hidden,
