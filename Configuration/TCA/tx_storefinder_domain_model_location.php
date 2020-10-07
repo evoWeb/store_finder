@@ -71,38 +71,43 @@ return [
 
     'interface' => [
         'showRecordFieldList' => 'hidden, endtime, fe_group, name, storeid, address, additionaladdress, person, city,
-            state, zipcode, country, attributes, products, phone, mobile, hours, url, notes, image, icon, content,
+            state, zipcode, country, area, products, phone, mobile, hours, url, notes, image, icon, content,
             use_coordinate, categories, latitude, longitude, geocode'
     ],
 
     'columns' => [
         'hidden' => [
             'exclude' => true,
-            'label' => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.hidden',
+            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:pages.hidden_toggle',
             'config' => [
                 'type' => 'check',
+                'renderType' => 'checkboxToggle',
+                'default' => 1,
                 'items' => [
-                    '1' => [
-                        '0' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:hidden.I.0'
+                    [
+                        0 => '',
+                        1 => '',
+                        'invertStateDisplay' => true
                     ]
-                ]
+                ],
             ]
         ],
         'starttime' => [
             'exclude' => true,
-            'label' => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.starttime',
+            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.starttime',
             'config' => [
                 'type' => 'input',
                 'renderType' => 'inputDateTime',
                 'eval' => 'datetime,int',
-                'default' => 0
-            ],
-            'l10n_mode' => 'exclude',
-            'l10n_display' => 'defaultAsReadonly'
+                'default' => 0,
+                'behaviour' => [
+                    'allowLanguageSynchronization' => true
+                ]
+            ]
         ],
         'endtime' => [
             'exclude' => true,
-            'label' => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.endtime',
+            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.endtime',
             'config' => [
                 'type' => 'input',
                 'renderType' => 'inputDateTime',
@@ -110,31 +115,32 @@ return [
                 'default' => 0,
                 'range' => [
                     'upper' => mktime(0, 0, 0, 1, 1, 2038)
+                ],
+                'behaviour' => [
+                    'allowLanguageSynchronization' => true
                 ]
-            ],
-            'l10n_mode' => 'exclude',
-            'l10n_display' => 'defaultAsReadonly'
+            ]
         ],
         'fe_group' => [
             'exclude' => true,
-            'label' => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.fe_group',
+            'l10n_mode' => 'exclude',
+            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.fe_group',
             'config' => [
                 'type' => 'select',
                 'renderType' => 'selectMultipleSideBySide',
-                'size' => 5,
+                'size' => 7,
                 'maxitems' => 20,
-                'default' => 0,
                 'items' => [
                     [
-                        'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.hide_at_login',
+                        'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.hide_at_login',
                         -1
                     ],
                     [
-                        'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.any_login',
+                        'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.any_login',
                         -2
                     ],
                     [
-                        'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.usergroups',
+                        'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.usergroups',
                         '--div--'
                     ]
                 ],
@@ -145,26 +151,25 @@ return [
             ]
         ],
         'sys_language_uid' => [
-            'exclude' => true,
-            'label' => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.language',
+            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
             'config' => [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
-                'special' => 'languages',
-                'items' => [
-                    [
-                        'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.allLanguages',
-                        -1,
-                        'flags-multiple'
+                'foreign_table' => 'sys_language',
+                'foreign_table_where' => 'ORDER BY sys_language.sorting',
+                'items' => [], // no default language here, as the pages table is always the default language
+                'default' => 0,
+                'fieldWizard' => [
+                    'selectIcons' => [
+                        'disabled' => false,
                     ],
                 ],
-                'default' => 0,
             ]
         ],
         'l18n_parent' => [
             'exclude' => true,
             'displayCond' => 'FIELD:sys_language_uid:>:0',
-            'label' => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
+            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
             'config' => [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
@@ -175,9 +180,10 @@ return [
                     ]
                 ],
                 'foreign_table' => 'tx_storefinder_domain_model_location',
+                // no sys_language_uid = -1 allowed explicitly!
                 'foreign_table_where' =>
                     'AND tx_storefinder_domain_model_location.pid = ###CURRENT_PID### '
-                    . 'AND tx_storefinder_domain_model_location.sys_language_uid IN (-1, 0)',
+                    . 'AND tx_storefinder_domain_model_location.sys_language_uid = 0',
                 'default' => 0
             ]
         ],
@@ -271,7 +277,7 @@ return [
                     ['', 0],
                 ],
                 'foreign_table' => 'static_country_zones',
-                'foreign_table_where' => 'AND zn_country_uid = ###REC_FIELD_country### 
+                'foreign_table_where' => 'AND zn_country_uid = ###REC_FIELD_country###
                     ORDER BY static_country_zones.zn_name_local',
                 'size' => 1,
                 'minitems' => 0,
@@ -433,10 +439,10 @@ return [
             ]
         ],
 
-        'attributes' => [
+        'area' => [
             'l10n_mode' => 'exclude',
             'exclude' => true,
-            'label' => $languageFile . 'tx_storefinder_domain_model_location.attributes',
+            'label' => $languageFile . 'tx_storefinder_domain_model_location.area',
             'config' => [
                 'type' => 'select',
                 'renderType' => 'selectMultipleSideBySide',
@@ -447,31 +453,11 @@ return [
                 'MM' => 'tx_storefinder_location_attribute_mm',
                 'MM_match_fields' => [
                     'tablenames' => 'tx_storefinder_domain_model_attribute',
-                    'fieldname' => 'attributes',
+                    'fieldname' => 'area',
                 ],
                 'size' => 10,
                 'maxitems' => 30,
             ]
-        ],
-
-        'icon' => [
-            'l10n_mode' => 'exclude',
-            'label' => $languageFile . 'tx_storefinder_domain_model_location.icon',
-            'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
-                'icon',
-                [
-                    'appearance' => [
-                        'createNewRelationLinkTitle' =>
-                            'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:images.addFileReference'
-                    ],
-                    'minitems' => 0,
-                    'maxitems' => 1,
-                    // custom configuration for displaying fields in the overlay/reference table
-                    // to use the imageoverlayPalette instead of the basicoverlayPalette
-                    'overrideChildTca' => $overrideChildTca,
-                ],
-                $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']
-            ),
         ],
 
         'latitude' => [
@@ -479,8 +465,8 @@ return [
             'label' => $languageFile . 'tx_storefinder_domain_model_location.latitude',
             'config' => [
                 'type' => 'input',
-                // 'readOnly' => 1,
                 'size' => 10,
+                'default' => 0,
             ]
         ],
 
@@ -489,8 +475,8 @@ return [
             'label' => $languageFile . 'tx_storefinder_domain_model_location.longitude',
             'config' => [
                 'type' => 'input',
-                // 'readOnly' => 1,
                 'size' => 10,
+                'default' => 0,
             ]
         ],
 
@@ -574,6 +560,26 @@ return [
             ]
         ],
 
+        'icon' => [
+            'l10n_mode' => 'exclude',
+            'label' => $languageFile . 'tx_storefinder_domain_model_location.icon',
+            'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
+                'icon',
+                [
+                    'appearance' => [
+                        'createNewRelationLinkTitle' =>
+                            'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:images.addFileReference'
+                    ],
+                    'minitems' => 0,
+                    'maxitems' => 1,
+                    // custom configuration for displaying fields in the overlay/reference table
+                    // to use the imageoverlayPalette instead of the basicoverlayPalette
+                    'overrideChildTca' => $overrideChildTca,
+                ],
+                $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']
+            ),
+        ],
+
         'image' => [
             'label' => $languageFile . 'tx_storefinder_domain_model_location.image',
             'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
@@ -583,9 +589,6 @@ return [
                         'createNewRelationLinkTitle' =>
                             'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:images.addFileReference'
                     ],
-                    // custom configuration for displaying fields in the overlay/reference table
-                    // to use the imageoverlayPalette instead of the basicoverlayPalette
-                    'overrideChildTca' => $overrideChildTca,
                 ],
                 $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']
             ),
@@ -600,11 +603,24 @@ return [
                         'createNewRelationLinkTitle' =>
                             'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:images.addFileReference'
                     ],
-                    // custom configuration for displaying fields in the overlay/reference table
-                    // to use the imageoverlayPalette instead of the basicoverlayPalette
-                    'overrideChildTca' => $overrideChildTca,
+                ]
+            ),
+        ],
+
+        'layer' => [
+            'l10n_mode' => 'exclude',
+            'label' => $languageFile . 'tx_storefinder_domain_model_location.layer',
+            'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
+                'layer',
+                [
+                    'appearance' => [
+                        'createNewRelationLinkTitle' =>
+                            $languageFile. 'tx_storefinder_domain_model_location.layer.addFileReference'
+                    ],
+                    'minitems' => 0,
+                    'maxitems' => 1,
                 ],
-                $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']
+                'svg,kml'
             ),
         ],
 
@@ -652,10 +668,11 @@ return [
                     icon,
                     image,
                     media,
+                    layer,
                     content,
                 --div--;' . $languageFile . 'div-relations,
                     related,
-                    attributes,
+                    area,
                     categories,
                 --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,
                     --palette--;;hidden,

@@ -3,127 +3,133 @@
 	<file source-language="en" datatype="plaintext" original="messages" date="2018-05-06T14:19:01Z" product-name="store_finder">
 		<header/>
 		<body>
-			<trans-unit id="tx_storefinder_domain_model_location" xml:space="preserve">
+			<trans-unit id="tx_storefinder_domain_model_location">
 				<source>Store Location</source>
 			</trans-unit>
-			<trans-unit id="tx_storefinder_domain_model_location.hidden" xml:space="preserve">
+			<trans-unit id="tx_storefinder_domain_model_location.hidden">
 				<source>Visibility of location</source>
 			</trans-unit>
-			<trans-unit id="tx_storefinder_domain_model_location.name" xml:space="preserve">
+			<trans-unit id="tx_storefinder_domain_model_location.name">
 				<source>Store Name</source>
 			</trans-unit>
-			<trans-unit id="tx_storefinder_domain_model_location.related" xml:space="preserve">
+			<trans-unit id="tx_storefinder_domain_model_location.related">
 				<source>Related to location</source>
 			</trans-unit>
-			<trans-unit id="tx_storefinder_domain_model_location.storeid" xml:space="preserve">
+			<trans-unit id="tx_storefinder_domain_model_location.storeid">
 				<source>Store Id</source>
 			</trans-unit>
-			<trans-unit id="tx_storefinder_domain_model_location.attributes" xml:space="preserve">
+			<trans-unit id="tx_storefinder_domain_model_location.attributes">
 				<source>Attributes</source>
 			</trans-unit>
-			<trans-unit id="tx_storefinder_domain_model_location.address" xml:space="preserve">
+			<trans-unit id="tx_storefinder_domain_model_location.address">
 				<source>Address</source>
 			</trans-unit>
-			<trans-unit id="tx_storefinder_domain_model_location.additionaladdress" xml:space="preserve">
+			<trans-unit id="tx_storefinder_domain_model_location.additionaladdress">
 				<source>Additional address</source>
 			</trans-unit>
-			<trans-unit id="tx_storefinder_domain_model_location.person" xml:space="preserve">
+			<trans-unit id="tx_storefinder_domain_model_location.person">
 				<source>Contact person</source>
 			</trans-unit>
-			<trans-unit id="tx_storefinder_domain_model_location.city" xml:space="preserve">
+			<trans-unit id="tx_storefinder_domain_model_location.city">
 				<source>City</source>
 			</trans-unit>
-			<trans-unit id="tx_storefinder_domain_model_location.state" xml:space="preserve">
+			<trans-unit id="tx_storefinder_domain_model_location.state">
 				<source>State</source>
 			</trans-unit>
-			<trans-unit id="tx_storefinder_domain_model_location.zipcode" xml:space="preserve">
+			<trans-unit id="tx_storefinder_domain_model_location.zipcode">
 				<source>ZIP / Postal Code</source>
 			</trans-unit>
-			<trans-unit id="tx_storefinder_domain_model_location.country" xml:space="preserve">
+			<trans-unit id="tx_storefinder_domain_model_location.country">
 				<source>Country</source>
 			</trans-unit>
-			<trans-unit id="tx_storefinder_domain_model_location.products" xml:space="preserve">
+			<trans-unit id="tx_storefinder_domain_model_location.products">
 				<source>Products</source>
 			</trans-unit>
-			<trans-unit id="tx_storefinder_domain_model_location.phone" xml:space="preserve">
+			<trans-unit id="tx_storefinder_domain_model_location.phone">
 				<source>Phone</source>
 			</trans-unit>
-			<trans-unit id="tx_storefinder_domain_model_location.mobile" xml:space="preserve">
+			<trans-unit id="tx_storefinder_domain_model_location.mobile">
 				<source>Cellular</source>
 			</trans-unit>
-			<trans-unit id="tx_storefinder_domain_model_location.fax" xml:space="preserve">
+			<trans-unit id="tx_storefinder_domain_model_location.fax">
 				<source>Fax</source>
 			</trans-unit>
-			<trans-unit id="tx_storefinder_domain_model_location.email" xml:space="preserve">
+			<trans-unit id="tx_storefinder_domain_model_location.email">
 				<source>Email</source>
 			</trans-unit>
-			<trans-unit id="tx_storefinder_domain_model_location.hours" xml:space="preserve">
+			<trans-unit id="tx_storefinder_domain_model_location.hours">
 				<source>Hours</source>
 			</trans-unit>
-			<trans-unit id="tx_storefinder_domain_model_location.url" xml:space="preserve">
+			<trans-unit id="tx_storefinder_domain_model_location.url">
 				<source>URL</source>
 			</trans-unit>
-			<trans-unit id="tx_storefinder_domain_model_location.notes" xml:space="preserve">
+			<trans-unit id="tx_storefinder_domain_model_location.notes">
 				<source>Notes</source>
 			</trans-unit>
-			<trans-unit id="tx_storefinder_domain_model_location.media" xml:space="preserve">
+			<trans-unit id="tx_storefinder_domain_model_location.media">
 				<source>Media</source>
 			</trans-unit>
-			<trans-unit id="tx_storefinder_domain_model_location.image" xml:space="preserve">
+			<trans-unit id="tx_storefinder_domain_model_location.image">
 				<source>Images</source>
 			</trans-unit>
-			<trans-unit id="tx_storefinder_domain_model_location.icon" xml:space="preserve">
+			<trans-unit id="tx_storefinder_domain_model_location.icon">
 				<source>Icon</source>
 			</trans-unit>
-			<trans-unit id="tx_storefinder_domain_model_location.content" xml:space="preserve">
+			<trans-unit id="tx_storefinder_domain_model_location.layer">
+				<source>Layer</source>
+			</trans-unit>
+			<trans-unit id="tx_storefinder_domain_model_location.layer.addFileReference">
+				<source>Add layer file</source>
+			</trans-unit>
+			<trans-unit id="tx_storefinder_domain_model_location.content">
 				<source>Content Elements</source>
 			</trans-unit>
-			<trans-unit id="tx_storefinder_domain_model_location.categories" xml:space="preserve">
+			<trans-unit id="tx_storefinder_domain_model_location.categories">
 				<source>Categories</source>
 			</trans-unit>
-			<trans-unit id="tx_storefinder_domain_model_location.latitude" xml:space="preserve">
+			<trans-unit id="tx_storefinder_domain_model_location.latitude">
 				<source>Latitude</source>
 			</trans-unit>
-			<trans-unit id="tx_storefinder_domain_model_location.longitude" xml:space="preserve">
+			<trans-unit id="tx_storefinder_domain_model_location.longitude">
 				<source>Longitude</source>
 			</trans-unit>
-			<trans-unit id="tx_storefinder_domain_model_location.center" xml:space="preserve">
+			<trans-unit id="tx_storefinder_domain_model_location.center">
 				<source>Use as center</source>
 			</trans-unit>
-			<trans-unit id="tx_storefinder_domain_model_location.geocode" xml:space="preserve">
+			<trans-unit id="tx_storefinder_domain_model_location.geocode">
 				<source>Geocode this location</source>
 			</trans-unit>
-			<trans-unit id="tx_storefinder_domain_model_location.distance" xml:space="preserve">
+			<trans-unit id="tx_storefinder_domain_model_location.distance">
 				<source>Calculated value by search query</source>
 			</trans-unit>
-			<trans-unit id="tx_storefinder_domain_model_location.modifyLocationMap" xml:space="preserve">
+			<trans-unit id="tx_storefinder_domain_model_location.modifyLocationMap">
 				<source>Modify location coordinate</source>
 			</trans-unit>
-			<trans-unit id="sys_category.add" xml:space="preserve">
+			<trans-unit id="sys_category.add">
 				<source>Add category</source>
 			</trans-unit>
-			<trans-unit id="div-address" xml:space="preserve">
+			<trans-unit id="div-address">
 				<source>Address</source>
 			</trans-unit>
-			<trans-unit id="div-contact" xml:space="preserve">
+			<trans-unit id="div-contact">
 				<source>Contact</source>
 			</trans-unit>
-			<trans-unit id="div-informations" xml:space="preserve">
+			<trans-unit id="div-informations">
 				<source>Informations</source>
 			</trans-unit>
-			<trans-unit id="div-relations" xml:space="preserve">
+			<trans-unit id="div-relations">
 				<source>Relations</source>
 			</trans-unit>
-			<trans-unit id="palette-coordinates" xml:space="preserve">
+			<trans-unit id="palette-coordinates">
 				<source>Coordinates</source>
 			</trans-unit>
-			<trans-unit id="tx_storefinder_domain_model_attribute" xml:space="preserve">
+			<trans-unit id="tx_storefinder_domain_model_attribute">
 				<source>Store Attributes</source>
 			</trans-unit>
-			<trans-unit id="tx_storefinder_domain_model_attribute.name" xml:space="preserve">
+			<trans-unit id="tx_storefinder_domain_model_attribute.name">
 				<source>Name</source>
 			</trans-unit>
-			<trans-unit id="tx_storefinder_domain_model_attribute.icon" xml:space="preserve">
+			<trans-unit id="tx_storefinder_domain_model_attribute.icon">
 				<source>Icon</source>
 			</trans-unit>
 

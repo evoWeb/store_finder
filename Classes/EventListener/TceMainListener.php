@@ -80,7 +80,7 @@ class TceMainListener
     public function processDatamap_afterDatabaseOperations($_1, $table, $id, $fieldArray, $parentObject)
     {
         if ($table === 'tx_storefinder_domain_model_location') {
-            $locationId = $this->remapId($id, $table, $parentObject);
+            $locationId = (int)$this->remapId($id, $table, $parentObject);
             $location = $this->locationRepository->findByUidInBackend($locationId);
 
             if ($location !== null && $location->getGeocode()) {

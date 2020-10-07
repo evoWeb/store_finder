@@ -159,6 +159,12 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>
      * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
      */
+    protected $layer;
+
+    /**
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>
+     * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
+     */
     protected $icon;
 
     /**
@@ -260,6 +266,19 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setIcon(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $icon)
     {
         $this->icon = $icon;
+    }
+
+    /**
+     * @return FileReference[]|\TYPO3\CMS\Extbase\Persistence\ObjectStorage
+     */
+    public function getLayer(): \TYPO3\CMS\Extbase\Persistence\ObjectStorage
+    {
+        return $this->layer;
+    }
+
+    public function setLayer(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $layer)
+    {
+        $this->layer = $layer;
     }
 
     /**

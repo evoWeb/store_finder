@@ -193,7 +193,7 @@ class ImportLocationsCommand extends Command
                     ),
                     $expression->eq(
                         'fieldname',
-                        $queryBuilder->createNamedParameter('attributes')
+                        $queryBuilder->createNamedParameter('area')
                     )
                 )
                 ->execute();
@@ -238,7 +238,7 @@ class ImportLocationsCommand extends Command
                 case isset($this->attributeMap[$sourceColumn]):
                     if ($this->attributeMap[$sourceColumn][$value]) {
                         $attributes[] = $this->attributeMap[$sourceColumn][$value];
-                        $location['attributes']++;
+                        $location['area']++;
                     }
                     break;
 
@@ -362,7 +362,7 @@ class ImportLocationsCommand extends Command
         }
 
         foreach ($attributes as $attribute) {
-            $this->addReference($table, $tableName, 'attributes', $locationUid, $attribute);
+            $this->addReference($table, $tableName, 'area', $locationUid, $attribute);
         }
     }
 
