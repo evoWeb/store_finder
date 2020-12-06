@@ -1,4 +1,5 @@
 <?php
+
 namespace Evoweb\StoreFinder\Tests\Functional\Cache;
 
 /*
@@ -150,9 +151,11 @@ class AddLocationToCacheTest extends \TYPO3\TestingFramework\Core\Functional\Fun
         foreach ($data as $field => $value) {
             $setter = 'set' . ucfirst($field);
             if (method_exists($constraint, $setter) && !empty($value)) {
-                if (($field !== 'country' && !is_string($value))
+                if (
+                    ($field !== 'country' && !is_string($value))
                     || ($field !== 'state' && !is_string($value))
-                    || ($field !== 'country' && $field !== 'state')) {
+                    || ($field !== 'country' && $field !== 'state')
+                ) {
                     $constraint->{$setter}($value);
                 }
             }
