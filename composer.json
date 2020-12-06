@@ -30,8 +30,8 @@
 		"ext-json": "*",
 		"ext-pdo": "*",
 
-		"typo3/cms-core": "^10.4.1",
-		"typo3/cms-extbase": "*",
+		"typo3/cms-core": "^10.4",
+		"typo3/cms-extbase": "^10.4.1",
 		"typo3/cms-extensionmanager": "*",
 		"typo3/cms-fluid": "*",
 		"typo3/cms-frontend": "*",
