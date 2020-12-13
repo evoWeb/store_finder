@@ -1,5 +1,6 @@
 # TYPO3 Extension ``store_finder``
-[![Build Status](https://travis-ci.org/evoWeb/store_finder.svg?branch=master)](https://travis-ci.org/evoWeb/store_finder)
+
+![build](https://github.com/evoWeb/store_finder/workflows/build/badge.svg?branch=develop)
 [![Latest Stable Version](https://poser.pugx.org/evoweb/store-finder/v/stable)](https://packagist.org/packages/evoweb/store-finder)
 [![Monthly Downloads](https://poser.pugx.org/evoweb/store-finder/d/monthly)](https://packagist.org/packages/evoweb/store-finder)
 [![Total Downloads](https://poser.pugx.org/evoweb/store-finder/downloads)](https://packagist.org/packages/evoweb/store-finder)
