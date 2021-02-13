@@ -24,3 +24,6 @@ services:
   Evoweb\StoreFinder\Command\GeocodeLocationsCommand:
     tags:
       - { name: 'console.command', command: 'storefinder:geocode', schedulable: false }
+
+  SJBR\StaticInfoTables\Domain\Repository\TerritoryRepository:
+    public: true
