@@ -1,0 +1,95 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      xmlns:sf="http://typo3.org/ns/Evoweb/StoreFinder/ViewHelpers"
+      data-namespace-typo3-fluid="true">
+
+<f:variable name="path">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:</f:variable>
+
+<table class="table table-condensed table-hover news-table">
+    <colgroup>
+        <col style="width: 40%"/>
+        <col style="width: 60%"/>
+    </colgroup>
+    <thead>
+        <tr>
+            <th colspan="2">Settings of "<f:translate id="{path}tt_content.list_type_map"/>"</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th style="vertical-align: top"><f:translate id="{path}pi_flexform.showBeforeSearch"/></th>
+            <td>
+                <sf:bitwiseIf a="{pi_flexform_transformed.settings.showBeforeSearch}" b="1"><f:translate id="{path}pi_flexform.showItems.search"/><br></sf:bitwiseIf>
+                <sf:bitwiseIf a="{pi_flexform_transformed.settings.showBeforeSearch}" b="2"><f:translate id="{path}pi_flexform.showItems.map"/><br></sf:bitwiseIf>
+                <sf:bitwiseIf a="{pi_flexform_transformed.settings.showBeforeSearch}" b="4"><f:translate id="{path}pi_flexform.showItems.list"/></sf:bitwiseIf>
+            </td>
+        </tr>
+
+        <tr>
+            <th style="vertical-align: top"><f:translate id="{path}pi_flexform.showAfterSearch"/></th>
+            <td>
+                <sf:bitwiseIf a="{pi_flexform_transformed.settings.showAfterSearch}" b="1"><f:translate id="{path}pi_flexform.showItems.search"/><br></sf:bitwiseIf>
+                <sf:bitwiseIf a="{pi_flexform_transformed.settings.showAfterSearch}" b="2"><f:translate id="{path}pi_flexform.showItems.map"/><br></sf:bitwiseIf>
+                <sf:bitwiseIf a="{pi_flexform_transformed.settings.showAfterSearch}" b="4"><f:translate id="{path}pi_flexform.showItems.list"/></sf:bitwiseIf>
+            </td>
+        </tr>
+
+        <f:if condition="{pi_flexform_transformed.settings.categories}">
+        <tr>
+            <th style="vertical-align: top"><f:translate id="{path}pi_flexform.categories"/></th>
+            <td>
+                <f:for each="{sf:records(uids: pi_flexform_transformed.settings.categories, table: 'sys_category')}" as="category" iteration="iterator">
+                    <core:iconForRecord table="sys_category" row="{category}" /> {category.title}
+                    <f:if condition="!{iterator.isLast}"><br></f:if>
+                </f:for>
+            </td>
+        </tr>
+
+        <tr>
+            <th style="vertical-align: top"><f:translate id="{path}pi_flexform.categoryPriority"/></th>
+            <td>
+                <f:switch expression="{pi_flexform_transformed.settings.categoryPriority}">
+                    <f:case value="useAsFilterInFrontend"><f:translate id="{path}pi_flexform.categoryPriority.useAsFilterInFrontend"/></f:case>
+                    <f:case value="useParentIfNoFilterSelected"><f:translate id="{path}pi_flexform.categoryPriority.useParentIfNoFilterSelected"/></f:case>
+                    <f:case value="limitResultsToCategories"><f:translate id="{path}pi_flexform.categoryPriority.limitResultsToCategories"/></f:case>
+                </f:switch>
+            </td>
+        </tr>
+        </f:if>
+
+        <f:if condition="{pi_flexform_transformed.settings.singleLocationId}">
+        <tr>
+            <th style="vertical-align: top"><f:translate id="{path}pi_flexform.singleLocationId"/></th>
+            <td>
+                <f:for each="{sf:records(uids: pi_flexform_transformed.settings.singleLocationId, table: 'tx_storefinder_domain_model_location')}" as="location" iteration="iterator">
+                    <core:iconForRecord table="tx_storefinder_domain_model_location" row="{location}" /> {location.name}
+                    <f:if condition="!{iterator.isLast}"><br></f:if>
+                </f:for>
+            </td>
+        </tr>
+        </f:if>
+
+        <f:if condition="{pi_flexform_transformed.settings.resultPageId}">
+        <tr>
+            <th style="vertical-align: top"><f:translate id="{path}pi_flexform.resultPageId"/></th>
+            <td>
+                <f:for each="{sf:records(uids: pi_flexform_transformed.settings.resultPageId, table: 'pages')}" as="page" iteration="iterator">
+                    <core:iconForRecord table="pages" row="{page}" /> {page.title}
+                    <f:if condition="!{iterator.isLast}"><br></f:if>
+                </f:for>
+            </td>
+        </tr>
+        </f:if>
+
+        <tr>
+            <th style="vertical-align: top"><f:translate id="{path}pages"/></th>
+            <td>
+                <f:for each="{sf:records(uids: pages, table: 'pages')}" as="page" iteration="iterator">
+                    <core:iconForRecord table="pages" row="{page}" /> {page.title}
+                    <f:if condition="!{iterator.isLast}"><br></f:if>
+                </f:for>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+</html>

@@ -22,7 +22,7 @@ CREATE TABLE tx_storefinder_domain_model_location (
 
 	attributes int(11) unsigned DEFAULT '0' NOT NULL,
 	categories int(11) unsigned DEFAULT '0' NOT NULL,
-	content int(11) unsigned DEFAULT '0' NOT NULL,
+	content_elements int(11) unsigned DEFAULT '0' NOT NULL,
 	related int(11) unsigned DEFAULT '0' NOT NULL,
 	image int(11) unsigned DEFAULT '0' NOT NULL,
 	media int(11) unsigned DEFAULT '0' NOT NULL,

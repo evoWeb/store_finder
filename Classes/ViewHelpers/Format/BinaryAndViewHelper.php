@@ -18,6 +18,11 @@ namespace Evoweb\StoreFinder\ViewHelpers\Format;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
 
+/**
+ * Class BinaryAndViewHelper
+ * @package Evoweb\StoreFinder\ViewHelpers\Format
+ * @deprecated will be removed in version 7.0.0
+ */
 class BinaryAndViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper
 {
     use CompileWithRenderStatic;

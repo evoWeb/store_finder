@@ -5,33 +5,33 @@ $overrideChildTca = [
         '0' => [
             'showitem' => '
                 --palette--;;imageoverlayPalette,
-                --palette--;;filePalette'
+                --palette--;;filePalette',
         ],
         \TYPO3\CMS\Core\Resource\File::FILETYPE_TEXT => [
             'showitem' => '
                 --palette--;;imageoverlayPalette,
-                --palette--;;filePalette'
+                --palette--;;filePalette',
         ],
         \TYPO3\CMS\Core\Resource\File::FILETYPE_IMAGE => [
             'showitem' => '
                 --palette--;;imageoverlayPalette,
-                --palette--;;filePalette'
+                --palette--;;filePalette',
         ],
         \TYPO3\CMS\Core\Resource\File::FILETYPE_AUDIO => [
             'showitem' => '
                 --palette--;;audioOverlayPalette,
-                --palette--;;filePalette'
+                --palette--;;filePalette',
         ],
         \TYPO3\CMS\Core\Resource\File::FILETYPE_VIDEO => [
             'showitem' => '
                 --palette--;;videoOverlayPalette,
-                --palette--;;filePalette'
+                --palette--;;filePalette',
         ],
         \TYPO3\CMS\Core\Resource\File::FILETYPE_APPLICATION => [
             'showitem' => '
                 --palette--;;imageoverlayPalette,
-                --palette--;;filePalette'
-        ]
+                --palette--;;filePalette',
+        ],
     ],
 ];
 
@@ -69,12 +69,6 @@ return [
         'iconfile' => 'EXT:store_finder/Resources/Public/Icons/tx_storefinder_domain_model_location.gif',
     ],
 
-    'interface' => [
-        'showRecordFieldList' => 'hidden, endtime, fe_group, name, storeid, address, additionaladdress, person, city,
-            state, zipcode, country, attributes, products, phone, mobile, hours, url, notes, image, icon, content,
-            use_coordinate, categories, latitude, longitude, geocode'
-    ],
-
     'columns' => [
         'hidden' => [
             'exclude' => true,
@@ -87,10 +81,10 @@ return [
                     [
                         0 => '',
                         1 => '',
-                        'invertStateDisplay' => true
-                    ]
+                        'invertStateDisplay' => true,
+                    ],
                 ],
-            ]
+            ],
         ],
         'starttime' => [
             'exclude' => true,
@@ -101,9 +95,9 @@ return [
                 'eval' => 'datetime,int',
                 'default' => 0,
                 'behaviour' => [
-                    'allowLanguageSynchronization' => true
-                ]
-            ]
+                    'allowLanguageSynchronization' => true,
+                ],
+            ],
         ],
         'endtime' => [
             'exclude' => true,
@@ -114,12 +108,12 @@ return [
                 'eval' => 'datetime,int',
                 'default' => 0,
                 'range' => [
-                    'upper' => mktime(0, 0, 0, 1, 1, 2038)
+                    'upper' => mktime(0, 0, 0, 1, 1, 2038),
                 ],
                 'behaviour' => [
-                    'allowLanguageSynchronization' => true
-                ]
-            ]
+                    'allowLanguageSynchronization' => true,
+                ],
+            ],
         ],
         'fe_group' => [
             'exclude' => true,
@@ -133,22 +127,21 @@ return [
                 'items' => [
                     [
                         'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.hide_at_login',
-                        -1
+                        -1,
                     ],
                     [
                         'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.any_login',
-                        -2
+                        -2,
                     ],
                     [
                         'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.usergroups',
-                        '--div--'
-                    ]
+                        '--div--',
+                    ],
                 ],
                 'exclusiveKeys' => '-1,-2',
                 'foreign_table' => 'fe_groups',
                 'foreign_table_where' => 'ORDER BY fe_groups.title',
-                'enableMultiSelectFilterTextfield' => true
-            ]
+            ],
         ],
         'sys_language_uid' => [
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
@@ -164,39 +157,35 @@ return [
                         'disabled' => false,
                     ],
                 ],
-            ]
+            ],
         ],
         'l18n_parent' => [
-            'exclude' => true,
             'displayCond' => 'FIELD:sys_language_uid:>:0',
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
             'config' => [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => [
-                    [
-                        '',
-                        0
-                    ]
+                    ['', 0],
                 ],
                 'foreign_table' => 'tx_storefinder_domain_model_location',
                 // no sys_language_uid = -1 allowed explicitly!
                 'foreign_table_where' =>
                     'AND tx_storefinder_domain_model_location.pid = ###CURRENT_PID### '
                     . 'AND tx_storefinder_domain_model_location.sys_language_uid = 0',
-                'default' => 0
-            ]
+                'default' => 0,
+            ],
         ],
         'l10n_source' => [
             'config' => [
-                'type' => 'passthrough'
-            ]
+                'type' => 'passthrough',
+            ],
         ],
         'l18n_diffsource' => [
             'config' => [
                 'type' => 'passthrough',
-                'default' => ''
-            ]
+                'default' => '',
+            ],
         ],
 
         // address
@@ -207,7 +196,7 @@ return [
                 'size' => 50,
                 'max' => 255,
                 'eval' => 'required,trim',
-            ]
+            ],
         ],
 
         'storeid' => [
@@ -217,7 +206,7 @@ return [
                 'type' => 'input',
                 'size' => 30,
                 'eval' => 'trim',
-            ]
+            ],
         ],
 
         'address' => [
@@ -228,9 +217,9 @@ return [
                 'rows' => 3,
                 'eval' => 'trim',
                 'behaviour' => [
-                    'allowLanguageSynchronization' => true
-                ]
-            ]
+                    'allowLanguageSynchronization' => true,
+                ],
+            ],
         ],
 
         'additionaladdress' => [
@@ -240,9 +229,9 @@ return [
                 'size' => 30,
                 'eval' => 'trim',
                 'behaviour' => [
-                    'allowLanguageSynchronization' => true
-                ]
-            ]
+                    'allowLanguageSynchronization' => true,
+                ],
+            ],
         ],
 
         'zipcode' => [
@@ -252,7 +241,7 @@ return [
                 'type' => 'input',
                 'size' => 30,
                 'eval' => 'required,trim',
-            ]
+            ],
         ],
 
         'city' => [
@@ -262,9 +251,9 @@ return [
                 'size' => 30,
                 'eval' => 'required,trim',
                 'behaviour' => [
-                    'allowLanguageSynchronization' => true
-                ]
-            ]
+                    'allowLanguageSynchronization' => true,
+                ],
+            ],
         ],
 
         'state' => [
@@ -283,9 +272,9 @@ return [
                 'minitems' => 0,
                 'maxitems' => 1,
                 'behaviour' => [
-                    'allowLanguageSynchronization' => true
-                ]
-            ]
+                    'allowLanguageSynchronization' => true,
+                ],
+            ],
         ],
 
         'country' => [
@@ -300,14 +289,14 @@ return [
                 'foreign_table' => 'static_countries',
                 'itemsProcFunc' =>
                     \SJBR\StaticInfoTables\Hook\Backend\Form\FormDataProvider\TcaSelectItemsProcessor::class .
-                        '->translateCountriesSelector',
+                    '->translateCountriesSelector',
                 'size' => 1,
                 'minitems' => 1,
                 'maxitems' => 1,
                 'behaviour' => [
-                    'allowLanguageSynchronization' => true
-                ]
-            ]
+                    'allowLanguageSynchronization' => true,
+                ],
+            ],
         ],
 
         // contact
@@ -318,9 +307,9 @@ return [
                 'size' => 30,
                 'eval' => 'trim',
                 'behaviour' => [
-                    'allowLanguageSynchronization' => true
-                ]
-            ]
+                    'allowLanguageSynchronization' => true,
+                ],
+            ],
         ],
 
         'phone' => [
@@ -330,9 +319,9 @@ return [
                 'size' => 30,
                 'eval' => 'trim',
                 'behaviour' => [
-                    'allowLanguageSynchronization' => true
-                ]
-            ]
+                    'allowLanguageSynchronization' => true,
+                ],
+            ],
         ],
 
         'mobile' => [
@@ -342,9 +331,9 @@ return [
                 'size' => 30,
                 'eval' => 'trim',
                 'behaviour' => [
-                    'allowLanguageSynchronization' => true
-                ]
-            ]
+                    'allowLanguageSynchronization' => true,
+                ],
+            ],
         ],
 
         'fax' => [
@@ -354,9 +343,9 @@ return [
                 'size' => 30,
                 'eval' => 'trim',
                 'behaviour' => [
-                    'allowLanguageSynchronization' => true
-                ]
-            ]
+                    'allowLanguageSynchronization' => true,
+                ],
+            ],
         ],
 
         'email' => [
@@ -366,9 +355,9 @@ return [
                 'size' => 30,
                 'eval' => 'trim',
                 'behaviour' => [
-                    'allowLanguageSynchronization' => true
-                ]
-            ]
+                    'allowLanguageSynchronization' => true,
+                ],
+            ],
         ],
 
         'hours' => [
@@ -378,9 +367,9 @@ return [
                 'cols' => 30,
                 'rows' => 5,
                 'behaviour' => [
-                    'allowLanguageSynchronization' => true
-                ]
-            ]
+                    'allowLanguageSynchronization' => true,
+                ],
+            ],
         ],
 
 
@@ -400,7 +389,7 @@ return [
                     'tablenames' => 'tx_storefinder_domain_model_location',
                     'fieldname' => 'related',
                 ],
-            ]
+            ],
         ],
 
         'categories' => [
@@ -433,10 +422,10 @@ return [
                             'setValue' => 'prepend',
                             'table' => 'sys_category',
                             'title' => $languageFile . 'sys_category.add',
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
-            ]
+            ],
         ],
 
         'attributes' => [
@@ -457,7 +446,7 @@ return [
                 ],
                 'size' => 10,
                 'maxitems' => 30,
-            ]
+            ],
         ],
 
         'latitude' => [
@@ -467,7 +456,7 @@ return [
                 'type' => 'input',
                 'size' => 10,
                 'default' => 0,
-            ]
+            ],
         ],
 
         'longitude' => [
@@ -477,7 +466,7 @@ return [
                 'type' => 'input',
                 'size' => 10,
                 'default' => 0,
-            ]
+            ],
         ],
 
         'center' => [
@@ -485,7 +474,7 @@ return [
             'label' => $languageFile . 'tx_storefinder_domain_model_location.center',
             'config' => [
                 'type' => 'check',
-            ]
+            ],
         ],
 
         'distance' => [
@@ -495,7 +484,7 @@ return [
                 'type' => 'input',
                 'readOnly' => 1,
                 'size' => 10,
-            ]
+            ],
         ],
         'geocode' => [
             'l10n_mode' => 'exclude',
@@ -503,7 +492,7 @@ return [
             'label' => $languageFile . 'tx_storefinder_domain_model_location.geocode',
             'config' => [
                 'type' => 'check',
-            ]
+            ],
         ],
         'map' => [
             'l10n_mode' => 'exclude',
@@ -512,7 +501,7 @@ return [
             'config' => [
                 'type' => 'check',
                 'renderType' => 'modifyLocationMap',
-            ]
+            ],
         ],
 
         // information
@@ -523,7 +512,7 @@ return [
                 'size' => 50,
                 'eval' => 'trim',
                 'max' => 255,
-            ]
+            ],
         ],
 
         'notes' => [
@@ -534,7 +523,7 @@ return [
                 'rows' => 15,
                 'enableRichtext' => true,
                 'softref' => 'rtehtmlarea_images,typolink_tag,images,email[subst],url',
-            ]
+            ],
         ],
 
         'url' => [
@@ -554,10 +543,10 @@ return [
                         'module' => [
                             'name' => 'wizard_link',
                         ],
-                        'JSopenParams' => 'height=300,width=500,status=0,menubar=0,scrollbars=1'
-                    ]
-                ]
-            ]
+                        'JSopenParams' => 'height=300,width=500,status=0,menubar=0,scrollbars=1',
+                    ],
+                ],
+            ],
         ],
 
         'icon' => [
@@ -568,7 +557,7 @@ return [
                 [
                     'appearance' => [
                         'createNewRelationLinkTitle' =>
-                            'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:images.addFileReference'
+                            'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:images.addFileReference',
                     ],
                     'minitems' => 0,
                     'maxitems' => 1,
@@ -587,7 +576,7 @@ return [
                 [
                     'appearance' => [
                         'createNewRelationLinkTitle' =>
-                            'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:images.addFileReference'
+                            'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:images.addFileReference',
                     ],
                 ],
                 $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']
@@ -601,7 +590,7 @@ return [
                 [
                     'appearance' => [
                         'createNewRelationLinkTitle' =>
-                            'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:images.addFileReference'
+                            'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:images.addFileReference',
                     ],
                 ]
             ),
@@ -615,7 +604,7 @@ return [
                 [
                     'appearance' => [
                         'createNewRelationLinkTitle' =>
-                            $languageFile . 'tx_storefinder_domain_model_location.layer.addFileReference'
+                            $languageFile . 'tx_storefinder_domain_model_location.layer.addFileReference',
                     ],
                     'minitems' => 0,
                     'maxitems' => 1,
@@ -624,9 +613,9 @@ return [
             ),
         ],
 
-        'content' => [
+        'content_elements' => [
             'exclude' => true,
-            'label' => $languageFile . 'tx_storefinder_domain_model_location.content',
+            'label' => $languageFile . 'tx_storefinder_domain_model_location.content_elements',
             'config' => [
                 'type' => 'inline',
                 'allowed' => 'tt_content',
@@ -644,9 +633,9 @@ return [
                     'showSynchronizationLink' => 1,
                     'enabledControls' => [
                         'info' => false,
-                    ]
-                ]
-            ]
+                    ],
+                ],
+            ],
         ],
     ],
 
@@ -677,8 +666,8 @@ return [
                 --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,
                     --palette--;;hidden,
                     --palette--;;access,
-            '
-        ]
+            ',
+        ],
     ],
 
     'palettes' => [
@@ -686,7 +675,7 @@ return [
             'label' => $languageFile . 'palette-name',
             'showitem' => '
                 name, storeid
-            '
+            ',
         ],
         'address' => [
             'label' => $languageFile . 'palette-address',
@@ -696,7 +685,7 @@ return [
                 zipcode, city,
                 --linebreak--,
                 state, country
-            '
+            ',
         ],
         'contact' => [
             'label' => $languageFile . 'palette-contact',
@@ -704,7 +693,7 @@ return [
                 phone, mobile,
                 --linebreak--,
                 fax, email
-            '
+            ',
         ],
         'coordinates' => [
             'label' => $languageFile . 'palette-coordinates',
@@ -714,7 +703,7 @@ return [
                 latitude, longitude,
                 --linebreak--,
                 geocode, center
-            '
+            ',
         ],
         'hidden' => [
             'showitem' => '
@@ -728,7 +717,7 @@ return [
                 endtime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:endtime_formlabel,
                 --linebreak--,
                 fe_group;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:fe_group_formlabel,
-            '
+            ',
         ],
-    ]
+    ],
 ];

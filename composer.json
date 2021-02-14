@@ -16,7 +16,9 @@
 		"store locator",
 		"poi",
 		"shop list",
-		"google map"
+		"Google Maps",
+		"OpenStreetMap",
+		"open street map"
 	],
 
 	"repositories": [
@@ -30,15 +32,15 @@
 		"ext-json": "*",
 		"ext-pdo": "*",
 
-		"typo3/cms-core": "^10.4",
-		"typo3/cms-extbase": "^10.4.1 || dev-master",
+		"typo3/cms-core": "^11.0",
+		"typo3/cms-extbase": "*",
 		"typo3/cms-extensionmanager": "*",
 		"typo3/cms-fluid": "*",
 		"typo3/cms-frontend": "*",
 		"sjbr/static-info-tables": "^6.8.7",
 
 		"geocoder-php/google-maps-provider": "^4.4.0",
-		"php-http/guzzle6-adapter": "*",
+		"php-http/guzzle7-adapter": "*",
 		"php-http/message": "*",
 		"phpoffice/phpspreadsheet": "^1.9.0"
 	},

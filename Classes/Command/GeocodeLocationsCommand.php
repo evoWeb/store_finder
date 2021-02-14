@@ -26,20 +26,11 @@ use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 
 class GeocodeLocationsCommand extends Command
 {
-    /**
-     * @var PersistenceManager
-     */
-    protected $persistenceManager;
+    protected PersistenceManager $persistenceManager;
 
-    /**
-     * @var LocationRepository
-     */
-    protected $locationRepository;
+    protected LocationRepository $locationRepository;
 
-    /**
-     * @var GeocodeService
-     */
-    protected $geocodeService;
+    protected GeocodeService $geocodeService;
 
     public function __construct(
         LocationRepository $locationRepository,
@@ -51,7 +42,7 @@ class GeocodeLocationsCommand extends Command
         $this->persistenceManager = $persistenceManager;
         $this->geocodeService = $geocodeService;
         $this->geocodeService->setSettings($extensionConfiguration->get('store_finder') ?? []);
-        parent::__construct(null);
+        parent::__construct();
     }
 
     /**
@@ -82,5 +73,7 @@ class GeocodeLocationsCommand extends Command
 
         $io = new SymfonyStyle($input, $output);
         $io->comment('All locations geocoded');
+
+        return 0;
     }
 }

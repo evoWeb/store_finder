@@ -15,6 +15,7 @@ namespace Evoweb\StoreFinder\Validation\Validator;
  * LICENSE.txt file that was distributed with this source code.
  */
 
+use Evoweb\StoreFinder\Domain\Model\Constraint;
 use TYPO3\CMS\Extbase\Validation\Validator\GenericObjectValidator;
 use TYPO3\CMS\Extbase\Validation\Validator\ObjectValidatorInterface;
 
@@ -25,26 +26,26 @@ class ConstraintValidator extends GenericObjectValidator
      *
      * @var string
      */
-    protected $currentPropertyName = '';
+    protected string $currentPropertyName = '';
 
     /**
      * Options for the current validation
      *
      * @var array
      */
-    protected $currentValidatorOptions = [];
+    protected array $currentValidatorOptions = [];
 
     /**
      * Model that gets validated currently
      *
-     * @var \Evoweb\StoreFinder\Domain\Model\Constraint
+     * @var Constraint
      */
-    protected $model;
+    protected Constraint $model;
 
     /**
      * Checks if the given value is valid according to the property validators.
      *
-     * @param mixed $object The value that should be validated
+     * @param Constraint $object The value that should be validated
      */
     protected function isValid($object)
     {
@@ -92,12 +93,12 @@ class ConstraintValidator extends GenericObjectValidator
     /**
      * Checks if validator can validate the object
      *
-     * @param \Evoweb\SfRegister\Domain\Model\FrontendUser|\Evoweb\SfRegister\Domain\Model\Password $object
+     * @param Constraint $object
      *
      * @return bool
      */
-    public function canValidate($object): bool
+    public function canValidate($object)
     {
-        return $object instanceof \Evoweb\StoreFinder\Domain\Model\Constraint;
+        return $object instanceof Constraint;
     }
 }

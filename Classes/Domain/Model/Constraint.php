@@ -17,39 +17,24 @@ namespace Evoweb\StoreFinder\Domain\Model;
 
 class Constraint extends Location
 {
-    /**
-     * @var string
-     */
-    protected $search = '';
+    protected string $search = '';
 
-    /**
-     * @var array
-     */
-    protected $category = [];
+    protected array $category = [];
 
-    /**
-     * @var int
-     */
-    protected $radius = 0;
+    protected int $radius = 0;
 
-    /**
-     * @var int
-     */
-    protected $limit = 0;
+    protected int $limit = 0;
 
-    /**
-     * @var int
-     */
-    protected $page = 0;
-
-    public function getSearch(): string
-    {
-        return $this->search;
-    }
+    protected int $page = 0;
 
     public function setSearch(string $search)
     {
         $this->search = $search;
+    }
+
+    public function getSearch(): string
+    {
+        return $this->search;
     }
 
     public function setCategory(array $category)

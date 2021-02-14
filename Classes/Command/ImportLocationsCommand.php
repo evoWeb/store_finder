@@ -27,7 +27,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class ImportLocationsCommand extends Command
 {
-    private $columnMap = [
+    private array $columnMap = [
         'A' => 'import_id',
         'B' => ['name', 'storeid'],
         'C' => 'address',
@@ -40,37 +40,31 @@ class ImportLocationsCommand extends Command
         'J' => 'image',
     ];
 
-    private $attributeMap = [
+    private array $attributeMap = [
         'K' => [
             'att1' => 1,
         ],
     ];
 
-    private $categoryMap = [
+    private array $categoryMap = [
         'L' => [
             'cat1' => 1,
         ]
     ];
 
-    private $countryCache = [];
+    private array $countryCache = [];
 
-    private $stateCache = [];
+    private array $stateCache = [];
 
-    /**
-     * @var ConnectionPool
-     */
-    protected $connectionPool;
+    protected ConnectionPool $connectionPool;
 
-    /**
-     * @var ResourceFactory
-     */
-    protected $resourceFactory;
+    protected ResourceFactory $resourceFactory;
 
     public function __construct(ConnectionPool $connectionPool, ResourceFactory $resourceFactory)
     {
         $this->connectionPool = $connectionPool;
         $this->resourceFactory = $resourceFactory;
-        parent::__construct(null);
+        parent::__construct();
     }
 
     /**
@@ -178,7 +172,7 @@ class ImportLocationsCommand extends Command
                 $expression->eq('pid', $storagePid)
             )
             ->execute()
-            ->fetchAll();
+            ->fetchAllAssociative();
 
         if (count($locationUids)) {
             $queryBuilder = $this->getQueryBuilderForTable($tableMm);
@@ -289,7 +283,7 @@ class ImportLocationsCommand extends Command
                     $queryBuilder->expr()->eq('cn_iso_3', $queryBuilder->createNamedParameter($value))
                 )
                 ->execute()
-                ->fetchColumn(0);
+                ->fetchOne();
         }
         return $this->countryCache[$value];
     }
@@ -306,7 +300,7 @@ class ImportLocationsCommand extends Command
                     $queryBuilder->expr()->eq('zn_code', $queryBuilder->createNamedParameter($value))
                 )
                 ->execute()
-                ->fetchColumn(0);
+                ->fetchOne();
         }
         return $this->stateCache[$value];
     }
@@ -461,7 +455,7 @@ class ImportLocationsCommand extends Command
                 )
             )
             ->execute();
-        return (int)$result->fetchColumn(0);
+        return (int)$result->fetchOne();
     }
 
     protected function getReferences(
@@ -477,7 +471,7 @@ class ImportLocationsCommand extends Command
             ->where(
                 $queryBuilder->expr()->eq(
                     'tablenames',
-                    $queryBuilder->createNamedParameter($tableName, \PDO::PARAM_STR)
+                    $queryBuilder->createNamedParameter($tableName)
                 )
             );
 
@@ -508,7 +502,7 @@ class ImportLocationsCommand extends Command
 
         return $queryBuilder
             ->execute()
-            ->fetchAll();
+            ->fetchAllAssociative();
     }
 
     protected function addReference(
@@ -548,7 +542,7 @@ class ImportLocationsCommand extends Command
             ->where(
                 $queryBuilder->expr()->eq(
                     'tablenames',
-                    $queryBuilder->createNamedParameter($tableName, \PDO::PARAM_STR)
+                    $queryBuilder->createNamedParameter($tableName)
                 ),
                 $queryBuilder->expr()->eq(
                     'uid_local',
@@ -563,7 +557,7 @@ class ImportLocationsCommand extends Command
             $queryBuilder->andWhere(
                 $queryBuilder->expr()->eq(
                     'fieldname',
-                    $queryBuilder->createNamedParameter($fieldName, \PDO::PARAM_STR)
+                    $queryBuilder->createNamedParameter($fieldName)
                 )
             );
         }

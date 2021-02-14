@@ -28,6 +28,15 @@ use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 {
     /**
+     * @var array
+     */
+    protected $defaultOrderings = [
+        'zipcode' => QueryInterface::ORDER_ASCENDING,
+        'city' => QueryInterface::ORDER_ASCENDING,
+        'name' => QueryInterface::ORDER_ASCENDING,
+    ];
+
+    /**
      * Natural logarithm of 2
      *
      * @var float
@@ -46,20 +55,11 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      */
     public const ZOOM_MAX = 21;
 
-    /**
-     * @var array
-     */
-    protected $settings = [];
+    protected array $settings = [];
 
-    /**
-     * @var ConnectionPool
-     */
-    protected $connectionPool;
+    protected ConnectionPool $connectionPool;
 
-    /**
-     * @var CategoryRepository
-     */
-    protected $categoryRepository;
+    protected CategoryRepository $categoryRepository;
 
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -98,6 +98,7 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     {
         /** @var Query $query */
         $query = $this->createQuery();
+        $query->getQuerySettings()->setRespectStoragePage(false);
 
         $query->matching($query->equals('uid', $uid));
 
@@ -237,7 +238,7 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         }
 
         $queryBuilder->having(
-            '`distance` <= ' . $queryBuilder->createNamedParameter($constraint->getRadius(), \PDO::PARAM_STR)
+            '`distance` <= ' . $queryBuilder->createNamedParameter($constraint->getRadius())
         );
 
         return $queryBuilder;

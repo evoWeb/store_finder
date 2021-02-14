@@ -5,7 +5,7 @@
 <f:section name="content">
 <h3 class="formHeader"><f:translate key="formHeader"/></h3>
 
-<f:form object="{constraint}" action="map" name="constraint">
+<f:form action="search" name="constraint" object="{constraint}" pageUid="{settings.resultPageId}">
 	<f:render partial="FormErrors" section="Main" arguments="{for: 'constraint'}" />
 	<f:render partial="FieldError" section="Main" arguments="{field: 'uid'}" />
 
@@ -34,7 +34,7 @@
 			<f:form.textfield property="city" id="city" class="form-control"/>
 		</div>
 
-		<f:if condition="{static_info_tables}">
+		<f:if condition="{settings.static_info_tables}">
 			<div class="col-md-6 mb-3 country">
 				<label for="country"><f:translate key="country" /></label>
 				<f:render partial="FieldError" section="Main" arguments="{field: 'country'}" />

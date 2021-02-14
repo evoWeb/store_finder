@@ -207,23 +207,26 @@
 			<trans-unit id="pi_flexform.zoom">
 				<source>Zoom</source>
 			</trans-unit>
+			<trans-unit id="wizard.group.store_finder">
+				<source>Store Finder</source>
+			</trans-unit>
 			<trans-unit id="pi1_title_map">
-				<source>Store Finder - Map with search and list</source>
+				<source>Map with search and list</source>
 			</trans-unit>
 			<trans-unit id="pi1_description_map">
 				<source>Adds a store finder search form with map and result list.</source>
 			</trans-unit>
 			<trans-unit id="tt_content.list_type_map">
-				<source>Store Finder - Map with search and list</source>
+				<source>Store Finder: Map with search and list</source>
 			</trans-unit>
 			<trans-unit id="pi1_title_show">
-				<source>Store Finder - Single location map</source>
+				<source>Single location map</source>
 			</trans-unit>
 			<trans-unit id="pi1_description_show">
 				<source>Adds a map for a single location to display.</source>
 			</trans-unit>
 			<trans-unit id="tt_content.list_type_show">
-				<source>Store Finder - Single location map</source>
+				<source>Store Finder: Single location map</source>
 			</trans-unit>
 			<trans-unit id="pi_flexform.showBeforeSearch">
 				<source>Show before search</source>
@@ -270,9 +273,6 @@
 			<trans-unit id="pi_flexform.resultPageId">
 				<source>Result page</source>
 			</trans-unit>
-			<trans-unit id="pi_flexform.routePageId">
-				<source>Routing page id</source>
-			</trans-unit>
 			<trans-unit id="pi_flexform.singleLocationId">
 				<source>Single location to render</source>
 			</trans-unit>
@@ -290,6 +290,10 @@
 			</trans-unit>
 			<trans-unit id="pi_flexform.categoryPriority.useParentIfNoFilterSelected">
 				<source>Filter utilized by the user in frontend or as filter if the user selected none</source>
+			</trans-unit>
+
+			<trans-unit id="pages">
+				<source>Record Storage Page</source>
 			</trans-unit>
 		</body>
 	</file>

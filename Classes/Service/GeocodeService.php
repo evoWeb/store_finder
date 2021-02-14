@@ -18,34 +18,20 @@ namespace Evoweb\StoreFinder\Service;
 use Evoweb\StoreFinder\Cache\CoordinatesCache;
 use Evoweb\StoreFinder\Domain\Model\Location;
 use Evoweb\StoreFinder\Domain\Repository\CountryRepository;
+use Geocoder\Model\Coordinates;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class GeocodeService
 {
-    /**
-     * @var CoordinatesCache
-     */
-    protected $coordinatesCache;
+    protected CoordinatesCache $coordinatesCache;
 
-    /**
-     * @var CountryRepository
-     */
-    protected $countryRepository;
+    protected CountryRepository $countryRepository;
 
-    /**
-     * @var array
-     */
-    protected $settings = [];
+    protected array $settings = [];
 
-    /**
-     * @var array
-     */
-    protected $fields = ['address', 'zipcode', 'city', 'state', 'country'];
+    protected array $fields = ['address', 'zipcode', 'city', 'state', 'country'];
 
-    /**
-     * @var bool
-     */
-    public $hasMultipleResults;
+    public bool $hasMultipleResults = false;
 
     public function __construct(
         CoordinatesCache $coordinatesCache,
@@ -60,13 +46,7 @@ class GeocodeService
         $this->settings = $settings;
     }
 
-    /**
-     * @param Location $address
-     * @param bool $forceGeoCoding
-     *
-     * @return Location
-     */
-    public function geocodeAddress(Location $address, bool $forceGeoCoding = false)
+    public function geocodeAddress(Location $address, bool $forceGeoCoding = false): Location
     {
         $queryValues = $this->prepareValuesForQuery($address, $this->fields);
         $geoCodedAddress = $this->coordinatesCache->getCoordinateByAddress($address, $queryValues);
@@ -157,12 +137,12 @@ class GeocodeService
     protected function getCoordinatesFromProvider(array $queryValues): \Geocoder\Model\Coordinates
     {
         if (strpos($this->settings['geocoderProvider'], '\\') === false) {
-            $providerClass = 'Geocoder\\Provider\\GoogleMaps\\GoogleMaps';
+            $providerClass = \Geocoder\Provider\GoogleMaps\GoogleMaps::class;
         } else {
             $providerClass = $this->settings['geocoderProvider'];
         }
 
-        $httpClient = new \Http\Adapter\Guzzle6\Client();
+        $httpClient = new \Http\Adapter\Guzzle7\Client();
         $provider = GeneralUtility::makeInstance(
             $providerClass,
             $httpClient,
@@ -176,10 +156,10 @@ class GeocodeService
             if ($results->count() > 0) {
                 $result = $results->get(0)->getCoordinates();
             } else {
-                $result = new \Geocoder\Model\Coordinates(0, 0);
+                $result = new Coordinates(0, 0);
             }
         } else {
-            $result = new \Geocoder\Model\Coordinates(0, 0);
+            $result = new Coordinates(0, 0);
         }
 
         return $result;

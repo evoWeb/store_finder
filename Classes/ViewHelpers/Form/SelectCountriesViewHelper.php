@@ -30,12 +30,7 @@ use Evoweb\StoreFinder\Domain\Repository\CountryRepository;
  */
 class SelectCountriesViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\SelectViewHelper
 {
-    /**
-     * Repository that provides the country models
-     *
-     * @var CountryRepository
-     */
-    protected $countryRepository;
+    protected CountryRepository $countryRepository;
 
     public function injectCountryRepository(CountryRepository $countryRepository)
     {

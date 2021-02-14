@@ -1,25 +1,32 @@
-mod.wizards.newContentElement.wizardItems {
-	plugins {
-		elements {
-			storefinder_map {
-				iconIdentifier = store-finder-plugin
-				title = LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi1_title_map
-				description = LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi1_description_map
-				tt_content_defValues {
-					CType = list
-					list_type = storefinder_map
-				}
-			}
-			storefinder_show {
-				iconIdentifier = store-finder-plugin
-				title = LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi1_title_show
-				description = LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi1_description_show
-				tt_content_defValues {
-					CType = list
-					list_type = storefinder_show
-				}
-			}
-		}
-		show = *
-	}
+mod.wizards.newContentElement.wizardItems.store_finder {
+  after = common, menu, special, forms, plugins
+  header = LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:wizard.group.store_finder
+  elements {
+    storefinder_map {
+      iconIdentifier = store-finder-plugin
+      title = LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi1_title_map
+      description = LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi1_description_map
+      tt_content_defValues {
+        CType = list
+        list_type = storefinder_map
+      }
+    }
+
+    storefinder_show {
+      iconIdentifier = store-finder-plugin
+      title = LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi1_title_show
+      description = LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi1_description_show
+      tt_content_defValues {
+        CType = list
+        list_type = storefinder_show
+      }
+    }
+  }
+
+  show = *
+}
+
+mod.web_layout.tt_content.preview.list {
+  storefinder_map = EXT:store_finder/Resources/Private/Templates/Preview/Map.html
+  storefinder_show = EXT:store_finder/Resources/Private/Templates/Preview/Show.html
 }

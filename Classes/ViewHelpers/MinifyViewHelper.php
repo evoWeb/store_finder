@@ -16,19 +16,20 @@ namespace Evoweb\StoreFinder\ViewHelpers;
  */
 
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
 
-class MinifyViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper
+class MinifyViewHelper extends AbstractViewHelper
 {
     use CompileWithRenderStatic;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $escapeChildren = false;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $escapeOutput = false;
 

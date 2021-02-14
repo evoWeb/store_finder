@@ -14,6 +14,7 @@ namespace Evoweb\StoreFinder\Tests\Functional\Cache;
  */
 
 use Evoweb\StoreFinder\Domain\Model\Constraint;
+use Evoweb\StoreFinder\Service\GeocodeService;
 use PHPUnit\Framework\MockObject\MockObject;
 use SJBR\StaticInfoTables\Domain\Model\Country;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
@@ -24,25 +25,22 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class AddLocationToCacheTest extends \TYPO3\TestingFramework\Core\Functional\FunctionalTestCase
 {
-    /**
-     * @var array
-     */
-    protected $testExtensionsToLoad = ['typo3conf/ext/store_finder', 'typo3conf/ext/static_info_tables'];
+    protected array $testExtensionsToLoad = [
+        'typo3conf/ext/store_finder',
+        'typo3conf/ext/static_info_tables',
+    ];
 
-    /**
-     * @var array
-     */
-    protected $coreExtensionsToLoad = ['extbase', 'fluid'];
+    protected array $coreExtensionsToLoad = [
+        'extbase',
+        'fluid',
+    ];
 
     /**
      * @var \Evoweb\StoreFinder\Cache\CoordinatesCache|MockObject
      */
     protected $coordinatesCache;
 
-    /**
-     * @var \Evoweb\StoreFinder\Service\GeocodeService
-     */
-    protected $geocodeService;
+    protected GeocodeService $geocodeService;
 
     public function setUp(): void
     {
@@ -67,10 +65,7 @@ class AddLocationToCacheTest extends \TYPO3\TestingFramework\Core\Functional\Fun
             \Evoweb\StoreFinder\Domain\Repository\CountryRepository::class
         );
 
-        $this->geocodeService = new \Evoweb\StoreFinder\Service\GeocodeService(
-            $this->coordinatesCache,
-            $categoryRepository
-        );
+        $this->geocodeService = new GeocodeService($this->coordinatesCache, $categoryRepository);
     }
 
     public function cacheDataProvider(): array
