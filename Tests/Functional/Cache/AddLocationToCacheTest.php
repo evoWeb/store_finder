@@ -52,7 +52,11 @@ class AddLocationToCacheTest extends \TYPO3\TestingFramework\Core\Functional\Fun
     {
         parent::setUp();
 
+        $logger = new \Psr\Log\NullLogger();
+
         $frontendUser = new \TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication();
+        $frontendUser->setLogger($logger);
+        $frontendUser->start();
 
         $cacheManager = new \TYPO3\CMS\Core\Cache\CacheManager();
         $cacheManager->setCacheConfigurations([
