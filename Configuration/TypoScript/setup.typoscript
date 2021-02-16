@@ -15,6 +15,7 @@ plugin.tx_storefinder.settings {
   categoryPriority = useAsFilterInFrontend
 
   limit = 20
+  addPaginator = {$plugin.tx_storefinder.addPaginator}
 
   radius {
     15 = 15

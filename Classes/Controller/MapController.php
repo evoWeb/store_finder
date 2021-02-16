@@ -28,9 +28,11 @@ use Evoweb\StoreFinder\Domain\Model\Location;
 use Psr\Http\Message\ResponseInterface;
 use SJBR\StaticInfoTables\Domain\Model\Country;
 use TYPO3\CMS\Core\Http\HtmlResponse;
+use TYPO3\CMS\Core\Pagination\SimplePagination;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Http\ForwardResponse;
+use TYPO3\CMS\Extbase\Pagination\QueryResultPaginator;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Property\TypeConverter\PersistentObjectConverter;
 use TYPO3\CMS\Extbase\Validation\Validator\ValidatorInterface;
@@ -199,6 +201,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             }
 
             $this->addCategoryFromSettingsToView();
+            $this->addPaginator($locations);
 
             $response = new HtmlResponse($this->view->render());
         }
@@ -235,6 +238,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         }
 
         $this->addCategoryFromSettingsToView();
+        $this->addPaginator($locations);
 
         return new HtmlResponse($this->view->render());
     }
@@ -484,5 +488,24 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $center->setZoom(intval(18 - $zoom));
 
         return $center;
+    }
+
+    protected function addPaginator(QueryResultInterface $locations)
+    {
+        if ($this->settings['addPaginator']) {
+            $currentPage = $this->request->hasArgument('currentPage')
+                ? (int)$this->request->hasArgument('currentPage') : 1;
+
+            $resultPaginator = new QueryResultPaginator($locations, $currentPage, (int)$this->settings['limit']);
+            $pagination = new SimplePagination($resultPaginator);
+
+            $this->view->assignMultiple(
+                [
+                    'paginator' => $resultPaginator,
+                    'pagination' => $pagination,
+                    'pages' => range(1, $pagination->getLastPageNumber()),
+                ]
+            );
+        }
     }
 }
