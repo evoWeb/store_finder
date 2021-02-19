@@ -69,12 +69,6 @@ return [
         'iconfile' => 'EXT:store_finder/Resources/Public/Icons/tx_storefinder_domain_model_location.gif',
     ],
 
-    'interface' => [
-        'showRecordFieldList' => 'hidden, endtime, fe_group, name, storeid, address, additionaladdress, person, city,
-            state, zipcode, country, attributes, products, phone, mobile, hours, url, notes, image, icon, content,
-            use_coordinate, categories, latitude, longitude, geocode'
-    ],
-
     'columns' => [
         'hidden' => [
             'exclude' => true,
@@ -147,7 +141,6 @@ return [
                 'exclusiveKeys' => '-1,-2',
                 'foreign_table' => 'fe_groups',
                 'foreign_table_where' => 'ORDER BY fe_groups.title',
-                'enableMultiSelectFilterTextfield' => true
             ]
         ],
         'sys_language_uid' => [
@@ -167,7 +160,6 @@ return [
             ]
         ],
         'l18n_parent' => [
-            'exclude' => true,
             'displayCond' => 'FIELD:sys_language_uid:>:0',
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
             'config' => [

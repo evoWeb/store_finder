@@ -36,7 +36,7 @@ $overrideChildTca = [
 ];
 
 $table = 'tx_storefinder_domain_model_attribute';
-$languageFile = 'LLL:EXT:store_finder/Resources/Private/Language/locallang_db.xlf' . ':';
+$languageFile = 'LLL:EXT:store_finder/Resources/Private/Language/locallang_db.xlf:';
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages(
     'tx_storefinder_domain_model_attribute'
@@ -67,10 +67,6 @@ return [
         'iconfile' => 'EXT:store_finder/Resources/Public/Icons/tx_storefinder_domain_model_attribute.gif',
     ],
 
-    'interface' => [
-        'showRecordFieldList' => 'sys_language_uid,l18n_parent,l18n_diffsource,name,icon'
-    ],
-
     'columns' => [
         'sys_language_uid' => [
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
@@ -89,7 +85,6 @@ return [
             ]
         ],
         'l18n_parent' => [
-            'exclude' => true,
             'displayCond' => 'FIELD:sys_language_uid:>:0',
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
             'config' => [
