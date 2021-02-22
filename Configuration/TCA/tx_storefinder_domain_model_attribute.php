@@ -35,7 +35,6 @@ $overrideChildTca = [
     ],
 ];
 
-$table = 'tx_storefinder_domain_model_attribute';
 $languageFile = 'LLL:EXT:store_finder/Resources/Private/Language/locallang_db.xlf:';
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages(
@@ -69,19 +68,20 @@ return [
 
     'columns' => [
         'sys_language_uid' => [
+            'exclude' => true,
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
             'config' => [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
-                'foreign_table' => 'sys_language',
-                'foreign_table_where' => 'ORDER BY sys_language.sorting',
-                'items' => [], // no default language here, as the pages table is always the default language
-                'default' => 0,
-                'fieldWizard' => [
-                    'selectIcons' => [
-                        'disabled' => false,
+                'special' => 'languages',
+                'items' => [
+                    [
+                        'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.allLanguages',
+                        -1,
+                        'flags-multiple'
                     ],
                 ],
+                'default' => 0,
             ]
         ],
         'l18n_parent' => [
@@ -96,10 +96,11 @@ return [
                         0
                     ]
                 ],
-                'foreign_table' => $table,
+                'foreign_table' => 'tx_storefinder_domain_model_attribute',
                 // no sys_language_uid = -1 allowed explicitly!
                 'foreign_table_where' =>
-                    'AND ' . $table . '.pid = ###CURRENT_PID### AND ' . $table . '.sys_language_uid IN = 0',
+                    'AND tx_storefinder_domain_model_attribute.pid = ###CURRENT_PID###'
+                    . ' AND tx_storefinder_domain_model_attribute.sys_language_uid = 0',
                 'default' => 0
             ]
         ],
@@ -112,6 +113,21 @@ return [
             'config' => [
                 'type' => 'passthrough',
                 'default' => ''
+            ]
+        ],
+        'hidden' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.visible',
+            'config' => [
+                'type' => 'check',
+                'renderType' => 'checkboxToggle',
+                'items' => [
+                    [
+                        0 => '',
+                        1 => '',
+                        'invertStateDisplay' => true
+                    ]
+                ],
             ]
         ],
 
@@ -147,14 +163,27 @@ return [
 
     'types' => [
         '0' => [
-            'showitem' => 'sys_language_uid, l18n_parent, l18n_diffsource, name, icon'
+            'showitem' => '
+                --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,
+                    name, icon,
+                --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,
+                    --palette--;;language,
+                --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,
+                    --palette--;;hidden,
+            '
         ]
     ],
     'palettes' => [
         'language' => [
             'showitem' => '
-            sys_language_uid;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:sys_language_uid_formlabel,
-            l18n_parent
+                sys_language_uid;'
+                . 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:sys_language_uid_formlabel,
+                l18n_parent
+            ',
+        ],
+        'hidden' => [
+            'showitem' => '
+                hidden;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:field.default.hidden
             ',
         ],
     ]
