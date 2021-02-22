@@ -199,6 +199,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             'static_info_tables',
             \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('static_info_tables') ? 1 : 0
         );
+        return trim($this->view->render());
     }
 
     protected function getLocationsByConstraints(Constraint $constraint)
