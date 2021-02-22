@@ -179,11 +179,13 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     /**
      * Action responsible for rendering search, map and list partial
      *
-     * @param Constraint $constraint
+     * @param ?Constraint $constraint
      *
      * @TYPO3\CMS\Extbase\Annotation\Validate("Evoweb\StoreFinder\Validation\Validator\Constraint", param="constraint")
+     *
+     * @return string
      */
-    public function mapAction(Constraint $constraint = null)
+    public function mapAction(Constraint $constraint = null): string
     {
         if ($constraint !== null) {
             $this->getLocationsByConstraints($constraint);
