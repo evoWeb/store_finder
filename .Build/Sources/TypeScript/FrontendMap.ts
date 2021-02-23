@@ -64,6 +64,16 @@ export default class FrontendMap {
 
   createMarker(location: Location, icon: string) {}
 
+  removeMarker(location: Location) {}
+
+  removeLocation(location: Location) {
+    this.removeMarker(location);
+    let position = this.locations.indexOf(location);
+    if (position > -1) {
+      this.locations.splice(position, 1);
+    }
+  }
+
   /**
    * Process single location
    */
@@ -83,8 +93,8 @@ export default class FrontendMap {
   /**
    * Initialize location marker on map
    */
-  initializeLocations(this: FrontendMap) {
-    this.locations.map(this.processLocation.bind(this));
+  initializeLocations(this: FrontendMap, locations: Array<Location>) {
+    locations.map(this.processLocation.bind(this));
   }
 
   initializeInfoWindow() {}
@@ -124,7 +134,7 @@ export default class FrontendMap {
   postLoadScript() {
     this.initializeMap();
     this.initializeLayer();
-    this.initializeLocations();
+    this.initializeLocations(this.locations);
     this.initializeInfoWindow();
     this.initializeTemplates();
     this.initializeListEvents();

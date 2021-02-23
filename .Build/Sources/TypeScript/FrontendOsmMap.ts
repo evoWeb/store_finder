@@ -49,16 +49,6 @@ class FrontendOsmMap extends FrontendMap {
    * Initialize information layer on map
    */
   initializeLayer(this: FrontendOsmMap) {
-    /*if (this.mapConfiguration.apiV3Layers.indexOf('traffic') > -1) {
-      let trafficLayer = new google.maps.TrafficLayer();
-      trafficLayer.setMap(this.map);
-    }
-
-    if (this.mapConfiguration.apiV3Layers.indexOf('bicycling') > -1) {
-      let bicyclingLayer = new google.maps.BicyclingLayer();
-      bicyclingLayer.setMap(this.map);
-    }*/
-
     if (this.mapConfiguration.apiV3Layers.indexOf('kml') > -1) {
       let $jsDeferred = $.Deferred(),
         $jsFile = $('<script/>', {
@@ -98,7 +88,7 @@ class FrontendOsmMap extends FrontendMap {
   /**
    * Create marker and add to map
    */
-  createMarker(location: Location, icon: string): L.Marker {
+  createMarker(this: FrontendOsmMap, location: Location, icon: string): L.Marker {
     let options = {
         title: location.name,
         icon: new L.Icon({iconUrl: icon}),
@@ -111,6 +101,10 @@ class FrontendOsmMap extends FrontendMap {
     });
 
     return marker;
+  }
+
+  removeMarker(location: Location) {
+    this.map.removeLayer(location.marker);
   }
 
   /**
