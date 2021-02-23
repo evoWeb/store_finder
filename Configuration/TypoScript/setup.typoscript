@@ -124,3 +124,27 @@ lib.tx_storefinder.contentElementRendering {
   stdWrap.wrap = <div class="content">|</div>
   stdWrap.required = 1
 }
+
+mapAjaxPage = PAGE
+mapAjaxPage {
+  typeNum = 3000
+
+  # disable header code
+  config {
+    disableAllHeaderCode = 1
+    additionalHeaders = Content-type: application/json, utf-8
+
+    xhtml_cleaning = 0
+    admPanel = 0
+    debug = 0
+  }
+
+  10 < tt_content.list.20.storefinder_map
+  10.settings < plugin.tx_storefinder.settings
+  10.settings.ajax = 1
+  10.view < plugin.tx_storefinder.view
+  10.view.templateRootPaths.200 = {$plugin.tx_storefinder.ajax.templateRootPaths}
+  10.view.partialRootPaths.200 = {$plugin.tx_storefinder.ajax.partialRootPaths}
+  10.view.layoutRootPaths.200 = {$plugin.tx_storefinder.ajax.layoutRootPaths}
+  10.persistence.storagePid = {$plugin.tx_storefinder.ajax.storagePid}
+}
