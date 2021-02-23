@@ -24,6 +24,7 @@ use Evoweb\StoreFinder\Domain\Model\Constraint;
 use Evoweb\StoreFinder\Domain\Model\Location;
 use SJBR\StaticInfoTables\Domain\Model\Country;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Property\PropertyMappingConfiguration;
@@ -483,6 +484,11 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $center->setZoom(intval(18 - $zoom));
 
         return $center;
+    }
+
+    public function getView(): ViewInterface
+    {
+        return $this->view;
     }
 
     protected function getErrorFlashMessage()
