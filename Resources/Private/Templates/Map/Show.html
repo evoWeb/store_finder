@@ -3,14 +3,9 @@
 <f:layout name="General" />
 
 <f:section name="content">
-	<f:if condition="{numberOfLocations}">
-		<f:then>
-			<f:render partial="Map" section="content" arguments="{_all}"/>
-		</f:then>
-
-		<f:else>
-			No valid location selected
-		</f:else>
+	<f:if condition="{locations -> f:count()}">
+		<f:then><f:render partial="Map" section="content" arguments="{_all}"/></f:then>
+		<f:else>No valid location selected</f:else>
 	</f:if>
 </f:section>
 
