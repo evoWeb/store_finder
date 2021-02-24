@@ -12,26 +12,7 @@
 import * as Mustache from 'mustache';
 
 export default class FrontendMap {
-  public mapConfiguration: MapConfiguration = {
-    active: false,
-    afterSearch: 0,
-    center: {
-      lat: 0,
-      lng: 0
-    },
-    zoom: 18,
-
-    apiConsoleKey: '',
-    apiUrl: '',
-    language: '',
-
-    markerIcon: '',
-    apiV3Layers: '',
-    kmlUrl: '',
-
-    renderSingleViewCallback: null,
-    handleCloseButtonCallback: null
-  };
+  public mapConfiguration: MapConfiguration;
   public locations: Array<Location> = [];
   public locationIndex: number = 0;
   public infoWindowTemplate: string = '';
@@ -58,7 +39,7 @@ export default class FrontendMap {
   /**
    * Render content of the info window
    */
-  renderInfoWindowContent(location: Location): string {
+  renderInfoWindowContent(this: FrontendMap, location: Location): string {
     return Mustache.render(this.infoWindowTemplate, location.information)
   }
 
@@ -107,8 +88,8 @@ export default class FrontendMap {
    * Initialize list click events
    */
   initializeListEvents(this: FrontendMap) {
-    $(document).on('click', '.tx-storefinder .resultList > li', (event: Event, $field: JQuery): void => {
-      this.openInfoWindow($field.data('index'));
+    $(document).on('click', '.tx-storefinder .resultList > li', (event: Event, field: JQuery): void => {
+      this.openInfoWindow(field.data('index'));
     });
   }
 
@@ -116,12 +97,12 @@ export default class FrontendMap {
    * Initialize info window template
    */
   initializeTemplates(this: FrontendMap) {
-    this.infoWindowTemplate = $('#templateInfoWindow').html();
+    this.infoWindowTemplate = document.getElementById('templateInfoWindow').innerHTML;
     Mustache.parse(this.infoWindowTemplate);
 
-    $(document).on('click', '.tx-storefinder .infoWindow .close', (event: Event, $closeButton: JQuery): void => {
+    $(document).on('click', '.tx-storefinder .infoWindow .close', (event: Event, closeButton: JQuery): void => {
       if (typeof this.mapConfiguration.renderSingleViewCallback === 'function') {
-        this.mapConfiguration.handleCloseButtonCallback($closeButton);
+        this.mapConfiguration.handleCloseButtonCallback(closeButton);
       } else {
         this.closeInfoWindow();
       }
@@ -141,5 +122,21 @@ export default class FrontendMap {
   }
 
   loadScript() {}
-}
 
+  public ajax(url: string, successCallback: Function, formData: FormData = null) {
+    let request = new XMLHttpRequest();
+    request.onreadystatechange = function() {
+      if (request.readyState === 4 && request.status === 200) {
+        successCallback(request.response);
+      }
+    }
+
+    if (formData) {
+      request.open('POST', url, true);
+      request.send(formData);
+    } else {
+      request.open('GET', url, true);
+      request.send();
+    }
+  }
+}
