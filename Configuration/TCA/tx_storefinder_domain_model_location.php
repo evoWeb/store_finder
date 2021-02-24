@@ -525,7 +525,7 @@ return [
                 'cols' => 80,
                 'rows' => 15,
                 'enableRichtext' => true,
-                'softref' => 'rtehtmlarea_images,typolink_tag,images,email[subst],url',
+                'softref' => 'typolink_tag,images,email[subst],url',
             ]
         ],
 

@@ -47,6 +47,8 @@ CREATE TABLE tx_storefinder_domain_model_location (
 CREATE TABLE tx_storefinder_domain_model_attribute (
 	icon varchar(255) DEFAULT '' NOT NULL,
 	name varchar(255) DEFAULT '' NOT NULL,
+	description text,
+	css_class varchar(255) DEFAULT '' NOT NULL,
 
 	import_id int(11) DEFAULT '0' NOT NULL,
 

@@ -18,7 +18,7 @@ namespace Evoweb\StoreFinder\Domain\Model;
 class Attribute extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
     /**
-     * Image
+     * Icon
      *
      * @var \TYPO3\CMS\Extbase\Domain\Model\FileReference
      * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
@@ -29,6 +29,16 @@ class Attribute extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @var string
      */
     protected $name;
+
+    /**
+     * @var string
+     */
+    protected $description;
+
+    /**
+     * @var string
+     */
+    protected $cssClass = '';
 
     /**
      * @return \TYPO3\CMS\Extbase\Domain\Model\FileReference
@@ -54,5 +64,25 @@ class Attribute extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setName(string $name)
     {
         $this->name = $name;
+    }
+
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): void
+    {
+        $this->description = $description;
+    }
+
+    public function getCssClass(): string
+    {
+        return $this->cssClass;
+    }
+
+    public function setCssClass(string $cssClass)
+    {
+        $this->cssClass = $cssClass;
     }
 }

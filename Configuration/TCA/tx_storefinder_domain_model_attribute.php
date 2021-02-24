@@ -45,8 +45,6 @@ return [
     'ctrl' => [
         'title' => $languageFile . 'tx_storefinder_domain_model_attribute',
         'label' => 'name',
-        'label_alt' => 'icon',
-        'label_alt_force' => '1',
         'sortby' => 'sorting',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
@@ -159,13 +157,34 @@ return [
                 $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']
             ),
         ],
+
+        'description' => [
+            'label' => $languageFile . 'tx_storefinder_domain_model_attribute.description',
+            'config' => [
+                'type' => 'text',
+                'cols' => 80,
+                'rows' => 15,
+                'enableRichtext' => true,
+                'softref' => 'typolink_tag,images,email[subst],url',
+            ]
+        ],
+
+        'css_class' => [
+            'label' => $languageFile . 'tx_storefinder_domain_model_attribute.css_class',
+            'config' => [
+                'type' => 'input',
+                'size' => 50,
+                'max' => 255,
+                'eval' => 'trim',
+            ]
+        ],
     ],
 
     'types' => [
         '0' => [
             'showitem' => '
                 --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,
-                    name, icon,
+                    name, icon, description, css_class,
                 --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,
                     --palette--;;language,
                 --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,
