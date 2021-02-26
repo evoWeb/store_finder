@@ -30,6 +30,14 @@ export default class FrontendMap {
       }
       this.loadScript();
     }
+
+    if (!Element.prototype.matches) {
+      Element.prototype.matches = Element.prototype.matchesSelector ||
+        Element.prototype.mozMatchesSelector ||
+        Element.prototype.msMatchesSelector ||
+        Element.prototype.oMatchesSelector ||
+        Element.prototype.webkitMatchesSelector;
+    }
   }
 
   initializeMap() {}
@@ -88,8 +96,12 @@ export default class FrontendMap {
    * Initialize list click events
    */
   initializeListEvents(this: FrontendMap) {
-    $(document).on('click', '.tx-storefinder .resultList > li', (event: Event, field: JQuery): void => {
-      this.openInfoWindow(field.data('index'));
+    document.addEventListener('click', (event: Event) => {
+      let field = event.target as HTMLLIElement,
+        selector = '.tx-storefinder .resultList > li';
+      if (field.matches(selector)) {
+        this.openInfoWindow(parseInt(field.dataset.index));
+      }
     });
   }
 
@@ -100,11 +112,15 @@ export default class FrontendMap {
     this.infoWindowTemplate = document.getElementById('templateInfoWindow').innerHTML;
     Mustache.parse(this.infoWindowTemplate);
 
-    $(document).on('click', '.tx-storefinder .infoWindow .close', (event: Event, closeButton: JQuery): void => {
-      if (typeof this.mapConfiguration.renderSingleViewCallback === 'function') {
-        this.mapConfiguration.handleCloseButtonCallback(closeButton);
-      } else {
-        this.closeInfoWindow();
+    document.addEventListener('click', (event: Event) => {
+      let button = event.target as HTMLButtonElement,
+        selector = '.tx-storefinder .infoWindow .close';
+      if (button.matches(selector)) {
+        if (typeof this.mapConfiguration.handleCloseButtonCallback === 'function') {
+          this.mapConfiguration.handleCloseButtonCallback(button);
+        } else {
+          this.closeInfoWindow();
+        }
       }
     });
   }
@@ -123,11 +139,25 @@ export default class FrontendMap {
 
   loadScript() {}
 
-  public ajax(url: string, successCallback: Function, formData: FormData = null) {
+  public static ajax(
+    url: string,
+    formData: FormData = null,
+    successCallback: Function = null,
+    errorCallback: Function = null
+  ) {
     let request = new XMLHttpRequest();
-    request.onreadystatechange = function() {
-      if (request.readyState === 4 && request.status === 200) {
-        successCallback(request.response);
+
+    request.onreadystatechange = () => {
+      if (request.readyState === 4) {
+        if (request.status === 200) {
+          if (successCallback) {
+            successCallback(request.response);
+          }
+        } else {
+          if (successCallback) {
+            errorCallback(request.response);
+          }
+        }
       }
     }
 
