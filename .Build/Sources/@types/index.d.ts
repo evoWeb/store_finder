@@ -51,6 +51,10 @@ declare interface Window {
   sfas: any
 }
 
+interface Element {
+  msMatchesSelector(selectors: string): boolean;
+}
+
 declare interface Location {
   name: string,
   lat: number,
