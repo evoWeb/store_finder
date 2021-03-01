@@ -92,7 +92,7 @@ class ConstraintValidator extends GenericObjectValidator
     /**
      * Checks if validator can validate the object
      *
-     * @param \Evoweb\SfRegister\Domain\Model\FrontendUser|\Evoweb\SfRegister\Domain\Model\Password $object
+     * @param mixed $object
      *
      * @return bool
      */

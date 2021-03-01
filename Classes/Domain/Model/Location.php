@@ -308,7 +308,7 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     * @return \SJBR\StaticInfoTables\Domain\Model\CountryZone
+     * @return ?\SJBR\StaticInfoTables\Domain\Model\CountryZone
      */
     public function getState()
     {
@@ -329,7 +329,7 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     * @return \SJBR\StaticInfoTables\Domain\Model\Country
+     * @return ?\SJBR\StaticInfoTables\Domain\Model\Country
      */
     public function getCountry()
     {

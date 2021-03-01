@@ -53,15 +53,14 @@ class TceMainListener
      * Remap id for id and table
      *
      * @param string $id
-     * @param string &$table
+     * @param string $table
      * @param \TYPO3\CMS\Core\DataHandling\DataHandler $parentObject
      *
      * @return int
      */
-    protected function remapId($id, &$table, $parentObject)
+    protected function remapId($id, $table, $parentObject)
     {
         if (array_key_exists($id, $parentObject->substNEWwithIDs)) {
-            $table = $parentObject->substNEWwithIDs_table[$id];
             $id = $parentObject->substNEWwithIDs[$id];
         }
 

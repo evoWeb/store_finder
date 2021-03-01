@@ -320,7 +320,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     protected function getCenterOfQueryResult(Constraint $constraint, QueryResultInterface $queryResult): Location
     {
         $count = $queryResult->count();
-        /** @var Location $center */
+        /** @var $center Location */
         if ($count == 1) {
             $center = $queryResult->getFirst();
         } elseif (!$queryResult->count()) {
@@ -384,7 +384,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
                 case 'country':
                     /** @var CountryRepository $countryRepository */
                     $countryRepository = GeneralUtility::getContainer()->get(CountryRepository::class);
-                    /** @var Country $country */
+                    /** @var $country Country */
                     if (intval($defaultConstraint['country'])) {
                         $value = $countryRepository->findByUid((int) $defaultConstraint['country']);
                     } elseif (strlen($defaultConstraint['country']) === 2) {
