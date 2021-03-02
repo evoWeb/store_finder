@@ -612,7 +612,7 @@ return [
                     'minitems' => 0,
                     'maxitems' => 1,
                 ],
-                'svg,kml'
+                'svg,kml,geojson'
             ),
         ],
 
