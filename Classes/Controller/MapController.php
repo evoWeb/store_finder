@@ -207,8 +207,8 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     protected function getLocationsByConstraints(Constraint $constraint)
     {
         /** @var Constraint $constraint */
-        $constraint = $this->geocodeService->geocodeAddress($constraint);
         $constraint = $this->addDefaultConstraint($constraint);
+        $constraint = $this->geocodeService->geocodeAddress($constraint);
         $this->view->assign('searchWasNotClearEnough', $this->geocodeService->hasMultipleResults);
 
         $locations = $this->locationRepository->findByConstraint($constraint);
