@@ -235,7 +235,25 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     {
         if ($constraint->getAttributes()->count()) {
             $expression = $queryBuilder->expr();
-            $fieldName = 'attributes';
+
+            $queryBuilder->innerJoin(
+                'l',
+                'tx_storefinder_location_attribute_mm',
+                'a',
+                (string) $expression->andX(
+                    $expression->eq('l.uid', 'a.uid_foreign'),
+                    $expression->eq(
+                        'a.tablenames',
+                        $queryBuilder->createNamedParameter('tx_storefinder_domain_model_attribute')
+                    ),
+                    $expression->eq(
+                        'a.fieldname',
+                        $queryBuilder->createNamedParameter('attributes')
+                    )
+                )
+            );
+
+            $fieldName = 'a.uid_foreign';
             $constraints = [
                 $expression->isNull($fieldName),
                 $expression->eq($fieldName, $expression->literal('')),
