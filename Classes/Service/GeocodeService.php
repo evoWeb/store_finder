@@ -18,7 +18,14 @@ namespace Evoweb\StoreFinder\Service;
 use Evoweb\StoreFinder\Cache\CoordinatesCache;
 use Evoweb\StoreFinder\Domain\Model\Location;
 use Evoweb\StoreFinder\Domain\Repository\CountryRepository;
+use Geocoder\Provider\GoogleMaps\GoogleMaps;
+use Geocoder\Provider\Provider;
+use Geocoder\StatefulGeocoder;
+use Geocoder\Query\GeocodeQuery;
 use Geocoder\Model\Coordinates;
+use Http\Adapter\Guzzle7\Client;
+use SJBR\StaticInfoTables\Domain\Model\Country;
+use SJBR\StaticInfoTables\Domain\Model\CountryZone;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class GeocodeService
@@ -98,14 +105,14 @@ class GeocodeService
         // for url encoding
         $queryValues = [];
         foreach ($fields as $field) {
-            $methodName = 'get' . \TYPO3\CMS\Core\Utility\GeneralUtility::underscoredToUpperCamelCase($field);
+            $methodName = 'get' . GeneralUtility::underscoredToUpperCamelCase($field);
             $value = $location->{$methodName}();
 
             switch ($field) {
                 // if a known country code is used we fetch the english short name
                 // to enhance the map api query result
                 case 'country':
-                    if (is_numeric($value) || strlen((string) $value) == 3) {
+                    if (is_numeric($value) || strlen((string)$value) == 3) {
                         if (is_numeric($value)) {
                             $value = $this->countryRepository->findByUid($value);
                         } else {
@@ -113,13 +120,13 @@ class GeocodeService
                         }
                     }
 
-                    if ($value instanceof \SJBR\StaticInfoTables\Domain\Model\Country) {
+                    if ($value instanceof Country) {
                         $value = $value->getIsoCodeA2();
                     }
                     break;
 
                 case 'state':
-                    if ($value instanceof \SJBR\StaticInfoTables\Domain\Model\CountryZone) {
+                    if ($value instanceof CountryZone) {
                         $value = $value->getLocalName();
                     }
                     break;
@@ -134,24 +141,24 @@ class GeocodeService
         return $queryValues;
     }
 
-    protected function getCoordinatesFromProvider(array $queryValues): \Geocoder\Model\Coordinates
+    protected function getCoordinatesFromProvider(array $queryValues): Coordinates
     {
         if (strpos($this->settings['geocoderProvider'], '\\') === false) {
-            $providerClass = \Geocoder\Provider\GoogleMaps\GoogleMaps::class;
+            $providerClass = GoogleMaps::class;
         } else {
             $providerClass = $this->settings['geocoderProvider'];
         }
 
-        $httpClient = new \Http\Adapter\Guzzle7\Client();
+        $httpClient = new Client();
         $provider = GeneralUtility::makeInstance(
             $providerClass,
             $httpClient,
             null,
             $this->settings['apiConsoleKeyGeocoding']
         );
-        if ($provider instanceof \Geocoder\Provider\Provider) {
-            $geoCoder = new \Geocoder\StatefulGeocoder($provider, $this->settings['geocoderLocale']);
-            $results = $geoCoder->geocodeQuery(\Geocoder\Query\GeocodeQuery::create(implode(',', $queryValues)));
+        if ($provider instanceof Provider) {
+            $geoCoder = new StatefulGeocoder($provider, $this->settings['geocoderLocale']);
+            $results = $geoCoder->geocodeQuery(GeocodeQuery::create(implode(',', $queryValues)));
             $this->hasMultipleResults = $results->count() > 1;
             if ($results->count() > 0) {
                 $result = $results->get(0)->getCoordinates();

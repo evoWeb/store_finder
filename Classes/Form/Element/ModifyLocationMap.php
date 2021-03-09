@@ -15,7 +15,9 @@ namespace Evoweb\StoreFinder\Form\Element;
  * LICENSE.txt file that was distributed with this source code.
  */
 
-class ModifyLocationMap extends \TYPO3\CMS\Backend\Form\Element\AbstractFormElement
+use TYPO3\CMS\Backend\Form\Element\AbstractFormElement;
+
+class ModifyLocationMap extends AbstractFormElement
 {
     public function render(): array
     {
@@ -26,8 +28,8 @@ class ModifyLocationMap extends \TYPO3\CMS\Backend\Form\Element\AbstractFormElem
     protected function renderMap(array $resultArray): array
     {
         $row = $this->data['databaseRow'];
-        $latitude = (float) ($row['latitude'] ? $row['latitude'] : 51.4583912);
-        $longitude = (float) ($row['longitude'] ? $row['longitude'] : 7.0157931);
+        $latitude = (float)($row['latitude'] ? $row['latitude'] : 51.4583912);
+        $longitude = (float)($row['longitude'] ? $row['longitude'] : 7.0157931);
 
         $resultArray['html'] = '<div id="map" style="height: 300px; width: 100%;"></div>';
         $resultArray['stylesheetFiles'][] = 'EXT:store_finder/Resources/Public/JavaScript/Vendor/Leaflet/leaflet.css';

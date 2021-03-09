@@ -97,7 +97,6 @@ class CoordinatesCache
         $this->flushSessionCache();
     }
 
-
     /**
      * Check if session has key set and the value is not empty
      *
@@ -139,9 +138,6 @@ class CoordinatesCache
         }
     }
 
-    /**
-     * Flush session cache
-     */
     public function flushSessionCache()
     {
         if ($this->frontendUser != null) {
@@ -149,7 +145,6 @@ class CoordinatesCache
             $this->frontendUser->storeSessionData();
         }
     }
-
 
     /**
      * Check if cache table has key set

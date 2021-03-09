@@ -39,7 +39,7 @@ class Constraint extends Location
 
     public function setCategory(array $category)
     {
-        $this->category = (array) $category;
+        $this->category = (array)$category;
     }
 
     public function getCategory(): array

@@ -17,12 +17,14 @@ namespace Evoweb\StoreFinder\Validation\Validator;
 
 use Evoweb\StoreFinder\Domain\Model\Constraint;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Validation\Validator;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
+use TYPO3\CMS\Extbase\Validation\Validator\ValidatorInterface;
 
 /**
  * A either validator to check that a value is set
  */
-class EitherValidator extends Validator\AbstractValidator implements Validator\ValidatorInterface
+class EitherValidator extends AbstractValidator implements ValidatorInterface
 {
     /**
      * @var array
@@ -33,7 +35,7 @@ class EitherValidator extends Validator\AbstractValidator implements Validator\V
 
     protected array $properties = [];
 
-    protected Constraint $model;
+    protected ?Constraint $model;
 
     protected string $propertyName;
 
@@ -90,7 +92,7 @@ class EitherValidator extends Validator\AbstractValidator implements Validator\V
 
         if (!$result) {
             $this->addError(
-                \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('error_either', 'StoreFinder'),
+                LocalizationUtility::translate('error_either', 'StoreFinder'),
                 1305008423
             );
         }

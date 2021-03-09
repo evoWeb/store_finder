@@ -1,5 +1,7 @@
 <?php
 
+defined('TYPO3') or die();
+
 $overrideChildTca = [
     'types' => [
         '0' => [
@@ -372,7 +374,6 @@ return [
             ],
         ],
 
-
         // relations
         'related' => [
             'l10n_mode' => 'exclude',
@@ -534,18 +535,8 @@ return [
                 'size' => 30,
                 'max' => 255,
                 'eval' => 'trim',
-                'wizards' => [
-                    '_PADDING' => 2,
-                    'link' => [
-                        'type' => 'popup',
-                        'title' => 'Link',
-                        'icon' => 'actions-wizard-link',
-                        'module' => [
-                            'name' => 'wizard_link',
-                        ],
-                        'JSopenParams' => 'height=300,width=500,status=0,menubar=0,scrollbars=1',
-                    ],
-                ],
+                'renderType' => 'inputLink',
+                'fieldControl' => ['linkPopup' => ['options' => ['title' => 'Link']]],
             ],
         ],
 

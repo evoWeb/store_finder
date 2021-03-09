@@ -1,5 +1,7 @@
 <?php
 
+defined('TYPO3') or die();
+
 $pluginSignature = 'storefinder_map';
 $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist'][$pluginSignature] = 'layout, select_key';
 $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist'][$pluginSignature] = 'pi_flexform';

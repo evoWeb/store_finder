@@ -17,27 +17,30 @@ namespace Evoweb\StoreFinder\Controller;
 
 use Doctrine\Common\Annotations\DocParser;
 use Evoweb\StoreFinder\Controller\Event\MapGetLocationsByConstraintsEvent;
+use Evoweb\StoreFinder\Domain\Model\Constraint;
+use Evoweb\StoreFinder\Domain\Model\Location;
 use Evoweb\StoreFinder\Domain\Repository\CategoryRepository;
 use Evoweb\StoreFinder\Domain\Repository\CountryRepository;
 use Evoweb\StoreFinder\Domain\Repository\LocationRepository;
 use Evoweb\StoreFinder\Service\GeocodeService;
 use Evoweb\StoreFinder\Validation\Validator\ConstraintValidator;
 use Evoweb\StoreFinder\Validation\Validator\SettableInterface;
-use Evoweb\StoreFinder\Domain\Model\Constraint;
-use Evoweb\StoreFinder\Domain\Model\Location;
 use Psr\Http\Message\ResponseInterface;
 use SJBR\StaticInfoTables\Domain\Model\Country;
 use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Pagination\SimplePagination;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Http\ForwardResponse;
+use TYPO3\CMS\Extbase\Mvc\Controller\Argument;
+use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Pagination\QueryResultPaginator;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Property\TypeConverter\PersistentObjectConverter;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Validation\Validator\ValidatorInterface;
+use TYPO3\CMS\Extbase\Validation\ValidatorClassNameResolver;
 
-class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
+class MapController extends ActionController
 {
     protected LocationRepository $locationRepository;
 
@@ -68,7 +71,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     }
 
     protected function modifyValidatorsBasedOnSettings(
-        \TYPO3\CMS\Extbase\Mvc\Controller\Argument $argument,
+        Argument $argument,
         array $configuredValidators
     ) {
         $parser = new DocParser();
@@ -123,7 +126,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $validateAnnotation = current($parser->parse(
             '@TYPO3\CMS\Extbase\Annotation\Validate(' . $configuration . ')'
         ));
-        $validatorObjectName = \TYPO3\CMS\Extbase\Validation\ValidatorClassNameResolver::resolve(
+        $validatorObjectName = ValidatorClassNameResolver::resolve(
             $validateAnnotation->validator
         );
         /** @var ValidatorInterface $validator */
@@ -389,8 +392,8 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
                     /** @var CountryRepository $countryRepository */
                     $countryRepository = GeneralUtility::getContainer()->get(CountryRepository::class);
                     /** @var Country $country */
-                    if (intval($defaultConstraint['country'])) {
-                        $value = $countryRepository->findByUid((int) $defaultConstraint['country']);
+                    if ((int)($defaultConstraint['country'])) {
+                        $value = $countryRepository->findByUid((int)$defaultConstraint['country']);
                     } elseif (strlen($defaultConstraint['country']) === 2) {
                         $value = $countryRepository->findByIsoCodeA2($defaultConstraint['country']);
                     } elseif (strlen($defaultConstraint['country']) === 2) {
@@ -460,7 +463,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         }
 
         if ($radius === false) {
-            $radius = (int) $this->settings['defaultConstraint']['radius'];
+            $radius = (int)$this->settings['defaultConstraint']['radius'];
         }
 
         if ($radius < 2) {
@@ -485,7 +488,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             $zoom = 13;
         }
 
-        $center->setZoom(intval(18 - $zoom));
+        $center->setZoom((int)(18 - $zoom));
 
         return $center;
     }

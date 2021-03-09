@@ -1,5 +1,7 @@
 <?php
 
+defined('TYPO3') or die();
+
 $tempColumns = [
     'children' => [
         'exclude' => 1,

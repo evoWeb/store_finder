@@ -15,12 +15,15 @@ namespace Evoweb\StoreFinder\Command;
  * LICENSE.txt file that was distributed with this source code.
  */
 
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Worksheet\Row;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -116,8 +119,8 @@ class ImportLocationsCommand extends Command
         $io->title($this->getDescription());
 
         $fileName = $input->getArgument('fileName');
-        $storagePid = (int) $input->getArgument('storagePid');
-        $clearStorageFolder = (bool) $input->getArgument('clearStorageFolder');
+        $storagePid = (int)$input->getArgument('storagePid');
+        $clearStorageFolder = (bool)$input->getArgument('clearStorageFolder');
 
         if ($input->hasArgument('columnMap') && $input->getArgument('columnMap') !== '') {
             $this->columnMap = json_decode($input->getArgument('columnMap'));
@@ -145,7 +148,7 @@ class ImportLocationsCommand extends Command
         }
 
         $filePath = $file->getForLocalProcessing();
-        $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($filePath);
+        $reader = IOFactory::createReaderForFile($filePath);
         $spreadsheet = $reader->load($filePath);
         foreach ($spreadsheet->getActiveSheet()->getRowIterator() as $row) {
             if ($row->getRowIndex() === 1) {
@@ -214,7 +217,7 @@ class ImportLocationsCommand extends Command
         }
     }
 
-    protected function transformAndStoreLocation(\PhpOffice\PhpSpreadsheet\Worksheet\Row $row, int $storagePid)
+    protected function transformAndStoreLocation(Row $row, int $storagePid)
     {
         $attributes = [];
         $categories = [];
@@ -564,7 +567,7 @@ class ImportLocationsCommand extends Command
         $queryBuilder->execute();
     }
 
-    protected function getQueryBuilderForTable(string $table): \TYPO3\CMS\Core\Database\Query\QueryBuilder
+    protected function getQueryBuilderForTable(string $table): QueryBuilder
     {
         $queryBuilder = $this->connectionPool->getQueryBuilderForTable($table);
         $queryBuilder->getRestrictions()->removeAll();

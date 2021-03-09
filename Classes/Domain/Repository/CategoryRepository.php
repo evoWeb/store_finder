@@ -15,14 +15,20 @@ namespace Evoweb\StoreFinder\Domain\Repository;
  * LICENSE.txt file that was distributed with this source code.
  */
 
-class CategoryRepository extends \TYPO3\CMS\Extbase\Domain\Repository\CategoryRepository
+use Evoweb\StoreFinder\Domain\Model\Category;
+use TYPO3\CMS\Extbase\Domain\Repository\CategoryRepository as ExtbaseCategoryRepository;
+use TYPO3\CMS\Extbase\Persistence\Generic\QueryResult;
+use TYPO3\CMS\Extbase\Persistence\QueryInterface;
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
+
+class CategoryRepository extends ExtbaseCategoryRepository
 {
     /**
      * @var array
      */
-    protected $defaultOrderings = ['sorting' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING];
+    protected $defaultOrderings = ['sorting' => QueryInterface::ORDER_ASCENDING];
 
-    public function findByUids(array $uids): \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+    public function findByUids(array $uids): QueryResultInterface
     {
         $query = $this->createQuery();
         $query->getQuerySettings()->setRespectStoragePage(false);
@@ -36,12 +42,12 @@ class CategoryRepository extends \TYPO3\CMS\Extbase\Domain\Repository\CategoryRe
 
     public function findByParentRecursive(array $subCategories, array $categories = []): array
     {
-        /** @var \Evoweb\StoreFinder\Domain\Model\Category $subCategory */
+        /** @var Category $subCategory */
         foreach ($subCategories as $subCategory) {
-            $categories[] = $subcategoryUid = (int) (is_object($subCategory) ? $subCategory->getUid() : $subCategory);
+            $categories[] = $subcategoryUid = (int)(is_object($subCategory) ? $subCategory->getUid() : $subCategory);
 
             /** @noinspection PhpUndefinedMethodInspection */
-            /** @var \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $foundCategories */
+            /** @var QueryResult $foundCategories */
             $foundCategories = $this->findByParent($subcategoryUid);
             $foundCategories->rewind();
 

@@ -15,15 +15,16 @@ namespace Evoweb\StoreFinder\Domain\Model;
  * LICENSE.txt file that was distributed with this source code.
  */
 
+use TYPO3\CMS\Extbase\Domain\Model\Category as ExtbaseCategory;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
-class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
+class Category extends ExtbaseCategory
 {
     /**
      * @var ObjectStorage<Category>
      * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
      */
-    protected ObjectStorage $children;
+    protected ?ObjectStorage $children;
 
     public function __construct()
     {

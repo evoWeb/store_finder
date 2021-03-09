@@ -17,10 +17,12 @@ namespace Evoweb\StoreFinder\Domain\Model;
 
 use SJBR\StaticInfoTables\Domain\Model\Country;
 use SJBR\StaticInfoTables\Domain\Model\CountryZone;
+use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
+use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
-class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
+class Location extends AbstractEntity
 {
     protected string $name = '';
 
@@ -114,13 +116,13 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @var ?Country
      * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
      */
-    protected $country = null;
+    protected $country;
 
     /**
      * @var ?CountryZone
      * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
      */
-    protected $state = null;
+    protected $state;
 
     protected float $distance = 0.0;
 
@@ -223,7 +225,7 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 
     public function getState(): ?CountryZone
     {
-        if ($this->state instanceof \TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy) {
+        if ($this->state instanceof LazyLoadingProxy) {
             $this->state = $this->state->_loadRealInstance();
         }
         return $this->state;
@@ -241,7 +243,7 @@ class Location extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 
     public function getCountry(): ?Country
     {
-        if ($this->country instanceof \TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy) {
+        if ($this->country instanceof LazyLoadingProxy) {
             $this->country = $this->country->_loadRealInstance();
         }
         return $this->country;

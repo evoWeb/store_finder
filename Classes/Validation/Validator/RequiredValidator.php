@@ -15,12 +15,14 @@ namespace Evoweb\StoreFinder\Validation\Validator;
  * LICENSE.txt file that was distributed with this source code.
  */
 
-use TYPO3\CMS\Extbase\Validation\Validator;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
+use TYPO3\CMS\Extbase\Validation\Validator\ValidatorInterface;
 
 /**
  * A required validator to check that a value is set
  */
-class RequiredValidator extends Validator\AbstractValidator implements Validator\ValidatorInterface
+class RequiredValidator extends AbstractValidator implements ValidatorInterface
 {
     /**
      * @var bool
@@ -36,7 +38,7 @@ class RequiredValidator extends Validator\AbstractValidator implements Validator
     {
         if (empty($value)) {
             $this->addError(
-                \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('error_required', 'StoreFinder'),
+                LocalizationUtility::translate('error_required', 'StoreFinder'),
                 1305008423
             );
         }
