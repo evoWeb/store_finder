@@ -33,7 +33,7 @@ use TYPO3\CMS\Fluid\ViewHelpers\Form\SelectViewHelper;
  */
 class SelectCountriesViewHelper extends SelectViewHelper
 {
-    protected ?CountryRepository $countryRepository;
+    protected ?CountryRepository $countryRepository = null;
 
     public function injectCountryRepository(CountryRepository $countryRepository)
     {

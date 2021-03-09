@@ -116,13 +116,13 @@ class Location extends AbstractEntity
      * @var ?Country
      * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
      */
-    protected $country;
+    protected $country = null;
 
     /**
      * @var ?CountryZone
      * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
      */
-    protected $state;
+    protected $state = null;
 
     protected float $distance = 0.0;
 

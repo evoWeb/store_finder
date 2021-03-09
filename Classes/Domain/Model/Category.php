@@ -24,7 +24,7 @@ class Category extends ExtbaseCategory
      * @var ObjectStorage<Category>
      * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
      */
-    protected ?ObjectStorage $children;
+    protected ?ObjectStorage $children = null;
 
     public function __construct()
     {

@@ -35,9 +35,9 @@ class EitherValidator extends AbstractValidator implements ValidatorInterface
 
     protected array $properties = [];
 
-    protected ?Constraint $model;
+    protected ?Constraint $model = null;
 
-    protected string $propertyName;
+    protected string $propertyName = '';
 
     /**
      * @var bool

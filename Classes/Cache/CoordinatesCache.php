@@ -23,7 +23,7 @@ use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 
 class CoordinatesCache
 {
-    protected ?FrontendUserAuthentication $frontendUser;
+    protected ?FrontendUserAuthentication $frontendUser = null;
 
     protected FrontendInterface $cacheFrontend;
 
@@ -31,7 +31,7 @@ class CoordinatesCache
 
     public function __construct(
         FrontendInterface $cacheFrontend,
-        ?FrontendUserAuthentication $frontendUser = null
+        FrontendUserAuthentication $frontendUser = null
     ) {
         $this->cacheFrontend = $cacheFrontend;
         $this->frontendUser = $frontendUser;
