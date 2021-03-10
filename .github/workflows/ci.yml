@@ -119,5 +119,4 @@ jobs:
       - name: Publish to TER
         uses: tomasnorre/typo3-upload-ter@v1
         with:
-          username: ${{ secrets.typo3Username }}
-          password: ${{ secrets.typo3Password }}
+          api-token: ${{ secrets.TYPO3_API_TOKEN }}
