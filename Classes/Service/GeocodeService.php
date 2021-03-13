@@ -40,10 +40,8 @@ class GeocodeService
 
     public bool $hasMultipleResults = false;
 
-    public function __construct(
-        CoordinatesCache $coordinatesCache,
-        CountryRepository $countryRepository
-    ) {
+    public function __construct(CoordinatesCache $coordinatesCache, CountryRepository $countryRepository)
+    {
         $this->coordinatesCache = $coordinatesCache;
         $this->countryRepository = $countryRepository;
     }
