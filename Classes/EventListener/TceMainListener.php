@@ -45,7 +45,7 @@ class TceMainListener
      * Remap id for id and table
      *
      * @param string|int $id
-     * @param string &$table
+     * @param string $table
      * @param DataHandler $parentObject
      *
      * @return int

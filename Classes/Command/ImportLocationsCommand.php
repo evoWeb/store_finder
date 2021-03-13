@@ -412,7 +412,7 @@ class ImportLocationsCommand extends Command
                     'description' => $location['name']
                 ];
 
-                /** @var \TYPO3\CMS\Core\Database\Connection $connectionPool */
+                /** @var \TYPO3\CMS\Core\Database\Connection $connection */
                 $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable($table);
                 $connection->update(
                     $table,
@@ -527,7 +527,7 @@ class ImportLocationsCommand extends Command
             $data = array_merge($additionalData, $data);
         }
 
-        /** @var \TYPO3\CMS\Core\Database\Connection $connectionPool */
+        /** @var \TYPO3\CMS\Core\Database\Connection $connection */
         $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable($table);
         $connection->insert($table, $data);
     }

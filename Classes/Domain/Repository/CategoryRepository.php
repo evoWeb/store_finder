@@ -17,7 +17,6 @@ namespace Evoweb\StoreFinder\Domain\Repository;
 
 use Evoweb\StoreFinder\Domain\Model\Category;
 use TYPO3\CMS\Extbase\Domain\Repository\CategoryRepository as ExtbaseCategoryRepository;
-use TYPO3\CMS\Extbase\Persistence\Generic\QueryResult;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
@@ -40,14 +39,19 @@ class CategoryRepository extends ExtbaseCategoryRepository
         return $query->execute();
     }
 
+    public function findByParent(int $parentUid): QueryResultInterface
+    {
+        $query = $this->createQuery();
+        $query->matching($query->equals('parent', $parentUid));
+        return $query->execute();
+    }
+
     public function findByParentRecursive(array $subCategories, array $categories = []): array
     {
         /** @var Category $subCategory */
         foreach ($subCategories as $subCategory) {
             $categories[] = $subcategoryUid = (int)(is_object($subCategory) ? $subCategory->getUid() : $subCategory);
 
-            /** @noinspection PhpUndefinedMethodInspection */
-            /** @var QueryResult $foundCategories */
             $foundCategories = $this->findByParent($subcategoryUid);
             $foundCategories->rewind();
 

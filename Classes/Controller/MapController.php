@@ -327,8 +327,8 @@ class MapController extends ActionController
     protected function getCenterOfQueryResult(Location $constraint, QueryResultInterface $queryResult): Location
     {
         $count = $queryResult->count();
-        /** @var Location $center */
         if ($count == 1) {
+            /** @var Location $center */
             $center = $queryResult->getFirst();
         } elseif (!$queryResult->count()) {
             $center = $this->getCenter($constraint);
@@ -391,7 +391,7 @@ class MapController extends ActionController
                 case 'country':
                     /** @var CountryRepository $countryRepository */
                     $countryRepository = GeneralUtility::getContainer()->get(CountryRepository::class);
-                    /** @var Country $country */
+
                     if ((int)($defaultConstraint['country'])) {
                         $value = $countryRepository->findByUid((int)$defaultConstraint['country']);
                     } elseif (strlen($defaultConstraint['country']) === 2) {
