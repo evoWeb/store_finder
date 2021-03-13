@@ -15,13 +15,16 @@ namespace Evoweb\StoreFinder\Validation\Validator;
  * LICENSE.txt file that was distributed with this source code.
  */
 
+use Evoweb\StoreFinder\Domain\Model\Constraint;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Validation\Validator;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
+use TYPO3\CMS\Extbase\Validation\Validator\ValidatorInterface;
 
 /**
  * A either validator to check that a value is set
  */
-class EitherValidator extends Validator\AbstractValidator implements Validator\ValidatorInterface
+class EitherValidator extends AbstractValidator implements ValidatorInterface
 {
     /**
      * @var array
@@ -30,20 +33,11 @@ class EitherValidator extends Validator\AbstractValidator implements Validator\V
         'properties' => [false, 'Properties to check in either', 'string'],
     ];
 
-    /**
-     * @var array
-     */
-    protected $properties = [];
+    protected array $properties = [];
 
-    /**
-     * @var \Evoweb\StoreFinder\Domain\Model\Constraint
-     */
-    protected $model;
+    protected ?Constraint $model = null;
 
-    /**
-     * @var string
-     */
-    protected $propertyName;
+    protected string $propertyName = '';
 
     /**
      * @var bool
@@ -64,14 +58,11 @@ class EitherValidator extends Validator\AbstractValidator implements Validator\V
         }
     }
 
-    public function setModel(\Evoweb\StoreFinder\Domain\Model\Constraint $model)
+    public function setModel(Constraint $model)
     {
         $this->model = $model;
     }
 
-    /**
-     * @param string $propertyName Property name
-     */
     public function setPropertyName(string $propertyName)
     {
         $this->propertyName = $propertyName;
@@ -101,7 +92,7 @@ class EitherValidator extends Validator\AbstractValidator implements Validator\V
 
         if (!$result) {
             $this->addError(
-                \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('error_either', 'StoreFinder'),
+                LocalizationUtility::translate('error_either', 'StoreFinder'),
                 1305008423
             );
         }

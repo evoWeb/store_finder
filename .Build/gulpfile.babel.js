@@ -11,7 +11,7 @@ import source from 'vinyl-source-stream';
 import sourcemaps from 'gulp-sourcemaps';
 import tsify from 'tsify';
 import ts from 'gulp-typescript';
-import uglify from 'gulp-uglify';
+import terser from 'gulp-terser';
 
 import postcss from 'gulp-postcss';
 import autoprefixer from 'autoprefixer';
@@ -48,7 +48,7 @@ gulp.task('typescript-gm', () => {
 		// This will output the non-minified version
 		.pipe(gulp.dest(path.join(paths.dest, tasks.typescript.dest)))
 		// Add transformation tasks to the pipeline here.
-		.pipe(uglify())
+		.pipe(terser())
 		.on('error', log.error)
 		.pipe(rename({ extname: '.min.js' }))
 		.pipe(sourcemaps.write('./', {
@@ -75,7 +75,7 @@ gulp.task('typescript-osm', () => {
 		// This will output the non-minified version
 		.pipe(gulp.dest(path.join(paths.dest, tasks.typescript.dest)))
 		// Add transformation tasks to the pipeline here.
-		.pipe(uglify())
+		.pipe(terser())
 		.on('error', log.error)
 		.pipe(rename({ extname: '.min.js' }))
 		.pipe(sourcemaps.write('./', {

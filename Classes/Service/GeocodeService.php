@@ -18,39 +18,30 @@ namespace Evoweb\StoreFinder\Service;
 use Evoweb\StoreFinder\Cache\CoordinatesCache;
 use Evoweb\StoreFinder\Domain\Model\Location;
 use Evoweb\StoreFinder\Domain\Repository\CountryRepository;
+use Geocoder\Model\Coordinates;
+use Geocoder\Provider\GoogleMaps\GoogleMaps;
+use Geocoder\Provider\Provider;
+use Geocoder\Query\GeocodeQuery;
+use Geocoder\StatefulGeocoder;
+use Http\Adapter\Guzzle7\Client;
+use SJBR\StaticInfoTables\Domain\Model\Country;
+use SJBR\StaticInfoTables\Domain\Model\CountryZone;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class GeocodeService
 {
-    /**
-     * @var CoordinatesCache
-     */
-    protected $coordinatesCache;
+    protected CoordinatesCache $coordinatesCache;
 
-    /**
-     * @var CountryRepository
-     */
-    protected $countryRepository;
+    protected CountryRepository $countryRepository;
 
-    /**
-     * @var array
-     */
-    protected $settings = [];
+    protected array $settings = [];
 
-    /**
-     * @var array
-     */
-    protected $fields = ['address', 'zipcode', 'city', 'state', 'country'];
+    protected array $fields = ['address', 'zipcode', 'city', 'state', 'country'];
 
-    /**
-     * @var bool
-     */
-    public $hasMultipleResults;
+    public bool $hasMultipleResults = false;
 
-    public function __construct(
-        CoordinatesCache $coordinatesCache,
-        CountryRepository $countryRepository
-    ) {
+    public function __construct(CoordinatesCache $coordinatesCache, CountryRepository $countryRepository)
+    {
         $this->coordinatesCache = $coordinatesCache;
         $this->countryRepository = $countryRepository;
     }
@@ -60,13 +51,7 @@ class GeocodeService
         $this->settings = $settings;
     }
 
-    /**
-     * @param Location $address
-     * @param bool $forceGeoCoding
-     *
-     * @return Location
-     */
-    public function geocodeAddress(Location $address, bool $forceGeoCoding = false)
+    public function geocodeAddress(Location $address, bool $forceGeoCoding = false): Location
     {
         $queryValues = $this->prepareValuesForQuery($address, $this->fields);
         $geoCodedAddress = $this->coordinatesCache->getCoordinateByAddress($address, $queryValues);
@@ -118,14 +103,14 @@ class GeocodeService
         // for url encoding
         $queryValues = [];
         foreach ($fields as $field) {
-            $methodName = 'get' . \TYPO3\CMS\Core\Utility\GeneralUtility::underscoredToUpperCamelCase($field);
+            $methodName = 'get' . GeneralUtility::underscoredToUpperCamelCase($field);
             $value = $location->{$methodName}();
 
             switch ($field) {
                 // if a known country code is used we fetch the english short name
                 // to enhance the map api query result
                 case 'country':
-                    if (is_numeric($value) || strlen((string) $value) == 3) {
+                    if (is_numeric($value) || strlen((string)$value) == 3) {
                         if (is_numeric($value)) {
                             $value = $this->countryRepository->findByUid($value);
                         } else {
@@ -133,13 +118,13 @@ class GeocodeService
                         }
                     }
 
-                    if ($value instanceof \SJBR\StaticInfoTables\Domain\Model\Country) {
+                    if ($value instanceof Country) {
                         $value = $value->getIsoCodeA2();
                     }
                     break;
 
                 case 'state':
-                    if ($value instanceof \SJBR\StaticInfoTables\Domain\Model\CountryZone) {
+                    if ($value instanceof CountryZone) {
                         $value = $value->getLocalName();
                     }
                     break;
@@ -154,32 +139,32 @@ class GeocodeService
         return $queryValues;
     }
 
-    protected function getCoordinatesFromProvider(array $queryValues): \Geocoder\Model\Coordinates
+    protected function getCoordinatesFromProvider(array $queryValues): Coordinates
     {
         if (strpos($this->settings['geocoderProvider'], '\\') === false) {
-            $providerClass = 'Geocoder\\Provider\\GoogleMaps\\GoogleMaps';
+            $providerClass = GoogleMaps::class;
         } else {
             $providerClass = $this->settings['geocoderProvider'];
         }
 
-        $httpClient = new \Http\Adapter\Guzzle6\Client();
+        $httpClient = new Client();
         $provider = GeneralUtility::makeInstance(
             $providerClass,
             $httpClient,
             null,
             $this->settings['apiConsoleKeyGeocoding']
         );
-        if ($provider instanceof \Geocoder\Provider\Provider) {
-            $geoCoder = new \Geocoder\StatefulGeocoder($provider, $this->settings['geocoderLocale']);
-            $results = $geoCoder->geocodeQuery(\Geocoder\Query\GeocodeQuery::create(implode(',', $queryValues)));
+        if ($provider instanceof Provider) {
+            $geoCoder = new StatefulGeocoder($provider, $this->settings['geocoderLocale']);
+            $results = $geoCoder->geocodeQuery(GeocodeQuery::create(implode(',', $queryValues)));
             $this->hasMultipleResults = $results->count() > 1;
             if ($results->count() > 0) {
                 $result = $results->get(0)->getCoordinates();
             } else {
-                $result = new \Geocoder\Model\Coordinates(0, 0);
+                $result = new Coordinates(0, 0);
             }
         } else {
-            $result = new \Geocoder\Model\Coordinates(0, 0);
+            $result = new Coordinates(0, 0);
         }
 
         return $result;

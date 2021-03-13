@@ -1,0 +1,24 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      xmlns:sf="http://typo3.org/ns/Evoweb/StoreFinder/ViewHelpers"
+      data-namespace-typo3-fluid="true">
+
+<f:variable name="zoom"><f:if condition="{center.zoom}"><f:then>{center.zoom}</f:then><f:else>10</f:else></f:if></f:variable>
+<f:variable name="latitude"><f:format.number decimals="7"><f:if condition="{center.latitude}"><f:then>{center.latitude}</f:then><f:else>{constraint.latitude}</f:else></f:if></f:format.number></f:variable>
+<f:variable name="longitude"><f:format.number decimals="7"><f:if condition="{center.longitude}"><f:then>{center.longitude}</f:then><f:else>{constraint.longitude}</f:else></f:if></f:format.number></f:variable>
+<f:variable name="mapConfiguration">
+var mapConfiguration = {
+    active: true,
+    zoom: {zoom},
+    apiConsoleKey: "{settings.apiConsoleKey}",
+    <f:for each="{settings.mapConfiguration}" as="configuration" key="name">{name}: "{configuration}",</f:for>
+    center: {<f:format.raw/>
+        lat: {latitude},
+        lng: {longitude}
+    },
+    afterSearch: "{afterSearch}"
+};
+</f:variable>
+
+<f:asset.script identifier="storeFinderMapConfiguration" priority="true"><sf:minify>{mapConfiguration}</sf:minify></f:asset.script>
+
+</html>

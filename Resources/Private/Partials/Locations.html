@@ -1,0 +1,16 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      xmlns:sf="http://typo3.org/ns/Evoweb/StoreFinder/ViewHelpers"
+      data-namespace-typo3-fluid="true">
+
+<f:variable name="locationRows">
+    var locations = [
+    <f:for each="{locations}" as="location" iteration="loop">
+        <f:render partial="LocationJson" section="content" arguments="{_all}"/>
+        <f:if condition="!{loop.isLast}">,</f:if>
+    </f:for>
+    ];
+</f:variable>
+
+<f:asset.script identifier="storeFinderLocations" priority="true"><sf:minify>{locationRows}</sf:minify></f:asset.script>
+
+</html>

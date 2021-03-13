@@ -27,7 +27,7 @@
 		<div class="media"><f:for each="{location.media}" as="image" iteration="iterator">
 			{f:uri.image(image: image, width: 70) -> f:format.json()}<f:if condition="!{iterator.isLast}">, </f:if>
 		</f:for></div>
-		<f:cObject typoscriptObjectPath="lib.tx_storefinder.contentElementRendering">{location.content}</f:cObject>
+		<f:cObject typoscriptObjectPath="lib.tx_storefinder.contentElementRendering">{location.contentElements}</f:cObject>
 		<f:if condition="{location.related}"><div class="related"><f:for each="{location.related}" as="related">{related}</f:for></div></f:if>
 		<f:if condition="{location.distance}"><div class="distance">{location.distance}</div></f:if>
 	</div>

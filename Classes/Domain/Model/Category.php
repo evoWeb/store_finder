@@ -15,17 +15,17 @@ namespace Evoweb\StoreFinder\Domain\Model;
  * LICENSE.txt file that was distributed with this source code.
  */
 
-class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
+use TYPO3\CMS\Extbase\Domain\Model\Category as ExtbaseCategory;
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+
+class Category extends ExtbaseCategory
 {
     /**
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Evoweb\StoreFinder\Domain\Model\Category>
+     * @var ObjectStorage<Category>
      * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
      */
-    protected $children;
+    protected ?ObjectStorage $children = null;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         $this->initializeObject();
@@ -33,18 +33,15 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
 
     public function initializeObject()
     {
-        $this->children = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        $this->children = new ObjectStorage();
     }
 
-    public function setChildren(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $children)
+    public function setChildren(ObjectStorage $children)
     {
         $this->children = $children;
     }
 
-    /**
-     * @return Category[]|\TYPO3\CMS\Extbase\Persistence\ObjectStorage
-     */
-    public function getChildren()
+    public function getChildren(): ?ObjectStorage
     {
         return $this->children;
     }

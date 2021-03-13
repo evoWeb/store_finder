@@ -107,7 +107,7 @@
 				<source>Add layer file</source>
 				<target>Füge Datei für Fläche hinzu</target>
 			</trans-unit>
-			<trans-unit id="tx_storefinder_domain_model_location.content">
+			<trans-unit id="tx_storefinder_domain_model_location.content_elements">
 				<source>Content Elements</source>
 				<target>Content Elemente</target>
 			</trans-unit>

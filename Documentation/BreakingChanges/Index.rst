@@ -7,6 +7,14 @@ Breaking Changes
 ----------------
 
 
+15. February 2021
+============
+Rename property
+---------------
+Rename content to contentElement in location model
+
+
+
 01. Mai 2020
 ============
 Refactor signal slots to PSR-14 events

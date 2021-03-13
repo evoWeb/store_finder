@@ -81,7 +81,7 @@
 			<trans-unit id="tx_storefinder_domain_model_location.layer.addFileReference">
 				<source>Add layer file</source>
 			</trans-unit>
-			<trans-unit id="tx_storefinder_domain_model_location.content">
+			<trans-unit id="tx_storefinder_domain_model_location.content_elements">
 				<source>Content Elements</source>
 			</trans-unit>
 			<trans-unit id="tx_storefinder_domain_model_location.categories">

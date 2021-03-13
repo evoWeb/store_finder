@@ -15,7 +15,7 @@ namespace Evoweb\StoreFinder\Cache;
  * LICENSE.txt file that was distributed with this source code.
  */
 
-use Evoweb\StoreFinder\Domain\Model;
+use Evoweb\StoreFinder\Domain\Model\Location;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -23,20 +23,11 @@ use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 
 class CoordinatesCache
 {
-    /**
-     * @var FrontendUserAuthentication
-     */
-    protected $frontendUser;
+    protected ?FrontendUserAuthentication $frontendUser = null;
 
-    /**
-     * @var FrontendInterface
-     */
-    protected $cacheFrontend;
+    protected FrontendInterface $cacheFrontend;
 
-    /**
-     * @var array
-     */
-    protected $fields = ['address', 'zipcode', 'city', 'state', 'country'];
+    protected array $fields = ['address', 'zipcode', 'city', 'state', 'country'];
 
     public function __construct(
         FrontendInterface $cacheFrontend,
@@ -46,7 +37,7 @@ class CoordinatesCache
         $this->frontendUser = $frontendUser;
     }
 
-    public static function getInstance(): ?self
+    public static function getInstance(): self
     {
         /** @var CacheManager $cacheManager */
         $cacheManager = GeneralUtility::getContainer()->get(CacheManager::class);
@@ -60,13 +51,7 @@ class CoordinatesCache
         return $instance;
     }
 
-    /**
-     * Add calculated coordinate for hash
-     *
-     * @param Model\Location $address
-     * @param array $queryValues
-     */
-    public function addCoordinateForAddress($address, array $queryValues)
+    public function addCoordinateForAddress(Location $address, array $queryValues)
     {
         $coordinate = [
             'latitude' => $address->getLatitude(),
@@ -82,15 +67,7 @@ class CoordinatesCache
         }
     }
 
-    /**
-     * Get coordinate by address
-     *
-     * @param Model\Location $address
-     * @param array $queryValues
-     *
-     * @return Model\Location
-     */
-    public function getCoordinateByAddress($address, array $queryValues)
+    public function getCoordinateByAddress(Location $address, array $queryValues): Location
     {
         if ($queryValues) {
             $fields = array_keys($queryValues);
@@ -120,7 +97,6 @@ class CoordinatesCache
         $this->flushSessionCache();
     }
 
-
     /**
      * Check if session has key set and the value is not empty
      *
@@ -139,13 +115,6 @@ class CoordinatesCache
         return is_array($sessionData) && isset($sessionData[$key]) && !empty($sessionData[$key]);
     }
 
-    /**
-     * Fetch value for hash from session
-     *
-     * @param string $key
-     *
-     * @return array
-     */
     public function getValueFromSession(string $key): array
     {
         $sessionData = null;
@@ -157,13 +126,7 @@ class CoordinatesCache
         return is_array($sessionData) && isset($sessionData[$key]) ? unserialize($sessionData[$key]) : [];
     }
 
-    /**
-     * Store coordinate for hash in session
-     *
-     * @param string $key
-     * @param array $value
-     */
-    public function setValueInSession(string $key, $value)
+    public function setValueInSession(string $key, array $value)
     {
         if ($this->frontendUser != null) {
             $sessionData = $this->frontendUser->getKey('ses', 'tx_storefinder_coordinates');
@@ -175,9 +138,6 @@ class CoordinatesCache
         }
     }
 
-    /**
-     * Flush session cache
-     */
     public function flushSessionCache()
     {
         if ($this->frontendUser != null) {
@@ -185,7 +145,6 @@ class CoordinatesCache
             $this->frontendUser->storeSessionData();
         }
     }
-
 
     /**
      * Check if cache table has key set

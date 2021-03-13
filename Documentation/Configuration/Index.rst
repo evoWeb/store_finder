@@ -43,7 +43,6 @@ plugin.tx_storefinder.settings
 
   showStoreImage_                                       :ref:`data-type-boolean`                          yes        yes        no         1
   resultPageId_                                         :ref:`data-type-integer`                          yes        yes        no         -
-  routePageId_                                          :ref:`data-type-integer`                          yes        yes        no         -
   `mapSize.height <ms-height_>`_                        :ref:`data-type-integer`                          yes                   no         400
   `mapSize.width <ms-width_>`_                          :ref:`data-type-integer`                          yes                   no         600
   override_                                             :ref:`data-type-array`                            yes                   no         -
@@ -352,24 +351,6 @@ plugin.tx_storefinder.persistence
 
    Description
          If set the search result gets rendered on a different page
-
-   Default
-         none
-
-
-.. _routePageId:
-.. ### BEGIN~OF~TABLE ###
-
-.. container:: table-row
-
-   Property
-         routePageId
-
-   Data type
-         integer
-
-   Description
-         If set the routing result gets display on a different page
 
    Default
          none

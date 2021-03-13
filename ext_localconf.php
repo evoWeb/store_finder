@@ -1,6 +1,6 @@
 <?php
 
-defined('TYPO3_MODE') || die('Access denied.');
+defined('TYPO3') or die();
 
 call_user_func(function () {
     if (
@@ -34,8 +34,8 @@ call_user_func(function () {
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
         'StoreFinder',
         'Map',
-        [\Evoweb\StoreFinder\Controller\MapController::class => 'map'],
-        [\Evoweb\StoreFinder\Controller\MapController::class => 'map']
+        [\Evoweb\StoreFinder\Controller\MapController::class => 'map, search, show'],
+        [\Evoweb\StoreFinder\Controller\MapController::class => 'map, search, show']
     );
 
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(

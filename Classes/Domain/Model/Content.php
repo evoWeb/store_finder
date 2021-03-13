@@ -15,7 +15,8 @@ namespace Evoweb\StoreFinder\Domain\Model;
  * LICENSE.txt file that was distributed with this source code.
  */
 
-class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
-{
+use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
+class Content extends AbstractEntity
+{
 }

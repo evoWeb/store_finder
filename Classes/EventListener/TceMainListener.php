@@ -18,24 +18,16 @@ namespace Evoweb\StoreFinder\EventListener;
 use Evoweb\StoreFinder\Domain\Repository\LocationRepository;
 use Evoweb\StoreFinder\Service\GeocodeService;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 
 class TceMainListener
 {
-    /**
-     * @var LocationRepository
-     */
-    protected $locationRepository;
+    protected LocationRepository $locationRepository;
 
-    /**
-     * @var PersistenceManager
-     */
-    protected $persistenceManager;
+    protected PersistenceManager $persistenceManager;
 
-    /**
-     * @var GeocodeService
-     */
-    protected $geocodeService;
+    protected GeocodeService $geocodeService;
 
     public function __construct(
         LocationRepository $locationRepository,
@@ -52,13 +44,13 @@ class TceMainListener
     /**
      * Remap id for id and table
      *
-     * @param string $id
-     * @param string &$table
-     * @param \TYPO3\CMS\Core\DataHandling\DataHandler $parentObject
+     * @param string|int $id
+     * @param string $table
+     * @param DataHandler $parentObject
      *
      * @return int
      */
-    protected function remapId($id, &$table, $parentObject)
+    protected function remapId($id, string &$table, DataHandler $parentObject)
     {
         if (array_key_exists($id, $parentObject->substNEWwithIDs)) {
             $table = $parentObject->substNEWwithIDs_table[$id];
@@ -71,14 +63,19 @@ class TceMainListener
     /**
      * After database operations hook
      *
-     * @param string $_1
+     * @param string $status
      * @param string $table
-     * @param string $id
-     * @param array $fieldArray
-     * @param \TYPO3\CMS\Core\DataHandling\DataHandler $parentObject
+     * @param string|int $id
+     * @param array $fieldValues
+     * @param DataHandler $parentObject
      */
-    public function processDatamap_afterDatabaseOperations($_1, $table, $id, $fieldArray, $parentObject)
-    {
+    public function processDatamap_afterDatabaseOperations(
+        string $status,
+        string $table,
+        $id,
+        array $fieldValues,
+        DataHandler $parentObject
+    ) {
         if ($table === 'tx_storefinder_domain_model_location') {
             $locationId = (int)$this->remapId($id, $table, $parentObject);
             $location = $this->locationRepository->findByUidInBackend($locationId);

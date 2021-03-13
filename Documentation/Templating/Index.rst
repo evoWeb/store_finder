@@ -43,9 +43,11 @@ viewhelper get used.
 Register Namespace:
 ===================
 
+Add the xmlns to the html tag in the template
+
 ::
 
-    {namespace sf=Evoweb\StoreFinder\ViewHelpers}
+    xmlns:sf="http://typo3.org/ns/Evoweb/StoreFinder/ViewHelpers"
 
 
 minify Viewhelper
@@ -88,8 +90,8 @@ To be able to select which partial should be rendered its necessary to
 compare with binary and if the part is check in the plugin. As the f:if
 viewhelper is not able to do so, a special viewhelper is needed for that.
 
-Basicly what this means is, that the setting value, in this case
-showBeforeSearch, is formated with a logical and for comparison like in
+Basically what this means is, that the setting value, in this case
+showBeforeSearch, is formatted with a logical and for comparison like in
 the example below. Here we check if the list should be rendered because
 in the plugin the binary value 4 stands for list.
 

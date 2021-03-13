@@ -15,19 +15,11 @@ namespace Evoweb\StoreFinder\Validation\Validator;
  * LICENSE.txt file that was distributed with this source code.
  */
 
+use Evoweb\StoreFinder\Domain\Model\Constraint;
+
 interface SettableInterface
 {
-    /**
-     * Setter for model
-     *
-     * @param \Evoweb\StoreFinder\Domain\Model\Constraint $model
-     */
-    public function setModel($model);
+    public function setModel(Constraint $model);
 
-    /**
-     * Setter for propertyName
-     *
-     * @param string $propertyName
-     */
     public function setPropertyName(string $propertyName);
 }

@@ -15,33 +15,31 @@ namespace Evoweb\StoreFinder\Domain\Model;
  * LICENSE.txt file that was distributed with this source code.
  */
 
-class Attribute extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
+use TYPO3\CMS\Extbase\Domain\Model\FileReference;
+use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
+
+class Attribute extends AbstractEntity
 {
     /**
-     * Image
+     * Icon
      *
-     * @var \TYPO3\CMS\Extbase\Domain\Model\FileReference
+     * @var ?FileReference
      * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
      */
     protected $icon;
 
-    /**
-     * @var string
-     */
-    protected $name;
+    protected string $name;
 
-    /**
-     * @return \TYPO3\CMS\Extbase\Domain\Model\FileReference
-     */
-    public function getIcon()
+    public function getIcon(): FileReference
     {
-        if ($this->icon instanceof \TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy) {
+        if ($this->icon instanceof LazyLoadingProxy) {
             $this->icon = $this->icon->_loadRealInstance();
         }
         return $this->icon;
     }
 
-    public function setIcon(\TYPO3\CMS\Extbase\Domain\Model\FileReference $icon)
+    public function setIcon(FileReference $icon)
     {
         $this->icon = $icon;
     }

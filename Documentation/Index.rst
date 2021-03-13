@@ -56,4 +56,7 @@ a GNU/GPL CMS/Framework available from http://typo3.org
    Configuration/Index
    Templating/Index
    Tutorial/Index
+   ImportCommand/Index
+   Deprecation/Index
+   BreakingChanges/Index
    Targets

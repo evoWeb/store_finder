@@ -1,5 +1,7 @@
 <?php
 
+defined('TYPO3') or die();
+
 $overrideChildTca = [
     'types' => [
         '0' => [
@@ -67,10 +69,6 @@ return [
         'iconfile' => 'EXT:store_finder/Resources/Public/Icons/tx_storefinder_domain_model_attribute.gif',
     ],
 
-    'interface' => [
-        'showRecordFieldList' => 'sys_language_uid,l18n_parent,l18n_diffsource,name,icon'
-    ],
-
     'columns' => [
         'sys_language_uid' => [
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
@@ -89,7 +87,6 @@ return [
             ]
         ],
         'l18n_parent' => [
-            'exclude' => true,
             'displayCond' => 'FIELD:sys_language_uid:>:0',
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
             'config' => [

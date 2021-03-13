@@ -16,13 +16,13 @@ namespace Evoweb\StoreFinder\ViewHelpers\Format;
  */
 
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * Class RemoveEscapingViewHelper
- *
- * @package Evoweb\StoreFinder\ViewHelpers\Format
+ * @deprecated will be removed in version 7.0.0
  */
-class RemoveEscapingViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper
+class RemoveEscapingViewHelper extends AbstractViewHelper
 {
     public function initializeArguments()
     {

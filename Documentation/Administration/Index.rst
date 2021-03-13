@@ -10,7 +10,7 @@ The part for administrator is fairly simple. Just go to the extension manager,
 switch to "Get extensions" and enter "store_finder" in the search field on top.
 Install the extensions and you are done for a new installation.
 
-If you use a different google maps key, like for a business accont, you need to
+If you use a different google maps key, like for a business account, you need to
 configure the extension in the em. Just hit the gear on the line of the
 installed store_finder and enter the api console key in the designated field.
 

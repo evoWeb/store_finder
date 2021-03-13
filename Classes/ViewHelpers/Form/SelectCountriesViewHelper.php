@@ -16,6 +16,9 @@ namespace Evoweb\StoreFinder\ViewHelpers\Form;
  */
 
 use Evoweb\StoreFinder\Domain\Repository\CountryRepository;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Extbase\Persistence\QueryInterface;
+use TYPO3\CMS\Fluid\ViewHelpers\Form\SelectViewHelper;
 
 /**
  * Viewhelper to render a select element with values of static info tables countries
@@ -28,14 +31,9 @@ use Evoweb\StoreFinder\Domain\Repository\CountryRepository;
  * <evoweb:form.SelectStaticCountries name="country" optionLabelField="cnShortDe"/>
  * </code>
  */
-class SelectCountriesViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\SelectViewHelper
+class SelectCountriesViewHelper extends SelectViewHelper
 {
-    /**
-     * Repository that provides the country models
-     *
-     * @var CountryRepository
-     */
-    protected $countryRepository;
+    protected ?CountryRepository $countryRepository = null;
 
     public function injectCountryRepository(CountryRepository $countryRepository)
     {
@@ -76,9 +74,9 @@ class SelectCountriesViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\Select
     {
         parent::initialize();
 
-        if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('static_info_tables')) {
+        if (ExtensionManagementUtility::isLoaded('static_info_tables')) {
             $this->countryRepository->setDefaultOrderings([
-                'cn_short_local' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING,
+                'cn_short_local' => QueryInterface::ORDER_ASCENDING,
             ]);
 
             if ($this->hasArgument('allowedCountries') && count($this->arguments['allowedCountries'])) {

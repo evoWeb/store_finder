@@ -15,6 +15,7 @@ plugin.tx_storefinder.settings {
   categoryPriority = useAsFilterInFrontend
 
   limit = 20
+  addPaginator = {$plugin.tx_storefinder.addPaginator}
 
   radius {
     15 = 15
@@ -40,6 +41,8 @@ plugin.tx_storefinder.settings {
     city =
     country =
   }
+  # needed to be 1 if zipcode, city and country is filled
+  # if defaultConstraint.latitude and defaultConstraint.longitude are used this can be 0
   geocodeDefaultConstraint = 1
 
   fulltextSearchFields {
@@ -70,6 +73,10 @@ plugin.tx_storefinder.settings {
     city = "Evoweb.StoreFinder:Required"
     country = "Evoweb.StoreFinder:Required"
   }
+}
+
+plugin.tx_storefinder_show.settings {
+  defaultConstraint.radius = 1
 }
 
 plugin.tx_storefinder.view {
