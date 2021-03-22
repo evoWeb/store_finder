@@ -69,8 +69,8 @@ class MinifyViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHel
 
         /* remove tabs, spaces, newlines, etc. */
         $content = str_replace(
-            [CRLF, CR, LF, "\t", '     ', '    ', '  ', ': '],
-            ['', '', '', '', '', '', '', ':'],
+            [CRLF, CR, LF, "\t", '     ', '    ', '  ', '": "'],
+            ['', '', '', '', '', '', '', '":"'],
             $content
         );
         /* remove other spaces before/after ) */
