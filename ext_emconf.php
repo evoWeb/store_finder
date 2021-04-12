@@ -1,6 +1,6 @@
 <?php
 
-$EM_CONF['store_finder'] = [
+$EM_CONF[$_EXTKEY] = [
     'title' => 'Store Finder',
     'description' => 'Manage store locations, search by distance and show Google maps.',
     'category' => 'plugin',
