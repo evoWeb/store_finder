@@ -152,7 +152,7 @@ class GeocodeService
             }
         }
 
-        if (!isset($queryValues['country']) || empty($queryValues['country'])) {
+        if (!isset($queryValues['country'])) {
             throw new \Exception('Country may never be empty query', 1618235512);
         }
 
