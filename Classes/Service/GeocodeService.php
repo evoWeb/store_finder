@@ -151,6 +151,11 @@ class GeocodeService
                 $queryValues[$field] =  iconv('UTF-8', 'ASCII//TRANSLIT', $value);
             }
         }
+
+        if (!isset($queryValues['country']) || empty($queryValues['country'])) {
+            throw new \Exception('Country may never be empty query', 1618235512);
+        }
+
         return $queryValues;
     }
 
@@ -169,16 +174,23 @@ class GeocodeService
             null,
             $this->settings['apiConsoleKeyGeocoding']
         );
+        $result = null;
         if ($provider instanceof \Geocoder\Provider\Provider) {
+            $country = $queryValues['country'] ?? '';
+            unset($queryValues['country']);
+
+            $query = \Geocoder\Query\GeocodeQuery::create(implode(',', $queryValues));
+            $query = $query->withData('components', 'country:' . $country);
+
             $geoCoder = new \Geocoder\StatefulGeocoder($provider, $this->settings['geocoderLocale']);
-            $results = $geoCoder->geocodeQuery(\Geocoder\Query\GeocodeQuery::create(implode(',', $queryValues)));
+            $results = $geoCoder->geocodeQuery($query);
             $this->hasMultipleResults = $results->count() > 1;
             if ($results->count() > 0) {
                 $result = $results->get(0)->getCoordinates();
-            } else {
-                $result = new \Geocoder\Model\Coordinates(0, 0);
             }
-        } else {
+        }
+
+        if ($result === null) {
             $result = new \Geocoder\Model\Coordinates(0, 0);
         }
 
