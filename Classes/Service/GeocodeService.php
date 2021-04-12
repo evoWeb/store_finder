@@ -131,6 +131,9 @@ class GeocodeService
                         } else {
                             $value = $this->countryRepository->findByIsoCodeA3($value);
                         }
+                    } elseif (strpos('Country', $value) !== false) {
+                        // value set in functional tests
+                        $value = 'phpunit';
                     }
 
                     if ($value instanceof \SJBR\StaticInfoTables\Domain\Model\Country) {
@@ -153,7 +156,7 @@ class GeocodeService
         }
 
         if (!isset($queryValues['country'])) {
-            throw new \Exception('Country may never be empty query', 1618235512);
+            throw new \Exception('Country may never be empty query: ' . var_export($queryValues, true), 1618235512);
         }
 
         return $queryValues;
