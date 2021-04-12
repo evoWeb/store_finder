@@ -15,6 +15,7 @@ namespace Evoweb\StoreFinder\Tests\Functional\Cache;
 use Evoweb\StoreFinder\Domain\Model\Constraint;
 use PHPUnit\Framework\MockObject\MockObject;
 use SJBR\StaticInfoTables\Domain\Model\Country;
+use SJBR\StaticInfoTables\Domain\Model\CountryZone;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -80,8 +81,8 @@ class AddLocationToCacheTest extends \TYPO3\TestingFramework\Core\Functional\Fun
                     'address' => '',
                     'zipcode' => substr(time(), -5),
                     'city' => uniqid('City'),
-                    'state' => '',
-                    'country' => uniqid('Country'),
+                    'state' => null,
+                    'country' => GeneralUtility::makeInstance(Country::class),
                 ],
                 ['zipcode', 'city', 'country'],
                 ['zipcode', 'city', 'country'],
@@ -91,8 +92,8 @@ class AddLocationToCacheTest extends \TYPO3\TestingFramework\Core\Functional\Fun
                     'address' => '',
                     'zipcode' => substr(time(), -5),
                     'city' => uniqid('City'),
-                    'state' => '',
-                    'country' => uniqid('Country'),
+                    'state' => null,
+                    'country' => GeneralUtility::makeInstance(Country::class),
                 ],
                 ['address', 'zipcode', 'city', 'state', 'country'],
                 ['zipcode', 'city', 'country'],
@@ -102,7 +103,7 @@ class AddLocationToCacheTest extends \TYPO3\TestingFramework\Core\Functional\Fun
                     'address' => uniqid('Address'),
                     'zipcode' => substr(time(), -5),
                     'city' => uniqid('City'),
-                    'state' => '',
+                    'state' => null,
                     'country' => GeneralUtility::makeInstance(Country::class),
                 ],
                 ['address', 'zipcode', 'city', 'state', 'country'],
@@ -113,7 +114,7 @@ class AddLocationToCacheTest extends \TYPO3\TestingFramework\Core\Functional\Fun
                     'address' => uniqid('Address'),
                     'zipcode' => substr(time(), -5),
                     'city' => uniqid('City'),
-                    'state' => '',
+                    'state' => GeneralUtility::makeInstance(CountryZone::class),
                     'country' => GeneralUtility::makeInstance(Country::class),
                 ],
                 ['address', 'zipcode', 'city', 'state', 'country'],
@@ -150,11 +151,13 @@ class AddLocationToCacheTest extends \TYPO3\TestingFramework\Core\Functional\Fun
         foreach ($data as $field => $value) {
             $setter = 'set' . ucfirst($field);
             if (method_exists($constraint, $setter) && !empty($value)) {
-                if (($field !== 'country' && !is_string($value))
-                    || ($field !== 'state' && !is_string($value))
-                    || ($field !== 'country' && $field !== 'state')) {
-                    $constraint->{$setter}($value);
+                if ($field === 'country') {
+                    $value->setIsoCodeA2('de');
                 }
+                if ($field === 'state') {
+                    $value->setLocalName('Nordrhein-Westfalen');
+                }
+                $constraint->{$setter}($value);
             }
         }
 

@@ -131,9 +131,6 @@ class GeocodeService
                         } else {
                             $value = $this->countryRepository->findByIsoCodeA3($value);
                         }
-                    } elseif (strpos('Country', $value) !== false) {
-                        // value set in functional tests
-                        $value = 'phpunit';
                     }
 
                     if ($value instanceof \SJBR\StaticInfoTables\Domain\Model\Country) {
