@@ -72,7 +72,6 @@
 			"rm -rf .github",
 			"rm -rf Tests",
 			"rm .gitignore",
-			"sed -i \"s/version' => '.*'/version' => '$(echo ${GITHUB_REF} | cut -d / -f 3)'/\" ext_emconf.php\n"
 		]
 	}
 }
