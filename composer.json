@@ -71,7 +71,7 @@
 			"rm -rf .Build",
 			"rm -rf .github",
 			"rm -rf Tests",
-			"rm .gitignore",
+			"rm .gitignore"
 		]
 	}
 }
