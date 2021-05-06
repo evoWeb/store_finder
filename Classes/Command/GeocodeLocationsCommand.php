@@ -82,5 +82,6 @@ class GeocodeLocationsCommand extends Command
 
         $io = new SymfonyStyle($input, $output);
         $io->comment('All locations geocoded');
+        return 0;
     }
 }
