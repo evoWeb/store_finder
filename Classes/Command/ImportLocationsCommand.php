@@ -116,7 +116,7 @@ class ImportLocationsCommand extends Command
             );
     }
 
-    public function execute(InputInterface $input, OutputInterface $output): int
+    public function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
         $io->title($this->getDescription());
