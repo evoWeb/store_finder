@@ -134,6 +134,7 @@ class ImportLocationsCommand extends Command
 
         $file = $this->getFile($fileName);
         $this->processFile($file, $storagePid, $clearStorageFolder);
+        return 0;
     }
 
     protected function getFile(string $fileName): File
