@@ -395,7 +395,7 @@ class MapController extends ActionController
                     if ((int)($defaultConstraint['country'])) {
                         $value = $countryRepository->findByUid((int)$defaultConstraint['country']);
                     } elseif (strlen($defaultConstraint['country']) === 2) {
-                        $value = $countryRepository->findByIsoCodeA2($defaultConstraint['country']);
+                        $value = $countryRepository->findByIsoCodeA2([$defaultConstraint['country']])->getFirst();
                     } elseif (strlen($defaultConstraint['country']) === 2) {
                         $value = $countryRepository->findByIsoCodeA3($defaultConstraint['country']);
                     }
