@@ -206,11 +206,11 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
     protected function getLocationsByConstraints(Constraint $constraint)
     {
-        /** @var Constraint $constraint */
         $constraint = $this->addDefaultConstraint($constraint);
         $constraint = $this->geocodeService->geocodeAddress($constraint);
         $this->view->assign('searchWasNotClearEnough', $this->geocodeService->hasMultipleResults);
 
+        /** @var Constraint $constraint */
         $locations = $this->locationRepository->findByConstraint($constraint);
 
         $event = new MapGetLocationsByConstraintsEvent($this, $locations, $constraint);
@@ -388,7 +388,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
                     if (intval($defaultConstraint['country'])) {
                         $value = $countryRepository->findByUid((int) $defaultConstraint['country']);
                     } elseif (strlen($defaultConstraint['country']) === 2) {
-                        $value = $countryRepository->findByIsoCodeA2($defaultConstraint['country']);
+                        $value = $countryRepository->findByIsoCodeA2([$defaultConstraint['country']])->getFirst();
                     } elseif (strlen($defaultConstraint['country']) === 2) {
                         $value = $countryRepository->findByIsoCodeA3($defaultConstraint['country']);
                     }
@@ -408,7 +408,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     /**
      * Geocode requested address and use as center or fetch location that was flagged as center.
      *
-     * @param Constraint $constraint
+     * @param ?Constraint $constraint
      *
      * @return Location
      */
