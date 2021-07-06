@@ -23,4 +23,4 @@ services:
 
   Evoweb\StoreFinder\Command\GeocodeLocationsCommand:
     tags:
-      - { name: 'console.command', command: 'storefinder:geocode', schedulable: false }
+      - { name: 'console.command', command: 'storefinder:geocode', schedulable: true }
