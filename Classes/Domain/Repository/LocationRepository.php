@@ -83,7 +83,8 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $query = $this->createQuery();
         $query->getQuerySettings()
             ->setIgnoreEnableFields(true)
-            ->setRespectStoragePage(false);
+            ->setRespectStoragePage(false)
+            ->setRespectSyslanguage(false);
 
         /** @var Location $location */
         $location = $query
