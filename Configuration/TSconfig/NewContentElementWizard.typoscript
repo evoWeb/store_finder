@@ -10,6 +10,15 @@ mod.wizards.newContentElement.wizardItems {
 					list_type = storefinder_map
 				}
 			}
+			storefinder_cached {
+				iconIdentifier = store-finder-plugin
+				title = LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi1_title_cached
+				description = LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi1_description_cached
+				tt_content_defValues {
+					CType = list
+					list_type = storefinder_cached
+				}
+			}
 			storefinder_show {
 				iconIdentifier = store-finder-plugin
 				title = LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi1_title_show

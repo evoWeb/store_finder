@@ -16,6 +16,7 @@ namespace Evoweb\StoreFinder\EventListener;
  */
 
 use Evoweb\StoreFinder\Domain\Repository\LocationRepository;
+use Evoweb\StoreFinder\Service\CacheService;
 use Evoweb\StoreFinder\Service\GeocodeService;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
@@ -37,14 +38,21 @@ class TceMainListener
      */
     protected $geocodeService;
 
+    /**
+     * @var CacheService
+     */
+    protected $cacheService;
+
     public function __construct(
         LocationRepository $locationRepository,
         PersistenceManager $persistenceManager,
         GeocodeService $geocodeService,
-        ExtensionConfiguration $extensionConfiguration
+        ExtensionConfiguration $extensionConfiguration,
+        CacheService $cacheService
     ) {
         $this->locationRepository = $locationRepository;
         $this->persistenceManager = $persistenceManager;
+        $this->cacheService = $cacheService;
         $this->geocodeService = $geocodeService;
         $this->geocodeService->setSettings($extensionConfiguration->get('store_finder') ?? []);
     }
@@ -78,9 +86,10 @@ class TceMainListener
      */
     public function processDatamap_afterDatabaseOperations($_1, $table, $id, $fieldArray, $parentObject)
     {
+        $id = $this->remapId($id, $table, $parentObject);
+
         if ($table === 'tx_storefinder_domain_model_location') {
-            $locationId = (int)$this->remapId($id, $table, $parentObject);
-            $location = $this->locationRepository->findByUidInBackend($locationId);
+            $location = $this->locationRepository->findByUidInBackend($id);
 
             if ($location !== null && $location->getGeocode()) {
                 $location = $this->geocodeService->geocodeAddress($location);
@@ -88,6 +97,17 @@ class TceMainListener
                 $this->locationRepository->update($location);
                 $this->persistenceManager->persistAll();
             }
+        }
+
+        // Clear caches if required
+        switch ($table) {
+            case 'tx_storefinder_domain_model_location':
+                $this->cacheService->flushCacheByTag('tx_storefinder_domain_model_location_' . $id);
+                break;
+            case 'sys_category':
+                $this->cacheService->flushCacheByTag('tx_storefinder_domain_model_category_' . $id);
+                break;
+            default:
         }
     }
 }
