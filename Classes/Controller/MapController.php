@@ -34,7 +34,9 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Http\ForwardResponse;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\Controller\Argument;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Pagination\QueryResultPaginator;
+use TYPO3\CMS\Extbase\Persistence\Generic\QueryResult;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Property\TypeConverter\PersistentObjectConverter;
 use TYPO3\CMS\Extbase\Validation\Validator\ValidatorInterface;
@@ -215,6 +217,46 @@ class MapController extends ActionController
     /**
      * Action responsible for rendering search, map and list partial
      *
+     * @param ?Constraint $constraint
+     *
+     * @TYPO3\CMS\Extbase\Annotation\Validate("Evoweb\StoreFinder\Validation\Validator\Constraint", param="constraint")
+     *
+     * @return string
+     */
+    public function cachedMapAction(Constraint $constraint = null): ResponseInterface
+    {
+        if ($this->settings['location']) {
+            $response = new ForwardResponse('show');
+        }  else {
+            [$locations, $constraint] = $this->getLocationsByDefaultConstraints();
+
+            $event = new MapGetLocationsByConstraintsEvent($this, $locations, $constraint);
+            $this->eventDispatcher->dispatch($event);
+            $locations = $event->getLocations();
+            $constraint = $event->getConstraint();
+
+            $this->view->assign('afterSearch', 0);
+            $this->view->assign('constraint', $constraint);
+            $this->view->assign('locations', $locations);
+
+            if (count($locations) > 0 || $constraint->isGeocoded()) {
+                $center = $this->getCenterOfQueryResult($constraint, $locations);
+                $center = $this->setZoomLevel($center, $locations);
+                $this->view->assign('center', $center);
+            }
+
+            $this->addCategoryFromSettingsToView();
+            $this->addPaginator($locations);
+
+            $response = new HtmlResponse($this->view->render());
+        }
+
+        return $response;
+    }
+
+    /**
+     * Action responsible for rendering search, map and list partial
+     *
      * @param Constraint $constraint
      *
      * @return ResponseInterface
@@ -259,9 +301,9 @@ class MapController extends ActionController
 
     protected function getLocationsByDefaultConstraints(): array
     {
+        /** @var QueryResultInterface $locations */
         /** @var Constraint $constraint */
         $constraint = GeneralUtility::makeInstance(Constraint::class);
-        $locations = [];
 
         if ($this->settings['showBeforeSearch'] & 2 && is_array($this->settings['defaultConstraint'])) {
             $constraint = $this->addDefaultConstraint($constraint);
@@ -278,6 +320,10 @@ class MapController extends ActionController
 
         if ($this->settings['showBeforeSearch'] & 4) {
             $locations = $this->locationRepository->findAll();
+        }
+
+        if (empty($locations)) {
+            $locations = GeneralUtility::getContainer()->get(QueryResultInterface::class);
         }
 
         return [$locations, $constraint];
@@ -396,7 +442,7 @@ class MapController extends ActionController
                         $value = $countryRepository->findByUid((int)$defaultConstraint['country']);
                     } elseif (strlen($defaultConstraint['country']) === 2) {
                         $value = $countryRepository->findByIsoCodeA2([$defaultConstraint['country']])->getFirst();
-                    } elseif (strlen($defaultConstraint['country']) === 2) {
+                    } elseif (strlen($defaultConstraint['country']) === 3) {
                         $value = $countryRepository->findByIsoCodeA3($defaultConstraint['country']);
                     }
                     break;

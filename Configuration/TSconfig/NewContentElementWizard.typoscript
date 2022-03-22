@@ -12,6 +12,16 @@ mod.wizards.newContentElement.wizardItems.store_finder {
       }
     }
 
+    storefinder_cached {
+        iconIdentifier = store-finder-plugin
+        title = LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi1_title_cached
+        description = LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi1_description_cached
+        tt_content_defValues {
+            CType = list
+            list_type = storefinder_cached
+        }
+    }
+
     storefinder_show {
       iconIdentifier = store-finder-plugin
       title = LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi1_title_show
@@ -28,5 +38,6 @@ mod.wizards.newContentElement.wizardItems.store_finder {
 
 mod.web_layout.tt_content.preview.list {
   storefinder_map = EXT:store_finder/Resources/Private/Templates/Preview/Map.html
+  storefinder_cached = EXT:store_finder/Resources/Private/Templates/Preview/Map.html
   storefinder_show = EXT:store_finder/Resources/Private/Templates/Preview/Show.html
 }

@@ -16,6 +16,20 @@ $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist'][$pluginSignat
     'LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:tt_content.list_type_map'
 );
 
+$pluginSignature = 'storefinder_cached';
+$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist'][$pluginSignature] = 'layout, select_key';
+$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist'][$pluginSignature] = 'pi_flexform';
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue(
+    $pluginSignature,
+    'FILE:EXT:store_finder/Configuration/FlexForms/flexform_mapWithSearch.xml'
+);
+
+\TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
+    'store_finder',
+    'Cached',
+    'LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:tt_content.list_type_cached'
+);
+
 $pluginSignature = 'storefinder_show';
 $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist'][$pluginSignature] = 'layout, select_key';
 $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist'][$pluginSignature] = 'pi_flexform';

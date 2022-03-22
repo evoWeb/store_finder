@@ -40,6 +40,13 @@ call_user_func(function () {
 
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
         'StoreFinder',
+        'Cached',
+        [\Evoweb\StoreFinder\Controller\MapController::class => 'cachedMap, map, search, show'],
+        [\Evoweb\StoreFinder\Controller\MapController::class => 'map, search, show']
+    );
+
+    \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+        'StoreFinder',
         'Show',
         [\Evoweb\StoreFinder\Controller\MapController::class => 'show'],
         [\Evoweb\StoreFinder\Controller\MapController::class => 'show']
