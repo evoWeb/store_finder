@@ -47,6 +47,13 @@ call_user_func(function () {
 
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
         $extensionName,
+        'Cached',
+        [$mapController => 'cachedMap, map, search, show'],
+        [$mapController=> 'map, search, show']
+    );
+
+    \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+        $extensionName,
         'Show',
         [$mapController => 'show'],
         [$mapController => 'show']

@@ -220,6 +220,24 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         );
     }
 
+    /**
+     * Action responsible for rendering search, map and list partial
+     */
+    public function cachedMapAction()
+    {
+        if ($this->settings['location']) {
+            $this->forward('show');
+        } else {
+            $this->getLocationsByDefaultConstraints();
+        }
+
+        $this->addCategoryFromSettingsToView();
+        $this->view->assign(
+            'static_info_tables',
+            \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('static_info_tables') ? 1 : 0
+        );
+    }
+
     protected function getLocationsByConstraints(Constraint $constraint)
     {
         /** @var Constraint $constraint */
@@ -396,8 +414,8 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
                     if (intval($defaultConstraint['country'])) {
                         $value = $countryRepository->findByUid((int) $defaultConstraint['country']);
                     } elseif (strlen($defaultConstraint['country']) === 2) {
-                        $value = $countryRepository->findByIsoCodeA2($defaultConstraint['country']);
-                    } elseif (strlen($defaultConstraint['country']) === 2) {
+                        $value = $countryRepository->findByIsoCodeA2([$defaultConstraint['country']])->getFirst();
+                    } else {
                         $value = $countryRepository->findByIsoCodeA3($defaultConstraint['country']);
                     }
                     break;

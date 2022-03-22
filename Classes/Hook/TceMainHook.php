@@ -14,6 +14,7 @@ namespace Evoweb\StoreFinder\Hook;
  */
 
 use Evoweb\StoreFinder\Domain\Repository\LocationRepository;
+use Evoweb\StoreFinder\Service\CacheService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
@@ -60,11 +61,11 @@ class TceMainHook
      */
     public function processDatamap_afterDatabaseOperations($_1, $table, $id, $fieldArray, $parentObject)
     {
+        $id = $this->remapId($id, $table, $parentObject);
+
         if ($table === 'tx_storefinder_domain_model_location') {
             $locationRepository = $this->getLocationRepository();
-
-            $locationId = $this->remapId($id, $table, $parentObject);
-            $location = $locationRepository->findByUidInBackend($locationId);
+            $location = $locationRepository->findByUidInBackend($id);
 
             if ($location !== null && $location->getGeocode()) {
                 $location = $this->getGeocodeService()->geocodeAddress($location);
@@ -75,6 +76,19 @@ class TceMainHook
                 $persistenceManager = $this->objectManager->get(PersistenceManager::class);
                 $persistenceManager->persistAll();
             }
+        }
+
+        // Clear caches if required
+        switch ($table) {
+            case 'tx_storefinder_domain_model_location':
+                GeneralUtility::makeInstance(CacheService::class)
+                    ->flushCacheByTag('tx_storefinder_domain_model_location_' . $id);
+                break;
+            case 'sys_category':
+                GeneralUtility::makeInstance(CacheService::class)
+                    ->flushCacheByTag('tx_storefinder_domain_model_category_' . $id);
+                break;
+            default:
         }
     }
 
