@@ -213,14 +213,11 @@
 			<trans-unit id="pi1_description_map">
 				<source>Adds a store finder search form with map and result list.</source>
 			</trans-unit>
-			<trans-unit id="pi1_title_cached">
-				<source>Store Finder - Cached map</source>
-			</trans-unit>
-			<trans-unit id="pi1_description_cached">
-				<source>Adds a store finder cached map.</source>
-			</trans-unit>
 			<trans-unit id="tt_content.list_type_map">
 				<source>Store Finder - Map with search and list</source>
+			</trans-unit>
+			<trans-unit id="pi1_title_cached">
+				<source>Store Finder - Cached map</source>
 			</trans-unit>
 			<trans-unit id="pi1_description_cached">
 				<source>Adds a store finder cached map.</source>
