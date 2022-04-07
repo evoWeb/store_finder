@@ -206,10 +206,18 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
     /**
      * Action responsible for rendering search, map and list partial
+     *
+     * @param ?Constraint $constraint
+     *
+     * @TYPO3\CMS\Extbase\Annotation\Validate("Evoweb\StoreFinder\Validation\Validator\Constraint", param="constraint")
+     *
+     * @return string
      */
-    public function cachedMapAction()
+    public function cachedMapAction(Constraint $constraint = null): string
     {
-        if ($this->settings['location']) {
+        if ($constraint !== null) {
+            $this->getLocationsByConstraints($constraint);
+        } elseif ($this->settings['location']) {
             $this->forward('show');
         } else {
             $this->getLocationsByDefaultConstraints();
