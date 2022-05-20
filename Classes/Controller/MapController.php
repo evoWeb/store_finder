@@ -175,6 +175,22 @@ class MapController extends ActionController
         $this->geocodeService->setSettings($this->settings);
         $this->locationRepository->setSettings($this->settings);
 
+        if ($this->request->hasArgument('constraint')) {
+            $constraint = $this->request->getArgument('constraint');
+            if (!intval($constraint['country'])) {
+                /** @var CountryRepository $countryRepository */
+                $countryRepository = GeneralUtility::getContainer()->get(CountryRepository::class);
+                /** @var $country Country */
+                if (strlen($constraint['country']) === 2) {
+                    $value = $countryRepository->findByIsoCodeA2([$constraint['country']])->getFirst();
+                } elseif (strlen($constraint['country']) === 3) {
+                    $value = $countryRepository->findByIsoCodeA3($constraint['country']);
+                }
+                $constraint['country'] = $value->getUid();
+                $this->request->setArgument('constraint', $constraint);
+            }
+        }
+
         $this->setTypeConverter();
     }
 

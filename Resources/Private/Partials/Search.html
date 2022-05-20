@@ -35,11 +35,21 @@
 		</div>
 
 		<f:if condition="{settings.static_info_tables}">
+			<f:switch expression="{settings.countryValueType}">
+				<f:case value="uid"><f:variable name="value" value="{constraint.country.uid}" /></f:case>
+				<f:case value="isoCodeA2"><f:variable name="value" value="{constraint.country.isoCodeA2}" /></f:case>
+				<f:case value="isoCodeA3"><f:variable name="value" value="{constraint.country.isoCodeA3}" /></f:case>
+			</f:switch>
 			<div class="col-md-6 mb-3 country">
 				<label for="country"><f:translate key="country" /></label>
 				<f:render partial="FieldError" section="Main" arguments="{field: 'country'}" />
-				<sf:form.selectCountries property="country" id="country" class="form-control"
-					optionValueField="{settings.countryValueType}" allowedCountries="{settings.allowedCountries}" />
+				<sf:form.selectCountries
+					property="country"
+					id="country"
+					class="form-control"
+					optionValueField="{settings.countryValueType}"
+					allowedCountries="{settings.allowedCountries}"
+					value="{value}" />
 			</div>
 		</f:if>
 	</div>
