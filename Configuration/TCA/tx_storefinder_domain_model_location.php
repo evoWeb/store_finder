@@ -39,9 +39,6 @@ $overrideChildTca = [
 
 $languageFile = 'LLL:EXT:store_finder/Resources/Private/Language/locallang_db.xlf:';
 
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages(
-    'tx_storefinder_domain_model_location'
-);
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToInsertRecords(
     'tx_storefinder_domain_model_location'
 );
