@@ -18,6 +18,7 @@ use Evoweb\StoreFinder\Domain\Model\Constraint;
 use Evoweb\StoreFinder\Domain\Repository\CountryRepository;
 use Evoweb\StoreFinder\Service\GeocodeService;
 use PHPUnit\Framework\MockObject\MockObject;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\NullLogger;
 use SJBR\StaticInfoTables\Domain\Model\Country;
 use SJBR\StaticInfoTables\Domain\Model\CountryZone;
@@ -64,9 +65,14 @@ class AddLocationToCacheTest extends FunctionalTestCase
 
         $logger = new NullLogger();
 
+        /** @var ServerRequestInterface|MockObject $request */
+        $request = $this->getMockBuilder(ServerRequestInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $frontendUser = new FrontendUserAuthentication();
         $frontendUser->setLogger($logger);
-        $frontendUser->start();
+        $frontendUser->start($request);
 
         $cacheManager = new CacheManager();
         $cacheManager->setCacheConfigurations([
