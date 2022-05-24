@@ -37,7 +37,7 @@
 		"typo3/cms-extensionmanager": "*",
 		"typo3/cms-fluid": "*",
 		"typo3/cms-frontend": "*",
-		"sjbr/static-info-tables": "^6.8.7",
+		"sjbr/static-info-tables": "^11.5.2",
 
 		"geocoder-php/google-maps-provider": "^4.4.0",
 		"php-http/guzzle7-adapter": "*",
