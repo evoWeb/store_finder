@@ -148,17 +148,7 @@ return [
         'sys_language_uid' => [
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
             'config' => [
-                'type' => 'select',
-                'renderType' => 'selectSingle',
-                'foreign_table' => 'sys_language',
-                'foreign_table_where' => 'ORDER BY sys_language.sorting',
-                'items' => [], // no default language here, as the pages table is always the default language
-                'default' => 0,
-                'fieldWizard' => [
-                    'selectIcons' => [
-                        'disabled' => false,
-                    ],
-                ],
+                'type' => 'language',
             ],
         ],
         'l18n_parent' => [
@@ -619,7 +609,6 @@ return [
                     'levelLinksPosition' => 'bottom',
                     'useSortable' => 1,
                     'showPossibleLocalizationRecords' => 1,
-                    'showRemovedLocalizationRecords' => 1,
                     'showAllLocalizationLink' => 1,
                     'showSynchronizationLink' => 1,
                     'enabledControls' => [
