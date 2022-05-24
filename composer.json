@@ -21,12 +21,6 @@
 		"open street map"
 	],
 
-	"repositories": [
-		{
-			"url": "https://github.com/garbast/static_info_tables.git",
-			"type": "git"
-		}
-	],
 	"require": {
 		"ext-iconv": "*",
 		"ext-json": "*",
