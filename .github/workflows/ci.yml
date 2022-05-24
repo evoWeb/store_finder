@@ -49,7 +49,7 @@ jobs:
       fail-fast: false
       matrix:
         env:
-          - { php: 7.4, TYPO3_VERSION: ^11.5, TESTING_FRAMEWORK: ^6.16.4 }
+          - { php: 7.4, TYPO3_VERSION: ^11.5, TESTING_FRAMEWORK: ^6.16.4, POLYFILL_PHP80: ^1.16 }
           - { php: 7.4, TYPO3_VERSION: ^11.5.1, TESTING_FRAMEWORK: ^6.11.1, PREFER_LOWEST: "--prefer-lowest" }
           - { php: 8.1, TYPO3_VERSION: "dev-main as 11.0.0", TESTING_FRAMEWORK: dev-main, experimental: true }
 
@@ -82,8 +82,12 @@ jobs:
           composer config minimum-stability dev
           composer config prefer-stable true
 
-      - name: Install TYPO3 core
+      - name: Install TYPO3 ${{ matrix.env.TYPO3_VERSION }} core
         run: composer require typo3/cms-core="${TYPO3_VERSION}" ${PREFER_LOWEST};
+
+      - name: Install Polyfill PHP80
+        if: ${{ matrix.env.POLYFILL_PHP80 }}
+        run: composer require symfony/polyfill-php80="${{ matrix.env.POLYFILL_PHP80 }}";
 
       - name: Install testing framework ${{ matrix.env.TESTING_FRAMEWORK }}
         if: ${{ matrix.env.TESTING_FRAMEWORK }}
