@@ -444,4 +444,11 @@ class LocationRepository extends Repository
     {
         return $this->connectionPool->getQueryBuilderForTable($table);
     }
+
+    public function getEmptyResult(): QueryResultInterface
+    {
+        $query = $this->createQuery();
+        $query->matching($query->lessThan('pid', 0));
+        return $query->execute();
+    }
 }

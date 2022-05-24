@@ -339,7 +339,7 @@ class MapController extends ActionController
         }
 
         if (empty($locations)) {
-            $locations = GeneralUtility::getContainer()->get(QueryResultInterface::class);
+            $locations = $this->locationRepository->getEmptyResult();
         }
 
         return [$locations, $constraint];
