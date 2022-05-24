@@ -40,10 +40,6 @@ $overrideChildTca = [
 $table = 'tx_storefinder_domain_model_attribute';
 $languageFile = 'LLL:EXT:store_finder/Resources/Private/Language/locallang_db.xlf' . ':';
 
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages(
-    'tx_storefinder_domain_model_attribute'
-);
-
 return [
     'ctrl' => [
         'title' => $languageFile . 'tx_storefinder_domain_model_attribute',
