@@ -43,6 +43,6 @@ cd ../;
 
 runFunctionalTests "/usr/bin/php7.4" "^11.0.0" "^6.6.2";
 runFunctionalTests "/usr/bin/php7.4" "^11.0.0" "^6.6.2" "--prefer-lowest";
-runFunctionalTests "/usr/bin/php7.4" "dev-master as 11.0.0" "^6.6.2";
+runFunctionalTests "/usr/bin/php8.1" "dev-main as 11.0.0" "dev-main";
 
 git checkout composer.json
