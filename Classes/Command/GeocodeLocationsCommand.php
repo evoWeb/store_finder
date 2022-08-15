@@ -15,6 +15,7 @@ namespace Evoweb\StoreFinder\Command;
  * LICENSE.txt file that was distributed with this source code.
  */
 
+use Evoweb\StoreFinder\Domain\Model\Location;
 use Evoweb\StoreFinder\Domain\Repository\LocationRepository;
 use Evoweb\StoreFinder\Service\GeocodeService;
 use Symfony\Component\Console\Command\Command;
@@ -54,19 +55,10 @@ class GeocodeLocationsCommand extends Command
         parent::__construct(null);
     }
 
-    /**
-     * Configure the command by defining the name, options and arguments
-     */
-    protected function configure()
-    {
-        $this->setAliases(['storefinder:geocode']);
-        $this->setDescription('Query google geocode service to get lat/lon for locations that are not geocode already');
-    }
-
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $locationsToGeocode = $this->locationRepository->findAllWithoutLatLon();
-        /** @var \Evoweb\StoreFinder\Domain\Model\Location $location */
+        /** @var Location $location */
         foreach ($locationsToGeocode as $index => $location) {
             $location = $this->geocodeService->geocodeAddress($location);
             $location->setGeocode(($location->getLatitude() && $location->getLongitude()) ? 0 : 1);

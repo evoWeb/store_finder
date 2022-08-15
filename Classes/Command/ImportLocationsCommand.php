@@ -15,12 +15,16 @@ namespace Evoweb\StoreFinder\Command;
  * LICENSE.txt file that was distributed with this source code.
  */
 
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Worksheet\Row;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -79,40 +83,42 @@ class ImportLocationsCommand extends Command
     protected function configure()
     {
         $this
-            ->setDescription(
-                'Import locations from excel file into given storage folder (default 1)'
-            )
             ->addArgument(
                 'fileName',
                 InputArgument::REQUIRED,
-                'Filename and path of excel file that should be imported'
+                'StorageId (most likely 1) and path and filename of excel file
+                 that should be imported relatively to the storage (fileadmin)'
             )
-            ->addArgument(
+            ->addOption(
                 'storagePid',
-                InputArgument::OPTIONAL,
+                'sp',
+                InputOption::VALUE_OPTIONAL,
                 'Page id to store locations in',
                 1
             )
-            ->addArgument(
-                'clearStorageFolder',
-                InputArgument::OPTIONAL,
-                'Page id to store locations in',
-                0
-            )
-            ->addArgument(
+            ->addOption(
                 'columnMap',
-                InputArgument::OPTIONAL,
-                'Column map {A: "import_id", B: {"city", "name"}, C: "zipcode", D: "person", E: "url"}'
+                'calmap',
+                InputOption::VALUE_OPTIONAL,
+                'Column map e.G. {A: "import_id", B: {"city", "name"}, C: "zipcode", D: "person", E: "url"}'
             )
-            ->addArgument(
+            ->addOption(
                 'attributeMap',
-                InputArgument::OPTIONAL,
-                'Attribute map {K: {"Attribute 1": 1, "Attribute 2": 2}}'
+                'attmap',
+                InputOption::VALUE_OPTIONAL,
+                'Attribute map e.G. {K: {"Attribute 1": 1, "Attribute 2": 2}}'
             )
-            ->addArgument(
+            ->addOption(
                 'categoryMap',
-                InputArgument::OPTIONAL,
-                'Category map {L: {"Category 1": 1, "Category 2": 2}}'
+                'catmap',
+                InputOption::VALUE_OPTIONAL,
+                'Category map e.G. {L: {"Category 1": 1, "Category 2": 2}}'
+            )
+            ->addOption(
+                'clearStorageFolder',
+                'csf',
+                InputOption::VALUE_NONE,
+                'Page id to store locations in'
             );
     }
 
@@ -122,17 +128,17 @@ class ImportLocationsCommand extends Command
         $io->title($this->getDescription());
 
         $fileName = $input->getArgument('fileName');
-        $storagePid = (int) $input->getArgument('storagePid');
-        $clearStorageFolder = (bool) $input->getArgument('clearStorageFolder');
+        $storagePid = (int)$input->getOption('storagePid');
+        $clearStorageFolder = (bool)$input->getOption('clearStorageFolder');
 
-        if ($input->hasArgument('columnMap') && $input->getArgument('columnMap') !== '') {
-            $this->columnMap = json_decode($input->getArgument('columnMap'));
+        if ($input->hasOption('columnMap') && !empty($input->getOption('columnMap'))) {
+            $this->columnMap = json_decode($input->getOption('columnMap'), true);
         }
-        if ($input->hasArgument('attributeMap') && $input->getArgument('attributeMap') !== '') {
-            $this->attributeMap = json_decode($input->getArgument('attributeMap'));
+        if ($input->hasOption('attributeMap') && !empty($input->getOption('attributeMap'))) {
+            $this->attributeMap = json_decode($input->getOption('attributeMap'), true);
         }
-        if ($input->hasArgument('categoryMap') && $input->getArgument('categoryMap') !== '') {
-            $this->categoryMap = json_decode($input->getArgument('categoryMap'));
+        if ($input->hasOption('categoryMap') && !empty($input->getOption('categoryMap'))) {
+            $this->categoryMap = json_decode($input->getOption('categoryMap'), true);
         }
 
         $file = $this->getFile($fileName);
@@ -152,7 +158,7 @@ class ImportLocationsCommand extends Command
         }
 
         $filePath = $file->getForLocalProcessing();
-        $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($filePath);
+        $reader = IOFactory::createReaderForFile($filePath);
         $spreadsheet = $reader->load($filePath);
         foreach ($spreadsheet->getActiveSheet()->getRowIterator() as $row) {
             if ($row->getRowIndex() === 1) {
@@ -221,7 +227,7 @@ class ImportLocationsCommand extends Command
         }
     }
 
-    protected function transformAndStoreLocation(\PhpOffice\PhpSpreadsheet\Worksheet\Row $row, int $storagePid)
+    protected function transformAndStoreLocation(Row $row, int $storagePid)
     {
         $attributes = [];
         $categories = [];
@@ -256,6 +262,8 @@ class ImportLocationsCommand extends Command
                         foreach ($targetColumn as $targetSubColumn) {
                             $location[$targetSubColumn] = $value;
                         }
+                    } elseif ($targetColumn == 'import_id') {
+                        $location[$targetColumn] = (int)$value;
                     } elseif ($targetColumn == 'country') {
                         $location[$targetColumn] = $this->fetchCountry($value);
                     } elseif ($targetColumn == 'state') {
@@ -272,10 +280,12 @@ class ImportLocationsCommand extends Command
             }
         }
 
-        $location = $this->processLocation($location);
-        $this->processAttributes($location['uid'], $attributes);
-        $this->processCategories($location['uid'], $categories);
-        $this->processFiles($location, $files);
+        if (!empty($location['city']) && !empty($location['zipcode'])) {
+            $location = $this->processLocation($location);
+            $this->processAttributes($location['uid'], $attributes);
+            $this->processCategories($location['uid'], $categories);
+            $this->processFiles($location, $files);
+        }
     }
 
     protected function fetchCountry(string $value): int
@@ -571,7 +581,7 @@ class ImportLocationsCommand extends Command
         $queryBuilder->execute();
     }
 
-    protected function getQueryBuilderForTable(string $table): \TYPO3\CMS\Core\Database\Query\QueryBuilder
+    protected function getQueryBuilderForTable(string $table): QueryBuilder
     {
         $queryBuilder = $this->connectionPool->getQueryBuilderForTable($table);
         $queryBuilder->getRestrictions()->removeAll();

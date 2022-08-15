@@ -9,25 +9,30 @@ By using the import command its possible to import locations from a a spreadshee
 into a storage folder. If given references to attributes, categories and files are
 created.
 
-Configuration
-=============
+Arguments
+=========
 
 * fileName
-  File path and name of spreadsheet to import relative to file storage. Eg: 1:/user_upload/locations.xlsx
-* storagePid
+  StorageId (most likely 1) and path and filename of excel file that should be imported relatively to the storage (fileadmin) Eg: 1:/user_upload/locations.xlsx
+
+Options
+=======
+
+* --storagePid -sp
   Page id of storage folder. Default is 1.
-* clearStorageFolder
+* --clearStorageFolder -csf
   Flag if storage folder should be emptied before importing
-* columnMap
+* --columnMap -colmap
   Json encoded column map array. Defaults to {"A":"import_id","B":{0:"name",1:"storeid"}},"C":"address","D":"city","E":"zipcode","F":"country","G":"state","H":"person","I":"url","J":"image"}
-* attributeMap
+* --attributeMap -attmap
   Json encoded attribute map array. Defaults to {"K":{"att1":1}}
-* categoryMap
+* --categoryMap -catmap
   Json encoded attribute map array. Defaults to {"L":{"cat1":1}}
 
 Transformation
 ==============
 
+* the first line will always be ignored.
 * transformation is in order of attributes, categories, location fields.
 * every column in one of the three maps is imported in a location field
 * country, state, image, media, icon are special fields
@@ -51,3 +56,8 @@ Importing constraints
   and change the configuration object like:
   {..."H":"image","I":"image","J":"image"...}
   The result is, that the locations has three images referenced
+
+Example import command call
+===========================
+
+vendor/bin/typo3 storefinder:import --storagePid=202 --clearStorageFolder=1 filename

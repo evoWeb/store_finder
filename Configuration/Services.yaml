@@ -19,8 +19,17 @@ services:
 
   Evoweb\StoreFinder\Command\ImportLocationsCommand:
     tags:
-      - { name: 'console.command', command: 'storefinder:import', schedulable: false }
+      - name: 'console.command'
+        command: 'storefinder:import'
+        description: 'Import locations from excel file into given storage folder (default 1)'
+        schedulable: false
 
   Evoweb\StoreFinder\Command\GeocodeLocationsCommand:
     tags:
-      - { name: 'console.command', command: 'storefinder:geocode', schedulable: true }
+      - name: 'console.command'
+        command: 'storefinder:geocode'
+        description: 'Query google geocode service to get lat/lon for locations that are not geocode already'
+        schedulable: true
+
+  SJBR\StaticInfoTables\Domain\Repository\TerritoryRepository:
+    public: true
