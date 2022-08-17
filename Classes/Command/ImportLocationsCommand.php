@@ -85,34 +85,34 @@ class ImportLocationsCommand extends Command
             )
             ->addOption(
                 'storagePid',
-                'sp',
+                's',
                 InputOption::VALUE_OPTIONAL,
                 'Page id to store locations in',
                 1
             )
             ->addOption(
+                'clearStorageFolder',
+                'c',
+                InputOption::VALUE_NONE,
+                'Page id to store locations in'
+            )
+            ->addOption(
                 'columnMap',
-                'calmap',
+                'o',
                 InputOption::VALUE_OPTIONAL,
                 'Column map e.G. {A: "import_id", B: {"city", "name"}, C: "zipcode", D: "person", E: "url"}'
             )
             ->addOption(
                 'attributeMap',
-                'attmap',
+                'a',
                 InputOption::VALUE_OPTIONAL,
                 'Attribute map e.G. {K: {"Attribute 1": 1, "Attribute 2": 2}}'
             )
             ->addOption(
                 'categoryMap',
-                'catmap',
+                't',
                 InputOption::VALUE_OPTIONAL,
                 'Category map e.G. {L: {"Category 1": 1, "Category 2": 2}}'
-            )
-            ->addOption(
-                'clearStorageFolder',
-                'csf',
-                InputOption::VALUE_NONE,
-                'Page id to store locations in'
             );
     }
 
@@ -136,7 +136,7 @@ class ImportLocationsCommand extends Command
         }
 
         $file = $this->getFile($fileName);
-        $this->processFile($file, $storagePid, $clearStorageFolder);
+        $this->processFile($file, $storagePid, $clearStorageFolder, $io);
         return 0;
     }
 
@@ -145,7 +145,7 @@ class ImportLocationsCommand extends Command
         return $this->resourceFactory->getFileObjectFromCombinedIdentifier($fileName);
     }
 
-    protected function processFile(File $file, int $storagePid, bool $clearStorageFolder)
+    protected function processFile(File $file, int $storagePid, bool $clearStorageFolder, SymfonyStyle $io)
     {
         if ($clearStorageFolder) {
             $this->clearStorageFolder($storagePid);
@@ -154,13 +154,23 @@ class ImportLocationsCommand extends Command
         $filePath = $file->getForLocalProcessing();
         $reader = IOFactory::createReaderForFile($filePath);
         $spreadsheet = $reader->load($filePath);
-        foreach ($spreadsheet->getActiveSheet()->getRowIterator() as $row) {
+        $sheet = $spreadsheet->getActiveSheet();
+        $io->writeln('Import ' . $sheet->getHighestDataRow() . ' possible locations.');
+        $progressbar = $io->createProgressBar($sheet->getHighestDataRow());
+        $locationCount = 0;
+        foreach ($sheet->getRowIterator() as $row) {
+            if ($row->isEmpty()) {
+                break;
+            }
+            $progressbar->advance();
             if ($row->getRowIndex() === 1) {
                 continue;
             }
+            $locationCount++;
 
             $this->transformAndStoreLocation($row, $storagePid);
         }
+        $io->writeln('A total of ' . $locationCount . ' locations were imported');
         unlink($filePath);
     }
 
@@ -274,7 +284,7 @@ class ImportLocationsCommand extends Command
             }
         }
 
-        if (!empty($location['city']) && !empty($location['zipcode'])) {
+        if (!empty($location['city']) || !empty($location['zipcode'])) {
             $location = $this->processLocation($location);
             $this->processAttributes($location['uid'], $attributes);
             $this->processCategories($location['uid'], $categories);
@@ -333,6 +343,7 @@ class ImportLocationsCommand extends Command
 
         $locationUid = $this->getCurrentRecordUid($location, $table);
         if ($locationUid) {
+            $location['deleted'] = 0;
             $connection->update($table, $location, ['uid' => $locationUid]);
         } else {
             $location['crdate'] = $location['tstamp'];
