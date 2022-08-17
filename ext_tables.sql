@@ -15,7 +15,7 @@ CREATE TABLE tx_storefinder_domain_model_location (
 	phone varchar(20) DEFAULT '' NOT NULL,
 	mobile varchar(20) DEFAULT '' NOT NULL,
 	fax varchar(20) DEFAULT '' NOT NULL,
-	hours tinytext,
+	hours text,
 	email varchar(255) DEFAULT '' NOT NULL,
 	url varchar(2048) DEFAULT '' NOT NULL,
 	notes text,

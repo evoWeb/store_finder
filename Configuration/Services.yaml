@@ -22,7 +22,7 @@ services:
       - name: 'console.command'
         command: 'storefinder:import'
         description: 'Import locations from excel file into given storage folder (default 1)'
-        schedulable: false
+        schedulable: true
 
   Evoweb\StoreFinder\Command\GeocodeLocationsCommand:
     tags:
