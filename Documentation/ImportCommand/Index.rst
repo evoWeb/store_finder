@@ -18,15 +18,15 @@ Arguments
 Options
 =======
 
-* --storagePid -sp
+* --storagePid -s
   Page id of storage folder. Default is 1.
-* --clearStorageFolder -csf
+* --clearStorageFolder -c
   Flag if storage folder should be emptied before importing
-* --columnMap -colmap
+* --columnMap -o
   Json encoded column map array. Defaults to {"A":"import_id","B":{0:"name",1:"storeid"}},"C":"address","D":"city","E":"zipcode","F":"country","G":"state","H":"person","I":"url","J":"image"}
-* --attributeMap -attmap
+* --attributeMap -a
   Json encoded attribute map array. Defaults to {"K":{"att1":1}}
-* --categoryMap -catmap
+* --categoryMap -t
   Json encoded attribute map array. Defaults to {"L":{"cat1":1}}
 
 Transformation
@@ -57,7 +57,15 @@ Importing constraints
   {..."H":"image","I":"image","J":"image"...}
   The result is, that the locations has three images referenced
 
-Example import command call
-===========================
+Examples of import command calls
+================================
 
-vendor/bin/typo3 storefinder:import --storagePid=202 --clearStorageFolder=1 filename
+::
+    vendor/bin/typo3 storefinder:import --storagePid=202 --clearStorageFolder=1 filename
+
+    vendor/bin/typo3 storefinder:import --columnMap="{\"A\":\"import_id\",\"B\":\"name\",\"D\":\"city\"}" "1:/user_upload/ExportExcel.xlsx"
+    vendor/bin/typo3 storefinder:import \
+      -c \
+      --storagePid=2
+      -o"{\"A\":\"import_id\",\"B\":\"name\",\"D\":\"city\"}" \
+      "1:/user_upload/ExportExcel.xlsx"
