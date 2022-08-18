@@ -44,7 +44,7 @@ class CoordinatesCache
         $cacheFrontend = $cacheManager->getCache('store_finder_coordinate');
 
         /** @var FrontendUserAuthentication $frontendUser */
-        $frontendUser = ($GLOBALS['TSFE']) ? $GLOBALS['TSFE']->fe_user : null;
+        $frontendUser = ($GLOBALS['TSFE'] ?? null) ? $GLOBALS['TSFE']->fe_user : null;
 
         /** @var self $instance */
         $instance = GeneralUtility::makeInstance(self::class, $cacheFrontend, $frontendUser);
