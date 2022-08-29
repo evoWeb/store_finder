@@ -15,6 +15,7 @@ namespace Evoweb\StoreFinder\Domain\Repository;
  * LICENSE.txt file that was distributed with this source code.
  */
 
+use Doctrine\DBAL\Connection;
 use Evoweb\StoreFinder\Domain\Model\Constraint;
 use Evoweb\StoreFinder\Domain\Model\Location;
 use TYPO3\CMS\Core\Database\ConnectionPool;
@@ -24,9 +25,19 @@ use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 use TYPO3\CMS\Extbase\Persistence\Generic\Query;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
+use TYPO3\CMS\Extbase\Persistence\Repository;
 
-class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
+class LocationRepository extends Repository
 {
+    /**
+     * @var array
+     */
+    protected $defaultOrderings = [
+        'zipcode' => QueryInterface::ORDER_ASCENDING,
+        'city' => QueryInterface::ORDER_ASCENDING,
+        'name' => QueryInterface::ORDER_ASCENDING,
+    ];
+
     /**
      * Natural logarithm of 2
      *
@@ -99,6 +110,7 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     {
         /** @var Query $query */
         $query = $this->createQuery();
+        $query->getQuerySettings()->setRespectStoragePage(false);
 
         $query->matching($query->equals('uid', $uid));
 
@@ -107,7 +119,7 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
     public function findByConstraint(Constraint $constraint): QueryResultInterface
     {
-        /** @var \TYPO3\CMS\Extbase\Persistence\Generic\Query $query */
+        /** @var Query $query */
         $query = $this->createQuery();
 
         $queryBuilder = $this->getQueryBuilderForTable('tx_storefinder_domain_model_location');
@@ -139,7 +151,7 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                         'l.pid',
                         $queryBuilder->createNamedParameter(
                             $query->getQuerySettings()->getStoragePageIds(),
-                            \Doctrine\DBAL\Connection::PARAM_INT_ARRAY
+                            Connection::PARAM_INT_ARRAY
                         )
                     )
                 )
@@ -209,7 +221,7 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 'l',
                 'sys_category_record_mm',
                 'c',
-                (string) $expression->andX(
+                (string)$expression->andX(
                     $expression->eq('l.uid', 'c.uid_foreign'),
                     $expression->eq(
                         'c.tablenames',
@@ -224,7 +236,7 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             $queryBuilder->andWhere(
                 $expression->in(
                     'c.uid_local',
-                    $queryBuilder->createNamedParameter($categories, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY)
+                    $queryBuilder->createNamedParameter($categories, Connection::PARAM_INT_ARRAY)
                 )
             );
         }
@@ -274,11 +286,11 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     protected function addRadiusQueryPart(Constraint $constraint, QueryBuilder $queryBuilder): QueryBuilder
     {
         if ($this->settings['distanceUnit'] == 'miles') {
-            $constraint->setRadius(intval(max($constraint->getRadius(), 1) * 1.6));
+            $constraint->setRadius((int)(max($constraint->getRadius(), 1) * 1.6));
         }
 
         $queryBuilder->having(
-            '`distance` <= ' . $queryBuilder->createNamedParameter($constraint->getRadius(), \PDO::PARAM_STR)
+            '`distance` <= ' . $queryBuilder->createNamedParameter($constraint->getRadius())
         );
 
         return $queryBuilder;
@@ -286,7 +298,7 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
     protected function addLimitQueryParts(Constraint $constraint, QueryBuilder $queryBuilder): QueryBuilder
     {
-        $limit = (int) $this->settings['limit'];
+        $limit = (int)$this->settings['limit'];
         $page = 0;
 
         if ($constraint->getLimit()) {
@@ -332,14 +344,14 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
     public function findCenterByLatitudeAndLongitude(): Location
     {
-        /** @var \TYPO3\CMS\Extbase\Persistence\Generic\Query $query */
+        /** @var Query $query */
         $query = $this->createQuery();
 
         $query->setOrderings(['latitude' => QueryInterface::ORDER_ASCENDING]);
-        /** @var Location $minLatitude south */
+        /** @var ?Location $minLatitude south */
         $minLatitude = $query->execute()->getFirst();
 
-        // only search for the other locations if first succeed or else we have no locations at all
+        // only search for the other locations if first succeeded otherwise we have no locations at all
         if ($minLatitude === null) {
             $maxLatitude = $minLongitude = $maxLongitude = null;
         } else {
@@ -364,7 +376,7 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
          * http://stackoverflow.com/questions/6048975
          *    /google-maps-v3-how-to-calculate-the-zoom-level-for-a-given-bounds
          */
-        if ($minLatitude !== null && $maxLatitude !== null) {
+        if ($minLatitude instanceof Location && $maxLatitude instanceof Location) {
             $location->setLatitude(($maxLatitude->getLatitude() + $minLatitude->getLatitude()) / 2);
             $latitudeFraction = (
                 $this->latRad($maxLatitude->getLatitude())
@@ -389,7 +401,7 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
     public function findOneByCenter(): ?Location
     {
-        /** @var \TYPO3\CMS\Extbase\Persistence\Generic\Query $query */
+        /** @var Query $query */
         $query = $this->createQuery();
 
         $query->setOrderings(['sorting' => QueryInterface::ORDER_ASCENDING]);
@@ -470,7 +482,7 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             } elseif ($parameterType[$key] == 101) {
                 $sql = str_replace(':' . $key, implode(',', $value), $sql);
             } else {
-                $sql = str_replace(':' . $key, $value, $sql);
+                $sql = str_replace(':' . $key, (string)$value, $sql);
             }
         });
 
@@ -480,5 +492,12 @@ class LocationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     protected function getQueryBuilderForTable(string $table): QueryBuilder
     {
         return $this->connectionPool->getQueryBuilderForTable($table);
+    }
+
+    public function getEmptyResult(): QueryResultInterface
+    {
+        $query = $this->createQuery();
+        $query->matching($query->lessThan('pid', 0));
+        return $query->execute();
     }
 }

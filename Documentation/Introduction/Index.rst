@@ -1,10 +1,11 @@
-.. include:: ../Includes.txt
-
-
+.. include:: /Includes.rst.txt
+.. index::
+   Introduction
 .. _introduction:
 
+============
 Introduction
-------------
+============
 
 
 Search with result map and list

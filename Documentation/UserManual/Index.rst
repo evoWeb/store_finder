@@ -1,10 +1,11 @@
-.. include:: ../Includes.txt
-
-
+.. include:: /Includes.rst.txt
+.. index::
+   User Manual
 .. _user_manual:
 
+===========
 User Manual
------------
+===========
 
 The simple version would consists of a folder for the locations records,
 a page for the plugin and the plugin it self. In this plugin the folder

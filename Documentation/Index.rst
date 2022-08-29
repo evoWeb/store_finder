@@ -1,54 +1,47 @@
-.. include:: Includes.txt
-
-
-.. _start:
+.. include:: /Includes.rst.txt
 
 ============
 Store finder
 ============
 
 :Extension Key:
-      store_finder
+   store_finder
 
 :Version:
-      |release|
+   |release|
 
 :Language:
-      en
+   en
 
 :Description:
-      Search for stores based on local address with coordinates compiled with google maps api.
+   Search for stores based on local address with coordinates compiled with google maps api.
 
 :Keywords:
-      forEditors, forAdmins
+   Store Finder, POI Map, Google Maps, Configuration
 
 :Copyright:
-      2014-2019
+   2014-2022
 
 :Author:
-      Sebastian Fischer
+   Sebastian Fischer
 
 :License:
-      Open Content License available from http://www.opencontent.org/opl.shtml
+   This document is published under the
+   `Open Publication License <https://www.opencontent.org/openpub/>`__.
 
 :Rendered:
-      |today|
+   |today|
 
 The content of this document is related to TYPO3,
 a GNU/GPL CMS/Framework available from http://typo3.org
 
-.. only:: html
+----
 
-   .. tip::
-
-      :ref:`Sitemap`
-
-**Table of Contents**
+**Table of Contents:**
 
 .. toctree::
-   :maxdepth: 5
+   :maxdepth: 2
    :titlesonly:
-   :glob:
 
    Introduction/Index
    UserManual/Index
@@ -56,4 +49,14 @@ a GNU/GPL CMS/Framework available from http://typo3.org
    Configuration/Index
    Templating/Index
    Tutorial/Index
-   Targets
+   ImportCommand/Index
+   Deprecation/Index
+   BreakingChanges/Index
+
+.. Meta Menu
+
+.. toctree::
+   :hidden:
+
+   Sitemap
+   genindex

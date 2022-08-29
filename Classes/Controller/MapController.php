@@ -17,21 +17,34 @@ namespace Evoweb\StoreFinder\Controller;
 
 use Doctrine\Common\Annotations\DocParser;
 use Evoweb\StoreFinder\Controller\Event\MapGetLocationsByConstraintsEvent;
-use Evoweb\StoreFinder\Domain\Repository\CountryRepository;
-use Evoweb\StoreFinder\Validation\Validator\ConstraintValidator;
-use Evoweb\StoreFinder\Validation\Validator\SettableInterface;
 use Evoweb\StoreFinder\Domain\Model\Constraint;
 use Evoweb\StoreFinder\Domain\Model\Location;
+use Evoweb\StoreFinder\Domain\Repository\CategoryRepository;
+use Evoweb\StoreFinder\Domain\Repository\CountryRepository;
+use Evoweb\StoreFinder\Domain\Repository\LocationRepository;
+use Evoweb\StoreFinder\Service\GeocodeService;
+use Evoweb\StoreFinder\Validation\Validator\ConstraintValidator;
+use Evoweb\StoreFinder\Validation\Validator\SettableInterface;
+use Psr\Http\Message\ResponseInterface;
 use SJBR\StaticInfoTables\Domain\Model\Country;
+use TYPO3\CMS\Core\Http\HtmlResponse;
+use TYPO3\CMS\Core\Pagination\SimplePagination;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
+use TYPO3\CMS\Extbase\Annotation\Validate;
+use TYPO3\CMS\Extbase\Http\ForwardResponse;
+use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Extbase\Mvc\Controller\Argument;
+use TYPO3\CMS\Extbase\Pagination\QueryResultPaginator;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Property\PropertyMappingConfiguration;
 use TYPO3\CMS\Extbase\Property\TypeConverter\PersistentObjectConverter;
 use TYPO3\CMS\Extbase\Validation\Validator\ValidatorInterface;
+use TYPO3\CMS\Extbase\Validation\ValidatorClassNameResolver;
 
-class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
+class MapController extends ActionController
 {
     /**
      * @var \Evoweb\StoreFinder\Domain\Repository\LocationRepository
@@ -49,9 +62,9 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     protected $geocodeService;
 
     public function __construct(
-        \Evoweb\StoreFinder\Domain\Repository\LocationRepository $locationRepository,
-        \Evoweb\StoreFinder\Domain\Repository\CategoryRepository $categoryRepository,
-        \Evoweb\StoreFinder\Service\GeocodeService $geocodeService
+        LocationRepository $locationRepository,
+        CategoryRepository $categoryRepository,
+        GeocodeService $geocodeService
     ) {
         $this->locationRepository = $locationRepository;
         $this->categoryRepository = $categoryRepository;
@@ -71,7 +84,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     }
 
     protected function modifyValidatorsBasedOnSettings(
-        \TYPO3\CMS\Extbase\Mvc\Controller\Argument $argument,
+        Argument $argument,
         array $configuredValidators
     ) {
         $parser = new DocParser();
@@ -110,23 +123,17 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $argument->setValidator($validator);
     }
 
-    /**
-     * @param string $configuration
-     * @param DocParser $parser
-     *
-     * @return ValidatorInterface
-     */
-    protected function getValidatorByConfiguration(string $configuration, DocParser $parser)
+    protected function getValidatorByConfiguration(string $configuration, DocParser $parser): ValidatorInterface
     {
         if (strpos($configuration, '"') === false && strpos($configuration, '(') === false) {
             $configuration = sprintf('"%s"', $configuration);
         }
 
-        /** @var \TYPO3\CMS\Extbase\Annotation\Validate $validateAnnotation */
+        /** @var Validate $validateAnnotation */
         $validateAnnotation = current($parser->parse(
             '@TYPO3\CMS\Extbase\Annotation\Validate(' . $configuration . ')'
         ));
-        $validatorObjectName = \TYPO3\CMS\Extbase\Validation\ValidatorClassNameResolver::resolve(
+        $validatorObjectName = ValidatorClassNameResolver::resolve(
             $validateAnnotation->validator
         );
         /** @var ValidatorInterface $validator */
@@ -140,7 +147,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             /** @var array $constraint */
             $constraint = $this->request->getArgument('constraint');
             if (!is_array($constraint['category'])) {
-                $constraint['category'] = [$constraint['category']];
+                $constraint['category'] = array_filter(explode(',', $constraint['category'] ?? ''));
                 $this->request->setArgument('constraint', $constraint);
             }
 
@@ -168,11 +175,33 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             $this->settings = array_merge($this->settings, $override);
         }
 
+        $this->settings['static_info_tables'] = ExtensionManagementUtility::isLoaded('static_info_tables') ? 1 : 0;
+
         $this->settings['allowedCountries'] = $this->settings['allowedCountries'] ?
             explode(',', $this->settings['allowedCountries']) :
             [];
         $this->geocodeService->setSettings($this->settings);
         $this->locationRepository->setSettings($this->settings);
+
+        if ($this->request->hasArgument('constraint')) {
+            $constraint = $this->request->getArgument('constraint');
+            if (!intval($constraint['country'])) {
+                /** @var CountryRepository $countryRepository */
+                $countryRepository = GeneralUtility::getContainer()->get(CountryRepository::class);
+                /** @var $country Country */
+                if (strlen($constraint['country']) === 2) {
+                    $value = $countryRepository->findByIsoCodeA2([$constraint['country']])->getFirst();
+                } elseif (strlen($constraint['country']) === 3) {
+                    $value = $countryRepository->findByIsoCodeA3($constraint['country']);
+                } else {
+                    $value = false;
+                }
+                if ($value) {
+                    $constraint['country'] = $value->getUid();
+                    $this->request->setArgument('constraint', $constraint);
+                }
+            }
+        }
 
         $this->setTypeConverter();
     }
@@ -233,6 +262,14 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
     protected function getLocationsByConstraints(Constraint $constraint)
     {
+        if (($this->settings['disableLocationFetchLogic'] ?? false)) {
+            $locations = $this->locationRepository->getEmptyResult();
+            return  [
+                $locations,
+                $constraint
+            ];
+        }
+
         $constraint = $this->addDefaultConstraint($constraint);
         $constraint = $this->geocodeService->geocodeAddress($constraint);
         $this->view->assign('searchWasNotClearEnough', $this->geocodeService->hasMultipleResults);
@@ -260,8 +297,16 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     {
         /** @var Constraint $constraint */
         $constraint = GeneralUtility::makeInstance(Constraint::class);
-        $locations = false;
 
+        if (($this->settings['disableLocationFetchLogic'] ?? false)) {
+            $locations = $this->locationRepository->getEmptyResult();
+            return  [
+                $locations,
+                $constraint
+            ];
+        }
+
+        $locations = false;
         if ($this->settings['showBeforeSearch'] & 2 && is_array($this->settings['defaultConstraint'])) {
             $constraint = $this->addDefaultConstraint($constraint);
             if ($this->settings['geocodeDefaultConstraint']) {
@@ -476,14 +521,14 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      */
     public function setZoomLevel(Location $center, $locations): Location
     {
-        $radius = false;
+        $radius = 0;
         /** @var Location $location */
         foreach ($locations as $location) {
             $radius = max($radius, $location->getDistance());
         }
 
-        if ($radius === false) {
-            $radius = (int) $this->settings['defaultConstraint']['radius'];
+        if ($radius === 0) {
+            $radius = (int)$this->settings['defaultConstraint']['radius'];
         }
 
         if ($radius < 2) {
@@ -502,13 +547,13 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             $zoom = 10;
         } elseif ($radius <= 500) {
             $zoom = 11;
-        } elseif ($radius > 500 && $radius <= 1000) {
+        } elseif ($radius <= 1000) {
             $zoom = 12;
         } else {
             $zoom = 13;
         }
 
-        $center->setZoom(intval(18 - $zoom));
+        $center->setZoom((18 - $zoom));
 
         return $center;
     }
@@ -521,5 +566,10 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     protected function getErrorFlashMessage()
     {
         return false;
+    }
+
+    public function getSettings(): array
+    {
+        return $this->settings;
     }
 }
