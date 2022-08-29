@@ -18,7 +18,6 @@ namespace Evoweb\StoreFinder\Domain\Repository;
 use Doctrine\DBAL\Connection;
 use Evoweb\StoreFinder\Domain\Model\Constraint;
 use Evoweb\StoreFinder\Domain\Model\Location;
-use SJBR\StaticInfoTables\Domain\Model\Country;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -163,28 +162,13 @@ class LocationRepository extends Repository
 
     protected function addCountryQueryPart(Constraint $constraint, QueryBuilder $queryBuilder): QueryBuilder
     {
-        $value = $constraint->getCountry();
-        if ($value) {
-            if ($value instanceof Country) {
-                $value = $value->getUid();
-                $on = '(l.country = sc.uid)';
-                $field = 'uid';
-                $type = \PDO::PARAM_INT;
-            } elseif (is_numeric($value)) {
-                $on = '(l.country = sc.uid)';
-                $field = 'uid';
-                $type = \PDO::PARAM_INT;
-            } else {
-                $on = '(l.country = sc.cn_iso_3)';
-                $field = 'cn_iso_3';
-                $type = \PDO::PARAM_STR;
-            }
-
-            $queryBuilder->innerJoin('l', 'static_countries', 'sc', $on);
+        $country = $constraint->getCountry();
+        if ($country) {
+            $queryBuilder->innerJoin('l', 'static_countries', 'sc', '(l.country = sc.uid)');
             $queryBuilder->andWhere(
                 $queryBuilder->expr()->eq(
-                    'sc.' . $field,
-                    $queryBuilder->createNamedParameter($value, $type)
+                    'sc.uid',
+                    $queryBuilder->createNamedParameter($country->getUid(), \PDO::PARAM_INT)
                 )
             );
         }
@@ -195,12 +179,12 @@ class LocationRepository extends Repository
     protected function addCategoryQueryPart(Constraint $constraint, QueryBuilder $queryBuilder): QueryBuilder
     {
         if ($this->settings['categoryPriority'] == 'limitResultsToCategories') {
-            $constraint->setCategory(GeneralUtility::intExplode(',', $this->settings['categories'], 1));
+            $constraint->setCategory(GeneralUtility::intExplode(',', $this->settings['categories'], true));
         } elseif (
             $this->settings['categoryPriority'] == 'useSelectedCategoriesIfNoFilterSelected'
             && !count($constraint->getCategory())
         ) {
-            $constraint->setCategory(GeneralUtility::intExplode(',', $this->settings['categories'], 1));
+            $constraint->setCategory(GeneralUtility::intExplode(',', $this->settings['categories'], true));
         }
 
         $categories = $this->categoryRepository->findByParentRecursive($constraint->getCategory());
@@ -286,7 +270,7 @@ class LocationRepository extends Repository
             }
 
             if (count($fullTextSearchConstraint)) {
-                $queryBuilder->andWhere($queryBuilder->expr()->orX($fullTextSearchConstraint));
+                $queryBuilder->andWhere($queryBuilder->expr()->orX(...$fullTextSearchConstraint));
             }
         }
 
@@ -299,10 +283,10 @@ class LocationRepository extends Repository
         $query = $this->createQuery();
 
         $query->setOrderings(['latitude' => QueryInterface::ORDER_ASCENDING]);
-        /** @var Location $minLatitude south */
+        /** @var ?Location $minLatitude south */
         $minLatitude = $query->execute()->getFirst();
 
-        // only search for the other locations if first succeed or else we have no locations at all
+        // only search for the other locations if first succeeded otherwise we have no locations at all
         if ($minLatitude === null) {
             $maxLatitude = $minLongitude = $maxLongitude = null;
         } else {
@@ -327,7 +311,7 @@ class LocationRepository extends Repository
          * http://stackoverflow.com/questions/6048975
          *    /google-maps-v3-how-to-calculate-the-zoom-level-for-a-given-bounds
          */
-        if ($minLatitude !== null && $maxLatitude !== null) {
+        if ($minLatitude instanceof Location && $maxLatitude instanceof Location) {
             $location->setLatitude(($maxLatitude->getLatitude() + $minLatitude->getLatitude()) / 2);
             $latitudeFraction = (
                 $this->latRad($maxLatitude->getLatitude())
@@ -433,7 +417,7 @@ class LocationRepository extends Repository
             } elseif ($parameterType[$key] == 101) {
                 $sql = str_replace(':' . $key, implode(',', $value), $sql);
             } else {
-                $sql = str_replace(':' . $key, $value, $sql);
+                $sql = str_replace(':' . $key, (string)$value, $sql);
             }
         });
 

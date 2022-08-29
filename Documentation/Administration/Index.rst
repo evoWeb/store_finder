@@ -1,10 +1,11 @@
-.. include:: ../Includes.txt
-
-
+.. include:: /Includes.rst.txt
+.. index::
+   Administration
 .. _administration:
 
+==============
 Administration
---------------
+==============
 
 The part for administrator is fairly simple. Just go to the extension manager,
 switch to "Get extensions" and enter "store_finder" in the search field on top.
@@ -18,12 +19,14 @@ In case the google maps geocode url changes and the extension has no update for,
 that the url can be changed in the same configuration part. Just enter the url
 in the field Url used for geocode.
 
+
 Configuration:
 ==============
 
 .. figure:: Images/admin_config.png
    :alt: Search form
    :align: left
+
 
 Migrate from locator:
 =====================

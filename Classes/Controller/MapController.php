@@ -31,12 +31,11 @@ use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Pagination\SimplePagination;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Annotation\Validate;
 use TYPO3\CMS\Extbase\Http\ForwardResponse;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\Controller\Argument;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Pagination\QueryResultPaginator;
-use TYPO3\CMS\Extbase\Persistence\Generic\QueryResult;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Property\TypeConverter\PersistentObjectConverter;
 use TYPO3\CMS\Extbase\Validation\Validator\ValidatorInterface;
@@ -112,19 +111,13 @@ class MapController extends ActionController
         $argument->setValidator($validator);
     }
 
-    /**
-     * @param string $configuration
-     * @param DocParser $parser
-     *
-     * @return ValidatorInterface
-     */
     protected function getValidatorByConfiguration(string $configuration, DocParser $parser): ValidatorInterface
     {
         if (strpos($configuration, '"') === false && strpos($configuration, '(') === false) {
             $configuration = sprintf('"%s"', $configuration);
         }
 
-        /** @var \TYPO3\CMS\Extbase\Annotation\Validate $validateAnnotation */
+        /** @var Validate $validateAnnotation */
         $validateAnnotation = current($parser->parse(
             '@TYPO3\CMS\Extbase\Annotation\Validate(' . $configuration . ')'
         ));
@@ -151,7 +144,7 @@ class MapController extends ActionController
                 $configuration->allowProperties('category');
                 $configuration->setTypeConverterOption(
                     PersistentObjectConverter::class,
-                    PersistentObjectConverter::CONFIGURATION_CREATION_ALLOWED,
+                    (string)PersistentObjectConverter::CONFIGURATION_CREATION_ALLOWED,
                     true
                 );
             }
@@ -185,9 +178,13 @@ class MapController extends ActionController
                     $value = $countryRepository->findByIsoCodeA2([$constraint['country']])->getFirst();
                 } elseif (strlen($constraint['country']) === 3) {
                     $value = $countryRepository->findByIsoCodeA3($constraint['country']);
+                } else {
+                    $value = false;
                 }
-                $constraint['country'] = $value->getUid();
-                $this->request->setArgument('constraint', $constraint);
+                if ($value) {
+                    $constraint['country'] = $value->getUid();
+                    $this->request->setArgument('constraint', $constraint);
+                }
             }
         }
 
@@ -233,17 +230,13 @@ class MapController extends ActionController
     /**
      * Action responsible for rendering search, map and list partial
      *
-     * @param ?Constraint $constraint
-     *
-     * @TYPO3\CMS\Extbase\Annotation\Validate("Evoweb\StoreFinder\Validation\Validator\Constraint", param="constraint")
-     *
-     * @return string
+     * @return ResponseInterface
      */
-    public function cachedMapAction(Constraint $constraint = null): ResponseInterface
+    public function cachedMapAction(): ResponseInterface
     {
         if ($this->settings['location']) {
             $response = new ForwardResponse('show');
-        }  else {
+        } else {
             [$locations, $constraint] = $this->getLocationsByDefaultConstraints();
 
             $event = new MapGetLocationsByConstraintsEvent($this, $locations, $constraint);
@@ -306,6 +299,14 @@ class MapController extends ActionController
 
     protected function getLocationsByConstraints(Constraint $constraint): array
     {
+        if (($this->settings['disableLocationFetchLogic'] ?? false)) {
+            $locations = $this->locationRepository->getEmptyResult();
+            return  [
+                $locations,
+                $constraint
+            ];
+        }
+
         /** @var Constraint $constraint */
         $constraint = $this->geocodeService->geocodeAddress($constraint);
         $constraint = $this->addDefaultConstraint($constraint);
@@ -317,9 +318,16 @@ class MapController extends ActionController
 
     protected function getLocationsByDefaultConstraints(): array
     {
-        /** @var QueryResultInterface $locations */
         /** @var Constraint $constraint */
         $constraint = GeneralUtility::makeInstance(Constraint::class);
+
+        if (($this->settings['disableLocationFetchLogic'] ?? false)) {
+            $locations = $this->locationRepository->getEmptyResult();
+            return  [
+                $locations,
+                $constraint
+            ];
+        }
 
         if ($this->settings['showBeforeSearch'] & 2 && is_array($this->settings['defaultConstraint'])) {
             $constraint = $this->addDefaultConstraint($constraint);
@@ -328,6 +336,7 @@ class MapController extends ActionController
             }
 
             if ($this->settings['showLocationsForDefaultConstraint']) {
+                /** @var Constraint $constraint */
                 $locations = $this->locationRepository->findByConstraint($constraint);
             } else {
                 $locations = $this->locationRepository->findOneByUid(-1);
@@ -342,6 +351,7 @@ class MapController extends ActionController
             $locations = $this->locationRepository->getEmptyResult();
         }
 
+        /** @var QueryResultInterface $locations */
         return [$locations, $constraint];
     }
 
@@ -357,7 +367,7 @@ class MapController extends ActionController
         $this->view->assign('afterSearch', 1);
         $this->view->assign('locations', $locations);
 
-        if ($locations !== null) {
+        if ($locations->count() > 0) {
             $center = $this->getCenterOfQueryResult($location, $locations);
             $center = $this->setZoomLevel($center, $locations);
             $this->view->assign('center', $center);
@@ -501,7 +511,7 @@ class MapController extends ActionController
             $center = $this->locationRepository->findOneByCenter();
         }
 
-        if ($center === null) {
+        if (!($center instanceof Location)) {
             $center = $this->locationRepository->findCenterByLatitudeAndLongitude();
         }
 
@@ -518,13 +528,13 @@ class MapController extends ActionController
      */
     public function setZoomLevel(Location $center, QueryResultInterface $locations): Location
     {
-        $radius = false;
+        $radius = 0;
         /** @var Location $location */
         foreach ($locations as $location) {
             $radius = max($radius, $location->getDistance());
         }
 
-        if ($radius === false) {
+        if ($radius === 0) {
             $radius = (int)$this->settings['defaultConstraint']['radius'];
         }
 
@@ -544,13 +554,13 @@ class MapController extends ActionController
             $zoom = 10;
         } elseif ($radius <= 500) {
             $zoom = 11;
-        } elseif ($radius > 500 && $radius <= 1000) {
+        } elseif ($radius <= 1000) {
             $zoom = 12;
         } else {
             $zoom = 13;
         }
 
-        $center->setZoom((int)(18 - $zoom));
+        $center->setZoom((18 - $zoom));
 
         return $center;
     }
@@ -572,5 +582,10 @@ class MapController extends ActionController
                 ]
             );
         }
+    }
+
+    public function getSettings(): array
+    {
+        return $this->settings;
     }
 }

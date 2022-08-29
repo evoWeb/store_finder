@@ -44,6 +44,11 @@ class MapGetLocationsByConstraintsEvent
         return $this->locations;
     }
 
+    public function setLocations(QueryResultInterface $locations)
+    {
+        $this->locations = $locations;
+    }
+
     public function getConstraint(): Constraint
     {
         return $this->constraint;
