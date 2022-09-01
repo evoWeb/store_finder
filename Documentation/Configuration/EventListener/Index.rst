@@ -25,6 +25,7 @@ Add the following code to the Configuration/Services.yaml of your sitepackage to
 
    services:
      Evoweb\StoreFinder\EventListener\MapGetAllLocationsListener:
+       arguments: ['@Evoweb\StoreFinder\Domain\Repository\LocationRepository']
        tags:
          - name: event.listener
            identifier: 'storefinder_mapcontroller_locationsfetched'
