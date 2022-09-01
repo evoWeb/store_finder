@@ -25,19 +25,14 @@ use Evoweb\StoreFinder\Domain\Repository\LocationRepository;
 use Evoweb\StoreFinder\Service\GeocodeService;
 use Evoweb\StoreFinder\Validation\Validator\ConstraintValidator;
 use Evoweb\StoreFinder\Validation\Validator\SettableInterface;
-use Psr\Http\Message\ResponseInterface;
 use SJBR\StaticInfoTables\Domain\Model\Country;
-use TYPO3\CMS\Core\Http\HtmlResponse;
-use TYPO3\CMS\Core\Pagination\SimplePagination;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Annotation\Validate;
-use TYPO3\CMS\Extbase\Http\ForwardResponse;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\Controller\Argument;
-use TYPO3\CMS\Extbase\Pagination\QueryResultPaginator;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Property\PropertyMappingConfiguration;
 use TYPO3\CMS\Extbase\Property\TypeConverter\PersistentObjectConverter;
@@ -47,17 +42,17 @@ use TYPO3\CMS\Extbase\Validation\ValidatorClassNameResolver;
 class MapController extends ActionController
 {
     /**
-     * @var \Evoweb\StoreFinder\Domain\Repository\LocationRepository
+     * @var LocationRepository
      */
     public $locationRepository;
 
     /**
-     * @var \Evoweb\StoreFinder\Domain\Repository\CategoryRepository
+     * @var CategoryRepository
      */
     protected $categoryRepository;
 
     /**
-     * @var \Evoweb\StoreFinder\Service\GeocodeService
+     * @var GeocodeService
      */
     protected $geocodeService;
 
@@ -151,7 +146,6 @@ class MapController extends ActionController
                 $this->request->setArgument('constraint', $constraint);
             }
 
-            /** @var PropertyMappingConfiguration $configuration */
             $configuration = $this->arguments['constraint']->getPropertyMappingConfiguration();
             $configuration->allowProperties('category');
             $configuration->setTypeConverterOption(
@@ -228,7 +222,7 @@ class MapController extends ActionController
         $this->addCategoryFromSettingsToView();
         $this->view->assign(
             'static_info_tables',
-            \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('static_info_tables') ? 1 : 0
+            ExtensionManagementUtility::isLoaded('static_info_tables') ? 1 : 0
         );
         return trim($this->view->render());
     }
@@ -264,18 +258,14 @@ class MapController extends ActionController
     {
         if (($this->settings['disableLocationFetchLogic'] ?? false)) {
             $locations = $this->locationRepository->getEmptyResult();
-            return  [
-                $locations,
-                $constraint
-            ];
+        } else {
+            $constraint = $this->addDefaultConstraint($constraint);
+            $constraint = $this->geocodeService->geocodeAddress($constraint);
+            $this->view->assign('searchWasNotClearEnough', $this->geocodeService->hasMultipleResults);
+
+            /** @var Constraint $constraint */
+            $locations = $this->locationRepository->findByConstraint($constraint);
         }
-
-        $constraint = $this->addDefaultConstraint($constraint);
-        $constraint = $this->geocodeService->geocodeAddress($constraint);
-        $this->view->assign('searchWasNotClearEnough', $this->geocodeService->hasMultipleResults);
-
-        /** @var Constraint $constraint */
-        $locations = $this->locationRepository->findByConstraint($constraint);
 
         $event = new MapGetLocationsByConstraintsEvent($this, $locations, $constraint);
         $this->eventDispatcher->dispatch($event);
@@ -300,37 +290,33 @@ class MapController extends ActionController
 
         if (($this->settings['disableLocationFetchLogic'] ?? false)) {
             $locations = $this->locationRepository->getEmptyResult();
-            return  [
-                $locations,
-                $constraint
-            ];
-        }
+        } else {
+            $locations = false;
+            if ($this->settings['showBeforeSearch'] & 2 && is_array($this->settings['defaultConstraint'])) {
+                $constraint = $this->addDefaultConstraint($constraint);
+                if ($this->settings['geocodeDefaultConstraint']) {
+                    $constraint = $this->geocodeService->geocodeAddress($constraint);
+                }
+                $this->view->assign('searchWasNotClearEnough', $this->geocodeService->hasMultipleResults);
 
-        $locations = false;
-        if ($this->settings['showBeforeSearch'] & 2 && is_array($this->settings['defaultConstraint'])) {
-            $constraint = $this->addDefaultConstraint($constraint);
-            if ($this->settings['geocodeDefaultConstraint']) {
-                $constraint = $this->geocodeService->geocodeAddress($constraint);
+                if ($this->settings['showLocationsForDefaultConstraint']) {
+                    $locations = $this->locationRepository->findByConstraint($constraint);
+                }
             }
-            $this->view->assign('searchWasNotClearEnough', $this->geocodeService->hasMultipleResults);
 
-            if ($this->settings['showLocationsForDefaultConstraint']) {
-                $locations = $this->locationRepository->findByConstraint($constraint);
+            if ($this->settings['showBeforeSearch'] & 4) {
+                $this->locationRepository->setDefaultOrderings([
+                    'zipcode' => QueryInterface::ORDER_ASCENDING,
+                    'city' => QueryInterface::ORDER_ASCENDING,
+                    'name' => QueryInterface::ORDER_ASCENDING,
+                ]);
+
+                $locations = $this->locationRepository->findAll();
             }
-        }
 
-        if ($this->settings['showBeforeSearch'] & 4) {
-            $this->locationRepository->setDefaultOrderings([
-                'zipcode' => QueryInterface::ORDER_ASCENDING,
-                'city' => QueryInterface::ORDER_ASCENDING,
-                'name' => QueryInterface::ORDER_ASCENDING,
-            ]);
-
-            $locations = $this->locationRepository->findAll();
-        }
-
-        if (!$locations) {
-            $locations = $this->locationRepository->findOneByUid(-1);
+            if (!$locations) {
+                $locations = $this->locationRepository->findOneByUid(-1);
+            }
         }
 
         $event = new MapGetLocationsByConstraintsEvent($this, $locations, $constraint);
@@ -528,7 +514,7 @@ class MapController extends ActionController
         }
 
         if ($radius === 0) {
-            $radius = (int)$this->settings['defaultConstraint']['radius'];
+            $radius = (int)($this->settings['defaultConstraint']['radius'] ?? 0);
         }
 
         if ($radius < 2) {
@@ -539,7 +525,7 @@ class MapController extends ActionController
             $zoom = 4;
         } elseif ($radius < 15) {
             $zoom = 6;
-        } elseif ($radius <= 25) {
+        } elseif ($radius <= 50) {
             $zoom = 7;
         } elseif ($radius <= 100) {
             $zoom = 9;
