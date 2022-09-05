@@ -33,6 +33,7 @@ class LocationRepository extends Repository
      * @var array
      */
     protected $defaultOrderings = [
+        'country' => QueryInterface::ORDER_DESCENDING,
         'zipcode' => QueryInterface::ORDER_ASCENDING,
         'city' => QueryInterface::ORDER_ASCENDING,
         'name' => QueryInterface::ORDER_ASCENDING,
