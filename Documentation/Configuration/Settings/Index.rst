@@ -339,20 +339,41 @@ override
          array
 
 :aspect:`Description`
-         Sometimes the admin want to restrict configuration available in the flexform. With the override its possible to define values that should override the configuration done in the flexform.
+         Sometimes the admin want to restrict configuration available in the flexform.
+         With the override its possible to define values that should override the configuration done in the flexform.
 
 
-.. _disableLocationFetchLogic:
+.. _disableFetchLocationInAction:
 
-disableLocationFetchLogic
-=========================
+disableFetchLocationInAction
+============================
 
 :aspect:`Property`
-         disableLocationFetchLogic
+         disableFetchLocationInAction
 
 :aspect:`Data type`
-         integer
+         array of strings
 
 :aspect:`Description`
-         Disableling the fetching of locations based on constraints completly. This disables the fetching of locations in map, cached and search action.
+         Disabling the fetching of locations based on constraints individually.
+         This disables the fetching of locations in map, cachedMap and search action.
          Use this only in combination with a listener for MapGetLocationsByConstraintsEvent or you do not get any output at all.
+
+         0 = map
+             this is the default map action
+
+         1 = cachedMap
+             this is the cached map action
+
+         2 = search
+             this is the search action
+
+:aspect:`Example`
+   .. code-block:: typoscript
+      :caption: EXT:site_package/Configuration/TypoScript/setup.typoscript
+
+      disableFetchLocationInAction {
+        0 = map
+        1 = cachedMap
+        2 = search
+      }

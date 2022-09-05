@@ -34,7 +34,6 @@ use TYPO3\CMS\Extbase\Annotation\Validate;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\Controller\Argument;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
-use TYPO3\CMS\Extbase\Property\PropertyMappingConfiguration;
 use TYPO3\CMS\Extbase\Property\TypeConverter\PersistentObjectConverter;
 use TYPO3\CMS\Extbase\Validation\Validator\ValidatorInterface;
 use TYPO3\CMS\Extbase\Validation\ValidatorClassNameResolver;
@@ -256,7 +255,7 @@ class MapController extends ActionController
 
     protected function getLocationsByConstraints(Constraint $constraint)
     {
-        if (($this->settings['disableLocationFetchLogic'] ?? false)) {
+        if ($this->isDisabledFetchLocation($this->actionMethodName, $this->settings)) {
             $locations = $this->locationRepository->getEmptyResult();
         } else {
             $constraint = $this->addDefaultConstraint($constraint);
@@ -288,7 +287,7 @@ class MapController extends ActionController
         /** @var Constraint $constraint */
         $constraint = GeneralUtility::makeInstance(Constraint::class);
 
-        if (($this->settings['disableLocationFetchLogic'] ?? false)) {
+        if ($this->isDisabledFetchLocation($this->actionMethodName, $this->settings)) {
             $locations = $this->locationRepository->getEmptyResult();
         } else {
             $locations = false;
@@ -333,6 +332,11 @@ class MapController extends ActionController
             $center = $this->setZoomLevel($center, $locations);
             $this->view->assign('center', $center);
         }
+    }
+
+    protected function isDisabledFetchLocation(string $action, array $settings): bool
+    {
+        return in_array(str_replace('Action', '', $action), ($settings['disableFetchLocationInAction'] ?? []));
     }
 
     public function showAction(Location $location = null)

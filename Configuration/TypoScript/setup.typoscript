@@ -71,7 +71,8 @@ plugin.tx_storefinder.settings {
     country = "Evoweb.StoreFinder:Required"
   }
 
-  disableLocationFetchLogic = 0
+  disableFetchLocationInAction {
+  }
 }
 
 plugin.tx_storefinder.view {

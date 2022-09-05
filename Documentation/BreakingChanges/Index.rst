@@ -60,7 +60,7 @@ In addition a configuration.handleCloseButtonCallback should be provided.
 Example:
 
 .. code-block:: javascript
-   :caption: EXT:my_extension/Resources/Public/JavaScript/map.js
+   :caption: EXT:site_package/Resources/Public/JavaScript/map.js
 
    configuration.renderSingleViewCallback = function (location, infoWindowTemplate) {
          location['information']['staticMapCenter'] = encodeURIComponent(location.information.address) + ',+'

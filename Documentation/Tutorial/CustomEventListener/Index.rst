@@ -14,7 +14,7 @@ To add an custom listener, add the code below and replace the following and repl
 my* with your own values, but keep the event name as it is.
 
 .. code-block:: typoscript
-   :caption: EXT:my_extension/Configuration/Services.yaml
+   :caption: EXT:site_package/Configuration/Services.yaml
 
    services:
      MyVendor\MyExtension\EventListener\MapGetSpecialLocationsListener:

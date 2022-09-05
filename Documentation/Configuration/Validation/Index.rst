@@ -35,7 +35,7 @@ Remove validators
 -----------------
 
 .. code-block:: typoscript
-   :caption: EXT:my_extension/Configuration/TypoScript/setup.typoscript
+   :caption: EXT:site_package/Configuration/TypoScript/setup.typoscript
 
    plugin.tx_storefinder.settings.validation.zipcode >
 
@@ -46,7 +46,7 @@ Assign only one validator
 -------------------------
 
 .. code-block:: typoscript
-   :caption: EXT:my_extension/Configuration/TypoScript/setup.typoscript
+   :caption: EXT:site_package/Configuration/TypoScript/setup.typoscript
 
    plugin.tx_storefinder.settings.validation.zipcode = Evoweb\StoreFinder\Validation\Validator\RequiredValidator
 
@@ -57,7 +57,7 @@ Assign multiple validators
 --------------------------
 
 .. code-block:: typoscript
-   :caption: EXT:my_extension/Configuration/TypoScript/setup.typoscript
+   :caption: EXT:site_package/Configuration/TypoScript/setup.typoscript
 
    plugin.tx_storefinder.settings.validation.city {
       1 = Evoweb\StoreFinder\Validation\Validator\RequiredValidator
@@ -101,7 +101,7 @@ Custom validator usage
 ----------------------
 
 .. code-block:: typoscript
-   :caption: EXT:my_extension/Configuration/TypoScript/setup.typoscript
+   :caption: EXT:site_package/Configuration/TypoScript/setup.typoscript
 
    plugin.tx_storefinder.settings.validation.create.city {
       1 = Evoweb\StoreFinder\Validation\Validator\RequiredValidator

@@ -45,7 +45,7 @@ and list part. Copy the folder from the extension to your local path like the fi
 you can change the path either in the plugin field "Partial path" or via TypoScript:
 
 .. code-block:: typoscript
-   :caption: EXT:my_extension/Configuration/TypoScript/setup.typoscript
+   :caption: EXT:site_package/Configuration/TypoScript/setup.typoscript
 
    plugin.tx_storefinder.view.partialRootPaths.50 = ./yourpath/Partials/
 
@@ -76,7 +76,7 @@ search was requested. In the example below the zoom, latitude and longitude valu
 coordinates are used to render search results that are near of them.
 
 .. code-block:: typoscript
-   :caption: EXT:my_extension/Configuration/TypoScript/setup.typoscript:
+   :caption: EXT:site_package/Configuration/TypoScript/setup.typoscript:
 
    plugin.tx_storefinder.settings {
       showLocationsForDefaultConstraint = 1

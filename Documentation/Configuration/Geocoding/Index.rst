@@ -42,6 +42,6 @@ TypoScript constants
 If you want to use the additional provider for geocoding search results too, you need to change the constant
 
 .. code-block:: typoscript
-   :caption: EXT:my_extension/Configuration/TypoScript/constants.typoscript
+   :caption: EXT:site_package/Configuration/TypoScript/constants.typoscript
 
    plugin.tx_storefinder.geocoderProvider = Geocoder\Provider\Nominatim\Nominatim
