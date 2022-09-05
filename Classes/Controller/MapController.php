@@ -562,4 +562,9 @@ class MapController extends ActionController
     {
         return $this->settings;
     }
+
+    public function getActionMethodName(): string
+    {
+        return $this->actionMethodName;
+    }
 }
