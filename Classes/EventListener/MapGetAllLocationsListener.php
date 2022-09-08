@@ -15,8 +15,8 @@ namespace Evoweb\StoreFinder\EventListener;
  * LICENSE.txt file that was distributed with this source code.
  */
 
-
 use Evoweb\StoreFinder\Controller\Event\MapGetLocationsByConstraintsEvent;
+use Evoweb\StoreFinder\Domain\Model\Constraint;
 use Evoweb\StoreFinder\Domain\Repository\LocationRepository;
 
 class MapGetAllLocationsListener
@@ -30,6 +30,24 @@ class MapGetAllLocationsListener
 
     public function onLocationsFetchedEvent(MapGetLocationsByConstraintsEvent $event)
     {
-        $event->setLocations($this->locationRepository->findAll());
+        if ($this->isOverrideLocations($event)) {
+            $event->setLocations($this->locationRepository->findAll());
+        }
+    }
+
+    public function isOverrideLocations(MapGetLocationsByConstraintsEvent $event): bool
+    {
+        $controller = $event->getController();
+        $constraint = $controller->getArguments()->hasArgument('constraint') ?
+            $controller->getArguments()->getArgument('constraint')->getValue() :
+            null;
+
+        return !(
+            $constraint instanceof Constraint
+            && (
+                $constraint->getCity() !== ''
+                || $constraint->getZipcode() !== ''
+            )
+        );
     }
 }

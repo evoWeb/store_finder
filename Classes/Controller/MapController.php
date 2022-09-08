@@ -28,6 +28,7 @@ use Evoweb\StoreFinder\Validation\Validator\SettableInterface;
 use SJBR\StaticInfoTables\Domain\Model\Country;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Mvc\Controller\Arguments;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Annotation\Validate;
@@ -566,5 +567,10 @@ class MapController extends ActionController
     public function getActionMethodName(): string
     {
         return $this->actionMethodName;
+    }
+
+    public function getArguments(): Arguments
+    {
+        return $this->arguments;
     }
 }
