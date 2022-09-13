@@ -21,7 +21,10 @@ use Evoweb\StoreFinder\Domain\Repository\LocationRepository;
 
 class MapGetAllLocationsListener
 {
-    protected LocationRepository $locationRepository;
+    /**
+     * @var LocationRepository
+     */
+    protected $locationRepository;
 
     public function __construct(LocationRepository $locationRepository)
     {
