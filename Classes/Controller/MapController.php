@@ -306,6 +306,7 @@ class MapController extends ActionController
 
             if ($this->settings['showBeforeSearch'] & 4) {
                 $this->locationRepository->setDefaultOrderings([
+                    'country' => QueryInterface::ORDER_DESCENDING,
                     'zipcode' => QueryInterface::ORDER_ASCENDING,
                     'city' => QueryInterface::ORDER_ASCENDING,
                     'name' => QueryInterface::ORDER_ASCENDING,
