@@ -179,7 +179,7 @@ class MapController extends ActionController
 
         if ($this->request->hasArgument('constraint')) {
             $constraint = $this->request->getArgument('constraint');
-            if (!intval($constraint['country'])) {
+            if (isset($constraint['country']) && !intval($constraint['country'])) {
                 /** @var CountryRepository $countryRepository */
                 $countryRepository = GeneralUtility::getContainer()->get(CountryRepository::class);
                 /** @var $country Country */
