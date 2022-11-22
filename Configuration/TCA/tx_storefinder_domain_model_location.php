@@ -484,7 +484,7 @@ return [
             'l10n_mode' => 'exclude',
             'label' => $languageFile . 'tx_storefinder_domain_model_location.distance',
             'config' => [
-                'type' => 'input',
+                'type' => 'none',
                 'readOnly' => 1,
                 'size' => 10,
             ]
