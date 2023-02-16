@@ -70,6 +70,9 @@ jobs:
           tools: composer
           extensions: pdo, sqlite3, gd, zip
 
+      - name: Add repository for building pre release of TYPO3 12 compatible version of static_info_tables
+        run: composer config repositories.static-info-tables git git@github.com:garbast/static_info_tables.git
+
       - name: Validate composer.json and composer.lock
         run: composer validate
 
