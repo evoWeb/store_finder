@@ -1,9 +1,6 @@
 .idea
-.Build/bin
-.Build/vendor/
-.Build/Web
-.Build/node_modules
-.Build/package-lock.json
-var/
-composer.*
-!composer.json
+.Build/**
+!.Build/docker-compose.yml
+!.Build/runTests.sh
+!.Build/test.sh
+composer.lock

@@ -12,16 +12,6 @@ call_user_func(function () {
         ];
     }
 
-    /** @var \TYPO3\CMS\Core\Imaging\IconRegistry $iconRegistry */
-    $iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class);
-    $iconRegistry->registerIcon(
-        'store-finder-plugin',
-        \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
-        [
-            'source' => 'EXT:store_finder/Resources/Public/Icons/Extension.svg'
-        ]
-    );
-
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
         '@import \'EXT:store_finder/Configuration/TSconfig/NewContentElementWizard.typoscript\''
     );
