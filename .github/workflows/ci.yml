@@ -51,9 +51,9 @@ jobs:
       matrix:
         env:
           - { PHP: 7.4, TYPO3_VERSION: ^11.0, TESTING_FRAMEWORK: ^6.6.2, TEST_PATH:  "Tests/Functional" }
-          - { PHP: 8.1, TYPO3_VERSION: ^12.0, TESTING_FRAMEWORK: "dev-main", TEST_PATH:  "Tests/Functional12" }
-          - { PHP: 8.1, TYPO3_VERSION: ^12.0, TESTING_FRAMEWORK: "dev-main", TEST_PATH:  "Tests/Functional12", PREFER_LOWEST: "--prefer-lowest" }
-          - { PHP: 8.1, TYPO3_VERSION: "dev-main", TESTING_FRAMEWORK: "dev-main", TEST_PATH:  "Tests/Functional12" , experimental: true }
+          - { PHP: 8.1, TYPO3_VERSION: ^12.0, TESTING_FRAMEWORK: "dev-main", TEST_PATH:  "Tests/Functional" }
+          - { PHP: 8.1, TYPO3_VERSION: ^12.0, TESTING_FRAMEWORK: "dev-main", TEST_PATH:  "Tests/Functional", PREFER_LOWEST: "--prefer-lowest" }
+          - { PHP: 8.1, TYPO3_VERSION: "dev-main", TESTING_FRAMEWORK: "dev-main", TEST_PATH:  "Tests/Functional" , experimental: true }
 
     env: ${{ matrix.env }}
     continue-on-error: ${{ matrix.env.experimental == true }}
