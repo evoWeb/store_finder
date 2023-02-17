@@ -34,17 +34,15 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\Exception;
  */
 class SelectCountriesViewHelper extends AbstractFormFieldViewHelper
 {
-    protected ?CountryRepository $countryRepository = null;
-
     /**
      * @var string
      */
     protected $tagName = 'select';
 
-    public function __construct(CountryRepository $countryRepository)
-    {
+    public function __construct(
+        protected CountryRepository $countryRepository
+    ) {
         parent::__construct();
-        $this->countryRepository = $countryRepository;
     }
 
     public function initializeArguments(): void
@@ -308,7 +306,7 @@ class SelectCountriesViewHelper extends AbstractFormFieldViewHelper
      * @param mixed $value Value to check for
      * @return bool True if the value should be marked as selected.
      */
-    protected function isSelected($value): bool
+    protected function isSelected(mixed $value): bool
     {
         $selectedValue = $this->getSelectedValue();
         if ($value === $selectedValue || (string)$value === $selectedValue) {
@@ -328,7 +326,7 @@ class SelectCountriesViewHelper extends AbstractFormFieldViewHelper
     /**
      * Retrieves the selected value(s)
      *
-     * @return mixed value string or an array of strings
+     * @return string|array value string or an array of strings
      */
     protected function getSelectedValue()
     {
@@ -350,7 +348,7 @@ class SelectCountriesViewHelper extends AbstractFormFieldViewHelper
      * @param mixed $valueElement
      * @return string @todo: Does not always return string ...
      */
-    protected function getOptionValueScalar($valueElement)
+    protected function getOptionValueScalar($valueElement): mixed
     {
         if (is_object($valueElement)) {
             if ($this->hasArgument('optionValueField')) {

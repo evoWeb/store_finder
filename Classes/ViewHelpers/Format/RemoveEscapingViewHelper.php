@@ -20,7 +20,6 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * Class RemoveEscapingViewHelper
- * @deprecated will be removed in version 7.0.0
  */
 class RemoveEscapingViewHelper extends AbstractViewHelper
 {

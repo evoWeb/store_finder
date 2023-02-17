@@ -7,10 +7,18 @@ Breaking Changes
 ----------------
 
 
+17. February 2023
+=================
+Remove allowed on standard page
+_______________________________
+Records of attributes and locations are not allowed on standard pages anymore.
+
+
+
 15. February 2021
-============
+=================
 Rename property
----------------
+_______________
 Rename content to contentElement in location model
 
 
@@ -18,7 +26,7 @@ Rename content to contentElement in location model
 01. Mai 2020
 ============
 Refactor signal slots to PSR-14 events
---------------------------------------
+______________________________________
 All slots are replaced with events
 Evoweb\StoreFinder\Controller\MapController mapActionWithConstraint with MapGetLocationsByConstraintsEvent
 
@@ -38,7 +46,6 @@ are available now [ https://github.com/geocoder-php/Geocoder#world ]
 
 Migration steps:
 ________________
-
 Please check the extension configuration whether the api key assignment still works
 
 

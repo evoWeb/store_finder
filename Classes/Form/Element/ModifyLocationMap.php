@@ -22,14 +22,14 @@ class ModifyLocationMap extends AbstractFormElement
     public function render(): array
     {
         $resultArray = $this->initializeResultArray();
-        return $resultArray = $this->renderMap($resultArray);
+        return $this->renderMap($resultArray);
     }
 
     protected function renderMap(array $resultArray): array
     {
         $row = $this->data['databaseRow'];
-        $latitude = (float)($row['latitude'] ? $row['latitude'] : 51.4583912);
-        $longitude = (float)($row['longitude'] ? $row['longitude'] : 7.0157931);
+        $latitude = (float)($row['latitude'] ?: 51.4583912);
+        $longitude = (float)($row['longitude'] ?: 7.0157931);
 
         $resultArray['html'] = '<div id="map" style="height: 300px; width: 100%;"></div>';
         $resultArray['stylesheetFiles'][] = 'EXT:store_finder/Resources/Public/JavaScript/Vendor/Leaflet/leaflet.css';

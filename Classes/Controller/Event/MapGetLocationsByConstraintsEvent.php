@@ -21,17 +21,11 @@ use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
 class MapGetLocationsByConstraintsEvent
 {
-    protected MapController $controller;
-
-    protected QueryResultInterface $locations;
-
-    protected Constraint $constraint;
-
-    public function __construct(MapController $controller, QueryResultInterface $locations, Constraint $constraint)
-    {
-        $this->controller = $controller;
-        $this->locations = $locations;
-        $this->constraint = $constraint;
+    public function __construct(
+        protected MapController $controller,
+        protected QueryResultInterface $locations,
+        protected Constraint $constraint
+    ) {
     }
 
     public function getController(): MapController

@@ -24,26 +24,18 @@ use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 
 class TceMainListener
 {
-    protected LocationRepository $locationRepository;
-
-    protected PersistenceManager $persistenceManager;
-
-    protected GeocodeService $geocodeService;
-
-    protected CacheService $cacheService;
-
     public function __construct(
-        LocationRepository $locationRepository,
-        PersistenceManager $persistenceManager,
-        GeocodeService $geocodeService,
-        ExtensionConfiguration $extensionConfiguration,
-        CacheService $cacheService
+        protected LocationRepository $locationRepository,
+        protected PersistenceManager $persistenceManager,
+        protected GeocodeService $geocodeService,
+        protected CacheService $cacheService,
+        ExtensionConfiguration $extensionConfiguration
     ) {
-        $this->locationRepository = $locationRepository;
-        $this->persistenceManager = $persistenceManager;
-        $this->cacheService = $cacheService;
-        $this->geocodeService = $geocodeService;
-        $this->geocodeService->setSettings($extensionConfiguration->get('store_finder') ?? []);
+        try {
+            $this->geocodeService->setSettings($extensionConfiguration->get('store_finder') ?? []);
+        } catch (\Exception $e) {
+            die('Error in $GLOBALS[\'TYPO3_CONF_VARS\'][\'EXTENSIONS\']: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -82,7 +74,7 @@ class TceMainListener
         DataHandler $parentObject
     ) {
         $id = $this->remapId($id, $table, $parentObject);
-        
+
         if ($table === 'tx_storefinder_domain_model_location') {
             $location = $this->locationRepository->findByUidInBackend($id);
 

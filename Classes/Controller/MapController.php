@@ -44,23 +44,14 @@ use TYPO3\CMS\Extbase\Validation\ValidatorClassNameResolver;
 
 class MapController extends ActionController
 {
-    protected LocationRepository $locationRepository;
-
-    protected CategoryRepository $categoryRepository;
-
-    protected GeocodeService $geocodeService;
-
     public function __construct(
-        LocationRepository $locationRepository,
-        CategoryRepository $categoryRepository,
-        GeocodeService $geocodeService
+        protected LocationRepository $locationRepository,
+        protected CategoryRepository $categoryRepository,
+        protected GeocodeService $geocodeService
     ) {
-        $this->locationRepository = $locationRepository;
-        $this->categoryRepository = $categoryRepository;
-        $this->geocodeService = $geocodeService;
     }
 
-    protected function initializeActionMethodValidators()
+    protected function initializeActionMethodValidators(): void
     {
         if ($this->arguments->hasArgument('constraint')) {
             $this->modifyValidatorsBasedOnSettings(

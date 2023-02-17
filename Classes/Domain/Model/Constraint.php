@@ -27,7 +27,7 @@ class Constraint extends Location
 
     protected int $page = 0;
 
-    public function setSearch(string $search)
+    public function setSearch(string $search): void
     {
         $this->search = $search;
     }
@@ -37,9 +37,9 @@ class Constraint extends Location
         return $this->search;
     }
 
-    public function setCategory(array $category)
+    public function setCategory(array $category): void
     {
-        $this->category = (array)$category;
+        $this->category = $category;
     }
 
     public function getCategory(): array
@@ -47,7 +47,7 @@ class Constraint extends Location
         return array_filter($this->category);
     }
 
-    public function setRadius(int $radius)
+    public function setRadius(int $radius): void
     {
         $this->radius = $radius;
     }
@@ -57,7 +57,7 @@ class Constraint extends Location
         return $this->radius;
     }
 
-    public function setLimit(int $limit)
+    public function setLimit(int $limit): void
     {
         $this->limit = $limit;
     }
@@ -67,7 +67,7 @@ class Constraint extends Location
         return $this->limit;
     }
 
-    public function setPage(int $page)
+    public function setPage(int $page): void
     {
         $this->page = $page;
     }

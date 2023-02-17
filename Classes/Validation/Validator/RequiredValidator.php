@@ -34,7 +34,7 @@ class RequiredValidator extends AbstractValidator implements ValidatorInterface
      *
      * @param string $value The value
      */
-    protected function isValid($value)
+    protected function isValid($value): void
     {
         if (empty($value)) {
             $this->addError(

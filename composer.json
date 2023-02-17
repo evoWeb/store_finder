@@ -19,7 +19,7 @@
 		"docs": "https://docs.typo3.org/p/evoweb/store-finder/master/en-us/"
 	},
 	"require": {
-		"typo3/cms-core": "^11.0 || ^12.2 || dev-main",
+		"typo3/cms-core": "^12.2 || dev-main",
 		"typo3/cms-extbase": "*",
 		"typo3/cms-fluid": "*",
 		"typo3/cms-frontend": "*",
@@ -46,7 +46,7 @@
 		}
 	},
 	"require-dev": {
-		"typo3/testing-framework": "^6.6.2 || dev-main",
+		"typo3/testing-framework": "dev-main",
 		"sbuerk/typo3-cmscomposerinstallers-testingframework-bridge": "^0.0.1"
 	},
 	"autoload-dev": {
@@ -59,5 +59,15 @@
 			"web-dir": ".Build/Web",
 			"extension-key": "store_finder"
 		}
+	},
+
+	"scripts": {
+		"prepare-release": [
+			"rm -rf .Build",
+			"rm -rf .github",
+			"rm -rf Tests",
+			"rm .gitignore",
+			"sed -i \"s/version' => '.*'/version' => '$(echo ${GITHUB_REF} | cut -d / -f 3)'/\" ext_emconf.php\n"
+		]
 	}
 }

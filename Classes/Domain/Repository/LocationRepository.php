@@ -15,14 +15,12 @@ namespace Evoweb\StoreFinder\Domain\Repository;
  * LICENSE.txt file that was distributed with this source code.
  */
 
-use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\ArrayParameterType;
 use Evoweb\StoreFinder\Domain\Model\Constraint;
 use Evoweb\StoreFinder\Domain\Model\Location;
-use SJBR\StaticInfoTables\Domain\Model\Country;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 use TYPO3\CMS\Extbase\Persistence\Generic\Query;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
@@ -60,27 +58,20 @@ class LocationRepository extends Repository
 
     protected array $settings = [];
 
-    protected ConnectionPool $connectionPool;
-
-    protected CategoryRepository $categoryRepository;
-
     public function __construct(
-        ObjectManagerInterface $objectManager,
-        ConnectionPool $connectionPool,
-        CategoryRepository $categoryRepository
+        protected ConnectionPool $connectionPool,
+        protected CategoryRepository $categoryRepository
     ) {
-        $this->connectionPool = $connectionPool;
-        $this->categoryRepository = $categoryRepository;
-        parent::__construct($objectManager);
+        parent::__construct();
         $this->objectType = Location::class;
     }
 
-    public function setSettings(array $settings)
+    public function setSettings(array $settings): void
     {
         $this->settings = $settings;
     }
 
-    public function findByUidInBackend(int $uid): Location
+    public function findByUidInBackend(int $uid): ?Location
     {
         /** @var Query $query */
         $query = $this->createQuery();
@@ -142,7 +133,7 @@ class LocationRepository extends Repository
                         'l.pid',
                         $queryBuilder->createNamedParameter(
                             $query->getQuerySettings()->getStoragePageIds(),
-                            Connection::PARAM_INT_ARRAY
+                            ArrayParameterType::INTEGER
                         )
                     )
                 )
@@ -155,7 +146,7 @@ class LocationRepository extends Repository
             $queryBuilder = $this->addFulltextSearchQueryParts($constraint, $queryBuilder);
         }
 
-        $sql = $this->getStatement($queryBuilder);
+        $sql = QueryBuilderHelper::getStatement($queryBuilder);
         $query->statement($sql);
 
         return $query->execute();
@@ -165,26 +156,11 @@ class LocationRepository extends Repository
     {
         $value = $constraint->getCountry();
         if ($value) {
-            if ($value instanceof Country) {
-                $value = $value->getUid();
-                $on = '(l.country = sc.uid)';
-                $field = 'uid';
-                $type = \PDO::PARAM_INT;
-            } elseif (is_numeric($value)) {
-                $on = '(l.country = sc.uid)';
-                $field = 'uid';
-                $type = \PDO::PARAM_INT;
-            } else {
-                $on = '(l.country = sc.cn_iso_3)';
-                $field = 'cn_iso_3';
-                $type = \PDO::PARAM_STR;
-            }
-
-            $queryBuilder->innerJoin('l', 'static_countries', 'sc', $on);
+            $queryBuilder->innerJoin('l', 'static_countries', 'sc', '(l.country = sc.uid)');
             $queryBuilder->andWhere(
                 $queryBuilder->expr()->eq(
-                    'sc.' . $field,
-                    $queryBuilder->createNamedParameter($value, $type)
+                    'sc.uid',
+                    $queryBuilder->createNamedParameter($value->getUid(), \PDO::PARAM_INT)
                 )
             );
         }
@@ -211,7 +187,7 @@ class LocationRepository extends Repository
                 'l',
                 'sys_category_record_mm',
                 'c',
-                (string)$expression->andX(
+                (string)$expression->and(
                     $expression->eq('l.uid', 'c.uid_foreign'),
                     $expression->eq(
                         'c.tablenames',
@@ -226,7 +202,7 @@ class LocationRepository extends Repository
             $queryBuilder->andWhere(
                 $expression->in(
                     'c.uid_local',
-                    $queryBuilder->createNamedParameter($categories, Connection::PARAM_INT_ARRAY)
+                    $queryBuilder->createNamedParameter($categories, ArrayParameterType::INTEGER)
                 )
             );
         }
@@ -286,7 +262,7 @@ class LocationRepository extends Repository
             }
 
             if (count($fullTextSearchConstraint)) {
-                $queryBuilder->andWhere($queryBuilder->expr()->orX($fullTextSearchConstraint));
+                $queryBuilder->andWhere($queryBuilder->expr()->or(...$fullTextSearchConstraint));
             }
         }
 
@@ -365,10 +341,6 @@ class LocationRepository extends Repository
 
     /**
      * Rad calculation of latitude value
-     *
-     * @param float $latitude
-     *
-     * @return float
      */
     protected function latRad(float $latitude): float
     {
@@ -395,10 +367,6 @@ class LocationRepository extends Repository
     /**
      * Query location repository for all locations that
      * have latitude or longitude empty or geocode set to 1
-     *
-     * @param int $limit
-     *
-     * @return QueryResultInterface
      */
     public function findAllWithoutLatLon(int $limit = 500): QueryResultInterface
     {
@@ -418,26 +386,6 @@ class LocationRepository extends Repository
         );
 
         return $query->execute();
-    }
-
-    protected function getStatement(QueryBuilder $queryBuilder): string
-    {
-        $sql = $queryBuilder->getSQL();
-
-        $parameters = $queryBuilder->getParameters();
-        $parameterType = $queryBuilder->getParameterTypes();
-
-        array_walk($parameters, function ($value, $key) use (&$sql, $parameterType) {
-            if ($parameterType[$key] == 2) {
-                $sql = str_replace(':' . $key, '\'' . $value . '\'', $sql);
-            } elseif ($parameterType[$key] == 101) {
-                $sql = str_replace(':' . $key, implode(',', $value), $sql);
-            } else {
-                $sql = str_replace(':' . $key, $value, $sql);
-            }
-        });
-
-        return $sql;
     }
 
     protected function getQueryBuilderForTable(string $table): QueryBuilder

@@ -21,7 +21,6 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
 
 /**
  * Class BinaryAndViewHelper
- * @deprecated will be removed in version 7.0.0
  */
 class BinaryAndViewHelper extends AbstractViewHelper
 {

@@ -1,5 +1,7 @@
 <?php
+
 declare(strict_types = 1);
+
 namespace Evoweb\StoreFinder\Service;
 
 /*
@@ -12,13 +14,10 @@ namespace Evoweb\StoreFinder\Service;
 use Evoweb\StoreFinder\Domain\Model\Location;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 class CacheService
 {
-    /**
-     * @param Location $location
-     * @throws \InvalidArgumentException
-     */
     public function addTagsForPost(Location $location): void
     {
         $this->addTagToPage('tx_storefinder_domain_model_location_' . $location->getUid());
@@ -27,37 +26,21 @@ class CacheService
         }
     }
 
-    /**
-     * @param string $tag
-     */
     public function addTagToPage(string $tag): void
     {
         $this->addTagsToPage([$tag]);
     }
 
-    /**
-     * @param array $tags
-     */
     public function addTagsToPage(array $tags): void
     {
         $this->getTypoScriptFrontendController()->addCacheTags($tags);
     }
 
-    /**
-     * @param string $tag
-     * @throws \InvalidArgumentException
-     * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
-     */
     public function flushCacheByTag(string $tag): void
     {
         $this->flushCacheByTags([$tag]);
     }
 
-    /**
-     * @param array $tags
-     * @throws \InvalidArgumentException
-     * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
-     */
     public function flushCacheByTags(array $tags): void
     {
         GeneralUtility::makeInstance(CacheManager::class)
@@ -65,11 +48,10 @@ class CacheService
             ->flushByTags($tags);
     }
 
-    /**
-     * @return mixed|\TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController
-     */
-    protected function getTypoScriptFrontendController()
+    protected function getTypoScriptFrontendController(): ?TypoScriptFrontendController
     {
-        return $GLOBALS['TSFE'];
+        return $GLOBALS['TSFE'] instanceof TypoScriptFrontendController
+            ? $GLOBALS['TSFE']
+            : null;
     }
 }

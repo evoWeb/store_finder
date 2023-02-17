@@ -30,23 +30,19 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class GeocodeService
 {
-    protected CoordinatesCache $coordinatesCache;
-
-    protected CountryRepository $countryRepository;
-
     protected array $settings = [];
 
     protected array $fields = ['address', 'zipcode', 'city', 'state', 'country'];
 
     public bool $hasMultipleResults = false;
 
-    public function __construct(CoordinatesCache $coordinatesCache, CountryRepository $countryRepository)
-    {
-        $this->coordinatesCache = $coordinatesCache;
-        $this->countryRepository = $countryRepository;
+    public function __construct(
+        protected CoordinatesCache $coordinatesCache,
+        protected CountryRepository $countryRepository
+    ) {
     }
 
-    public function setSettings(array $settings)
+    public function setSettings(array $settings): void
     {
         $this->settings = $settings;
     }
@@ -138,7 +134,7 @@ class GeocodeService
 
     protected function getCoordinatesFromProvider(array $queryValues): Coordinates
     {
-        if (strpos($this->settings['geocoderProvider'], '\\') === false) {
+        if (!str_contains($this->settings['geocoderProvider'], '\\')) {
             $providerClass = GoogleMaps::class;
         } else {
             $providerClass = $this->settings['geocoderProvider'];
@@ -156,10 +152,10 @@ class GeocodeService
             $country = $queryValues['country'] ?? '';
             unset($queryValues['country']);
 
-            $query = \Geocoder\Query\GeocodeQuery::create(implode(',', $queryValues));
+            $query = GeocodeQuery::create(implode(',', $queryValues));
             $query = $query->withData('components', 'country:' . $country);
 
-            $geoCoder = new \Geocoder\StatefulGeocoder($provider, $this->settings['geocoderLocale']);
+            $geoCoder = new StatefulGeocoder($provider, $this->settings['geocoderLocale']);
             $results = $geoCoder->geocodeQuery($query);
             $this->hasMultipleResults = $results->count() > 1;
             if ($results->count() > 0) {

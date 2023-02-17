@@ -27,7 +27,6 @@ use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class ImportLocationsCommand extends Command
 {
@@ -60,14 +59,10 @@ class ImportLocationsCommand extends Command
 
     private array $stateCache = [];
 
-    protected ConnectionPool $connectionPool;
-
-    protected ResourceFactory $resourceFactory;
-
-    public function __construct(ConnectionPool $connectionPool, ResourceFactory $resourceFactory)
-    {
-        $this->connectionPool = $connectionPool;
-        $this->resourceFactory = $resourceFactory;
+    public function __construct(
+        protected ConnectionPool $connectionPool,
+        protected ResourceFactory $resourceFactory
+    ) {
         parent::__construct();
     }
 
@@ -145,7 +140,7 @@ class ImportLocationsCommand extends Command
         return $this->resourceFactory->getFileObjectFromCombinedIdentifier($fileName);
     }
 
-    protected function processFile(File $file, int $storagePid, bool $clearStorageFolder, SymfonyStyle $io)
+    protected function processFile(File $file, int $storagePid, bool $clearStorageFolder, SymfonyStyle $io): void
     {
         if ($clearStorageFolder) {
             $this->clearStorageFolder($storagePid);
@@ -155,8 +150,10 @@ class ImportLocationsCommand extends Command
         $reader = IOFactory::createReaderForFile($filePath);
         $spreadsheet = $reader->load($filePath);
         $sheet = $spreadsheet->getActiveSheet();
+
         $io->writeln('Import ' . $sheet->getHighestDataRow() . ' possible locations.');
         $progressbar = $io->createProgressBar($sheet->getHighestDataRow());
+
         $locationCount = 0;
         foreach ($sheet->getRowIterator() as $row) {
             if ($row->isEmpty()) {
@@ -170,11 +167,13 @@ class ImportLocationsCommand extends Command
 
             $this->transformAndStoreLocation($row, $storagePid);
         }
+
         $io->writeln('A total of ' . $locationCount . ' locations were imported');
+
         unlink($filePath);
     }
 
-    protected function clearStorageFolder(int $storagePid)
+    protected function clearStorageFolder(int $storagePid): void
     {
         $tableMm = 'tx_storefinder_location_attribute_mm';
         $fileMm = 'sys_file_reference';
@@ -188,7 +187,7 @@ class ImportLocationsCommand extends Command
             ->where(
                 $expression->eq('pid', $storagePid)
             )
-            ->execute()
+            ->executeQuery()
             ->fetchAllAssociative();
 
         if (count($locationUids)) {
@@ -207,7 +206,7 @@ class ImportLocationsCommand extends Command
                         $queryBuilder->createNamedParameter('area')
                     )
                 )
-                ->execute();
+                ->executeStatement();
 
             $queryBuilder = $this->getQueryBuilderForTable($fileMm);
             $expression = $queryBuilder->expr();
@@ -224,14 +223,14 @@ class ImportLocationsCommand extends Command
                         $queryBuilder->createNamedParameter('image')
                     )
                 )
-                ->execute();
+                ->executeStatement();
 
             $connection = $this->getQueryBuilderForTable($tableLocation)->getConnection();
             $connection->delete($tableLocation, ['pid' => $storagePid]);
         }
     }
 
-    protected function transformAndStoreLocation(Row $row, int $storagePid)
+    protected function transformAndStoreLocation(Row $row, int $storagePid): void
     {
         $attributes = [];
         $categories = [];
@@ -303,7 +302,7 @@ class ImportLocationsCommand extends Command
                 ->where(
                     $queryBuilder->expr()->eq('cn_iso_3', $queryBuilder->createNamedParameter($value))
                 )
-                ->execute()
+                ->executeQuery()
                 ->fetchOne();
         }
         return $this->countryCache[$value];
@@ -320,7 +319,7 @@ class ImportLocationsCommand extends Command
                 ->where(
                     $queryBuilder->expr()->eq('zn_code', $queryBuilder->createNamedParameter($value))
                 )
-                ->execute()
+                ->executeQuery()
                 ->fetchOne();
         }
         return $this->stateCache[$value];
@@ -328,12 +327,11 @@ class ImportLocationsCommand extends Command
 
     protected function fetchFile(string $value): string
     {
-        if ($value) {
-            $uid = $this->resourceFactory->getFileObjectFromCombinedIdentifier($value)->getUid();
-        } else {
-            $uid = 0;
-        }
-        return (string)$uid;
+        return (
+            $value === ''
+                ? '0'
+                : (string)$this->resourceFactory->getFileObjectFromCombinedIdentifier($value)?->getUid()
+        );
     }
 
     protected function processLocation(array $location): array
@@ -354,7 +352,7 @@ class ImportLocationsCommand extends Command
         return $location;
     }
 
-    protected function processAttributes(int $locationUid, array $attributes)
+    protected function processAttributes(int $locationUid, array $attributes): void
     {
         $table = 'tx_storefinder_location_attribute_mm';
         $tableName = 'tx_storefinder_domain_model_attribute';
@@ -382,7 +380,7 @@ class ImportLocationsCommand extends Command
         }
     }
 
-    protected function processCategories(int $locationUid, array $currentCategories)
+    protected function processCategories(int $locationUid, array $currentCategories): void
     {
         $table = 'sys_category_record_mm';
         $tableName = 'tx_storefinder_domain_model_location';
@@ -410,7 +408,7 @@ class ImportLocationsCommand extends Command
         }
     }
 
-    protected function processFiles(array $location, array $files)
+    protected function processFiles(array $location, array $files): void
     {
         $table = 'sys_file_reference';
         $tableName = 'tx_storefinder_domain_model_location';
@@ -431,8 +429,7 @@ class ImportLocationsCommand extends Command
                     'description' => $location['name']
                 ];
 
-                /** @var \TYPO3\CMS\Core\Database\Connection $connection */
-                $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable($table);
+                $connection = $this->connectionPool->getConnectionForTable($table);
                 $connection->update(
                     $table,
                     $data,
@@ -463,21 +460,23 @@ class ImportLocationsCommand extends Command
     protected function getCurrentRecordUid(array $location, string $table): int
     {
         $queryBuilder = $this->getQueryBuilderForTable($table);
+        $expression = $queryBuilder->expr();
         $result = $queryBuilder
             ->select('uid')
             ->from($table)
             ->where(
-                $queryBuilder->expr()->eq(
+                $expression->eq(
                     'pid',
                     $queryBuilder->createNamedParameter($location['pid'], \PDO::PARAM_INT)
                 ),
-                $queryBuilder->expr()->eq(
+                $expression->eq(
                     'import_id',
                     $queryBuilder->createNamedParameter($location['import_id'])
                 )
             )
-            ->execute();
-        return (int)$result->fetchOne();
+            ->executeQuery()
+            ->fetchOne();
+        return (int)$result;
     }
 
     protected function getReferences(
@@ -487,11 +486,12 @@ class ImportLocationsCommand extends Command
         int $uidForeign
     ): array {
         $queryBuilder = $this->getQueryBuilderForTable($table);
+        $expression = $queryBuilder->expr();
         $queryBuilder
             ->select('*')
             ->from($table)
             ->where(
-                $queryBuilder->expr()->eq(
+                $expression->eq(
                     'tablenames',
                     $queryBuilder->createNamedParameter($tableName)
                 )
@@ -499,7 +499,7 @@ class ImportLocationsCommand extends Command
 
         if ($uidLocal) {
             $queryBuilder->andWhere(
-                $queryBuilder->expr()->eq(
+                $expression->eq(
                     'uid_local',
                     $queryBuilder->createNamedParameter($uidLocal, \PDO::PARAM_INT)
                 )
@@ -507,7 +507,7 @@ class ImportLocationsCommand extends Command
         }
         if ($uidForeign) {
             $queryBuilder->andWhere(
-                $queryBuilder->expr()->eq(
+                $expression->eq(
                     'uid_foreign',
                     $queryBuilder->createNamedParameter($uidForeign, \PDO::PARAM_INT)
                 )
@@ -515,7 +515,7 @@ class ImportLocationsCommand extends Command
         }
         if ($table === 'sys_file_reference') {
             $queryBuilder->andWhere(
-                $queryBuilder->expr()->eq(
+                $expression->eq(
                     'deleted',
                     $queryBuilder->createNamedParameter(0, \PDO::PARAM_INT)
                 )
@@ -523,7 +523,7 @@ class ImportLocationsCommand extends Command
         }
 
         return $queryBuilder
-            ->execute()
+            ->executeQuery()
             ->fetchAllAssociative();
     }
 
@@ -534,7 +534,7 @@ class ImportLocationsCommand extends Command
         int $uidLocal,
         int $uidForeign,
         array $additionalData = []
-    ) {
+    ): void {
         $data = [
             'uid_local' => $uidLocal,
             'uid_foreign' => $uidForeign,
@@ -546,8 +546,7 @@ class ImportLocationsCommand extends Command
             $data = array_merge($additionalData, $data);
         }
 
-        /** @var \TYPO3\CMS\Core\Database\Connection $connection */
-        $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable($table);
+        $connection = $this->connectionPool->getConnectionForTable($table);
         $connection->insert($table, $data);
     }
 
@@ -557,33 +556,34 @@ class ImportLocationsCommand extends Command
         string $fieldName,
         int $uidLocal,
         int $uidForeign
-    ) {
+    ):void {
         $queryBuilder = $this->getQueryBuilderForTable($table);
+        $expression = $queryBuilder->expr();
         $queryBuilder
             ->delete($table)
             ->where(
-                $queryBuilder->expr()->eq(
+                $expression->eq(
                     'tablenames',
                     $queryBuilder->createNamedParameter($tableName)
                 ),
-                $queryBuilder->expr()->eq(
+                $expression->eq(
                     'uid_local',
                     $queryBuilder->createNamedParameter($uidLocal, \PDO::PARAM_INT)
                 ),
-                $queryBuilder->expr()->eq(
+                $expression->eq(
                     'uid_foreign',
                     $queryBuilder->createNamedParameter($uidForeign, \PDO::PARAM_INT)
                 )
             );
         if ($fieldName) {
             $queryBuilder->andWhere(
-                $queryBuilder->expr()->eq(
+                $expression->eq(
                     'fieldname',
                     $queryBuilder->createNamedParameter($fieldName)
                 )
             );
         }
-        $queryBuilder->execute();
+        $queryBuilder->executeStatement();
     }
 
     protected function getQueryBuilderForTable(string $table): QueryBuilder

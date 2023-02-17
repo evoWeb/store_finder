@@ -27,28 +27,30 @@ use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 
 class GeocodeLocationsCommand extends Command
 {
-    protected PersistenceManager $persistenceManager;
-
-    protected LocationRepository $locationRepository;
-
-    protected GeocodeService $geocodeService;
-
     public function __construct(
-        LocationRepository $locationRepository,
-        PersistenceManager $persistenceManager,
-        GeocodeService $geocodeService,
+        protected LocationRepository $locationRepository,
+        protected PersistenceManager $persistenceManager,
+        protected GeocodeService $geocodeService,
         ExtensionConfiguration $extensionConfiguration
     ) {
-        $this->locationRepository = $locationRepository;
-        $this->persistenceManager = $persistenceManager;
-        $this->geocodeService = $geocodeService;
-        $this->geocodeService->setSettings($extensionConfiguration->get('store_finder') ?? []);
+        try {
+            $this->geocodeService->setSettings($extensionConfiguration->get('store_finder') ?? []);
+        } catch (\Exception $e) {
+            die('Error in $GLOBALS[\'TYPO3_CONF_VARS\'][\'EXTENSIONS\']: ' . $e->getMessage());
+        }
         parent::__construct();
     }
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $locationsToGeocode = $this->locationRepository->findAllWithoutLatLon();
+        $io = new SymfonyStyle($input, $output);
+        $io->comment($this->getDescription());
+
+        $locationsToGeocode = $this->locationRepository->findAllWithoutLatLon()->toArray();
+        $locationCount = count($locationsToGeocode);
+
+        $progressBar = $io->createProgressBar($locationCount);
+
         /** @var Location $location */
         foreach ($locationsToGeocode as $index => $location) {
             $location = $this->geocodeService->geocodeAddress($location);
@@ -59,12 +61,13 @@ class GeocodeLocationsCommand extends Command
             if (($index % 50) == 0) {
                 $this->persistenceManager->persistAll();
             }
+
+            $progressBar->advance();
         }
 
         $this->persistenceManager->persistAll();
 
-        $io = new SymfonyStyle($input, $output);
-        $io->comment('All locations geocoded');
+        $io->writeln('A total of ' . $locationCount . ' locations were imported');
 
         return 0;
     }

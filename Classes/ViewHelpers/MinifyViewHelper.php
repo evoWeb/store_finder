@@ -75,8 +75,6 @@ class MinifyViewHelper extends AbstractViewHelper
             $content
         );
         /* remove other spaces before/after ) */
-        $content = preg_replace(['(( )+\))', '(\)( )+)'], ')', $content);
-
-        return $content;
+        return preg_replace(['(( )+\))', '(\)( )+)'], ')', $content);
     }
 }

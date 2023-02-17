@@ -40,6 +40,9 @@ runFunctionalTests () {
     echo "------"
 
     git checkout ../composer.json;
+    cd ..;
+    ${COMPOSER} config repositories.static-info-tables git https://github.com/garbast/static_info_tables.git;
+    cd .Build;
 
     ./runTests.sh -s cleanTests;
 
@@ -65,13 +68,11 @@ runFunctionalTests () {
     echo ""
 }
 
-runLint "7.4";
 runLint "8.1";
 
-runFunctionalTests "7.4" "^11.0" "^6.6.2" "Tests/Functional";
 runFunctionalTests "8.1" "^12.0" "dev-main" "Tests/Functional";
 runFunctionalTests "8.1" "^12.0" "dev-main" "Tests/Functional" "--prefer-lowest";
 runFunctionalTests "8.1" "dev-main" "dev-main" "Tests/Functional";
 
 ./runTests.sh -s clean;
-git checkout ../composer.json;
+#git checkout ../composer.json;

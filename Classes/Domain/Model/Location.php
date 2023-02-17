@@ -17,6 +17,7 @@ namespace Evoweb\StoreFinder\Domain\Model;
 
 use SJBR\StaticInfoTables\Domain\Model\Country;
 use SJBR\StaticInfoTables\Domain\Model\CountryZone;
+use TYPO3\CMS\Extbase\Annotation as Extbase;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
@@ -66,72 +67,67 @@ class Location extends AbstractEntity
 
     /**
      * @var ObjectStorage<Attribute>
-     * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
      */
+    #[Extbase\ORM\Lazy]
     protected ObjectStorage $attributes;
 
     /**
      * @var ObjectStorage<Category>
-     * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
      */
+    #[Extbase\ORM\Lazy]
     protected ObjectStorage $categories;
 
     /**
      * @var ObjectStorage<Content>
-     * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
      */
+    #[Extbase\ORM\Lazy]
     protected ObjectStorage $contentElements;
 
     /**
      * @var ObjectStorage<Location>
-     * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
      */
+    #[Extbase\ORM\Lazy]
     protected ObjectStorage $related;
 
     /**
      * @var ObjectStorage<FileReference>
-     * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
      */
+    #[Extbase\ORM\Lazy]
     protected ObjectStorage $image;
 
     /**
      * @var ObjectStorage<FileReference>
-     * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
      */
+    #[Extbase\ORM\Lazy]
     protected ObjectStorage $media;
 
     /**
      * @var ObjectStorage<FileReference>
-     * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
      */
+    #[Extbase\ORM\Lazy]
     protected ObjectStorage $layer;
 
     /**
      * @var ObjectStorage<FileReference>
-     * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
      */
+    #[Extbase\ORM\Lazy]
     protected ObjectStorage $icon;
 
     /**
-     * @var ?Country
-     * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
+     * @var Country
      */
+    #[Extbase\ORM\Lazy]
     protected $country;
 
     /**
-     * @var ?CountryZone
-     * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
+     * @var CountryZone
      */
+    #[Extbase\ORM\Lazy]
     protected $state;
 
     protected float $distance = 0.0;
 
     public function __construct()
-    {
-        $this->initializeObject();
-    }
-
-    public function initializeObject()
     {
         $this->attributes = new ObjectStorage();
         $this->categories = new ObjectStorage();
@@ -148,7 +144,7 @@ class Location extends AbstractEntity
         return $this->attributes;
     }
 
-    public function setAttributes(ObjectStorage $attributes)
+    public function setAttributes(ObjectStorage $attributes): void
     {
         $this->attributes = $attributes;
     }
@@ -158,7 +154,7 @@ class Location extends AbstractEntity
         return $this->categories;
     }
 
-    public function setCategories(ObjectStorage $categories)
+    public function setCategories(ObjectStorage $categories): void
     {
         $this->categories = $categories;
     }
@@ -168,7 +164,7 @@ class Location extends AbstractEntity
         return $this->contentElements;
     }
 
-    public function setContentElements(ObjectStorage $contentElements)
+    public function setContentElements(ObjectStorage $contentElements): void
     {
         $this->contentElements = $contentElements;
     }
@@ -178,7 +174,7 @@ class Location extends AbstractEntity
         return $this->related;
     }
 
-    public function setRelated(ObjectStorage $related)
+    public function setRelated(ObjectStorage $related): void
     {
         $this->related = $related;
     }
@@ -188,7 +184,7 @@ class Location extends AbstractEntity
         return $this->icon;
     }
 
-    public function setIcon(ObjectStorage $icon)
+    public function setIcon(ObjectStorage $icon): void
     {
         $this->icon = $icon;
     }
@@ -198,7 +194,7 @@ class Location extends AbstractEntity
         return $this->layer;
     }
 
-    public function setLayer(ObjectStorage $layer)
+    public function setLayer(ObjectStorage $layer): void
     {
         $this->layer = $layer;
     }
@@ -208,7 +204,7 @@ class Location extends AbstractEntity
         return $this->image;
     }
 
-    public function setImage(ObjectStorage $image)
+    public function setImage(ObjectStorage $image): void
     {
         $this->image = $image;
     }
@@ -218,20 +214,19 @@ class Location extends AbstractEntity
         return $this->media;
     }
 
-    public function setMedia(ObjectStorage $media)
+    public function setMedia(ObjectStorage $media): void
     {
         $this->media = $media;
     }
 
     public function getState(): ?CountryZone
     {
-        if ($this->state instanceof LazyLoadingProxy) {
-            $this->state = $this->state->_loadRealInstance();
-        }
-        return $this->state;
+        return $this->state instanceof LazyLoadingProxy
+            ? $this->state->_loadRealInstance()
+            : $this->state;
     }
 
-    public function setState(CountryZone $state)
+    public function setState(CountryZone $state): void
     {
         $this->state = $state;
     }
@@ -243,13 +238,12 @@ class Location extends AbstractEntity
 
     public function getCountry(): ?Country
     {
-        if ($this->country instanceof LazyLoadingProxy) {
-            $this->country = $this->country->_loadRealInstance();
-        }
-        return $this->country;
+        return $this->country instanceof LazyLoadingProxy
+            ? $this->country->_loadRealInstance()
+            : $this->country;
     }
 
-    public function setCountry(Country $country)
+    public function setCountry(Country $country): void
     {
         $this->country = $country;
     }
@@ -264,7 +258,7 @@ class Location extends AbstractEntity
         return $this->additionaladdress;
     }
 
-    public function setAdditionaladdress(string $additionalAddress)
+    public function setAdditionaladdress(string $additionalAddress): void
     {
         $this->additionaladdress = $additionalAddress;
     }
@@ -274,7 +268,7 @@ class Location extends AbstractEntity
         return $this->address;
     }
 
-    public function setAddress(string $address)
+    public function setAddress(string $address): void
     {
         $this->address = $address;
     }
@@ -284,7 +278,7 @@ class Location extends AbstractEntity
         return $this->city;
     }
 
-    public function setCity(string $city)
+    public function setCity(string $city): void
     {
         $this->city = $city;
     }
@@ -294,7 +288,7 @@ class Location extends AbstractEntity
         return $this->person;
     }
 
-    public function setPerson(string $person)
+    public function setPerson(string $person): void
     {
         $this->person = $person;
     }
@@ -304,7 +298,7 @@ class Location extends AbstractEntity
         return $this->email;
     }
 
-    public function setEmail(string $email)
+    public function setEmail(string $email): void
     {
         $this->email = $email;
     }
@@ -314,7 +308,7 @@ class Location extends AbstractEntity
         return $this->fax;
     }
 
-    public function setFax(string $fax)
+    public function setFax(string $fax): void
     {
         $this->fax = $fax;
     }
@@ -324,7 +318,7 @@ class Location extends AbstractEntity
         return $this->geocode;
     }
 
-    public function setGeocode(int $geocode)
+    public function setGeocode(int $geocode): void
     {
         $this->geocode = $geocode;
     }
@@ -334,7 +328,7 @@ class Location extends AbstractEntity
         return $this->hours;
     }
 
-    public function setHours(string $hours)
+    public function setHours(string $hours): void
     {
         $this->hours = $hours;
     }
@@ -344,7 +338,7 @@ class Location extends AbstractEntity
         return $this->mobile;
     }
 
-    public function setMobile(string $mobile)
+    public function setMobile(string $mobile): void
     {
         $this->mobile = $mobile;
     }
@@ -354,7 +348,7 @@ class Location extends AbstractEntity
         return $this->notes;
     }
 
-    public function setNotes(string $notes)
+    public function setNotes(string $notes): void
     {
         $this->notes = $notes;
     }
@@ -364,7 +358,7 @@ class Location extends AbstractEntity
         return $this->phone;
     }
 
-    public function setPhone(string $phone)
+    public function setPhone(string $phone): void
     {
         $this->phone = $phone;
     }
@@ -374,7 +368,7 @@ class Location extends AbstractEntity
         return $this->products;
     }
 
-    public function setProducts(string $products)
+    public function setProducts(string $products): void
     {
         $this->products = $products;
     }
@@ -384,7 +378,7 @@ class Location extends AbstractEntity
         return $this->storeid;
     }
 
-    public function setStoreid(string $storeid)
+    public function setStoreid(string $storeid): void
     {
         $this->storeid = $storeid;
     }
@@ -399,7 +393,7 @@ class Location extends AbstractEntity
         return $this->name;
     }
 
-    public function setName(string $name)
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
@@ -409,7 +403,7 @@ class Location extends AbstractEntity
         return $this->url;
     }
 
-    public function setUrl(string $url)
+    public function setUrl(string $url): void
     {
         $this->url = $url;
     }
@@ -419,7 +413,7 @@ class Location extends AbstractEntity
         return $this->zipcode;
     }
 
-    public function setZipcode(string $zipcode)
+    public function setZipcode(string $zipcode): void
     {
         $this->zipcode = $zipcode;
     }
@@ -429,7 +423,7 @@ class Location extends AbstractEntity
         return $this->center;
     }
 
-    public function setCenter(bool $center)
+    public function setCenter(bool $center): void
     {
         $this->center = $center;
     }
@@ -439,7 +433,7 @@ class Location extends AbstractEntity
         return $this->zoom;
     }
 
-    public function setZoom(int $zoom)
+    public function setZoom(int $zoom): void
     {
         $this->zoom = $zoom;
     }
@@ -449,7 +443,7 @@ class Location extends AbstractEntity
         return $this->latitude;
     }
 
-    public function setLatitude(?float $latitude)
+    public function setLatitude(?float $latitude): void
     {
         $this->latitude = (float)$latitude;
     }
@@ -459,7 +453,7 @@ class Location extends AbstractEntity
         return $this->longitude;
     }
 
-    public function setLongitude(?float $longitude)
+    public function setLongitude(?float $longitude): void
     {
         $this->longitude = (float)$longitude;
     }
@@ -474,7 +468,7 @@ class Location extends AbstractEntity
         return $this->distance;
     }
 
-    public function setDistance(float $distance)
+    public function setDistance(float $distance): void
     {
         $this->distance = $distance;
     }
