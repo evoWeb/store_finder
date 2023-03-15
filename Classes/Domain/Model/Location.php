@@ -21,6 +21,7 @@ use TYPO3\CMS\Extbase\Annotation as Extbase;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
+use TYPO3\CMS\Extbase\Persistence\Generic\LazyObjectStorage;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 class Location extends AbstractEntity
@@ -66,58 +67,58 @@ class Location extends AbstractEntity
     protected int $zoom = 0;
 
     #[Extbase\ORM\Lazy]
-    protected Country $country;
+    protected Country|LazyLoadingProxy $country;
 
     #[Extbase\ORM\Lazy]
-    protected CountryZone $state;
+    protected CountryZone|LazyLoadingProxy $state;
 
     /**
      * @var ObjectStorage<Attribute>
      */
     #[Extbase\ORM\Lazy]
-    protected ObjectStorage $attributes;
+    protected ObjectStorage|LazyObjectStorage $attributes;
 
     /**
      * @var ObjectStorage<Category>
      */
     #[Extbase\ORM\Lazy]
-    protected ObjectStorage $categories;
+    protected ObjectStorage|LazyObjectStorage $categories;
 
     /**
      * @var ObjectStorage<Content>
      */
     #[Extbase\ORM\Lazy]
-    protected ObjectStorage $contentElements;
+    protected ObjectStorage|LazyObjectStorage $contentElements;
 
     /**
      * @var ObjectStorage<Location>
      */
     #[Extbase\ORM\Lazy]
-    protected ObjectStorage $related;
+    protected ObjectStorage|LazyObjectStorage $related;
 
     /**
      * @var ObjectStorage<FileReference>
      */
     #[Extbase\ORM\Lazy]
-    protected ObjectStorage $image;
+    protected ObjectStorage|LazyObjectStorage $image;
 
     /**
      * @var ObjectStorage<FileReference>
      */
     #[Extbase\ORM\Lazy]
-    protected ObjectStorage $media;
+    protected ObjectStorage|LazyObjectStorage $media;
 
     /**
      * @var ObjectStorage<FileReference>
      */
     #[Extbase\ORM\Lazy]
-    protected ObjectStorage $layer;
+    protected ObjectStorage|LazyObjectStorage $layer;
 
     /**
      * @var ObjectStorage<FileReference>
      */
     #[Extbase\ORM\Lazy]
-    protected ObjectStorage $icon;
+    protected ObjectStorage|LazyObjectStorage $icon;
 
     protected float $distance = 0.0;
 

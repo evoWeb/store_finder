@@ -17,15 +17,16 @@ namespace Evoweb\StoreFinder\Domain\Model;
 
 use TYPO3\CMS\Extbase\Annotation as Extbase;
 use TYPO3\CMS\Extbase\Domain\Model\Category as ExtbaseCategory;
+use TYPO3\CMS\Extbase\Persistence\Generic\LazyObjectStorage;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 class Category extends ExtbaseCategory
 {
     /**
-     * @var ObjectStorage<Category>
+     * @var ObjectStorage<Category>|LazyObjectStorage
      */
     #[Extbase\ORM\Lazy]
-    protected ObjectStorage $children;
+    protected ObjectStorage|LazyObjectStorage $children;
 
     public function __construct()
     {
