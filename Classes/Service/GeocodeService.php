@@ -121,7 +121,7 @@ class GeocodeService
             }
 
             if (!empty($value) && !is_object($value) && !is_array($value)) {
-                $queryValues[$field] =  iconv('UTF-8', 'ASCII//TRANSLIT', $value);
+                $queryValues[$field] =  \iconv('UTF-8', 'ASCII//TRANSLIT', $value);
             }
         }
 

@@ -2,41 +2,6 @@
 
 defined('TYPO3') or die();
 
-$overrideChildTca = [
-    'types' => [
-        '0' => [
-            'showitem' => '
-                --palette--;;imageoverlayPalette,
-                --palette--;;filePalette',
-        ],
-        \TYPO3\CMS\Core\Resource\File::FILETYPE_TEXT => [
-            'showitem' => '
-                --palette--;;imageoverlayPalette,
-                --palette--;;filePalette',
-        ],
-        \TYPO3\CMS\Core\Resource\File::FILETYPE_IMAGE => [
-            'showitem' => '
-                --palette--;;imageoverlayPalette,
-                --palette--;;filePalette',
-        ],
-        \TYPO3\CMS\Core\Resource\File::FILETYPE_AUDIO => [
-            'showitem' => '
-                --palette--;;audioOverlayPalette,
-                --palette--;;filePalette',
-        ],
-        \TYPO3\CMS\Core\Resource\File::FILETYPE_VIDEO => [
-            'showitem' => '
-                --palette--;;videoOverlayPalette,
-                --palette--;;filePalette',
-        ],
-        \TYPO3\CMS\Core\Resource\File::FILETYPE_APPLICATION => [
-            'showitem' => '
-                --palette--;;imageoverlayPalette,
-                --palette--;;filePalette',
-        ],
-    ],
-];
-
 $languageFile = 'LLL:EXT:store_finder/Resources/Private/Language/locallang_db.xlf:';
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToInsertRecords(
@@ -519,76 +484,49 @@ return [
             'config' => [
                 'type' => 'input',
                 'renderType' => 'inputLink',
+                'eval' => 'trim',
+                'fieldControl' => ['linkPopup' => ['options' => ['title' => 'Link']]],
                 'size' => 30,
                 'max' => 255,
-                'eval' => 'trim',
-                'renderType' => 'inputLink',
-                'fieldControl' => ['linkPopup' => ['options' => ['title' => 'Link']]],
             ],
         ],
 
         'icon' => [
             'l10n_mode' => 'exclude',
             'label' => $languageFile . 'tx_storefinder_domain_model_location.icon',
-            'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
-                'icon',
-                [
-                    'appearance' => [
-                        'createNewRelationLinkTitle' =>
-                            'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:images.addFileReference',
-                    ],
-                    'minitems' => 0,
-                    'maxitems' => 1,
-                    // custom configuration for displaying fields in the overlay/reference table
-                    // to use the imageoverlayPalette instead of the basicoverlayPalette
-                    'overrideChildTca' => $overrideChildTca,
-                ],
-                $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']
-            ),
+            'config' => [
+                'type' => 'file',
+                'allowed' => 'common-image-types',
+                'minitems' => 0,
+                'maxitems' => 1,
+            ],
         ],
 
         'image' => [
             'label' => $languageFile . 'tx_storefinder_domain_model_location.image',
-            'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
-                'image',
-                [
-                    'appearance' => [
-                        'createNewRelationLinkTitle' =>
-                            'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:images.addFileReference',
-                    ],
-                ],
-                $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']
-            ),
+            'config' =>[
+                'type' => 'file',
+                'allowed' => 'common-image-types',
+            ],
         ],
 
         'media' => [
             'label' => $languageFile . 'tx_storefinder_domain_model_location.media',
-            'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
-                'media',
-                [
-                    'appearance' => [
-                        'createNewRelationLinkTitle' =>
-                            'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:images.addFileReference',
-                    ],
-                ]
-            ),
+            'config' => [
+                'type' => 'file',
+                'allowed' => 'common-media-types',
+            ]
         ],
 
         'layer' => [
             'l10n_mode' => 'exclude',
             'label' => $languageFile . 'tx_storefinder_domain_model_location.layer',
-            'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
-                'layer',
-                [
-                    'appearance' => [
-                        'createNewRelationLinkTitle' =>
-                            $languageFile . 'tx_storefinder_domain_model_location.layer.addFileReference',
-                    ],
-                    'minitems' => 0,
-                    'maxitems' => 1,
-                ],
-                'svg,kml'
-            ),
+            'config' => [
+                'type' => 'file',
+                'minitems' => 0,
+                'maxitems' => 1,
+                'allowed' => [ 'svg', 'kml' ]
+            ],
         ],
 
         'content_elements' => [

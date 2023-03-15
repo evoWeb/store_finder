@@ -24,11 +24,9 @@ class Attribute extends AbstractEntity
 {
     /**
      * Icon
-     *
-     * @var ?FileReference
      */
     #[Extbase\ORM\Lazy]
-    protected $icon;
+    protected null|FileReference|LazyLoadingProxy $icon;
 
     protected string $name;
 

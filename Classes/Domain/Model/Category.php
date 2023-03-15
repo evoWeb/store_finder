@@ -32,13 +32,13 @@ class Category extends ExtbaseCategory
         $this->children = new ObjectStorage();
     }
 
-    public function setChildren(ObjectStorage $children): void
-    {
-        $this->children = $children;
-    }
-
     public function getChildren(): ?ObjectStorage
     {
         return $this->children;
+    }
+
+    public function setChildren(ObjectStorage $children): void
+    {
+        $this->children = $children;
     }
 }

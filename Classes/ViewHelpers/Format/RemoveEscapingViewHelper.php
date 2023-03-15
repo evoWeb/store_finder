@@ -18,9 +18,6 @@ namespace Evoweb\StoreFinder\ViewHelpers\Format;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
-/**
- * Class RemoveEscapingViewHelper
- */
 class RemoveEscapingViewHelper extends AbstractViewHelper
 {
     public function initializeArguments()
@@ -43,7 +40,7 @@ class RemoveEscapingViewHelper extends AbstractViewHelper
         array $arguments,
         \Closure $renderChildrenClosure,
         RenderingContextInterface $renderingContext
-    ): string {
+    ) {
         $content = $arguments['content'] ?? $renderChildrenClosure();
         return str_replace(['\{', '\}'], ['{', '}'], $content);
     }

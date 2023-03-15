@@ -41,20 +41,22 @@ class TceMainListener
     /**
      * Remap id for id and table
      *
-     * @param string|int $id
+     * @param string|int $NEW_id
      * @param string $table
      * @param DataHandler $parentObject
      *
-     * @return int
+     * @return array
      */
-    protected function remapId($id, string &$table, DataHandler $parentObject)
+    protected function remapId(string|int $NEW_id, string $table, DataHandler $parentObject): array
     {
-        if (array_key_exists($id, $parentObject->substNEWwithIDs)) {
-            $table = $parentObject->substNEWwithIDs_table[$id];
-            $id = $parentObject->substNEWwithIDs[$id];
+        if (array_key_exists($NEW_id, $parentObject->substNEWwithIDs)) {
+            $id = $parentObject->substNEWwithIDs[$NEW_id];
+            $table = $parentObject->substNEWwithIDs_table[$NEW_id];
+        } else {
+            $id = $NEW_id;
         }
 
-        return $id;
+        return [(int)$id, $table];
     }
 
     /**
@@ -69,11 +71,11 @@ class TceMainListener
     public function processDatamap_afterDatabaseOperations(
         string $status,
         string $table,
-        $id,
+        string|int $id,
         array $fieldValues,
         DataHandler $parentObject
-    ) {
-        $id = $this->remapId($id, $table, $parentObject);
+    ): void {
+        [$id, $table] = $this->remapId($id, $table, $parentObject);
 
         if ($table === 'tx_storefinder_domain_model_location') {
             $location = $this->locationRepository->findByUidInBackend($id);

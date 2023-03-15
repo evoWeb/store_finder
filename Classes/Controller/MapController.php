@@ -31,12 +31,11 @@ use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Pagination\SimplePagination;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Annotation\Validate;
 use TYPO3\CMS\Extbase\Http\ForwardResponse;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\Controller\Argument;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Pagination\QueryResultPaginator;
-use TYPO3\CMS\Extbase\Persistence\Generic\QueryResult;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Property\TypeConverter\PersistentObjectConverter;
 use TYPO3\CMS\Extbase\Validation\Validator\ValidatorInterface;
@@ -103,19 +102,13 @@ class MapController extends ActionController
         $argument->setValidator($validator);
     }
 
-    /**
-     * @param string $configuration
-     * @param DocParser $parser
-     *
-     * @return ValidatorInterface
-     */
     protected function getValidatorByConfiguration(string $configuration, DocParser $parser): ValidatorInterface
     {
-        if (strpos($configuration, '"') === false && strpos($configuration, '(') === false) {
+        if (!str_contains($configuration, '"') && !str_contains($configuration, '(')) {
             $configuration = sprintf('"%s"', $configuration);
         }
 
-        /** @var \TYPO3\CMS\Extbase\Annotation\Validate $validateAnnotation */
+        /** @var Validate $validateAnnotation */
         $validateAnnotation = current($parser->parse(
             '@TYPO3\CMS\Extbase\Annotation\Validate(' . $configuration . ')'
         ));
@@ -127,14 +120,14 @@ class MapController extends ActionController
         return $validator;
     }
 
-    protected function setTypeConverter()
+    protected function setTypeConverter(): void
     {
         if ($this->request->hasArgument('constraint')) {
             /** @var array $constraint */
             $constraint = $this->request->getArgument('constraint');
             if (!is_array($constraint['category'])) {
                 $constraint['category'] = array_filter(explode(',', $constraint['category'] ?? ''));
-                $this->request->setArgument('constraint', $constraint);
+                $this->request->getAttribute('extbase')->setArgument('constraint', $constraint);
             }
 
             if ($this->arguments->hasArgument('constraint')) {
@@ -171,14 +164,16 @@ class MapController extends ActionController
             if (!intval($constraint['country'])) {
                 /** @var CountryRepository $countryRepository */
                 $countryRepository = GeneralUtility::getContainer()->get(CountryRepository::class);
-                /** @var $country Country */
+                /** @var $value Country */
                 if (strlen($constraint['country']) === 2) {
                     $value = $countryRepository->findByIsoCodeA2([$constraint['country']])->getFirst();
                 } elseif (strlen($constraint['country']) === 3) {
                     $value = $countryRepository->findByIsoCodeA3($constraint['country']);
                 }
-                $constraint['country'] = $value->getUid();
-                $this->request->setArgument('constraint', $constraint);
+                if ($value) {
+                    $constraint['country'] = $value->getUid();
+                }
+                $this->request->getAttribute('extbase')->setArgument('constraint', $constraint);
             }
         }
 
@@ -187,8 +182,6 @@ class MapController extends ActionController
 
     /**
      * Action responsible for rendering search, map and list partial
-     *
-     * @return ResponseInterface
      */
     public function mapAction(): ResponseInterface
     {
@@ -223,14 +216,8 @@ class MapController extends ActionController
 
     /**
      * Action responsible for rendering search, map and list partial
-     *
-     * @param ?Constraint $constraint
-     *
-     * @TYPO3\CMS\Extbase\Annotation\Validate("Evoweb\StoreFinder\Validation\Validator\Constraint", param="constraint")
-     *
-     * @return string
      */
-    public function cachedMapAction(Constraint $constraint = null): ResponseInterface
+    public function cachedMapAction(): ResponseInterface
     {
         if ($this->settings['location']) {
             $response = new ForwardResponse('show');
@@ -267,9 +254,8 @@ class MapController extends ActionController
      * @param Constraint $constraint
      *
      * @return ResponseInterface
-     *
-     * @TYPO3\CMS\Extbase\Annotation\Validate("Evoweb\StoreFinder\Validation\Validator\Constraint", param="constraint")
      */
+    #[Validate(['validator' => ConstraintValidator::class, 'options' => ['param' => 'constraint']])]
     public function searchAction(Constraint $constraint): ResponseInterface
     {
         [$locations, $constraint] = $this->getLocationsByConstraints($constraint);
@@ -348,7 +334,7 @@ class MapController extends ActionController
         $this->view->assign('afterSearch', 1);
         $this->view->assign('locations', $locations);
 
-        if ($locations !== null) {
+        if (count($locations)) {
             $center = $this->getCenterOfQueryResult($location, $locations);
             $center = $this->setZoomLevel($center, $locations);
             $this->view->assign('center', $center);
@@ -535,13 +521,13 @@ class MapController extends ActionController
             $zoom = 10;
         } elseif ($radius <= 500) {
             $zoom = 11;
-        } elseif ($radius > 500 && $radius <= 1000) {
+        } elseif ($radius <= 1000) {
             $zoom = 12;
         } else {
             $zoom = 13;
         }
 
-        $center->setZoom((int)(18 - $zoom));
+        $center->setZoom(18 - $zoom);
 
         return $center;
     }

@@ -313,7 +313,7 @@ class SelectCountriesViewHelper extends AbstractFormFieldViewHelper
             return true;
         }
         if ($this->hasArgument('multiple')) {
-            if ($selectedValue === null && $this->arguments['selectAllByDefault'] === true) {
+            if ($this->arguments['selectAllByDefault'] === true) {
                 return true;
             }
             if (is_array($selectedValue) && in_array($value, $selectedValue)) {
@@ -328,7 +328,7 @@ class SelectCountriesViewHelper extends AbstractFormFieldViewHelper
      *
      * @return string|array value string or an array of strings
      */
-    protected function getSelectedValue()
+    protected function getSelectedValue(): string|array
     {
         $this->setRespectSubmittedDataValue(true);
         $value = $this->getValueAttribute();
@@ -344,23 +344,20 @@ class SelectCountriesViewHelper extends AbstractFormFieldViewHelper
 
     /**
      * Get the option value for an object
-     *
-     * @param mixed $valueElement
-     * @return string @todo: Does not always return string ...
      */
-    protected function getOptionValueScalar($valueElement): mixed
+    protected function getOptionValueScalar(mixed $valueElement): string
     {
         if (is_object($valueElement)) {
             if ($this->hasArgument('optionValueField')) {
-                return ObjectAccess::getPropertyPath($valueElement, $this->arguments['optionValueField']);
+                return (string)ObjectAccess::getPropertyPath($valueElement, $this->arguments['optionValueField']);
             }
             // @todo use $this->persistenceManager->isNewObject() once it is implemented
             if ($this->persistenceManager->getIdentifierByObject($valueElement) !== null) {
-                return $this->persistenceManager->getIdentifierByObject($valueElement);
+                return (string)$this->persistenceManager->getIdentifierByObject($valueElement);
             }
             return (string)$valueElement;
         }
-        return $valueElement;
+        return (string)$valueElement;
     }
 
     /**

@@ -65,6 +65,12 @@ class Location extends AbstractEntity
 
     protected int $zoom = 0;
 
+    #[Extbase\ORM\Lazy]
+    protected Country $country;
+
+    #[Extbase\ORM\Lazy]
+    protected CountryZone $state;
+
     /**
      * @var ObjectStorage<Attribute>
      */
@@ -112,18 +118,6 @@ class Location extends AbstractEntity
      */
     #[Extbase\ORM\Lazy]
     protected ObjectStorage $icon;
-
-    /**
-     * @var Country
-     */
-    #[Extbase\ORM\Lazy]
-    protected $country;
-
-    /**
-     * @var CountryZone
-     */
-    #[Extbase\ORM\Lazy]
-    protected $state;
 
     protected float $distance = 0.0;
 

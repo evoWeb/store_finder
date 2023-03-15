@@ -35,8 +35,8 @@ class GeocodeLocationsCommand extends Command
     ) {
         try {
             $this->geocodeService->setSettings($extensionConfiguration->get('store_finder') ?? []);
-        } catch (\Exception $e) {
-            die('Error in $GLOBALS[\'TYPO3_CONF_VARS\'][\'EXTENSIONS\']: ' . $e->getMessage());
+        } catch (\Exception $exception) {
+            die('Error in $GLOBALS[\'TYPO3_CONF_VARS\'][\'EXTENSIONS\']: ' . $exception->getMessage());
         }
         parent::__construct();
     }

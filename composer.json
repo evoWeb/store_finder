@@ -25,10 +25,8 @@
 		"typo3/cms-frontend": "*",
 		"sjbr/static-info-tables": "^11.5.2",
 
-		"geocoder-php/google-maps-provider": "^4.4.0",
-		"php-http/guzzle7-adapter": "*",
-		"php-http/message": "*",
-		"phpoffice/phpspreadsheet": "^1.9.0"
+		"geocoder-php/google-maps-provider": "^4.7.0",
+		"phpoffice/phpspreadsheet": "^1.28.0"
 	},
 	"autoload": {
 		"psr-4": {

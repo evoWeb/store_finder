@@ -31,7 +31,7 @@ class CountryRepository extends SJBRCountryRepository
      *
      * @return string Class name of the repository.
      */
-    protected function getRepositoryClassName()
+    protected function getRepositoryClassName(): string
     {
         return SJBRCountryRepository::class;
     }
