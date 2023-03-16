@@ -67,10 +67,10 @@ class Location extends AbstractEntity
     protected int $zoom = 0;
 
     #[Extbase\ORM\Lazy]
-    protected Country|LazyLoadingProxy $country;
+    protected null|Country|LazyLoadingProxy $country = null;
 
     #[Extbase\ORM\Lazy]
-    protected CountryZone|LazyLoadingProxy $state;
+    protected null|CountryZone|LazyLoadingProxy $state = null;
 
     /**
      * @var ObjectStorage<Attribute>
