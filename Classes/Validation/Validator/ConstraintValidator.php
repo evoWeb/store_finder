@@ -23,20 +23,6 @@ use TYPO3\CMS\Extbase\Validation\Validator\ObjectValidatorInterface;
 class ConstraintValidator extends AbstractGenericObjectValidator
 {
     /**
-     * Name of the current field to validate
-     *
-     * @var string
-     */
-    protected string $currentPropertyName = '';
-
-    /**
-     * Options for the current validation
-     *
-     * @var array
-     */
-    protected array $currentValidatorOptions = [];
-
-    /**
      * Model that gets validated currently
      *
      * @var Constraint
@@ -63,7 +49,7 @@ class ConstraintValidator extends AbstractGenericObjectValidator
      */
     protected function checkProperty(mixed $value, \Traversable $validators, string $propertyName): void
     {
-        /** @var Result $result */
+        /** @var Result|null $result */
         $result = null;
         foreach ($validators as $validator) {
             if ($validator instanceof SettableInterface) {

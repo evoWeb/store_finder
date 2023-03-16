@@ -31,7 +31,7 @@ use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Pagination\SimplePagination;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Annotation\Validate;
+use TYPO3\CMS\Extbase\Annotation as Extbase;
 use TYPO3\CMS\Extbase\Http\ForwardResponse;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\Controller\Argument;
@@ -255,7 +255,7 @@ class MapController extends ActionController
      *
      * @return ResponseInterface
      */
-    #[Validate(['validator' => ConstraintValidator::class, 'options' => ['param' => 'constraint']])]
+    #[Extbase\Validate(['validator' => ConstraintValidator::class, 'param' => 'constraint'])]
     public function searchAction(Constraint $constraint): ResponseInterface
     {
         [$locations, $constraint] = $this->getLocationsByConstraints($constraint);
