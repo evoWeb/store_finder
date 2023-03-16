@@ -108,7 +108,7 @@ class MapController extends ActionController
             $configuration = sprintf('"%s"', $configuration);
         }
 
-        /** @var Validate $validateAnnotation */
+        /** @var Extbase\Validate $validateAnnotation */
         $validateAnnotation = current($parser->parse(
             '@TYPO3\CMS\Extbase\Annotation\Validate(' . $configuration . ')'
         ));
