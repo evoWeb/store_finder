@@ -23,7 +23,7 @@
 		"typo3/cms-extbase": "*",
 		"typo3/cms-fluid": "*",
 		"typo3/cms-frontend": "*",
-		"sjbr/static-info-tables": "^11.5.2",
+		"sjbr/static-info-tables": "^11.5.2 || dev-master",
 
 		"geocoder-php/google-maps-provider": "^4.7.0",
 		"phpoffice/phpspreadsheet": "^1.28.0"
