@@ -13,7 +13,7 @@ runLint () {
     echo "Run lint with PHP ${PHP_VERSION}"
     echo "------"
 
-    ./runTests.sh -p ${PHP_VERSION} -s lintPhp;
+    ./Scripts/runTests.sh -p ${PHP_VERSION} -s lintPhp;
     LINT_EXIT_CODE=$?
 
     echo "------"
@@ -40,21 +40,18 @@ runFunctionalTests () {
     echo "------"
 
     git checkout ../composer.json;
-    cd ..;
-    ${COMPOSER} config repositories.static-info-tables git https://github.com/garbast/static_info_tables.git;
-    cd .Build;
 
-    ./runTests.sh -s cleanTests;
+    ./Scripts/runTests.sh -s cleanTests;
 
-    ./runTests.sh -p ${PHP_VERSION} -s composerInstall;
+    ./Scripts/runTests.sh -p ${PHP_VERSION} -s composerInstall;
 
-    ./runTests.sh -p ${PHP_VERSION} -s composerInstallPackage -q "typo3/cms-core:${TYPO3_VERSION}";
+    ./Scripts/runTests.sh -p ${PHP_VERSION} -s composerInstallPackage -q "typo3/cms-core:${TYPO3_VERSION}";
 
-    ./runTests.sh -p ${PHP_VERSION} -s composerInstallPackage -q "typo3/testing-framework:${TESTING_FRAMEWORK}" -o " --dev ${PREFER_LOWEST}";
+    ./Scripts/runTests.sh -p ${PHP_VERSION} -s composerInstallPackage -q "typo3/testing-framework:${TESTING_FRAMEWORK}" -o " --dev ${PREFER_LOWEST}";
 
-    ./runTests.sh -p ${PHP_VERSION} -s composerValidate;
+    ./Scripts/runTests.sh -p ${PHP_VERSION} -s composerValidate;
 
-    ./runTests.sh -p ${PHP_VERSION} -s functional ${TEST_PATH};
+    ./Scripts/runTests.sh -p ${PHP_VERSION} -s functional ${TEST_PATH};
     FUNCTIONAL_EXIT_CODE=$?
 
     echo "------"
@@ -74,5 +71,5 @@ runFunctionalTests "8.1" "^12.0" "dev-main" "Tests/Functional";
 runFunctionalTests "8.1" "^12.0" "dev-main" "Tests/Functional" "--prefer-lowest";
 runFunctionalTests "8.1" "dev-main" "dev-main" "Tests/Functional";
 
-./runTests.sh -s clean;
+#./Scripts/runTests.sh -s clean;
 #git checkout ../composer.json;

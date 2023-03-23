@@ -1,6 +1,8 @@
-.idea
-.Build/**
-!.Build/docker-compose.yml
-!.Build/runTests.sh
-!.Build/test.sh
+.Build/
+.cache/
+.idea/
+bin/
+typo3temp/
+var/
+vendor/
 composer.lock

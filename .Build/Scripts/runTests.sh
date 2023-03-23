@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# ! COPIED from https://github.com/TYPO3/typo3/blob/main/Build/Scripts/runTests.sh
-
 #
 # TYPO3 core test runner based on docker and docker-compose.
 #
@@ -73,38 +71,53 @@ handleDbmsAndDriverOptions() {
 cleanBuildFiles() {
     # > builds
     echo -n "Clean builds ... " ; rm -rf \
-        ./JavaScript \
-        ./node_modules ; \
+        ../../../Build/JavaScript \
+        ../../../Build/node_modules \
+        ../../../composer.lock ; \
         echo "done"
 }
 
 cleanCacheFiles() {
     # > caches
-    echo -n "Clean caches ... " ; \
-    rm -rf \
-        ./.cache ; \
+    echo -n "Clean caches ... " ; rm -rf \
+        ../../../.cache \
+        ../../../Build/.cache \
+        ../../../Build/composer/.cache/ \
+        ../../../.php-cs-fixer.cache ; \
         echo "done"
 }
 
 cleanTestFiles() {
     # > composer distribution test
-    echo -n "Clean composer distribution test ... " ; \
-    rm -rf \
-        ../composer.lock ; \
+    echo -n "Clean composer distribution test ... " ; rm -rf \
+        ../../../Build/composer/composer.json \
+        ../../../Build/composer/composer.lock \
+        ../../../Build/composer/public/index.php \
+        ../../../Build/composer/public/typo3 \
+        ../../../Build/composer/public/typo3conf/ext \
+        ../../../Build/composer/var/ \
+        ../../../Build/composer/vendor/ \
+        ../../../.Build/Web/ \
+        ../../../bin/ \
+        ../../../vendor/ ; \
        echo "done"
 
     # > test related
-    echo -n "Clean test related files ... " ; \
-    rm -rf \
-        ./.env \
-        ./Web ; \
+    echo -n "Clean test related files ... " ; rm -rf \
+        ../../../Build/phpunit/FunctionalTests-Job-*.xml \
+        ../../../typo3/sysext/core/Tests/AcceptanceTests-Job-* \
+        ../../../typo3/sysext/core/Tests/Acceptance/Support/_generated \
+        ../../../typo3temp/var/tests/ \
+        ../../../.Build/testing-docker/local/.env \
+        ../../../typo3temp/ \
+        ../../../var/ ; \
         echo "done"
 }
 
 cleanRenderedDocumentationFiles() {
     # > caches
     echo -n "Clean rendered documentation files ... " ; rm -rf \
-        ../*/Documentation-GENERATED-temp ; \
+        ../../../typo3/sysext/*/Documentation-GENERATED-temp ; \
         echo "done"
 }
 
@@ -309,14 +322,14 @@ THIS_SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null && pwd)"
 cd "$THIS_SCRIPT_DIR" || exit 1
 
 # Go to directory that contains the local docker-compose.yml file
-cd . || exit 1
+cd ../testing-docker/local || exit 1
 
 # Set core root path by checking whether realpath exists
 if ! command -v realpath &> /dev/null; then
     echo "Consider installing realpath for properly resolving symlinks" >&2
-    CORE_ROOT="${PWD}/../"
+    CORE_ROOT="${PWD}/../../../"
 else
-    CORE_ROOT=$(realpath "${PWD}/../")
+    CORE_ROOT=$(realpath "${PWD}/../../../")
 fi
 
 # Option defaults
@@ -338,8 +351,6 @@ THISCHUNK=0
 DOCKER_SELENIUM_IMAGE="selenium/standalone-chrome:4.0.0-20211102"
 IS_CORE_CI=0
 PHPSTAN_CONFIG_FILE="phpstan.local.neon"
-PACKAGE=""
-COMPOSER_PARAMETER=""
 
 # ENV var "CI" is set by gitlab-ci. We use it here to distinct 'local' and 'CI' environment.
 if [ "$CI" == "true" ]; then
@@ -362,7 +373,7 @@ OPTIND=1
 # Array for invalid options
 INVALID_OPTIONS=();
 # Simple option parsing based on getopts (! not getopt)
-while getopts ":a:s:c:d:i:j:k:p:e:xy:o:nhuv:q" OPT; do
+while getopts ":a:s:c:d:i:j:k:p:e:xy:o:nhuv" OPT; do
     case ${OPT} in
         s)
             TEST_SUITE=${OPTARG}
@@ -402,7 +413,7 @@ while getopts ":a:s:c:d:i:j:k:p:e:xy:o:nhuv:q" OPT; do
             ;;
         p)
             PHP_VERSION=${OPTARG}
-            if ! [[ ${PHP_VERSION} =~ ^(7.4|8.1|8.2)$ ]]; then
+            if ! [[ ${PHP_VERSION} =~ ^(8.1|8.2)$ ]]; then
                 INVALID_OPTIONS+=("${OPTARG}")
             fi
             ;;
@@ -430,12 +441,6 @@ while getopts ":a:s:c:d:i:j:k:p:e:xy:o:nhuv:q" OPT; do
             ;;
         v)
             SCRIPT_VERBOSE=1
-            ;;
-        q)
-            PACKAGE=${OPTARG}
-            ;;
-        o)
-            COMPOSER_PARAMETER=${OPTARG}
             ;;
         \?)
             INVALID_OPTIONS+=("${OPTARG}")
@@ -734,7 +739,7 @@ case ${TEST_SUITE} in
                 # Since docker is executed as root (yay!), the path to this dir is owned by
                 # root if docker creates it. Thank you, docker. We create the path beforehand
                 # to avoid permission issues on host filesystem after execution.
-                mkdir -p "${CORE_ROOT}/.Build/Web/typo3temp/var/tests/functional-sqlite-dbs/"
+                mkdir -p "${CORE_ROOT}/typo3temp/var/tests/functional-sqlite-dbs/"
                 docker-compose run prepare_functional_sqlite
                 docker-compose run functional_sqlite
                 SUITE_EXIT_CODE=$?
@@ -773,7 +778,7 @@ case ${TEST_SUITE} in
                 # Since docker is executed as root (yay!), the path to this dir is owned by
                 # root if docker creates it. Thank you, docker. We create the path beforehand
                 # to avoid permission issues on host filesystem after execution.
-                mkdir -p "${CORE_ROOT}/.Build/Web/typo3temp/var/tests/functional-sqlite-dbs/"
+                mkdir -p "${CORE_ROOT}/typo3temp/var/tests/functional-sqlite-dbs/"
                 docker-compose run prepare_functional_sqlite
                 docker-compose run functional_deprecated_sqlite
                 SUITE_EXIT_CODE=$?
