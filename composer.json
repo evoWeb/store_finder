@@ -19,11 +19,11 @@
 		"docs": "https://docs.typo3.org/p/evoweb/store-finder/master/en-us/"
 	},
 	"require": {
-		"typo3/cms-core": "^11.0 || ^12.2 || dev-main",
+		"typo3/cms-core": "^11.0",
 		"typo3/cms-extbase": "*",
 		"typo3/cms-fluid": "*",
 		"typo3/cms-frontend": "*",
-		"sjbr/static-info-tables": "^11.5.2",
+		"sjbr/static-info-tables": "^11.5.0",
 
 		"geocoder-php/google-maps-provider": "^4.4.0",
 		"php-http/guzzle7-adapter": "*",
