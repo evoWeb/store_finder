@@ -18,10 +18,13 @@ namespace Evoweb\StoreFinder\Domain\Repository;
 use Doctrine\DBAL\ArrayParameterType;
 use Evoweb\StoreFinder\Domain\Model\Constraint;
 use Evoweb\StoreFinder\Domain\Model\Location;
+use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\Context\LanguageAspect;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\Query;
+use TYPO3\CMS\Extbase\Persistence\Generic\QuerySettingsInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Persistence\Repository;
@@ -104,9 +107,10 @@ class LocationRepository extends Repository
         /** @var Query $query */
         $query = $this->createQuery();
 
-        $queryBuilder = $this->getQueryBuilderForTable('tx_storefinder_domain_model_location');
+        $tableName = 'tx_storefinder_domain_model_location';
+        $queryBuilder = $this->getQueryBuilderForTable($tableName);
         $queryBuilder
-            ->from('tx_storefinder_domain_model_location', 'l');
+            ->from($tableName, 'l');
 
         if (!$constraint->isGeocoded()) {
             $queryBuilder
@@ -144,6 +148,7 @@ class LocationRepository extends Repository
             $queryBuilder = $this->addRadiusQueryPart($constraint, $queryBuilder);
             $queryBuilder = $this->addLimitQueryParts($constraint, $queryBuilder);
             $queryBuilder = $this->addFulltextSearchQueryParts($constraint, $queryBuilder);
+            $queryBuilder = $this->addLanguagePart($tableName, 'l', $queryBuilder);
         }
 
         $sql = QueryBuilderHelper::getStatement($queryBuilder);
@@ -220,6 +225,106 @@ class LocationRepository extends Repository
             '`distance` <= ' . $queryBuilder->createNamedParameter($constraint->getRadius())
         );
 
+        return $queryBuilder;
+    }
+
+    protected function addLanguagePart(
+        string $tableName,
+        string $tableAlias,
+        QueryBuilder $queryBuilder
+    ): QueryBuilder {
+        if (empty($GLOBALS['TCA'][$tableName]['ctrl']['languageField'])) {
+            return $queryBuilder;
+        }
+
+        /** @var Context $context */
+        $context = GeneralUtility::makeInstance(Context::class);
+        /** @var LanguageAspect $languageAspect */
+        $languageAspect = $context->getAspect('language');
+
+        // Select all entries for the current language
+        // If any language is set -> get those entries which are not translated yet
+        $languageField = $GLOBALS['TCA'][$tableName]['ctrl']['languageField'];
+
+        $transOrigPointerField = $GLOBALS['TCA'][$tableName]['ctrl']['transOrigPointerField'] ?? '';
+        if (!$transOrigPointerField || !$languageAspect->getContentId()) {
+            $queryBuilder->andWhere($queryBuilder->expr()->in(
+                $tableAlias . '.' . $languageField,
+                [$languageAspect->getContentId(), -1]
+            ));
+            return $queryBuilder;
+        }
+
+        $mode = $languageAspect->getOverlayType();
+        if (
+            !in_array($mode, [
+                LanguageAspect::OVERLAYS_ON_WITH_FLOATING,
+                LanguageAspect::OVERLAYS_ON,
+                LanguageAspect::OVERLAYS_MIXED
+            ])
+        ) {
+            $queryBuilder->andWhere($queryBuilder->expr()->in(
+                $tableAlias . '.' . $languageField,
+                [$languageAspect->getContentId(), -1]
+            ));
+            return $queryBuilder;
+        }
+
+        $defLangTableAlias = $tableAlias . '_dl';
+        $defaultLanguageRecordsSubSelect = $queryBuilder->getConnection()->createQueryBuilder();
+        $defaultLanguageRecordsSubSelect
+            ->select($defLangTableAlias . '.uid')
+            ->from($tableName, $defLangTableAlias)
+            ->where(
+                $defaultLanguageRecordsSubSelect->expr()->and(
+                    $defaultLanguageRecordsSubSelect->expr()->eq($defLangTableAlias . '.' . $transOrigPointerField, 0),
+                    $defaultLanguageRecordsSubSelect->expr()->eq($defLangTableAlias . '.' . $languageField, 0)
+                )
+            );
+
+        $andConditions = [];
+        // records in language 'all'
+        $andConditions[] = $queryBuilder->expr()->eq($tableAlias . '.' . $languageField, -1);
+        // translated records where a default language exists
+        $andConditions[] = $queryBuilder->expr()->and(
+            $queryBuilder->expr()->eq($tableAlias . '.' . $languageField, $languageAspect->getContentId()),
+            $queryBuilder->expr()->in(
+                $tableAlias . '.' . $transOrigPointerField,
+                $defaultLanguageRecordsSubSelect->getSQL()
+            )
+        );
+        if ($mode === LanguageAspect::OVERLAYS_MIXED) {
+            // $mode = TRUE
+            // returns records from current language which have default language
+            // together with not translated default language records
+            $translatedOnlyTableAlias = $tableAlias . '_to';
+            $queryBuilderForSubSelect = $queryBuilder->getConnection()->createQueryBuilder();
+            $queryBuilderForSubSelect
+                ->select($translatedOnlyTableAlias . '.' . $transOrigPointerField)
+                ->from($tableName, $translatedOnlyTableAlias)
+                ->where(
+                    $queryBuilderForSubSelect->expr()->and(
+                        $queryBuilderForSubSelect->expr()->gt(
+                            $translatedOnlyTableAlias . '.' . $transOrigPointerField,
+                            0
+                        ),
+                        $queryBuilderForSubSelect->expr()->eq(
+                            $translatedOnlyTableAlias . '.' . $languageField,
+                            $languageAspect->getContentId()
+                        )
+                    )
+                );
+            // records in default language, which do not have a translation
+            $andConditions[] = $queryBuilder->expr()->and(
+                $queryBuilder->expr()->eq($tableAlias . '.' . $languageField, 0),
+                $queryBuilder->expr()->notIn(
+                    $tableAlias . '.uid',
+                    $queryBuilderForSubSelect->getSQL()
+                )
+            );
+        }
+
+        $queryBuilder->andWhere($queryBuilder->expr()->or(...$andConditions));
         return $queryBuilder;
     }
 
