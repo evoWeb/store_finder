@@ -1,7 +1,5 @@
 <?php
 
-defined('TYPO3') or die();
-
 $languageFile = 'LLL:EXT:store_finder/Resources/Private/Language/locallang_db.xlf:';
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToInsertRecords(
@@ -10,27 +8,26 @@ $languageFile = 'LLL:EXT:store_finder/Resources/Private/Language/locallang_db.xl
 
 return [
     'ctrl' => [
-        'title' => $languageFile . 'tx_storefinder_domain_model_location',
         'label' => 'name',
         'sortby' => 'sorting',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
-        'cruser_id' => 'cruser_id',
         'delete' => 'deleted',
-
+        'title' => $languageFile . 'tx_storefinder_domain_model_location',
         'transOrigPointerField' => 'l18n_parent',
         'transOrigDiffSourceField' => 'l18n_diffsource',
         'languageField' => 'sys_language_uid',
         'translationSource' => 'l10n_source',
-
-        'searchFields' => 'name, storeid, zipcode, city, address, country, notes',
         'enablecolumns' => [
             'disabled' => 'hidden',
             'starttime' => 'starttime',
             'endtime' => 'endtime',
             'fe_group' => 'fe_group',
         ],
-        'iconfile' => 'EXT:store_finder/Resources/Public/Icons/tx_storefinder_domain_model_location.gif',
+        'searchFields' => 'name, storeid, zipcode, city, address, country, notes',
+        'typeicon_classes' => [
+            'default' => 'store-finder-attribute',
+        ],
     ],
 
     'columns' => [
@@ -40,11 +37,9 @@ return [
             'config' => [
                 'type' => 'check',
                 'renderType' => 'checkboxToggle',
-                'default' => 1,
                 'items' => [
                     [
-                        0 => '',
-                        1 => '',
+                        'label' => '',
                         'invertStateDisplay' => true,
                     ],
                 ],
@@ -54,60 +49,53 @@ return [
             'exclude' => true,
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.starttime',
             'config' => [
-                'type' => 'input',
-                'renderType' => 'inputDateTime',
-                'eval' => 'datetime,int',
+                'type' => 'datetime',
                 'default' => 0,
-                'behaviour' => [
-                    'allowLanguageSynchronization' => true,
-                ],
             ],
+            'l10n_mode' => 'exclude',
+            'l10n_display' => 'defaultAsReadonly',
         ],
         'endtime' => [
             'exclude' => true,
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.endtime',
             'config' => [
-                'type' => 'input',
-                'renderType' => 'inputDateTime',
-                'eval' => 'datetime,int',
+                'type' => 'datetime',
                 'default' => 0,
                 'range' => [
                     'upper' => mktime(0, 0, 0, 1, 1, 2038),
                 ],
-                'behaviour' => [
-                    'allowLanguageSynchronization' => true,
-                ],
             ],
+            'l10n_mode' => 'exclude',
+            'l10n_display' => 'defaultAsReadonly',
         ],
         'fe_group' => [
             'exclude' => true,
-            'l10n_mode' => 'exclude',
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.fe_group',
             'config' => [
                 'type' => 'select',
                 'renderType' => 'selectMultipleSideBySide',
-                'size' => 7,
+                'size' => 5,
                 'maxitems' => 20,
                 'items' => [
                     [
-                        'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.hide_at_login',
-                        -1,
+                        'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.hide_at_login',
+                        'value' => -1,
                     ],
                     [
-                        'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.any_login',
-                        -2,
+                        'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.any_login',
+                        'value' => -2,
                     ],
                     [
-                        'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.usergroups',
-                        '--div--',
+                        'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.usergroups',
+                        'value' => '--div--',
                     ],
                 ],
                 'exclusiveKeys' => '-1,-2',
                 'foreign_table' => 'fe_groups',
-                'foreign_table_where' => 'ORDER BY fe_groups.title',
             ],
         ],
         'sys_language_uid' => [
+            'exclude' => true,
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
             'config' => [
                 'type' => 'language',
@@ -120,13 +108,12 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => [
-                    ['', 0],
+                    ['label' => '', 'value' => 0],
                 ],
-                'foreign_table' => 'tx_storefinder_domain_model_location',
-                // no sys_language_uid = -1 allowed explicitly!
+                'foreign_table' => 'tt_content',
                 'foreign_table_where' =>
-                    'AND tx_storefinder_domain_model_location.pid = ###CURRENT_PID### '
-                    . 'AND tx_storefinder_domain_model_location.sys_language_uid = 0',
+                    'AND tx_storefinder_domain_model_location.pid = ###CURRENT_PID###
+                     AND tx_storefinder_domain_model_location.sys_language_uid = 0',
                 'default' => 0,
             ],
         ],
@@ -149,7 +136,8 @@ return [
                 'type' => 'input',
                 'size' => 50,
                 'max' => 255,
-                'eval' => 'required,trim',
+                'eval' => 'trim',
+                'required' => true
             ],
         ],
 
@@ -194,7 +182,8 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 30,
-                'eval' => 'required,trim',
+                'eval' => 'trim',
+                'required' => true
             ],
         ],
 
@@ -203,7 +192,8 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 30,
-                'eval' => 'required,trim',
+                'eval' => 'trim',
+                'required' => true,
                 'behaviour' => [
                     'allowLanguageSynchronization' => true,
                 ],
@@ -217,7 +207,7 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => [
-                    ['', 0],
+                    ['label' => '', 'value' => 0],
                 ],
                 'foreign_table' => 'static_country_zones',
                 'foreign_table_where' => 'AND zn_country_uid = ###REC_FIELD_country###
@@ -238,7 +228,7 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => [
-                    ['', 0],
+                    ['label' => '', 'value' => 0],
                 ],
                 'foreign_table' => 'static_countries',
                 'itemsProcFunc' =>
@@ -332,7 +322,6 @@ return [
             'label' => $languageFile . 'tx_storefinder_domain_model_location.related',
             'config' => [
                 'type' => 'group',
-                'internal_type' => 'db',
                 'allowed' => 'tx_storefinder_domain_model_location',
                 'foreign_table' => 'tx_storefinder_domain_model_location',
                 'foreign_table_where' => 'AND tx_storefinder_domain_model_location.uid != ###THIS_UID###
@@ -482,8 +471,7 @@ return [
         'url' => [
             'label' => $languageFile . 'tx_storefinder_domain_model_location.url',
             'config' => [
-                'type' => 'input',
-                'renderType' => 'inputLink',
+                'type' => 'link',
                 'eval' => 'trim',
                 'fieldControl' => ['linkPopup' => ['options' => ['title' => 'Link']]],
                 'size' => 30,

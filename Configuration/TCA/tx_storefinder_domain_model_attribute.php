@@ -1,72 +1,33 @@
 <?php
 
-defined('TYPO3') or die();
-
-$overrideChildTca = [
-    'types' => [
-        '0' => [
-            'showitem' => '
-                --palette--;;imageoverlayPalette,
-                --palette--;;filePalette'
-        ],
-        \TYPO3\CMS\Core\Resource\File::FILETYPE_TEXT => [
-            'showitem' => '
-                --palette--;;imageoverlayPalette,
-                --palette--;;filePalette'
-        ],
-        \TYPO3\CMS\Core\Resource\File::FILETYPE_IMAGE => [
-            'showitem' => '
-                --palette--;;imageoverlayPalette,
-                --palette--;;filePalette'
-        ],
-        \TYPO3\CMS\Core\Resource\File::FILETYPE_AUDIO => [
-            'showitem' => '
-                --palette--;;audioOverlayPalette,
-                --palette--;;filePalette'
-        ],
-        \TYPO3\CMS\Core\Resource\File::FILETYPE_VIDEO => [
-            'showitem' => '
-                --palette--;;videoOverlayPalette,
-                --palette--;;filePalette'
-        ],
-        \TYPO3\CMS\Core\Resource\File::FILETYPE_APPLICATION => [
-            'showitem' => '
-                --palette--;;imageoverlayPalette,
-                --palette--;;filePalette'
-        ]
-    ],
-];
-
-$table = 'tx_storefinder_domain_model_attribute';
-$languageFile = 'LLL:EXT:store_finder/Resources/Private/Language/locallang_db.xlf' . ':';
+$languageFile = 'LLL:EXT:store_finder/Resources/Private/Language/locallang_db.xlf:';
 
 return [
     'ctrl' => [
-        'title' => $languageFile . 'tx_storefinder_domain_model_attribute',
         'label' => 'name',
         'label_alt' => 'icon',
         'label_alt_force' => '1',
         'sortby' => 'sorting',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
-        'cruser_id' => 'cruser_id',
         'delete' => 'deleted',
-
+        'title' => $languageFile . 'tx_storefinder_domain_model_attribute',
         'transOrigPointerField' => 'l18n_parent',
         'transOrigDiffSourceField' => 'l18n_diffsource',
         'languageField' => 'sys_language_uid',
         'translationSource' => 'l10n_source',
-
         'selicon_field' => 'icon',
-
         'enablecolumns' => [
             'disabled' => 'hidden',
         ],
-        'iconfile' => 'EXT:store_finder/Resources/Public/Icons/tx_storefinder_domain_model_attribute.gif',
+        'typeicon_classes' => [
+            'default' => 'store-finder-attribute',
+        ],
     ],
 
     'columns' => [
         'sys_language_uid' => [
+            'exclude' => true,
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
             'config' => [
                 'type' => 'language',
@@ -79,28 +40,26 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => [
-                    [
-                        '',
-                        0
-                    ]
+                    ['label' => '', 'value' => 0],
                 ],
-                'foreign_table' => $table,
+                'foreign_table' => 'tx_storefinder_domain_model_attribute',
                 // no sys_language_uid = -1 allowed explicitly!
                 'foreign_table_where' =>
-                    'AND ' . $table . '.pid = ###CURRENT_PID### AND ' . $table . '.sys_language_uid IN = 0',
+                    'AND tx_storefinder_domain_model_attribute.pid = ###CURRENT_PID###
+                     AND tx_storefinder_domain_model_attribute.sys_language_uid IN = 0',
                 'default' => 0
             ]
         ],
         'l10n_source' => [
             'config' => [
-                'type' => 'passthrough'
-            ]
+                'type' => 'passthrough',
+            ],
         ],
         'l18n_diffsource' => [
             'config' => [
                 'type' => 'passthrough',
-                'default' => ''
-            ]
+                'default' => '',
+            ],
         ],
 
         'name' => [
@@ -109,7 +68,8 @@ return [
                 'type' => 'input',
                 'size' => 50,
                 'max' => 255,
-                'eval' => 'required,trim',
+                'eval' => 'trim',
+                'required' => true
             ]
         ],
 
@@ -126,7 +86,11 @@ return [
 
     'types' => [
         '0' => [
-            'showitem' => 'sys_language_uid, l18n_parent, l18n_diffsource, name, icon'
+            'showitem' => '
+                --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,
+                    --palette--;;language,
+                    name, icon
+            '
         ]
     ],
     'palettes' => [

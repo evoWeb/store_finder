@@ -188,7 +188,6 @@
 							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.singleLocationId</label>
 							<config>
 								<type>group</type>
-								<internal_type>db</internal_type>
 								<allowed>tx_storefinder_domain_model_location</allowed>
 								<size>1</size>
 								<maxitems>1</maxitems>
@@ -202,7 +201,6 @@
 							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.resultPageId</label>
 							<config>
 								<type>group</type>
-								<internal_type>db</internal_type>
 								<allowed>pages</allowed>
 								<size>1</size>
 								<maxitems>1</maxitems>
