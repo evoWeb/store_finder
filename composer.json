@@ -31,7 +31,8 @@
 			"composer/package-versions-deprecated": true,
 			"php-http/discovery": true,
 			"typo3/class-alias-loader": true,
-			"typo3/cms-composer-installers": true
+			"typo3/cms-composer-installers": true,
+			"sbuerk/typo3-cmscomposerinstallers-testingframework-bridge": true
 		}
 	},
 	"require": {
@@ -46,6 +47,8 @@
 		"typo3/cms-frontend": "^12.2 || dev-main"
 	},
 	"require-dev": {
+		"phpunit/phpunit": "^9.6.1",
+		"sbuerk/typo3-cmscomposerinstallers-testingframework-bridge": "dev-main",
 		"typo3/testing-framework": "dev-main"
 	},
 	"extra": {

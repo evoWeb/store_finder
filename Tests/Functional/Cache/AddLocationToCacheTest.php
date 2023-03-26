@@ -48,7 +48,9 @@ class AddLocationToCacheTest extends FunctionalTestCase
 
     protected array $configurationToUseInTestInstance = [
         'EXTENSIONS' => [
-            'static_info_tables' => []
+            'static_info_tables' => [
+                'enableManager' => false,
+            ]
         ]
     ];
 
