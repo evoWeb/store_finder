@@ -33,26 +33,26 @@ class FrontendGoogleMap extends FrontendMap {
       center = new google.maps.LatLng(0, 0);
     }
 
-    let mapOptions = {
+    const mapOptions: google.maps.MapOptions = {
       zoom: this.mapConfiguration.zoom,
       center: center,
       disableDefaultUI: true, // a way to quickly hide all controls
       zoomControl: true,
+      styles: ([] as google.maps.MapTypeStyle[]),
       zoomControlOptions: {
-        style: google.maps.ZoomControlStyle.LARGE
+        position: google.maps.ControlPosition.RIGHT_BOTTOM,
       },
-      styles: ([] as Array<object>)
     };
 
     if (self.mapConfiguration.mapStyles) {
-        mapOptions.styles = self.mapConfiguration.mapStyles;
+      mapOptions.styles = self.mapConfiguration.mapStyles;
     }
-    
+
     this.map = new google.maps.Map($('#tx_storefinder_map')[0], mapOptions);
 
     if (this.mapConfiguration.afterSearch === 0 && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
-        let pos = {
+        const pos = {
           lat: position.coords.latitude,
           lng: position.coords.longitude
         };
@@ -67,17 +67,17 @@ class FrontendGoogleMap extends FrontendMap {
    */
   initializeLayer(this: FrontendGoogleMap) {
     if (this.mapConfiguration.apiV3Layers.indexOf('traffic') > -1) {
-      let trafficLayer = new google.maps.TrafficLayer();
+      const trafficLayer = new google.maps.TrafficLayer();
       trafficLayer.setMap(this.map);
     }
 
     if (this.mapConfiguration.apiV3Layers.indexOf('bicycling') > -1) {
-      let bicyclingLayer = new google.maps.BicyclingLayer();
+      const bicyclingLayer = new google.maps.BicyclingLayer();
       bicyclingLayer.setMap(this.map);
     }
 
     if (this.mapConfiguration.apiV3Layers.indexOf('kml') > -1) {
-      let kmlLayer = new google.maps.KmlLayer({url : this.mapConfiguration.kmlUrl});
+      const kmlLayer = new google.maps.KmlLayer({ url : this.mapConfiguration.kmlUrl });
       kmlLayer.setMap(this.map);
     }
   }
@@ -85,7 +85,7 @@ class FrontendGoogleMap extends FrontendMap {
   /**
    * Close previously open info window, renders new content and opens the window
    */
-  showInformation(this: FrontendGoogleMap, location: Location, marker: any) {
+  showInformation(this: FrontendGoogleMap, location: Location, marker: google.maps.Marker) {
     if (typeof this.mapConfiguration.renderSingleViewCallback === 'function') {
       this.mapConfiguration.renderSingleViewCallback(location, this.infoWindowTemplate);
     } else {
@@ -100,7 +100,7 @@ class FrontendGoogleMap extends FrontendMap {
    * Create marker and add to map
    */
   createMarker(location: Location, icon: string): google.maps.Marker {
-    let options = {
+    const options = {
         title: location.name,
         position: new google.maps.LatLng(location.lat, location.lng),
         icon: icon,
@@ -140,19 +140,18 @@ class FrontendGoogleMap extends FrontendMap {
    * Load google map script
    */
   loadScript() {
-    let self = this,
-      apiUrl = 'https://maps.googleapis.com/maps/api/js?v=3.exp',
+    let apiUrl = 'https://maps.googleapis.com/maps/api/js?v=3.exp',
       parameter = '&key=' + this.mapConfiguration.apiConsoleKey;
 
-    if (self.mapConfiguration.language !== '') {
-      parameter += '&language=' + self.mapConfiguration.language;
+    if (this.mapConfiguration.language !== '') {
+      parameter += '&language=' + this.mapConfiguration.language;
     }
 
-    if (self.mapConfiguration.hasOwnProperty('apiUrl')) {
-      apiUrl = self.mapConfiguration.apiUrl;
+    if (Object.prototype.hasOwnProperty.call(this.mapConfiguration, 'apiUrl')) {
+      apiUrl = this.mapConfiguration.apiUrl;
     }
 
-    let $jsDeferred = $.Deferred(),
+    const $jsDeferred = $.Deferred(),
       $jsFile = $('<script/>', {
         src: apiUrl + parameter,
         crossorigin: ''
@@ -162,7 +161,7 @@ class FrontendGoogleMap extends FrontendMap {
 
     $.when(
       $jsDeferred.promise()
-    ).done(function () {
+    ).done(() => {
       function wait(this: FrontendMap) {
         if (typeof google !== 'undefined') {
           this.postLoadScript();
@@ -170,8 +169,8 @@ class FrontendGoogleMap extends FrontendMap {
           window.requestAnimationFrame(wait.bind(this));
         }
       }
-      window.requestAnimationFrame(wait.bind(self));
-    }).fail(function () {
+      window.requestAnimationFrame(wait.bind(this));
+    }).fail(() => {
       console.log('Failed loading resources.');
     });
   }

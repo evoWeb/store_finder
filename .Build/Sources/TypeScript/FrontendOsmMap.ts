@@ -40,7 +40,7 @@ class FrontendOsmMap extends FrontendMap {
     L.tileLayer(
       'https://korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}', {
         maxZoom: 20,
-        attribution: 'Imagery from <a href="http://giscience.uni-hd.de/">GIScience Research Group @ University of Heidelberg</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        attribution: 'Imagery from <a href="https://www.geog.uni-heidelberg.de/gis/index_en.html">GIScience Research Group @ University of Heidelberg</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
       }
     ).addTo(this.map);
   }
@@ -49,18 +49,8 @@ class FrontendOsmMap extends FrontendMap {
    * Initialize information layer on map
    */
   initializeLayer(this: FrontendOsmMap) {
-    /*if (this.mapConfiguration.apiV3Layers.indexOf('traffic') > -1) {
-      let trafficLayer = new google.maps.TrafficLayer();
-      trafficLayer.setMap(this.map);
-    }
-
-    if (this.mapConfiguration.apiV3Layers.indexOf('bicycling') > -1) {
-      let bicyclingLayer = new google.maps.BicyclingLayer();
-      bicyclingLayer.setMap(this.map);
-    }*/
-
     if (this.mapConfiguration.apiV3Layers.indexOf('kml') > -1) {
-      let $jsDeferred = $.Deferred(),
+      const $jsDeferred = $.Deferred(),
         $jsFile = $('<script/>', {
           src: 'https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js',
           crossorigin: ''
@@ -68,11 +58,10 @@ class FrontendOsmMap extends FrontendMap {
 
       $jsDeferred.resolve($jsFile);
 
-      let self = this;
-      $.when($jsDeferred.promise()).done(function () {
-        let kmlLayer = omnivore.kml(self.mapConfiguration.kmlUrl);
-        kmlLayer.setMap(self.map);
-      }).fail(function () {
+      $.when($jsDeferred.promise()).done(() => {
+        const kmlLayer = omnivore.kml(this.mapConfiguration.kmlUrl);
+        kmlLayer.setMap(this.map);
+      }).fail(() => {
         console.log('Failed loading resources.');
       });
     }
@@ -81,7 +70,7 @@ class FrontendOsmMap extends FrontendMap {
   /**
    * Close previously open info window, renders new content and opens the window
    */
-  showInformation(this: FrontendOsmMap, location: Location, marker: any) {
+  showInformation(this: FrontendOsmMap, location: Location, marker: L.Marker) {
     if (typeof this.mapConfiguration.renderSingleViewCallback === 'function') {
       this.mapConfiguration.renderSingleViewCallback(location, this.infoWindowTemplate);
     } else {
@@ -99,9 +88,9 @@ class FrontendOsmMap extends FrontendMap {
    * Create marker and add to map
    */
   createMarker(location: Location, icon: string): L.Marker {
-    let options = {
+    const options = {
         title: location.name,
-        icon: new L.Icon({iconUrl: icon}),
+        icon: new L.Icon({ iconUrl: icon }),
       },
       marker = new L.Marker([location.lat, location.lng], options);
     marker.bindPopup('').addTo(this.map);
@@ -138,8 +127,7 @@ class FrontendOsmMap extends FrontendMap {
    * Load open street map leaflet script
    */
   loadScript() {
-    let self = this,
-      $cssDeferred = $.Deferred(),
+    const $cssDeferred = $.Deferred(),
       $cssFile = $('<link/>', {
         rel: 'stylesheet',
         type: 'text/css',
@@ -160,7 +148,7 @@ class FrontendOsmMap extends FrontendMap {
     $.when(
       $cssDeferred.promise(),
       $jsDeferred.promise()
-    ).done(function () {
+    ).done(() => {
       function wait(this: FrontendMap) {
         if (typeof L !== 'undefined') {
           this.postLoadScript();
@@ -168,8 +156,8 @@ class FrontendOsmMap extends FrontendMap {
           window.requestAnimationFrame(wait.bind(this));
         }
       }
-      window.requestAnimationFrame(wait.bind(self));
-    }).fail(function () {
+      window.requestAnimationFrame(wait.bind(this));
+    }).fail(() => {
       console.log('Failed loading resources.');
     });
   }

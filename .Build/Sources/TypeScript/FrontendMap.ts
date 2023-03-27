@@ -51,9 +51,13 @@ export default class FrontendMap {
     }
   }
 
-  initializeMap() {}
+  initializeMap() {
+    // do nothing.
+  }
 
-  initializeLayer() {}
+  initializeLayer() {
+    // do nothing.
+  }
 
   /**
    * Render content of the info window
@@ -62,7 +66,11 @@ export default class FrontendMap {
     return Mustache.render(this.infoWindowTemplate, location.information)
   }
 
-  createMarker(location: Location, icon: string) {}
+  /* eslint-disable */
+  createMarker(location: Location, icon: string) {
+    // do nothing.
+  }
+  /* eslint-enable */
 
   /**
    * Process single location
@@ -71,7 +79,7 @@ export default class FrontendMap {
     let icon = '';
     if (location.information.icon) {
       icon = location.information.icon;
-    } else if (this.mapConfiguration.hasOwnProperty('markerIcon')) {
+    } else if (Object.prototype.hasOwnProperty.call(this.mapConfiguration, 'markerIcon')) {
       icon = this.mapConfiguration.markerIcon;
     }
 
@@ -87,18 +95,29 @@ export default class FrontendMap {
     this.locations.map(this.processLocation.bind(this));
   }
 
-  initializeInfoWindow() {}
+  initializeInfoWindow() {
+    // do nothing.
+  }
 
-  closeInfoWindow() {}
+  closeInfoWindow() {
+    // do nothing.
+  }
 
-  openInfoWindow(this: FrontendMap, index: number) {}
+  /* eslint-disable */
+  openInfoWindow(this: FrontendMap, index: number) {
+    // do nothing.
+  }
+  /* eslint-enable */
 
   /**
    * Initialize list click events
    */
   initializeListEvents(this: FrontendMap) {
-    $(document).on('click', '.tx-storefinder .resultList > li', (event: Event, $field: JQuery): void => {
-      this.openInfoWindow($field.data('index'));
+    $(document).on('click', (event: Event) => {
+      if (!$(event.target).is('.tx-storefinder .resultList > li')) {
+        return;
+      }
+      this.openInfoWindow($(event.target).data('index'));
     });
   }
 
@@ -109,9 +128,12 @@ export default class FrontendMap {
     this.infoWindowTemplate = $('#templateInfoWindow').html();
     Mustache.parse(this.infoWindowTemplate);
 
-    $(document).on('click', '.tx-storefinder .infoWindow .close', (event: Event, $closeButton: JQuery): void => {
+    $(document).on('click', (event: Event) => {
+      if (!$(event.target).is('.tx-storefinder .infoWindow .close')) {
+        return;
+      }
       if (typeof this.mapConfiguration.renderSingleViewCallback === 'function') {
-        this.mapConfiguration.handleCloseButtonCallback($closeButton);
+        this.mapConfiguration.handleCloseButtonCallback($(event.target));
       } else {
         this.closeInfoWindow();
       }
@@ -130,6 +152,8 @@ export default class FrontendMap {
     this.initializeListEvents();
   }
 
-  loadScript() {}
+  loadScript() {
+    // do nothing.
+  }
 }
 

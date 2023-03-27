@@ -29,7 +29,7 @@ declare interface MapConfiguration {
   markerIcon: string,
   apiV3Layers: string,
   kmlUrl: string,
-  mapStyles?: Array<object>,
+  mapStyles?: google.maps.MapTypeStyle[],
 
   renderSingleViewCallback(location: object, template: string): void,
   handleCloseButtonCallback(button: object): void,
