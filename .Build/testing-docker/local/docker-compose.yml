@@ -1183,7 +1183,7 @@ services:
         fi
         mkdir -p ${CORE_ROOT}/.cache
         npm ci || exit 1
-        node_modules/grunt/bin/grunt stylelint;
+        node_modules/.bin/gulp stylelint;
       "
 
   lint_html:
@@ -1219,7 +1219,7 @@ services:
         fi
         mkdir -p ${CORE_ROOT}/.cache
         npm ci || exit 1
-        node_modules/grunt/bin/grunt eslint;
+        node_modules/.bin/gulp eslint;
       "
 
   list_exception_codes:

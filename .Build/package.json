@@ -44,9 +44,13 @@
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0",
 
-		"grunt": "^1.5.3",
-		"grunt-stylelint": "^0.18.0",
-		"grunt-eslint": "^24.0.0"
+		"gulp-eslint": "^6.0.0",
+		"@typescript-eslint/eslint-plugin": "^5.57.0",
+		"eslint-plugin-wc": "^1.4.0",
+		"eslint-plugin-lit": "^1.8.2",
+		"gulp-stylelint": "^13.0.0",
+		"stylelint-order": "^4.0.0",
+		"stylelint-scss": "^3.21.0"
 	},
   "babel": {
     "presets": [
