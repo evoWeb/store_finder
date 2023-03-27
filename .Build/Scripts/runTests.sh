@@ -83,7 +83,8 @@ cleanCacheFiles() {
         ../../../.cache \
         ../../../Build/.cache \
         ../../../Build/composer/.cache/ \
-        ../../../.php-cs-fixer.cache ; \
+        ../../../.php-cs-fixer.cache \
+        ../../../.Build/node_modules ; \
         echo "done"
 }
 
