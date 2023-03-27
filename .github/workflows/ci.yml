@@ -36,10 +36,10 @@ jobs:
         run: .Build/Scripts/runTests.sh -p ${{ matrix.php }} -s lintTypescript
 
       - name: Functional tests with sqlite
-        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -d sqlite -s functional Tests/Functional
+        run: .Build/Scripts/runTests.sh -p ${{ matrix.php }} -d sqlite -s functional Tests/Functional
 
       - name: Cleanup
-        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -s clean
+        run: .Build/Scripts/runTests.sh -p ${{ matrix.php }} -s clean
 
   xliff:
     runs-on: ubuntu-20.04
