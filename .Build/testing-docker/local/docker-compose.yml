@@ -1175,7 +1175,7 @@ services:
       - ${CORE_ROOT}:${CORE_ROOT}
     environment:
       HOME: "${CORE_ROOT}/.cache"
-    working_dir: ${CORE_ROOT}/Build
+    working_dir: ${CORE_ROOT}/.Build
     command: >
       /bin/sh -c "
         if [ ${SCRIPT_VERBOSE} -eq 1 ]; then
@@ -1211,7 +1211,7 @@ services:
       - ${CORE_ROOT}:${CORE_ROOT}
     environment:
       HOME: "${CORE_ROOT}/.cache"
-    working_dir: ${CORE_ROOT}/Build
+    working_dir: ${CORE_ROOT}/.Build
     command: >
       /bin/sh -c "
         if [ ${SCRIPT_VERBOSE} -eq 1 ]; then
