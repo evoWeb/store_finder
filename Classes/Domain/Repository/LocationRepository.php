@@ -176,12 +176,12 @@ class LocationRepository extends Repository
     protected function addCategoryQueryPart(Constraint $constraint, QueryBuilder $queryBuilder): QueryBuilder
     {
         if ($this->settings['categoryPriority'] == 'limitResultsToCategories') {
-            $constraint->setCategory(GeneralUtility::intExplode(',', $this->settings['categories'], 1));
+            $constraint->setCategory(GeneralUtility::intExplode(',', $this->settings['categories'], true));
         } elseif (
             $this->settings['categoryPriority'] == 'useSelectedCategoriesIfNoFilterSelected'
             && !count($constraint->getCategory())
         ) {
-            $constraint->setCategory(GeneralUtility::intExplode(',', $this->settings['categories'], 1));
+            $constraint->setCategory(GeneralUtility::intExplode(',', $this->settings['categories'], true));
         }
 
         $categories = $this->categoryRepository->findByParentRecursive($constraint->getCategory());
@@ -380,10 +380,10 @@ class LocationRepository extends Repository
         $query = $this->createQuery();
 
         $query->setOrderings(['latitude' => QueryInterface::ORDER_ASCENDING]);
-        /** @var Location $minLatitude south */
+        /** @var ?Location $minLatitude south */
         $minLatitude = $query->execute()->getFirst();
 
-        // only search for the other locations if first succeed or else we have no locations at all
+        // only search for the other locations if first succeeded otherwise we have no locations at all
         if ($minLatitude === null) {
             $maxLatitude = $minLongitude = $maxLongitude = null;
         } else {
@@ -408,7 +408,7 @@ class LocationRepository extends Repository
          * http://stackoverflow.com/questions/6048975
          *    /google-maps-v3-how-to-calculate-the-zoom-level-for-a-given-bounds
          */
-        if ($minLatitude !== null && $maxLatitude !== null) {
+        if ($minLatitude instanceof Location && $maxLatitude instanceof Location) {
             $location->setLatitude(($maxLatitude->getLatitude() + $minLatitude->getLatitude()) / 2);
             $latitudeFraction = (
                 $this->latRad($maxLatitude->getLatitude())

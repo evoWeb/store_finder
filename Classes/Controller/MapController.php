@@ -135,7 +135,7 @@ class MapController extends ActionController
                 $configuration->allowProperties('category');
                 $configuration->setTypeConverterOption(
                     PersistentObjectConverter::class,
-                    PersistentObjectConverter::CONFIGURATION_CREATION_ALLOWED,
+                    (string)PersistentObjectConverter::CONFIGURATION_CREATION_ALLOWED,
                     true
                 );
             }
@@ -169,6 +169,8 @@ class MapController extends ActionController
                     $value = $countryRepository->findByIsoCodeA2([$constraint['country']])->getFirst();
                 } elseif (strlen($constraint['country']) === 3) {
                     $value = $countryRepository->findByIsoCodeA3($constraint['country']);
+                } else {
+                    $value = false;
                 }
                 if ($value) {
                     $constraint['country'] = $value->getUid();
@@ -221,7 +223,7 @@ class MapController extends ActionController
     {
         if ($this->settings['location']) {
             $response = new ForwardResponse('show');
-        }  else {
+        } else {
             [$locations, $constraint] = $this->getLocationsByDefaultConstraints();
 
             $event = new MapGetLocationsByConstraintsEvent($this, $locations, $constraint);
@@ -283,6 +285,14 @@ class MapController extends ActionController
 
     protected function getLocationsByConstraints(Constraint $constraint): array
     {
+        if (($this->settings['disableLocationFetchLogic'] ?? false)) {
+            $locations = $this->locationRepository->getEmptyResult();
+            return  [
+                $locations,
+                $constraint
+            ];
+        }
+
         /** @var Constraint $constraint */
         $constraint = $this->geocodeService->geocodeAddress($constraint);
         $constraint = $this->addDefaultConstraint($constraint);
@@ -297,6 +307,14 @@ class MapController extends ActionController
         /** @var QueryResultInterface $locations */
         /** @var Constraint $constraint */
         $constraint = GeneralUtility::makeInstance(Constraint::class);
+
+        if (($this->settings['disableLocationFetchLogic'] ?? false)) {
+            $locations = $this->locationRepository->getEmptyResult();
+            return [
+                $locations,
+                $constraint
+            ];
+        }
 
         if ($this->settings['showBeforeSearch'] & 2 && is_array($this->settings['defaultConstraint'])) {
             $constraint = $this->addDefaultConstraint($constraint);
@@ -478,7 +496,7 @@ class MapController extends ActionController
             $center = $this->locationRepository->findOneByCenter();
         }
 
-        if ($center === null) {
+        if (!($center instanceof Location)) {
             $center = $this->locationRepository->findCenterByLatitudeAndLongitude();
         }
 
@@ -495,13 +513,13 @@ class MapController extends ActionController
      */
     public function setZoomLevel(Location $center, QueryResultInterface $locations): Location
     {
-        $radius = false;
+        $radius = 0;
         /** @var Location $location */
         foreach ($locations as $location) {
             $radius = max($radius, $location->getDistance());
         }
 
-        if ($radius === false) {
+        if ($radius === 0) {
             $radius = (int)$this->settings['defaultConstraint']['radius'];
         }
 
@@ -549,5 +567,10 @@ class MapController extends ActionController
                 ]
             );
         }
+    }
+
+    public function getSettings(): array
+    {
+        return $this->settings;
     }
 }
