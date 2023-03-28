@@ -1,10 +1,11 @@
-.. include:: ../Includes.txt
-
-
+.. include:: /Includes.rst.txt
+.. index::
+   Templating
 .. _templating:
 
+==========
 Templating
-----------
+==========
 
 
 Templates, partials and layouts
@@ -18,7 +19,8 @@ possible to configure the templates and partials path in the plugin.
 Example:
 ________
 
-::
+.. code-block:: typoscript
+   :caption: EXT:my_extension/Configuration/TypoScript/setup.typoscript
 
     plugin.tx_storefinder.view {
         templateRootPath =
@@ -45,7 +47,8 @@ Register Namespace:
 
 Add the xmlns to the html tag in the template
 
-::
+.. code-block:: html
+   :caption: EXT:my_extension/Resources/Private/Templates/Map/Map.html
 
     xmlns:sf="http://typo3.org/ns/Evoweb/StoreFinder/ViewHelpers"
 
@@ -63,7 +66,8 @@ on rendering time.
 Example viewhelper:
 ___________________
 
-::
+.. code-block:: html
+   :caption: EXT:my_extension/Resources/Private/Templates/Map/Map.html
 
     var mapConfiguration = {<sf:minify>active: true,
             <f:for each="{settings.mapConfiguration}" as="configuration" key="name" iteration="loop">{name}: '{configuration}',</f:for>
@@ -78,7 +82,8 @@ ___________________
 Example output:
 _______________
 
-::
+.. code-block:: html
+   :caption: EXT:my_extension/Resources/Private/Templates/Map/Map.html
 
     var mapConfiguration = {active:true,apiV3Layers:'',language:'de',center:{lat:50.1125089,lng:8.6521548},zoom:'11'}
 
@@ -99,7 +104,8 @@ in the plugin the binary value 4 stands for list.
 Example viewhelper:
 ___________________
 
-::
+.. code-block:: html
+   :caption: EXT:my_extension/Resources/Private/Templates/Map/Map.html
 
     <f:if condition="{sf:format.binaryAnd(base: 4, content: settings.showBeforeSearch)} == 4">...</f:if>
 
@@ -117,7 +123,8 @@ allowedCountries accepts a comma seperated list of ISO2 country codes.
 Example viewhelper:
 ___________________
 
-::
+.. code-block:: html
+   :caption: EXT:my_extension/Resources/Private/Templates/Map/Map.html
 
     <sf:form.selectCountries property="country" id="sfrCountry" optionValueField="isoCodeA3" allowedCountries="{0: 'DE', 1: 'AT'}" />
 

@@ -1,19 +1,23 @@
-.. include:: ../Includes.txt
-
+.. include:: /Includes.rst.txt
+.. index::
+   Import Command
 .. _importCommand:
 
+==============
 Import command
---------------
+==============
 
 By using the import command its possible to import locations from a a spreadsheet
 into a storage folder. If given references to attributes, categories and files are
 created.
+
 
 Arguments
 =========
 
 * fileName
   StorageId (most likely 1) and path and filename of excel file that should be imported relatively to the storage (fileadmin) Eg: 1:/user_upload/locations.xlsx
+
 
 Options
 =======
@@ -29,6 +33,7 @@ Options
 * --categoryMap -t
   Json encoded attribute map array. Defaults to {"L":{"cat1":1}}
 
+
 Transformation
 ==============
 
@@ -42,6 +47,7 @@ Transformation
   * media is a file path and name relative to file storage like 1:/user_upload/video.mp4 and is referenced by sys_file_reference
   * icon is a file path and name relative to file storage like 1:/user_upload/icon.jpg and is referenced by sys_file_reference
 * references to attributes, categories and files are removed if not present any more
+
 
 Importing constraints
 =====================
@@ -57,10 +63,13 @@ Importing constraints
   {..."H":"image","I":"image","J":"image"...}
   The result is, that the locations has three images referenced
 
+
 Examples of import command calls
 ================================
 
-::
+.. code-block:: bash
+   :caption: On command line
+
     vendor/bin/typo3 storefinder:import --storagePid=202 --clearStorageFolder=1 filename
 
     vendor/bin/typo3 storefinder:import --columnMap="{\"A\":\"import_id\",\"B\":\"name\",\"D\":\"city\"}" "1:/user_upload/ExportExcel.xlsx"

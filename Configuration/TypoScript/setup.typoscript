@@ -73,6 +73,8 @@ plugin.tx_storefinder.settings {
     city = "Evoweb.StoreFinder:Required"
     country = "Evoweb.StoreFinder:Required"
   }
+
+  disableLocationFetchLogic = 0
 }
 
 plugin.tx_storefinder_show.settings {

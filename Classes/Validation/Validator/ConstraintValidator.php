@@ -16,6 +16,7 @@ namespace Evoweb\StoreFinder\Validation\Validator;
  */
 
 use Evoweb\StoreFinder\Domain\Model\Constraint;
+use TYPO3\CMS\Extbase\Error\Result;
 use TYPO3\CMS\Extbase\Validation\Validator\GenericObjectValidator;
 use TYPO3\CMS\Extbase\Validation\Validator\ObjectValidatorInterface;
 
@@ -66,7 +67,7 @@ class ConstraintValidator extends GenericObjectValidator
      */
     protected function checkProperty($value, $validators, $propertyName)
     {
-        /** @var \TYPO3\CMS\Extbase\Error\Result $result */
+        /** @var Result $result */
         $result = null;
         foreach ($validators as $validator) {
             if ($validator instanceof SettableInterface) {
