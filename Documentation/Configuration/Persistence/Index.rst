@@ -1,9 +1,9 @@
 .. include:: /Includes.rst.txt
-.. index:: Configuration
-.. _persistance:
+
+.. _persistence:
 
 ===========
-Persistance
+Persistence
 ===========
 
 .. _persistence-storagePid:
@@ -15,7 +15,7 @@ storagePid
    storagePid
 
 :aspect:`Data type`
-   List of :ref:`storage folder pids <tsref:data-type-integer>`
+   List of :ref:`storage folder pids <t3tsref:data-type-integer>`
 
 :aspect:`Description`
    Comma-separated list of storage page ids. In content elements please use the `Record Storage Page` field of the plugin.

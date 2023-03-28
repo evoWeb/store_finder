@@ -1,6 +1,5 @@
 .. include:: /Includes.rst.txt
-.. index::
-   Administration
+
 .. _administration:
 
 ==============
@@ -25,11 +24,10 @@ Configuration:
 
 .. figure:: Images/admin_config.png
    :alt: Search form
-   :align: left
 
 
-Migrate from locator:
-=====================
+Migrate from locator
+====================
 
 The extension supports an update script that is able to migrate locator records
 to the own tables. If the update scripts gets executed the start migration button

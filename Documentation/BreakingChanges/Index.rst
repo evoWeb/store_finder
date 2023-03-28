@@ -1,6 +1,5 @@
 .. include:: /Includes.rst.txt
-.. index::
-   Breaking changes
+
 .. _breaking-changes:
 
 ================
@@ -10,21 +9,23 @@ Breaking Changes
 29. August 2022
 ===============
 
-The import command is refactores and the arguments and options are cleaned up. Please read the :ref:`docs <importCommand>` for the changes
+The import command is refactors and the arguments and options are cleaned up. Please read the :ref:`docs <importCommand>` for the changes
 
 
 17. February 2023
 =================
+
 Remove allowed on standard page
-_______________________________
+-------------------------------
 Records of attributes and locations are not allowed on standard pages anymore.
 
 
 
 15. February 2021
 =================
+
 Rename property
-_______________
+---------------
 Rename content to contentElement in location model
 
 
@@ -32,7 +33,7 @@ Rename content to contentElement in location model
 ============
 
 Refactor signal slots to PSR-14 events
-______________________________________
+--------------------------------------
 All slots are replaced with events
 Evoweb\StoreFinder\Controller\MapController mapActionWithConstraint with MapGetLocationsByConstraintsEvent
 
@@ -50,8 +51,8 @@ Change geocoding
 Change to use geocoder-php/geocoder for geocoding locations. By this a hole spectrum of `providers/geocoders <https://github.com/geocoder-php/Geocoder#world>`_
 are available now
 
-Migration steps:
-________________
+Migration steps
+---------------
 Please check the extension configuration whether the api key assignment still works
 
 
@@ -108,8 +109,8 @@ Example:
 As of the location model does not escapeJsonString any properties anymore. With this getNameRaw and
 getCityRaw are dropped.
 
-Migration steps:
-----------------
+Migration steps
+---------------
 Check for {location.nameRaw} and {location.cityRaw} and replace it with
 {location.nameRaw -> f:format.json()} and {location.cityRaw -> f:format.json()}
 

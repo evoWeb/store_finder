@@ -1,4 +1,5 @@
 .. include:: /Includes.rst.txt
+
 .. _configuration:
 
 =============
@@ -12,7 +13,7 @@ Configuration
 
    Settings/Index
    View/Index
-   Persistance/Index
+   Persistence/Index
    Validation/Index
    Geocoding/Index
    EventListener/Index

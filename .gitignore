@@ -1,8 +1,10 @@
-.Build/
 .cache/
 .idea/
+Build/
 bin/
+Documentation-GENERATED-temp/
 typo3temp/
 var/
+public/
 vendor/
 composer.lock

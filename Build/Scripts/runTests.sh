@@ -39,8 +39,6 @@ setUpDockerComposeDotEnv() {
         echo "DOCKER_SELENIUM_IMAGE=${DOCKER_SELENIUM_IMAGE}"
         echo "IS_CORE_CI=${IS_CORE_CI}"
         echo "PHPSTAN_CONFIG_FILE=${PHPSTAN_CONFIG_FILE}"
-        echo "PACKAGE=${PACKAGE}"
-        echo "COMPOSER_PARAMETER=${COMPOSER_PARAMETER}"
     } > .env
 }
 
@@ -72,7 +70,16 @@ cleanBuildFiles() {
     # > builds
     echo -n "Clean builds ... " ; rm -rf \
         ../../../Build/JavaScript \
-        ../../../Build/node_modules \
+        ../../../Build/node_modules ; \
+        echo "done"
+
+    echo -n "Clean composer install files ... " ; rm -rf \
+        ../../../bin/ \
+        ../../../Build/phpunit \
+        ../../../Build/testing-docker/local/.env \
+        ../../../public/ \
+        ../../../typo3temp/ \
+        ../../../vendor/ \
         ../../../composer.lock ; \
         echo "done"
 }
@@ -83,8 +90,7 @@ cleanCacheFiles() {
         ../../../.cache \
         ../../../Build/.cache \
         ../../../Build/composer/.cache/ \
-        ../../../.php-cs-fixer.cache \
-        ../../../.Build/node_modules ; \
+        ../../../.php-cs-fixer.cache ; \
         echo "done"
 }
 
@@ -97,10 +103,7 @@ cleanTestFiles() {
         ../../../Build/composer/public/typo3 \
         ../../../Build/composer/public/typo3conf/ext \
         ../../../Build/composer/var/ \
-        ../../../Build/composer/vendor/ \
-        ../../../.Build/Web/ \
-        ../../../bin/ \
-        ../../../vendor/ ; \
+        ../../../Build/composer/vendor/ ; \
        echo "done"
 
     # > test related
@@ -108,10 +111,7 @@ cleanTestFiles() {
         ../../../Build/phpunit/FunctionalTests-Job-*.xml \
         ../../../typo3/sysext/core/Tests/AcceptanceTests-Job-* \
         ../../../typo3/sysext/core/Tests/Acceptance/Support/_generated \
-        ../../../typo3temp/var/tests/ \
-        ../../../.Build/testing-docker/local/.env \
-        ../../../typo3temp/ \
-        ../../../var/ ; \
+        ../../../typo3temp/var/tests/ ; \
         echo "done"
 }
 
@@ -872,11 +872,9 @@ case ${TEST_SUITE} in
         docker images typo3/core-testing-* --filter "dangling=true" --format "{{.ID}}" | xargs -I {} docker rmi {}
         echo ""
         ;;
-    composerInstallPackage)
+    buildDocumentation)
         setUpDockerComposeDotEnv
-        docker-compose run composer_require_package
-        SUITE_EXIT_CODE=$?
-        docker-compose down
+        docker-compose run t3docmake
         ;;
     *)
         echo "Invalid -s option argument ${TEST_SUITE}" >&2

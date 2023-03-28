@@ -1,6 +1,5 @@
 .. include:: /Includes.rst.txt
-.. index::
-   Templating
+
 .. _templating:
 
 ==========
@@ -64,7 +63,7 @@ on rendering time.
 
 
 Example viewhelper:
-___________________
+-------------------
 
 .. code-block:: html
    :caption: EXT:my_extension/Resources/Private/Templates/Map/Map.html
@@ -80,7 +79,7 @@ ___________________
 
 
 Example output:
-_______________
+---------------
 
 .. code-block:: html
    :caption: EXT:my_extension/Resources/Private/Templates/Map/Map.html
@@ -102,7 +101,7 @@ in the plugin the binary value 4 stands for list.
 
 
 Example viewhelper:
-___________________
+-------------------
 
 .. code-block:: html
    :caption: EXT:my_extension/Resources/Private/Templates/Map/Map.html
@@ -110,8 +109,8 @@ ___________________
     <f:if condition="{sf:format.binaryAnd(base: 4, content: settings.showBeforeSearch)} == 4">...</f:if>
 
 
-form.selectCounrtries
-=====================
+form.selectCountries
+====================
 
 The countries select viewhelper fetches the countries from
 static_info_tables and renders each country as option. All attributes from
@@ -121,7 +120,7 @@ allowedCountries accepts a comma seperated list of ISO2 country codes.
 
 
 Example viewhelper:
-___________________
+-------------------
 
 .. code-block:: html
    :caption: EXT:my_extension/Resources/Private/Templates/Map/Map.html

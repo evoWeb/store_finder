@@ -1,5 +1,5 @@
 .. include:: /Includes.rst.txt
-.. index:: Configuration
+
 .. _settings:
 
 ========
@@ -18,7 +18,7 @@ showBeforeSearch
          showBeforeSearch
 
 :aspect:`Data type`
-         :ref:`integer <tsref:data-type-integer>`
+         :ref:`integer <t3tsref:data-type-integer>`
 
 :aspect:`Description`
          Defines what should get displayed before the search was triggered
@@ -39,7 +39,7 @@ showAfterSearch
          showBeforeSearch
 
 :aspect:`Data type`
-         :ref:`integer <tsref:data-type-integer>`
+         :ref:`integer <t3tsref:data-type-integer>`
 
 :aspect:`Description`
          Defines what should get displayed after the search was triggered

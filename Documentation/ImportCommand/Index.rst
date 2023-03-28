@@ -1,6 +1,5 @@
 .. include:: /Includes.rst.txt
-.. index::
-   Import Command
+
 .. _importCommand:
 
 ==============

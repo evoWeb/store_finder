@@ -1,5 +1,5 @@
 .. include:: /Includes.rst.txt
-.. index:: Configuration
+
 .. _validation:
 
 ==========
@@ -125,7 +125,7 @@ RequiredValidator
    RequiredValidator
 
 :aspect:`Data type`
-   :ref:`string <tsref:data-type-string>`
+   :ref:`string <t3tsref:data-type-string>`
 
 :aspect:`Description`
    This validator serves two purpose. First of check if the field contains

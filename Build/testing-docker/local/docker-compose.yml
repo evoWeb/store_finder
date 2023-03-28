@@ -734,6 +734,7 @@ services:
           set -x
         fi
         composer install --no-progress --no-interaction;
+        ln -s ../vendor/typo3/testing-framework/Resources/Core/Build/ Build/phpunit;
       "
 
   composer_install_max:
@@ -860,7 +861,7 @@ services:
           echo \"Running chunk ${THISCHUNK}\"
           COMMAND=\"vendor/phpunit/phpunit/phpunit -c Build/phpunit/FunctionalTests-Job-${THISCHUNK}.xml ${EXTRA_TEST_OPTIONS} ${TEST_FILE}\"
         else
-          COMMAND=\"vendor/phpunit/phpunit/phpunit -c vendor/typo3/testing-framework/Resources/Core/Build/FunctionalTests.xml ${EXTRA_TEST_OPTIONS} ${TEST_FILE}\"
+          COMMAND=\"vendor/phpunit/phpunit/phpunit -c Build/phpunit/FunctionalTests.xml ${EXTRA_TEST_OPTIONS} ${TEST_FILE}\"
         fi
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
           XDEBUG_MODE=\"off\" $${COMMAND};
@@ -947,7 +948,7 @@ services:
           echo \"Running chunk ${THISCHUNK}\"
           COMMAND=\"vendor/phpunit/phpunit/phpunit -c Build/phpunit/FunctionalTests-Job-${THISCHUNK}.xml ${EXTRA_TEST_OPTIONS} ${TEST_FILE}\"
         else
-          COMMAND=\"vendor/phpunit/phpunit/phpunit -c vendor/typo3/testing-framework/Resources/Core/Build/FunctionalTests.xml ${EXTRA_TEST_OPTIONS} ${TEST_FILE}\"
+          COMMAND=\"vendor/phpunit/phpunit/phpunit -c Build/phpunit/FunctionalTests.xml ${EXTRA_TEST_OPTIONS} ${TEST_FILE}\"
         fi
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
           XDEBUG_MODE=\"off\" $${COMMAND};
@@ -1034,7 +1035,7 @@ services:
           echo \"Running chunk ${THISCHUNK}\"
           COMMAND=\"vendor/phpunit/phpunit/phpunit -c Build/phpunit/FunctionalTests-Job-${THISCHUNK}.xml ${EXTRA_TEST_OPTIONS} --exclude-group not-postgres ${TEST_FILE}\"
         else
-          COMMAND=\"vendor/phpunit/phpunit/phpunit -c vendor/typo3/testing-framework/Resources/Core/Build/FunctionalTests.xml ${EXTRA_TEST_OPTIONS} --exclude-group not-postgres ${TEST_FILE}\"
+          COMMAND=\"vendor/phpunit/phpunit/phpunit -c Build/phpunit/FunctionalTests.xml ${EXTRA_TEST_OPTIONS} --exclude-group not-postgres ${TEST_FILE}\"
         fi
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
           XDEBUG_MODE=\"off\" $${COMMAND};
@@ -1111,7 +1112,7 @@ services:
           echo \"Running chunk ${THISCHUNK}\"
           COMMAND=\"vendor/phpunit/phpunit/phpunit -c Build/phpunit/FunctionalTests-Job-${THISCHUNK}.xml ${EXTRA_TEST_OPTIONS} --exclude-group not-sqlite ${TEST_FILE}\"
         else
-          COMMAND=\"vendor/phpunit/phpunit/phpunit -c vendor/typo3/testing-framework/Resources/Core/Build/FunctionalTests.xml ${EXTRA_TEST_OPTIONS} --exclude-group not-sqlite ${TEST_FILE}\"
+          COMMAND=\"vendor/phpunit/phpunit/phpunit -c Build/phpunit/FunctionalTests.xml ${EXTRA_TEST_OPTIONS} --exclude-group not-sqlite ${TEST_FILE}\"
         fi
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
           XDEBUG_MODE=\"off\" $${COMMAND};
@@ -1175,7 +1176,7 @@ services:
       - ${CORE_ROOT}:${CORE_ROOT}
     environment:
       HOME: "${CORE_ROOT}/.cache"
-    working_dir: ${CORE_ROOT}/.Build
+    working_dir: ${CORE_ROOT}/Build
     command: >
       /bin/sh -c "
         if [ ${SCRIPT_VERBOSE} -eq 1 ]; then
@@ -1183,7 +1184,7 @@ services:
         fi
         mkdir -p ${CORE_ROOT}/.cache
         npm ci || exit 1
-        node_modules/.bin/gulp stylelint;
+        node_modules/grunt/bin/grunt stylelint;
       "
 
   lint_html:
@@ -1211,7 +1212,7 @@ services:
       - ${CORE_ROOT}:${CORE_ROOT}
     environment:
       HOME: "${CORE_ROOT}/.cache"
-    working_dir: ${CORE_ROOT}/.Build
+    working_dir: ${CORE_ROOT}/Build
     command: >
       /bin/sh -c "
         if [ ${SCRIPT_VERBOSE} -eq 1 ]; then
@@ -1219,7 +1220,7 @@ services:
         fi
         mkdir -p ${CORE_ROOT}/.cache
         npm ci || exit 1
-        node_modules/.bin/gulp eslint;
+        node_modules/grunt/bin/grunt eslint;
       "
 
   list_exception_codes:
@@ -1284,12 +1285,12 @@ services:
         php -v | grep '^PHP'
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
           XDEBUG_MODE=\"off\" \
-          vendor/phpunit/phpunit/phpunit -c vendor/typo3/testing-framework/Resources/Core/Build/UnitTests.xml ${EXTRA_TEST_OPTIONS} ${TEST_FILE};
+          vendor/phpunit/phpunit/phpunit -c Build/phpunit/UnitTests.xml ${EXTRA_TEST_OPTIONS} ${TEST_FILE};
         else
           XDEBUG_MODE=\"debug,develop\" \
           XDEBUG_TRIGGER=\"foo\" \
           XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=host.docker.internal\" \
-          vendor/phpunit/phpunit/phpunit -c vendor/typo3/testing-framework/Resources/Core/Build/UnitTests.xml ${EXTRA_TEST_OPTIONS} ${TEST_FILE};
+          vendor/phpunit/phpunit/phpunit -c Build/phpunit/UnitTests.xml ${EXTRA_TEST_OPTIONS} ${TEST_FILE};
         fi
       "
 
@@ -1353,27 +1354,24 @@ services:
         php -v | grep '^PHP'
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
           XDEBUG_MODE=\"off\" \
-          vendor/phpunit/phpunit/phpunit -c vendor/typo3/testing-framework/Resources/Core/Build/UnitTests.xml --order-by=random ${EXTRA_TEST_OPTIONS} ${PHPUNIT_RANDOM} ${TEST_FILE};
+          vendor/phpunit/phpunit/phpunit -c Build/phpunit/UnitTests.xml --order-by=random ${EXTRA_TEST_OPTIONS} ${PHPUNIT_RANDOM} ${TEST_FILE};
         else
           XDEBUG_MODE=\"debug,develop\" \
           XDEBUG_TRIGGER=\"foo\" \
           XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=host.docker.internal\" \
-          vendor/phpunit/phpunit/phpunit -c vendor/typo3/testing-framework/Resources/Core/Build/UnitTests.xml --order-by=random ${EXTRA_TEST_OPTIONS} ${PHPUNIT_RANDOM} ${TEST_FILE};
+          vendor/phpunit/phpunit/phpunit -c Build/phpunit/UnitTests.xml --order-by=random ${EXTRA_TEST_OPTIONS} ${PHPUNIT_RANDOM} ${TEST_FILE};
         fi
       "
 
-  composer_require_package:
-    image: typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
-    user: "${HOST_UID}"
+  t3docmake:
+    image: ghcr.io/t3docs/render-documentation:v3.0.dev30
     volumes:
-      - ${CORE_ROOT}:${CORE_ROOT}
-    working_dir: ${CORE_ROOT}
-    environment:
-      COMPOSER_CACHE_DIR: ".Build/.cache/composer"
-    command: >
+      - ../../../:/PROJECT:ro
+      - ../../../Documentation-GENERATED-temp:/RESULT
+    entrypoint: >
       /bin/sh -c "
         if [ ${SCRIPT_VERBOSE} -eq 1 ]; then
           set -x
         fi
-        composer require -n -q ${COMPOSER_PARAMETER} ${PACKAGE};
+        /ALL/Menu/mainmenu.sh makehtml;
       "

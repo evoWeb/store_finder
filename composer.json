@@ -22,7 +22,6 @@
 	},
 	"config": {
 		"bin-dir": "bin",
-		"vendor-dir": "vendor",
 		"platform": {
 			"php": "8.1.1"
 		},
@@ -54,15 +53,15 @@
 	},
 	"extra": {
 		"typo3/cms": {
-			"web-dir": ".Build/Web",
 			"extension-key": "store_finder"
 		}
 	},
 	"scripts": {
 		"prepare-release": [
-			"rm -rf .Build",
 			"rm -rf .github",
+			"rm -rf Build",
 			"rm -rf Tests",
+			"rm .gitattributes",
 			"rm .gitignore",
 			"sed -i \"s/version' => '.*'/version' => '$(echo ${GITHUB_REF} | cut -d / -f 3)'/\" ext_emconf.php\n"
 		]

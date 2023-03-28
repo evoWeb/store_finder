@@ -1,6 +1,5 @@
 .. include:: /Includes.rst.txt
-.. index::
-   Introduction
+
 .. _introduction:
 
 ============
@@ -23,7 +22,6 @@ Search form:
 .. figure:: Images/introduction_search.png
    :alt: Search form
    :width: 711px
-   :align: left
 
 
 Result map and list:
@@ -32,7 +30,6 @@ Result map and list:
 .. figure:: Images/introduction_result.png
    :alt: Result map and list
    :width: 711px
-   :align: left
 
 
 Single points of interest
