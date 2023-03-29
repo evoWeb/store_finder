@@ -734,7 +734,9 @@ services:
           set -x
         fi
         composer install --no-progress --no-interaction;
+        echo "Create symlink to Build/phpunit";
         ln -s ../vendor/typo3/testing-framework/Resources/Core/Build/ Build/phpunit;
+        ls -la Build;
       "
 
   composer_install_max:
