@@ -736,7 +736,6 @@ services:
         composer install --no-progress --no-interaction;
         echo "Create symlink to Build/phpunit";
         ln -s ../vendor/typo3/testing-framework/Resources/Core/Build/ Build/phpunit;
-        ls -la Build;
       "
 
   composer_install_max:
@@ -755,6 +754,8 @@ services:
         composer config --unset platform.php;
         composer update --no-progress --no-interaction;
         composer dumpautoload;
+        echo "Create symlink to Build/phpunit";
+        ln -s ../vendor/typo3/testing-framework/Resources/Core/Build/ Build/phpunit;
       "
 
   composer_install_min:
@@ -773,6 +774,8 @@ services:
         composer config platform.php ${PHP_VERSION}.0;
         composer update --prefer-lowest --no-progress --no-interaction;
         composer dumpautoload;
+        echo "Create symlink to Build/phpunit";
+        ln -s ../vendor/typo3/testing-framework/Resources/Core/Build/ Build/phpunit;
       "
 
   composer_test_distribution:
