@@ -734,7 +734,6 @@ services:
           set -x
         fi
         composer install --no-progress --no-interaction;
-        composer createSymlink;
       "
 
   composer_install_max:
@@ -753,7 +752,6 @@ services:
         composer config --unset platform.php;
         composer update --no-progress --no-interaction;
         composer dumpautoload;
-        composer createSymlink;
       "
 
   composer_install_min:
@@ -772,7 +770,6 @@ services:
         composer config platform.php ${PHP_VERSION}.0;
         composer update --prefer-lowest --no-progress --no-interaction;
         composer dumpautoload;
-        composer createSymlink;
       "
 
   composer_test_distribution:
