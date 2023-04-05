@@ -12,6 +12,15 @@ call_user_func(function () {
         ];
     }
 
+    if (
+        !isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['store_finder_middleware_cache'])
+        || !is_array($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['store_finder_middleware_cache'])
+    ) {
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['store_finder_middleware_cache'] = [
+            'groups' => ['system'],
+        ];
+    }
+
     /** @var \TYPO3\CMS\Core\Imaging\IconRegistry $iconRegistry */
     $iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class);
     $iconRegistry->registerIcon(
@@ -24,6 +33,10 @@ call_user_func(function () {
 
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
         '@import \'EXT:store_finder/Configuration/TSconfig/NewContentElementWizard.typoscript\''
+    );
+
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
+        '@import \'EXT:store_finder/Configuration/TSconfig/TCEMAIN.tsconfig\''
     );
 
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addUserTSConfig('

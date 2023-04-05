@@ -33,3 +33,12 @@ services:
 
   SJBR\StaticInfoTables\Domain\Repository\TerritoryRepository:
     public: true
+
+  cache.store_finder_middleware_cache:
+    class: TYPO3\CMS\Core\Cache\Frontend\FrontendInterface
+    factory: ['@TYPO3\CMS\Core\Cache\CacheManager', 'getCache']
+    arguments: ['store_finder_middleware_cache']
+
+  Evoweb\StoreFinder\Cache\MiddlewareCache:
+    arguments:
+      $frontendInterface: '@cache.store_finder_middleware_cache'

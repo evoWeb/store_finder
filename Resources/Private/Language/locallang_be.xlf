@@ -288,6 +288,9 @@
 			<trans-unit id="pi_flexform.categories">
 				<source>Categories</source>
 			</trans-unit>
+			<trans-unit id="pi_flexform.activeCategories">
+				<source>Active (preselected) categories</source>
+			</trans-unit>
 			<trans-unit id="pi_flexform.categoryPriority">
 				<source>Category used for</source>
 			</trans-unit>
