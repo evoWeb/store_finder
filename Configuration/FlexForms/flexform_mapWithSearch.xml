@@ -159,7 +159,22 @@
 						</TCEforms>
 					</settings.categories>
 
-					<settings.categoryPriority>
+                    <settings.activeCategories>
+                        <TCEforms>
+                            <label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.activeCategories</label>
+                            <config>
+                                <type>select</type>
+                                <renderType>selectMultipleSideBySide</renderType>
+                                <foreign_table>sys_categories</foreign_table>
+                                <foreign_table_where>AND {#sys_category}.{#children} = 0</foreign_table_where>
+                                <size>3</size>
+                                <maxitems>50</maxitems>
+                                <minitems>0</minitems>
+                            </config>
+                        </TCEforms>
+                    </settings.activeCategories>
+
+                    <settings.categoryPriority>
 						<TCEforms>
 							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.categoryPriority</label>
 							<config>
