@@ -1,7 +1,6 @@
 'use strict';
 
 import gulp from 'gulp';
-import log from 'gulplog';
 import path from 'path';
 
 import browserify from 'browserify';
@@ -49,7 +48,7 @@ gulp.task('typescript-gm', () => {
 		.pipe(gulp.dest(path.join(paths.dest, tasks.typescript.dest)))
 		// Add transformation tasks to the pipeline here.
 		.pipe(terser())
-		.on('error', log.error)
+		.on('error', console.error.bind(console))
 		.pipe(rename({ extname: '.min.js' }))
 		.pipe(sourcemaps.write('./', {
 			mapFile: function(mapFilePath) {
@@ -76,7 +75,7 @@ gulp.task('typescript-osm', () => {
 		.pipe(gulp.dest(path.join(paths.dest, tasks.typescript.dest)))
 		// Add transformation tasks to the pipeline here.
 		.pipe(terser())
-		.on('error', log.error)
+		.on('error', console.error.bind(console))
 		.pipe(rename({ extname: '.min.js' }))
 		.pipe(sourcemaps.write('./', {
 			mapFile: function(mapFilePath) {
@@ -103,9 +102,7 @@ gulp.task('scss', () => {
 	return gulp.src(path.join(paths.src, tasks.scss.src))
 		.pipe(sourcemaps.init())
 		.pipe(
-			sass({
-				includePaths: require('node-normalize-scss').includePaths
-			}).on('error', sass.logError)
+			sass().on('error', console.error.bind(console))
 		)
 		.pipe(postcss([autoprefixer()]))
 		.pipe(sourcemaps.write('./'))
