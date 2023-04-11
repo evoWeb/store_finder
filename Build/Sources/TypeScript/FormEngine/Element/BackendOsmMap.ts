@@ -9,7 +9,7 @@
  * LICENSE.txt file that was distributed with this source code.
  */
 
-/// <reference types="../types/index"/>
+/// <reference types="../../../types/index"/>
 
 import * as $ from 'jquery';
 /* eslint-disable */
@@ -17,7 +17,7 @@ import * as $ from 'jquery';
 import * as L from 'TYPO3/CMS/StoreFinder/Vendor/Leaflet/leaflet';
 /* eslint-enable */
 
-class BackendOsmMap {
+export default class BackendOsmMap {
   private map: L.Map;
   private marker: L.Marker;
   private mapConfiguration: BackendConfiguration = {
@@ -89,5 +89,3 @@ class BackendOsmMap {
     $longitudeField.val(coordinates.lng).trigger('change');
   }
 }
-
-export = BackendOsmMap;
