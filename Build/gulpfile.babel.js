@@ -17,9 +17,6 @@ import postcss from 'gulp-postcss';
 import autoprefixer from 'autoprefixer';
 import sass from 'gulp-sass';
 
-import stylelint from 'gulp-stylelint';
-import eslint from 'gulp-eslint';
-
 const paths = {
 	src: './Sources/',
 	dest: '../Resources/Public/'
@@ -116,21 +113,3 @@ gulp.task('scss', () => {
 });
 
 gulp.task('build', gulp.series('typescript', 'scss'));
-
-gulp.task('eslint', () => {
-  return gulp
-    .src(['Sources/TypeScript/*.ts'])
-    .pipe(eslint())
-    .pipe(eslint.format())
-    .pipe(eslint.failAfterError());
-});
-
-gulp.task('stylelint', () => {
-  return gulp
-    .src('Sources/Scss/*.scss')
-    .pipe(stylelint({
-      reporters: [
-        { formatter: 'string', console: true }
-      ]
-    }));
-});

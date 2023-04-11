@@ -24,7 +24,7 @@ class FrontendGoogleMap extends FrontendMap {
   /**
    * Initialize map
    */
-  initializeMap(this: FrontendGoogleMap) {
+  initializeMap(this: FrontendGoogleMap): void {
     let center;
 
     if (typeof this.mapConfiguration.center !== 'undefined') {
@@ -65,7 +65,7 @@ class FrontendGoogleMap extends FrontendMap {
   /**
    * Initialize information layer on map
    */
-  initializeLayer(this: FrontendGoogleMap) {
+  initializeLayer(this: FrontendGoogleMap): void {
     if (this.mapConfiguration.apiV3Layers.indexOf('traffic') > -1) {
       const trafficLayer = new google.maps.TrafficLayer();
       trafficLayer.setMap(this.map);
@@ -85,7 +85,7 @@ class FrontendGoogleMap extends FrontendMap {
   /**
    * Close previously open info window, renders new content and opens the window
    */
-  showInformation(this: FrontendGoogleMap, location: Location, marker: google.maps.Marker) {
+  showInformation(this: FrontendGoogleMap, location: Location, marker: google.maps.Marker): void {
     if (typeof this.mapConfiguration.renderSingleViewCallback === 'function') {
       this.mapConfiguration.renderSingleViewCallback(location, this.infoWindowTemplate);
     } else {
@@ -118,7 +118,7 @@ class FrontendGoogleMap extends FrontendMap {
   /**
    * Initialize instance of map infoWindow
    */
-  initializeInfoWindow(this: FrontendGoogleMap) {
+  initializeInfoWindow(this: FrontendGoogleMap): void {
     this.infoWindow = new google.maps.InfoWindow();
   }
 
@@ -132,14 +132,14 @@ class FrontendGoogleMap extends FrontendMap {
   /**
    * Trigger click event on marker on click in result list
    */
-  openInfoWindow(this: FrontendMap, index: number) {
+  openInfoWindow(this: FrontendMap, index: number): void {
     google.maps.event.trigger(this.locations[index].marker, 'click');
   }
 
   /**
    * Load google map script
    */
-  loadScript() {
+  loadScript(): void {
     let apiUrl = 'https://maps.googleapis.com/maps/api/js?v=3.exp',
       parameter = '&key=' + this.mapConfiguration.apiConsoleKey;
 

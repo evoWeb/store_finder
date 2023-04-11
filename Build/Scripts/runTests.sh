@@ -72,16 +72,6 @@ cleanBuildFiles() {
         ../../../Build/JavaScript \
         ../../../Build/node_modules ; \
         echo "done"
-
-    echo -n "Clean composer install files ... " ; rm -rf \
-        ../../../bin/ \
-        ../../../Build/phpunit \
-        ../../../Build/testing-docker/local/.env \
-        ../../../public/ \
-        ../../../typo3temp/ \
-        ../../../vendor/ \
-        ../../../composer.lock ; \
-        echo "done"
 }
 
 cleanCacheFiles() {
@@ -123,14 +113,10 @@ cleanRenderedDocumentationFiles() {
 }
 
 # Load help text into $HELP
-# @todo Remove xdebug / php8.2 note after PHP8.2 image contains working xdebug.
 read -r -d '' HELP <<EOF
 TYPO3 core test runner. Execute acceptance, unit, functional and other test suites in
 a docker based test environment. Handles execution of single test files, sending
 xdebug information to a local IDE and more.
-
-Recommended docker version is >=20.10 for xdebug break pointing to work reliably, and
-a recent docker-compose (tested >=1.21.2) is needed.
 
 Usage: $0 [options] [file]
 
@@ -201,32 +187,35 @@ Options:
             - mysql: use MySQL server
             - postgres: use postgres
 
-    -i <10.3|10.4|10.5|10.6|10.7|10.8|10.9|10.10>
+    -i <10.3|10.4|10.5|10.6|10.7|10.8|10.9|10.10|10.11|11.0|11.1>
         Only with -d mariadb
         Specifies on which version of mariadb tests are performed
-            - 10.3 (default)
-            - 10.4
-            - 10.5
-            - 10.6
-            - 10.7
-            - 10.8
-            - 10.9
-            - 10.10
+            - 10.3   short-term, maintained until 2023-05-25 (default)
+            - 10.4   short-term, maintained until 2024-06-18
+            - 10.5   short-term, maintained until 2025-06-24
+            - 10.6   long-term, maintained until 2026-06
+            - 10.7   short-term, no longer maintained
+            - 10.8   short-term, maintained until 2023-05
+            - 10.9   short-term, maintained until 2023-08
+            - 10.10  short-term, maintained until 2023-11
+            - 10.11  long-term, maintained until 2028-02
+            - 11.0   development series
+            - 11.1   short-term development series
 
     -j <8.0>
         Only with -d mysql
         Specifies on which version of mysql tests are performed
-            - 8.0 (default)
+            - 8.0   maintained until 2026-04 (default)
 
     -k <10|11|12|13|14|15>
         Only with -d postgres
         Specifies on which version of postgres tests are performed
-            - 10 (default)
-            - 11
-            - 12
-            - 13
-            - 14
-            - 15
+            - 10    unmaintained since 2022-11-10 (default)
+            - 11    maintained until 2023-11-09
+            - 12    maintained until 2024-11-14
+            - 13    maintained until 2025-11-13
+            - 14    maintained until 2026-11-12
+            - 15    maintained until 2027-11-11
 
     -c <chunk/numberOfChunks>
         Only with -s functional|acceptance
@@ -236,7 +225,7 @@ Options:
     -p <8.1|8.2>
         Specifies the PHP minor version to be used
             - 8.1 (default): use PHP 8.1
-            - 8.2: use PHP 8.2 (note that xdebug is currently not available for PHP8.2)
+            - 8.2: use PHP 8.2
 
     -e "<phpunit options>"
         Only with -s functional|functionalDeprecated|unit|unitDeprecated|unitRandom|acceptance
@@ -396,7 +385,7 @@ while getopts ":a:s:c:d:i:j:k:p:e:xy:o:nhuv" OPT; do
             ;;
         i)
             MARIADB_VERSION=${OPTARG}
-            if ! [[ ${MARIADB_VERSION} =~ ^(10.3|10.4|10.5|10.6|10.7|10.8|10.9|10.10)$ ]]; then
+            if ! [[ ${MARIADB_VERSION} =~ ^(10.3|10.4|10.5|10.6|10.7|10.8|10.9|10.10|10.11|11.0|11.1)$ ]]; then
                 INVALID_OPTIONS+=("${OPTARG}")
             fi
             ;;
@@ -753,6 +742,31 @@ case ${TEST_SUITE} in
         esac
         docker-compose down
         ;;
+    functional10)
+        handleDbmsAndDriverOptions
+        setUpDockerComposeDotEnv
+        if [ "${CHUNKS}" -gt 0 ]; then
+            docker-compose run functional_split10
+        fi
+        case ${DBMS} in
+            sqlite)
+                # sqlite has a tmpfs as typo3temp/var/tests/functional-sqlite-dbs/
+                # Since docker is executed as root (yay!), the path to this dir is owned by
+                # root if docker creates it. Thank you, docker. We create the path beforehand
+                # to avoid permission issues on host filesystem after execution.
+                mkdir -p "${CORE_ROOT}/typo3temp/var/tests/functional-sqlite-dbs/"
+                docker-compose run prepare_functional_sqlite
+                docker-compose run functional_sqlite10
+                SUITE_EXIT_CODE=$?
+                ;;
+            *)
+                echo "Functional tests don't run with DBMS ${DBMS}" >&2
+                echo >&2
+                echo "call \".Build/Scripts/runTests.sh -h\" to display help and valid options" >&2
+                exit 1
+        esac
+        docker-compose down
+        ;;
     functionalDeprecated)
         handleDbmsAndDriverOptions
         setUpDockerComposeDotEnv
@@ -782,6 +796,28 @@ case ${TEST_SUITE} in
                 mkdir -p "${CORE_ROOT}/typo3temp/var/tests/functional-sqlite-dbs/"
                 docker-compose run prepare_functional_sqlite
                 docker-compose run functional_deprecated_sqlite
+                SUITE_EXIT_CODE=$?
+                ;;
+            *)
+                echo "Deprecated functional tests don't run with DBMS ${DBMS}" >&2
+                echo >&2
+                echo "call \".Build/Scripts/runTests.sh -h\" to display help and valid options" >&2
+                exit 1
+        esac
+        docker-compose down
+        ;;
+    functionalDeprecated10)
+        handleDbmsAndDriverOptions
+        setUpDockerComposeDotEnv
+        case ${DBMS} in
+            sqlite)
+                # sqlite has a tmpfs as typo3temp/var/tests/functional-sqlite-dbs/
+                # Since docker is executed as root (yay!), the path to this dir is owned by
+                # root if docker creates it. Thank you, docker. We create the path beforehand
+                # to avoid permission issues on host filesystem after execution.
+                mkdir -p "${CORE_ROOT}/typo3temp/var/tests/functional-sqlite-dbs/"
+                docker-compose run prepare_functional_sqlite
+                docker-compose run functional_deprecated_sqlite10
                 SUITE_EXIT_CODE=$?
                 ;;
             *)
@@ -840,9 +876,22 @@ case ${TEST_SUITE} in
         SUITE_EXIT_CODE=$?
         docker-compose down
         ;;
+    unit10)
+        # temp until phpunit 9 is gone to ensure 10 works for now
+        setUpDockerComposeDotEnv
+        docker-compose run unit10
+        SUITE_EXIT_CODE=$?
+        docker-compose down
+        ;;
     unitDeprecated)
         setUpDockerComposeDotEnv
         docker-compose run unitDeprecated
+        SUITE_EXIT_CODE=$?
+        docker-compose down
+        ;;
+    unitDeprecated10)
+        setUpDockerComposeDotEnv
+        docker-compose run unitDeprecated10
         SUITE_EXIT_CODE=$?
         docker-compose down
         ;;
@@ -871,10 +920,6 @@ case ${TEST_SUITE} in
         echo "> remove \"dangling\" typo3/core-testing-* images (those tagged as <none>)"
         docker images typo3/core-testing-* --filter "dangling=true" --format "{{.ID}}" | xargs -I {} docker rmi {}
         echo ""
-        ;;
-    buildDocumentation)
-        setUpDockerComposeDotEnv
-        docker-compose run t3docmake
         ;;
     *)
         echo "Invalid -s option argument ${TEST_SUITE}" >&2

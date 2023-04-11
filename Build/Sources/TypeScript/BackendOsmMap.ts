@@ -36,7 +36,7 @@ class BackendOsmMap {
     setTimeout(() => { this.map.invalidateSize(); }, 10);
   }
 
-  initializeMap(this: BackendOsmMap) {
+  initializeMap(this: BackendOsmMap): void {
     this.map = L.map('map');
     this.map.setView(
       [this.mapConfiguration.latitude, this.mapConfiguration.longitude],
@@ -50,7 +50,7 @@ class BackendOsmMap {
     }).addTo(this.map);
   }
 
-  initializeMarker(this: BackendOsmMap) {
+  initializeMarker(this: BackendOsmMap): void {
     const options = {
       draggable: true
     };
@@ -58,7 +58,7 @@ class BackendOsmMap {
     this.marker.bindPopup('').addTo(this.map);
   }
 
-  initializeEvents(this: BackendOsmMap) {
+  initializeEvents(this: BackendOsmMap): void {
     $('.t3js-tabmenu-item a').on('click', (event: JQuery.ClickEvent) => {
       $('#' + $(event.target).attr('aria-controls')).trigger('cssActiveAdded');
     });
@@ -80,7 +80,7 @@ class BackendOsmMap {
     });
   }
 
-  updateCoordinateFields(coordinates: L.LatLng, backend: BackendOsmMap) {
+  updateCoordinateFields(coordinates: L.LatLng, backend: BackendOsmMap): void {
     const fieldPrefix = 'data[tx_storefinder_domain_model_location][' + backend.mapConfiguration.uid + ']',
       $latitudeField = $('*[data-formengine-input-name="' + fieldPrefix + '[latitude]"]'),
       $longitudeField = $('*[data-formengine-input-name="' + fieldPrefix + '[longitude]"]');

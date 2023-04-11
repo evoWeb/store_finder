@@ -44,13 +44,16 @@
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0",
 
-		"gulp-eslint": "^6.0.0",
-		"@typescript-eslint/eslint-plugin": "^5.57.0",
-		"eslint-plugin-wc": "^1.4.0",
+		"@typescript-eslint/eslint-plugin": "^5.55.0",
+		"@typescript-eslint/parser": "^5.55.0",
+		"@typescript-eslint/typescript-estree": "^5.55.0",
+		"eslint": "^8.36.0",
 		"eslint-plugin-lit": "^1.8.2",
-		"gulp-stylelint": "^13.0.0",
-		"stylelint-order": "^4.0.0",
-		"stylelint-scss": "^3.21.0"
+		"eslint-plugin-wc": "^1.4.0",
+		"stylelint": "^14.11.0",
+		"stylelint-order": "^5.0.0",
+		"stylelint-scss": "^4.3.0",
+		"postcss-scss": "^4.0.6"
 	},
   "babel": {
     "presets": [

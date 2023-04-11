@@ -9,32 +9,6 @@ on:
 
 jobs:
 
-  testsuite:
-    name: all tests
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        php: [ '8.1', '8.2' ]
-        minMax: [ 'composerInstallMin', 'composerInstallMax' ]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Composer
-        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -s ${{ matrix.minMax }}
-
-      - name: Composer validate
-        run: Build/Scripts/runTests.sh -s composerValidate
-
-      - name: Lint PHP
-        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -s lintPhp
-
-      - name: Functional tests with sqlite
-        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -d sqlite -s functional Tests/Functional
-
-      - name: Cleanup
-        run: Build/Scripts/runTests.sh -s clean
-
   resources:
     runs-on: ubuntu-20.04
 
@@ -44,30 +18,70 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Lint SCSS
-        run: Build/Scripts/runTests.sh -s lintScss
+        run: Build/Scripts/additionalTests.sh -s lintScss
 
       - name: Lint Typescript
-        run: Build/Scripts/runTests.sh -s lintTypescript
+        run: Build/Scripts/additionalTests.sh -s lintTypescript
+
+      - name: Run the xliff lint
+        uses: Build/Scripts/additionalTests.sh -s lintXliff
 
       - name: Test documentation build
-        run: Build/Scripts/runTests.sh -s buildDocumentation
+        run: Build/Scripts/additionalTests.sh -s buildDocumentation
 
       - name: Cleanup
-        run: Build/Scripts/runTests.sh -s clean
+        run: |
+          Build/Scripts/runTests.sh -s clean ; \
+          Build/Scripts/additionalTests.sh -s clean ; \
+          git checkout composer.json
 
-  xliff:
-    runs-on: ubuntu-20.04
-
-    name: Xliff Lint
+  testsuite:
+    name: all tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: [ '8.1', '8.2' ]
+        packages:
+          - core: '^12.0'
+            framework: 'dev-main'
+            prefer: ''
+          - core: '^12.0'
+            framework: 'dev-main'
+            prefer: '--prefer-lowest'
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Run the xliff lint
-        uses: TYPO3-Continuous-Integration/TYPO3-CI-Xliff-Lint@v1
+      - name: Composer
+        run: Build/Scripts/additionalTests.sh -p ${{ matrix.php }} -s lintPhp
+
+      - name: Composer install
+        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -s composerInstall
+
+      - name: Composer install core
+        run: |
+          Build/Scripts/additionalTests.sh -p ${{ matrix.php }} \
+            -s composerInstallPackage \
+            -q "typo3/cms-core:${{ matrix.packages.core }}"
+
+      - name: Composer install framework
+        run: |
+          Build/Scripts/additionalTests.sh -p ${{ matrix.php }} \
+            -s composerInstallPackage \
+            -q "typo3/testing-framework:${{ matrix.packages.framework }}" \
+            -o " --dev ${{ matrix.packages.prefer }}"
+
+      - name: Composer validate
+        run: Build/Scripts/runTests.sh -s composerValidate
+
+      - name: Functional tests with sqlite
+        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -d sqlite -s functional Tests/Functional
+
+      - name: Cleanup
+        run: Build/Scripts/runTests.sh -s clean
 
   TERUpload:
-    needs: [ xliff, testsuite, resources ]
+    needs: [ resources, testsuite ]
     if: startsWith(github.ref, 'refs/tags/')
 
     runs-on: ubuntu-22.04

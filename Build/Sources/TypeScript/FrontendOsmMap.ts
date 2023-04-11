@@ -24,7 +24,7 @@ class FrontendOsmMap extends FrontendMap {
   /**
    * Initialize map
    */
-  initializeMap(this: FrontendOsmMap) {
+  initializeMap(this: FrontendOsmMap): void {
     this.map = L.map('tx_storefinder_map');
 
     if (typeof this.mapConfiguration.center !== 'undefined') {
@@ -48,7 +48,7 @@ class FrontendOsmMap extends FrontendMap {
   /**
    * Initialize information layer on map
    */
-  initializeLayer(this: FrontendOsmMap) {
+  initializeLayer(this: FrontendOsmMap): void {
     if (this.mapConfiguration.apiV3Layers.indexOf('kml') > -1) {
       const $jsDeferred = $.Deferred(),
         $jsFile = $('<script/>', {
@@ -70,7 +70,7 @@ class FrontendOsmMap extends FrontendMap {
   /**
    * Close previously open info window, renders new content and opens the window
    */
-  showInformation(this: FrontendOsmMap, location: Location, marker: L.Marker) {
+  showInformation(this: FrontendOsmMap, location: Location, marker: L.Marker): void {
     if (typeof this.mapConfiguration.renderSingleViewCallback === 'function') {
       this.mapConfiguration.renderSingleViewCallback(location, this.infoWindowTemplate);
     } else {
@@ -105,28 +105,28 @@ class FrontendOsmMap extends FrontendMap {
   /**
    * Initialize instance of map infoWindow
    */
-  initializeInfoWindow(this: FrontendOsmMap) {
+  initializeInfoWindow(this: FrontendOsmMap): void {
     this.infoWindow = L.popup();
   }
 
   /**
    * Close info window
    */
-  closeInfoWindow() {
+  closeInfoWindow(): void {
     this.infoWindow.closePopup();
   }
 
   /**
    * Trigger click event on marker on click in result list
    */
-  openInfoWindow(this: FrontendMap, index: number) {
+  openInfoWindow(this: FrontendMap, index: number): void {
     this.locations[index].marker.fire('click');
   }
 
   /**
    * Load open street map leaflet script
    */
-  loadScript() {
+  loadScript(): void {
     const $cssDeferred = $.Deferred(),
       $cssFile = $('<link/>', {
         rel: 'stylesheet',

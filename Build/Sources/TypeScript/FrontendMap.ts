@@ -51,11 +51,11 @@ export default class FrontendMap {
     }
   }
 
-  initializeMap() {
+  initializeMap(): void {
     // do nothing.
   }
 
-  initializeLayer() {
+  initializeLayer(): void {
     // do nothing.
   }
 
@@ -67,7 +67,7 @@ export default class FrontendMap {
   }
 
   /* eslint-disable */
-  createMarker(location: Location, icon: string) {
+  createMarker(location: Location, icon: string): void {
     // do nothing.
   }
   /* eslint-enable */
@@ -75,7 +75,7 @@ export default class FrontendMap {
   /**
    * Process single location
    */
-  processLocation(this: FrontendMap, location: Location) {
+  processLocation(this: FrontendMap, location: Location): void {
     let icon = '';
     if (location.information.icon) {
       icon = location.information.icon;
@@ -91,20 +91,20 @@ export default class FrontendMap {
   /**
    * Initialize location marker on map
    */
-  initializeLocations(this: FrontendMap) {
+  initializeLocations(this: FrontendMap): void {
     this.locations.map(this.processLocation.bind(this));
   }
 
-  initializeInfoWindow() {
+  initializeInfoWindow(): void {
     // do nothing.
   }
 
-  closeInfoWindow() {
+  closeInfoWindow(): void {
     // do nothing.
   }
 
   /* eslint-disable */
-  openInfoWindow(this: FrontendMap, index: number) {
+  openInfoWindow(this: FrontendMap, index: number): void {
     // do nothing.
   }
   /* eslint-enable */
@@ -112,7 +112,7 @@ export default class FrontendMap {
   /**
    * Initialize list click events
    */
-  initializeListEvents(this: FrontendMap) {
+  initializeListEvents(this: FrontendMap): void {
     $(document).on('click', (event: Event) => {
       if (!$(event.target).is('.tx-storefinder .resultList > li')) {
         return;
@@ -124,7 +124,7 @@ export default class FrontendMap {
   /**
    * Initialize info window template
    */
-  initializeTemplates(this: FrontendMap) {
+  initializeTemplates(this: FrontendMap): void {
     this.infoWindowTemplate = $('#templateInfoWindow').html();
     Mustache.parse(this.infoWindowTemplate);
 
@@ -143,7 +143,7 @@ export default class FrontendMap {
   /**
    * Post load javascript files
    */
-  postLoadScript() {
+  postLoadScript(): void {
     this.initializeMap();
     this.initializeLayer();
     this.initializeLocations();
@@ -152,7 +152,7 @@ export default class FrontendMap {
     this.initializeListEvents();
   }
 
-  loadScript() {
+  loadScript(): void {
     // do nothing.
   }
 }
