@@ -10,9 +10,8 @@ on:
 jobs:
 
   resources:
+    name: Resources tests
     runs-on: ubuntu-20.04
-
-    name: Resources test
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -36,7 +35,7 @@ jobs:
           git checkout composer.json
 
   testsuite:
-    name: all tests
+    name: All php tests
     runs-on: ubuntu-latest
     strategy:
       matrix:
