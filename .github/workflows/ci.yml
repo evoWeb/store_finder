@@ -24,7 +24,7 @@ jobs:
         run: Build/Scripts/additionalTests.sh -s lintTypescript
 
       - name: Run the xliff lint
-        uses: Build/Scripts/additionalTests.sh -s lintXliff
+        run: Build/Scripts/additionalTests.sh -s lintXliff
 
       - name: Test documentation build
         run: Build/Scripts/additionalTests.sh -s buildDocumentation
