@@ -16,33 +16,32 @@ namespace Evoweb\StoreFinder\Form\Element;
  */
 
 use TYPO3\CMS\Backend\Form\Element\AbstractFormElement;
+use TYPO3\CMS\Core\Page\JavaScriptModuleInstruction;
+use TYPO3\CMS\Core\Utility\StringUtility;
 
 class ModifyLocationMap extends AbstractFormElement
 {
     public function render(): array
     {
-        $resultArray = $this->initializeResultArray();
-        return $this->renderMap($resultArray);
-    }
-
-    protected function renderMap(array $resultArray): array
-    {
         $row = $this->data['databaseRow'];
         $latitude = (float)($row['latitude'] ?: 51.4583912);
         $longitude = (float)($row['longitude'] ?: 7.0157931);
+        $fieldId = StringUtility::getUniqueId('formengine-map-');
 
-        $resultArray['html'] = '<div id="map" style="height: 300px; width: 100%;"></div>';
+        $resultArray = $this->initializeResultArray();
+
+        $resultArray['html'] = '<div id="' . $fieldId . '" style="height: 300px; width: 100%;"></div>';
         $resultArray['stylesheetFiles'][] = 'EXT:store_finder/Resources/Public/JavaScript/Vendor/Leaflet/leaflet.css';
-        $resultArray['requireJsModules']['modifyLocationMap'] = [
-            'TYPO3/CMS/StoreFinder/FormEngine/Element/BackendOsmMap' => 'function(LocationMap) {
-                new LocationMap({
-                    uid: \'' . $row['uid'] . '\',
-                    latitude: ' . $latitude . ',
-                    longitude: ' . $longitude . ',
-                    zoom: 15
-                });
-            }'
-        ];
+        $resultArray['javaScriptModules']['modifyLocationMap'] = JavaScriptModuleInstruction::create(
+            '@evoweb/store-finder/FormEngine/Element/BackendOsmMap.js',
+            'LocationMap'
+        )->instance([
+            'uid' => $row['uid'],
+            'mapId' => $fieldId,
+            'latitude' => $latitude,
+            'longitude' => $longitude,
+            'zoom' => 15
+        ]);
 
         return $resultArray;
     }

@@ -37,6 +37,7 @@ declare interface MapConfiguration {
 
 declare interface BackendConfiguration {
   uid: string,
+  mapId: string,
   latitude: number,
   longitude: number,
   zoom: number

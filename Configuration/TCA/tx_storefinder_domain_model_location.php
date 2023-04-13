@@ -110,7 +110,7 @@ return [
                 'items' => [
                     ['label' => '', 'value' => 0],
                 ],
-                'foreign_table' => 'tt_content',
+                'foreign_table' => 'tx_storefinder_domain_model_location',
                 'foreign_table_where' =>
                     'AND tx_storefinder_domain_model_location.pid = ###CURRENT_PID###
                      AND tx_storefinder_domain_model_location.sys_language_uid = 0',
@@ -379,8 +379,8 @@ return [
                 'renderType' => 'selectMultipleSideBySide',
                 'foreign_table' => 'tx_storefinder_domain_model_attribute',
                 'foreign_table_where' =>
-                    'AND tx_storefinder_domain_model_attribute.sys_language_uid IN (-1,0) AND '
-                    . 'tx_storefinder_domain_model_attribute.pid = ###CURRENT_PID###',
+                    'AND tx_storefinder_domain_model_attribute.pid = ###CURRENT_PID###
+                     AND tx_storefinder_domain_model_attribute.sys_language_uid IN (-1,0)',
                 'MM' => 'tx_storefinder_location_attribute_mm',
                 'MM_match_fields' => [
                     'tablenames' => 'tx_storefinder_domain_model_attribute',

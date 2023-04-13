@@ -1,32 +1,4 @@
-/* layout styles for store_finder extension */
-.group:after {
-    content: '';
-    display: table;
-    clear: both;
-}
+.group:after{content:'';display:table;clear:both}.tx-storefinder{position:relative}.tx-storefinder #tx_storefinder_map{height:400px;width:100% !important}.tx-storefinder .gm-style-iw{width:300px;height:100px}.tx-storefinder .infoWindow .right{float:right;width:40%}.tx-storefinder .infoWindow .left{float:left;width:60%}
 
-.tx-storefinder {
-    position: relative;
-}
 
-.tx-storefinder #tx_storefinder_map {
-    height: 400px;
-    width: 100% !important;
-}
-
-.tx-storefinder .gm-style-iw {
-    width: 300px;
-    height: 100px;
-}
-
-.tx-storefinder .infoWindow .right {
-    float: right;
-    width: 40%;
-}
-
-.tx-storefinder .infoWindow .left {
-    float: left;
-    width: 60%;
-}
-
-/*# sourceMappingURL=layout.css.map */
+/*# sourceMappingURL=layout.css.map*/

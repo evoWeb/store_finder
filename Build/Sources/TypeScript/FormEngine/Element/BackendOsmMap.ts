@@ -9,26 +9,22 @@
  * LICENSE.txt file that was distributed with this source code.
  */
 
-/// <reference types="../../../types/index"/>
-
+import * as L from 'leaflet';
 import * as $ from 'jquery';
-/* eslint-disable */
-// @ts-ignore
-import * as L from 'TYPO3/CMS/StoreFinder/Vendor/Leaflet/leaflet';
-/* eslint-enable */
 
 export default class BackendOsmMap {
   private map: L.Map;
   private marker: L.Marker;
   private mapConfiguration: BackendConfiguration = {
     uid: '0',
+    mapId: '',
     latitude: 0,
     longitude: 0,
     zoom: 15
   };
 
-  constructor(options: BackendConfiguration) {
-    this.mapConfiguration = options;
+  public constructor(mapConfiguration: BackendConfiguration) {
+    this.mapConfiguration = mapConfiguration;
 
     this.initializeMap();
     this.initializeMarker();
@@ -36,8 +32,8 @@ export default class BackendOsmMap {
     setTimeout(() => { this.map.invalidateSize(); }, 10);
   }
 
-  initializeMap(this: BackendOsmMap): void {
-    this.map = L.map('map');
+  private initializeMap(this: BackendOsmMap): void {
+    this.map = L.map(this.mapConfiguration.mapId);
     this.map.setView(
       [this.mapConfiguration.latitude, this.mapConfiguration.longitude],
       this.mapConfiguration.zoom
@@ -50,7 +46,7 @@ export default class BackendOsmMap {
     }).addTo(this.map);
   }
 
-  initializeMarker(this: BackendOsmMap): void {
+  private initializeMarker(this: BackendOsmMap): void {
     const options = {
       draggable: true
     };
@@ -58,7 +54,7 @@ export default class BackendOsmMap {
     this.marker.bindPopup('').addTo(this.map);
   }
 
-  initializeEvents(this: BackendOsmMap): void {
+  private initializeEvents(this: BackendOsmMap): void {
     $('.t3js-tabmenu-item a').on('click', (event: JQuery.ClickEvent) => {
       $('#' + $(event.target).attr('aria-controls')).trigger('cssActiveAdded');
     });
@@ -67,7 +63,7 @@ export default class BackendOsmMap {
       setTimeout(() => { this.map.invalidateSize(); }, 10);
     });
 
-    this.map.on('dblclick', (event: L.LeafletEvent) => {
+    this.map.on('dblclick', (event: L.LeafletMouseEvent) => {
       const coordinates = event.latlng;
       this.marker.setLatLng(coordinates);
       this.updateCoordinateFields(coordinates, this);
@@ -80,7 +76,7 @@ export default class BackendOsmMap {
     });
   }
 
-  updateCoordinateFields(coordinates: L.LatLng, backend: BackendOsmMap): void {
+  private updateCoordinateFields(coordinates: L.LatLng, backend: BackendOsmMap): void {
     const fieldPrefix = 'data[tx_storefinder_domain_model_location][' + backend.mapConfiguration.uid + ']',
       $latitudeField = $('*[data-formengine-input-name="' + fieldPrefix + '[latitude]"]'),
       $longitudeField = $('*[data-formengine-input-name="' + fieldPrefix + '[longitude]"]');

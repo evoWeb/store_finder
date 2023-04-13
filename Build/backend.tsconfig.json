@@ -16,10 +16,16 @@
 		"noImplicitReturns": true,
 		"pretty": true,
 		"baseUrl": "Sources/TypeScript",
-		"outDir": "../Resources/Public/JavaScript",
+		"outDir": "../Resources/Public/JavaScript/FormEngine/Element",
 		"typeRoots": [
 			"node_modules/@types",
 			"Sources/types"
 		]
-	}
+	},
+	"include": [
+		"Sources/types/*"
+	],
+	"files": [
+		"Sources/TypeScript/FormEngine/Element/BackendOsmMap.ts"
+	]
 }

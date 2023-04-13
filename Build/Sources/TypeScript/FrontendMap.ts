@@ -9,7 +9,7 @@
  * LICENSE.txt file that was distributed with this source code.
  */
 
-import * as Mustache from 'mustache';
+import Mustache from 'mustache';
 
 export default class FrontendMap {
   public mapConfiguration: MapConfiguration = {

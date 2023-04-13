@@ -1,0 +1,20 @@
+import path from 'path';
+import baseConfig from './webpack.config.babel';
+
+const entry = {
+  FrontendGoogleMap: path.resolve(__dirname, './Sources/TypeScript/FrontendGoogleMap.ts'),
+  FrontendOsmMap: path.resolve(__dirname, './Sources/TypeScript/FrontendOsmMap.ts'),
+};
+const outPath = path.resolve(__dirname, '../Resources/Public/JavaScript');
+
+module.exports = env => {
+  return {
+    ...baseConfig,
+    entry: entry,
+    mode: env.production ? 'production' : 'development',
+    output: {
+      path: outPath,
+      filename: env.production ? '[name].min.js' : '[name].js'
+    }
+  }
+};
