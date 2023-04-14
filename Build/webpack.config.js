@@ -1,5 +1,6 @@
-import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import fs from 'fs';
+const fs = require('fs');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const path = require('path');
 
 class RemovePlugin {
   static name = 'Remove *.LICENSE.txt';
@@ -57,7 +58,7 @@ const WebpackDefault = {
   plugins: [
     new RemovePlugin(),
     new MiniCssExtractPlugin({
-      filename: '../Stylesheet/[name].css'
+      filename: '..' + path.resolve(__dirname, '../Resources/Public/Stylesheet/[name].min.css')
     }),
   ]
 };

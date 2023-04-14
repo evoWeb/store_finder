@@ -10,8 +10,8 @@
  */
 
 // @ts-ignore
-import * as L from '@evoweb/store-finder/leaflet/leaflet';
-import * as $ from 'jquery';
+import * as L from '@evoweb/store-finder/leaflet/leaflet-src.esm.js';
+import $ from 'jquery';
 
 export default class BackendOsmMap {
   private map: L.Map;

@@ -33,8 +33,7 @@ class ModifyLocationMap extends AbstractFormElement
         $resultArray['html'] = '<div id="' . $fieldId . '" style="height: 300px; width: 100%;"></div>';
         $resultArray['stylesheetFiles'][] = 'EXT:store_finder/Resources/Public/JavaScript/leaflet/leaflet.css';
         $resultArray['javaScriptModules']['modifyLocationMap'] = JavaScriptModuleInstruction::create(
-            '@evoweb/store-finder/form-engine/element/backend-osm-map.js',
-            'BackendOsmMap'
+            '@evoweb/store-finder/form-engine/element/backend-osm-map.js'
         )->instance([
             'uid' => $row['uid'],
             'mapId' => $fieldId,

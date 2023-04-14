@@ -1,5 +1,5 @@
-import path from 'path';
-import baseConfig from './webpack.config.babel';
+const path = require('path');
+const baseConfig = require('./webpack.config');
 
 const outPath = path.resolve(__dirname, '../Resources/Public/JavaScript');
 const entry = {
@@ -7,14 +7,14 @@ const entry = {
   FrontendOsmMap: path.resolve(__dirname, './Sources/TypeScript/FrontendOsmMap.ts'),
 };
 
-module.exports = env => {
+module.exports = (env, argv) => {
   return {
     ...baseConfig,
     entry: entry,
-    mode: env.production ? 'production' : 'development',
+    mode: argv.mode,
     output: {
       path: outPath,
-      filename: env.production ? '[name].min.js' : '[name].js'
+      filename: argv.mode === 'production' ? '[name].min.js' : '[name].js'
     }
-  }
+  };
 };
