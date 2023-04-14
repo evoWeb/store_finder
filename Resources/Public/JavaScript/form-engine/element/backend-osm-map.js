@@ -8,7 +8,7 @@
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  */
-import * as L from 'leaflet';
+import * as L from '@evoweb/store-finder/leaflet/leaflet.js';
 import * as $ from 'jquery';
 export default class BackendOsmMap {
     constructor(mapConfiguration) {

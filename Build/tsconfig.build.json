@@ -1,0 +1,9 @@
+{
+	"extends": "./tsconfig",
+	"compilerOptions": {
+		"outDir": "../Resources/Public/JavaScript/form-engine/element"
+	},
+	"files": [
+		"Sources/TypeScript/form-engine/element/backend-osm-map.ts"
+	]
+}

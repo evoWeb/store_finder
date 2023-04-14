@@ -9,7 +9,8 @@
  * LICENSE.txt file that was distributed with this source code.
  */
 
-import * as L from 'leaflet';
+// @ts-ignore
+import * as L from '@evoweb/store-finder/leaflet/leaflet';
 import * as $ from 'jquery';
 
 export default class BackendOsmMap {

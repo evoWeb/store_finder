@@ -5,6 +5,7 @@
 		"incremental": true,
 		"tsBuildInfoFile": "./.cache/tsconfig.tsbuildinfo",
 		"module": "es2020",
+		"moduleResolution": "node",
 		"sourceMap": false,
 		"removeComments": false,
 		"alwaysStrict": true,
@@ -16,10 +17,23 @@
 		"noImplicitReturns": true,
 		"pretty": true,
 		"baseUrl": "Sources/TypeScript",
+		"paths": {
+			"@evoweb/store-finder/form-engine/*": [
+				"form-engine/*"
+			],
+			"@evoweb/store-finder/leaflet/*": [
+				"../../node_modules/leaflet/dist/*"
+			]
+		},
 		"outDir": "../Resources/Public/JavaScript",
+		"types": [
+			"Evoweb",
+			"google.maps",
+			"leaflet"
+		],
 		"typeRoots": [
 			"node_modules/@types",
-			"Sources/types"
+			"types"
 		]
 	}
 }

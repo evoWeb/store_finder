@@ -31,10 +31,10 @@ class ModifyLocationMap extends AbstractFormElement
         $resultArray = $this->initializeResultArray();
 
         $resultArray['html'] = '<div id="' . $fieldId . '" style="height: 300px; width: 100%;"></div>';
-        $resultArray['stylesheetFiles'][] = 'EXT:store_finder/Resources/Public/JavaScript/Vendor/Leaflet/leaflet.css';
+        $resultArray['stylesheetFiles'][] = 'EXT:store_finder/Resources/Public/JavaScript/leaflet/leaflet.css';
         $resultArray['javaScriptModules']['modifyLocationMap'] = JavaScriptModuleInstruction::create(
-            '@evoweb/store-finder/FormEngine/Element/BackendOsmMap.js',
-            'LocationMap'
+            '@evoweb/store-finder/form-engine/element/backend-osm-map.js',
+            'BackendOsmMap'
         )->instance([
             'uid' => $row['uid'],
             'mapId' => $fieldId,

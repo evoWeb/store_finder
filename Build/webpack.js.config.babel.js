@@ -1,11 +1,11 @@
 import path from 'path';
 import baseConfig from './webpack.config.babel';
 
+const outPath = path.resolve(__dirname, '../Resources/Public/JavaScript');
 const entry = {
   FrontendGoogleMap: path.resolve(__dirname, './Sources/TypeScript/FrontendGoogleMap.ts'),
   FrontendOsmMap: path.resolve(__dirname, './Sources/TypeScript/FrontendOsmMap.ts'),
 };
-const outPath = path.resolve(__dirname, '../Resources/Public/JavaScript');
 
 module.exports = env => {
   return {

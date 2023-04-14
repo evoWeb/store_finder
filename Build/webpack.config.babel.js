@@ -1,5 +1,5 @@
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import { rimrafSync } from 'rimraf';
+import fs from 'fs';
 
 class RemovePlugin {
   static name = 'Remove *.LICENSE.txt';
@@ -15,10 +15,9 @@ class RemovePlugin {
    * @param done Stats
    */
   done(done) {
-    console.log(done);
     Object.keys(done.compilation.assets).forEach(file => {
       if (file.indexOf('LICENSE.txt') > 0) {
-        rimrafSync(done.compilation.outputOptions.path + '/' + file);
+        fs.unlinkSync(done.compilation.outputOptions.path + '/' + file);
       }
     });
   }

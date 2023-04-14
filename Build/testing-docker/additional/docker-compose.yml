@@ -46,7 +46,7 @@ services:
         fi
         mkdir -p ${CORE_ROOT}/.cache
         npm ci || exit 1
-        npm run lint-css;
+        npm run lint:css;
       "
 
   lint_typescript:
@@ -64,7 +64,7 @@ services:
         fi
         mkdir -p ${CORE_ROOT}/.cache
         npm ci || exit 1
-        npm run lint-javascript;
+        npm run lint:ts;
       "
 
   lint_xliff:
