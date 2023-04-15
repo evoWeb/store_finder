@@ -92,13 +92,6 @@ plugin.tx_storefinder.view {
   layoutRootPaths.1 = {$plugin.tx_storefinder.layoutRootPaths}
 }
 
-config.tx_extbase.persistence {
-  classes {
-    Evoweb\StoreFinder\Domain\Model\Category.mapping.tableName = sys_category
-    Evoweb\StoreFinder\Domain\Model\Content.mapping.tableName = tt_content
-  }
-}
-
 plugin.tx_storefinder.fieldError = TEXT
 plugin.tx_storefinder.fieldError {
   current = 1

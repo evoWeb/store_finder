@@ -14570,25 +14570,27 @@ class FrontendMap {
      * Initialize list click events
      */
     initializeListEvents() {
-        $(document).on('click', (event) => {
-            if (!$(event.target).is('.tx-storefinder .resultList > li')) {
+        document.addEventListener('click', (event) => {
+            const target = event.target;
+            if (!target.matches('.tx-storefinder .resultList > li')) {
                 return;
             }
-            this.openInfoWindow($(event.target).data('index'));
+            this.openInfoWindow(parseInt(target.dataset.index, 10));
         });
     }
     /**
      * Initialize info window template
      */
     initializeTemplates() {
-        this.infoWindowTemplate = $('#templateInfoWindow').html();
+        this.infoWindowTemplate = document.getElementById('templateInfoWindow').innerHTML;
         mustache__WEBPACK_IMPORTED_MODULE_0__["default"].parse(this.infoWindowTemplate);
-        $(document).on('click', (event) => {
-            if (!$(event.target).is('.tx-storefinder .infoWindow .close')) {
+        document.addEventListener('click', (event) => {
+            const target = event.target;
+            if (!target.matches('.tx-storefinder .infoWindow .close')) {
                 return;
             }
             if (typeof this.mapConfiguration.renderSingleViewCallback === 'function') {
-                this.mapConfiguration.handleCloseButtonCallback($(event.target));
+                this.mapConfiguration.handleCloseButtonCallback(target);
             }
             else {
                 this.closeInfoWindow();
@@ -14605,6 +14607,36 @@ class FrontendMap {
         this.initializeInfoWindow();
         this.initializeTemplates();
         this.initializeListEvents();
+    }
+    /**
+     * Create a promise that resolves once the given resource is loaded
+     */
+    createFilePromise(uri, integrity = '', crossOrigin = '') {
+        return new Promise((resolve, reject) => {
+            let element;
+            if (uri.match(/\.css/)) {
+                element = document.createElement('link');
+                element.rel = 'stylesheet';
+                element.href = uri;
+            }
+            else {
+                element = document.createElement('script');
+                element.src = uri;
+            }
+            if (integrity.length > 0) {
+                element.integrity = integrity;
+            }
+            if (crossOrigin.length > 0) {
+                element.crossOrigin = crossOrigin;
+            }
+            element.onload = () => {
+                resolve(uri);
+            };
+            element.onerror = () => {
+                reject(uri);
+            };
+            document.head.appendChild(element);
+        });
     }
     loadScript() {
         // do nothing.
@@ -15469,9 +15501,9 @@ var __webpack_exports__ = {};
   !*** ./Sources/TypeScript/FrontendOsmMap.ts ***!
   \**********************************************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! leaflet */ "./node_modules/leaflet/dist/leaflet-src.js");
-/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(leaflet__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _FrontendMap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./FrontendMap */ "./Sources/TypeScript/FrontendMap.ts");
+/* harmony import */ var _FrontendMap__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./FrontendMap */ "./Sources/TypeScript/FrontendMap.ts");
+/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! leaflet */ "./node_modules/leaflet/dist/leaflet-src.js");
+/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(leaflet__WEBPACK_IMPORTED_MODULE_1__);
 /**
  * This file is developed by evoWeb.
  *
@@ -15489,12 +15521,12 @@ __webpack_require__.r(__webpack_exports__);
  * contains all logic for the frontend map output
  * @exports TYPO3/CMS/StoreFinder/FrontendOsmMap
  */
-class FrontendOsmMap extends _FrontendMap__WEBPACK_IMPORTED_MODULE_1__["default"] {
+class FrontendOsmMap extends _FrontendMap__WEBPACK_IMPORTED_MODULE_0__["default"] {
     /**
      * Initialize map
      */
     initializeMap() {
-        this.map = leaflet__WEBPACK_IMPORTED_MODULE_0__.map('tx_storefinder_map');
+        this.map = leaflet__WEBPACK_IMPORTED_MODULE_1__.map('tx_storefinder_map');
         if (typeof this.mapConfiguration.center !== 'undefined') {
             this.map.setView([this.mapConfiguration.center.lat, this.mapConfiguration.center.lng], this.mapConfiguration.zoom);
         }
@@ -15502,7 +15534,7 @@ class FrontendOsmMap extends _FrontendMap__WEBPACK_IMPORTED_MODULE_1__["default"
             this.map.setView([0, 0], 13);
         }
         // more providers can be found here http://leaflet-extras.github.io/leaflet-providers/preview/
-        leaflet__WEBPACK_IMPORTED_MODULE_0__.tileLayer('https://korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}', {
+        leaflet__WEBPACK_IMPORTED_MODULE_1__.tileLayer('https://korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}', {
             maxZoom: 20,
             attribution: 'Imagery from <a href="https://www.geog.uni-heidelberg.de/gis/index_en.html">GIScience Research Group @ University of Heidelberg</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(this.map);
@@ -15512,15 +15544,14 @@ class FrontendOsmMap extends _FrontendMap__WEBPACK_IMPORTED_MODULE_1__["default"
      */
     initializeLayer() {
         if (this.mapConfiguration.apiV3Layers.indexOf('kml') > -1) {
-            const $jsDeferred = $.Deferred(), $jsFile = $('<script/>', {
-                src: 'https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js',
-                crossorigin: ''
-            }).appendTo('head');
-            $jsDeferred.resolve($jsFile);
-            $.when($jsDeferred.promise()).done(() => {
+            Promise.all([
+                this.createFilePromise('https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js')
+            ])
+                .then(() => {
                 const kmlLayer = omnivore.kml(this.mapConfiguration.kmlUrl);
                 kmlLayer.setMap(this.map);
-            }).fail(() => {
+            })
+                .catch(() => {
                 console.log('Failed loading resources.');
             });
         }
@@ -15538,7 +15569,7 @@ class FrontendOsmMap extends _FrontendMap__WEBPACK_IMPORTED_MODULE_1__["default"
             }
             this.infoWindow = marker.getPopup();
             this.infoWindow.setContent(this.renderInfoWindowContent(location));
-            this.infoWindow.setLatLng(leaflet__WEBPACK_IMPORTED_MODULE_0__.latLng(location.lat, location.lng));
+            this.infoWindow.setLatLng(leaflet__WEBPACK_IMPORTED_MODULE_1__.latLng(location.lat, location.lng));
             this.infoWindow.openOn(this.map);
         }
     }
@@ -15548,8 +15579,8 @@ class FrontendOsmMap extends _FrontendMap__WEBPACK_IMPORTED_MODULE_1__["default"
     createMarker(location, icon) {
         const options = {
             title: location.name,
-            icon: new leaflet__WEBPACK_IMPORTED_MODULE_0__.Icon({ iconUrl: icon }),
-        }, marker = new leaflet__WEBPACK_IMPORTED_MODULE_0__.Marker([location.lat, location.lng], options);
+            icon: new leaflet__WEBPACK_IMPORTED_MODULE_1__.Icon({ iconUrl: icon }),
+        }, marker = new leaflet__WEBPACK_IMPORTED_MODULE_1__.Marker([location.lat, location.lng], options);
         marker.bindPopup('').addTo(this.map);
         marker.on('click', () => {
             this.showInformation(location, marker);
@@ -15560,7 +15591,7 @@ class FrontendOsmMap extends _FrontendMap__WEBPACK_IMPORTED_MODULE_1__["default"
      * Initialize instance of map infoWindow
      */
     initializeInfoWindow() {
-        this.infoWindow = leaflet__WEBPACK_IMPORTED_MODULE_0__.popup();
+        this.infoWindow = leaflet__WEBPACK_IMPORTED_MODULE_1__.popup();
     }
     /**
      * Close info window
@@ -15578,30 +15609,22 @@ class FrontendOsmMap extends _FrontendMap__WEBPACK_IMPORTED_MODULE_1__["default"
      * Load open street map leaflet script
      */
     loadScript() {
-        const $cssDeferred = $.Deferred(), $cssFile = $('<link/>', {
-            rel: 'stylesheet',
-            type: 'text/css',
-            href: 'https://unpkg.com/leaflet@1.5.1/dist/leaflet.css',
-            integrity: 'sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==',
-            crossorigin: ''
-        }).appendTo('head'), $jsDeferred = $.Deferred(), $jsFile = $('<script/>', {
-            src: 'https://unpkg.com/leaflet@1.5.1/dist/leaflet.js',
-            integrity: 'sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA==',
-            crossorigin: ''
-        }).appendTo('head');
-        $cssDeferred.resolve($cssFile);
-        $jsDeferred.resolve($jsFile);
-        $.when($cssDeferred.promise(), $jsDeferred.promise()).done(() => {
-            function wait() {
-                if (typeof leaflet__WEBPACK_IMPORTED_MODULE_0__ !== 'undefined') {
+        Promise.all([
+            this.createFilePromise('https://unpkg.com/leaflet@1.9.3/dist/leaflet.css', 'sha512-mD70nAW2ThLsWH0zif8JPbfraZ8hbCtjQ+5RU1m4+ztZq6/MymyZeB55pWsi4YAX+73yvcaJyk61mzfYMvtm9w==', 'anonymous'),
+            this.createFilePromise('https://unpkg.com/leaflet@1.9.3/dist/leaflet.js', 'sha512-Dqm3h1Y4qiHUjbhxTuBGQsza0Tfppn53SHlu/uj1f+RT+xfShfe7r6czRf5r2NmllO2aKx+tYJgoxboOkn1Scg==', 'anonymous')
+        ])
+            .then(() => {
+            const wait = () => {
+                if (typeof leaflet__WEBPACK_IMPORTED_MODULE_1__ !== 'undefined') {
                     this.postLoadScript();
                 }
                 else {
-                    window.requestAnimationFrame(wait.bind(this));
+                    window.requestAnimationFrame(wait);
                 }
-            }
-            window.requestAnimationFrame(wait.bind(this));
-        }).fail(() => {
+            };
+            window.requestAnimationFrame(wait);
+        })
+            .catch(() => {
             console.log('Failed loading resources.');
         });
     }

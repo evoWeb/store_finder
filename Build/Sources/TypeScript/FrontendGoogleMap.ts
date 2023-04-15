@@ -24,7 +24,7 @@ class FrontendGoogleMap extends FrontendMap {
   /**
    * Initialize map
    */
-  initializeMap(this: FrontendGoogleMap): void {
+  initializeMap(): void {
     let center;
 
     if (typeof this.mapConfiguration.center !== 'undefined') {
@@ -48,7 +48,7 @@ class FrontendGoogleMap extends FrontendMap {
       mapOptions.styles = self.mapConfiguration.mapStyles;
     }
 
-    this.map = new google.maps.Map($('#tx_storefinder_map')[0], mapOptions);
+    this.map = new google.maps.Map(document.getElementById('tx_storefinder_map'), mapOptions);
 
     if (this.mapConfiguration.afterSearch === 0 && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
@@ -65,7 +65,7 @@ class FrontendGoogleMap extends FrontendMap {
   /**
    * Initialize information layer on map
    */
-  initializeLayer(this: FrontendGoogleMap): void {
+  initializeLayer(): void {
     if (this.mapConfiguration.apiV3Layers.indexOf('traffic') > -1) {
       const trafficLayer = new google.maps.TrafficLayer();
       trafficLayer.setMap(this.map);
@@ -85,7 +85,7 @@ class FrontendGoogleMap extends FrontendMap {
   /**
    * Close previously open info window, renders new content and opens the window
    */
-  showInformation(this: FrontendGoogleMap, location: Location, marker: google.maps.Marker): void {
+  showInformation(location: Location, marker: google.maps.Marker): void {
     if (typeof this.mapConfiguration.renderSingleViewCallback === 'function') {
       this.mapConfiguration.renderSingleViewCallback(location, this.infoWindowTemplate);
     } else {
@@ -118,7 +118,7 @@ class FrontendGoogleMap extends FrontendMap {
   /**
    * Initialize instance of map infoWindow
    */
-  initializeInfoWindow(this: FrontendGoogleMap): void {
+  initializeInfoWindow(): void {
     this.infoWindow = new google.maps.InfoWindow();
   }
 
@@ -132,7 +132,7 @@ class FrontendGoogleMap extends FrontendMap {
   /**
    * Trigger click event on marker on click in result list
    */
-  openInfoWindow(this: FrontendMap, index: number): void {
+  openInfoWindow(index: number): void {
     google.maps.event.trigger(this.locations[index].marker, 'click');
   }
 
@@ -151,28 +151,22 @@ class FrontendGoogleMap extends FrontendMap {
       apiUrl = this.mapConfiguration.apiUrl;
     }
 
-    const $jsDeferred = $.Deferred(),
-      $jsFile = $('<script/>', {
-        src: apiUrl + parameter,
-        crossorigin: ''
-      }).appendTo('head');
-
-    $jsDeferred.resolve($jsFile);
-
-    $.when(
-      $jsDeferred.promise()
-    ).done(() => {
-      function wait(this: FrontendMap) {
-        if (typeof google !== 'undefined') {
-          this.postLoadScript();
-        } else {
-          window.requestAnimationFrame(wait.bind(this));
+    Promise.all([
+      this.createFilePromise(apiUrl + parameter)
+    ])
+      .then(() => {
+        const wait = () => {
+          if (typeof google !== 'undefined') {
+            this.postLoadScript();
+          } else {
+            window.requestAnimationFrame(wait);
+          }
         }
-      }
-      window.requestAnimationFrame(wait.bind(this));
-    }).fail(() => {
-      console.log('Failed loading resources.');
-    });
+        window.requestAnimationFrame(wait);
+      })
+      .catch(() => {
+        console.log('Failed loading resources.');
+      });
   }
 }
 

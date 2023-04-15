@@ -4,11 +4,8 @@ https://commons.wikimedia.org/wiki/File:GoogleMaps_logo.svg
 InfoBubble
 https://github.com/RelativeMedia/InfoBubble
 
-Hogan.js
-http://twitter.github.io/hogan.js/
-
-jQuery
-http://jquery.com/
+Mustache
+https://github.com/janl/mustache.js
 
 Google map stubs
 https://code.google.com/p/closure-compiler/source/browse/#git%2Fcontrib%2Fexterns%2Fmaps

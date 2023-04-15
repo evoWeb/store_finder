@@ -9,8 +9,8 @@
  * LICENSE.txt file that was distributed with this source code.
  */
 
-import * as L from 'leaflet';
 import FrontendMap from './FrontendMap';
+import * as L from 'leaflet';
 
 /**
  * Module: TYPO3/CMS/StoreFinder/FrontendOsmMap
@@ -24,7 +24,7 @@ class FrontendOsmMap extends FrontendMap {
   /**
    * Initialize map
    */
-  initializeMap(this: FrontendOsmMap): void {
+  initializeMap(): void {
     this.map = L.map('tx_storefinder_map');
 
     if (typeof this.mapConfiguration.center !== 'undefined') {
@@ -48,29 +48,27 @@ class FrontendOsmMap extends FrontendMap {
   /**
    * Initialize information layer on map
    */
-  initializeLayer(this: FrontendOsmMap): void {
+  initializeLayer(): void {
     if (this.mapConfiguration.apiV3Layers.indexOf('kml') > -1) {
-      const $jsDeferred = $.Deferred(),
-        $jsFile = $('<script/>', {
-          src: 'https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js',
-          crossorigin: ''
-        }).appendTo('head');
-
-      $jsDeferred.resolve($jsFile);
-
-      $.when($jsDeferred.promise()).done(() => {
-        const kmlLayer = omnivore.kml(this.mapConfiguration.kmlUrl);
-        kmlLayer.setMap(this.map);
-      }).fail(() => {
-        console.log('Failed loading resources.');
-      });
+      Promise.all([
+        this.createFilePromise(
+          'https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js'
+        )
+      ])
+        .then(() => {
+          const kmlLayer = omnivore.kml(this.mapConfiguration.kmlUrl);
+          kmlLayer.setMap(this.map);
+        })
+        .catch(() => {
+          console.log('Failed loading resources.');
+        });
     }
   }
 
   /**
    * Close previously open info window, renders new content and opens the window
    */
-  showInformation(this: FrontendOsmMap, location: Location, marker: L.Marker): void {
+  showInformation(location: Location, marker: L.Marker): void {
     if (typeof this.mapConfiguration.renderSingleViewCallback === 'function') {
       this.mapConfiguration.renderSingleViewCallback(location, this.infoWindowTemplate);
     } else {
@@ -105,7 +103,7 @@ class FrontendOsmMap extends FrontendMap {
   /**
    * Initialize instance of map infoWindow
    */
-  initializeInfoWindow(this: FrontendOsmMap): void {
+  initializeInfoWindow(): void {
     this.infoWindow = L.popup();
   }
 
@@ -119,7 +117,7 @@ class FrontendOsmMap extends FrontendMap {
   /**
    * Trigger click event on marker on click in result list
    */
-  openInfoWindow(this: FrontendMap, index: number): void {
+  openInfoWindow(index: number): void {
     this.locations[index].marker.fire('click');
   }
 
@@ -127,39 +125,31 @@ class FrontendOsmMap extends FrontendMap {
    * Load open street map leaflet script
    */
   loadScript(): void {
-    const $cssDeferred = $.Deferred(),
-      $cssFile = $('<link/>', {
-        rel: 'stylesheet',
-        type: 'text/css',
-        href: 'https://unpkg.com/leaflet@1.5.1/dist/leaflet.css',
-        integrity: 'sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==',
-        crossorigin: ''
-      }).appendTo('head'),
-      $jsDeferred = $.Deferred(),
-      $jsFile = $('<script/>', {
-        src: 'https://unpkg.com/leaflet@1.5.1/dist/leaflet.js',
-        integrity: 'sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA==',
-        crossorigin: ''
-      }).appendTo('head');
-
-    $cssDeferred.resolve($cssFile);
-    $jsDeferred.resolve($jsFile);
-
-    $.when(
-      $cssDeferred.promise(),
-      $jsDeferred.promise()
-    ).done(() => {
-      function wait(this: FrontendMap) {
-        if (typeof L !== 'undefined') {
-          this.postLoadScript();
-        } else {
-          window.requestAnimationFrame(wait.bind(this));
+    Promise.all([
+      this.createFilePromise(
+        'https://unpkg.com/leaflet@1.9.3/dist/leaflet.css',
+        'sha512-mD70nAW2ThLsWH0zif8JPbfraZ8hbCtjQ+5RU1m4+ztZq6/MymyZeB55pWsi4YAX+73yvcaJyk61mzfYMvtm9w==',
+        'anonymous'
+      ),
+      this.createFilePromise(
+        'https://unpkg.com/leaflet@1.9.3/dist/leaflet.js',
+        'sha512-Dqm3h1Y4qiHUjbhxTuBGQsza0Tfppn53SHlu/uj1f+RT+xfShfe7r6czRf5r2NmllO2aKx+tYJgoxboOkn1Scg==',
+        'anonymous'
+      )
+    ])
+      .then(() => {
+        const wait = () => {
+          if (typeof L !== 'undefined') {
+            this.postLoadScript();
+          } else {
+            window.requestAnimationFrame(wait);
+          }
         }
-      }
-      window.requestAnimationFrame(wait.bind(this));
-    }).fail(() => {
-      console.log('Failed loading resources.');
-    });
+        window.requestAnimationFrame(wait);
+      })
+      .catch(() => {
+        console.log('Failed loading resources.');
+      });
   }
 }
 

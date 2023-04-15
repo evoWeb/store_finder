@@ -51,7 +51,7 @@
     "lint:css": "stylelint Sources/Scss/*.scss",
     "lint:ts": "eslint -c .eslintrc.json Sources/TypeScript/*.ts",
     "build:css": "webpack --mode=production --config webpack.css.config.js",
-		"build:js": "webpack --mode=development --config webpack.js.config.js && webpack --mode=production --config webpack.js.config.js",
+		"build:js": "npm run lint:ts && webpack --mode=development --config webpack.js.config.js && webpack --mode=production --config webpack.js.config.js",
 		"build:module": "tsc --project tsconfig.build.json && rollup -c"
 	}
 }

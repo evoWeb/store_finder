@@ -20,6 +20,7 @@ use Evoweb\StoreFinder\Domain\Model\Constraint;
 use Evoweb\StoreFinder\Domain\Model\Location;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\LanguageAspect;
+use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -164,7 +165,7 @@ class LocationRepository extends Repository
             $queryBuilder->andWhere(
                 $queryBuilder->expr()->eq(
                     'sc.uid',
-                    $queryBuilder->createNamedParameter($value->getUid(), \PDO::PARAM_INT)
+                    $queryBuilder->createNamedParameter($value->getUid(), Connection::PARAM_INT)
                 )
             );
         }

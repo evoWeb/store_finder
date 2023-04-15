@@ -31,7 +31,7 @@ class QueryBuilderHelper
                 $value = $value ? '"' . implode('", "', $value) . '"' : '""';
             }
             if (is_int($key)) {
-                $sql = substr_replace($sql, $value, strpos($sql, '?'), 1);
+                $sql = substr_replace($sql, (string)$value, strpos($sql, '?'), 1);
             } else {
                 $sql = str_replace(':' . $key, $value, $sql);
             }

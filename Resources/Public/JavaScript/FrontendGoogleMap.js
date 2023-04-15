@@ -112,25 +112,27 @@ class FrontendMap {
      * Initialize list click events
      */
     initializeListEvents() {
-        $(document).on('click', (event) => {
-            if (!$(event.target).is('.tx-storefinder .resultList > li')) {
+        document.addEventListener('click', (event) => {
+            const target = event.target;
+            if (!target.matches('.tx-storefinder .resultList > li')) {
                 return;
             }
-            this.openInfoWindow($(event.target).data('index'));
+            this.openInfoWindow(parseInt(target.dataset.index, 10));
         });
     }
     /**
      * Initialize info window template
      */
     initializeTemplates() {
-        this.infoWindowTemplate = $('#templateInfoWindow').html();
+        this.infoWindowTemplate = document.getElementById('templateInfoWindow').innerHTML;
         mustache__WEBPACK_IMPORTED_MODULE_0__["default"].parse(this.infoWindowTemplate);
-        $(document).on('click', (event) => {
-            if (!$(event.target).is('.tx-storefinder .infoWindow .close')) {
+        document.addEventListener('click', (event) => {
+            const target = event.target;
+            if (!target.matches('.tx-storefinder .infoWindow .close')) {
                 return;
             }
             if (typeof this.mapConfiguration.renderSingleViewCallback === 'function') {
-                this.mapConfiguration.handleCloseButtonCallback($(event.target));
+                this.mapConfiguration.handleCloseButtonCallback(target);
             }
             else {
                 this.closeInfoWindow();
@@ -147,6 +149,36 @@ class FrontendMap {
         this.initializeInfoWindow();
         this.initializeTemplates();
         this.initializeListEvents();
+    }
+    /**
+     * Create a promise that resolves once the given resource is loaded
+     */
+    createFilePromise(uri, integrity = '', crossOrigin = '') {
+        return new Promise((resolve, reject) => {
+            let element;
+            if (uri.match(/\.css/)) {
+                element = document.createElement('link');
+                element.rel = 'stylesheet';
+                element.href = uri;
+            }
+            else {
+                element = document.createElement('script');
+                element.src = uri;
+            }
+            if (integrity.length > 0) {
+                element.integrity = integrity;
+            }
+            if (crossOrigin.length > 0) {
+                element.crossOrigin = crossOrigin;
+            }
+            element.onload = () => {
+                resolve(uri);
+            };
+            element.onerror = () => {
+                reject(uri);
+            };
+            document.head.appendChild(element);
+        });
     }
     loadScript() {
         // do nothing.
@@ -1039,7 +1071,7 @@ class FrontendGoogleMap extends _FrontendMap__WEBPACK_IMPORTED_MODULE_0__["defau
         if (self.mapConfiguration.mapStyles) {
             mapOptions.styles = self.mapConfiguration.mapStyles;
         }
-        this.map = new google.maps.Map($('#tx_storefinder_map')[0], mapOptions);
+        this.map = new google.maps.Map(document.getElementById('tx_storefinder_map'), mapOptions);
         if (this.mapConfiguration.afterSearch === 0 && navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((position) => {
                 const pos = {
@@ -1125,22 +1157,21 @@ class FrontendGoogleMap extends _FrontendMap__WEBPACK_IMPORTED_MODULE_0__["defau
         if (Object.prototype.hasOwnProperty.call(this.mapConfiguration, 'apiUrl')) {
             apiUrl = this.mapConfiguration.apiUrl;
         }
-        const $jsDeferred = $.Deferred(), $jsFile = $('<script/>', {
-            src: apiUrl + parameter,
-            crossorigin: ''
-        }).appendTo('head');
-        $jsDeferred.resolve($jsFile);
-        $.when($jsDeferred.promise()).done(() => {
-            function wait() {
+        Promise.all([
+            this.createFilePromise(apiUrl + parameter)
+        ])
+            .then(() => {
+            const wait = () => {
                 if (typeof google !== 'undefined') {
                     this.postLoadScript();
                 }
                 else {
-                    window.requestAnimationFrame(wait.bind(this));
+                    window.requestAnimationFrame(wait);
                 }
-            }
-            window.requestAnimationFrame(wait.bind(this));
-        }).fail(() => {
+            };
+            window.requestAnimationFrame(wait);
+        })
+            .catch(() => {
             console.log('Failed loading resources.');
         });
     }

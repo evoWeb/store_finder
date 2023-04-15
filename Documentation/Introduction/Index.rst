@@ -13,7 +13,7 @@ Search with result map and list
 Purpose of this extension is, to have a search for locations based on
 an entered or configured address. The result displays a google map with
 marker for each location and a list of all locations. On click on a
-marker an info window with additional informations get shown.
+marker an info window with additional information get shown.
 
 
 Search form:
@@ -37,7 +37,7 @@ Single points of interest
 
 Its also possible to pre define a single location to display it on the
 map without search form. This is useful to have map with single point
-of interesst.
+of interest.
 For developer its also possible to use the plugin in their extension
 as map renderer for the location.
 

@@ -75,7 +75,7 @@ export default class FrontendMap {
   /**
    * Process single location
    */
-  processLocation(this: FrontendMap, location: Location): void {
+  processLocation(location: Location): void {
     let icon = '';
     if (location.information.icon) {
       icon = location.information.icon;
@@ -91,7 +91,7 @@ export default class FrontendMap {
   /**
    * Initialize location marker on map
    */
-  initializeLocations(this: FrontendMap): void {
+  initializeLocations(): void {
     this.locations.map(this.processLocation.bind(this));
   }
 
@@ -104,7 +104,7 @@ export default class FrontendMap {
   }
 
   /* eslint-disable */
-  openInfoWindow(this: FrontendMap, index: number): void {
+  openInfoWindow(index: number): void {
     // do nothing.
   }
   /* eslint-enable */
@@ -112,28 +112,30 @@ export default class FrontendMap {
   /**
    * Initialize list click events
    */
-  initializeListEvents(this: FrontendMap): void {
-    $(document).on('click', (event: Event) => {
-      if (!$(event.target).is('.tx-storefinder .resultList > li')) {
+  initializeListEvents(): void {
+    document.addEventListener('click', (event: Event) => {
+      const target = event.target as HTMLElement;
+      if (!target.matches('.tx-storefinder .resultList > li')) {
         return;
       }
-      this.openInfoWindow($(event.target).data('index'));
-    });
+      this.openInfoWindow(parseInt(target.dataset.index, 10));
+    })
   }
 
   /**
    * Initialize info window template
    */
-  initializeTemplates(this: FrontendMap): void {
-    this.infoWindowTemplate = $('#templateInfoWindow').html();
+  initializeTemplates(): void {
+    this.infoWindowTemplate = document.getElementById('templateInfoWindow').innerHTML;
     Mustache.parse(this.infoWindowTemplate);
 
-    $(document).on('click', (event: Event) => {
-      if (!$(event.target).is('.tx-storefinder .infoWindow .close')) {
+    document.addEventListener('click', (event: Event) => {
+      const target = event.target as HTMLElement;
+      if (!target.matches('.tx-storefinder .infoWindow .close')) {
         return;
       }
       if (typeof this.mapConfiguration.renderSingleViewCallback === 'function') {
-        this.mapConfiguration.handleCloseButtonCallback($(event.target));
+        this.mapConfiguration.handleCloseButtonCallback(target);
       } else {
         this.closeInfoWindow();
       }
@@ -150,6 +152,39 @@ export default class FrontendMap {
     this.initializeInfoWindow();
     this.initializeTemplates();
     this.initializeListEvents();
+  }
+
+  /**
+   * Create a promise that resolves once the given resource is loaded
+   */
+  createFilePromise(uri: string, integrity: string = '', crossOrigin: string = ''): Promise<string> {
+    return new Promise((resolve, reject) => {
+      let element: HTMLLinkElement|HTMLScriptElement;
+      if (uri.match(/\.css/)) {
+        element = document.createElement('link');
+        element.rel = 'stylesheet';
+        element.href = uri;
+      } else {
+        element = document.createElement('script');
+        element.src = uri;
+      }
+
+      if (integrity.length > 0) {
+        element.integrity = integrity;
+      }
+
+      if (crossOrigin.length > 0) {
+        element.crossOrigin = crossOrigin;
+      }
+
+      element.onload = () => {
+        resolve(uri);
+      };
+      element.onerror = () => {
+        reject(uri);
+      };
+      document.head.appendChild(element);
+    })
   }
 
   loadScript(): void {
