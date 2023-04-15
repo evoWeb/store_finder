@@ -44,14 +44,12 @@ class CacheService
     public function flushCacheByTags(array $tags): void
     {
         GeneralUtility::makeInstance(CacheManager::class)
-            ->getCache('cache_pages')
+            ->getCache('pages')
             ->flushByTags($tags);
     }
 
     protected function getTypoScriptFrontendController(): ?TypoScriptFrontendController
     {
-        return $GLOBALS['TSFE'] instanceof TypoScriptFrontendController
-            ? $GLOBALS['TSFE']
-            : null;
+        return $GLOBALS['TSFE'];
     }
 }

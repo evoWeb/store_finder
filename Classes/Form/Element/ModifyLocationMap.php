@@ -16,6 +16,7 @@ namespace Evoweb\StoreFinder\Form\Element;
  */
 
 use TYPO3\CMS\Backend\Form\Element\AbstractFormElement;
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Page\JavaScriptModuleInstruction;
 use TYPO3\CMS\Core\Utility\StringUtility;
 
@@ -23,10 +24,15 @@ class ModifyLocationMap extends AbstractFormElement
 {
     public function render(): array
     {
-        $row = $this->data['databaseRow'];
-        $latitude = (float)($row['latitude'] ?: 51.4583912);
-        $longitude = (float)($row['longitude'] ?: 7.0157931);
+        try {
+            $configuration = (new ExtensionConfiguration())->get('store_finder');
+        } catch (\Exception) {
+            $configuration = [];
+        }
+
         $fieldId = StringUtility::getUniqueId('formengine-map-');
+
+        $row = $this->data['databaseRow'];
 
         $resultArray = $this->initializeResultArray();
 
@@ -35,11 +41,11 @@ class ModifyLocationMap extends AbstractFormElement
         $resultArray['javaScriptModules']['modifyLocationMap'] = JavaScriptModuleInstruction::create(
             '@evoweb/store-finder/form-engine/element/backend-osm-map.js'
         )->instance([
-            'uid' => $row['uid'],
             'mapId' => $fieldId,
-            'latitude' => $latitude,
-            'longitude' => $longitude,
-            'zoom' => 15
+            'uid' => $row['uid'],
+            'latitude' => (float)($row['latitude'] ?: $configuration['latitude'] ?? 51.4583912),
+            'longitude' => (float)($row['longitude'] ?: $configuration['longitude'] ?? 7.0157931),
+            'zoom' => (int)($configuration['zoom'] ?? 16)
         ]);
 
         return $resultArray;

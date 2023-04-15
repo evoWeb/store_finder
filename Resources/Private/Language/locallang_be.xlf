@@ -15,6 +15,15 @@
 			<trans-unit id="apiConsoleKeyGeocoding">
 				<source>Private key for geocoding</source>
 			</trans-unit>
+			<trans-unit id="latitude">
+				<source>Default latitude in location record form</source>
+			</trans-unit>
+			<trans-unit id="longitude">
+				<source>Default longitude in location record form</source>
+			</trans-unit>
+			<trans-unit id="zoom">
+				<source>Default zoom in location record form</source>
+			</trans-unit>
 			<trans-unit id="addPaginator">
 				<source>Add paginator to lists</source>
 			</trans-unit>

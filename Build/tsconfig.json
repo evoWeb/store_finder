@@ -20,9 +20,6 @@
 		"paths": {
 			"@evoweb/store-finder/form-engine/*": [
 				"form-engine/*"
-			],
-			"@evoweb/store-finder/leaflet/*": [
-				"../../node_modules/leaflet/dist/*"
 			]
 		},
 		"outDir": "../Resources/Public/JavaScript",
