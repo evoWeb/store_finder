@@ -1,6 +1,5 @@
 plugin.tx_storefinder.settings {
   includeStyleSheet = true
-  includeJquery = true
 
   geocoderProvider = {$plugin.tx_storefinder.geocoderProvider}
   geocoderLocale = {$plugin.tx_storefinder.geocoderLocale}

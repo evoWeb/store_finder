@@ -15517,9 +15517,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * Module: TYPO3/CMS/StoreFinder/FrontendOsmMap
+ * Module: Evoweb/StoreFinder/FrontendOsmMap
  * contains all logic for the frontend map output
- * @exports TYPO3/CMS/StoreFinder/FrontendOsmMap
  */
 class FrontendOsmMap extends _FrontendMap__WEBPACK_IMPORTED_MODULE_0__["default"] {
     /**
@@ -15534,9 +15533,9 @@ class FrontendOsmMap extends _FrontendMap__WEBPACK_IMPORTED_MODULE_0__["default"
             this.map.setView([0, 0], 13);
         }
         // more providers can be found here http://leaflet-extras.github.io/leaflet-providers/preview/
-        leaflet__WEBPACK_IMPORTED_MODULE_1__.tileLayer('https://korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}', {
-            maxZoom: 20,
-            attribution: 'Imagery from <a href="https://www.geog.uni-heidelberg.de/gis/index_en.html">GIScience Research Group @ University of Heidelberg</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        leaflet__WEBPACK_IMPORTED_MODULE_1__.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+            maxZoom: 20
         }).addTo(this.map);
     }
     /**
@@ -15610,8 +15609,7 @@ class FrontendOsmMap extends _FrontendMap__WEBPACK_IMPORTED_MODULE_0__["default"
      */
     loadScript() {
         Promise.all([
-            this.createFilePromise('https://unpkg.com/leaflet@1.9.3/dist/leaflet.css', 'sha512-mD70nAW2ThLsWH0zif8JPbfraZ8hbCtjQ+5RU1m4+ztZq6/MymyZeB55pWsi4YAX+73yvcaJyk61mzfYMvtm9w==', 'anonymous'),
-            this.createFilePromise('https://unpkg.com/leaflet@1.9.3/dist/leaflet.js', 'sha512-Dqm3h1Y4qiHUjbhxTuBGQsza0Tfppn53SHlu/uj1f+RT+xfShfe7r6czRf5r2NmllO2aKx+tYJgoxboOkn1Scg==', 'anonymous')
+            this.createFilePromise('https://unpkg.com/leaflet@1.9.3/dist/leaflet.css', 'sha512-mD70nAW2ThLsWH0zif8JPbfraZ8hbCtjQ+5RU1m4+ztZq6/MymyZeB55pWsi4YAX+73yvcaJyk61mzfYMvtm9w==', 'anonymous')
         ])
             .then(() => {
             const wait = () => {

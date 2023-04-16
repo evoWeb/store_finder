@@ -13,9 +13,8 @@
 import FrontendMap from './FrontendMap';
 
 /**
- * Module: TYPO3/CMS/StoreFinder/FrontendGoogleMap
+ * Module: Evoweb/StoreFinder/FrontendGoogleMap
  * contains all logic for the frontend map output
- * @exports TYPO3/CMS/StoreFinder/FrontendGoogleMap
  */
 class FrontendGoogleMap extends FrontendMap {
   private map: google.maps.Map;

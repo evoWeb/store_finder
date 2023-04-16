@@ -1042,9 +1042,8 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 /**
- * Module: TYPO3/CMS/StoreFinder/FrontendGoogleMap
+ * Module: Evoweb/StoreFinder/FrontendGoogleMap
  * contains all logic for the frontend map output
- * @exports TYPO3/CMS/StoreFinder/FrontendGoogleMap
  */
 class FrontendGoogleMap extends _FrontendMap__WEBPACK_IMPORTED_MODULE_0__["default"] {
     /**
