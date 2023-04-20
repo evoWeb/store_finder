@@ -367,7 +367,6 @@ return [
             'label' => $languageFile . 'tx_storefinder_domain_model_location.related',
             'config' => [
                 'type' => 'group',
-                'internal_type' => 'db',
                 'allowed' => 'tx_storefinder_domain_model_location',
                 'foreign_table' => 'tx_storefinder_domain_model_location',
                 'foreign_table_where' => 'AND tx_storefinder_domain_model_location.uid != ###THIS_UID###

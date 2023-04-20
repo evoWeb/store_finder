@@ -156,10 +156,10 @@ class GeocodeService
             $country = $queryValues['country'] ?? '';
             unset($queryValues['country']);
 
-            $query = \Geocoder\Query\GeocodeQuery::create(implode(',', $queryValues));
+            $query = GeocodeQuery::create(implode(',', $queryValues));
             $query = $query->withData('components', 'country:' . $country);
 
-            $geoCoder = new \Geocoder\StatefulGeocoder($provider, $this->settings['geocoderLocale']);
+            $geoCoder = new StatefulGeocoder($provider, $this->settings['geocoderLocale']);
             $results = $geoCoder->geocodeQuery($query);
             $this->hasMultipleResults = $results->count() > 1;
             if ($results->count() > 0) {

@@ -28,25 +28,13 @@ use TYPO3\CMS\Core\Http\JsonResponse;
 
 class LocationMiddleware implements MiddlewareInterface
 {
-    /**
-     * @var ConnectionPool
-     */
-    protected $connectionPool;
+    protected ConnectionPool $connectionPool;
 
-    /**
-     * @var JsonResponse
-     */
-    protected $jsonResponse;
+    protected JsonResponse $jsonResponse;
 
-    /**
-     * @var MiddlewareCache
-     */
-    protected $cachingService;
+    protected MiddlewareCache $cachingService;
 
-    /**
-     * @var EventDispatcher
-     */
-    protected $eventDispatcher;
+    protected EventDispatcher $eventDispatcher;
 
     public function __construct(
         ConnectionPool $connectionPool,

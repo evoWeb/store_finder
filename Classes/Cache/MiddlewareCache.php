@@ -21,15 +21,9 @@ use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 
 class MiddlewareCache
 {
-    /**
-     * @var FrontendInterface
-     */
-    protected $frontendInterface;
+    protected FrontendInterface $frontendInterface;
 
-    /**
-     * @var FrontendUserAuthentication
-     */
-    protected $frontendUser;
+    protected FrontendUserAuthentication $frontendUser;
 
     public function __construct(FrontendInterface $frontendInterface, FrontendUserAuthentication $frontendUser)
     {

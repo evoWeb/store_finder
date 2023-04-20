@@ -14,7 +14,7 @@ namespace Evoweb\StoreFinder\Domain\Model;
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  */
-
+use TYPO3\CMS\Extbase\Annotation\ORM\Lazy;
 use TYPO3\CMS\Extbase\Domain\Model\Category as ExtbaseCategory;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
@@ -22,7 +22,7 @@ class Category extends ExtbaseCategory
 {
     /**
      * @var ObjectStorage<Category>
-     * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
+     * @Lazy
      */
     protected ?ObjectStorage $children = null;
 

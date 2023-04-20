@@ -14,7 +14,7 @@ namespace Evoweb\StoreFinder\Domain\Model;
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  */
-
+use TYPO3\CMS\Extbase\Annotation\ORM\Lazy;
 use SJBR\StaticInfoTables\Domain\Model\Country;
 use SJBR\StaticInfoTables\Domain\Model\CountryZone;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
@@ -66,61 +66,61 @@ class Location extends AbstractEntity
 
     /**
      * @var ObjectStorage<Attribute>
-     * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
+     * @Lazy
      */
     protected ObjectStorage $attributes;
 
     /**
      * @var ObjectStorage<Category>
-     * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
+     * @Lazy
      */
     protected ObjectStorage $categories;
 
     /**
      * @var ObjectStorage<Content>
-     * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
+     * @Lazy
      */
     protected ObjectStorage $contentElements;
 
     /**
      * @var ObjectStorage<Location>
-     * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
+     * @Lazy
      */
     protected ObjectStorage $related;
 
     /**
      * @var ObjectStorage<FileReference>
-     * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
+     * @Lazy
      */
     protected ObjectStorage $image;
 
     /**
      * @var ObjectStorage<FileReference>
-     * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
+     * @Lazy
      */
     protected ObjectStorage $media;
 
     /**
      * @var ObjectStorage<FileReference>
-     * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
+     * @Lazy
      */
     protected ObjectStorage $layer;
 
     /**
      * @var ObjectStorage<FileReference>
-     * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
+     * @Lazy
      */
     protected ObjectStorage $icon;
 
     /**
      * @var ?Country
-     * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
+     * @Lazy
      */
     protected $country;
 
     /**
      * @var ?CountryZone
-     * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
+     * @Lazy
      */
     protected $state;
 

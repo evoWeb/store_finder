@@ -165,7 +165,7 @@
                             <config>
                                 <type>select</type>
                                 <renderType>selectMultipleSideBySide</renderType>
-                                <foreign_table>sys_categories</foreign_table>
+                                <foreign_table>sys_category</foreign_table>
                                 <foreign_table_where>AND {#sys_category}.{#children} = 0</foreign_table_where>
                                 <size>3</size>
                                 <maxitems>50</maxitems>

@@ -270,7 +270,7 @@ class MapController extends ActionController
      *
      * @return ResponseInterface
      *
-     * @TYPO3\CMS\Extbase\Annotation\Validate("Evoweb\StoreFinder\Validation\Validator\Constraint", param="constraint")
+     * @Validate("Evoweb\StoreFinder\Validation\Validator\Constraint", param="constraint")
      */
     public function searchAction(Constraint $constraint): ResponseInterface
     {

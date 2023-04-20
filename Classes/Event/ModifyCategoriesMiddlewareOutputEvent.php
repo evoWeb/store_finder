@@ -20,11 +20,11 @@ use Psr\Http\Message\ServerRequestInterface;
 
 final class ModifyCategoriesMiddlewareOutputEvent
 {
-    private $categoryMiddleware;
+    private CategoryMiddleware $categoryMiddleware;
 
-    private $categories;
+    private array $categories;
 
-    private $request;
+    private ServerRequestInterface $request;
 
     public function __construct(
         CategoryMiddleware $categoryMiddleware,
@@ -36,54 +36,36 @@ final class ModifyCategoriesMiddlewareOutputEvent
         $this->request = $request;
     }
 
-    /**
-     * @return CategoryMiddleware
-     */
     public function getCategoryMiddleware(): CategoryMiddleware
     {
         return $this->categoryMiddleware;
     }
 
-    /**
-     * @param CategoryMiddleware $categoryMiddleware
-     */
-    public function setCategoryMiddleware(CategoryMiddleware $categoryMiddleware)
+    public function setCategoryMiddleware(CategoryMiddleware $categoryMiddleware): self
     {
         $this->categoryMiddleware = $categoryMiddleware;
 
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public function getCategories(): array
     {
         return $this->categories;
     }
 
-    /**
-     * @param array $categories
-     */
-    public function setCategories(array $categories)
+    public function setCategories(array $categories): self
     {
         $this->categories = $categories;
 
         return $this;
     }
 
-    /**
-     * @return ServerRequestInterface
-     */
     public function getRequest(): ServerRequestInterface
     {
         return $this->request;
     }
 
-    /**
-     * @param ServerRequestInterface $request
-     */
-    public function setRequest(ServerRequestInterface $request)
+    public function setRequest(ServerRequestInterface $request): self
     {
         $this->request = $request;
 

@@ -29,35 +29,17 @@ use TYPO3\CMS\Core\Service\FlexFormService;
 
 class CategoryMiddleware implements MiddlewareInterface
 {
-    /**
-     * @var ConnectionPool
-     */
-    protected $connectionPool;
+    protected ConnectionPool $connectionPool;
 
-    /**
-     * @var JsonResponse
-     */
-    protected $jsonResponse;
+    protected JsonResponse $jsonResponse;
 
-    /**
-     * @var FlexFormService
-     */
-    protected $flexFormService;
+    protected FlexFormService $flexFormService;
 
-    /**
-     * @var array
-     */
-    protected $settings;
+    protected array $settings;
 
-    /**
-     * @var MiddlewareCache
-     */
-    protected $cachingService;
+    protected MiddlewareCache $cachingService;
 
-    /**
-     * @var EventDispatcher
-     */
-    protected $eventDispatcher;
+    protected EventDispatcher $eventDispatcher;
 
     public function __construct(
         ConnectionPool $connectionPool,
@@ -82,7 +64,7 @@ class CategoryMiddleware implements MiddlewareInterface
             && $queryParams['action'] == 'categories'
         ) {
             // @todo make dynamic with js post data
-            $mapPluginId = 643;
+            $mapPluginId = 2;
 
             $cacheIdentifier = md5(
                 serialize(

@@ -20,11 +20,11 @@ use Psr\Http\Message\ServerRequestInterface;
 
 final class ModifyLocationsMiddlewareOutputEvent
 {
-    private $locationMiddleware;
+    private LocationMiddleware $locationMiddleware;
 
-    private $locations;
+    private array $locations;
 
-    private $request;
+    private ServerRequestInterface $request;
 
     public function __construct(LocationMiddleware $locationMiddleware, array $locations, ServerRequestInterface $request)
     {
@@ -33,17 +33,11 @@ final class ModifyLocationsMiddlewareOutputEvent
         $this->request = $request;
     }
 
-    /**
-     * @return LocationMiddleware
-     */
     public function getLocationMiddleware(): LocationMiddleware
     {
         return $this->locationMiddleware;
     }
 
-    /**
-     * @param LocationMiddleware $locationMiddleware
-     */
     public function setLocationMiddleware(LocationMiddleware $locationMiddleware): self
     {
         $this->locationMiddleware = $locationMiddleware;
@@ -51,17 +45,11 @@ final class ModifyLocationsMiddlewareOutputEvent
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public function getLocations(): array
     {
         return $this->locations;
     }
 
-    /**
-     * @param array $locations
-     */
     public function setLocations(array $locations): self
     {
         $this->locations = $locations;
@@ -69,9 +57,6 @@ final class ModifyLocationsMiddlewareOutputEvent
         return $this;
     }
 
-    /**
-     * @return ServerRequestInterface
-     */
     public function getRequest(): ServerRequestInterface
     {
         return $this->request;

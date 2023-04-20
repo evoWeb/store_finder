@@ -8,7 +8,8 @@ namespace Evoweb\StoreFinder\Service;
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
  */
-
+use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
+use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use Evoweb\StoreFinder\Domain\Model\Location;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -46,7 +47,7 @@ class CacheService
     /**
      * @param string $tag
      * @throws \InvalidArgumentException
-     * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
+     * @throws NoSuchCacheException
      */
     public function flushCacheByTag(string $tag): void
     {
@@ -56,17 +57,17 @@ class CacheService
     /**
      * @param array $tags
      * @throws \InvalidArgumentException
-     * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
+     * @throws NoSuchCacheException
      */
     public function flushCacheByTags(array $tags): void
     {
         GeneralUtility::makeInstance(CacheManager::class)
-            ->getCache('cache_pages')
+            ->getCache('pages')
             ->flushByTags($tags);
     }
 
     /**
-     * @return mixed|\TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController
+     * @return mixed|TypoScriptFrontendController
      */
     protected function getTypoScriptFrontendController()
     {
