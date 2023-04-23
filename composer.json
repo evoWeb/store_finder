@@ -18,7 +18,7 @@
 	"support": {
 		"source" : "https://github.com/evoWeb/store_finder",
 		"issues": "https://github.com/evoWeb/store_finder/issues",
-		"docs": "https://docs.typo3.org/p/evoweb/store-finder/master/en-us/"
+		"docs": "https://docs.typo3.org/p/evoweb/store-finder/main/en-us/"
 	},
 	"config": {
 		"bin-dir": "bin",
