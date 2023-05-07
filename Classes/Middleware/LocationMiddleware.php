@@ -69,8 +69,7 @@ class LocationMiddleware implements MiddlewareInterface
             && !empty($queryParams['action'])
             && $queryParams['action'] == 'locations'
         ) {
-            // @todo make filter dynamic with js implementation
-            $filter = '';
+            $filter = $queryParams['ids'];
 
             $cacheIdentifier = md5(serialize($filter ?? 'allLocationsCacheIdentifier'));
 
@@ -112,7 +111,7 @@ class LocationMiddleware implements MiddlewareInterface
 
         if (!empty($filter)) {
             $locations->andWhere(
-                $locations->expr()->inSet('uid', $filter)
+                $locations->expr()->in('uid', $filter)
             );
         }
 
