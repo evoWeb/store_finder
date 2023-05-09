@@ -509,8 +509,8 @@ return [
                 'cols' => 80,
                 'rows' => 15,
                 'enableRichtext' => true,
-                'softref' => 'rtehtmlarea_images,typolink_tag,images,email[subst],url',
-            ],
+                'softref' => 'typolink_tag,images,email[subst],url',
+            ]
         ],
 
         'url' => [
@@ -521,7 +521,6 @@ return [
                 'size' => 30,
                 'max' => 255,
                 'eval' => 'trim',
-                'renderType' => 'inputLink',
                 'fieldControl' => ['linkPopup' => ['options' => ['title' => 'Link']]],
             ],
         ],
@@ -586,7 +585,7 @@ return [
                     'minitems' => 0,
                     'maxitems' => 1,
                 ],
-                'svg,kml'
+                'svg,kml,geojson'
             ),
         ],
 

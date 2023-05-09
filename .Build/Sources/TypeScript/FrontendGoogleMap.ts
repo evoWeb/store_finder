@@ -47,8 +47,8 @@ class FrontendGoogleMap extends FrontendMap {
     if (self.mapConfiguration.mapStyles) {
         mapOptions.styles = self.mapConfiguration.mapStyles;
     }
-    
-    this.map = new google.maps.Map($('#tx_storefinder_map')[0], mapOptions);
+
+    this.map = new google.maps.Map(document.getElementById('tx_storefinder_map'), mapOptions);
 
     if (this.mapConfiguration.afterSearch === 0 && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
@@ -85,14 +85,14 @@ class FrontendGoogleMap extends FrontendMap {
   /**
    * Close previously open info window, renders new content and opens the window
    */
-  showInformation(this: FrontendGoogleMap, location: Location, marker: any) {
+  showInformation(this: FrontendGoogleMap, location: Location) {
     if (typeof this.mapConfiguration.renderSingleViewCallback === 'function') {
       this.mapConfiguration.renderSingleViewCallback(location, this.infoWindowTemplate);
     } else {
       this.infoWindow.close();
       this.infoWindow.setContent(this.renderInfoWindowContent(location));
-      this.infoWindow.setPosition(marker.getPosition());
-      this.infoWindow.open(this.map, marker);
+      this.infoWindow.setPosition(location.marker.getPosition());
+      this.infoWindow.open(this.map, location.marker);
     }
   }
 
@@ -109,7 +109,7 @@ class FrontendGoogleMap extends FrontendMap {
     marker.setMap(this.map);
 
     marker.addListener('click', () => {
-      this.showInformation(location, marker);
+      this.showInformation(location);
     });
 
     return marker;
@@ -152,16 +152,16 @@ class FrontendGoogleMap extends FrontendMap {
       apiUrl = self.mapConfiguration.apiUrl;
     }
 
-    let $jsDeferred = $.Deferred(),
-      $jsFile = $('<script/>', {
+    let jsDeferred = $.Deferred(),
+      jsFile = $('<script/>', {
         src: apiUrl + parameter,
         crossorigin: ''
       }).appendTo('head');
 
-    $jsDeferred.resolve($jsFile);
+    jsDeferred.resolve(jsFile);
 
     $.when(
-      $jsDeferred.promise()
+      jsDeferred.promise()
     ).done(function () {
       function wait(this: FrontendMap) {
         if (typeof google !== 'undefined') {

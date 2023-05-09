@@ -31,6 +31,9 @@ declare interface MapConfiguration {
   kmlUrl: string,
   mapStyles?: Array<object>,
 
+  attribution?: string,
+  style?: string,
+
   renderSingleViewCallback(location: object, template: string): void,
   handleCloseButtonCallback(button: object): void,
 }
@@ -43,8 +46,13 @@ declare interface BackendConfiguration {
 }
 
 declare interface Window {
-    mapConfiguration: MapConfiguration,
-    locations: Array<any>
+  mapConfiguration: MapConfiguration,
+  locations: Array<any>,
+  sfas: any
+}
+
+interface Element {
+  msMatchesSelector(selectors: string): boolean;
 }
 
 declare interface Location {
@@ -52,6 +60,7 @@ declare interface Location {
   lat: number,
   lng: number,
   information: {
+    uid: number,
     index: number,
     icon: string,
   },

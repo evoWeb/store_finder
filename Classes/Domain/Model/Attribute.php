@@ -31,6 +31,10 @@ class Attribute extends AbstractEntity
 
     protected string $name;
 
+    protected string $description;
+
+    protected string $cssClass = '';
+
     public function getIcon(): FileReference
     {
         if ($this->icon instanceof LazyLoadingProxy) {
@@ -52,5 +56,25 @@ class Attribute extends AbstractEntity
     public function setName(string $name)
     {
         $this->name = $name;
+    }
+
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): void
+    {
+        $this->description = $description;
+    }
+
+    public function getCssClass(): string
+    {
+        return $this->cssClass;
+    }
+
+    public function setCssClass(string $cssClass)
+    {
+        $this->cssClass = $cssClass;
     }
 }

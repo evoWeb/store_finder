@@ -175,6 +175,17 @@
 				<source>Icon</source>
 				<target>Icon</target>
 			</trans-unit>
+			<trans-unit id="tx_storefinder_domain_model_attribute.description">
+				<source>Description</source>
+				<target>Beschreibung</target>
+			</trans-unit>
+			<trans-unit id="tx_storefinder_domain_model_attribute.css_class">
+				<source>CSS Class</source>
+				<target>CSS Klasse</target>
+			</trans-unit>
+			<trans-unit id="sys_category.children">
+				<source>Unterkategorie</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

@@ -132,6 +132,12 @@
 			<trans-unit id="tx_storefinder_domain_model_attribute.icon">
 				<source>Icon</source>
 			</trans-unit>
+			<trans-unit id="tx_storefinder_domain_model_attribute.description">
+				<source>Description</source>
+			</trans-unit>
+			<trans-unit id="tx_storefinder_domain_model_attribute.css_class">
+				<source>CSS Class</source>
+			</trans-unit>
 
 			<trans-unit id="sys_category.children">
 				<source>Child categories</source>

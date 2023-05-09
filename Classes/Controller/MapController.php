@@ -31,6 +31,9 @@ use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Pagination\SimplePagination;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Mvc\Controller\Arguments;
+use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
+use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Annotation\Validate;
 use TYPO3\CMS\Extbase\Http\ForwardResponse;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
@@ -344,6 +347,13 @@ class MapController extends ActionController
         }
 
         if ($this->settings['showBeforeSearch'] & 4) {
+            $this->locationRepository->setDefaultOrderings([
+                'country' => QueryInterface::ORDER_DESCENDING,
+                'zipcode' => QueryInterface::ORDER_ASCENDING,
+                'city' => QueryInterface::ORDER_ASCENDING,
+                'name' => QueryInterface::ORDER_ASCENDING,
+            ]);
+
             $locations = $this->locationRepository->findAll();
         }
 
@@ -353,6 +363,11 @@ class MapController extends ActionController
 
         /** @var QueryResultInterface $locations */
         return [$locations, $constraint];
+    }
+
+    protected function isDisabledFetchLocation(string $action, array $settings): bool
+    {
+        return in_array(str_replace('Action', '', $action), ($settings['disableFetchLocationInAction'] ?? []));
     }
 
     public function showAction(Location $location = null): ResponseInterface
@@ -584,8 +599,28 @@ class MapController extends ActionController
         }
     }
 
+    public function getView(): ViewInterface
+    {
+        return $this->view;
+    }
+
+    protected function getErrorFlashMessage()
+    {
+        return false;
+    }
+
     public function getSettings(): array
     {
         return $this->settings;
+    }
+
+    public function getActionMethodName(): string
+    {
+        return $this->actionMethodName;
+    }
+
+    public function getArguments(): Arguments
+    {
+        return $this->arguments;
     }
 }

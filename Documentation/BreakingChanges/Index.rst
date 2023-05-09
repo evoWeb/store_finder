@@ -10,7 +10,7 @@ Breaking Changes
 29. August 2022
 ===============
 
-The import command is refactores and the arguments and options are cleaned up. Please read the :ref:`docs <importCommand>` for the changes
+The import command is refactored and the arguments and options are cleaned up. Please read the :ref:`docs <importCommand>` for the changes
 
 
 15. February 2021

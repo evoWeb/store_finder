@@ -49,27 +49,17 @@ class FrontendOsmMap extends FrontendMap {
    * Initialize information layer on map
    */
   initializeLayer(this: FrontendOsmMap) {
-    /*if (this.mapConfiguration.apiV3Layers.indexOf('traffic') > -1) {
-      let trafficLayer = new google.maps.TrafficLayer();
-      trafficLayer.setMap(this.map);
-    }
-
-    if (this.mapConfiguration.apiV3Layers.indexOf('bicycling') > -1) {
-      let bicyclingLayer = new google.maps.BicyclingLayer();
-      bicyclingLayer.setMap(this.map);
-    }*/
-
     if (this.mapConfiguration.apiV3Layers.indexOf('kml') > -1) {
-      let $jsDeferred = $.Deferred(),
-        $jsFile = $('<script/>', {
+      let jsDeferred = $.Deferred(),
+        jsFile = $('<script/>', {
           src: 'https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js',
           crossorigin: ''
         }).appendTo('head');
 
-      $jsDeferred.resolve($jsFile);
+      jsDeferred.resolve(jsFile);
 
       let self = this;
-      $.when($jsDeferred.promise()).done(function () {
+      $.when(jsDeferred.promise()).done(function () {
         let kmlLayer = omnivore.kml(self.mapConfiguration.kmlUrl);
         kmlLayer.setMap(self.map);
       }).fail(function () {
@@ -81,14 +71,14 @@ class FrontendOsmMap extends FrontendMap {
   /**
    * Close previously open info window, renders new content and opens the window
    */
-  showInformation(this: FrontendOsmMap, location: Location, marker: any) {
+  showInformation(this: FrontendOsmMap, location: Location) {
     if (typeof this.mapConfiguration.renderSingleViewCallback === 'function') {
       this.mapConfiguration.renderSingleViewCallback(location, this.infoWindowTemplate);
     } else {
       if (this.infoWindow.isOpen()) {
         this.infoWindow.closePopup();
       }
-      this.infoWindow = marker.getPopup();
+      this.infoWindow = location.marker.getPopup();
       this.infoWindow.setContent(this.renderInfoWindowContent(location));
       this.infoWindow.setLatLng(L.latLng(location.lat, location.lng));
       this.infoWindow.openOn(this.map);
@@ -98,7 +88,7 @@ class FrontendOsmMap extends FrontendMap {
   /**
    * Create marker and add to map
    */
-  createMarker(location: Location, icon: string): L.Marker {
+  createMarker(this: FrontendOsmMap, location: Location, icon: string): L.Marker {
     let options = {
         title: location.name,
         icon: new L.Icon({iconUrl: icon}),
@@ -107,10 +97,14 @@ class FrontendOsmMap extends FrontendMap {
     marker.bindPopup('').addTo(this.map);
 
     marker.on('click', () => {
-      this.showInformation(location, marker);
+      this.showInformation(location);
     });
 
     return marker;
+  }
+
+  removeMarker(location: Location) {
+    this.map.removeLayer(location.marker);
   }
 
   /**
@@ -139,27 +133,27 @@ class FrontendOsmMap extends FrontendMap {
    */
   loadScript() {
     let self = this,
-      $cssDeferred = $.Deferred(),
-      $cssFile = $('<link/>', {
+      cssDeferred = $.Deferred(),
+      cssFile = $('<link/>', {
         rel: 'stylesheet',
         type: 'text/css',
         href: 'https://unpkg.com/leaflet@1.5.1/dist/leaflet.css',
         integrity: 'sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==',
         crossorigin: ''
       }).appendTo('head'),
-      $jsDeferred = $.Deferred(),
-      $jsFile = $('<script/>', {
+      jsDeferred = $.Deferred(),
+      jsFile = $('<script/>', {
         src: 'https://unpkg.com/leaflet@1.5.1/dist/leaflet.js',
         integrity: 'sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA==',
         crossorigin: ''
       }).appendTo('head');
 
-    $cssDeferred.resolve($cssFile);
-    $jsDeferred.resolve($jsFile);
+    cssDeferred.resolve(cssFile);
+    jsDeferred.resolve(jsFile);
 
     $.when(
-      $cssDeferred.promise(),
-      $jsDeferred.promise()
+      cssDeferred.promise(),
+      jsDeferred.promise()
     ).done(function () {
       function wait(this: FrontendMap) {
         if (typeof L !== 'undefined') {

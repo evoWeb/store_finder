@@ -17,4 +17,12 @@ plugin.tx_storefinder {
 
   # cat=store_finder//130; type=bool; label=LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:addPaginator
   addPaginator = 0
+
+  ajax {
+    templateRootPaths = EXT:store_finder/Resources/Private/Templates/
+    partialRootPaths = EXT:store_finder/Resources/Private/Partials/
+    layoutRootPaths = EXT:store_finder/Resources/Private/Layouts/
+
+    storagePid =
+  }
 }

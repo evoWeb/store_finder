@@ -26,8 +26,11 @@ final class ModifyLocationsMiddlewareOutputEvent
 
     private ServerRequestInterface $request;
 
-    public function __construct(LocationMiddleware $locationMiddleware, array $locations, ServerRequestInterface $request)
-    {
+    public function __construct(
+        LocationMiddleware $locationMiddleware,
+        array $locations,
+        ServerRequestInterface $request
+    ) {
         $this->locationMiddleware = $locationMiddleware;
         $this->locations = $locations;
         $this->request = $request;

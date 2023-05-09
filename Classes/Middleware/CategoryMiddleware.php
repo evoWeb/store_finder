@@ -59,8 +59,8 @@ class CategoryMiddleware implements MiddlewareInterface
     {
         $queryParams = $request->getQueryParams();
 
-        if (isset($queryParams['action'])
-            && !empty($queryParams['action'])
+        if (
+            !empty($queryParams['action'])
             && $queryParams['action'] == 'categories'
         ) {
             // @todo make dynamic with js post data

@@ -12,26 +12,7 @@
 import * as Mustache from 'mustache';
 
 export default class FrontendMap {
-  public mapConfiguration: MapConfiguration = {
-    active: false,
-    afterSearch: 0,
-    center: {
-      lat: 0,
-      lng: 0
-    },
-    zoom: 18,
-
-    apiConsoleKey: '',
-    apiUrl: '',
-    language: '',
-
-    markerIcon: '',
-    apiV3Layers: '',
-    kmlUrl: '',
-
-    renderSingleViewCallback: null,
-    handleCloseButtonCallback: null
-  };
+  public mapConfiguration: MapConfiguration;
   public locations: Array<Location> = [];
   public locationIndex: number = 0;
   public infoWindowTemplate: string = '';
@@ -49,6 +30,11 @@ export default class FrontendMap {
       }
       this.loadScript();
     }
+
+    if (!Element.prototype.matches) {
+      Element.prototype.matches = Element.prototype.msMatchesSelector ||
+        Element.prototype.webkitMatchesSelector;
+    }
   }
 
   initializeMap() {}
@@ -58,11 +44,21 @@ export default class FrontendMap {
   /**
    * Render content of the info window
    */
-  renderInfoWindowContent(location: Location): string {
+  renderInfoWindowContent(this: FrontendMap, location: Location): string {
     return Mustache.render(this.infoWindowTemplate, location.information)
   }
 
   createMarker(location: Location, icon: string) {}
+
+  removeMarker(location: Location) {}
+
+  removeLocation(location: Location) {
+    this.removeMarker(location);
+    let position = this.locations.indexOf(location);
+    if (position > -1) {
+      this.locations.splice(position, 1);
+    }
+  }
 
   /**
    * Process single location
@@ -83,8 +79,8 @@ export default class FrontendMap {
   /**
    * Initialize location marker on map
    */
-  initializeLocations(this: FrontendMap) {
-    this.locations.map(this.processLocation.bind(this));
+  initializeLocations(this: FrontendMap, locations: Array<Location>) {
+    locations.map(this.processLocation.bind(this));
   }
 
   initializeInfoWindow() {}
@@ -97,8 +93,12 @@ export default class FrontendMap {
    * Initialize list click events
    */
   initializeListEvents(this: FrontendMap) {
-    $(document).on('click', '.tx-storefinder .resultList > li', (event: Event, $field: JQuery): void => {
-      this.openInfoWindow($field.data('index'));
+    document.addEventListener('click', (event: Event) => {
+      let field = event.target as HTMLLIElement,
+        selector = '.tx-storefinder .resultList > li';
+      if (field.matches(selector)) {
+        this.openInfoWindow(parseInt(field.dataset.index));
+      }
     });
   }
 
@@ -106,14 +106,18 @@ export default class FrontendMap {
    * Initialize info window template
    */
   initializeTemplates(this: FrontendMap) {
-    this.infoWindowTemplate = $('#templateInfoWindow').html();
+    this.infoWindowTemplate = document.getElementById('templateInfoWindow').innerHTML;
     Mustache.parse(this.infoWindowTemplate);
 
-    $(document).on('click', '.tx-storefinder .infoWindow .close', (event: Event, $closeButton: JQuery): void => {
-      if (typeof this.mapConfiguration.renderSingleViewCallback === 'function') {
-        this.mapConfiguration.handleCloseButtonCallback($closeButton);
-      } else {
-        this.closeInfoWindow();
+    document.addEventListener('click', (event: Event) => {
+      let button = event.target as HTMLButtonElement,
+        selector = '.tx-storefinder .infoWindow .close';
+      if (button.matches(selector)) {
+        if (typeof this.mapConfiguration.handleCloseButtonCallback === 'function') {
+          this.mapConfiguration.handleCloseButtonCallback(button);
+        } else {
+          this.closeInfoWindow();
+        }
       }
     });
   }
@@ -124,12 +128,42 @@ export default class FrontendMap {
   postLoadScript() {
     this.initializeMap();
     this.initializeLayer();
-    this.initializeLocations();
+    this.initializeLocations(this.locations);
     this.initializeInfoWindow();
     this.initializeTemplates();
     this.initializeListEvents();
   }
 
   loadScript() {}
-}
 
+  public static ajax(
+    url: string,
+    formData: FormData = null,
+    successCallback: Function = null,
+    errorCallback: Function = null
+  ) {
+    let request = new XMLHttpRequest();
+
+    request.onreadystatechange = () => {
+      if (request.readyState === 4) {
+        if (request.status === 200) {
+          if (successCallback) {
+            successCallback(request.response);
+          }
+        } else {
+          if (successCallback) {
+            errorCallback(request.response);
+          }
+        }
+      }
+    }
+
+    if (formData) {
+      request.open('POST', url, true);
+      request.send(formData);
+    } else {
+      request.open('GET', url, true);
+      request.send();
+    }
+  }
+}

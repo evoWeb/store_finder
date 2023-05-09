@@ -82,7 +82,7 @@ class TceMainListener
         DataHandler $parentObject
     ) {
         $id = $this->remapId($id, $table, $parentObject);
-        
+
         if ($table === 'tx_storefinder_domain_model_location') {
             $location = $this->locationRepository->findByUidInBackend($id);
 

@@ -53,12 +53,13 @@ class LocationMiddleware implements MiddlewareInterface
     {
         $queryParams = $request->getQueryParams();
 
-        if (isset($queryParams['action'])
-            && !empty($queryParams['action'])
+        if (
+            !empty($queryParams['action'])
             && $queryParams['action'] == 'locations'
         ) {
             // @todo make filter dynamic with js implementation
             $filter = '';
+            $filter = $queryParams['ids'];
 
             $cacheIdentifier = md5(serialize($filter ?? 'allLocationsCacheIdentifier'));
 

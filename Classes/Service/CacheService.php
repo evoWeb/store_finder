@@ -1,5 +1,7 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
+
 namespace Evoweb\StoreFinder\Service;
 
 /*
@@ -8,6 +10,7 @@ namespace Evoweb\StoreFinder\Service;
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
  */
+
 use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use Evoweb\StoreFinder\Domain\Model\Location;

@@ -38,7 +38,7 @@ $overrideChildTca = [
 ];
 
 $table = 'tx_storefinder_domain_model_attribute';
-$languageFile = 'LLL:EXT:store_finder/Resources/Private/Language/locallang_db.xlf' . ':';
+$languageFile = 'LLL:EXT:store_finder/Resources/Private/Language/locallang_db.xlf:';
 
 return [
     'ctrl' => [
@@ -102,6 +102,21 @@ return [
                 'default' => ''
             ]
         ],
+        'hidden' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.visible',
+            'config' => [
+                'type' => 'check',
+                'renderType' => 'checkboxToggle',
+                'items' => [
+                    [
+                        0 => '',
+                        1 => '',
+                        'invertStateDisplay' => true
+                    ]
+                ],
+            ]
+        ],
 
         'name' => [
             'label' => $languageFile . 'tx_storefinder_domain_model_attribute.name',
@@ -131,18 +146,52 @@ return [
                 $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']
             ),
         ],
+
+        'description' => [
+            'label' => $languageFile . 'tx_storefinder_domain_model_attribute.description',
+            'config' => [
+                'type' => 'text',
+                'cols' => 80,
+                'rows' => 15,
+                'enableRichtext' => true,
+                'softref' => 'typolink_tag,images,email[subst],url',
+            ]
+        ],
+
+        'css_class' => [
+            'label' => $languageFile . 'tx_storefinder_domain_model_attribute.css_class',
+            'config' => [
+                'type' => 'input',
+                'size' => 50,
+                'max' => 255,
+                'eval' => 'trim',
+            ]
+        ],
     ],
 
     'types' => [
         '0' => [
-            'showitem' => 'sys_language_uid, l18n_parent, l18n_diffsource, name, icon'
+            'showitem' => '
+                --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,
+                    name, icon, description, css_class,
+                --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,
+                    --palette--;;language,
+                --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,
+                    --palette--;;hidden,
+            '
         ]
     ],
     'palettes' => [
         'language' => [
             'showitem' => '
-            sys_language_uid;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:sys_language_uid_formlabel,
-            l18n_parent
+                sys_language_uid;'
+                . 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:sys_language_uid_formlabel,
+                l18n_parent
+            ',
+        ],
+        'hidden' => [
+            'showitem' => '
+                hidden;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:field.default.hidden
             ',
         ],
     ]
