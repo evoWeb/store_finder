@@ -1,8 +1,11 @@
 <?php
 
+use SJBR\StaticInfoTables\Hook\Backend\Form\FormDataProvider\TcaSelectItemsProcessor;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+
 $languageFile = 'LLL:EXT:store_finder/Resources/Private/Language/locallang_db.xlf:';
 
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToInsertRecords(
+ExtensionManagementUtility::addToInsertRecords(
     'tx_storefinder_domain_model_location'
 );
 
@@ -232,8 +235,7 @@ return [
                 ],
                 'foreign_table' => 'static_countries',
                 'itemsProcFunc' =>
-                    \SJBR\StaticInfoTables\Hook\Backend\Form\FormDataProvider\TcaSelectItemsProcessor::class .
-                    '->translateCountriesSelector',
+                    TcaSelectItemsProcessor::class . '->translateCountriesSelector',
                 'size' => 1,
                 'minitems' => 1,
                 'maxitems' => 1,
