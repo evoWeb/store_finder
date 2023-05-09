@@ -80,7 +80,8 @@ class LocationRepository extends Repository
         $query = $this->createQuery();
         $query->getQuerySettings()
             ->setIgnoreEnableFields(true)
-            ->setRespectStoragePage(false);
+            ->setRespectStoragePage(false)
+            ->setRespectSyslanguage(false);
 
         /** @var Location $location */
         $location = $query
@@ -145,6 +146,7 @@ class LocationRepository extends Repository
 
             $queryBuilder = $this->addCountryQueryPart($constraint, $queryBuilder);
             $queryBuilder = $this->addCategoryQueryPart($constraint, $queryBuilder);
+            $queryBuilder = $this->addAttributeQueryPart($constraint, $queryBuilder);
             $queryBuilder = $this->addRadiusQueryPart($constraint, $queryBuilder);
             $queryBuilder = $this->addLimitQueryParts($constraint, $queryBuilder);
             $queryBuilder = $this->addFulltextSearchQueryParts($constraint, $queryBuilder);
@@ -212,6 +214,45 @@ class LocationRepository extends Repository
             );
         }
 
+        return $queryBuilder;
+    }
+
+    protected function addAttributeQueryPart(Constraint $constraint, QueryBuilder $queryBuilder): QueryBuilder
+    {
+        if ($constraint->getAttributes()->count()) {
+            $expression = $queryBuilder->expr();
+
+            $queryBuilder->innerJoin(
+                'l',
+                'tx_storefinder_location_attribute_mm',
+                'a',
+                (string) $expression->andX(
+                    $expression->eq('l.uid', 'a.uid_foreign'),
+                    $expression->eq(
+                        'a.tablenames',
+                        $queryBuilder->createNamedParameter('tx_storefinder_domain_model_attribute')
+                    ),
+                    $expression->eq(
+                        'a.fieldname',
+                        $queryBuilder->createNamedParameter('attributes')
+                    )
+                )
+            );
+
+            $fieldName = 'a.uid_foreign';
+            $constraints = [
+                $expression->isNull($fieldName),
+                $expression->eq($fieldName, $expression->literal('')),
+                $expression->eq($fieldName, $expression->literal('0')),
+            ];
+            foreach ($constraint->getAttributes() as $attribute) {
+                $constraints[] = $expression->inSet(
+                    $fieldName,
+                    $expression->literal((string)$attribute->getUid())
+                );
+            }
+            $queryBuilder->andWhere($expression->orX(...$constraints));
+        }
         return $queryBuilder;
     }
 

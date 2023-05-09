@@ -49,6 +49,11 @@ export default class FrontendMap {
       }
       this.loadScript();
     }
+
+    if (!Element.prototype.matches) {
+      Element.prototype.matches = Element.prototype.msMatchesSelector ||
+        Element.prototype.webkitMatchesSelector;
+    }
   }
 
   initializeMap(): void {
@@ -71,6 +76,16 @@ export default class FrontendMap {
     // do nothing.
   }
   /* eslint-enable */
+
+  removeMarker(location: Location) {}
+
+  removeLocation(location: Location) {
+    this.removeMarker(location);
+    let position = this.locations.indexOf(location);
+    if (position > -1) {
+      this.locations.splice(position, 1);
+    }
+  }
 
   /**
    * Process single location

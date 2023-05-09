@@ -464,8 +464,8 @@ return [
                 'cols' => 80,
                 'rows' => 15,
                 'enableRichtext' => true,
-                'softref' => 'rtehtmlarea_images,typolink_tag,images,email[subst],url',
-            ],
+                'softref' => 'typolink_tag,images,email[subst],url',
+            ]
         ],
 
         'url' => [
@@ -492,7 +492,7 @@ return [
 
         'image' => [
             'label' => $languageFile . 'tx_storefinder_domain_model_location.image',
-            'config' =>[
+            'config' => [
                 'type' => 'file',
                 'allowed' => 'common-image-types',
             ],
@@ -513,7 +513,7 @@ return [
                 'type' => 'file',
                 'minitems' => 0,
                 'maxitems' => 1,
-                'allowed' => [ 'svg', 'kml' ]
+                'allowed' => [ 'svg', 'kml', 'geojson' ]
             ],
         ],
 

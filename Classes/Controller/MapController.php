@@ -31,10 +31,12 @@ use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Pagination\SimplePagination;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3Fluid\Fluid\View\ViewInterface;
 use TYPO3\CMS\Extbase\Annotation as Extbase;
 use TYPO3\CMS\Extbase\Http\ForwardResponse;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\Controller\Argument;
+use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Pagination\QueryResultPaginator;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Property\TypeConverter\PersistentObjectConverter;
@@ -330,6 +332,13 @@ class MapController extends ActionController
         }
 
         if ($this->settings['showBeforeSearch'] & 4) {
+            $this->locationRepository->setDefaultOrderings([
+                'country' => QueryInterface::ORDER_DESCENDING,
+                'zipcode' => QueryInterface::ORDER_ASCENDING,
+                'city' => QueryInterface::ORDER_ASCENDING,
+                'name' => QueryInterface::ORDER_ASCENDING,
+            ]);
+
             $locations = $this->locationRepository->findAll();
         }
 
@@ -338,6 +347,11 @@ class MapController extends ActionController
         }
 
         return [$locations, $constraint];
+    }
+
+    protected function isDisabledFetchLocation(string $action, array $settings): bool
+    {
+        return in_array(str_replace('Action', '', $action), ($settings['disableFetchLocationInAction'] ?? []));
     }
 
     public function showAction(Location $location = null): ResponseInterface
@@ -360,7 +374,7 @@ class MapController extends ActionController
         return new HtmlResponse($this->view->render());
     }
 
-    protected function addCategoryFromSettingsToView()
+    protected function addCategoryFromSettingsToView(): void
     {
         if ($this->settings['categories']) {
             $categories = $this->categoryRepository->findByUids(
@@ -569,8 +583,28 @@ class MapController extends ActionController
         }
     }
 
+    public function getView(): ViewInterface
+    {
+        return $this->view;
+    }
+
+    protected function getErrorFlashMessage()
+    {
+        return false;
+    }
+
     public function getSettings(): array
     {
         return $this->settings;
+    }
+
+    public function getActionMethodName(): string
+    {
+        return $this->actionMethodName;
+    }
+
+    public function getArguments(): Arguments
+    {
+        return $this->arguments;
     }
 }

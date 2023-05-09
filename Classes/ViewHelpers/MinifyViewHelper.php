@@ -70,8 +70,8 @@ class MinifyViewHelper extends AbstractViewHelper
 
         /* remove tabs, spaces, newlines, etc. */
         $content = str_replace(
-            [CRLF, CR, LF, "\t", '     ', '    ', '  ', ': '],
-            ['', '', '', '', '', '', '', ':'],
+            [CRLF, CR, LF, "\t", '     ', '    ', '  ', '": "'],
+            ['', '', '', '', '', '', '', '":"'],
             $content
         );
 

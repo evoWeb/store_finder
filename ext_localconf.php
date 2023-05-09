@@ -18,8 +18,21 @@ call_user_func(function () {
         ];
     }
 
+    if (
+        !isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['store_finder_middleware_cache'])
+        || !is_array($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['store_finder_middleware_cache'])
+    ) {
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['store_finder_middleware_cache'] = [
+            'groups' => ['system'],
+        ];
+    }
+
     ExtensionManagementUtility::addPageTSConfig(
         '@import \'EXT:store_finder/Configuration/TSconfig/NewContentElementWizard.typoscript\''
+    );
+
+    ExtensionManagementUtility::addPageTSConfig(
+        '@import \'EXT:store_finder/Configuration/TSconfig/TCEMAIN.typoscript\''
     );
 
     ExtensionManagementUtility::addUserTSConfig('

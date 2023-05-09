@@ -6,12 +6,6 @@
 Breaking Changes
 ================
 
-29. August 2022
-===============
-
-The import command is refactors and the arguments and options are cleaned up. Please read the :ref:`docs <importCommand>` for the changes
-
-
 17. February 2023
 =================
 
@@ -19,6 +13,11 @@ Remove allowed on standard page
 -------------------------------
 Records of attributes and locations are not allowed on standard pages anymore.
 
+
+29. August 2022
+===============
+
+The import command is refactored and the arguments and options are cleaned up. Please read the :ref:`docs <importCommand>` for the changes
 
 
 15. February 2021
