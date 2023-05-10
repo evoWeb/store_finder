@@ -25,6 +25,7 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Http\JsonResponse;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class CategoryMiddleware implements MiddlewareInterface
 {
@@ -52,7 +53,10 @@ class CategoryMiddleware implements MiddlewareInterface
             $settings = $this->contentRepository->getPluginSettingsByPluginUid((int)$contentUid);
             $categories = $this
                 ->categoryRepository
-                ->getCategories($this->settings['categories'] ?? [], $settings);
+                ->getCategories(
+                    GeneralUtility::intExplode(',', $settings['categories'] ?? ''),
+                    $settings
+                );
             $this->cache->set($cacheIdentifier, $categories);
         }
 

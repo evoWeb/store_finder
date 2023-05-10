@@ -15,9 +15,11 @@ namespace Evoweb\StoreFinder\Middleware;
  * LICENSE.txt file that was distributed with this source code.
  */
 
+use Evoweb\StoreFinder\Domain\Model\Constraint;
 use Evoweb\StoreFinder\Domain\Repository\ContentRepository;
 use Evoweb\StoreFinder\Domain\Repository\LocationRepository;
 use Evoweb\StoreFinder\Event\ModifyLocationsMiddlewareOutputEvent;
+use Evoweb\StoreFinder\Service\GeocodeService;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -31,6 +33,7 @@ class LocationMiddleware implements MiddlewareInterface
     public function __construct(
         protected ContentRepository $contentRepository,
         protected LocationRepository $locationRepository,
+        protected GeocodeService $geocodeService,
         protected EventDispatcherInterface $eventDispatcher,
         protected FrontendInterface $cache,
     ) {
@@ -51,7 +54,15 @@ class LocationMiddleware implements MiddlewareInterface
             $locations = $this->cache->get($cacheIdentifier);
         } else {
             $settings = $this->contentRepository->getPluginSettingsByPluginUid($contentUid);
-            $locations = $this->locationRepository->getLocations($filter, $settings);
+
+            $this->geocodeService->setSettings($settings);
+            $this->locationRepository->setSettings($settings);
+            /** @var Constraint $constraint */
+            $constraint = $this->geocodeService->geocodeAddress($constraint);
+
+            $locations = $this->locationRepository->findByConstraint($constraint, true);
+            // @todo transform notes to html
+            // @todo transform models to arrays
             $this->cache->set($cacheIdentifier, $locations);
         }
 

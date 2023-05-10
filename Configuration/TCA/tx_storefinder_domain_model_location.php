@@ -340,35 +340,7 @@ return [
             'l10n_mode' => 'exclude',
             'label' => $languageFile . 'tx_storefinder_domain_model_location.categories',
             'config' => [
-                'type' => 'select',
-                'renderType' => 'selectTree',
-                'foreign_table' => 'sys_category',
-                'foreign_table_where' => 'AND sys_category.sys_language_uid IN (-1,0) ORDER BY sys_category.title ASC',
-                'MM' => 'sys_category_record_mm',
-                'MM_opposite_field' => 'items',
-                'MM_match_fields' => [
-                    'tablenames' => 'tx_storefinder_domain_model_location',
-                    'fieldname' => 'categories',
-                ],
-                'size' => 10,
-                'maxitems' => 9999,
-                'treeConfig' => [
-                    'parentField' => 'parent',
-                    'appearance' => [
-                        'expandAll' => false,
-                        'showHeader' => true,
-                    ],
-                ],
-                'fieldControl' => [
-                    'addRecord' => [
-                        'options' => [
-                            'pid' => '###CURRENT_PID###',
-                            'setValue' => 'prepend',
-                            'table' => 'sys_category',
-                            'title' => $languageFile . 'sys_category.add',
-                        ],
-                    ],
-                ],
+                'type' => 'category',
             ],
         ],
 

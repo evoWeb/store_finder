@@ -23,6 +23,7 @@ use TYPO3\CMS\Core\Context\LanguageAspect;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
+use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\Query;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
@@ -103,7 +104,7 @@ class LocationRepository extends Repository
         return $query->execute();
     }
 
-    public function findByConstraint(Constraint $constraint): QueryResultInterface
+    public function findByConstraint(Constraint $constraint, bool $raw = false): QueryResultInterface|array
     {
         /** @var Query $query */
         $query = $this->createQuery();
@@ -156,7 +157,7 @@ class LocationRepository extends Repository
         $sql = QueryBuilderHelper::getStatement($queryBuilder);
         $query->statement($sql);
 
-        return $query->execute();
+        return $query->execute($raw);
     }
 
     protected function addCountryQueryPart(Constraint $constraint, QueryBuilder $queryBuilder): QueryBuilder
@@ -534,20 +535,55 @@ class LocationRepository extends Repository
         return $query->execute();
     }
 
-    public function getLocations(string $filter, array $settings): array
+    public function getLocations(string $filter, Constraint $constraint, array $settings): array
     {
+        /** @var Context $context */
+        $context = GeneralUtility::makeInstance(Context::class);
+        /** @var LanguageAspect $languageAspect */
+        $languageAspect = $context->getAspect('language');
         $queryBuilder = $this->getQueryBuilderForTable('tx_storefinder_domain_model_location');
-        $locations = $queryBuilder
-            ->select('*')
-            ->from('tx_storefinder_domain_model_location');
 
+        $queryBuilder
+            ->select(...GeneralUtility::trimExplode(',', $settings['tsconfig']['locations.']['fields'] ?? '*'))
+            ->from('tx_storefinder_domain_model_location')
+            ->where(
+                $queryBuilder->expr()->or(
+                    $queryBuilder->expr()->in('sys_language_uid', [0, -1]),
+                    $queryBuilder->expr()->and(
+                        $queryBuilder->expr()->eq('l10n_parent', 0),
+                        $queryBuilder->expr()->eq('sys_language_uid', $languageAspect->getContentId())
+                    )
+                ),
+            );
+
+        // @todo search
+        // @todo category filter
         if (!empty($filter)) {
-            $locations->andWhere(
-                $locations->expr()->inSet('uid', $filter)
+            $queryBuilder->andWhere(
+                $queryBuilder->expr()->inSet('uid', $filter)
             );
         }
 
-        return $locations->executeQuery()->fetchAllAssociative();
+        if (!empty($settings['tsconfig']['locations.']['sortBy'])) {
+            $queryBuilder->addOrderBy($settings['tsconfig']['locations.']['sortBy'], 'ASC');
+        }
+
+        $locations = $queryBuilder
+            ->executeQuery()
+            ->fetchAllAssociative();
+
+        $pageRepository = $this->getPageRepository();
+        foreach ($locations as &$location) {
+            $location = $pageRepository->getLanguageOverlay('tx_storefinder_domain_model_location', $location);
+        }
+
+        return $locations;
+    }
+
+
+    protected function getPageRepository(): PageRepository
+    {
+        return GeneralUtility::makeInstance(PageRepository::class);
     }
 
     protected function getQueryBuilderForTable(string $table): QueryBuilder

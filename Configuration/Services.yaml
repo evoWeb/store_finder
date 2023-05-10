@@ -46,6 +46,7 @@ services:
     arguments:
       $contentRepository: '@Evoweb\StoreFinder\Domain\Repository\ContentRepository'
       $locationRepository: '@Evoweb\StoreFinder\Domain\Repository\LocationRepository'
+      $geocodeService: '@Evoweb\StoreFinder\Service\GeocodeService'
       $eventDispatcher: '@Psr\EventDispatcher\EventDispatcherInterface'
       $cache: '@cache.store_finder.middleware_cache'
     public: true

@@ -142,19 +142,7 @@
 						<TCEforms>
 							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.categories</label>
 							<config>
-								<type>select</type>
-								<renderType>selectTree</renderType>
-								<foreign_table>sys_category</foreign_table>
-								<foreign_table_where>AND sys_category.sys_language_uid IN (-1, 0) ORDER BY sys_category.sorting ASC</foreign_table_where>
-								<maxitems>200</maxitems>
-								<size>10</size>
-								<treeConfig>
-									<parentField>parent</parentField>
-									<appearance>
-										<expandAll>1</expandAll>
-										<showHeader>1</showHeader>
-									</appearance>
-								</treeConfig>
+								<type>category</type>
 							</config>
 						</TCEforms>
 					</settings.categories>

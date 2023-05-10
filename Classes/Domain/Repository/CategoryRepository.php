@@ -82,7 +82,7 @@ class CategoryRepository extends Repository
         return array_unique($categories);
     }
 
-    public function getCategories(array $categories, array $settings): array
+    public function getCategories(array $selectedCategories, array $settings): array
     {
         /** @var Context $context */
         $context = GeneralUtility::makeInstance(Context::class);
@@ -91,31 +91,46 @@ class CategoryRepository extends Repository
         $queryBuilder = $this->getQueryBuilderForTable('sys_category');
 
         $queryBuilder
-            ->select(...GeneralUtility::trimExplode(',', $settings['tsconfig']['categories.']['fields'] ?? '*'))
-            ->from('sys_category')
+            ->select(...GeneralUtility::trimExplode(',', $settings['tsconfig']['categories.']['fields'] ?? 'c.*'))
+            ->from('sys_category', 'c')
             ->where(
-                $queryBuilder->expr()->eq('parent', 0),
+                $queryBuilder->expr()->eq('c.parent', 0),
                 $queryBuilder->expr()->or(
-                    $queryBuilder->expr()->in('sys_language_uid', [0, -1]),
+                    $queryBuilder->expr()->in('c.sys_language_uid', [0, -1]),
                     $queryBuilder->expr()->and(
-                        $queryBuilder->expr()->eq('l10n_parent', 0),
-                        $queryBuilder->expr()->eq('sys_language_uid', $languageAspect->getContentId())
+                        $queryBuilder->expr()->eq('c.l10n_parent', 0),
+                        $queryBuilder->expr()->eq('c.sys_language_uid', $languageAspect->getContentId())
                     )
                 ),
             );
 
-        if (!empty($categories)) {
+        if ($settings['tsconfig']['categories.']['onlyCategoriesWithLocations'] ?? false) {
+            $queryBuilder->innerJoin(
+                'c',
+                'sys_category_record_mm',
+                'mm',
+                (string)$queryBuilder->expr()->and(
+                    $queryBuilder->expr()->eq(
+                        'mm.tablenames',
+                        $queryBuilder->quote('tx_storefinder_domain_model_location')
+                    ),
+                    $queryBuilder->expr()->eq('c.uid', 'mm.uid_local')
+                )
+            );
+        }
+
+        if (!empty($selectedCategories)) {
             $queryBuilder->andWhere(
                 $queryBuilder->expr()->in(
-                    'uid',
-                    $queryBuilder->createNamedParameter($categories, ArrayParameterType::INTEGER)
+                    'c.uid',
+                    $queryBuilder->createNamedParameter($selectedCategories, ArrayParameterType::INTEGER)
                 )
             );
         }
 
         if (!empty($settings['storagePid'])) {
             $queryBuilder->andWhere(
-                $queryBuilder->expr()->in('pid', GeneralUtility::intExplode(',', $settings['storagePid']))
+                $queryBuilder->expr()->in('c.pid', GeneralUtility::intExplode(',', $settings['storagePid']))
             );
         }
 
@@ -130,13 +145,17 @@ class CategoryRepository extends Repository
         $pageRepository = $this->getPageRepository();
         foreach ($categories as &$category) {
             $category = $pageRepository->getLanguageOverlay('sys_category', $category);
-            $category['children'] = $this->findCategoryByParent($category['uid'], $settings);
+            $category['children'] = $this->findCategoryByParent(
+                $selectedCategories,
+                $category['uid'],
+                $settings
+            );
         }
 
         return $categories;
     }
 
-    protected function findCategoryByParent(int $parentUid, array $settings): array
+    protected function findCategoryByParent(array $selectedCategories, int $parentUid, array $settings): array
     {
         /** @var Context $context */
         $context = GeneralUtility::makeInstance(Context::class);
@@ -146,17 +165,47 @@ class CategoryRepository extends Repository
 
         $queryBuilder
             ->select(...GeneralUtility::trimExplode(',', $settings['tsconfig']['categories.']['fields'] ?? '*'))
-            ->from('sys_category')
+            ->from('sys_category', 'c')
             ->where(
-                $queryBuilder->expr()->eq('parent', $queryBuilder->createNamedParameter($parentUid)),
+                $queryBuilder->expr()->eq('c.parent', $queryBuilder->createNamedParameter($parentUid)),
                 $queryBuilder->expr()->or(
-                    $queryBuilder->expr()->in('sys_language_uid', [0, -1]),
+                    $queryBuilder->expr()->in('c.sys_language_uid', [0, -1]),
                     $queryBuilder->expr()->and(
-                        $queryBuilder->expr()->eq('l10n_parent', 0),
-                        $queryBuilder->expr()->eq('sys_language_uid', $languageAspect->getContentId())
+                        $queryBuilder->expr()->eq('c.l10n_parent', 0),
+                        $queryBuilder->expr()->eq('c.sys_language_uid', $languageAspect->getContentId())
                     )
                 ),
             );
+
+        if ($settings['tsconfig']['categories.']['onlyCategoriesWithLocations'] ?? false) {
+            $queryBuilder->innerJoin(
+                'c',
+                'sys_category_record_mm',
+                'mm',
+                (string)$queryBuilder->expr()->and(
+                    $queryBuilder->expr()->eq(
+                        'mm.tablenames',
+                        $queryBuilder->quote('tx_storefinder_domain_model_location')
+                    ),
+                    $queryBuilder->expr()->eq('c.uid', 'mm.uid_local')
+                )
+            );
+        }
+
+        if (!empty($selectedCategories)) {
+            $queryBuilder->andWhere(
+                $queryBuilder->expr()->in(
+                    'c.uid',
+                    $queryBuilder->createNamedParameter($selectedCategories, ArrayParameterType::INTEGER)
+                )
+            );
+        }
+
+        if (!empty($settings['storagePid'])) {
+            $queryBuilder->andWhere(
+                $queryBuilder->expr()->in('c.pid', GeneralUtility::intExplode(',', $settings['storagePid']))
+            );
+        }
 
         if (!empty($settings['tsconfig']['categories.']['sortBy'])) {
             $queryBuilder->addOrderBy($settings['tsconfig']['categories.']['sortBy'], 'ASC');
@@ -166,13 +215,19 @@ class CategoryRepository extends Repository
             ->executeQuery()
             ->fetchAllAssociative();
 
+        $pageRepository = $this->getPageRepository();
         foreach ($categoryChildren as &$categoryChild) {
+            $categoryChild = $pageRepository->getLanguageOverlay('sys_category', $categoryChild);
             if (in_array($categoryChild['uid'], explode(',', $settings['activeCategories']))) {
                 $categoryChild['active'] = 1;
             }
 
             if ($categoryChild['children'] > 0) {
-                $categoryChild['children'] = $this->findCategoryByParent($categoryChild['uid'], $settings);
+                $categoryChild['children'] = $this->findCategoryByParent(
+                    $selectedCategories,
+                    $categoryChild['uid'],
+                    $settings
+                );
             }
         }
 
