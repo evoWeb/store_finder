@@ -194,22 +194,22 @@ class LocationRepository extends Repository
             $queryBuilder->innerJoin(
                 'l',
                 'sys_category_record_mm',
-                'c',
+                'mm',
                 (string)$expression->and(
-                    $expression->eq('l.uid', 'c.uid_foreign'),
+                    $expression->eq('l.uid', 'mm.uid_foreign'),
                     $expression->eq(
-                        'c.tablenames',
-                        $queryBuilder->createNamedParameter('tx_storefinder_domain_model_location')
+                        'mm.tablenames',
+                        $queryBuilder->quote('tx_storefinder_domain_model_location')
                     ),
                     $expression->eq(
-                        'c.fieldname',
-                        $queryBuilder->createNamedParameter('categories')
+                        'mm.fieldname',
+                        $queryBuilder->quote('categories')
                     )
                 )
             );
             $queryBuilder->andWhere(
                 $expression->in(
-                    'c.uid_local',
+                    'mm.uid_local',
                     $queryBuilder->createNamedParameter($categories, ArrayParameterType::INTEGER)
                 )
             );
@@ -535,7 +535,7 @@ class LocationRepository extends Repository
         return $query->execute();
     }
 
-    public function getLocations(string $filter, Constraint $constraint, array $settings): array
+    public function getLocations(Constraint $constraint, array $settings): array
     {
         /** @var Context $context */
         $context = GeneralUtility::makeInstance(Context::class);
@@ -544,7 +544,7 @@ class LocationRepository extends Repository
         $queryBuilder = $this->getQueryBuilderForTable('tx_storefinder_domain_model_location');
 
         $queryBuilder
-            ->select(...GeneralUtility::trimExplode(',', $settings['tsconfig']['locations.']['fields'] ?? '*'))
+            ->select(...GeneralUtility::trimExplode(',', $settings['tables']['locations']['fields'] ?? '*'))
             ->from('tx_storefinder_domain_model_location')
             ->where(
                 $queryBuilder->expr()->or(
@@ -564,8 +564,8 @@ class LocationRepository extends Repository
             );
         }
 
-        if (!empty($settings['tsconfig']['locations.']['sortBy'])) {
-            $queryBuilder->addOrderBy($settings['tsconfig']['locations.']['sortBy'], 'ASC');
+        if (!empty($settings['tables']['locations']['sortBy'])) {
+            $queryBuilder->addOrderBy($settings['tables']['locations']['sortBy'], 'ASC');
         }
 
         $locations = $queryBuilder
@@ -579,7 +579,6 @@ class LocationRepository extends Repository
 
         return $locations;
     }
-
 
     protected function getPageRepository(): PageRepository
     {

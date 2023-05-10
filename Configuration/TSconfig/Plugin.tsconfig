@@ -1,12 +1,21 @@
 plugin.tx_storefinder.ajax {
-  categories {
-    fields = c.uid, c.title, c.slug
-    sortBy = c.sorting
-    onlyCategoriesWithLocations = 1
+  tables {
+    categories {
+      fields = c.uid, c.title, c.slug
+      sortBy = c.sorting
+      onlyCategoriesWithLocations = 1
+    }
+
+    locations {
+      fields = uid, name, address, zipcode, city, dont_show_address, person, phone, email, latitude, longitude, url, notes, image, categories
+      sortBy = name
+    }
   }
 
-  locations {
-    fields = uid, name, address, zipcode, city, dont_show_address, person, phone, email, latitude, longitude, url notes, image, categories
-    sortBy = name
+  fulltextSearchFields {
+    10 = name
+    30 = address
+    50 = city
+    80 = notes
   }
 }

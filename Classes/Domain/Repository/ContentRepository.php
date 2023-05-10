@@ -8,12 +8,14 @@ use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Service\FlexFormService;
+use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 
 class ContentRepository
 {
     public function __construct(
         protected ConnectionPool $connectionPool,
         protected FlexFormService $flexFormService,
+        protected TypoScriptService $typoScriptService,
     ) {
     }
 
@@ -38,7 +40,8 @@ class ContentRepository
         $settings['storagePid'] = $row['pages'];
 
         $pageTs = BackendUtility::getPagesTSconfig($row['pid']);
-        $settings['tsconfig'] = $pageTs['plugin.']['tx_storefinder.']['ajax.'] ?? [];
+        $pageTs = $this->typoScriptService->convertTypoScriptArrayToPlainArray($pageTs);
+        $settings += $pageTs['plugin']['tx_storefinder']['ajax'] ?? [];
 
         return $settings;
     }

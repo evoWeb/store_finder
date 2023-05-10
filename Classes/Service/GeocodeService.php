@@ -17,7 +17,6 @@ namespace Evoweb\StoreFinder\Service;
 
 use Evoweb\StoreFinder\Cache\CoordinatesCache;
 use Evoweb\StoreFinder\Domain\Model\Location;
-use Evoweb\StoreFinder\Domain\Repository\CountryRepository;
 use Geocoder\Model\Coordinates;
 use Geocoder\Provider\GoogleMaps\GoogleMaps;
 use Geocoder\Provider\Provider;
@@ -37,8 +36,7 @@ class GeocodeService
     public bool $hasMultipleResults = false;
 
     public function __construct(
-        protected CoordinatesCache $coordinatesCache,
-        protected CountryRepository $countryRepository
+        protected CoordinatesCache $coordinatesCache
     ) {
     }
 

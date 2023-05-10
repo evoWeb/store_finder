@@ -89,39 +89,40 @@ class CategoryRepository extends Repository
         /** @var LanguageAspect $languageAspect */
         $languageAspect = $context->getAspect('language');
         $queryBuilder = $this->getQueryBuilderForTable('sys_category');
+        $expression = $queryBuilder->expr();
 
         $queryBuilder
-            ->select(...GeneralUtility::trimExplode(',', $settings['tsconfig']['categories.']['fields'] ?? 'c.*'))
+            ->select(...GeneralUtility::trimExplode(',', $settings['tables']['categories']['fields'] ?? 'c.*'))
             ->from('sys_category', 'c')
             ->where(
-                $queryBuilder->expr()->eq('c.parent', 0),
-                $queryBuilder->expr()->or(
-                    $queryBuilder->expr()->in('c.sys_language_uid', [0, -1]),
-                    $queryBuilder->expr()->and(
-                        $queryBuilder->expr()->eq('c.l10n_parent', 0),
-                        $queryBuilder->expr()->eq('c.sys_language_uid', $languageAspect->getContentId())
+                $expression->eq('c.parent', 0),
+                $expression->or(
+                    $expression->in('c.sys_language_uid', [0, -1]),
+                    $expression->and(
+                        $expression->eq('c.l10n_parent', 0),
+                        $expression->eq('c.sys_language_uid', $languageAspect->getContentId())
                     )
                 ),
             );
 
-        if ($settings['tsconfig']['categories.']['onlyCategoriesWithLocations'] ?? false) {
+        if ($settings['tables']['categories']['onlyCategoriesWithLocations'] ?? false) {
             $queryBuilder->innerJoin(
                 'c',
                 'sys_category_record_mm',
                 'mm',
-                (string)$queryBuilder->expr()->and(
-                    $queryBuilder->expr()->eq(
+                (string)$expression->and(
+                    $expression->eq(
                         'mm.tablenames',
                         $queryBuilder->quote('tx_storefinder_domain_model_location')
                     ),
-                    $queryBuilder->expr()->eq('c.uid', 'mm.uid_local')
+                    $expression->eq('c.uid', 'mm.uid_local')
                 )
             );
         }
 
         if (!empty($selectedCategories)) {
             $queryBuilder->andWhere(
-                $queryBuilder->expr()->in(
+                $expression->in(
                     'c.uid',
                     $queryBuilder->createNamedParameter($selectedCategories, ArrayParameterType::INTEGER)
                 )
@@ -130,12 +131,12 @@ class CategoryRepository extends Repository
 
         if (!empty($settings['storagePid'])) {
             $queryBuilder->andWhere(
-                $queryBuilder->expr()->in('c.pid', GeneralUtility::intExplode(',', $settings['storagePid']))
+                $expression->in('c.pid', GeneralUtility::intExplode(',', $settings['storagePid']))
             );
         }
 
-        if (!empty($settings['tsconfig']['categories.']['sortBy'])) {
-            $queryBuilder->addOrderBy($settings['tsconfig']['categories.']['sortBy'], 'ASC');
+        if (!empty($settings['tables']['categories']['sortBy'])) {
+            $queryBuilder->addOrderBy($settings['tables']['categories']['sortBy'], 'ASC');
         }
 
         $categories = $queryBuilder
@@ -162,39 +163,40 @@ class CategoryRepository extends Repository
         /** @var LanguageAspect $languageAspect */
         $languageAspect = $context->getAspect('language');
         $queryBuilder = $this->getQueryBuilderForTable('sys_category');
+        $expression = $queryBuilder->expr();
 
         $queryBuilder
-            ->select(...GeneralUtility::trimExplode(',', $settings['tsconfig']['categories.']['fields'] ?? '*'))
+            ->select(...GeneralUtility::trimExplode(',', $settings['tables']['categories']['fields'] ?? '*'))
             ->from('sys_category', 'c')
             ->where(
-                $queryBuilder->expr()->eq('c.parent', $queryBuilder->createNamedParameter($parentUid)),
-                $queryBuilder->expr()->or(
-                    $queryBuilder->expr()->in('c.sys_language_uid', [0, -1]),
-                    $queryBuilder->expr()->and(
-                        $queryBuilder->expr()->eq('c.l10n_parent', 0),
-                        $queryBuilder->expr()->eq('c.sys_language_uid', $languageAspect->getContentId())
+                $expression->eq('c.parent', $queryBuilder->createNamedParameter($parentUid)),
+                $expression->or(
+                    $expression->in('c.sys_language_uid', [0, -1]),
+                    $expression->and(
+                        $expression->eq('c.l10n_parent', 0),
+                        $expression->eq('c.sys_language_uid', $languageAspect->getContentId())
                     )
                 ),
             );
 
-        if ($settings['tsconfig']['categories.']['onlyCategoriesWithLocations'] ?? false) {
+        if ($settings['tables']['categories']['onlyCategoriesWithLocations'] ?? false) {
             $queryBuilder->innerJoin(
                 'c',
                 'sys_category_record_mm',
                 'mm',
-                (string)$queryBuilder->expr()->and(
-                    $queryBuilder->expr()->eq(
+                (string)$expression->and(
+                    $expression->eq(
                         'mm.tablenames',
                         $queryBuilder->quote('tx_storefinder_domain_model_location')
                     ),
-                    $queryBuilder->expr()->eq('c.uid', 'mm.uid_local')
+                    $expression->eq('c.uid', 'mm.uid_local')
                 )
             );
         }
 
         if (!empty($selectedCategories)) {
             $queryBuilder->andWhere(
-                $queryBuilder->expr()->in(
+                $expression->in(
                     'c.uid',
                     $queryBuilder->createNamedParameter($selectedCategories, ArrayParameterType::INTEGER)
                 )
@@ -203,12 +205,12 @@ class CategoryRepository extends Repository
 
         if (!empty($settings['storagePid'])) {
             $queryBuilder->andWhere(
-                $queryBuilder->expr()->in('c.pid', GeneralUtility::intExplode(',', $settings['storagePid']))
+                $expression->in('c.pid', GeneralUtility::intExplode(',', $settings['storagePid']))
             );
         }
 
-        if (!empty($settings['tsconfig']['categories.']['sortBy'])) {
-            $queryBuilder->addOrderBy($settings['tsconfig']['categories.']['sortBy'], 'ASC');
+        if (!empty($settings['tables']['categories']['sortBy'])) {
+            $queryBuilder->addOrderBy($settings['tables']['categories']['sortBy'], 'ASC');
         }
 
         $categoryChildren = $queryBuilder
