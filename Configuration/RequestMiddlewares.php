@@ -1,23 +1,26 @@
 <?php
 
+use Evoweb\StoreFinder\Middleware\CategoryMiddleware;
+use Evoweb\StoreFinder\Middleware\LocationMiddleware;
+
 return [
     'frontend' => [
         'evoweb/storefinder-categories' => [
-            'target' => \Evoweb\StoreFinder\Middleware\CategoryMiddleware::class,
-            'before' => [
-                'shortcut-and-mountpoint-redirect',
-            ],
+            'target' => CategoryMiddleware::class,
             'after' => [
-                'prepare-tsfe-rendering',
+                'typo3/cms-frontend/static-route-resolver',
+            ],
+            'before' => [
+                'typo3/cms-frontend/page-resolver',
             ],
         ],
         'evoweb/storefinder-locations' => [
-            'target' => \Evoweb\StoreFinder\Middleware\LocationMiddleware::class,
-            'before' => [
-                'shortcut-and-mountpoint-redirect',
-            ],
+            'target' => LocationMiddleware::class,
             'after' => [
-                'prepare-tsfe-rendering',
+                'typo3/cms-frontend/static-route-resolver',
+            ],
+            'before' => [
+                'typo3/cms-frontend/page-resolver',
             ],
         ],
     ],

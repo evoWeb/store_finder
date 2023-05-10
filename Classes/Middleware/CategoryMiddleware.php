@@ -15,154 +15,51 @@ namespace Evoweb\StoreFinder\Middleware;
  * LICENSE.txt file that was distributed with this source code.
  */
 
-use Evoweb\StoreFinder\Cache\MiddlewareCache;
+use Evoweb\StoreFinder\Domain\Repository\CategoryRepository;
+use Evoweb\StoreFinder\Domain\Repository\ContentRepository;
 use Evoweb\StoreFinder\Event\ModifyCategoriesMiddlewareOutputEvent;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use TYPO3\CMS\Core\Database\ConnectionPool;
-use TYPO3\CMS\Core\Database\Query\QueryBuilder;
-use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
+use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Http\JsonResponse;
-use TYPO3\CMS\Core\Service\FlexFormService;
 
 class CategoryMiddleware implements MiddlewareInterface
 {
-    protected ConnectionPool $connectionPool;
-
-    protected JsonResponse $jsonResponse;
-
-    protected FlexFormService $flexFormService;
-
-    protected array $settings;
-
-    protected MiddlewareCache $cachingService;
-
-    protected EventDispatcher $eventDispatcher;
-
     public function __construct(
-        ConnectionPool $connectionPool,
-        JsonResponse $jsonResponse,
-        FlexFormService $flexFormService,
-        MiddlewareCache $cachingService,
-        EventDispatcher $eventDispatcher
+        protected ContentRepository $contentRepository,
+        protected CategoryRepository $categoryRepository,
+        protected EventDispatcherInterface $eventDispatcher,
+        protected FrontendInterface $cache,
     ) {
-        $this->connectionPool = $connectionPool;
-        $this->jsonResponse = $jsonResponse;
-        $this->flexFormService = $flexFormService;
-        $this->cachingService = $cachingService;
-        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $queryParams = $request->getQueryParams();
-
-        if (
-            !empty($queryParams['action'])
-            && $queryParams['action'] == 'categories'
-        ) {
-            // @todo make dynamic with js post data
-            $mapPluginId = 2;
-
-            $cacheIdentifier = md5(
-                serialize(
-                    $this->settings['settings']['categories'] ?? 'noActiveCategoriesCacheIdentifier'
-                )
-            );
-
-            if ($this->cachingService->readCache($cacheIdentifier)) {
-                $categories = $this->cachingService->readCache($cacheIdentifier);
-            } else {
-                $this->settings = $this->getPluginSettingsByPluginUid($mapPluginId);
-                $categories = $this->getCategories();
-                $this->cachingService->writeCache($cacheIdentifier, $categories);
-            }
-
-            $eventResult = $this->eventDispatcher->dispatch(
-                new ModifyCategoriesMiddlewareOutputEvent($this, $categories, $request)
-            );
-
-            $this->jsonResponse->setPayload(
-                $eventResult->getCategories()
-            );
-
-            return $this->jsonResponse;
+        $path = ltrim($request->getUri()->getPath(), '/');
+        if ($path !== 'api/storefinder/categories') {
+            return $handler->handle($request);
         }
 
-        return $handler->handle($request);
-    }
+        $contentUid = $request->getQueryParams()['contentUid'] ?? 0;
+        $cacheIdentifier = md5('store_finder' . ($contentUid ?? 'noActiveCategoriesCacheIdentifier'));
 
-    protected function getCategories(): array
-    {
-        $queryBuilder = $this->initializeQueryBuilder('sys_category');
-
-        $categories = $queryBuilder
-            ->select('*')
-            ->from('sys_category', '')
-            ->where(
-                $queryBuilder->expr()->in('uid', $this->settings['settings']['categories'])
-            )
-            ->execute()
-            ->fetchAllAssociative();
-
-        foreach ($categories as &$category) {
-            if ($category['children'] > 0) {
-                $category['children'] = $this->findCategoryChildrenByParentUid($category['uid']);
-            }
+        if ($this->cache->has($cacheIdentifier)) {
+            $categories = $this->cache->get($cacheIdentifier);
+        } else {
+            $settings = $this->contentRepository->getPluginSettingsByPluginUid((int)$contentUid);
+            $categories = $this
+                ->categoryRepository
+                ->getCategories($this->settings['categories'] ?? [], $settings);
+            $this->cache->set($cacheIdentifier, $categories);
         }
 
-        return $categories;
-    }
+        $eventResult = $this->eventDispatcher->dispatch(
+            new ModifyCategoriesMiddlewareOutputEvent($this, $request, $categories)
+        );
 
-    protected function findCategoryChildrenByParentUid(int $parentUid): array
-    {
-        $queryBuilder = $this->initializeQueryBuilder('sys_category');
-
-        $categoryChildren = $queryBuilder
-            ->select('*')
-            ->from('sys_category')
-            ->where(
-                $queryBuilder->expr()->eq('parent', $queryBuilder->createNamedParameter($parentUid))
-            )
-            ->execute()
-            ->fetchAllAssociative();
-
-        foreach ($categoryChildren as &$categoryChild) {
-            if (in_array($categoryChild['uid'], explode(',', $this->settings['settings']['activeCategories']))) {
-                $categoryChild['active'] = 1;
-            }
-
-            if ($categoryChild['children'] > 0) {
-                $categoryChild['children'] = $this->findCategoryChildrenByParentUid($categoryChild['uid']);
-            }
-        }
-
-        return $categoryChildren;
-    }
-
-    protected function getPluginSettingsByPluginUid(int $pluginUid): array
-    {
-        $queryBuilder = $this->initializeQueryBuilder('tt_content');
-
-        $piFlexFormData = $queryBuilder
-            ->select('pi_flexform')
-            ->from('tt_content')
-            ->where(
-                $queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter($pluginUid))
-            )
-            ->execute()
-            ->fetchAllAssociative();
-
-        return $this->flexFormService->convertFlexFormContentToArray($piFlexFormData[0]['pi_flexform'] ?? '');
-    }
-
-    protected function initializeQueryBuilder(string $table): QueryBuilder
-    {
-        $queryBuilder = $this->connectionPool
-            ->getQueryBuilderForTable($table);
-
-        return $queryBuilder;
+        return new JsonResponse($eventResult->getCategories());
     }
 }

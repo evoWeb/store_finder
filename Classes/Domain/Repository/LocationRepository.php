@@ -226,7 +226,7 @@ class LocationRepository extends Repository
                 'l',
                 'tx_storefinder_location_attribute_mm',
                 'a',
-                (string) $expression->andX(
+                (string) $expression->and(
                     $expression->eq('l.uid', 'a.uid_foreign'),
                     $expression->eq(
                         'a.tablenames',
@@ -251,7 +251,7 @@ class LocationRepository extends Repository
                     $expression->literal((string)$attribute->getUid())
                 );
             }
-            $queryBuilder->andWhere($expression->orX(...$constraints));
+            $queryBuilder->andWhere($expression->or(...$constraints));
         }
         return $queryBuilder;
     }
@@ -532,6 +532,22 @@ class LocationRepository extends Repository
         );
 
         return $query->execute();
+    }
+
+    public function getLocations(string $filter, array $settings): array
+    {
+        $queryBuilder = $this->getQueryBuilderForTable('tx_storefinder_domain_model_location');
+        $locations = $queryBuilder
+            ->select('*')
+            ->from('tx_storefinder_domain_model_location');
+
+        if (!empty($filter)) {
+            $locations->andWhere(
+                $locations->expr()->inSet('uid', $filter)
+            );
+        }
+
+        return $locations->executeQuery()->fetchAllAssociative();
     }
 
     protected function getQueryBuilderForTable(string $table): QueryBuilder

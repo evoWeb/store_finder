@@ -15,96 +15,50 @@ namespace Evoweb\StoreFinder\Middleware;
  * LICENSE.txt file that was distributed with this source code.
  */
 
-use Evoweb\StoreFinder\Cache\MiddlewareCache;
+use Evoweb\StoreFinder\Domain\Repository\ContentRepository;
+use Evoweb\StoreFinder\Domain\Repository\LocationRepository;
 use Evoweb\StoreFinder\Event\ModifyLocationsMiddlewareOutputEvent;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use TYPO3\CMS\Core\Database\ConnectionPool;
-use TYPO3\CMS\Core\Database\Query\QueryBuilder;
-use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
+use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Http\JsonResponse;
 
 class LocationMiddleware implements MiddlewareInterface
 {
-    protected ConnectionPool $connectionPool;
-
-    protected JsonResponse $jsonResponse;
-
-    protected MiddlewareCache $cachingService;
-
-    protected EventDispatcher $eventDispatcher;
-
     public function __construct(
-        ConnectionPool $connectionPool,
-        JsonResponse $jsonResponse,
-        MiddlewareCache $cachingService,
-        EventDispatcher $eventDispatcher
-
+        protected ContentRepository $contentRepository,
+        protected LocationRepository $locationRepository,
+        protected EventDispatcherInterface $eventDispatcher,
+        protected FrontendInterface $cache,
     ) {
-        $this->connectionPool = $connectionPool;
-        $this->jsonResponse = $jsonResponse;
-        $this->cachingService = $cachingService;
-        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $queryParams = $request->getQueryParams();
-
-        if (
-            !empty($queryParams['action'])
-            && $queryParams['action'] == 'locations'
-        ) {
-            // @todo make filter dynamic with js implementation
-            $filter = '';
-            $filter = $queryParams['ids'];
-
-            $cacheIdentifier = md5(serialize($filter ?? 'allLocationsCacheIdentifier'));
-
-            if ($this->cachingService->readCache($cacheIdentifier)) {
-                $locations = $this->cachingService->readCache($cacheIdentifier);
-            } else {
-                $locations = $this->getLocations($filter ?? '');
-                $this->cachingService->writeCache($cacheIdentifier, $locations);
-            }
-
-            $eventResult = $this->eventDispatcher->dispatch(
-                new ModifyLocationsMiddlewareOutputEvent($this, $locations, $request)
-            );
-
-            $this->jsonResponse->setPayload(
-                $eventResult->getLocations()
-            );
-
-            return $this->jsonResponse;
+        $path = ltrim($request->getUri()->getPath(), '/');
+        if ($path !== 'api/storefinder/locations') {
+            return $handler->handle($request);
         }
 
-        return $handler->handle($request);
-    }
+        $contentUid = $request->getQueryParams()['contentUid'] ?? 0;
+        $filter = $request->getQueryParams()['filter'] ?? '';
+        $cacheIdentifier = md5('store_finder' . $contentUid . serialize($filter ?? 'allLocationsCacheIdentifier'));
 
-    protected function initializeQueryBuilder(string $table): QueryBuilder
-    {
-        $queryBuilder = $this->connectionPool
-            ->getQueryBuilderForTable($table);
-
-        return $queryBuilder;
-    }
-
-    protected function getLocations(string $filter = ''): array
-    {
-        $queryBuilder = $this->initializeQueryBuilder('tx_storefinder_domain_model_location');
-        $locations = $queryBuilder
-            ->select('*')
-            ->from('tx_storefinder_domain_model_location');
-
-        if (!empty($filter)) {
-            $locations->andWhere(
-                $locations->expr()->inSet('uid', $filter)
-            );
+        if ($this->cache->has($cacheIdentifier)) {
+            $locations = $this->cache->get($cacheIdentifier);
+        } else {
+            $settings = $this->contentRepository->getPluginSettingsByPluginUid($contentUid);
+            $locations = $this->locationRepository->getLocations($filter, $settings);
+            $this->cache->set($cacheIdentifier, $locations);
         }
 
-        return $locations->execute()->fetchAllAssociative();
+        $eventResult = $this->eventDispatcher->dispatch(
+            new ModifyLocationsMiddlewareOutputEvent($this, $request, $locations)
+        );
+
+        return new JsonResponse($eventResult->getLocations());
     }
 }

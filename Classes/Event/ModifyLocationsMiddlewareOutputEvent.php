@@ -28,8 +28,8 @@ final class ModifyLocationsMiddlewareOutputEvent
 
     public function __construct(
         LocationMiddleware $locationMiddleware,
+        ServerRequestInterface $request,
         array $locations,
-        ServerRequestInterface $request
     ) {
         $this->locationMiddleware = $locationMiddleware;
         $this->locations = $locations;
@@ -41,11 +41,9 @@ final class ModifyLocationsMiddlewareOutputEvent
         return $this->locationMiddleware;
     }
 
-    public function setLocationMiddleware(LocationMiddleware $locationMiddleware): self
+    public function getRequest(): ServerRequestInterface
     {
-        $this->locationMiddleware = $locationMiddleware;
-
-        return $this;
+        return $this->request;
     }
 
     public function getLocations(): array
@@ -58,10 +56,5 @@ final class ModifyLocationsMiddlewareOutputEvent
         $this->locations = $locations;
 
         return $this;
-    }
-
-    public function getRequest(): ServerRequestInterface
-    {
-        return $this->request;
     }
 }

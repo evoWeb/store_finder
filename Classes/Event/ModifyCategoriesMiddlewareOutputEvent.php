@@ -28,8 +28,8 @@ final class ModifyCategoriesMiddlewareOutputEvent
 
     public function __construct(
         CategoryMiddleware $categoryMiddleware,
+        ServerRequestInterface $request,
         array $categories,
-        ServerRequestInterface $request
     ) {
         $this->categoryMiddleware = $categoryMiddleware;
         $this->categories = $categories;
@@ -41,11 +41,9 @@ final class ModifyCategoriesMiddlewareOutputEvent
         return $this->categoryMiddleware;
     }
 
-    public function setCategoryMiddleware(CategoryMiddleware $categoryMiddleware): self
+    public function getRequest(): ServerRequestInterface
     {
-        $this->categoryMiddleware = $categoryMiddleware;
-
-        return $this;
+        return $this->request;
     }
 
     public function getCategories(): array
@@ -56,18 +54,6 @@ final class ModifyCategoriesMiddlewareOutputEvent
     public function setCategories(array $categories): self
     {
         $this->categories = $categories;
-
-        return $this;
-    }
-
-    public function getRequest(): ServerRequestInterface
-    {
-        return $this->request;
-    }
-
-    public function setRequest(ServerRequestInterface $request): self
-    {
-        $this->request = $request;
 
         return $this;
     }

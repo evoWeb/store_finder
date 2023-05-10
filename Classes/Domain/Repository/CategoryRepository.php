@@ -15,7 +15,13 @@ namespace Evoweb\StoreFinder\Domain\Repository;
  * LICENSE.txt file that was distributed with this source code.
  */
 
+use Doctrine\DBAL\ArrayParameterType;
 use Evoweb\StoreFinder\Domain\Model\Category;
+use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\Context\LanguageAspect;
+use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Database\Query\QueryBuilder;
+use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
@@ -29,7 +35,13 @@ class CategoryRepository extends Repository
      */
     protected $defaultOrderings = ['sorting' => QueryInterface::ORDER_ASCENDING];
 
-    public function initializeObject()
+    public function __construct(
+        protected ConnectionPool $connectionPool
+    ) {
+        parent::__construct();
+    }
+
+    public function initializeObject(): void
     {
         $querySettings = GeneralUtility::makeInstance(Typo3QuerySettings::class);
         $querySettings->setRespectStoragePage(false);
@@ -68,5 +80,112 @@ class CategoryRepository extends Repository
         }
 
         return array_unique($categories);
+    }
+
+    public function getCategories(array $categories, array $settings): array
+    {
+        /** @var Context $context */
+        $context = GeneralUtility::makeInstance(Context::class);
+        /** @var LanguageAspect $languageAspect */
+        $languageAspect = $context->getAspect('language');
+        $queryBuilder = $this->getQueryBuilderForTable('sys_category');
+
+        $queryBuilder
+            ->select(...GeneralUtility::trimExplode(',', $settings['tsconfig']['categories.']['fields'] ?? '*'))
+            ->from('sys_category')
+            ->where(
+                $queryBuilder->expr()->eq('parent', 0),
+                $queryBuilder->expr()->or(
+                    $queryBuilder->expr()->in('sys_language_uid', [0, -1]),
+                    $queryBuilder->expr()->and(
+                        $queryBuilder->expr()->eq('l10n_parent', 0),
+                        $queryBuilder->expr()->eq('sys_language_uid', $languageAspect->getContentId())
+                    )
+                ),
+            );
+
+        if (!empty($categories)) {
+            $queryBuilder->andWhere(
+                $queryBuilder->expr()->in(
+                    'uid',
+                    $queryBuilder->createNamedParameter($categories, ArrayParameterType::INTEGER)
+                )
+            );
+        }
+
+        if (!empty($settings['storagePid'])) {
+            $queryBuilder->andWhere(
+                $queryBuilder->expr()->in('pid', GeneralUtility::intExplode(',', $settings['storagePid']))
+            );
+        }
+
+        if (!empty($settings['tsconfig']['categories.']['sortBy'])) {
+            $queryBuilder->addOrderBy($settings['tsconfig']['categories.']['sortBy'], 'ASC');
+        }
+
+        $categories = $queryBuilder
+            ->executeQuery()
+            ->fetchAllAssociative();
+
+        $pageRepository = $this->getPageRepository();
+        foreach ($categories as &$category) {
+            $category = $pageRepository->getLanguageOverlay('sys_category', $category);
+            $category['children'] = $this->findCategoryByParent($category['uid'], $settings);
+        }
+
+        return $categories;
+    }
+
+    protected function findCategoryByParent(int $parentUid, array $settings): array
+    {
+        /** @var Context $context */
+        $context = GeneralUtility::makeInstance(Context::class);
+        /** @var LanguageAspect $languageAspect */
+        $languageAspect = $context->getAspect('language');
+        $queryBuilder = $this->getQueryBuilderForTable('sys_category');
+
+        $queryBuilder
+            ->select(...GeneralUtility::trimExplode(',', $settings['tsconfig']['categories.']['fields'] ?? '*'))
+            ->from('sys_category')
+            ->where(
+                $queryBuilder->expr()->eq('parent', $queryBuilder->createNamedParameter($parentUid)),
+                $queryBuilder->expr()->or(
+                    $queryBuilder->expr()->in('sys_language_uid', [0, -1]),
+                    $queryBuilder->expr()->and(
+                        $queryBuilder->expr()->eq('l10n_parent', 0),
+                        $queryBuilder->expr()->eq('sys_language_uid', $languageAspect->getContentId())
+                    )
+                ),
+            );
+
+        if (!empty($settings['tsconfig']['categories.']['sortBy'])) {
+            $queryBuilder->addOrderBy($settings['tsconfig']['categories.']['sortBy'], 'ASC');
+        }
+
+        $categoryChildren = $queryBuilder
+            ->executeQuery()
+            ->fetchAllAssociative();
+
+        foreach ($categoryChildren as &$categoryChild) {
+            if (in_array($categoryChild['uid'], explode(',', $settings['activeCategories']))) {
+                $categoryChild['active'] = 1;
+            }
+
+            if ($categoryChild['children'] > 0) {
+                $categoryChild['children'] = $this->findCategoryByParent($categoryChild['uid'], $settings);
+            }
+        }
+
+        return $categoryChildren;
+    }
+
+    protected function getPageRepository(): PageRepository
+    {
+        return GeneralUtility::makeInstance(PageRepository::class);
+    }
+
+    protected function getQueryBuilderForTable(string $table): QueryBuilder
+    {
+        return $this->connectionPool->getQueryBuilderForTable($table);
     }
 }

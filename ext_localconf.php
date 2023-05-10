@@ -9,31 +9,23 @@ use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 
 call_user_func(function () {
-    if (
-        !isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['store_finder_coordinate'])
-        || !is_array($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['store_finder_coordinate'])
-    ) {
-        $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['store_finder_coordinate'] = [
+    $cacheConfigurations =& $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'];
+    if (!is_array($cacheConfigurations['store_finder_coordinate'] ?? null)) {
+        $cacheConfigurations['store_finder_coordinate'] = [
             'groups' => ['system'],
         ];
     }
 
-    if (
-        !isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['store_finder_middleware_cache'])
-        || !is_array($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['store_finder_middleware_cache'])
-    ) {
-        $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['store_finder_middleware_cache'] = [
-            'groups' => ['system'],
+    if (!is_array($cacheConfigurations['store_finder_middleware_cache'] ?? null)) {
+        $cacheConfigurations['store_finder_middleware_cache'] = [
+            'groups' => ['pages'],
         ];
     }
 
-    ExtensionManagementUtility::addPageTSConfig(
-        '@import \'EXT:store_finder/Configuration/TSconfig/NewContentElementWizard.typoscript\''
-    );
-
-    ExtensionManagementUtility::addPageTSConfig(
-        '@import \'EXT:store_finder/Configuration/TSconfig/TCEMAIN.typoscript\''
-    );
+    ExtensionManagementUtility::addPageTSConfig('
+        @import \'EXT:store_finder/Configuration/TSconfig/NewContentElementWizard.tsconfig\'
+        @import \'EXT:store_finder/Configuration/TSconfig/Plugin.tsconfig\'
+    ');
 
     ExtensionManagementUtility::addUserTSConfig('
         options.saveDocNew.tx_storefinder_domain_model_location = 1

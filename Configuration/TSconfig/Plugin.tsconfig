@@ -1,0 +1,6 @@
+plugin.tx_storefinder.ajax {
+  categories {
+    fields = uid, title, slug
+    sortBy = sorting
+  }
+}

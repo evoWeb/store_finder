@@ -28,6 +28,28 @@ services:
         description: 'Query google geocode service to get lat/lon for locations that are not geocode already'
         schedulable: true
 
+  cache.store_finder.middleware_cache:
+    class: 'TYPO3\CMS\Core\Cache\Frontend\FrontendInterface'
+    factory: ['@TYPO3\CMS\Core\Cache\CacheManager', 'getCache']
+    arguments:
+      $identifier: 'store_finder_middleware_cache'
+
+  Evoweb\StoreFinder\Middleware\CategoryMiddleware:
+    arguments:
+      $contentRepository: '@Evoweb\StoreFinder\Domain\Repository\ContentRepository'
+      $categoryRepository: '@Evoweb\StoreFinder\Domain\Repository\CategoryRepository'
+      $eventDispatcher: '@Psr\EventDispatcher\EventDispatcherInterface'
+      $cache: '@cache.store_finder.middleware_cache'
+    public: true
+
+  Evoweb\StoreFinder\Middleware\LocationMiddleware:
+    arguments:
+      $contentRepository: '@Evoweb\StoreFinder\Domain\Repository\ContentRepository'
+      $locationRepository: '@Evoweb\StoreFinder\Domain\Repository\LocationRepository'
+      $eventDispatcher: '@Psr\EventDispatcher\EventDispatcherInterface'
+      $cache: '@cache.store_finder.middleware_cache'
+    public: true
+
   Evoweb\StoreFinder\EventListener\TceMainListener:
     public: true
 
@@ -36,12 +58,3 @@ services:
 
   SJBR\StaticInfoTables\Domain\Repository\TerritoryRepository:
     public: true
-
-  cache.store_finder_middleware_cache:
-    class: TYPO3\CMS\Core\Cache\Frontend\FrontendInterface
-    factory: ['@TYPO3\CMS\Core\Cache\CacheManager', 'getCache']
-    arguments: ['store_finder_middleware_cache']
-
-  Evoweb\StoreFinder\Cache\MiddlewareCache:
-    arguments:
-      $frontendInterface: '@cache.store_finder_middleware_cache'

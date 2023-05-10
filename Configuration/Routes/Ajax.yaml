@@ -1,17 +1,13 @@
 routes:
-  - route: /api/storefinder
+  - route: api/storefinder
     type: staticText
     content: '{"message": "Ajax Api"}'
 
 routeEnhancers:
-  AjaxApi:
+  AjaxCategories:
     type: Simple
     routePath: /api/storefinder/{action}
     requirements:
       action: '[a-zA-Z0-9].*'
     _arguments:
       action: 'action'
-
-settings:
-  tx_storefinder:
-    automaticCacheClearingStoragePid: ''
