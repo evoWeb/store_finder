@@ -39,11 +39,9 @@ class LocationMiddleware implements MiddlewareInterface
 
     protected GeocodeService $geocodeService;
 
-    public function __construct(
-        protected EventDispatcherInterface $eventDispatcher,
-        protected FrontendInterface $cache,
-    ) {
-    }
+    protected EventDispatcherInterface $eventDispatcher;
+
+    protected FrontendInterface $cache;
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
@@ -79,6 +77,8 @@ class LocationMiddleware implements MiddlewareInterface
         $this->contentRepository = GeneralUtility::makeInstance(ContentRepository::class);
         $this->locationRepository = GeneralUtility::makeInstance(LocationRepository::class);
         $this->geocodeService = GeneralUtility::makeInstance(GeocodeService::class);
+        $this->eventDispatcher = GeneralUtility::makeInstance(EventDispatcherInterface::class);
+        $this->cache = GeneralUtility::getContainer()->get('cache.store_finder.middleware_cache');
     }
 
     protected function prepareConstraint(ServerRequestInterface $request, array $settings): array

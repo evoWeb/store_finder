@@ -33,17 +33,6 @@ services:
     factory: ['@TYPO3\CMS\Core\Cache\CacheManager', 'getCache']
     arguments:
       $identifier: 'store_finder_middleware_cache'
-
-  Evoweb\StoreFinder\Middleware\CategoryMiddleware:
-    arguments:
-      $eventDispatcher: '@Psr\EventDispatcher\EventDispatcherInterface'
-      $cache: '@cache.store_finder.middleware_cache'
-    public: true
-
-  Evoweb\StoreFinder\Middleware\LocationMiddleware:
-    arguments:
-      $eventDispatcher: '@Psr\EventDispatcher\EventDispatcherInterface'
-      $cache: '@cache.store_finder.middleware_cache'
     public: true
 
   Evoweb\StoreFinder\Domain\Repository\CategoryRepository:
@@ -59,6 +48,12 @@ services:
     public: true
 
   Evoweb\StoreFinder\EventListener\TceMainListener:
+    public: true
+
+  Evoweb\StoreFinder\Middleware\CategoryMiddleware:
+    public: true
+
+  Evoweb\StoreFinder\Middleware\LocationMiddleware:
     public: true
 
   Evoweb\StoreFinder\Service\GeocodeService:

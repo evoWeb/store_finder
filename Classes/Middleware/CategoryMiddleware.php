@@ -33,11 +33,9 @@ class CategoryMiddleware implements MiddlewareInterface
 
     protected CategoryRepository $categoryRepository;
 
-    public function __construct(
-        protected EventDispatcherInterface $eventDispatcher,
-        protected FrontendInterface $cache,
-    ) {
-    }
+    protected EventDispatcherInterface $eventDispatcher;
+
+    protected FrontendInterface $cache;
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
@@ -74,5 +72,7 @@ class CategoryMiddleware implements MiddlewareInterface
     {
         $this->contentRepository = GeneralUtility::makeInstance(ContentRepository::class);
         $this->categoryRepository = GeneralUtility::makeInstance(CategoryRepository::class);
+        $this->eventDispatcher = GeneralUtility::makeInstance(EventDispatcherInterface::class);
+        $this->cache = GeneralUtility::getContainer()->get('cache.store_finder.middleware_cache');
     }
 }
