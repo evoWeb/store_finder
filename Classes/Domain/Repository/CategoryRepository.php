@@ -35,10 +35,17 @@ class CategoryRepository extends Repository
      */
     protected $defaultOrderings = ['sorting' => QueryInterface::ORDER_ASCENDING];
 
+    protected array $settings = [];
+
     public function __construct(
         protected ConnectionPool $connectionPool
     ) {
         parent::__construct();
+    }
+
+    public function setSettings(array $settings): void
+    {
+        $this->settings = $settings;
     }
 
     public function initializeObject(): void
@@ -82,53 +89,45 @@ class CategoryRepository extends Repository
         return array_unique($categories);
     }
 
-    public function getCategories(array $selectedCategories, array $settings): array
+    public function getCategories(array $selectedCategories): array
     {
         $categories = $this
-            ->getCommonQuery('sys_category', $settings, 0)
+            ->getCommonQuery('sys_category', 0)
             ->executeQuery()
             ->fetchAllAssociative();
 
         $pageRepository = $this->getPageRepository();
         foreach ($categories as &$category) {
             $category = $pageRepository->getLanguageOverlay('sys_category', $category);
-            $category['children'] = $this->findCategoryByParent(
-                $selectedCategories,
-                $category['uid'],
-                $settings
-            );
+            $category['children'] = $this->findCategoryByParent($selectedCategories, $category['uid']);
         }
 
         return $categories;
     }
 
-    protected function findCategoryByParent(array $selectedCategories, int $parentUid, array $settings): array
+    protected function findCategoryByParent(array $selectedCategories, int $parentUid): array
     {
         $categoryChildren = $this
-            ->getCommonQuery('sys_category', $settings, $parentUid)
+            ->getCommonQuery('sys_category', $parentUid)
             ->executeQuery()
             ->fetchAllAssociative();
 
         $pageRepository = $this->getPageRepository();
         foreach ($categoryChildren as &$categoryChild) {
             $categoryChild = $pageRepository->getLanguageOverlay('sys_category', $categoryChild);
-            if (in_array($categoryChild['uid'], explode(',', $settings['activeCategories']))) {
+            if (in_array($categoryChild['uid'], explode(',', $this->settings['activeCategories']))) {
                 $categoryChild['active'] = 1;
             }
 
             if ($categoryChild['children'] > 0) {
-                $categoryChild['children'] = $this->findCategoryByParent(
-                    $selectedCategories,
-                    $categoryChild['uid'],
-                    $settings
-                );
+                $categoryChild['children'] = $this->findCategoryByParent($selectedCategories, $categoryChild['uid']);
             }
         }
 
         return $categoryChildren;
     }
 
-    protected function getCommonQuery(string $table, array $settings, int $parentUid): QueryBuilder
+    protected function getCommonQuery(string $table, int $parentUid): QueryBuilder
     {
         $queryBuilder = $this->getQueryBuilderForTable($table);
         /** @var Context $context */
@@ -138,7 +137,7 @@ class CategoryRepository extends Repository
         $expression = $queryBuilder->expr();
 
         $queryBuilder
-            ->select(...GeneralUtility::trimExplode(',', $settings['tables'][$table]['fields'] ?? '*', true))
+            ->select(...GeneralUtility::trimExplode(',', $this->settings['tables'][$table]['fields'] ?? '*', true))
             ->from($table, 'c')
             ->where(
                 $expression->eq('c.parent', $queryBuilder->createNamedParameter($parentUid)),
@@ -172,16 +171,16 @@ class CategoryRepository extends Repository
             );
         }
 
-        if (!empty($settings['storagePid'])) {
+        if (!empty($this->settings['storagePid'])) {
             $queryBuilder->andWhere(
-                $expression->in('c.pid', GeneralUtility::intExplode(',', $settings['storagePid']))
+                $expression->in('c.pid', GeneralUtility::intExplode(',', $this->settings['storagePid']))
             );
         }
 
-        if (!empty($settings['tables'][$table]['sortBy'])) {
+        if (!empty($this->settings['tables'][$table]['sortBy'])) {
             $queryBuilder->addOrderBy(
-                $settings['tables'][$table]['sortBy']['field'] ?? 'c.uid',
-                $settings['tables'][$table]['sortBy']['direction'] ?? 'ASC'
+                $this->settings['tables'][$table]['sortBy']['field'] ?? 'c.uid',
+                $this->settings['tables'][$table]['sortBy']['direction'] ?? 'ASC'
             );
         }
 

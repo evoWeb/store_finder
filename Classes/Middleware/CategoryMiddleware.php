@@ -40,24 +40,23 @@ class CategoryMiddleware implements MiddlewareInterface
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $path = ltrim($request->getUri()->getPath(), '/');
-        if ($path !== 'api/storefinder/categories') {
+        $queryParams = $request->getQueryParams();
+        if (!str_starts_with($path, 'api/storefinder/') || ($queryParams['action'] ?? '') !== 'categories') {
             return $handler->handle($request);
         }
         $this->initializeObject();
 
-        $contentUid = $request->getQueryParams()['contentUid'] ?? 0;
+        $contentUid = $queryParams['contentUid'] ?? 0;
         $cacheIdentifier = md5('store_finder' . ($contentUid ?? 'noActiveCategoriesCacheIdentifier'));
 
         if ($this->cache->has($cacheIdentifier)) {
             $categories = $this->cache->get($cacheIdentifier);
         } else {
             $settings = $this->contentRepository->getPluginSettingsByPluginUid((int)$contentUid);
-            $categories = $this
-                ->categoryRepository
-                ->getCategories(
-                    GeneralUtility::intExplode(',', $settings['categories'] ?? ''),
-                    $settings
-                );
+            $this->categoryRepository->setSettings($settings);
+            $categories = $this->categoryRepository->getCategories(
+                GeneralUtility::intExplode(',', $settings['categories'] ?? '', true)
+            );
             $this->cache->set($cacheIdentifier, $categories);
         }
 

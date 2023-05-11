@@ -14,6 +14,7 @@ plugin.tx_storefinder.ajax {
         field = l.sorting
         direction = ASC
       }
+      parseFuncTSPath = lib.parseFunc_RTE
     }
   }
 

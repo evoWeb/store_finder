@@ -17,10 +17,10 @@ return [
         'evoweb/storefinder-locations' => [
             'target' => LocationMiddleware::class,
             'after' => [
-                'typo3/cms-frontend/static-route-resolver',
+                'typo3/cms-frontend/prepare-tsfe-rendering',
             ],
             'before' => [
-                'typo3/cms-frontend/page-resolver',
+                'typo3/cms-frontend/shortcut-and-mountpoint-redirect',
             ],
         ],
     ],

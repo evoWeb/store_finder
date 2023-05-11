@@ -30,6 +30,7 @@ use SJBR\StaticInfoTables\Domain\Repository\CountryZoneRepository;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 class LocationMiddleware implements MiddlewareInterface
 {
@@ -46,12 +47,13 @@ class LocationMiddleware implements MiddlewareInterface
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $path = ltrim($request->getUri()->getPath(), '/');
-        if ($path !== 'api/storefinder/locations') {
+        $queryParams = $request->getQueryParams();
+        if (!str_starts_with($path, 'api/storefinder/') || ($queryParams['action'] ?? '') !== 'locations') {
             return $handler->handle($request);
         }
         $this->initializeObject();
 
-        $contentUid = $request->getQueryParams()['contentUid'] ?? 0;
+        $contentUid = $queryParams['contentUid'] ?? 0;
         $cacheIdentifier = md5('store_finder' . $contentUid . serialize($filter ?? 'allLocationsCacheIdentifier'));
 
         if (empty($request->getParsedBody()) && $this->cache->has($cacheIdentifier)) {
@@ -59,10 +61,12 @@ class LocationMiddleware implements MiddlewareInterface
         } else {
             $settings = $this->contentRepository->getPluginSettingsByPluginUid((int)$contentUid);
 
-            [$constraint, $settings] = $this->prepareConstraint($request, $settings);
-            $locations = $this->locationRepository->getLocations($constraint, $settings);
+            $constraint = $this->prepareConstraint($request, $settings);
+            $this->locationRepository->setSettings($settings);
+            $locations = $this->locationRepository->getLocations($constraint);
+            $locations = $this->convertLocationsForResult($locations, $settings, $request);
 
-            $this->cache->set($cacheIdentifier, $this->convertLocationsForResult($locations, $settings));
+            $this->cache->set($cacheIdentifier, $locations);
         }
 
         $eventResult = $this->eventDispatcher->dispatch(
@@ -81,7 +85,7 @@ class LocationMiddleware implements MiddlewareInterface
         $this->cache = GeneralUtility::getContainer()->get('cache.store_finder.middleware_cache');
     }
 
-    protected function prepareConstraint(ServerRequestInterface $request, array $settings): array
+    protected function prepareConstraint(ServerRequestInterface $request, array $settings): Constraint
     {
         /** @var Constraint $constraint */
         $constraint = GeneralUtility::makeInstance(Constraint::class);
@@ -122,14 +126,39 @@ class LocationMiddleware implements MiddlewareInterface
             $constraint = $this->geocodeService->geocodeAddress($constraint);
         }
 
-        return [$constraint, $settings];
+        return $constraint;
     }
 
-    protected function convertLocationsForResult(array $locations, array $settings): array
-    {
+    protected function convertLocationsForResult(
+        array $locations,
+        array $settings,
+        ServerRequestInterface $request
+    ): array {
+        $table = 'tx_storefinder_domain_model_location';
         // @todo transform notes to html
         // @todo transform models to arrays
-        $fields = GeneralUtility::trimExplode(',', $settings['tables']['categories']['fields']);
+        foreach ($locations as &$location) {
+            if ($location['categories'] ?? false) {
+                $location['categories'] = GeneralUtility::intExplode(',', $location['categories'], true);
+            }
+            if ($location['notes'] ?? false) {
+                $contentObject = GeneralUtility::makeInstance(ContentObjectRenderer::class);
+                $contentObject->setRequest($request);
+                $contentObject->start($location, $table);
+                $location['notes'] = $contentObject->parseFunc(
+                    $location['notes'],
+                    null,
+                    '< ' . $settings['tables'][$table]['parseFuncTSPath']
+                );
+            }
+            if ($location['image'] ?? false) {
+                $location['image'] = $location['image'];
+            }
+            if ($location['icon'] ?? false) {
+                $location['icon'] = $location['icon'];
+            }
+        }
+
         return $locations;
     }
 }

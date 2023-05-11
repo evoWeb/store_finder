@@ -535,7 +535,7 @@ class LocationRepository extends Repository
         return $query->execute();
     }
 
-    public function getLocations(Constraint $constraint, array $settings): array
+    public function getLocations(Constraint $constraint): array
     {
         $table = 'tx_storefinder_domain_model_location';
         $queryBuilder = $this->getQueryBuilderForTable($table);
@@ -546,7 +546,7 @@ class LocationRepository extends Repository
         $expression = $queryBuilder->expr();
 
         $queryBuilder
-            ->select(...GeneralUtility::trimExplode(',', $settings['tables'][$table]['fields'] ?? '*', true))
+            ->select(...GeneralUtility::trimExplode(',', $this->settings['tables'][$table]['fields'] ?? '*', true))
             ->from($table, 'l')
             ->where(
                 $expression->or(
@@ -586,19 +586,38 @@ class LocationRepository extends Repository
                         'mm.uid_local',
                         $queryBuilder->createNamedParameter($constraint->getCategory(), ArrayParameterType::INTEGER)
                     )
-                );
+                )
+                ->addSelectLiteral('GROUP_CONCAT(mm.uid_local) as categories');
         }
 
-        if (!empty($settings['storagePid'])) {
+        if ($constraint->isGeocoded()) {
+            $queryBuilder
+                ->addSelectLiteral(
+                    '(acos(
+                            sin(' . $constraint->getLatitude() * M_PI . ' / 180) *
+                            sin(latitude * ' . M_PI . ' / 180) +
+                            cos(' . $constraint->getLatitude() * M_PI . ' / 180) *
+                            cos(latitude * ' . M_PI . ' / 180) *
+                            cos((' . $constraint->getLongitude() . ' - longitude) * ' . M_PI . ' / 180)
+                        ) * 6370) as `distance`'
+                )
+                ->addOrderBy('distance');
+        }
+
+        if ($constraint->getSearch()) {
+            $queryBuilder = $this->addFulltextSearchQueryParts($constraint, $queryBuilder);
+        }
+
+        if (!empty($this->settings['storagePid'])) {
             $queryBuilder->andWhere(
-                $expression->in('l.pid', GeneralUtility::intExplode(',', $settings['storagePid']))
+                $expression->in('l.pid', GeneralUtility::intExplode(',', $this->settings['storagePid']))
             );
         }
 
-        if (!empty($settings['tables'][$table]['sortBy'])) {
+        if (!empty($this->settings['tables'][$table]['sortBy'])) {
             $queryBuilder->addOrderBy(
-                $settings['tables'][$table]['sortBy']['field'] ?? 'c.uid',
-                $settings['tables'][$table]['sortBy']['direction'] ?? 'ASC'
+                $this->settings['tables'][$table]['sortBy']['field'] ?? 'c.uid',
+                $this->settings['tables'][$table]['sortBy']['direction'] ?? 'ASC'
             );
         }
 
