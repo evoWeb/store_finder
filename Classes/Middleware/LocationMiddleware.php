@@ -17,6 +17,7 @@ namespace Evoweb\StoreFinder\Middleware;
 
 use Evoweb\StoreFinder\Domain\Model\Constraint;
 use Evoweb\StoreFinder\Domain\Repository\ContentRepository;
+use Evoweb\StoreFinder\Domain\Repository\CountryRepository;
 use Evoweb\StoreFinder\Domain\Repository\LocationRepository;
 use Evoweb\StoreFinder\Event\ModifyLocationsMiddlewareOutputEvent;
 use Evoweb\StoreFinder\Service\GeocodeService;
@@ -25,8 +26,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use SJBR\StaticInfoTables\Domain\Model\Country;
-use SJBR\StaticInfoTables\Domain\Model\CountryZone;
+use SJBR\StaticInfoTables\Domain\Repository\CountryZoneRepository;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -52,10 +52,10 @@ class LocationMiddleware implements MiddlewareInterface
         $contentUid = $request->getQueryParams()['contentUid'] ?? 0;
         $cacheIdentifier = md5('store_finder' . $contentUid . serialize($filter ?? 'allLocationsCacheIdentifier'));
 
-        if ($this->cache->has($cacheIdentifier)) {
+        if (empty($request->getParsedBody()) && $this->cache->has($cacheIdentifier)) {
             $locations = $this->cache->get($cacheIdentifier);
         } else {
-            $settings = $this->contentRepository->getPluginSettingsByPluginUid($contentUid);
+            $settings = $this->contentRepository->getPluginSettingsByPluginUid((int)$contentUid);
 
             [$constraint, $settings] = $this->prepareConstraint($request, $settings);
             $locations = $this->locationRepository->getLocations($constraint, $settings);
@@ -77,13 +77,19 @@ class LocationMiddleware implements MiddlewareInterface
         $post = $request->getParsedBody();
 
         if (!empty($post['address'])) {
-            $country = GeneralUtility::makeInstance(Country::class);
-            $country->_setProperty('uid', 54);
-            $constraint->setCountry($country);
+            if ((int)$settings['country'] ?? false) {
+                /** @var CountryRepository $countryRepository */
+                $countryRepository = GeneralUtility::makeInstance(CountryRepository::class);
+                $country = $countryRepository->findByUid((int)$settings['country']);
+                $constraint->setCountry($country);
+            }
 
-            $countryZone = GeneralUtility::makeInstance(CountryZone::class);
-            $countryZone->_setProperty('uid', 88);
-            $constraint->setState($countryZone);
+            if ((int)$settings['state'] ?? false) {
+                /** @var CountryZoneRepository $countryZoneRepository */
+                $countryZoneRepository = GeneralUtility::makeInstance(CountryZoneRepository::class);
+                $countryZone = $countryZoneRepository->findByUid((int)$settings['state']);
+                $constraint->setState($countryZone);
+            }
 
             $constraint->setCity($post['address']);
             $constraint->setZipcode($post['address']);
@@ -94,13 +100,16 @@ class LocationMiddleware implements MiddlewareInterface
         }
 
         if (!empty($post['categories'])) {
-            $settings['limitResultsToCategories'] = true;
             $constraint->setCategory(GeneralUtility::intExplode(',', $post['categories'], true));
+        } else {
+            $constraint->setCategory(GeneralUtility::intExplode(',', $settings['categories'], true));
         }
 
-        $this->geocodeService->setSettings($settings);
-        /** @var Constraint $constraint */
-        $constraint = $this->geocodeService->geocodeAddress($constraint);
+        if ($constraint->getCountry()) {
+            $this->geocodeService->setSettings($settings);
+            /** @var Constraint $constraint */
+            $constraint = $this->geocodeService->geocodeAddress($constraint);
+        }
 
         return [$constraint, $settings];
     }

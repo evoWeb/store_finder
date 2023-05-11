@@ -51,6 +51,9 @@ services:
       $cache: '@cache.store_finder.middleware_cache'
     public: true
 
+  Evoweb\StoreFinder\Domain\Repository\CountryRepository:
+    public: true
+
   Evoweb\StoreFinder\EventListener\TceMainListener:
     public: true
 
@@ -58,4 +61,7 @@ services:
     public: true
 
   SJBR\StaticInfoTables\Domain\Repository\TerritoryRepository:
+    public: true
+
+  SJBR\StaticInfoTables\Domain\Model\CountryZoneRepository:
     public: true

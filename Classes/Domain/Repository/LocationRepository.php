@@ -537,35 +537,69 @@ class LocationRepository extends Repository
 
     public function getLocations(Constraint $constraint, array $settings): array
     {
+        $table = 'tx_storefinder_domain_model_location';
+        $queryBuilder = $this->getQueryBuilderForTable($table);
         /** @var Context $context */
         $context = GeneralUtility::makeInstance(Context::class);
         /** @var LanguageAspect $languageAspect */
         $languageAspect = $context->getAspect('language');
-        $queryBuilder = $this->getQueryBuilderForTable('tx_storefinder_domain_model_location');
+        $expression = $queryBuilder->expr();
 
         $queryBuilder
-            ->select(...GeneralUtility::trimExplode(',', $settings['tables']['locations']['fields'] ?? '*'))
-            ->from('tx_storefinder_domain_model_location')
+            ->select(...GeneralUtility::trimExplode(',', $settings['tables'][$table]['fields'] ?? '*', true))
+            ->from($table, 'l')
             ->where(
-                $queryBuilder->expr()->or(
-                    $queryBuilder->expr()->in('sys_language_uid', [0, -1]),
-                    $queryBuilder->expr()->and(
-                        $queryBuilder->expr()->eq('l10n_parent', 0),
-                        $queryBuilder->expr()->eq('sys_language_uid', $languageAspect->getContentId())
+                $expression->or(
+                    $expression->in('l.sys_language_uid', [0, -1]),
+                    $expression->and(
+                        $expression->eq('l.l18n_parent', 0),
+                        $expression->eq('l.sys_language_uid', $languageAspect->getContentId())
                     )
                 ),
-            );
+            )
+            ->groupBy('l.uid');
 
         // @todo search
         // @todo category filter
         if (!empty($filter)) {
             $queryBuilder->andWhere(
-                $queryBuilder->expr()->inSet('uid', $filter)
+                $expression->inSet('uid', $filter)
             );
         }
 
-        if (!empty($settings['tables']['locations']['sortBy'])) {
-            $queryBuilder->addOrderBy($settings['tables']['locations']['sortBy'], 'ASC');
+        if (!empty($constraint->getCategories())) {
+            $queryBuilder
+                ->innerJoin(
+                    'l',
+                    'sys_category_record_mm',
+                    'mm',
+                    (string)$expression->and(
+                        $expression->eq(
+                            'mm.tablenames',
+                            $queryBuilder->quote('tx_storefinder_domain_model_location')
+                        ),
+                        $expression->eq('l.uid', 'mm.uid_foreign')
+                    )
+                )
+                ->andWhere(
+                    $expression->in(
+                        'mm.uid_local',
+                        $queryBuilder->createNamedParameter($constraint->getCategory(), ArrayParameterType::INTEGER)
+                    )
+                );
+        }
+
+        if (!empty($settings['storagePid'])) {
+            $queryBuilder->andWhere(
+                $expression->in('l.pid', GeneralUtility::intExplode(',', $settings['storagePid']))
+            );
+        }
+
+        if (!empty($settings['tables'][$table]['sortBy'])) {
+            $queryBuilder->addOrderBy(
+                $settings['tables'][$table]['sortBy']['field'] ?? 'c.uid',
+                $settings['tables'][$table]['sortBy']['direction'] ?? 'ASC'
+            );
         }
 
         $locations = $queryBuilder
