@@ -29,6 +29,10 @@ use Psr\Http\Server\RequestHandlerInterface;
 use SJBR\StaticInfoTables\Domain\Repository\CountryZoneRepository;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Http\JsonResponse;
+use TYPO3\CMS\Core\Imaging\ImageManipulation\CropVariantCollection;
+use TYPO3\CMS\Core\Resource\FileReference;
+use TYPO3\CMS\Core\Resource\FileRepository;
+use TYPO3\CMS\Core\Resource\ProcessedFile;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
@@ -135,15 +139,15 @@ class LocationMiddleware implements MiddlewareInterface
         ServerRequestInterface $request
     ): array {
         $table = 'tx_storefinder_domain_model_location';
-        // @todo transform notes to html
-        // @todo transform models to arrays
+        /** @var ContentObjectRenderer $contentObject */
+        $contentObject = GeneralUtility::makeInstance(ContentObjectRenderer::class);
+        $contentObject->setRequest($request);
+
         foreach ($locations as &$location) {
             if ($location['categories'] ?? false) {
                 $location['categories'] = GeneralUtility::intExplode(',', $location['categories'], true);
             }
             if ($location['notes'] ?? false) {
-                $contentObject = GeneralUtility::makeInstance(ContentObjectRenderer::class);
-                $contentObject->setRequest($request);
                 $contentObject->start($location, $table);
                 $location['notes'] = $contentObject->parseFunc(
                     $location['notes'],
@@ -152,13 +156,43 @@ class LocationMiddleware implements MiddlewareInterface
                 );
             }
             if ($location['image'] ?? false) {
-                $location['image'] = $location['image'];
+                $location['image'] = $this->getCroppedFile($location, 'image', $table, $settings);
             }
             if ($location['icon'] ?? false) {
-                $location['icon'] = $location['icon'];
+                $location['icon'] = $this->getCroppedFile($location, 'icon', $table, $settings);
             }
         }
 
         return $locations;
+    }
+
+    protected function getCroppedFile(array $location, string $fieldName, string $tableName, array $settings): string
+    {
+        /** @var FileRepository $fileRepository */
+        $fileRepository = GeneralUtility::makeInstance(FileRepository::class);
+        $file = $fileRepository->findByRelation($tableName, $fieldName, $location['uid'])[0] ?? null;
+
+        if (!empty($settings['tables'][$tableName]['cropVariant'][$fieldName])) {
+            $cropVariant = $settings['tables'][$tableName]['cropVariant'][$fieldName];
+            $cropString = $file instanceof FileReference ? $file->getProperty('crop') : '';
+            $cropArea = CropVariantCollection::create((string)$cropString)->getCropArea($cropVariant);
+            $processingInstructions = [];
+            $processingInstructions = array_merge(
+                $processingInstructions,
+                [
+                    'crop' => $cropArea->isEmpty() ? null : $cropArea->makeAbsoluteBasedOnFile($file),
+                ]
+            );
+        }
+
+        if (!empty($processingInstructions) && !($file instanceof ProcessedFile)) {
+            if (is_callable([$file, 'getOriginalFile'])) {
+                // Get the original file from the file reference
+                $file = $file->getOriginalFile();
+            }
+            $file = $file->process(ProcessedFile::CONTEXT_IMAGECROPSCALEMASK, $processingInstructions);
+        }
+
+        return GeneralUtility::locationHeaderUrl($file->getPublicUrl());
     }
 }

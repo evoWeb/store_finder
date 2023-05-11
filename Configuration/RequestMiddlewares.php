@@ -8,10 +8,10 @@ return [
         'evoweb/storefinder-categories' => [
             'target' => CategoryMiddleware::class,
             'after' => [
-                'typo3/cms-frontend/static-route-resolver',
+                'typo3/cms-frontend/page-resolver',
             ],
             'before' => [
-                'typo3/cms-frontend/page-resolver',
+                'typo3/cms-adminpanel/sql-logging',
             ],
         ],
         'evoweb/storefinder-locations' => [

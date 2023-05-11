@@ -191,28 +191,30 @@ class LocationRepository extends Repository
 
         if (!empty($categories)) {
             $expression = $queryBuilder->expr();
-            $queryBuilder->innerJoin(
-                'l',
-                'sys_category_record_mm',
-                'mm',
-                (string)$expression->and(
-                    $expression->eq('l.uid', 'mm.uid_foreign'),
-                    $expression->eq(
-                        'mm.tablenames',
-                        $queryBuilder->quote('tx_storefinder_domain_model_location')
-                    ),
-                    $expression->eq(
-                        'mm.fieldname',
-                        $queryBuilder->quote('categories')
+            $queryBuilder
+                ->innerJoin(
+                    'l',
+                    'sys_category_record_mm',
+                    'mm',
+                    (string)$expression->and(
+                        $expression->eq('l.uid', 'mm.uid_foreign'),
+                        $expression->eq(
+                            'mm.tablenames',
+                            $queryBuilder->quote('tx_storefinder_domain_model_location')
+                        ),
+                        $expression->eq(
+                            'mm.fieldname',
+                            $queryBuilder->quote('categories')
+                        ),
                     )
                 )
-            );
-            $queryBuilder->andWhere(
-                $expression->in(
-                    'mm.uid_local',
-                    $queryBuilder->createNamedParameter($categories, ArrayParameterType::INTEGER)
+                ->andWhere(
+                    $expression->in(
+                        'mm.uid_local',
+                        $queryBuilder->createNamedParameter($categories, ArrayParameterType::INTEGER)
+                    )
                 )
-            );
+                ->addSelectLiteral('GROUP_CONCAT(mm.uid_local) as categories');
         }
 
         return $queryBuilder;
@@ -539,33 +541,12 @@ class LocationRepository extends Repository
     {
         $table = 'tx_storefinder_domain_model_location';
         $queryBuilder = $this->getQueryBuilderForTable($table);
-        /** @var Context $context */
-        $context = GeneralUtility::makeInstance(Context::class);
-        /** @var LanguageAspect $languageAspect */
-        $languageAspect = $context->getAspect('language');
         $expression = $queryBuilder->expr();
 
         $queryBuilder
             ->select(...GeneralUtility::trimExplode(',', $this->settings['tables'][$table]['fields'] ?? '*', true))
             ->from($table, 'l')
-            ->where(
-                $expression->or(
-                    $expression->in('l.sys_language_uid', [0, -1]),
-                    $expression->and(
-                        $expression->eq('l.l18n_parent', 0),
-                        $expression->eq('l.sys_language_uid', $languageAspect->getContentId())
-                    )
-                ),
-            )
             ->groupBy('l.uid');
-
-        // @todo search
-        // @todo category filter
-        if (!empty($filter)) {
-            $queryBuilder->andWhere(
-                $expression->inSet('uid', $filter)
-            );
-        }
 
         if (!empty($constraint->getCategories())) {
             $queryBuilder
@@ -574,11 +555,15 @@ class LocationRepository extends Repository
                     'sys_category_record_mm',
                     'mm',
                     (string)$expression->and(
+                        $expression->eq('l.uid', 'mm.uid_foreign'),
                         $expression->eq(
                             'mm.tablenames',
                             $queryBuilder->quote('tx_storefinder_domain_model_location')
                         ),
-                        $expression->eq('l.uid', 'mm.uid_foreign')
+                        $expression->eq(
+                            'mm.fieldname',
+                            $queryBuilder->quote('categories')
+                        ),
                     )
                 )
                 ->andWhere(
@@ -594,19 +579,18 @@ class LocationRepository extends Repository
             $queryBuilder
                 ->addSelectLiteral(
                     '(acos(
-                            sin(' . $constraint->getLatitude() * M_PI . ' / 180) *
-                            sin(latitude * ' . M_PI . ' / 180) +
-                            cos(' . $constraint->getLatitude() * M_PI . ' / 180) *
-                            cos(latitude * ' . M_PI . ' / 180) *
-                            cos((' . $constraint->getLongitude() . ' - longitude) * ' . M_PI . ' / 180)
-                        ) * 6370) as `distance`'
+                        sin(' . $constraint->getLatitude() * M_PI . ' / 180) *
+                        sin(latitude * ' . M_PI . ' / 180) +
+                        cos(' . $constraint->getLatitude() * M_PI . ' / 180) *
+                        cos(latitude * ' . M_PI . ' / 180) *
+                        cos((' . $constraint->getLongitude() . ' - longitude) * ' . M_PI . ' / 180)
+                    ) * 6370) as `distance`'
                 )
                 ->addOrderBy('distance');
         }
 
-        if ($constraint->getSearch()) {
-            $queryBuilder = $this->addFulltextSearchQueryParts($constraint, $queryBuilder);
-        }
+        $queryBuilder = $this->addFulltextSearchQueryParts($constraint, $queryBuilder);
+        $queryBuilder = $this->addLanguagePart($table, 'l', $queryBuilder);
 
         if (!empty($this->settings['storagePid'])) {
             $queryBuilder->andWhere(
