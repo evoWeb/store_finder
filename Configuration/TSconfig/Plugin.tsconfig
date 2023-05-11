@@ -1,12 +1,11 @@
 plugin.tx_storefinder.ajax {
   tables {
     sys_category {
-      fields = c.uid, c.title, c.slug
+      fields = uid, title, slug
       sortBy {
         field = c.sorting
         direction = ASC
       }
-      onlyCategoriesWithLocations = 1
     }
 
     tx_storefinder_domain_model_location {

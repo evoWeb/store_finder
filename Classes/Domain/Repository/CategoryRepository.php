@@ -149,10 +149,8 @@ class CategoryRepository extends Repository
                         $expression->eq('c.sys_language_uid', $languageAspect->getContentId())
                     )
                 ),
-            );
-
-        if ($settings['tables'][$table]['onlyCategoriesWithLocations'] ?? false) {
-            $queryBuilder->innerJoin(
+            )
+            ->innerJoin(
                 'c',
                 'sys_category_record_mm',
                 'mm',
@@ -164,7 +162,6 @@ class CategoryRepository extends Repository
                     $expression->eq('c.uid', 'mm.uid_local')
                 )
             );
-        }
 
         if (!empty($selectedCategories)) {
             $queryBuilder->andWhere(

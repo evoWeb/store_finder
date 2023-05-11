@@ -29,9 +29,11 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class CategoryMiddleware implements MiddlewareInterface
 {
+    protected ContentRepository $contentRepository;
+
+    protected CategoryRepository $categoryRepository;
+
     public function __construct(
-        protected ContentRepository $contentRepository,
-        protected CategoryRepository $categoryRepository,
         protected EventDispatcherInterface $eventDispatcher,
         protected FrontendInterface $cache,
     ) {
@@ -43,6 +45,7 @@ class CategoryMiddleware implements MiddlewareInterface
         if ($path !== 'api/storefinder/categories') {
             return $handler->handle($request);
         }
+        $this->initializeObject();
 
         $contentUid = $request->getQueryParams()['contentUid'] ?? 0;
         $cacheIdentifier = md5('store_finder' . ($contentUid ?? 'noActiveCategoriesCacheIdentifier'));
@@ -65,5 +68,11 @@ class CategoryMiddleware implements MiddlewareInterface
         );
 
         return new JsonResponse($eventResult->getCategories());
+    }
+
+    protected function initializeObject(): void
+    {
+        $this->contentRepository = GeneralUtility::makeInstance(ContentRepository::class);
+        $this->categoryRepository = GeneralUtility::makeInstance(CategoryRepository::class);
     }
 }

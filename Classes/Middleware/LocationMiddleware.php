@@ -33,10 +33,13 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class LocationMiddleware implements MiddlewareInterface
 {
+    protected ContentRepository $contentRepository;
+
+    protected LocationRepository $locationRepository;
+
+    protected GeocodeService $geocodeService;
+
     public function __construct(
-        protected ContentRepository $contentRepository,
-        protected LocationRepository $locationRepository,
-        protected GeocodeService $geocodeService,
         protected EventDispatcherInterface $eventDispatcher,
         protected FrontendInterface $cache,
     ) {
@@ -48,6 +51,7 @@ class LocationMiddleware implements MiddlewareInterface
         if ($path !== 'api/storefinder/locations') {
             return $handler->handle($request);
         }
+        $this->initializeObject();
 
         $contentUid = $request->getQueryParams()['contentUid'] ?? 0;
         $cacheIdentifier = md5('store_finder' . $contentUid . serialize($filter ?? 'allLocationsCacheIdentifier'));
@@ -68,6 +72,13 @@ class LocationMiddleware implements MiddlewareInterface
         );
 
         return new JsonResponse($eventResult->getLocations());
+    }
+
+    protected function initializeObject(): void
+    {
+        $this->contentRepository = GeneralUtility::makeInstance(ContentRepository::class);
+        $this->locationRepository = GeneralUtility::makeInstance(LocationRepository::class);
+        $this->geocodeService = GeneralUtility::makeInstance(GeocodeService::class);
     }
 
     protected function prepareConstraint(ServerRequestInterface $request, array $settings): array

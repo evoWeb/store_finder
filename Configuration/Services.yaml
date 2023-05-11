@@ -36,25 +36,32 @@ services:
 
   Evoweb\StoreFinder\Middleware\CategoryMiddleware:
     arguments:
-      $contentRepository: '@Evoweb\StoreFinder\Domain\Repository\ContentRepository'
-      $categoryRepository: '@Evoweb\StoreFinder\Domain\Repository\CategoryRepository'
       $eventDispatcher: '@Psr\EventDispatcher\EventDispatcherInterface'
       $cache: '@cache.store_finder.middleware_cache'
     public: true
 
   Evoweb\StoreFinder\Middleware\LocationMiddleware:
     arguments:
-      $contentRepository: '@Evoweb\StoreFinder\Domain\Repository\ContentRepository'
-      $locationRepository: '@Evoweb\StoreFinder\Domain\Repository\LocationRepository'
-      $geocodeService: '@Evoweb\StoreFinder\Service\GeocodeService'
       $eventDispatcher: '@Psr\EventDispatcher\EventDispatcherInterface'
       $cache: '@cache.store_finder.middleware_cache'
+    public: true
+
+  Evoweb\StoreFinder\Domain\Repository\CategoryRepository:
+    public: true
+
+  Evoweb\StoreFinder\Domain\Repository\ContentRepository:
+    public: true
+
+  Evoweb\StoreFinder\Domain\Repository\LocationRepository:
     public: true
 
   Evoweb\StoreFinder\Domain\Repository\CountryRepository:
     public: true
 
   Evoweb\StoreFinder\EventListener\TceMainListener:
+    public: true
+
+  Evoweb\StoreFinder\Service\GeocodeService:
     public: true
 
   Evoweb\StoreFinder\ViewHelpers\Form\SelectCountriesViewHelper:
