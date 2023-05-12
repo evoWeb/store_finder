@@ -136,8 +136,9 @@ class CategoryRepository extends Repository
         $languageAspect = $context->getAspect('language');
         $expression = $queryBuilder->expr();
 
+        $fields = array_keys($this->settings['tables'][$table]['fields'] ?? ['*' => '']);
         $queryBuilder
-            ->select(...GeneralUtility::trimExplode(',', $this->settings['tables'][$table]['fields'] ?? '*', true))
+            ->select(...$fields)
             ->from($table, 'c')
             ->where(
                 $expression->eq('c.parent', $queryBuilder->createNamedParameter($parentUid)),

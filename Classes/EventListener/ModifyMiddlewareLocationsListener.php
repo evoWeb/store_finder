@@ -25,7 +25,7 @@ class ModifyMiddlewareLocationsListener
                 $location['notes'] = $contentObject->parseFunc(
                     $location['notes'],
                     null,
-                    '< ' . $settings['tables'][$table]['parseFuncTSPath']
+                    '< ' . $settings['tables'][$table]['fields']['notes']['parseFuncTSPath']
                 );
             }
         }

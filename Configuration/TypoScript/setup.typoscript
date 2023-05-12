@@ -116,7 +116,11 @@ plugin.tx_storefinder.fieldError {
 plugin.tx_storefinder.ajax {
   tables {
     sys_category {
-      fields = uid, title, slug
+      fields {
+        uid =
+        title =
+        slug =
+      }
       sortBy {
         field = c.sorting
         direction = ASC
@@ -124,16 +128,30 @@ plugin.tx_storefinder.ajax {
     }
 
     tx_storefinder_domain_model_location {
-      fields = uid, name, address, zipcode, city, dont_show_address, person, phone, email, latitude, longitude, url, notes, image, icon, categories
+      fields {
+        uid =
+        name =
+        address =
+        zipcode =
+        city =
+        dont_show_address =
+        person =
+        phone =
+        email =
+        latitude =
+        longitude =
+        url =
+        notes {
+          parseFuncTSPath = lib.parseFunc_RTE
+        }
+        image =
+        icon =
+        categories =
+      }
       sortBy {
         field = l.sorting
         direction = ASC
       }
-      cropVariant {
-        image =
-        icon =
-      }
-      parseFuncTSPath = lib.parseFunc_RTE
     }
   }
 

@@ -537,8 +537,9 @@ class LocationRepository extends Repository
         $queryBuilder = $this->getQueryBuilderForTable($table);
         $expression = $queryBuilder->expr();
 
+        $fields = array_keys($this->settings['tables'][$table]['fields'] ?? ['*' => '']);
         $queryBuilder
-            ->select(...GeneralUtility::trimExplode(',', $this->settings['tables'][$table]['fields'] ?? '*', true))
+            ->select(...$fields)
             ->from($table, 'l')
             ->groupBy('l.uid');
 
