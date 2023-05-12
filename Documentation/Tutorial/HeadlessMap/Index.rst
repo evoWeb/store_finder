@@ -38,6 +38,8 @@ To use the middleware, it's important to include th Ajax.yaml in the site config
     imports:
       - { resource: 'EXT:store_finder/Configuration/Routes/Ajax.yaml' }
 
+Fields to output and conversion can be changed with TypoScript key plugin.tx_storefinder.ajax
+
 Template example
 ================
 
