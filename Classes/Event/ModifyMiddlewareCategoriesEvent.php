@@ -15,30 +15,21 @@ namespace Evoweb\StoreFinder\Event;
  * LICENSE.txt file that was distributed with this source code.
  */
 
-use Evoweb\StoreFinder\Middleware\CategoryMiddleware;
+use Evoweb\StoreFinder\Middleware\StoreFinderMiddleware;
 use Psr\Http\Message\ServerRequestInterface;
 
-final class ModifyCategoriesMiddlewareOutputEvent
+final class ModifyMiddlewareCategoriesEvent
 {
-    private CategoryMiddleware $categoryMiddleware;
-
-    private array $categories;
-
-    private ServerRequestInterface $request;
-
     public function __construct(
-        CategoryMiddleware $categoryMiddleware,
-        ServerRequestInterface $request,
-        array $categories,
+        protected StoreFinderMiddleware $storeFinderMiddleware,
+        protected ServerRequestInterface $request,
+        protected array $categories,
     ) {
-        $this->categoryMiddleware = $categoryMiddleware;
-        $this->categories = $categories;
-        $this->request = $request;
     }
 
-    public function getCategoryMiddleware(): CategoryMiddleware
+    public function getStoreFinderMiddleware(): StoreFinderMiddleware
     {
-        return $this->categoryMiddleware;
+        return $this->storeFinderMiddleware;
     }
 
     public function getRequest(): ServerRequestInterface

@@ -501,12 +501,6 @@ class LocationRepository extends Repository
 
     /**
      * Calculate the map radius
-     *
-     * @param int $mapPx
-     * @param int $worldPx
-     * @param float $fraction
-     *
-     * @return float
      */
     protected function zoom(int $mapPx, int $worldPx, float $fraction): float
     {

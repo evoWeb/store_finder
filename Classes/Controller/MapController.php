@@ -31,6 +31,7 @@ use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Pagination\SimplePagination;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Mvc\Controller\Arguments;
 use TYPO3Fluid\Fluid\View\ViewInterface;
 use TYPO3\CMS\Extbase\Annotation as Extbase;
 use TYPO3\CMS\Extbase\Http\ForwardResponse;
@@ -67,7 +68,7 @@ class MapController extends ActionController
     protected function modifyValidatorsBasedOnSettings(
         Argument $argument,
         array $configuredValidators
-    ) {
+    ): void {
         $parser = new DocParser();
 
         /** @var ConstraintValidator $validator */
@@ -182,6 +183,11 @@ class MapController extends ActionController
         }
 
         $this->setTypeConverter();
+    }
+
+    protected function initializeView(): void
+    {
+        $this->view->assign('cObjectData', $this->request->getAttribute('currentContentObject')?->data);
     }
 
     /**
@@ -564,7 +570,7 @@ class MapController extends ActionController
         return $center;
     }
 
-    protected function addPaginator(QueryResultInterface $locations)
+    protected function addPaginator(QueryResultInterface $locations): void
     {
         if ($this->settings['addPaginator']) {
             $currentPage = $this->request->hasArgument('currentPage')

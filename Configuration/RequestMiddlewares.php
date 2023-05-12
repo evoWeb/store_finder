@@ -1,21 +1,11 @@
 <?php
 
-use Evoweb\StoreFinder\Middleware\CategoryMiddleware;
-use Evoweb\StoreFinder\Middleware\LocationMiddleware;
+use Evoweb\StoreFinder\Middleware\StoreFinderMiddleware;
 
 return [
     'frontend' => [
-        'evoweb/storefinder-categories' => [
-            'target' => CategoryMiddleware::class,
-            'after' => [
-                'typo3/cms-frontend/page-resolver',
-            ],
-            'before' => [
-                'typo3/cms-adminpanel/sql-logging',
-            ],
-        ],
         'evoweb/storefinder-locations' => [
-            'target' => LocationMiddleware::class,
+            'target' => StoreFinderMiddleware::class,
             'after' => [
                 'typo3/cms-frontend/prepare-tsfe-rendering',
             ],

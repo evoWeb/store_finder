@@ -16,10 +16,12 @@ namespace Evoweb\StoreFinder\Middleware;
  */
 
 use Evoweb\StoreFinder\Domain\Model\Constraint;
+use Evoweb\StoreFinder\Domain\Repository\CategoryRepository;
 use Evoweb\StoreFinder\Domain\Repository\ContentRepository;
 use Evoweb\StoreFinder\Domain\Repository\CountryRepository;
 use Evoweb\StoreFinder\Domain\Repository\LocationRepository;
-use Evoweb\StoreFinder\Event\ModifyLocationsMiddlewareOutputEvent;
+use Evoweb\StoreFinder\Event\ModifyMiddlewareCategoriesEvent;
+use Evoweb\StoreFinder\Event\ModifyMiddlewareLocationsEvent;
 use Evoweb\StoreFinder\Service\GeocodeService;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -36,64 +38,88 @@ use TYPO3\CMS\Core\Resource\ProcessedFile;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
-class LocationMiddleware implements MiddlewareInterface
+class StoreFinderMiddleware implements MiddlewareInterface
 {
-    protected ContentRepository $contentRepository;
-
-    protected LocationRepository $locationRepository;
-
-    protected GeocodeService $geocodeService;
-
     protected EventDispatcherInterface $eventDispatcher;
-
-    protected FrontendInterface $cache;
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $path = ltrim($request->getUri()->getPath(), '/');
         $queryParams = $request->getQueryParams();
-        if (!str_starts_with($path, 'api/storefinder/') || ($queryParams['action'] ?? '') !== 'locations') {
+        $action = ($queryParams['action'] ?? '');
+        if (
+            !str_starts_with($path, 'api/storefinder/')
+            || !in_array($action, ['locations', 'categories'])
+        ) {
             return $handler->handle($request);
         }
         $this->initializeObject();
 
         $contentUid = $queryParams['contentUid'] ?? 0;
-        $cacheIdentifier = md5('store_finder' . $contentUid . serialize($filter ?? 'allLocationsCacheIdentifier'));
+        $cacheIdentifier = md5('store_finder' . $action . $contentUid);
 
-        if (empty($request->getParsedBody()) && $this->cache->has($cacheIdentifier)) {
-            $locations = $this->cache->get($cacheIdentifier);
+        /** @var FrontendInterface $cache */
+        $cache = GeneralUtility::getContainer()->get('cache.store_finder.middleware_cache');
+        if ($request->getBody()->getSize() == 0 && $cache->has($cacheIdentifier)) {
+            $rows = $cache->get($cacheIdentifier);
         } else {
-            $settings = $this->contentRepository->getPluginSettingsByPluginUid((int)$contentUid);
-
-            $constraint = $this->prepareConstraint($request, $settings);
-            $this->locationRepository->setSettings($settings);
-            $locations = $this->locationRepository->getLocations($constraint);
-            $locations = $this->convertLocationsForResult($locations, $settings, $request);
-
-            $this->cache->set($cacheIdentifier, $locations);
+            $settings = $this->getSettings((int)$contentUid);
+            $rows = $this->{$action . 'Action'}($request, $settings);
+            $cache->set($cacheIdentifier, $rows);
         }
 
-        $eventResult = $this->eventDispatcher->dispatch(
-            new ModifyLocationsMiddlewareOutputEvent($this, $request, $locations)
-        );
-
-        return new JsonResponse($eventResult->getLocations());
+        return new JsonResponse($rows);
     }
 
     protected function initializeObject(): void
     {
-        $this->contentRepository = GeneralUtility::makeInstance(ContentRepository::class);
-        $this->locationRepository = GeneralUtility::makeInstance(LocationRepository::class);
-        $this->geocodeService = GeneralUtility::makeInstance(GeocodeService::class);
         $this->eventDispatcher = GeneralUtility::makeInstance(EventDispatcherInterface::class);
-        $this->cache = GeneralUtility::getContainer()->get('cache.store_finder.middleware_cache');
+    }
+
+    protected function getSettings(int $contentUid): array
+    {
+        /** @var ContentRepository $contentRepository */
+        $contentRepository = GeneralUtility::makeInstance(ContentRepository::class);
+        return $contentRepository->getPluginSettingsByPluginUid($contentUid);
+    }
+
+    protected function categoriesAction(ServerRequestInterface $request, array $settings): array
+    {
+        /** @var CategoryRepository $categoryRepository */
+        $categoryRepository = GeneralUtility::makeInstance(CategoryRepository::class);
+        $categoryRepository->setSettings($settings);
+
+        $categories = GeneralUtility::intExplode(',', $settings['categories'] ?? '', true);
+        $rows = $categoryRepository->getCategories($categories);
+
+        $eventResult = $this->eventDispatcher->dispatch(
+            new ModifyMiddlewareCategoriesEvent($this, $request, $rows)
+        );
+        return $eventResult->getCategories();
+    }
+
+    protected function locationsAction(ServerRequestInterface $request, array $settings): array
+    {
+        /** @var LocationRepository $locationRepository */
+        $locationRepository = GeneralUtility::makeInstance(LocationRepository::class);
+        $locationRepository->setSettings($settings);
+
+        $constraint = $this->prepareConstraint($request, $settings);
+        $rows = $locationRepository->getLocations($constraint);
+        $rows = $this->convertLocationsForResult($rows, $settings, $request);
+
+        $eventResult = $this->eventDispatcher->dispatch(
+            new ModifyMiddlewareLocationsEvent($this, $request, $rows)
+        );
+        return $eventResult->getLocations();
     }
 
     protected function prepareConstraint(ServerRequestInterface $request, array $settings): Constraint
     {
         /** @var Constraint $constraint */
         $constraint = GeneralUtility::makeInstance(Constraint::class);
-        $post = $request->getParsedBody();
+        $request->getBody()->rewind();
+        $post = json_decode($request->getBody()->getContents(), true);
 
         if (!empty($post['address'])) {
             if ((int)$settings['country'] ?? false) {
@@ -125,9 +151,10 @@ class LocationMiddleware implements MiddlewareInterface
         }
 
         if ($constraint->getCountry()) {
-            $this->geocodeService->setSettings($settings);
-            /** @var Constraint $constraint */
-            $constraint = $this->geocodeService->geocodeAddress($constraint);
+            /** @var GeocodeService $geocodeService */
+            $geocodeService = GeneralUtility::makeInstance(GeocodeService::class);
+            $geocodeService->setSettings($settings);
+            $constraint = $geocodeService->geocodeAddress($constraint);
         }
 
         return $constraint;
@@ -144,10 +171,10 @@ class LocationMiddleware implements MiddlewareInterface
         $contentObject->setRequest($request);
 
         foreach ($locations as &$location) {
-            if ($location['categories'] ?? false) {
+            if (!empty($location['categories'])) {
                 $location['categories'] = GeneralUtility::intExplode(',', $location['categories'], true);
             }
-            if ($location['notes'] ?? false) {
+            if (!empty($location['notes'])) {
                 $contentObject->start($location, $table);
                 $location['notes'] = $contentObject->parseFunc(
                     $location['notes'],
@@ -155,10 +182,10 @@ class LocationMiddleware implements MiddlewareInterface
                     '< ' . $settings['tables'][$table]['parseFuncTSPath']
                 );
             }
-            if ($location['image'] ?? false) {
+            if (!empty($location['image'])) {
                 $location['image'] = $this->getCroppedFile($location, 'image', $table, $settings);
             }
-            if ($location['icon'] ?? false) {
+            if (!empty($location['icon'])) {
                 $location['icon'] = $this->getCroppedFile($location, 'icon', $table, $settings);
             }
         }
@@ -171,6 +198,10 @@ class LocationMiddleware implements MiddlewareInterface
         /** @var FileRepository $fileRepository */
         $fileRepository = GeneralUtility::makeInstance(FileRepository::class);
         $file = $fileRepository->findByRelation($tableName, $fieldName, $location['uid'])[0] ?? null;
+
+        if (!$file) {
+            return '';
+        }
 
         if (!empty($settings['tables'][$tableName]['cropVariant'][$fieldName])) {
             $cropVariant = $settings['tables'][$tableName]['cropVariant'][$fieldName];

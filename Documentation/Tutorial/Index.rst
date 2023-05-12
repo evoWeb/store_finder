@@ -13,3 +13,4 @@ Tutorial
 
    Installation/Index
    CustomEventListener/Index
+   HeadlessMap/Index

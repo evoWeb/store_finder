@@ -16,6 +16,7 @@ namespace Evoweb\StoreFinder\Service;
  */
 
 use Evoweb\StoreFinder\Cache\CoordinatesCache;
+use Evoweb\StoreFinder\Domain\Model\Constraint;
 use Evoweb\StoreFinder\Domain\Model\Location;
 use Geocoder\Model\Coordinates;
 use Geocoder\Provider\GoogleMaps\GoogleMaps;
@@ -45,7 +46,7 @@ class GeocodeService
         $this->settings = $settings;
     }
 
-    public function geocodeAddress(Location $address, bool $forceGeoCoding = false): Location
+    public function geocodeAddress(Location|Constraint $address, bool $forceGeoCoding = false): Location|Constraint
     {
         $queryValues = $this->prepareValuesForQuery($address, $this->fields);
         $geoCodedAddress = $this->coordinatesCache->getCoordinateByAddress($address, $queryValues);

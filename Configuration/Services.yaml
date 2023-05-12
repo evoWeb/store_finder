@@ -50,10 +50,7 @@ services:
   Evoweb\StoreFinder\EventListener\TceMainListener:
     public: true
 
-  Evoweb\StoreFinder\Middleware\CategoryMiddleware:
-    public: true
-
-  Evoweb\StoreFinder\Middleware\LocationMiddleware:
+  Evoweb\StoreFinder\Middleware\StoreFinderMiddleware:
     public: true
 
   Evoweb\StoreFinder\Service\GeocodeService:
