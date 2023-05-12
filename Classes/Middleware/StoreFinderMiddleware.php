@@ -31,6 +31,8 @@ use Psr\Http\Server\RequestHandlerInterface;
 use SJBR\StaticInfoTables\Domain\Repository\CountryZoneRepository;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Http\JsonResponse;
+use TYPO3\CMS\Core\Service\FlexFormService;
+use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class StoreFinderMiddleware implements MiddlewareInterface
@@ -58,7 +60,7 @@ class StoreFinderMiddleware implements MiddlewareInterface
         if ($request->getBody()->getSize() == 0 && $cache->has($cacheIdentifier)) {
             $rows = $cache->get($cacheIdentifier);
         } else {
-            $settings = $this->getSettings((int)$contentUid);
+            [$settings, $request] = $this->getSettings($request, (int)$contentUid);
             $rows = $this->{$action . 'Action'}($request, $settings);
             $cache->set($cacheIdentifier, $rows);
         }
@@ -71,11 +73,31 @@ class StoreFinderMiddleware implements MiddlewareInterface
         $this->eventDispatcher = GeneralUtility::makeInstance(EventDispatcherInterface::class);
     }
 
-    protected function getSettings(int $contentUid): array
+    protected function getSettings(ServerRequestInterface $request, int $contentUid): array
     {
         /** @var ContentRepository $contentRepository */
         $contentRepository = GeneralUtility::makeInstance(ContentRepository::class);
-        return $contentRepository->getPluginSettingsByPluginUid($contentUid);
+        /** @var FlexFormService $flexFormService */
+        $flexFormService = GeneralUtility::makeInstance(FlexFormService::class);
+        /** @var TypoScriptService $typoScriptService */
+        $typoScriptService = GeneralUtility::makeInstance(TypoScriptService::class);
+
+        $row = $contentRepository->findByUid($contentUid);
+        $settings = $flexFormService->convertFlexFormContentToArray($row['pi_flexform'] ?? '')['settings'] ?? [];
+        $settings['pid'] = $row['pid'];
+        $settings['storagePid'] = $row['pages'];
+
+        $controller = $request->getAttribute('frontend.controller');
+        $controller->id = $row['pid'];
+        $controller->determineId($request);
+        $request = $controller->getFromCache($request);
+
+        $typoScript = $request->getAttribute('frontend.typoscript');
+        $settings += $typoScriptService->convertTypoScriptArrayToPlainArray(
+            $typoScript->getSetupArray()['plugin.']['tx_storefinder.']['ajax.'] ?? []
+        );
+
+        return [$settings, $request];
     }
 
     protected function categoriesAction(ServerRequestInterface $request, array $settings): array

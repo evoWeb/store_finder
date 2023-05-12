@@ -27,6 +27,17 @@ and ModifyMiddlewareLocationsEvent are provided.
 As an example on how to use the ModifyMiddlewareLocationsEvent the listener
 ModifyMiddlewareLocationsListener is present.
 
+Integration
+===========
+
+To use the middleware, it's important to include th Ajax.yaml in the site config
+
+.. code-block:: yaml
+   :caption: config/sites/{your-site}/config.yaml
+
+    imports:
+      - { resource: 'EXT:store_finder/Configuration/Routes/Ajax.yaml' }
+
 Template example
 ================
 

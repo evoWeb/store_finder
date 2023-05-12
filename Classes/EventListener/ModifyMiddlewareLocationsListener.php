@@ -5,10 +5,6 @@ declare(strict_types=1);
 namespace Evoweb\StoreFinder\EventListener;
 
 use Evoweb\StoreFinder\Event\ModifyMiddlewareLocationsEvent;
-use TYPO3\CMS\Core\Imaging\ImageManipulation\CropVariantCollection;
-use TYPO3\CMS\Core\Resource\FileReference;
-use TYPO3\CMS\Core\Resource\FileRepository;
-use TYPO3\CMS\Core\Resource\ProcessedFile;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 

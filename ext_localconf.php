@@ -24,7 +24,6 @@ call_user_func(function () {
 
     ExtensionManagementUtility::addPageTSConfig('
         @import \'EXT:store_finder/Configuration/TSconfig/NewContentElementWizard.tsconfig\'
-        @import \'EXT:store_finder/Configuration/TSconfig/Plugin.tsconfig\'
     ');
 
     ExtensionManagementUtility::addUserTSConfig('

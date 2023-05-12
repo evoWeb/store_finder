@@ -7,10 +7,10 @@ return [
         'evoweb/storefinder-locations' => [
             'target' => StoreFinderMiddleware::class,
             'after' => [
-                'typo3/cms-frontend/prepare-tsfe-rendering',
+                'typo3/cms-frontend/tsfe',
             ],
             'before' => [
-                'typo3/cms-frontend/shortcut-and-mountpoint-redirect',
+                'typo3/cms-frontend/prepare-tsfe-rendering',
             ],
         ],
     ],
