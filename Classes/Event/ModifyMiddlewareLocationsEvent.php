@@ -21,8 +21,9 @@ use Psr\Http\Message\ServerRequestInterface;
 final class ModifyMiddlewareLocationsEvent
 {
     public function __construct(
-        protected StoreFinderMiddleware $storeFinderMiddleware,
         protected ServerRequestInterface $request,
+        protected StoreFinderMiddleware $storeFinderMiddleware,
+        protected array $settings,
         protected array $locations,
     ) {
     }
@@ -30,6 +31,11 @@ final class ModifyMiddlewareLocationsEvent
     public function getStoreFinderMiddleware(): StoreFinderMiddleware
     {
         return $this->storeFinderMiddleware;
+    }
+
+    public function getSettings(): array
+    {
+        return $this->settings;
     }
 
     public function getRequest(): ServerRequestInterface

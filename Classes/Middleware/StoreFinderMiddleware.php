@@ -31,12 +31,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 use SJBR\StaticInfoTables\Domain\Repository\CountryZoneRepository;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Http\JsonResponse;
-use TYPO3\CMS\Core\Imaging\ImageManipulation\CropVariantCollection;
-use TYPO3\CMS\Core\Resource\FileReference;
-use TYPO3\CMS\Core\Resource\FileRepository;
-use TYPO3\CMS\Core\Resource\ProcessedFile;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 class StoreFinderMiddleware implements MiddlewareInterface
 {
@@ -46,7 +41,7 @@ class StoreFinderMiddleware implements MiddlewareInterface
     {
         $path = ltrim($request->getUri()->getPath(), '/');
         $queryParams = $request->getQueryParams();
-        $action = ($queryParams['action'] ?? '');
+        $action = $queryParams['action'] ?? '';
         if (
             !str_starts_with($path, 'api/storefinder/')
             || !in_array($action, ['locations', 'categories'])
@@ -93,7 +88,7 @@ class StoreFinderMiddleware implements MiddlewareInterface
         $rows = $categoryRepository->getCategories($categories);
 
         $eventResult = $this->eventDispatcher->dispatch(
-            new ModifyMiddlewareCategoriesEvent($this, $request, $rows)
+            new ModifyMiddlewareCategoriesEvent($request, $this, $settings, $rows)
         );
         return $eventResult->getCategories();
     }
@@ -106,10 +101,9 @@ class StoreFinderMiddleware implements MiddlewareInterface
 
         $constraint = $this->prepareConstraint($request, $settings);
         $rows = $locationRepository->getLocations($constraint);
-        $rows = $this->convertLocationsForResult($rows, $settings, $request);
 
         $eventResult = $this->eventDispatcher->dispatch(
-            new ModifyMiddlewareLocationsEvent($this, $request, $rows)
+            new ModifyMiddlewareLocationsEvent($request, $this, $settings, $rows)
         );
         return $eventResult->getLocations();
     }
@@ -158,72 +152,5 @@ class StoreFinderMiddleware implements MiddlewareInterface
         }
 
         return $constraint;
-    }
-
-    protected function convertLocationsForResult(
-        array $locations,
-        array $settings,
-        ServerRequestInterface $request
-    ): array {
-        $table = 'tx_storefinder_domain_model_location';
-        /** @var ContentObjectRenderer $contentObject */
-        $contentObject = GeneralUtility::makeInstance(ContentObjectRenderer::class);
-        $contentObject->setRequest($request);
-
-        foreach ($locations as &$location) {
-            if (!empty($location['categories'])) {
-                $location['categories'] = GeneralUtility::intExplode(',', $location['categories'], true);
-            }
-            if (!empty($location['notes'])) {
-                $contentObject->start($location, $table);
-                $location['notes'] = $contentObject->parseFunc(
-                    $location['notes'],
-                    null,
-                    '< ' . $settings['tables'][$table]['parseFuncTSPath']
-                );
-            }
-            if (!empty($location['image'])) {
-                $location['image'] = $this->getCroppedFile($location, 'image', $table, $settings);
-            }
-            if (!empty($location['icon'])) {
-                $location['icon'] = $this->getCroppedFile($location, 'icon', $table, $settings);
-            }
-        }
-
-        return $locations;
-    }
-
-    protected function getCroppedFile(array $location, string $fieldName, string $tableName, array $settings): string
-    {
-        /** @var FileRepository $fileRepository */
-        $fileRepository = GeneralUtility::makeInstance(FileRepository::class);
-        $file = $fileRepository->findByRelation($tableName, $fieldName, $location['uid'])[0] ?? null;
-
-        if (!$file) {
-            return '';
-        }
-
-        if (!empty($settings['tables'][$tableName]['cropVariant'][$fieldName])) {
-            $cropVariant = $settings['tables'][$tableName]['cropVariant'][$fieldName];
-            $cropString = $file instanceof FileReference ? $file->getProperty('crop') : '';
-            $cropArea = CropVariantCollection::create((string)$cropString)->getCropArea($cropVariant);
-            $processingInstructions = [];
-            $processingInstructions = array_merge(
-                $processingInstructions,
-                [
-                    'crop' => $cropArea->isEmpty() ? null : $cropArea->makeAbsoluteBasedOnFile($file),
-                ]
-            );
-        }
-
-        if (!empty($processingInstructions) && !($file instanceof ProcessedFile)) {
-            if (is_callable([$file, 'getOriginalFile'])) {
-                // Get the original file from the file reference
-                $file = $file->getOriginalFile();
-            }
-            $file = $file->process(ProcessedFile::CONTEXT_IMAGECROPSCALEMASK, $processingInstructions);
-        }
-
-        return GeneralUtility::locationHeaderUrl($file->getPublicUrl());
     }
 }

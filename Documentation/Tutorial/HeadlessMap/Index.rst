@@ -18,6 +18,15 @@ use location and fulltext search in combination with category filtering.
 
 Only the endpoints are provided. You need to implement the javascript yourself.
 
+Preparation of data
+===================
+
+To modify the categories and locations events ModifyMiddlewareCategoriesEvent
+and ModifyMiddlewareLocationsEvent are provided.
+
+As an example on how to use the ModifyMiddlewareLocationsEvent the listener
+ModifyMiddlewareLocationsListener is present.
+
 Template example
 ================
 
