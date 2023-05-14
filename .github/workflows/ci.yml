@@ -77,7 +77,9 @@ jobs:
         run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -d sqlite -s functional Tests/Functional
 
       - name: Cleanup
-        run: Build/Scripts/runTests.sh -s clean
+        run: |
+          Build/Scripts/runTests.sh -s clean
+          Build/Scripts/additionalTests.sh -s clean
 
   TERUpload:
     needs: [ resources, testsuite ]
