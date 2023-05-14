@@ -32,3 +32,16 @@ it add the following to your project composer.json.
     }
 ],
 ```
+
+## Caching
+
+The frontend middlewares are heavily cached and for every change in a location or category record the cache needs to be cleared to see changes. To counter this problem you can add a snippet to the sites TCEMAIN.tsconfig.
+
+```
+[traverse(page, "uid") == 70]
+  TCEMAIN {
+    clearCacheCmd = all
+  }
+[end]
+```
+With the condition at the top, we can make sure that only a certain page or folder is affected by the automatic cache clearing. Please see [TYPO3 Documentation](https://docs.typo3.org/m/typo3/reference-tsconfig/main/en-us/PageTsconfig/TceMain.html#clearcachecmd) for more information.

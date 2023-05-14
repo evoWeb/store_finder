@@ -24,45 +24,39 @@ use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 
 class TceMainListener
 {
-    protected LocationRepository $locationRepository;
-
-    protected PersistenceManager $persistenceManager;
-
-    protected GeocodeService $geocodeService;
-
-    protected CacheService $cacheService;
-
     public function __construct(
-        LocationRepository $locationRepository,
-        PersistenceManager $persistenceManager,
-        GeocodeService $geocodeService,
-        ExtensionConfiguration $extensionConfiguration,
-        CacheService $cacheService
+        protected LocationRepository $locationRepository,
+        protected PersistenceManager $persistenceManager,
+        protected GeocodeService $geocodeService,
+        protected CacheService $cacheService,
+        ExtensionConfiguration $extensionConfiguration
     ) {
-        $this->locationRepository = $locationRepository;
-        $this->persistenceManager = $persistenceManager;
-        $this->cacheService = $cacheService;
-        $this->geocodeService = $geocodeService;
-        $this->geocodeService->setSettings($extensionConfiguration->get('store_finder') ?? []);
+        try {
+            $this->geocodeService->setSettings($extensionConfiguration->get('store_finder') ?? []);
+        } catch (\Exception $e) {
+            die('Error in $GLOBALS[\'TYPO3_CONF_VARS\'][\'EXTENSIONS\']: ' . $e->getMessage());
+        }
     }
 
     /**
      * Remap id for id and table
      *
-     * @param string|int $id
+     * @param string|int $NEW_id
      * @param string $table
      * @param DataHandler $parentObject
      *
-     * @return int
+     * @return array
      */
-    protected function remapId($id, string &$table, DataHandler $parentObject)
+    protected function remapId(string|int $NEW_id, string $table, DataHandler $parentObject): array
     {
-        if (array_key_exists($id, $parentObject->substNEWwithIDs)) {
-            $table = $parentObject->substNEWwithIDs_table[$id];
-            $id = $parentObject->substNEWwithIDs[$id];
+        if (array_key_exists($NEW_id, $parentObject->substNEWwithIDs)) {
+            $id = $parentObject->substNEWwithIDs[$NEW_id];
+            $table = $parentObject->substNEWwithIDs_table[$NEW_id];
+        } else {
+            $id = $NEW_id;
         }
 
-        return $id;
+        return [(int)$id, $table];
     }
 
     /**
@@ -77,12 +71,12 @@ class TceMainListener
     public function processDatamap_afterDatabaseOperations(
         string $status,
         string $table,
-        $id,
+        string|int $id,
         array $fieldValues,
         DataHandler $parentObject
-    ) {
-        $id = $this->remapId($id, $table, $parentObject);
-        
+    ): void {
+        [$id, $table] = $this->remapId($id, $table, $parentObject);
+
         if ($table === 'tx_storefinder_domain_model_location') {
             $location = $this->locationRepository->findByUidInBackend($id);
 

@@ -65,18 +65,17 @@ class MinifyViewHelper extends AbstractViewHelper
 
         /* remove comments */
         $content = str_replace('://', "\xff", $content);
-        $content = preg_replace('@((?:/\*(?:[^*]|(?:\*+[^*/]))*\*+/)|(?://.*))@', '', $content);
+        $content = preg_replace('@(/\*(?:[^*]|\*+[^*/])*\*+/|//.*)@', '', $content);
         $content = str_replace("\xff", '://', $content);
 
         /* remove tabs, spaces, newlines, etc. */
         $content = str_replace(
-            [CRLF, CR, LF, "\t", '     ', '    ', '  ', ': '],
-            ['', '', '', '', '', '', '', ':'],
+            [CRLF, CR, LF, "\t", '     ', '    ', '  ', '": "'],
+            ['', '', '', '', '', '', '', '":"'],
             $content
         );
-        /* remove other spaces before/after ) */
-        $content = preg_replace(['(( )+\))', '(\)( )+)'], ')', $content);
 
-        return $content;
+        /* remove other spaces before/after ) */
+        return preg_replace(['(( )+\))', '(\)( )+)'], ')', $content);
     }
 }

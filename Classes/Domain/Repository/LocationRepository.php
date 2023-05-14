@@ -15,14 +15,16 @@ namespace Evoweb\StoreFinder\Domain\Repository;
  * LICENSE.txt file that was distributed with this source code.
  */
 
-use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\ArrayParameterType;
 use Evoweb\StoreFinder\Domain\Model\Constraint;
 use Evoweb\StoreFinder\Domain\Model\Location;
-use SJBR\StaticInfoTables\Domain\Model\Country;
+use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\Context\LanguageAspect;
+use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
+use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 use TYPO3\CMS\Extbase\Persistence\Generic\Query;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
@@ -60,33 +62,27 @@ class LocationRepository extends Repository
 
     protected array $settings = [];
 
-    protected ConnectionPool $connectionPool;
-
-    protected CategoryRepository $categoryRepository;
-
     public function __construct(
-        ObjectManagerInterface $objectManager,
-        ConnectionPool $connectionPool,
-        CategoryRepository $categoryRepository
+        protected ConnectionPool $connectionPool,
+        protected CategoryRepository $categoryRepository
     ) {
-        $this->connectionPool = $connectionPool;
-        $this->categoryRepository = $categoryRepository;
-        parent::__construct($objectManager);
+        parent::__construct();
         $this->objectType = Location::class;
     }
 
-    public function setSettings(array $settings)
+    public function setSettings(array $settings): void
     {
         $this->settings = $settings;
     }
 
-    public function findByUidInBackend(int $uid): Location
+    public function findByUidInBackend(int $uid): ?Location
     {
         /** @var Query $query */
         $query = $this->createQuery();
         $query->getQuerySettings()
             ->setIgnoreEnableFields(true)
-            ->setRespectStoragePage(false);
+            ->setRespectStoragePage(false)
+            ->setRespectSyslanguage(false);
 
         /** @var Location $location */
         $location = $query
@@ -108,14 +104,15 @@ class LocationRepository extends Repository
         return $query->execute();
     }
 
-    public function findByConstraint(Constraint $constraint): QueryResultInterface
+    public function findByConstraint(Constraint $constraint, bool $raw = false): QueryResultInterface|array
     {
         /** @var Query $query */
         $query = $this->createQuery();
 
-        $queryBuilder = $this->getQueryBuilderForTable('tx_storefinder_domain_model_location');
+        $tableName = 'tx_storefinder_domain_model_location';
+        $queryBuilder = $this->getQueryBuilderForTable($tableName);
         $queryBuilder
-            ->from('tx_storefinder_domain_model_location', 'l');
+            ->from($tableName, 'l');
 
         if (!$constraint->isGeocoded()) {
             $queryBuilder
@@ -142,7 +139,7 @@ class LocationRepository extends Repository
                         'l.pid',
                         $queryBuilder->createNamedParameter(
                             $query->getQuerySettings()->getStoragePageIds(),
-                            Connection::PARAM_INT_ARRAY
+                            ArrayParameterType::INTEGER
                         )
                     )
                 )
@@ -150,41 +147,28 @@ class LocationRepository extends Repository
 
             $queryBuilder = $this->addCountryQueryPart($constraint, $queryBuilder);
             $queryBuilder = $this->addCategoryQueryPart($constraint, $queryBuilder);
+            $queryBuilder = $this->addAttributeQueryPart($constraint, $queryBuilder);
             $queryBuilder = $this->addRadiusQueryPart($constraint, $queryBuilder);
             $queryBuilder = $this->addLimitQueryParts($constraint, $queryBuilder);
             $queryBuilder = $this->addFulltextSearchQueryParts($constraint, $queryBuilder);
+            $queryBuilder = $this->addLanguagePart($tableName, 'l', $queryBuilder);
         }
 
-        $sql = $this->getStatement($queryBuilder);
+        $sql = QueryBuilderHelper::getStatement($queryBuilder);
         $query->statement($sql);
 
-        return $query->execute();
+        return $query->execute($raw);
     }
 
     protected function addCountryQueryPart(Constraint $constraint, QueryBuilder $queryBuilder): QueryBuilder
     {
         $value = $constraint->getCountry();
         if ($value) {
-            if ($value instanceof Country) {
-                $value = $value->getUid();
-                $on = '(l.country = sc.uid)';
-                $field = 'uid';
-                $type = \PDO::PARAM_INT;
-            } elseif (is_numeric($value)) {
-                $on = '(l.country = sc.uid)';
-                $field = 'uid';
-                $type = \PDO::PARAM_INT;
-            } else {
-                $on = '(l.country = sc.cn_iso_3)';
-                $field = 'cn_iso_3';
-                $type = \PDO::PARAM_STR;
-            }
-
-            $queryBuilder->innerJoin('l', 'static_countries', 'sc', $on);
+            $queryBuilder->innerJoin('l', 'static_countries', 'sc', '(l.country = sc.uid)');
             $queryBuilder->andWhere(
                 $queryBuilder->expr()->eq(
-                    'sc.' . $field,
-                    $queryBuilder->createNamedParameter($value, $type)
+                    'sc.uid',
+                    $queryBuilder->createNamedParameter($value->getUid(), Connection::PARAM_INT)
                 )
             );
         }
@@ -195,42 +179,83 @@ class LocationRepository extends Repository
     protected function addCategoryQueryPart(Constraint $constraint, QueryBuilder $queryBuilder): QueryBuilder
     {
         if ($this->settings['categoryPriority'] == 'limitResultsToCategories') {
-            $constraint->setCategory(GeneralUtility::intExplode(',', $this->settings['categories'], 1));
+            $constraint->setCategory(GeneralUtility::intExplode(',', $this->settings['categories'], true));
         } elseif (
             $this->settings['categoryPriority'] == 'useSelectedCategoriesIfNoFilterSelected'
             && !count($constraint->getCategory())
         ) {
-            $constraint->setCategory(GeneralUtility::intExplode(',', $this->settings['categories'], 1));
+            $constraint->setCategory(GeneralUtility::intExplode(',', $this->settings['categories'], true));
         }
 
         $categories = $this->categoryRepository->findByParentRecursive($constraint->getCategory());
 
         if (!empty($categories)) {
             $expression = $queryBuilder->expr();
+            $queryBuilder
+                ->innerJoin(
+                    'l',
+                    'sys_category_record_mm',
+                    'mm',
+                    (string)$expression->and(
+                        $expression->eq('l.uid', 'mm.uid_foreign'),
+                        $expression->eq(
+                            'mm.tablenames',
+                            $queryBuilder->quote('tx_storefinder_domain_model_location')
+                        ),
+                        $expression->eq(
+                            'mm.fieldname',
+                            $queryBuilder->quote('categories')
+                        ),
+                    )
+                )
+                ->andWhere(
+                    $expression->in(
+                        'mm.uid_local',
+                        $queryBuilder->createNamedParameter($categories, ArrayParameterType::INTEGER)
+                    )
+                )
+                ->addSelectLiteral('GROUP_CONCAT(mm.uid_local) as categories');
+        }
+
+        return $queryBuilder;
+    }
+
+    protected function addAttributeQueryPart(Constraint $constraint, QueryBuilder $queryBuilder): QueryBuilder
+    {
+        if ($constraint->getAttributes()->count()) {
+            $expression = $queryBuilder->expr();
+
             $queryBuilder->innerJoin(
                 'l',
-                'sys_category_record_mm',
-                'c',
-                (string)$expression->andX(
-                    $expression->eq('l.uid', 'c.uid_foreign'),
+                'tx_storefinder_location_attribute_mm',
+                'a',
+                (string) $expression->and(
+                    $expression->eq('l.uid', 'a.uid_foreign'),
                     $expression->eq(
-                        'c.tablenames',
-                        $queryBuilder->createNamedParameter('tx_storefinder_domain_model_location')
+                        'a.tablenames',
+                        $queryBuilder->createNamedParameter('tx_storefinder_domain_model_attribute')
                     ),
                     $expression->eq(
-                        'c.fieldname',
-                        $queryBuilder->createNamedParameter('categories')
+                        'a.fieldname',
+                        $queryBuilder->createNamedParameter('attributes')
                     )
                 )
             );
-            $queryBuilder->andWhere(
-                $expression->in(
-                    'c.uid_local',
-                    $queryBuilder->createNamedParameter($categories, Connection::PARAM_INT_ARRAY)
-                )
-            );
-        }
 
+            $fieldName = 'a.uid_foreign';
+            $constraints = [
+                $expression->isNull($fieldName),
+                $expression->eq($fieldName, $expression->literal('')),
+                $expression->eq($fieldName, $expression->literal('0')),
+            ];
+            foreach ($constraint->getAttributes() as $attribute) {
+                $constraints[] = $expression->inSet(
+                    $fieldName,
+                    $expression->literal((string)$attribute->getUid())
+                );
+            }
+            $queryBuilder->andWhere($expression->or(...$constraints));
+        }
         return $queryBuilder;
     }
 
@@ -244,6 +269,106 @@ class LocationRepository extends Repository
             '`distance` <= ' . $queryBuilder->createNamedParameter($constraint->getRadius())
         );
 
+        return $queryBuilder;
+    }
+
+    protected function addLanguagePart(
+        string $tableName,
+        string $tableAlias,
+        QueryBuilder $queryBuilder
+    ): QueryBuilder {
+        if (empty($GLOBALS['TCA'][$tableName]['ctrl']['languageField'])) {
+            return $queryBuilder;
+        }
+
+        /** @var Context $context */
+        $context = GeneralUtility::makeInstance(Context::class);
+        /** @var LanguageAspect $languageAspect */
+        $languageAspect = $context->getAspect('language');
+
+        // Select all entries for the current language
+        // If any language is set -> get those entries which are not translated yet
+        $languageField = $GLOBALS['TCA'][$tableName]['ctrl']['languageField'];
+
+        $transOrigPointerField = $GLOBALS['TCA'][$tableName]['ctrl']['transOrigPointerField'] ?? '';
+        if (!$transOrigPointerField || !$languageAspect->getContentId()) {
+            $queryBuilder->andWhere($queryBuilder->expr()->in(
+                $tableAlias . '.' . $languageField,
+                [$languageAspect->getContentId(), -1]
+            ));
+            return $queryBuilder;
+        }
+
+        $mode = $languageAspect->getOverlayType();
+        if (
+            !in_array($mode, [
+                LanguageAspect::OVERLAYS_ON_WITH_FLOATING,
+                LanguageAspect::OVERLAYS_ON,
+                LanguageAspect::OVERLAYS_MIXED
+            ])
+        ) {
+            $queryBuilder->andWhere($queryBuilder->expr()->in(
+                $tableAlias . '.' . $languageField,
+                [$languageAspect->getContentId(), -1]
+            ));
+            return $queryBuilder;
+        }
+
+        $defLangTableAlias = $tableAlias . '_dl';
+        $defaultLanguageRecordsSubSelect = $queryBuilder->getConnection()->createQueryBuilder();
+        $defaultLanguageRecordsSubSelect
+            ->select($defLangTableAlias . '.uid')
+            ->from($tableName, $defLangTableAlias)
+            ->where(
+                $defaultLanguageRecordsSubSelect->expr()->and(
+                    $defaultLanguageRecordsSubSelect->expr()->eq($defLangTableAlias . '.' . $transOrigPointerField, 0),
+                    $defaultLanguageRecordsSubSelect->expr()->eq($defLangTableAlias . '.' . $languageField, 0)
+                )
+            );
+
+        $andConditions = [];
+        // records in language 'all'
+        $andConditions[] = $queryBuilder->expr()->eq($tableAlias . '.' . $languageField, -1);
+        // translated records where a default language exists
+        $andConditions[] = $queryBuilder->expr()->and(
+            $queryBuilder->expr()->eq($tableAlias . '.' . $languageField, $languageAspect->getContentId()),
+            $queryBuilder->expr()->in(
+                $tableAlias . '.' . $transOrigPointerField,
+                $defaultLanguageRecordsSubSelect->getSQL()
+            )
+        );
+        if ($mode === LanguageAspect::OVERLAYS_MIXED) {
+            // $mode = TRUE
+            // returns records from current language which have default language
+            // together with not translated default language records
+            $translatedOnlyTableAlias = $tableAlias . '_to';
+            $queryBuilderForSubSelect = $queryBuilder->getConnection()->createQueryBuilder();
+            $queryBuilderForSubSelect
+                ->select($translatedOnlyTableAlias . '.' . $transOrigPointerField)
+                ->from($tableName, $translatedOnlyTableAlias)
+                ->where(
+                    $queryBuilderForSubSelect->expr()->and(
+                        $queryBuilderForSubSelect->expr()->gt(
+                            $translatedOnlyTableAlias . '.' . $transOrigPointerField,
+                            0
+                        ),
+                        $queryBuilderForSubSelect->expr()->eq(
+                            $translatedOnlyTableAlias . '.' . $languageField,
+                            $languageAspect->getContentId()
+                        )
+                    )
+                );
+            // records in default language, which do not have a translation
+            $andConditions[] = $queryBuilder->expr()->and(
+                $queryBuilder->expr()->eq($tableAlias . '.' . $languageField, 0),
+                $queryBuilder->expr()->notIn(
+                    $tableAlias . '.uid',
+                    $queryBuilderForSubSelect->getSQL()
+                )
+            );
+        }
+
+        $queryBuilder->andWhere($queryBuilder->expr()->or(...$andConditions));
         return $queryBuilder;
     }
 
@@ -286,7 +411,7 @@ class LocationRepository extends Repository
             }
 
             if (count($fullTextSearchConstraint)) {
-                $queryBuilder->andWhere($queryBuilder->expr()->orX($fullTextSearchConstraint));
+                $queryBuilder->andWhere($queryBuilder->expr()->or(...$fullTextSearchConstraint));
             }
         }
 
@@ -299,10 +424,10 @@ class LocationRepository extends Repository
         $query = $this->createQuery();
 
         $query->setOrderings(['latitude' => QueryInterface::ORDER_ASCENDING]);
-        /** @var Location $minLatitude south */
+        /** @var ?Location $minLatitude south */
         $minLatitude = $query->execute()->getFirst();
 
-        // only search for the other locations if first succeed or else we have no locations at all
+        // only search for the other locations if first succeeded otherwise we have no locations at all
         if ($minLatitude === null) {
             $maxLatitude = $minLongitude = $maxLongitude = null;
         } else {
@@ -327,7 +452,7 @@ class LocationRepository extends Repository
          * http://stackoverflow.com/questions/6048975
          *    /google-maps-v3-how-to-calculate-the-zoom-level-for-a-given-bounds
          */
-        if ($minLatitude !== null && $maxLatitude !== null) {
+        if ($minLatitude instanceof Location && $maxLatitude instanceof Location) {
             $location->setLatitude(($maxLatitude->getLatitude() + $minLatitude->getLatitude()) / 2);
             $latitudeFraction = (
                 $this->latRad($maxLatitude->getLatitude())
@@ -365,10 +490,6 @@ class LocationRepository extends Repository
 
     /**
      * Rad calculation of latitude value
-     *
-     * @param float $latitude
-     *
-     * @return float
      */
     protected function latRad(float $latitude): float
     {
@@ -380,12 +501,6 @@ class LocationRepository extends Repository
 
     /**
      * Calculate the map radius
-     *
-     * @param int $mapPx
-     * @param int $worldPx
-     * @param float $fraction
-     *
-     * @return float
      */
     protected function zoom(int $mapPx, int $worldPx, float $fraction): float
     {
@@ -395,10 +510,6 @@ class LocationRepository extends Repository
     /**
      * Query location repository for all locations that
      * have latitude or longitude empty or geocode set to 1
-     *
-     * @param int $limit
-     *
-     * @return QueryResultInterface
      */
     public function findAllWithoutLatLon(int $limit = 500): QueryResultInterface
     {
@@ -420,24 +531,90 @@ class LocationRepository extends Repository
         return $query->execute();
     }
 
-    protected function getStatement(QueryBuilder $queryBuilder): string
+    public function getLocations(Constraint $constraint): array
     {
-        $sql = $queryBuilder->getSQL();
+        $table = 'tx_storefinder_domain_model_location';
+        $queryBuilder = $this->getQueryBuilderForTable($table);
+        $expression = $queryBuilder->expr();
 
-        $parameters = $queryBuilder->getParameters();
-        $parameterType = $queryBuilder->getParameterTypes();
+        $fields = array_keys($this->settings['tables'][$table]['fields'] ?? ['*' => '']);
+        $queryBuilder
+            ->select(...$fields)
+            ->from($table, 'l')
+            ->groupBy('l.uid');
 
-        array_walk($parameters, function ($value, $key) use (&$sql, $parameterType) {
-            if ($parameterType[$key] == 2) {
-                $sql = str_replace(':' . $key, '\'' . $value . '\'', $sql);
-            } elseif ($parameterType[$key] == 101) {
-                $sql = str_replace(':' . $key, implode(',', $value), $sql);
-            } else {
-                $sql = str_replace(':' . $key, $value, $sql);
-            }
-        });
+        if (!empty($constraint->getCategories())) {
+            $queryBuilder
+                ->innerJoin(
+                    'l',
+                    'sys_category_record_mm',
+                    'mm',
+                    (string)$expression->and(
+                        $expression->eq('l.uid', 'mm.uid_foreign'),
+                        $expression->eq(
+                            'mm.tablenames',
+                            $queryBuilder->quote('tx_storefinder_domain_model_location')
+                        ),
+                        $expression->eq(
+                            'mm.fieldname',
+                            $queryBuilder->quote('categories')
+                        ),
+                    )
+                )
+                ->andWhere(
+                    $expression->in(
+                        'mm.uid_local',
+                        $queryBuilder->createNamedParameter($constraint->getCategory(), ArrayParameterType::INTEGER)
+                    )
+                )
+                ->addSelectLiteral('GROUP_CONCAT(mm.uid_local) as categories');
+        }
 
-        return $sql;
+        if ($constraint->isGeocoded()) {
+            $queryBuilder
+                ->addSelectLiteral(
+                    '(acos(
+                        sin(' . $constraint->getLatitude() * M_PI . ' / 180) *
+                        sin(latitude * ' . M_PI . ' / 180) +
+                        cos(' . $constraint->getLatitude() * M_PI . ' / 180) *
+                        cos(latitude * ' . M_PI . ' / 180) *
+                        cos((' . $constraint->getLongitude() . ' - longitude) * ' . M_PI . ' / 180)
+                    ) * 6370) as `distance`'
+                )
+                ->addOrderBy('distance');
+        }
+
+        $queryBuilder = $this->addFulltextSearchQueryParts($constraint, $queryBuilder);
+        $queryBuilder = $this->addLanguagePart($table, 'l', $queryBuilder);
+
+        if (!empty($this->settings['storagePid'])) {
+            $queryBuilder->andWhere(
+                $expression->in('l.pid', GeneralUtility::intExplode(',', $this->settings['storagePid']))
+            );
+        }
+
+        if (!empty($this->settings['tables'][$table]['sortBy'])) {
+            $queryBuilder->addOrderBy(
+                $this->settings['tables'][$table]['sortBy']['field'] ?? 'c.uid',
+                $this->settings['tables'][$table]['sortBy']['direction'] ?? 'ASC'
+            );
+        }
+
+        $locations = $queryBuilder
+            ->executeQuery()
+            ->fetchAllAssociative();
+
+        $pageRepository = $this->getPageRepository();
+        foreach ($locations as &$location) {
+            $location = $pageRepository->getLanguageOverlay('tx_storefinder_domain_model_location', $location);
+        }
+
+        return $locations;
+    }
+
+    protected function getPageRepository(): PageRepository
+    {
+        return GeneralUtility::makeInstance(PageRepository::class);
     }
 
     protected function getQueryBuilderForTable(string $table): QueryBuilder

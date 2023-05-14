@@ -1,0 +1,15 @@
+routes:
+  - route: api/storefinder
+    type: staticText
+    content: '{"message": "Store Finder Ajax Api"}'
+
+routeEnhancers:
+  StoreFinderAjax:
+    type: Simple
+    routePath: /api/storefinder/{action}/{contentUid}
+    requirements:
+      action: '[a-zA-Z0-9].*'
+      contentUid: '[0-9].*'
+    _arguments:
+      action: 'action'
+      contentUid: 'contentUid'

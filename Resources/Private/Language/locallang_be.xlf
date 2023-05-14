@@ -15,6 +15,15 @@
 			<trans-unit id="apiConsoleKeyGeocoding">
 				<source>Private key for geocoding</source>
 			</trans-unit>
+			<trans-unit id="latitude">
+				<source>Default latitude in location record form</source>
+			</trans-unit>
+			<trans-unit id="longitude">
+				<source>Default longitude in location record form</source>
+			</trans-unit>
+			<trans-unit id="zoom">
+				<source>Default zoom in location record form</source>
+			</trans-unit>
 			<trans-unit id="addPaginator">
 				<source>Add paginator to lists</source>
 			</trans-unit>
@@ -231,6 +240,15 @@
 			<trans-unit id="tt_content.list_type_cached">
 				<source>Store Finder: Cached map </source>
 			</trans-unit>
+			<trans-unit id="pi1_title_cached">
+				<source>Store Finder - Cached map</source>
+			</trans-unit>
+			<trans-unit id="pi1_description_cached">
+				<source>Adds a store finder cached map.</source>
+			</trans-unit>
+			<trans-unit id="tt_content.list_type_cached">
+				<source>Store Finder: Cached map </source>
+			</trans-unit>
 			<trans-unit id="pi1_title_show">
 				<source>Single location map</source>
 			</trans-unit>
@@ -290,6 +308,9 @@
 			</trans-unit>
 			<trans-unit id="pi_flexform.categories">
 				<source>Categories</source>
+			</trans-unit>
+			<trans-unit id="pi_flexform.activeCategories">
+				<source>Active (preselected) categories</source>
 			</trans-unit>
 			<trans-unit id="pi_flexform.categoryPriority">
 				<source>Category used for</source>

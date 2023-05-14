@@ -16,25 +16,12 @@ namespace Evoweb\StoreFinder\Validation\Validator;
  */
 
 use Evoweb\StoreFinder\Domain\Model\Constraint;
-use TYPO3\CMS\Extbase\Validation\Validator\GenericObjectValidator;
+use TYPO3\CMS\Extbase\Error\Result;
+use TYPO3\CMS\Extbase\Validation\Validator\AbstractGenericObjectValidator;
 use TYPO3\CMS\Extbase\Validation\Validator\ObjectValidatorInterface;
 
-class ConstraintValidator extends GenericObjectValidator
+class ConstraintValidator extends AbstractGenericObjectValidator
 {
-    /**
-     * Name of the current field to validate
-     *
-     * @var string
-     */
-    protected string $currentPropertyName = '';
-
-    /**
-     * Options for the current validation
-     *
-     * @var array
-     */
-    protected array $currentValidatorOptions = [];
-
     /**
      * Model that gets validated currently
      *
@@ -47,7 +34,7 @@ class ConstraintValidator extends GenericObjectValidator
      *
      * @param Constraint $object The value that should be validated
      */
-    protected function isValid($object)
+    protected function isValid(mixed $object): void
     {
         $this->model = $object;
         foreach ($this->propertyValidators as $propertyName => $validators) {
@@ -59,14 +46,10 @@ class ConstraintValidator extends GenericObjectValidator
     /**
      * Checks if the specified property of the given object is valid, and adds
      * found errors to the $messages object.
-     *
-     * @param mixed $value The value to be validated
-     * @param \Traversable $validators The validators to be called on the value
-     * @param string $propertyName Name of the property to check
      */
-    protected function checkProperty($value, $validators, $propertyName)
+    protected function checkProperty(mixed $value, \Traversable $validators, string $propertyName): void
     {
-        /** @var \TYPO3\CMS\Extbase\Error\Result $result */
+        /** @var Result|null $result */
         $result = null;
         foreach ($validators as $validator) {
             if ($validator instanceof SettableInterface) {
@@ -97,7 +80,7 @@ class ConstraintValidator extends GenericObjectValidator
      *
      * @return bool
      */
-    public function canValidate($object)
+    public function canValidate(mixed $object): bool
     {
         return $object instanceof Constraint;
     }

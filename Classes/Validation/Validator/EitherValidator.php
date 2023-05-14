@@ -22,15 +22,19 @@ use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
 use TYPO3\CMS\Extbase\Validation\Validator\ValidatorInterface;
 
 /**
- * A either validator to check that a value is set
+ * A validator to check that a value is set in either of the given properties
+ *
+ * country = "Evoweb.StoreFinder:Either(properties: 'city, zipcode')"
  */
 class EitherValidator extends AbstractValidator implements ValidatorInterface
 {
     /**
-     * @var array
+     * @var bool
      */
+    protected $acceptsEmptyValues = false;
+
     protected $supportedOptions = [
-        'properties' => [false, 'Properties to check in either', 'string'],
+        'properties' => [ '', 'Properties to check in either', 'string' ],
     ];
 
     protected array $properties = [];
@@ -39,41 +43,27 @@ class EitherValidator extends AbstractValidator implements ValidatorInterface
 
     protected string $propertyName = '';
 
-    /**
-     * @var bool
-     */
-    protected $acceptsEmptyValues = false;
-
-    /**
-     * Constructs the validator and sets validation options
-     *
-     * @param array $options Options for the validator
-     */
-    public function __construct(array $options = [])
+    public function setOptions(array $options = []): void
     {
-        parent::__construct($options);
-
         if (isset($this->options['properties'])) {
             $this->properties = GeneralUtility::trimExplode(',', $this->options['properties'], true);
         }
     }
 
-    public function setModel(Constraint $model)
+    public function setModel(Constraint $model): void
     {
         $this->model = $model;
     }
 
-    public function setPropertyName(string $propertyName)
+    public function setPropertyName(string $propertyName): void
     {
         $this->propertyName = $propertyName;
     }
 
     /**
-     * If the given value is empty
-     *
-     * @param string $value The value
+     * Check if $value is valid. If it is not valid, needs to add an error to result.
      */
-    protected function isValid($value)
+    protected function isValid(mixed $value): void
     {
         $result = false;
 

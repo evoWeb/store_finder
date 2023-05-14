@@ -1,6 +1,5 @@
 plugin.tx_storefinder.settings {
   includeStyleSheet = true
-  includeJquery = true
 
   geocoderProvider = {$plugin.tx_storefinder.geocoderProvider}
   geocoderLocale = {$plugin.tx_storefinder.geocoderLocale}
@@ -73,6 +72,8 @@ plugin.tx_storefinder.settings {
     city = "Evoweb.StoreFinder:Required"
     country = "Evoweb.StoreFinder:Required"
   }
+
+  disableLocationFetchLogic = 0
 }
 
 plugin.tx_storefinder_show.settings {
@@ -88,13 +89,6 @@ plugin.tx_storefinder.view {
 
   layoutRootPaths.0 = EXT:store_finder/Resources/Private/Layouts/
   layoutRootPaths.1 = {$plugin.tx_storefinder.layoutRootPaths}
-}
-
-config.tx_extbase.persistence {
-  classes {
-    Evoweb\StoreFinder\Domain\Model\Category.mapping.tableName = sys_category
-    Evoweb\StoreFinder\Domain\Model\Content.mapping.tableName = tt_content
-  }
 }
 
 plugin.tx_storefinder.fieldError = TEXT
@@ -119,6 +113,60 @@ plugin.tx_storefinder.fieldError {
   }
 }
 
+plugin.tx_storefinder.ajax {
+  tables {
+    sys_category {
+      fields {
+        uid =
+        title =
+        slug =
+      }
+      sortBy {
+        field = c.sorting
+        direction = ASC
+      }
+    }
+
+    tx_storefinder_domain_model_location {
+      fields {
+        uid =
+        name =
+        address =
+        zipcode =
+        city =
+        dont_show_address =
+        person =
+        phone =
+        email =
+        latitude =
+        longitude =
+        url =
+        notes {
+          parseFuncTSPath = lib.parseFunc_RTE
+        }
+        image =
+        icon =
+        categories =
+      }
+      sortBy {
+        field = l.sorting
+        direction = ASC
+      }
+    }
+  }
+
+  country = 0
+  state = 0
+
+  fulltextSearchFields {
+    10 = name
+    30 = address
+    50 = city
+    80 = notes
+  }
+}
+
+
 plugin.tx_storefinder._LOCAL_LANG.default {
 }
 
@@ -130,4 +178,28 @@ lib.tx_storefinder.contentElementRendering {
 
   stdWrap.wrap = <div class="content">|</div>
   stdWrap.required = 1
+}
+
+mapAjaxPage = PAGE
+mapAjaxPage {
+  typeNum = 3000
+
+  # disable header code
+  config {
+    disableAllHeaderCode = 1
+    additionalHeaders = Content-type: application/json, utf-8
+
+    xhtml_cleaning = 0
+    admPanel = 0
+    debug = 0
+  }
+
+  10 < tt_content.list.20.storefinder_map
+  10.settings < plugin.tx_storefinder.settings
+  10.settings.ajax = 1
+  10.view < plugin.tx_storefinder.view
+  10.view.templateRootPaths.200 = {$plugin.tx_storefinder.ajax.templateRootPaths}
+  10.view.partialRootPaths.200 = {$plugin.tx_storefinder.ajax.partialRootPaths}
+  10.view.layoutRootPaths.200 = {$plugin.tx_storefinder.ajax.layoutRootPaths}
+  10.persistence.storagePid = {$plugin.tx_storefinder.ajax.storagePid}
 }

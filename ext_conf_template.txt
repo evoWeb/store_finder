@@ -9,3 +9,12 @@ apiConsoleKey =
 
 # cat=store_finder//130; type=input; label=LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:apiConsoleKeyGeocoding
 apiConsoleKeyGeocoding =
+
+# cat=store_finder//140; type=input; label=LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:latitude
+latitude = 51.4583912
+
+# cat=store_finder//150; type=input; label=LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:longitude
+longitude = 7.0157931
+
+# cat=store_finder//160; type=input; label=LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:zoom
+zoom = 16

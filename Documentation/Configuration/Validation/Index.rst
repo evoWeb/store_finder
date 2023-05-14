@@ -1,14 +1,10 @@
-.. include:: ../../Includes.txt
-
+.. include:: /Includes.rst.txt
 
 .. _validation:
 
+==========
 Validation
-----------
-
-.. contents::
-   :local:
-   :depth: 2
+==========
 
 
 Purpose of Validators
@@ -35,42 +31,38 @@ In case you want to have no validation at all for a field was was configured
 by default as required you need to empty the associated validators. Look at the
 example given where the validators of the email gets removed.
 
+Remove validators
+-----------------
 
-Remove validators:
-__________________
+.. code-block:: typoscript
+   :caption: EXT:my_extension/Configuration/TypoScript/setup.typoscript
 
-::
-
-	plugin.tx_storefinder.settings.validation.zipcode >
-
+   plugin.tx_storefinder.settings.validation.zipcode >
 
 If only one validator is needed you could assign it directly to the field like
 below.
 
+Assign only one validator
+-------------------------
 
-Assign only one validator:
-__________________________
+.. code-block:: typoscript
+   :caption: EXT:my_extension/Configuration/TypoScript/setup.typoscript
 
-::
-
-	plugin.tx_storefinder.settings.validation.zipcode =
-		Evoweb\StoreFinder\Validation\Validator\RequiredValidator
-
+   plugin.tx_storefinder.settings.validation.zipcode = Evoweb\StoreFinder\Validation\Validator\RequiredValidator
 
 And finaly it's possible to have multiple validators for one field like in the
 next example.
 
+Assign multiple validators
+--------------------------
 
-Assign multiple validators:
-___________________________
+.. code-block:: typoscript
+   :caption: EXT:my_extension/Configuration/TypoScript/setup.typoscript
 
-::
-
-	plugin.tx_storefinder.settings.validation.password {
-		1 = Evoweb\StoreFinder\Validation\Validator\RequiredValidator
-		2 = StringLength
-	}
-
+   plugin.tx_storefinder.settings.validation.city {
+      1 = Evoweb\StoreFinder\Validation\Validator\RequiredValidator
+      2 = StringLength
+   }
 
 Regarding validator it's possible to have values attached to the assigned one.
 This is beneficial if you want to check against conditions that are not equal
@@ -105,14 +97,15 @@ extbase or store_finder. Just code your validator and make it available for auto
 loading (either in an extbase standard path or via ext_autoload.php). Afterwards
 you are ready to use your validator like in the following example.
 
+Custom validator usage
+----------------------
 
-Custom validator usage:
-_______________________
+.. code-block:: typoscript
+   :caption: EXT:my_extension/Configuration/TypoScript/setup.typoscript
 
-::
-
-	plugin.tx_storefinder.settings.validation.create.password =
-		1 = Evoweb\StoreFinder\Validation\Validator\RequiredValidator
+   plugin.tx_storefinder.settings.validation.create.city {
+      1 = Evoweb\StoreFinder\Validation\Validator\RequiredValidator
+   }
 
 
 Available validators
@@ -123,28 +116,18 @@ in the different processes, the registration come with a set of specific ones
 that are tailored to the special need. The following lists all validators
 which are suited for the usage on fields.
 
-
-.. container:: ts-properties
-
-  ===================================================== ==============================================================================================
-  Validator                                             Options
-  ===================================================== ==============================================================================================
-  RequiredValidator_
-  ===================================================== ==============================================================================================
-
-
 .. _RequiredValidator:
-.. ### BEGIN~OF~TABLE ###
 
-.. container:: table-row
+RequiredValidator
+-----------------
 
-   Property
-         RequiredValidator
+:aspect:`Property`
+   RequiredValidator
 
-   Data type
-         string
+:aspect:`Data type`
+   :ref:`string <t3tsref:data-type-string>`
 
-   Description
-         This validator serves two purpose. First of check if the field contains
-         a value and that it is not empty. Second the rendering uses this
-         validator as condition to render required sign or not.
+:aspect:`Description`
+   This validator serves two purpose. First of check if the field contains
+   a value and that it is not empty. Second the rendering uses this
+   validator as condition to render required sign or not.

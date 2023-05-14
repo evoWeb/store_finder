@@ -16,8 +16,8 @@ namespace Evoweb\StoreFinder\Service;
  */
 
 use Evoweb\StoreFinder\Cache\CoordinatesCache;
+use Evoweb\StoreFinder\Domain\Model\Constraint;
 use Evoweb\StoreFinder\Domain\Model\Location;
-use Evoweb\StoreFinder\Domain\Repository\CountryRepository;
 use Geocoder\Model\Coordinates;
 use Geocoder\Provider\GoogleMaps\GoogleMaps;
 use Geocoder\Provider\Provider;
@@ -30,28 +30,23 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class GeocodeService
 {
-    protected CoordinatesCache $coordinatesCache;
-
-    protected CountryRepository $countryRepository;
-
     protected array $settings = [];
 
     protected array $fields = ['address', 'zipcode', 'city', 'state', 'country'];
 
     public bool $hasMultipleResults = false;
 
-    public function __construct(CoordinatesCache $coordinatesCache, CountryRepository $countryRepository)
-    {
-        $this->coordinatesCache = $coordinatesCache;
-        $this->countryRepository = $countryRepository;
+    public function __construct(
+        protected CoordinatesCache $coordinatesCache
+    ) {
     }
 
-    public function setSettings(array $settings)
+    public function setSettings(array $settings): void
     {
         $this->settings = $settings;
     }
 
-    public function geocodeAddress(Location $address, bool $forceGeoCoding = false): Location
+    public function geocodeAddress(Location|Constraint $address, bool $forceGeoCoding = false): Location|Constraint
     {
         $queryValues = $this->prepareValuesForQuery($address, $this->fields);
         $geoCodedAddress = $this->coordinatesCache->getCoordinateByAddress($address, $queryValues);
@@ -125,7 +120,7 @@ class GeocodeService
             }
 
             if (!empty($value) && !is_object($value) && !is_array($value)) {
-                $queryValues[$field] =  iconv('UTF-8', 'ASCII//TRANSLIT', $value);
+                $queryValues[$field] =  \iconv('UTF-8', 'ASCII//TRANSLIT', $value);
             }
         }
 
@@ -138,7 +133,7 @@ class GeocodeService
 
     protected function getCoordinatesFromProvider(array $queryValues): Coordinates
     {
-        if (strpos($this->settings['geocoderProvider'], '\\') === false) {
+        if (!str_contains($this->settings['geocoderProvider'], '\\')) {
             $providerClass = GoogleMaps::class;
         } else {
             $providerClass = $this->settings['geocoderProvider'];
@@ -156,10 +151,10 @@ class GeocodeService
             $country = $queryValues['country'] ?? '';
             unset($queryValues['country']);
 
-            $query = \Geocoder\Query\GeocodeQuery::create(implode(',', $queryValues));
+            $query = GeocodeQuery::create(implode(',', $queryValues));
             $query = $query->withData('components', 'country:' . $country);
 
-            $geoCoder = new \Geocoder\StatefulGeocoder($provider, $this->settings['geocoderLocale']);
+            $geoCoder = new StatefulGeocoder($provider, $this->settings['geocoderLocale']);
             $results = $geoCoder->geocodeQuery($query);
             $this->hasMultipleResults = $results->count() > 1;
             if ($results->count() > 0) {

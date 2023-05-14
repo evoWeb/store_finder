@@ -23,35 +23,29 @@ use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 
 class CoordinatesCache
 {
-    protected ?FrontendUserAuthentication $frontendUser = null;
-
-    protected FrontendInterface $cacheFrontend;
-
     protected array $fields = ['address', 'zipcode', 'city', 'state', 'country'];
 
     public function __construct(
-        FrontendInterface $cacheFrontend,
-        FrontendUserAuthentication $frontendUser = null
+        protected FrontendInterface $cacheFrontend,
+        protected ?FrontendUserAuthentication $frontendUser = null
     ) {
-        $this->cacheFrontend = $cacheFrontend;
-        $this->frontendUser = $frontendUser;
     }
 
     public static function getInstance(): self
     {
         /** @var CacheManager $cacheManager */
-        $cacheManager = GeneralUtility::getContainer()->get(CacheManager::class);
+        $cacheManager = GeneralUtility::makeInstance(CacheManager::class);
         $cacheFrontend = $cacheManager->getCache('store_finder_coordinate');
 
         /** @var FrontendUserAuthentication $frontendUser */
-        $frontendUser = ($GLOBALS['TSFE']) ? $GLOBALS['TSFE']->fe_user : null;
+        $frontendUser = ($GLOBALS['TSFE'] ?? null) ? $GLOBALS['TSFE']->fe_user : null;
 
         /** @var self $instance */
         $instance = GeneralUtility::makeInstance(self::class, $cacheFrontend, $frontendUser);
         return $instance;
     }
 
-    public function addCoordinateForAddress(Location $address, array $queryValues)
+    public function addCoordinateForAddress(Location $address, array $queryValues): void
     {
         $coordinate = [
             'latitude' => $address->getLatitude(),
@@ -91,7 +85,7 @@ class CoordinatesCache
     /**
      * Flush both sql table and session caches
      */
-    public function flushCache()
+    public function flushCache(): void
     {
         $this->flushCacheTable();
         $this->flushSessionCache();
@@ -106,27 +100,19 @@ class CoordinatesCache
      */
     public function sessionHasKey(string $key): bool
     {
-        $sessionData = null;
-
-        if ($this->frontendUser != null) {
-            $sessionData = $this->frontendUser->getKey('ses', 'tx_storefinder_coordinates');
-        }
+        $sessionData = $this->frontendUser?->getKey('ses', 'tx_storefinder_coordinates');
 
         return is_array($sessionData) && isset($sessionData[$key]) && !empty($sessionData[$key]);
     }
 
     public function getValueFromSession(string $key): array
     {
-        $sessionData = null;
-
-        if ($this->frontendUser != null) {
-            $sessionData = $this->frontendUser->getKey('ses', 'tx_storefinder_coordinates');
-        }
+        $sessionData = $this->frontendUser?->getKey('ses', 'tx_storefinder_coordinates');
 
         return is_array($sessionData) && isset($sessionData[$key]) ? unserialize($sessionData[$key]) : [];
     }
 
-    public function setValueInSession(string $key, array $value)
+    public function setValueInSession(string $key, array $value): void
     {
         if ($this->frontendUser != null) {
             $sessionData = $this->frontendUser->getKey('ses', 'tx_storefinder_coordinates');
@@ -138,7 +124,7 @@ class CoordinatesCache
         }
     }
 
-    public function flushSessionCache()
+    public function flushSessionCache(): void
     {
         if ($this->frontendUser != null) {
             $this->frontendUser->setKey('ses', 'tx_storefinder_coordinates', []);
@@ -165,7 +151,7 @@ class CoordinatesCache
      *
      * @return mixed
      */
-    public function getValueFromCacheTable(string $key)
+    public function getValueFromCacheTable(string $key): mixed
     {
         return $this->cacheFrontend->get($key);
     }
@@ -176,7 +162,7 @@ class CoordinatesCache
      * @param string $key
      * @param array $value
      */
-    public function setValueInCacheTable(string $key, array $value)
+    public function setValueInCacheTable(string $key, array $value): void
     {
         $this->cacheFrontend->set($key, $value);
     }
@@ -184,7 +170,7 @@ class CoordinatesCache
     /**
      * Flush data from cache table
      */
-    public function flushCacheTable()
+    public function flushCacheTable(): void
     {
         $this->cacheFrontend->flush();
     }

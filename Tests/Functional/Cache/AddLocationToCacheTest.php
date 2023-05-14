@@ -36,20 +36,22 @@ use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
  */
 class AddLocationToCacheTest extends FunctionalTestCase
 {
-    /**
-     * @var string[]
-     */
-    protected $testExtensionsToLoad = [
+    protected array $testExtensionsToLoad = [
         'typo3conf/ext/store_finder',
         'typo3conf/ext/static_info_tables',
     ];
 
-    /**
-     * @var string[]
-     */
-    protected $coreExtensionsToLoad = [
+    protected array $coreExtensionsToLoad = [
         'extbase',
         'fluid',
+    ];
+
+    protected array $configurationToUseInTestInstance = [
+        'EXTENSIONS' => [
+            'static_info_tables' => [
+                'enableManager' => false,
+            ]
+        ]
     ];
 
     /**

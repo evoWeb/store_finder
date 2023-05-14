@@ -14,9 +14,6 @@ services:
     autoconfigure: false
     autowire: false
 
-  Evoweb\StoreFinder\EventListener\TceMainListener:
-    public: true
-
   Evoweb\StoreFinder\Command\ImportLocationsCommand:
     tags:
       - name: 'console.command'
@@ -31,5 +28,42 @@ services:
         description: 'Query google geocode service to get lat/lon for locations that are not geocode already'
         schedulable: true
 
+  cache.store_finder.middleware_cache:
+    class: 'TYPO3\CMS\Core\Cache\Frontend\FrontendInterface'
+    factory: ['@TYPO3\CMS\Core\Cache\CacheManager', 'getCache']
+    arguments:
+      $identifier: 'store_finder_middleware_cache'
+    public: true
+
+  Evoweb\StoreFinder\Domain\Repository\CategoryRepository:
+    public: true
+
+  Evoweb\StoreFinder\Domain\Repository\ContentRepository:
+    public: true
+
+  Evoweb\StoreFinder\Domain\Repository\LocationRepository:
+    public: true
+
+  Evoweb\StoreFinder\Domain\Repository\CountryRepository:
+    public: true
+
+  Evoweb\StoreFinder\EventListener\TceMainListener:
+    public: true
+
+  Evoweb\StoreFinder\EventListener\ModifyMiddlewareLocationsListener:
+    tags: ['event.listener']
+
+  Evoweb\StoreFinder\Middleware\StoreFinderMiddleware:
+    public: true
+
+  Evoweb\StoreFinder\Service\GeocodeService:
+    public: true
+
+  Evoweb\StoreFinder\ViewHelpers\Form\SelectCountriesViewHelper:
+    public: true
+
   SJBR\StaticInfoTables\Domain\Repository\TerritoryRepository:
+    public: true
+
+  SJBR\StaticInfoTables\Domain\Model\CountryZoneRepository:
     public: true

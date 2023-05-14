@@ -31,12 +31,14 @@ use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Pagination\SimplePagination;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Mvc\Controller\Arguments;
+use TYPO3Fluid\Fluid\View\ViewInterface;
+use TYPO3\CMS\Extbase\Annotation as Extbase;
 use TYPO3\CMS\Extbase\Http\ForwardResponse;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\Controller\Argument;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Pagination\QueryResultPaginator;
-use TYPO3\CMS\Extbase\Persistence\Generic\QueryResult;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Property\TypeConverter\PersistentObjectConverter;
 use TYPO3\CMS\Extbase\Validation\Validator\ValidatorInterface;
@@ -44,23 +46,14 @@ use TYPO3\CMS\Extbase\Validation\ValidatorClassNameResolver;
 
 class MapController extends ActionController
 {
-    protected LocationRepository $locationRepository;
-
-    protected CategoryRepository $categoryRepository;
-
-    protected GeocodeService $geocodeService;
-
     public function __construct(
-        LocationRepository $locationRepository,
-        CategoryRepository $categoryRepository,
-        GeocodeService $geocodeService
+        protected LocationRepository $locationRepository,
+        protected CategoryRepository $categoryRepository,
+        protected GeocodeService $geocodeService
     ) {
-        $this->locationRepository = $locationRepository;
-        $this->categoryRepository = $categoryRepository;
-        $this->geocodeService = $geocodeService;
     }
 
-    protected function initializeActionMethodValidators()
+    protected function initializeActionMethodValidators(): void
     {
         if ($this->arguments->hasArgument('constraint')) {
             $this->modifyValidatorsBasedOnSettings(
@@ -75,7 +68,7 @@ class MapController extends ActionController
     protected function modifyValidatorsBasedOnSettings(
         Argument $argument,
         array $configuredValidators
-    ) {
+    ): void {
         $parser = new DocParser();
 
         /** @var ConstraintValidator $validator */
@@ -112,19 +105,13 @@ class MapController extends ActionController
         $argument->setValidator($validator);
     }
 
-    /**
-     * @param string $configuration
-     * @param DocParser $parser
-     *
-     * @return ValidatorInterface
-     */
     protected function getValidatorByConfiguration(string $configuration, DocParser $parser): ValidatorInterface
     {
-        if (strpos($configuration, '"') === false && strpos($configuration, '(') === false) {
+        if (!str_contains($configuration, '"') && !str_contains($configuration, '(')) {
             $configuration = sprintf('"%s"', $configuration);
         }
 
-        /** @var \TYPO3\CMS\Extbase\Annotation\Validate $validateAnnotation */
+        /** @var Extbase\Validate $validateAnnotation */
         $validateAnnotation = current($parser->parse(
             '@TYPO3\CMS\Extbase\Annotation\Validate(' . $configuration . ')'
         ));
@@ -136,14 +123,14 @@ class MapController extends ActionController
         return $validator;
     }
 
-    protected function setTypeConverter()
+    protected function setTypeConverter(): void
     {
         if ($this->request->hasArgument('constraint')) {
             /** @var array $constraint */
             $constraint = $this->request->getArgument('constraint');
             if (!is_array($constraint['category'])) {
                 $constraint['category'] = array_filter(explode(',', $constraint['category'] ?? ''));
-                $this->request->setArgument('constraint', $constraint);
+                $this->request->getAttribute('extbase')->setArgument('constraint', $constraint);
             }
 
             if ($this->arguments->hasArgument('constraint')) {
@@ -151,7 +138,7 @@ class MapController extends ActionController
                 $configuration->allowProperties('category');
                 $configuration->setTypeConverterOption(
                     PersistentObjectConverter::class,
-                    PersistentObjectConverter::CONFIGURATION_CREATION_ALLOWED,
+                    (string)PersistentObjectConverter::CONFIGURATION_CREATION_ALLOWED,
                     true
                 );
             }
@@ -180,24 +167,31 @@ class MapController extends ActionController
             if (!intval($constraint['country'])) {
                 /** @var CountryRepository $countryRepository */
                 $countryRepository = GeneralUtility::getContainer()->get(CountryRepository::class);
-                /** @var $country Country */
+                /** @var $value Country */
                 if (strlen($constraint['country']) === 2) {
                     $value = $countryRepository->findByIsoCodeA2([$constraint['country']])->getFirst();
                 } elseif (strlen($constraint['country']) === 3) {
                     $value = $countryRepository->findByIsoCodeA3($constraint['country']);
+                } else {
+                    $value = false;
                 }
-                $constraint['country'] = $value->getUid();
-                $this->request->setArgument('constraint', $constraint);
+                if ($value) {
+                    $constraint['country'] = $value->getUid();
+                }
+                $this->request->getAttribute('extbase')->setArgument('constraint', $constraint);
             }
         }
 
         $this->setTypeConverter();
     }
 
+    protected function initializeView(): void
+    {
+        $this->view->assign('cObjectData', $this->request->getAttribute('currentContentObject')?->data);
+    }
+
     /**
      * Action responsible for rendering search, map and list partial
-     *
-     * @return ResponseInterface
      */
     public function mapAction(): ResponseInterface
     {
@@ -232,18 +226,12 @@ class MapController extends ActionController
 
     /**
      * Action responsible for rendering search, map and list partial
-     *
-     * @param ?Constraint $constraint
-     *
-     * @TYPO3\CMS\Extbase\Annotation\Validate("Evoweb\StoreFinder\Validation\Validator\Constraint", param="constraint")
-     *
-     * @return string
      */
-    public function cachedMapAction(Constraint $constraint = null): ResponseInterface
+    public function cachedMapAction(): ResponseInterface
     {
         if ($this->settings['location']) {
             $response = new ForwardResponse('show');
-        }  else {
+        } else {
             [$locations, $constraint] = $this->getLocationsByDefaultConstraints();
 
             $event = new MapGetLocationsByConstraintsEvent($this, $locations, $constraint);
@@ -276,9 +264,8 @@ class MapController extends ActionController
      * @param Constraint $constraint
      *
      * @return ResponseInterface
-     *
-     * @TYPO3\CMS\Extbase\Annotation\Validate("Evoweb\StoreFinder\Validation\Validator\Constraint", param="constraint")
      */
+    #[Extbase\Validate(['validator' => ConstraintValidator::class, 'param' => 'constraint'])]
     public function searchAction(Constraint $constraint): ResponseInterface
     {
         [$locations, $constraint] = $this->getLocationsByConstraints($constraint);
@@ -306,6 +293,14 @@ class MapController extends ActionController
 
     protected function getLocationsByConstraints(Constraint $constraint): array
     {
+        if (($this->settings['disableLocationFetchLogic'] ?? false)) {
+            $locations = $this->locationRepository->getEmptyResult();
+            return  [
+                $locations,
+                $constraint
+            ];
+        }
+
         /** @var Constraint $constraint */
         $constraint = $this->geocodeService->geocodeAddress($constraint);
         $constraint = $this->addDefaultConstraint($constraint);
@@ -321,6 +316,14 @@ class MapController extends ActionController
         /** @var Constraint $constraint */
         $constraint = GeneralUtility::makeInstance(Constraint::class);
 
+        if (($this->settings['disableLocationFetchLogic'] ?? false)) {
+            $locations = $this->locationRepository->getEmptyResult();
+            return [
+                $locations,
+                $constraint
+            ];
+        }
+
         if ($this->settings['showBeforeSearch'] & 2 && is_array($this->settings['defaultConstraint'])) {
             $constraint = $this->addDefaultConstraint($constraint);
             if ($this->settings['geocodeDefaultConstraint']) {
@@ -335,6 +338,13 @@ class MapController extends ActionController
         }
 
         if ($this->settings['showBeforeSearch'] & 4) {
+            $this->locationRepository->setDefaultOrderings([
+                'country' => QueryInterface::ORDER_DESCENDING,
+                'zipcode' => QueryInterface::ORDER_ASCENDING,
+                'city' => QueryInterface::ORDER_ASCENDING,
+                'name' => QueryInterface::ORDER_ASCENDING,
+            ]);
+
             $locations = $this->locationRepository->findAll();
         }
 
@@ -343,6 +353,11 @@ class MapController extends ActionController
         }
 
         return [$locations, $constraint];
+    }
+
+    protected function isDisabledFetchLocation(string $action, array $settings): bool
+    {
+        return in_array(str_replace('Action', '', $action), ($settings['disableFetchLocationInAction'] ?? []));
     }
 
     public function showAction(Location $location = null): ResponseInterface
@@ -357,7 +372,7 @@ class MapController extends ActionController
         $this->view->assign('afterSearch', 1);
         $this->view->assign('locations', $locations);
 
-        if ($locations !== null) {
+        if (count($locations)) {
             $center = $this->getCenterOfQueryResult($location, $locations);
             $center = $this->setZoomLevel($center, $locations);
             $this->view->assign('center', $center);
@@ -365,7 +380,7 @@ class MapController extends ActionController
         return new HtmlResponse($this->view->render());
     }
 
-    protected function addCategoryFromSettingsToView()
+    protected function addCategoryFromSettingsToView(): void
     {
         if ($this->settings['categories']) {
             $categories = $this->categoryRepository->findByUids(
@@ -501,7 +516,7 @@ class MapController extends ActionController
             $center = $this->locationRepository->findOneByCenter();
         }
 
-        if ($center === null) {
+        if (!($center instanceof Location)) {
             $center = $this->locationRepository->findCenterByLatitudeAndLongitude();
         }
 
@@ -518,13 +533,13 @@ class MapController extends ActionController
      */
     public function setZoomLevel(Location $center, QueryResultInterface $locations): Location
     {
-        $radius = false;
+        $radius = 0;
         /** @var Location $location */
         foreach ($locations as $location) {
             $radius = max($radius, $location->getDistance());
         }
 
-        if ($radius === false) {
+        if ($radius === 0) {
             $radius = (int)$this->settings['defaultConstraint']['radius'];
         }
 
@@ -544,18 +559,18 @@ class MapController extends ActionController
             $zoom = 10;
         } elseif ($radius <= 500) {
             $zoom = 11;
-        } elseif ($radius > 500 && $radius <= 1000) {
+        } elseif ($radius <= 1000) {
             $zoom = 12;
         } else {
             $zoom = 13;
         }
 
-        $center->setZoom((int)(18 - $zoom));
+        $center->setZoom(18 - $zoom);
 
         return $center;
     }
 
-    protected function addPaginator(QueryResultInterface $locations)
+    protected function addPaginator(QueryResultInterface $locations): void
     {
         if ($this->settings['addPaginator']) {
             $currentPage = $this->request->hasArgument('currentPage')
@@ -572,5 +587,30 @@ class MapController extends ActionController
                 ]
             );
         }
+    }
+
+    public function getView(): ViewInterface
+    {
+        return $this->view;
+    }
+
+    protected function getErrorFlashMessage()
+    {
+        return false;
+    }
+
+    public function getSettings(): array
+    {
+        return $this->settings;
+    }
+
+    public function getActionMethodName(): string
+    {
+        return $this->actionMethodName;
+    }
+
+    public function getArguments(): Arguments
+    {
+        return $this->arguments;
     }
 }

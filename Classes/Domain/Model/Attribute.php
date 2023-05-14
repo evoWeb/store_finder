@@ -15,6 +15,7 @@ namespace Evoweb\StoreFinder\Domain\Model;
  * LICENSE.txt file that was distributed with this source code.
  */
 
+use TYPO3\CMS\Extbase\Annotation as Extbase;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
@@ -23,23 +24,24 @@ class Attribute extends AbstractEntity
 {
     /**
      * Icon
-     *
-     * @var ?FileReference
-     * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
      */
-    protected $icon;
+    #[Extbase\ORM\Lazy]
+    protected null|FileReference|LazyLoadingProxy $icon;
 
     protected string $name;
 
-    public function getIcon(): FileReference
+    protected string $description;
+
+    protected string $cssClass = '';
+
+    public function getIcon(): ?FileReference
     {
-        if ($this->icon instanceof LazyLoadingProxy) {
-            $this->icon = $this->icon->_loadRealInstance();
-        }
-        return $this->icon;
+        return $this->icon instanceof LazyLoadingProxy
+            ? $this->icon->_loadRealInstance()
+            : $this->icon;
     }
 
-    public function setIcon(FileReference $icon)
+    public function setIcon(FileReference $icon): void
     {
         $this->icon = $icon;
     }
@@ -49,8 +51,28 @@ class Attribute extends AbstractEntity
         return $this->name;
     }
 
-    public function setName(string $name)
+    public function setName(string $name): void
     {
         $this->name = $name;
+    }
+
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): void
+    {
+        $this->description = $description;
+    }
+
+    public function getCssClass(): string
+    {
+        return $this->cssClass;
+    }
+
+    public function setCssClass(string $cssClass)
+    {
+        $this->cssClass = $cssClass;
     }
 }

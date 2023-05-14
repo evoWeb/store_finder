@@ -19,10 +19,6 @@ use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
 
-/**
- * Class BinaryAndViewHelper
- * @deprecated will be removed in version 7.0.0
- */
 class BinaryAndViewHelper extends AbstractViewHelper
 {
     use CompileWithRenderStatic;
@@ -34,8 +30,7 @@ class BinaryAndViewHelper extends AbstractViewHelper
         $this->registerArgument(
             'base',
             'int',
-            'Content to be added on top',
-            false
+            'Content to be added on top'
         );
         $this->registerArgument(
             'content',
@@ -47,13 +42,13 @@ class BinaryAndViewHelper extends AbstractViewHelper
     }
 
     /**
-     * Make an binary addition and return the result
+     * Make a binary addition and return the result
      *
      * @param array $arguments
      * @param \Closure $renderChildrenClosure
      * @param RenderingContextInterface $renderingContext
      *
-     * @return string|int
+     * @return int
      */
     public static function renderStatic(
         array $arguments,

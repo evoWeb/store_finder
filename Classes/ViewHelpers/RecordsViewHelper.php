@@ -15,7 +15,7 @@ namespace Evoweb\StoreFinder\ViewHelpers;
  * LICENSE.txt file that was distributed with this source code.
  */
 
-use TYPO3\CMS\Core\Database\Connection;
+use Doctrine\DBAL\ArrayParameterType;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
@@ -72,12 +72,12 @@ class RecordsViewHelper extends AbstractViewHelper
                 ->where(
                     $queryBuilder->expr()->in(
                         'uid',
-                        $queryBuilder->createNamedParameter($uids, Connection::PARAM_INT_ARRAY)
+                        $queryBuilder->createNamedParameter($uids, ArrayParameterType::INTEGER)
                     )
                 )
                 ->orderBy('uid')
-                ->execute()
-                ->fetchAll();
+                ->executeQuery()
+                ->fetchAllAssociative();
         } catch (\Exception $e) {
             throw new \RuntimeException(
                 'Database query failed. Error was: ' . $e->getPrevious()->getMessage(),
