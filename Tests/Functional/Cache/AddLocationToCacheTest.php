@@ -17,6 +17,8 @@ use Evoweb\StoreFinder\Cache\CoordinatesCache;
 use Evoweb\StoreFinder\Domain\Model\Constraint;
 use Evoweb\StoreFinder\Domain\Repository\CountryRepository;
 use Evoweb\StoreFinder\Service\GeocodeService;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\NullLogger;
@@ -54,10 +56,7 @@ class AddLocationToCacheTest extends FunctionalTestCase
         ]
     ];
 
-    /**
-     * @var CoordinatesCache|MockObject
-     */
-    protected $coordinatesCache;
+    protected CoordinatesCache|MockObject $coordinatesCache;
 
     protected GeocodeService $geocodeService;
 
@@ -94,7 +93,7 @@ class AddLocationToCacheTest extends FunctionalTestCase
         $this->geocodeService = new GeocodeService($this->coordinatesCache, $categoryRepository);
     }
 
-    public function cacheDataProvider(): array
+    public static function cacheDataProvider(): array
     {
         return [
             'zip city country only' => [
@@ -144,14 +143,8 @@ class AddLocationToCacheTest extends FunctionalTestCase
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider cacheDataProvider
-     *
-     * @param array $data
-     * @param array $addFields
-     * @param array $getFields
-     */
+    #[Test]
+    #[DataProvider('cacheDataProvider')]
     public function locationStoredInCacheTable(array $data, array $addFields, array $getFields)
     {
         $this->coordinatesCache->flushCache();
