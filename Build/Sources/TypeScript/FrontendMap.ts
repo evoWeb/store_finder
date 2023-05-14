@@ -49,11 +49,6 @@ export default class FrontendMap {
       }
       this.loadScript();
     }
-
-    if (!Element.prototype.matches) {
-      Element.prototype.matches = Element.prototype.msMatchesSelector ||
-        Element.prototype.webkitMatchesSelector;
-    }
   }
 
   initializeMap(): void {
@@ -77,11 +72,13 @@ export default class FrontendMap {
   }
   /* eslint-enable */
 
-  removeMarker(location: Location) {}
+  removeMarker(location: Location) {
+    console.log(location, 'removeMarker should be overridden');
+  }
 
   removeLocation(location: Location) {
     this.removeMarker(location);
-    let position = this.locations.indexOf(location);
+    const position = this.locations.indexOf(location);
     if (position > -1) {
       this.locations.splice(position, 1);
     }
