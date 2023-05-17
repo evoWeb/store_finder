@@ -92,7 +92,7 @@ class CategoryRepository extends Repository
     public function getCategories(array $selectedCategories): array
     {
         $categories = $this
-            ->getCommonQuery('sys_category', 0)
+            ->getCommonQuery('sys_category', 0, $selectedCategories)
             ->executeQuery()
             ->fetchAllAssociative();
 
@@ -108,7 +108,7 @@ class CategoryRepository extends Repository
     protected function findCategoryByParent(array $selectedCategories, int $parentUid): array
     {
         $categoryChildren = $this
-            ->getCommonQuery('sys_category', $parentUid)
+            ->getCommonQuery('sys_category', $parentUid, [])
             ->executeQuery()
             ->fetchAllAssociative();
 
@@ -127,7 +127,7 @@ class CategoryRepository extends Repository
         return $categoryChildren;
     }
 
-    protected function getCommonQuery(string $table, int $parentUid): QueryBuilder
+    protected function getCommonQuery(string $table, int $parentUid, array $selectedCategories): QueryBuilder
     {
         $queryBuilder = $this->getQueryBuilderForTable($table);
         /** @var Context $context */
@@ -141,7 +141,13 @@ class CategoryRepository extends Repository
             ->select(...$fields)
             ->from($table, 'c')
             ->where(
-                $expression->eq('c.parent', $queryBuilder->createNamedParameter($parentUid)),
+                $expression->or(
+                    $expression->eq('c.parent', $queryBuilder->createNamedParameter($parentUid)),
+                    $expression->in(
+                        'c.uid',
+                        $queryBuilder->createNamedParameter($selectedCategories, ArrayParameterType::INTEGER)
+                    )
+                ),
                 $expression->or(
                     $expression->in('c.sys_language_uid', [0, -1]),
                     $expression->and(
