@@ -69,14 +69,12 @@ class LocationMiddleware implements MiddlewareInterface
             && !empty($queryParams['action'])
             && $queryParams['action'] == 'locations'
         ) {
-            $filter = $queryParams['ids'];
-
-            $cacheIdentifier = md5(serialize($filter ?? 'allLocationsCacheIdentifier'));
+            $cacheIdentifier = md5(serialize($queryParams ?? 'allLocationsCacheIdentifier'));
 
             if ($this->cachingService->readCache($cacheIdentifier)) {
                 $locations = $this->cachingService->readCache($cacheIdentifier);
             } else {
-                $locations = $this->getLocations($filter ?? '');
+                $locations = $this->getLocations();
                 $this->cachingService->writeCache($cacheIdentifier, $locations);
             }
 
@@ -102,18 +100,12 @@ class LocationMiddleware implements MiddlewareInterface
         return $queryBuilder;
     }
 
-    protected function getLocations(string $filter = ''): array
+    protected function getLocations(): array
     {
         $queryBuilder = $this->initializeQueryBuilder('tx_storefinder_domain_model_location');
         $locations = $queryBuilder
             ->select('*')
             ->from('tx_storefinder_domain_model_location');
-
-        if (!empty($filter)) {
-            $locations->andWhere(
-                $locations->expr()->in('uid', $filter)
-            );
-        }
 
         return $locations->execute()->fetchAllAssociative();
     }
