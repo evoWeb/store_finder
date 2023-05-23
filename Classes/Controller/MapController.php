@@ -219,6 +219,7 @@ class MapController extends ActionController
             $this->getLocationsByDefaultConstraints();
         }
 
+        $this->view->assign('data', $this->configurationManager->getContentObject()->data);
         $this->addCategoryFromSettingsToView();
         $this->view->assign(
             'static_info_tables',
