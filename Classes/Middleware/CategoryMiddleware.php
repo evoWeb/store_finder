@@ -81,9 +81,8 @@ class CategoryMiddleware implements MiddlewareInterface
             && !empty($queryParams['action'])
             && $queryParams['action'] == 'categories'
         ) {
-            // @todo make dynamic with js post data
-            $mapPluginId = 643;
-
+            $mapPluginId = (int)$queryParams['pluginUid'];
+            
             $cacheIdentifier = md5(
                 serialize(
                     $this->settings['settings']['categories'] ?? 'noActiveCategoriesCacheIdentifier'
