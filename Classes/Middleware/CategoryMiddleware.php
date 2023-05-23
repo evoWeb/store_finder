@@ -125,6 +125,10 @@ class CategoryMiddleware implements MiddlewareInterface
             ->fetchAllAssociative();
 
         foreach ($categories as &$category) {
+            if (in_array($category['uid'], explode(',', $this->settings['settings']['activeCategories']))) {
+                $category['active'] = 1;
+            }
+            
             if ($category['children'] > 0) {
                 $category['children'] = $this->findCategoryChildrenByParentUid($category['uid']);
             }
