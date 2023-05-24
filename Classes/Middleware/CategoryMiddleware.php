@@ -83,11 +83,7 @@ class CategoryMiddleware implements MiddlewareInterface
         ) {
             $mapPluginId = (int)$queryParams['pluginUid'];
             
-            $cacheIdentifier = md5(
-                serialize(
-                    $this->settings['settings']['activeCategories'] ?? 'noActiveCategoriesCacheIdentifier'
-                )
-            );
+            $this->settings = $this->getPluginSettingsByPluginUid($mapPluginId ?? 7784);
 
             $categories = $this->getCategories();
 
