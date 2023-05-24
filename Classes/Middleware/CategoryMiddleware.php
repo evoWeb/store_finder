@@ -85,7 +85,7 @@ class CategoryMiddleware implements MiddlewareInterface
             
             $cacheIdentifier = md5(
                 serialize(
-                    $this->settings['settings']['categories'] ?? 'noActiveCategoriesCacheIdentifier'
+                    $this->settings['settings']['activeCategories'] ?? 'noActiveCategoriesCacheIdentifier'
                 )
             );
 
