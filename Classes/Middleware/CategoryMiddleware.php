@@ -89,13 +89,7 @@ class CategoryMiddleware implements MiddlewareInterface
                 )
             );
 
-            if ($this->cachingService->readCache($cacheIdentifier)) {
-                $categories = $this->cachingService->readCache($cacheIdentifier);
-            } else {
-                $this->settings = $this->getPluginSettingsByPluginUid($mapPluginId);
-                $categories = $this->getCategories();
-                $this->cachingService->writeCache($cacheIdentifier, $categories);
-            }
+            $categories = $this->getCategories();
 
             $eventResult = $this->eventDispatcher->dispatch(
                 new ModifyCategoriesMiddlewareOutputEvent($this, $categories, $request)
@@ -114,10 +108,10 @@ class CategoryMiddleware implements MiddlewareInterface
     protected function getCategories(): array
     {
         $queryBuilder = $this->initializeQueryBuilder('sys_category');
-
+        
         $categories = $queryBuilder
             ->select('*')
-            ->from('sys_category', '')
+            ->from('sys_category')
             ->where(
                 $queryBuilder->expr()->in('uid', $this->settings['settings']['categories'])
             )
