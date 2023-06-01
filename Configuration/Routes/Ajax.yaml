@@ -10,6 +10,8 @@ routeEnhancers:
     requirements:
       action: '[a-zA-Z0-9].*'
       contentUid: '[0-9].*'
+      language: '.*'
     _arguments:
       action: 'action'
       contentUid: 'contentUid'
+      language: 'language'

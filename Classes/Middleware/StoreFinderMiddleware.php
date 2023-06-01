@@ -32,6 +32,7 @@ use SJBR\StaticInfoTables\Domain\Repository\CountryZoneRepository;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Service\FlexFormService;
+use TYPO3\CMS\Core\Site\Entity\SiteLanguage;
 use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -45,15 +46,17 @@ class StoreFinderMiddleware implements MiddlewareInterface
         $queryParams = $request->getQueryParams();
         $action = $queryParams['action'] ?? '';
         if (
-            !str_starts_with($path, 'api/storefinder/')
+            !str_contains($path, 'api/storefinder/')
             || !in_array($action, ['locations', 'categories'])
         ) {
             return $handler->handle($request);
         }
         $this->initializeObject();
 
+        /** @var SiteLanguage $requestLanguage */
+        $requestLanguage = $request->getAttribute('language');
         $contentUid = $queryParams['contentUid'] ?? 0;
-        $cacheIdentifier = md5('store_finder' . $action . $contentUid);
+        $cacheIdentifier = md5('store_finder' . $action . $contentUid . $requestLanguage->getLanguageId());
 
         /** @var FrontendInterface $cache */
         $cache = GeneralUtility::getContainer()->get('cache.store_finder.middleware_cache');
@@ -109,10 +112,29 @@ class StoreFinderMiddleware implements MiddlewareInterface
         $categories = GeneralUtility::intExplode(',', $settings['categories'] ?? '', true);
         $rows = $categoryRepository->getCategories($categories);
 
+        $categoryTree = [];
+        foreach ($rows as $row) {
+            if ($row['parent'] == 0) {
+                $row = $this->addChildCategories($row, $rows);
+                $categoryTree[] = $row;
+            }
+        }
+
         $eventResult = $this->eventDispatcher->dispatch(
-            new ModifyMiddlewareCategoriesEvent($request, $this, $settings, $rows)
+            new ModifyMiddlewareCategoriesEvent($request, $this, $settings, $categoryTree)
         );
         return $eventResult->getCategories();
+    }
+
+    protected function addChildCategories(array $category, array $children): array
+    {
+        foreach ($children as $child) {
+            if ($child['parent'] == $category['uid']) {
+                $child = $this->addChildCategories($child, $children);
+                $category['children'][] = $child;
+            }
+        }
+        return $category;
     }
 
     protected function locationsAction(ServerRequestInterface $request, array $settings): array

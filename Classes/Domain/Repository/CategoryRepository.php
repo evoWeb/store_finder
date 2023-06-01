@@ -99,7 +99,6 @@ class CategoryRepository extends Repository
         $pageRepository = $this->getPageRepository();
         foreach ($categories as &$category) {
             $category = $pageRepository->getLanguageOverlay('sys_category', $category);
-            $category['children'] = $this->findCategoryByParent($selectedCategories, $category['uid']);
         }
 
         return $categories;
@@ -137,17 +136,13 @@ class CategoryRepository extends Repository
         $expression = $queryBuilder->expr();
 
         $fields = array_keys($this->settings['tables'][$table]['fields'] ?? ['*' => '']);
+        $fields[] = 'uid';
+        $fields[] = 'pid';
+        $fields[] = $GLOBALS['TCA'][$table]['ctrl']['languageField'];
         $queryBuilder
             ->select(...$fields)
             ->from($table, 'c')
             ->where(
-                $expression->or(
-                    $expression->eq('c.parent', $queryBuilder->createNamedParameter($parentUid)),
-                    $expression->in(
-                        'c.uid',
-                        $queryBuilder->createNamedParameter($selectedCategories, ArrayParameterType::INTEGER)
-                    )
-                ),
                 $expression->or(
                     $expression->in('c.sys_language_uid', [0, -1]),
                     $expression->and(
@@ -156,18 +151,7 @@ class CategoryRepository extends Repository
                     )
                 ),
             )
-            ->innerJoin(
-                'c',
-                'sys_category_record_mm',
-                'mm',
-                (string)$expression->and(
-                    $expression->eq(
-                        'mm.tablenames',
-                        $queryBuilder->quote('tx_storefinder_domain_model_location')
-                    ),
-                    $expression->eq('c.uid', 'mm.uid_local')
-                )
-            );
+            ->groupBy('c.uid');
 
         if (!empty($selectedCategories)) {
             $queryBuilder->andWhere(
