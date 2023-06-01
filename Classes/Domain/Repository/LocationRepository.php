@@ -395,19 +395,23 @@ class LocationRepository extends Repository
 
     protected function addFulltextSearchQueryParts(Constraint $constraint, QueryBuilder $queryBuilder): QueryBuilder
     {
+        $search = preg_replace('/[^\w,]+/', '', $constraint->getSearch());
         if (
-            $constraint->getSearch()
+            $search
             && isset($this->settings['fulltextSearchFields'])
             && is_array($this->settings['fulltextSearchFields'])
         ) {
             $fullTextSearchConstraint = [];
             $searchWordWrap = $this->settings['fulltextSearchWordWrap'] ?? '|';
 
-            foreach ($this->settings['fulltextSearchFields'] as $searchField) {
-                $fullTextSearchConstraint[] = $queryBuilder->expr()->like(
-                    $searchField,
-                    $queryBuilder->createNamedParameter(str_replace('|', $constraint->getSearch(), $searchWordWrap))
-                );
+            $searchWords = GeneralUtility::trimExplode(',', $search);
+            foreach ($searchWords as $searchWord) {
+                foreach ($this->settings['fulltextSearchFields'] as $searchField) {
+                    $fullTextSearchConstraint[] = $queryBuilder->expr()->like(
+                        $searchField,
+                        $queryBuilder->createNamedParameter(str_replace('|', $searchWord, $searchWordWrap))
+                    );
+                }
             }
 
             if (count($fullTextSearchConstraint)) {
