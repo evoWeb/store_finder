@@ -102,7 +102,7 @@ class CoordinatesCache
     {
         $sessionData = $this->frontendUser?->getKey('ses', 'tx_storefinder_coordinates');
 
-        return is_array($sessionData) && isset($sessionData[$key]) && !empty($sessionData[$key]);
+        return is_array($sessionData) && !empty($sessionData[$key]);
     }
 
     public function getValueFromSession(string $key): array

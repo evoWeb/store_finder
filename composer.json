@@ -23,7 +23,7 @@
 	"config": {
 		"bin-dir": "bin",
 		"platform": {
-			"php": "8.2.1"
+			"php": "8.1.1"
 		},
 		"sort-packages": true,
 		"allow-plugins": {
@@ -35,7 +35,7 @@
 		}
 	},
 	"require": {
-		"php": "^8.2",
+		"php": "^8.1",
 		"ext-pdo": "*",
 		"geocoder-php/google-maps-provider": "^4.7.0",
 		"php-http/guzzle7-adapter": "^1.0",
