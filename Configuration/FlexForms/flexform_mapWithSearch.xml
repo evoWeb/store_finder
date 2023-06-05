@@ -16,6 +16,7 @@
 					<settings.showBeforeSearch>
 						<TCEforms>
 							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.showBeforeSearch</label>
+                            <exclude>true</exclude>
 							<config>
 								<type>check</type>
 								<default>1</default>
@@ -40,6 +41,7 @@
 					<settings.showAfterSearch>
 						<TCEforms>
 							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.showAfterSearch</label>
+                            <exclude>true</exclude>
 							<config>
 								<type>check</type>
 								<default>6</default>
@@ -64,6 +66,7 @@
 					<settings.mapConfiguration.apiV3Layers>
 						<TCEforms>
 							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.apiV3Layers</label>
+                            <exclude>true</exclude>
 							<config>
 								<type>select</type>
 								<renderType>selectCheckBox</renderType>
@@ -90,6 +93,7 @@
 					<settings.allowedCountries>
 						<TCEforms>
 							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.allowedCountries</label>
+                            <exclude>true</exclude>
 							<config>
 								<type>input</type>
 								<size>40</size>
@@ -100,6 +104,7 @@
 					<view.templateRootPaths.200>
 						<TCEforms>
 							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.templateRootPath</label>
+                            <exclude>true</exclude>
 							<config>
 								<type>input</type>
 								<size>40</size>
@@ -110,6 +115,7 @@
 					<view.partialRootPaths.200>
 						<TCEforms>
 							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.partialRootPath</label>
+                            <exclude>true</exclude>
 							<config>
 								<type>input</type>
 								<size>40</size>
@@ -120,6 +126,7 @@
 					<settings.showStoreImage>
 						<TCEforms>
 							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.showStoreImage</label>
+                            <exclude>true</exclude>
 							<config>
 								<type>check</type>
 								<default>1</default>
@@ -141,6 +148,7 @@
 					<settings.categories>
 						<TCEforms>
 							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.categories</label>
+                            <exclude>true</exclude>
 							<config>
 								<type>category</type>
 							</config>
@@ -150,6 +158,7 @@
                     <settings.activeCategories>
                         <TCEforms>
                             <label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.activeCategories</label>
+                            <exclude>true</exclude>
                             <config>
                                 <type>select</type>
                                 <renderType>selectMultipleSideBySide</renderType>
@@ -165,6 +174,7 @@
                     <settings.categoryPriority>
 						<TCEforms>
 							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.categoryPriority</label>
+                            <exclude>true</exclude>
 							<config>
 								<type>select</type>
 								<renderType>selectSingle</renderType>
@@ -189,6 +199,7 @@
 					<settings.singleLocationId>
 						<TCEforms>
 							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.singleLocationId</label>
+                            <exclude>true</exclude>
 							<config>
 								<type>group</type>
 								<allowed>tx_storefinder_domain_model_location</allowed>
@@ -202,6 +213,7 @@
 					<settings.resultPageId>
 						<TCEforms>
 							<label>LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.resultPageId</label>
+                            <exclude>true</exclude>
 							<config>
 								<type>group</type>
 								<allowed>pages</allowed>
