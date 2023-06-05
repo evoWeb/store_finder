@@ -556,7 +556,7 @@ class ImportLocationsCommand extends Command
         string $fieldName,
         int $uidLocal,
         int $uidForeign
-    ):void {
+    ): void {
         $queryBuilder = $this->getQueryBuilderForTable($table);
         $expression = $queryBuilder->expr();
         $queryBuilder

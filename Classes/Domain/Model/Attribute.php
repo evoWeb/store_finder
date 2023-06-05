@@ -71,7 +71,7 @@ class Attribute extends AbstractEntity
         return $this->cssClass;
     }
 
-    public function setCssClass(string $cssClass)
+    public function setCssClass(string $cssClass): void
     {
         $this->cssClass = $cssClass;
     }

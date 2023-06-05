@@ -29,7 +29,7 @@ class MapGetAllLocationsListener
         $this->locationRepository = $locationRepository;
     }
 
-    public function onLocationsFetchedEvent(MapGetLocationsByConstraintsEvent $event)
+    public function onLocationsFetchedEvent(MapGetLocationsByConstraintsEvent $event): void
     {
         if ($this->isOverrideLocations($event)) {
             $event->setLocations($this->locationRepository->findAll());
