@@ -62,6 +62,7 @@ class StoreFinderMiddleware implements MiddlewareInterface
         } else {
             [$settings, $request] = $this->getSettings($request, (int)$contentUid);
             $rows = $this->{$action . 'Action'}($request, $settings);
+            $request->getBody()->rewind();
             if (empty($request->getBody()->getContents())) {
                 $cache->set($cacheIdentifier, $rows);
             }
