@@ -62,7 +62,9 @@ class StoreFinderMiddleware implements MiddlewareInterface
         } else {
             [$settings, $request] = $this->getSettings($request, (int)$contentUid);
             $rows = $this->{$action . 'Action'}($request, $settings);
-            $cache->set($cacheIdentifier, $rows);
+            if (empty($request->getBody()->getContents())) {
+                $cache->set($cacheIdentifier, $rows);
+            }
         }
 
         return new JsonResponse($rows);
