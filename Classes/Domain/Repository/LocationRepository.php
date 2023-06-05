@@ -547,7 +547,7 @@ class LocationRepository extends Repository
             ->from($table, 'l')
             ->groupBy('l.uid');
 
-        if (!empty($constraint->getCategories())) {
+        if (!empty($constraint->getCategory())) {
             $queryBuilder
                 ->innerJoin(
                     'l',

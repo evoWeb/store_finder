@@ -19,6 +19,7 @@ use Doctrine\DBAL\ArrayParameterType;
 use Evoweb\StoreFinder\Domain\Model\Category;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\LanguageAspect;
+use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
@@ -89,16 +90,17 @@ class CategoryRepository extends Repository
         return array_unique($categories);
     }
 
-    public function getCategories(array $selectedCategories): array
+    public function getCategoriesByParents(array $selectedCategories): array
     {
         $categories = $this
-            ->getCommonQuery('sys_category', 0, $selectedCategories)
+            ->getCommonQuery('sys_category', $selectedCategories)
             ->executeQuery()
             ->fetchAllAssociative();
 
         $pageRepository = $this->getPageRepository();
         foreach ($categories as &$category) {
             $category = $pageRepository->getLanguageOverlay('sys_category', $category);
+            $category['children'] = $this->findCategoryByParent($selectedCategories, $category['uid']);
         }
 
         return $categories;
@@ -106,8 +108,12 @@ class CategoryRepository extends Repository
 
     protected function findCategoryByParent(array $selectedCategories, int $parentUid): array
     {
-        $categoryChildren = $this
-            ->getCommonQuery('sys_category', $parentUid, [])
+        $queryBuilder = $this->getCommonQuery('sys_category', []);
+        $categoryChildren = $queryBuilder
+            ->andWhere($queryBuilder->expr()->eq(
+                'parent',
+                $queryBuilder->createNamedParameter($parentUid, Connection::PARAM_INT)
+            ))
             ->executeQuery()
             ->fetchAllAssociative();
 
@@ -126,7 +132,7 @@ class CategoryRepository extends Repository
         return $categoryChildren;
     }
 
-    protected function getCommonQuery(string $table, int $parentUid, array $selectedCategories): QueryBuilder
+    protected function getCommonQuery(string $table, array $selectedCategories): QueryBuilder
     {
         $queryBuilder = $this->getQueryBuilderForTable($table);
         /** @var Context $context */
@@ -162,12 +168,6 @@ class CategoryRepository extends Repository
             );
         }
 
-        if (!empty($this->settings['storagePid'])) {
-            $queryBuilder->andWhere(
-                $expression->in('c.pid', GeneralUtility::intExplode(',', $this->settings['storagePid']))
-            );
-        }
-
         if (!empty($this->settings['tables'][$table]['sortBy'])) {
             $queryBuilder->addOrderBy(
                 $this->settings['tables'][$table]['sortBy']['field'] ?? 'c.uid',
@@ -181,6 +181,23 @@ class CategoryRepository extends Repository
     protected function getPageRepository(): PageRepository
     {
         return GeneralUtility::makeInstance(PageRepository::class);
+    }
+
+    public function enrichCategoriesWithChildren(array $categories): array
+    {
+        $result = $categories;
+        foreach ($categories as $category) {
+            $queryBuilder = $this->getQueryBuilderForTable('sys_category');
+            $children = $queryBuilder
+                ->select('uid')
+                ->from('sys_category')
+                ->where($queryBuilder->expr()->eq('parent', (int)$category))
+                ->executeQuery()
+                ->fetchFirstColumn();
+            $children = $this->enrichCategoriesWithChildren($children);
+            $result = array_merge($result, $children);
+        }
+        return $result;
     }
 
     protected function getQueryBuilderForTable(string $table): QueryBuilder
