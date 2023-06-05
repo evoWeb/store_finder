@@ -45,10 +45,7 @@ class StoreFinderMiddleware implements MiddlewareInterface
         $path = ltrim($request->getUri()->getPath(), '/');
         $queryParams = $request->getQueryParams();
         $action = $queryParams['action'] ?? '';
-        if (
-            !str_contains($path, 'api/storefinder/')
-            || !in_array($action, ['locations', 'categories'])
-        ) {
+        if (!str_contains($path, 'api/storefinder/') || !in_array($action, ['locations', 'categories'])) {
             return $handler->handle($request);
         }
         $this->initializeObject();
@@ -60,7 +57,7 @@ class StoreFinderMiddleware implements MiddlewareInterface
 
         /** @var FrontendInterface $cache */
         $cache = GeneralUtility::getContainer()->get('cache.store_finder.middleware_cache');
-        if ($request->getBody()->getSize() == 0 && $cache->has($cacheIdentifier)) {
+        if (empty($request->getBody()->getContents()) && $cache->has($cacheIdentifier)) {
             $rows = $cache->get($cacheIdentifier);
         } else {
             [$settings, $request] = $this->getSettings($request, (int)$contentUid);
@@ -110,31 +107,12 @@ class StoreFinderMiddleware implements MiddlewareInterface
         $categoryRepository->setSettings($settings);
 
         $categories = GeneralUtility::intExplode(',', $settings['categories'] ?? '', true);
-        $rows = $categoryRepository->getCategories($categories);
-
-        $categoryTree = [];
-        foreach ($rows as $row) {
-            if ($row['parent'] == 0) {
-                $row = $this->addChildCategories($row, $rows);
-                $categoryTree[] = $row;
-            }
-        }
+        $categoryTree = $categoryRepository->getCategoriesByParents($categories);
 
         $eventResult = $this->eventDispatcher->dispatch(
             new ModifyMiddlewareCategoriesEvent($request, $this, $settings, $categoryTree)
         );
         return $eventResult->getCategories();
-    }
-
-    protected function addChildCategories(array $category, array $children): array
-    {
-        foreach ($children as $child) {
-            if ($child['parent'] == $category['uid']) {
-                $child = $this->addChildCategories($child, $children);
-                $category['children'][] = $child;
-            }
-        }
-        return $category;
     }
 
     protected function locationsAction(ServerRequestInterface $request, array $settings): array
@@ -185,7 +163,11 @@ class StoreFinderMiddleware implements MiddlewareInterface
         if (!empty($post['categories'])) {
             $constraint->setCategory(GeneralUtility::intExplode(',', $post['categories'], true));
         } else {
-            $constraint->setCategory(GeneralUtility::intExplode(',', $settings['categories'], true));
+            /** @var CategoryRepository $categoryRepository */
+            $categoryRepository = GeneralUtility::makeInstance(CategoryRepository::class);
+            $categories = GeneralUtility::intExplode(',', $settings['categories'], true);
+            $categories = $categoryRepository->enrichCategoriesWithChildren($categories);
+            $constraint->setCategory($categories);
         }
 
         if ($constraint->getCountry()) {
