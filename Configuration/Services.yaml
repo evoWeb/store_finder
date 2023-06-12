@@ -50,9 +50,6 @@ services:
   Evoweb\StoreFinder\EventListener\TceMainListener:
     public: true
 
-  Evoweb\StoreFinder\EventListener\ModifyMiddlewareLocationsListener:
-    tags: ['event.listener']
-
   Evoweb\StoreFinder\Middleware\StoreFinderMiddleware:
     public: true
 
