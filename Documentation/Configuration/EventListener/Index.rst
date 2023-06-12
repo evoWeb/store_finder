@@ -61,3 +61,14 @@ this case, you need to set the zoom level in the template OR the radius in TypoS
    :caption: EXT:my_extension/Configuration/TypoScript/setup.typoscript
 
    plugin.tx_storefinder.settings.defaultConstraint.radius = 20
+
+Modify locations in StoreFinderMiddleware
+=========================================
+
+It's possible to change locations records from store finder middleware before
+sending the json response. Use the ModifyMiddlewareLocationsListener as an
+example of how to change values.
+
+.. code-block:: Services.yaml
+  Evoweb\StoreFinder\EventListener\ModifyMiddlewareLocationsListener:
+    tags: ['event.listener']

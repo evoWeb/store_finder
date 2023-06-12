@@ -19,16 +19,14 @@ class ModifyMiddlewareLocationsListener
         $contentObject->setRequest($event->getRequest());
 
         $locations = $event->getLocations();
+        /* do what ever you need to change
         foreach ($locations as &$location) {
             if (!empty($location['notes'])) {
                 $contentObject->start($location, $table);
-                $location['notes'] = $contentObject->parseFunc(
-                    $location['notes'],
-                    null,
-                    '< ' . $settings['tables'][$table]['fields']['notes']['parseFuncTSPath']
-                );
+                $location['notes'] = $contentObject->cObjGet([], 'notes');
             }
         }
+        */
 
         $event->setLocations($locations);
     }
