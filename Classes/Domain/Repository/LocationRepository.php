@@ -395,7 +395,7 @@ class LocationRepository extends Repository
 
     protected function addFulltextSearchQueryParts(Constraint $constraint, QueryBuilder $queryBuilder): QueryBuilder
     {
-        $search = preg_replace('/[^\w,]+/', '', $constraint->getSearch());
+        $search = preg_replace('/[^a-zA-Z0-9äöüÄÖÜß]+/', '', $constraint->getSearch());
         if (
             $search
             && isset($this->settings['fulltextSearchFields'])
