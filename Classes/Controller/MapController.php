@@ -128,7 +128,7 @@ class MapController extends ActionController
         if ($this->request->hasArgument('constraint')) {
             /** @var array $constraint */
             $constraint = $this->request->getArgument('constraint');
-            if (!is_array($constraint['category'])) {
+            if (!is_array($constraint['category'] ?? '')) {
                 $constraint['category'] = array_filter(explode(',', $constraint['category'] ?? ''));
                 $this->request->getAttribute('extbase')->setArgument('constraint', $constraint);
             }
@@ -195,7 +195,7 @@ class MapController extends ActionController
      */
     public function mapAction(): ResponseInterface
     {
-        if ($this->settings['location']) {
+        if ($this->settings['location'] ?? false) {
             $response = new ForwardResponse('show');
         } else {
             [$locations, $constraint] = $this->getLocationsByDefaultConstraints();
@@ -229,7 +229,7 @@ class MapController extends ActionController
      */
     public function cachedMapAction(): ResponseInterface
     {
-        if ($this->settings['location']) {
+        if ($this->settings['location'] ?? false) {
             $response = new ForwardResponse('show');
         } else {
             [$locations, $constraint] = $this->getLocationsByDefaultConstraints();
