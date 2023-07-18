@@ -147,7 +147,7 @@ class MapController extends ActionController
 
     protected function initializeAction()
     {
-        if (isset($this->settings['override']) && is_array($this->settings['override'])) {
+        if (is_array($this->settings['override'] ?? false)) {
             $override = $this->settings['override'];
             unset($this->settings['override']);
 
@@ -156,9 +156,7 @@ class MapController extends ActionController
 
         $this->settings['static_info_tables'] = ExtensionManagementUtility::isLoaded('static_info_tables') ? 1 : 0;
 
-        $this->settings['allowedCountries'] = $this->settings['allowedCountries'] ?
-            explode(',', $this->settings['allowedCountries']) :
-            [];
+        $this->settings['allowedCountries'] = explode(',', $this->settings['allowedCountries'] ?? '');
         $this->geocodeService->setSettings($this->settings);
         $this->locationRepository->setSettings($this->settings);
 
@@ -293,7 +291,7 @@ class MapController extends ActionController
 
     protected function getLocationsByConstraints(Constraint $constraint): array
     {
-        if (($this->settings['disableLocationFetchLogic'] ?? false)) {
+        if ($this->settings['disableLocationFetchLogic'] ?? false) {
             $locations = $this->locationRepository->getEmptyResult();
             return  [
                 $locations,
@@ -316,7 +314,7 @@ class MapController extends ActionController
         /** @var Constraint $constraint */
         $constraint = GeneralUtility::makeInstance(Constraint::class);
 
-        if (($this->settings['disableLocationFetchLogic'] ?? false)) {
+        if ($this->settings['disableLocationFetchLogic'] ?? false) {
             $locations = $this->locationRepository->getEmptyResult();
             return [
                 $locations,
@@ -324,20 +322,23 @@ class MapController extends ActionController
             ];
         }
 
-        if ($this->settings['showBeforeSearch'] & 2 && is_array($this->settings['defaultConstraint'])) {
+        if (
+            ($this->settings['showBeforeSearch'] ?? 0) & 2
+            && is_array($this->settings['defaultConstraint'] ?? false)
+        ) {
             $constraint = $this->addDefaultConstraint($constraint);
-            if ($this->settings['geocodeDefaultConstraint']) {
+            if ($this->settings['geocodeDefaultConstraint'] ?? false) {
                 $constraint = $this->geocodeService->geocodeAddress($constraint);
             }
 
-            if ($this->settings['showLocationsForDefaultConstraint']) {
+            if ($this->settings['showLocationsForDefaultConstraint'] ?? false) {
                 $locations = $this->locationRepository->findByConstraint($constraint);
             } else {
                 $locations = $this->locationRepository->findOneByUid(-1);
             }
         }
 
-        if ($this->settings['showBeforeSearch'] & 4) {
+        if (($this->settings['showBeforeSearch'] ?? 0) & 4) {
             $this->locationRepository->setDefaultOrderings([
                 'country' => QueryInterface::ORDER_DESCENDING,
                 'zipcode' => QueryInterface::ORDER_ASCENDING,
@@ -382,7 +383,7 @@ class MapController extends ActionController
 
     protected function addCategoryFromSettingsToView(): void
     {
-        if ($this->settings['categories']) {
+        if ($this->settings['categories'] ?? false) {
             $categories = $this->categoryRepository->findByUids(
                 GeneralUtility::intExplode(',', $this->settings['categories'], true)
             );
@@ -450,7 +451,7 @@ class MapController extends ActionController
      */
     protected function addDefaultConstraint(Constraint $search): Constraint
     {
-        $defaultConstraint = $this->settings['defaultConstraint'];
+        $defaultConstraint = $this->settings['defaultConstraint'] ?? [];
 
         foreach ($defaultConstraint as $property => $value) {
             switch ($property) {
@@ -540,7 +541,7 @@ class MapController extends ActionController
         }
 
         if ($radius === 0) {
-            $radius = (int)$this->settings['defaultConstraint']['radius'];
+            $radius = (int)($this->settings['defaultConstraint']['radius'] ?? 0);
         }
 
         if ($radius < 2) {
@@ -572,11 +573,15 @@ class MapController extends ActionController
 
     protected function addPaginator(QueryResultInterface $locations): void
     {
-        if ($this->settings['addPaginator']) {
+        if ($this->settings['addPaginator'] ?? false) {
             $currentPage = $this->request->hasArgument('currentPage')
                 ? (int)$this->request->hasArgument('currentPage') : 1;
 
-            $resultPaginator = new QueryResultPaginator($locations, $currentPage, (int)$this->settings['limit']);
+            $resultPaginator = new QueryResultPaginator(
+                $locations,
+                $currentPage,
+                (int)($this->settings['limit'] ?? 10)
+            );
             $pagination = new SimplePagination($resultPaginator);
 
             $this->view->assignMultiple(
