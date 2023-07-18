@@ -10,6 +10,7 @@ plugin.tx_storefinder.settings {
   apiConsoleKeyGeocoding = {$plugin.tx_storefinder.apiConsoleKeyGeocoding}
 
   categories =
+  allowedCountries =
 
   categoryPriority = useAsFilterInFrontend
 
