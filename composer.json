@@ -3,7 +3,9 @@
 	"type": "typo3-cms-extension",
 	"description": "Store Finder",
 	"homepage": "https://www.evoweb.de",
-	"license": "GPL-2.0-or-later",
+	"license": [
+		"GPL-2.0-or-later"
+	],
 	"keywords": [
 		"store finder",
 		"store locator",
@@ -18,25 +20,11 @@
 		"issues": "https://github.com/evoWeb/store_finder/issues",
 		"docs": "https://docs.typo3.org/p/evoweb/store-finder/master/en-us/"
 	},
-	"require": {
-		"typo3/cms-core": "^11.0",
-		"typo3/cms-extbase": "*",
-		"typo3/cms-fluid": "*",
-		"typo3/cms-frontend": "*",
-		"sjbr/static-info-tables": "^11.5.0",
-
-		"geocoder-php/google-maps-provider": "^4.4.0",
-		"php-http/guzzle7-adapter": "*",
-		"php-http/message": "*",
-		"phpoffice/phpspreadsheet": "^1.9.0"
-	},
-	"autoload": {
-		"psr-4": {
-			"Evoweb\\StoreFinder\\": "Classes/"
-		}
-	},
 	"config": {
-		"vendor-dir": ".Build/Web/vendor",
+		"bin-dir": "bin",
+		"platform": {
+			"php": "8.1.1"
+		},
 		"sort-packages": true,
 		"allow-plugins": {
 			"typo3/cms-composer-installers": true,
@@ -44,18 +32,55 @@
 			"php-http/discovery": true
 		}
 	},
-	"require-dev": {
-		"typo3/testing-framework": "^6.6.2 || dev-main"
+	"require": {
+		"php": "^7.4 || ^8.1",
+		"ext-pdo": "*",
+		"typo3/cms-core": "^11.5",
+		"typo3/cms-backend": "^11.5",
+		"typo3/cms-extbase": "^11.5",
+		"typo3/cms-fluid": "^11.5",
+		"typo3/cms-frontend": "^11.5",
+
+		"sjbr/static-info-tables": "^11.5.0",
+
+		"geocoder-php/google-maps-provider": "^4.4.0",
+		"php-http/guzzle7-adapter": "*",
+		"php-http/message": "*",
+		"phpoffice/phpspreadsheet": "^1.9.0"
 	},
-	"autoload-dev": {
-		"psr-4": {
-			"Evoweb\\StoreFinder\\Tests\\": "Tests/"
-		}
+	"require-dev": {
+		"typo3/testing-framework": "^6.16.9"
 	},
 	"extra": {
 		"typo3/cms": {
 			"web-dir": ".Build/Web",
 			"extension-key": "store_finder"
+		}
+	},
+	"scripts": {
+		"prepare-release": [
+			"rm -rf .github",
+			"rm -rf Build",
+			"rm -rf Tests",
+			"rm .gitattributes",
+			"rm .gitignore",
+			"sed -i \"s/version' => '.*'/version' => '$(echo ${GITHUB_REF} | cut -d / -f 3)'/\" ext_emconf.php\n"
+		],
+		"post-install-cmd": [
+			"ln -sf ../vendor/typo3/testing-framework/Resources/Core/Build/ Build/phpunit;"
+		],
+		"post-update-cmd": [
+			"@post-install-cmd"
+		]
+	},
+	"autoload": {
+		"psr-4": {
+			"Evoweb\\StoreFinder\\": "Classes/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Evoweb\\StoreFinder\\Tests\\": "Tests/"
 		}
 	}
 }
