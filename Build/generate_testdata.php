@@ -15,25 +15,13 @@ if (@file_exists($additionalConfigurationFile)) {
 }
 
 $seeder = new class {
-    /**
-     * @var int
-     */
-    protected $pid = 10;
+    protected int $pid = 10;
 
-    /**
-     * @var string
-     */
-    protected $table = 'tx_storefinder_domain_model_location';
+    protected string $table = 'tx_storefinder_domain_model_location';
 
-    /**
-     * @var \Faker\Generator
-     */
-    protected $faker;
+    protected \Faker\Generator $faker;
 
-    /**
-     * @var Connection
-     */
-    protected $databaseConnection;
+    protected Connection $databaseConnection;
 
     public function __construct()
     {
