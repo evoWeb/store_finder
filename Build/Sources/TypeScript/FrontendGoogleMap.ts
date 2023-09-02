@@ -33,7 +33,7 @@ class FrontendGoogleMap extends FrontendMap {
       center = new google.maps.LatLng(0, 0);
     }
 
-    let mapOptions = {
+    const mapOptions = {
       zoom: this.mapConfiguration.zoom,
       center: center,
       disableDefaultUI: true, // a way to quickly hide all controls
@@ -45,14 +45,14 @@ class FrontendGoogleMap extends FrontendMap {
     };
 
     if (self.mapConfiguration.mapStyles) {
-        mapOptions.styles = self.mapConfiguration.mapStyles;
+      mapOptions.styles = self.mapConfiguration.mapStyles;
     }
 
     this.map = new google.maps.Map(document.getElementById('tx_storefinder_map'), mapOptions);
 
     if (this.mapConfiguration.afterSearch === 0 && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
-        let pos = {
+        const pos = {
           lat: position.coords.latitude,
           lng: position.coords.longitude
         };
@@ -67,17 +67,17 @@ class FrontendGoogleMap extends FrontendMap {
    */
   initializeLayer(this: FrontendGoogleMap) {
     if (this.mapConfiguration.apiV3Layers.indexOf('traffic') > -1) {
-      let trafficLayer = new google.maps.TrafficLayer();
+      const trafficLayer = new google.maps.TrafficLayer();
       trafficLayer.setMap(this.map);
     }
 
     if (this.mapConfiguration.apiV3Layers.indexOf('bicycling') > -1) {
-      let bicyclingLayer = new google.maps.BicyclingLayer();
+      const bicyclingLayer = new google.maps.BicyclingLayer();
       bicyclingLayer.setMap(this.map);
     }
 
     if (this.mapConfiguration.apiV3Layers.indexOf('kml') > -1) {
-      let kmlLayer = new google.maps.KmlLayer({url : this.mapConfiguration.kmlUrl});
+      const kmlLayer = new google.maps.KmlLayer({ url : this.mapConfiguration.kmlUrl });
       kmlLayer.setMap(this.map);
     }
   }
@@ -100,7 +100,7 @@ class FrontendGoogleMap extends FrontendMap {
    * Create marker and add to map
    */
   createMarker(location: Location, icon: string): google.maps.Marker {
-    let options = {
+    const options = {
         title: location.name,
         position: new google.maps.LatLng(location.lat, location.lng),
         icon: icon,
@@ -140,40 +140,33 @@ class FrontendGoogleMap extends FrontendMap {
    * Load google map script
    */
   loadScript() {
-    let self = this,
-      apiUrl = 'https://maps.googleapis.com/maps/api/js?v=3.exp',
+    let apiUrl = 'https://maps.googleapis.com/maps/api/js?v=3.exp',
       parameter = '&key=' + this.mapConfiguration.apiConsoleKey;
 
     if (self.mapConfiguration.language !== '') {
-      parameter += '&language=' + self.mapConfiguration.language;
+      parameter += '&language=' + this.mapConfiguration.language;
     }
 
-    if (self.mapConfiguration.hasOwnProperty('apiUrl')) {
-      apiUrl = self.mapConfiguration.apiUrl;
+    if (Object.prototype.hasOwnProperty.call(this.mapConfiguration, 'apiUrl')) {
+      apiUrl = this.mapConfiguration.apiUrl;
     }
 
-    let jsDeferred = $.Deferred(),
-      jsFile = $('<script/>', {
-        src: apiUrl + parameter,
-        crossorigin: ''
-      }).appendTo('head');
-
-    jsDeferred.resolve(jsFile);
-
-    $.when(
-      jsDeferred.promise()
-    ).done(function () {
-      function wait(this: FrontendMap) {
-        if (typeof google !== 'undefined') {
-          this.postLoadScript();
-        } else {
-          window.requestAnimationFrame(wait.bind(this));
+    Promise.all([
+      this.createFilePromise(apiUrl + parameter)
+    ])
+      .then(() => {
+        const wait = () => {
+          if (typeof google !== 'undefined') {
+            this.postLoadScript();
+          } else {
+            window.requestAnimationFrame(wait);
+          }
         }
-      }
-      window.requestAnimationFrame(wait.bind(self));
-    }).fail(function () {
-      console.log('Failed loading resources.');
-    });
+        window.requestAnimationFrame(wait);
+      })
+      .catch(() => {
+        console.log('Failed loading resources.');
+      });
   }
 }
 

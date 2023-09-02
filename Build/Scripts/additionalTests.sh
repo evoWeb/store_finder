@@ -143,7 +143,7 @@ while getopts ":a:s:c:d:i:j:k:p:e:xy:q:o:nhuv" OPT; do
         q)
             PACKAGE=${OPTARG}
             ;;
-        r)
+        o)
             COMPOSER_PARAMETER=${OPTARG}
             ;;
     esac

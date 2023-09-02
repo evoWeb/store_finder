@@ -1,57 +1,55 @@
 {
-  "name": "store-finder",
-  "version": "3.0.0",
-  "description": "Manage store locations, search by distance and show Google maps.",
-  "main": "gulpfile.js",
-  "repository": "https://github.com/evoWeb/store_finder.git",
-  "author": "Sebastian Fischer",
-  "license": "GPL-2.0-or-later",
-  "readme": "../README.md",
-  "homepage": "https://github.com/evoWeb/store_finder/",
-  "engines": {
-    "node": ">=8.0.0 <15.0.0",
-    "yarn": "^1.10.0"
-  },
-  "dependencies": {
-    "@types/googlemaps": "^3.43.2",
-    "@types/jquery": "2.0.56",
-    "@types/leaflet": "^1.5.21",
-    "@types/mustache": "^0.8.32",
-    "leaflet": "^1.7.1",
-    "mustache": "^3.2.1"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.12.10",
-    "@babel/plugin-proposal-class-properties": "^7.12.1",
-    "@babel/preset-env": "^7.12.11",
-    "@babel/register": "^7.12.10",
-    "autoprefixer": "^9.8.6",
-    "browserify": "^16.5.2",
-    "exorcist": "^1.0.1",
-    "gulp": "^4.0.2",
-    "gulp-babel": "^8.0.0",
-    "gulp-postcss": "^8.0.0",
-    "gulp-rename": "^1.4.0",
-    "gulp-sass": "^4.1.0",
-    "gulp-sourcemaps": "^2.6.5",
-    "gulp-typescript": "^5.0.1",
-    "gulp-terser": "^2.0.1",
-    "gulplog": "^1.0.0",
-    "node-normalize-scss": "^8.0.2",
-    "sass": "^1.29.0",
-    "tsify": "^4.0.2",
-    "typescript": "^3.9.7",
-    "vinyl-buffer": "^1.0.1",
-    "vinyl-source-stream": "^2.0.0"
-  },
-  "babel": {
-    "presets": [
-      "@babel/preset-env"
-    ]
-  },
-  "scripts": {
-    "css": "gulp scss",
-    "js": "gulp typescript",
-    "build": "gulp build"
-  }
+	"name": "store-finder",
+	"description": "Manage store locations, search by distance and show Google maps.",
+	"repository": "https://github.com/evoWeb/store_finder.git",
+	"readme": "../README.md",
+	"homepage": "https://github.com/evoWeb/store_finder/",
+	"author": "Sebastian Fischer",
+	"version": "4.0.0",
+	"license": "GPL-2.0-or-later",
+	"engines": {
+		"node": ">=14.15.0 <19.0.0",
+		"npm": ">=8.0.0 <10.0.0"
+	},
+	"dependencies": {
+		"leaflet": "^1.7.1",
+		"mustache": "^3.2.1"
+	},
+	"devDependencies": {
+		"webpack": "^5.79.0",
+		"webpack-cli": "^5.0.1",
+
+		"mini-css-extract-plugin": "^2.7.5",
+		"css-loader": "^6.7.3",
+		"postcss-loader": "^7.2.4",
+		"sass-loader": "^13.2.2",
+		"node-sass": "^8.0.0",
+
+		"ts-loader": "^9.4.2",
+		"rollup": "^2.79.1",
+		"rollup-plugin-terser": "^7.0.2",
+		"terser": "^5.16.9",
+
+		"@types/google.maps": "^3.52.5",
+		"@types/leaflet": "^1.9.3",
+		"@types/mustache": "^4.2.2",
+		"@typescript-eslint/eslint-plugin": "^5.55.0",
+		"@typescript-eslint/parser": "^5.55.0",
+		"@typescript-eslint/typescript-estree": "^5.55.0",
+		"eslint": "^8.36.0",
+		"eslint-plugin-lit": "^1.8.2",
+		"eslint-plugin-wc": "^1.4.0",
+		"postcss-scss": "^4.0.6",
+		"stylelint": "^15.10.3",
+		"stylelint-order": "^6.0.3",
+		"stylelint-scss": "^5.1.0",
+		"typescript": "^5.0.4"
+	},
+	"scripts": {
+		"lint:css": "stylelint Sources/Scss/*.scss",
+		"lint:ts": "eslint -c .eslintrc.json Sources/TypeScript/*.ts",
+		"build:css": "webpack --mode=production --config webpack.css.config.js",
+		"build:js": "npm run lint:ts && webpack --mode=development --config webpack.js.config.js && webpack --mode=production --config webpack.js.config.js",
+		"build:module": "tsc --project tsconfig.build.json && rollup -c"
+	}
 }

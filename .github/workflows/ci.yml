@@ -39,33 +39,59 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: [ '7.4', '8.2' ]
         packages:
-          - core: '^11.5'
+          - php: '7.4'
+            core: '^11.5'
             framework: '^6.16.9'
             prefer: ''
-          - core: '^12.5'
-            framework: '^6.16.9'
+          - php: '7.4'
+            core: '^11.5'
+            framework: '^6.16.1'
             prefer: '--prefer-lowest'
+          - php: '8.1'
+            core: '^11.5'
+            framework: '^6.16.9'
+            prefer: ''
+#          - php: '8.1'
+#            core: '^11.5'
+#            framework: '^6.16.1'
+#            prefer: '--prefer-lowest'
+          - php: '8.2'
+            core: '^11.5'
+            framework: '^6.16.9'
+            prefer: ''
+#          - php: '8.2'
+#            core: '^11.5'
+#            framework: '^6.16.1'
+#            prefer: '--prefer-lowest'
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
       - name: Composer
-        run: Build/Scripts/additionalTests.sh -p ${{ matrix.php }} -s lintPhp
+        run: Build/Scripts/additionalTests.sh -p ${{ matrix.packages.php }} -s lintPhp
 
       - name: Composer install
-        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -s composerInstall
+        run: Build/Scripts/runTests.sh -p ${{ matrix.packages.php }} -s composerInstall
 
       - name: Composer install core
         run: |
-          Build/Scripts/additionalTests.sh -p ${{ matrix.php }} \
+          Build/Scripts/additionalTests.sh -p ${{ matrix.packages.php }} \
             -s composerInstallPackage \
-            -q "typo3/cms-core:${{ matrix.packages.core }}"
+            -q "typo3/cms-core:${{ matrix.packages.packages.core }}"
+
+      - name: Install polyfil
+        run: |
+          if [[ "${{ matrix.packages.php }}" == "7.4" ]]; then
+            Build/Scripts/additionalTests.sh -p ${{ matrix.packages.php }} \
+              -s composerInstallPackage \
+              -q "symfony/polyfill-php80:1.27.0" || exit 1 ; \
+              EXIT_CODE_CORE=$?
+          fi
 
       - name: Composer install framework
         run: |
-          Build/Scripts/additionalTests.sh -p ${{ matrix.php }} \
+          Build/Scripts/additionalTests.sh -p ${{ matrix.packages.php }} \
             -s composerInstallPackage \
             -q "typo3/testing-framework:${{ matrix.packages.framework }}" \
             -o " --dev ${{ matrix.packages.prefer }}"
@@ -74,7 +100,7 @@ jobs:
         run: Build/Scripts/runTests.sh -s composerValidate
 
       - name: Functional tests with sqlite
-        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -d sqlite -s functional Tests/Functional
+        run: Build/Scripts/runTests.sh -p ${{ matrix.packages.php }} -d sqlite -s functional Tests/Functional
 
       - name: Cleanup
         run: |

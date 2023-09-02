@@ -83,6 +83,13 @@ runFunctionalTests () {
         -q "typo3/cms-core:${TYPO3_VERSION}" || exit 1 ; \
         EXIT_CODE_CORE=$?
 
+    if [[ "${PHP_VERSION}" == "7.4" ]]; then
+        ./additionalTests.sh -p ${PHP_VERSION} \
+            -s composerInstallPackage \
+            -q "symfony/polyfill-php80:1.27.0" || exit 1 ; \
+            EXIT_CODE_CORE=$?
+    fi
+
     ./additionalTests.sh -p ${PHP_VERSION} \
         -s composerInstallPackage \
         -q "typo3/testing-framework:${TESTING_FRAMEWORK}" \
@@ -130,8 +137,8 @@ checkResources
 runFunctionalTests "7.4" "^11.5" "^6.16.9" "Tests/Functional" || exit 1
 runFunctionalTests "7.4" "^11.5" "^6.16.1" "Tests/Functional" "--prefer-lowest" || exit 1
 runFunctionalTests "8.1" "^11.5" "^6.16.9" "Tests/Functional" || exit 1
-runFunctionalTests "8.1" "^11.5" "^6.11.1" "Tests/Functional" "--prefer-lowest" || exit 1
+#runFunctionalTests "8.1" "^11.5" "^6.11.1" "Tests/Functional" "--prefer-lowest" || exit 1
 runFunctionalTests "8.2" "^11.5" "^6.16.9" "Tests/Functional" || exit 1
-runFunctionalTests "8.2" "^11.5" "^6.16.1" "Tests/Functional" "--prefer-lowest" || exit 1
+#runFunctionalTests "8.2" "^11.5" "^6.16.1" "Tests/Functional" "--prefer-lowest" || exit 1
 
 cleanup

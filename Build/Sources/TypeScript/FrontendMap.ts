@@ -30,16 +30,15 @@ export default class FrontendMap {
       }
       this.loadScript();
     }
-
-    if (!Element.prototype.matches) {
-      Element.prototype.matches = Element.prototype.msMatchesSelector ||
-        Element.prototype.webkitMatchesSelector;
-    }
   }
 
-  initializeMap() {}
+  initializeMap(): void {
+    // do nothing.
+  }
 
-  initializeLayer() {}
+  initializeLayer(): void {
+    // do nothing.
+  }
 
   /**
    * Render content of the info window
@@ -48,13 +47,19 @@ export default class FrontendMap {
     return Mustache.render(this.infoWindowTemplate, location.information)
   }
 
-  createMarker(location: Location, icon: string) {}
+  /* eslint-disable */
+  createMarker(location: Location, icon: string): void {
+    // do nothing.
+  }
+  /* eslint-enable */
 
-  removeMarker(location: Location) {}
+  removeMarker(location: Location) {
+    console.log(location, 'removeMarker should be overridden');
+  }
 
   removeLocation(location: Location) {
     this.removeMarker(location);
-    let position = this.locations.indexOf(location);
+    const position = this.locations.indexOf(location);
     if (position > -1) {
       this.locations.splice(position, 1);
     }
@@ -67,7 +72,7 @@ export default class FrontendMap {
     let icon = '';
     if (location.information.icon) {
       icon = location.information.icon;
-    } else if (this.mapConfiguration.hasOwnProperty('markerIcon')) {
+    } else if (Object.prototype.hasOwnProperty.call(this.mapConfiguration, 'markerIcon')) {
       icon = this.mapConfiguration.markerIcon;
     }
 
@@ -83,22 +88,30 @@ export default class FrontendMap {
     locations.map(this.processLocation.bind(this));
   }
 
-  initializeInfoWindow() {}
+  initializeInfoWindow(): void {
+    // do nothing.
+  }
 
-  closeInfoWindow() {}
+  closeInfoWindow(): void {
+    // do nothing.
+  }
 
-  openInfoWindow(this: FrontendMap, index: number) {}
+  /* eslint-disable */
+  openInfoWindow(index: number): void {
+    // do nothing.
+  }
+  /* eslint-enable */
 
   /**
    * Initialize list click events
    */
   initializeListEvents(this: FrontendMap) {
     document.addEventListener('click', (event: Event) => {
-      let field = event.target as HTMLLIElement,
-        selector = '.tx-storefinder .resultList > li';
-      if (field.matches(selector)) {
-        this.openInfoWindow(parseInt(field.dataset.index));
+      const target = event.target as HTMLLIElement;
+      if (!target.matches('.tx-storefinder .resultList > li')) {
+        return;
       }
+      this.openInfoWindow(parseInt(target.dataset.index, 10));
     });
   }
 
@@ -110,14 +123,14 @@ export default class FrontendMap {
     Mustache.parse(this.infoWindowTemplate);
 
     document.addEventListener('click', (event: Event) => {
-      let button = event.target as HTMLButtonElement,
-        selector = '.tx-storefinder .infoWindow .close';
-      if (button.matches(selector)) {
-        if (typeof this.mapConfiguration.handleCloseButtonCallback === 'function') {
-          this.mapConfiguration.handleCloseButtonCallback(button);
-        } else {
-          this.closeInfoWindow();
-        }
+      const button = event.target as HTMLElement;
+      if (!button.matches('.tx-storefinder .infoWindow .close')) {
+        return;
+      }
+      if (typeof this.mapConfiguration.handleCloseButtonCallback === 'function') {
+        this.mapConfiguration.handleCloseButtonCallback(button);
+      } else {
+        this.closeInfoWindow();
       }
     });
   }
@@ -134,36 +147,40 @@ export default class FrontendMap {
     this.initializeListEvents();
   }
 
-  loadScript() {}
-
-  public static ajax(
-    url: string,
-    formData: FormData = null,
-    successCallback: Function = null,
-    errorCallback: Function = null
-  ) {
-    let request = new XMLHttpRequest();
-
-    request.onreadystatechange = () => {
-      if (request.readyState === 4) {
-        if (request.status === 200) {
-          if (successCallback) {
-            successCallback(request.response);
-          }
-        } else {
-          if (successCallback) {
-            errorCallback(request.response);
-          }
-        }
+  /**
+   * Create a promise that resolves once the given resource is loaded
+   */
+  createFilePromise(uri: string, integrity: string = '', crossOrigin: string = ''): Promise<string> {
+    return new Promise((resolve, reject) => {
+      let element: HTMLLinkElement|HTMLScriptElement;
+      if (uri.match(/\.css/)) {
+        element = document.createElement('link');
+        element.rel = 'stylesheet';
+        element.href = uri;
+      } else {
+        element = document.createElement('script');
+        element.src = uri;
       }
-    }
 
-    if (formData) {
-      request.open('POST', url, true);
-      request.send(formData);
-    } else {
-      request.open('GET', url, true);
-      request.send();
-    }
+      if (integrity.length > 0) {
+        element.integrity = integrity;
+      }
+
+      if (crossOrigin.length > 0) {
+        element.crossOrigin = crossOrigin;
+      }
+
+      element.onload = () => {
+        resolve(uri);
+      };
+      element.onerror = () => {
+        reject(uri);
+      };
+      document.head.appendChild(element);
+    })
+  }
+
+  loadScript(): void {
+    // do nothing.
   }
 }

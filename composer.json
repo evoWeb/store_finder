@@ -38,7 +38,7 @@
 		"typo3/cms-fluid": "^11.5",
 		"typo3/cms-frontend": "^11.5",
 
-		"sjbr/static-info-tables": "^11.5.0",
+		"sjbr/static-info-tables": "^11.5.5",
 
 		"geocoder-php/google-maps-provider": "^4.4.0",
 		"php-http/guzzle7-adapter": "*",
@@ -46,7 +46,8 @@
 		"phpoffice/phpspreadsheet": "^1.9.0"
 	},
 	"require-dev": {
-		"typo3/testing-framework": "^6.16.9"
+		"typo3/testing-framework": "^6.16.9",
+		"phpunit/phpunit": "^8.4"
 	},
 	"extra": {
 		"typo3/cms": {
