@@ -22,15 +22,12 @@ use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
 
 class Attribute extends AbstractEntity
 {
-    /**
-     * Icon
-     */
     #[Extbase\ORM\Lazy]
-    protected null|FileReference|LazyLoadingProxy $icon;
+    protected null|FileReference|LazyLoadingProxy $icon = null;
 
-    protected string $name;
+    protected string $name = '';
 
-    protected string $description;
+    protected string $description = '';
 
     protected string $cssClass = '';
 
