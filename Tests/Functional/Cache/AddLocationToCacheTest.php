@@ -15,7 +15,6 @@ namespace Evoweb\StoreFinder\Tests\Functional\Cache;
 
 use Evoweb\StoreFinder\Cache\CoordinatesCache;
 use Evoweb\StoreFinder\Domain\Model\Constraint;
-use Evoweb\StoreFinder\Domain\Repository\CountryRepository;
 use Evoweb\StoreFinder\Service\GeocodeService;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
@@ -24,11 +23,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\NullLogger;
 use SJBR\StaticInfoTables\Domain\Model\Country;
 use SJBR\StaticInfoTables\Domain\Model\CountryZone;
-use TYPO3\CMS\Core\Cache\Backend\Typo3DatabaseBackend;
 use TYPO3\CMS\Core\Cache\CacheManager;
-use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
-use TYPO3\CMS\Core\Database\Schema\SchemaMigrator;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
@@ -46,6 +41,7 @@ class AddLocationToCacheTest extends FunctionalTestCase
     protected array $coreExtensionsToLoad = [
         'extbase',
         'fluid',
+        'extensionmanager',
     ];
 
     protected array $configurationToUseInTestInstance = [
@@ -53,45 +49,17 @@ class AddLocationToCacheTest extends FunctionalTestCase
             'static_info_tables' => [
                 'enableManager' => false,
             ]
+        ],
+        'SYS' => [
+            'caching' => [
+                'cacheConfigurations' => [
+                    'store_finder_coordinate_cache' => [
+                        'groups' => ['system'],
+                    ]
+                ]
+            ]
         ]
     ];
-
-    protected CoordinatesCache|MockObject $coordinatesCache;
-
-    protected GeocodeService $geocodeService;
-
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        $logger = new NullLogger();
-
-        /** @var ServerRequestInterface|MockObject $request */
-        $request = $this->getMockBuilder(ServerRequestInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $frontendUser = new FrontendUserAuthentication();
-        $frontendUser->setLogger($logger);
-        $frontendUser->start($request);
-
-        $cacheManager = new CacheManager();
-        $cacheManager->setCacheConfigurations([
-            'store_finder_coordinate' => [
-                'groups' => ['system'],
-            ]
-        ]);
-        $cacheFrontend = $cacheManager->getCache('store_finder_coordinate');
-
-        $this->createCacheTables($cacheFrontend);
-
-        $this->coordinatesCache = new CoordinatesCache($cacheFrontend, $frontendUser);
-
-        /** @var CountryRepository $categoryRepository */
-        $categoryRepository = GeneralUtility::makeInstance(CountryRepository::class);
-
-        $this->geocodeService = new GeocodeService($this->coordinatesCache, $categoryRepository);
-    }
 
     public static function cacheDataProvider(): array
     {
@@ -147,15 +115,36 @@ class AddLocationToCacheTest extends FunctionalTestCase
     #[DataProvider('cacheDataProvider')]
     public function locationStoredInCacheTable(array $data, array $addFields, array $getFields)
     {
-        $this->coordinatesCache->flushCache();
+        $expected = $this->getConstraintStub($data);
+        $actual = unserialize(serialize($expected));
 
-        $constraint = $this->getConstraintStub($data);
+        /** @var ServerRequestInterface|MockObject $request */
+        $request = $this->getMockBuilder(ServerRequestInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $queryValues = $this->geocodeService->prepareValuesForQuery($constraint, $addFields);
-        $this->coordinatesCache->addCoordinateForAddress($constraint, $queryValues);
+        $frontendUser = new FrontendUserAuthentication();
+        $frontendUser->setLogger(new NullLogger());
+        $frontendUser->start($request);
 
-        $queryValues = $this->geocodeService->prepareValuesForQuery($constraint, $getFields);
-        self::assertEquals($constraint, $this->coordinatesCache->getCoordinateByAddress($constraint, $queryValues));
+        $request = $request->withAttribute('frontend.user', $frontendUser);
+        $GLOBALS['TYPO3_REQUEST'] = $request;
+
+        /** @var CacheManager $cacheManager */
+        $cacheManager = GeneralUtility::makeInstance(CacheManager::class);
+        $cacheFrontend = $cacheManager->getCache('store_finder_coordinate_cache');
+
+        $coordinatesCache = new CoordinatesCache($cacheFrontend, $frontendUser);
+        $coordinatesCache->flushCache();
+
+        $geocodeService = new GeocodeService($coordinatesCache);
+
+        $queryValues = $geocodeService->prepareValuesForQuery($expected, $addFields);
+        $coordinatesCache->addCoordinateForAddress($expected, $queryValues);
+
+        $queryValues = $geocodeService->prepareValuesForQuery($expected, $getFields);
+        $actual = $coordinatesCache->getCoordinateByAddress($actual, $queryValues);
+        self::assertEquals($expected, $actual);
     }
 
     public function getConstraintStub(array $data): Constraint
@@ -179,27 +168,5 @@ class AddLocationToCacheTest extends FunctionalTestCase
         $constraint->setLongitude(10.451526);
 
         return $constraint;
-    }
-
-    protected function createCacheTables(FrontendInterface $cacheFrontend)
-    {
-        /** @var Typo3DatabaseBackend $cacheBackend */
-        $cacheBackend = $cacheFrontend->getBackend();
-
-        $cacheTableSql = file_get_contents(
-            ExtensionManagementUtility::extPath('core') .
-            'Resources/Private/Sql/Cache/Backend/Typo3DatabaseBackendCache.sql'
-        );
-        $requiredTableStructures = str_replace('###CACHE_TABLE###', $cacheBackend->getCacheTable(), $cacheTableSql);
-        $tagsTableSql = file_get_contents(
-            ExtensionManagementUtility::extPath('core') .
-            'Resources/Private/Sql/Cache/Backend/Typo3DatabaseBackendTags.sql'
-        );
-        $requiredTagTableStructures = str_replace('###TAGS_TABLE###', $cacheBackend->getTagsTable(), $tagsTableSql);
-
-        /** @var SchemaMigrator $schemaMigrator */
-        $schemaMigrator = GeneralUtility::makeInstance(SchemaMigrator::class);
-        $schemaMigrator->install([$requiredTableStructures]);
-        $schemaMigrator->install([$requiredTagTableStructures]);
     }
 }
