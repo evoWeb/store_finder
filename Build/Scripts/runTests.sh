@@ -771,7 +771,7 @@ case ${TEST_SUITE} in
         cleanTestFiles
         ;;
     composerInstall)
-        ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name composer-install-${SUFFIX} -e COMPOSER_CACHE_DIR=.cache/composer -e COMPOSER_ROOT_VERSION=${COMPOSER_ROOT_VERSION} ${IMAGE_PHP} composer install --no-progress --no-interaction
+        ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name composer-install-${SUFFIX} --entrypoint "" -e COMPOSER_CACHE_DIR=.cache/composer -e COMPOSER_ROOT_VERSION=${COMPOSER_ROOT_VERSION} ${IMAGE_PHP} composer install --no-progress --no-interaction
         SUITE_EXIT_CODE=$?
         ;;
     composerInstallMax)
