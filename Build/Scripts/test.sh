@@ -76,6 +76,11 @@ runFunctionalTests () {
         -s lintPhp || exit 1 ; \
         EXIT_CODE_LINT=$?
 
+    ./runTests.sh \
+        -p ${PHP_VERSION} \
+        -s composerInstall || exit 1 ; \
+        EXIT_CODE_LINT=$?
+
     ./additionalTests.sh \
         -p ${PHP_VERSION} \
         -s composerInstallPackage \

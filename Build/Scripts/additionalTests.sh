@@ -131,6 +131,7 @@ cleanTestFiles() {
         typo3temp/ \
         vendor/ \
         composer.lock
+    git checkout composer.json
     echo "done"
 }
 
