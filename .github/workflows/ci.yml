@@ -91,7 +91,7 @@ jobs:
       - name: Composer validate
         run: |
           Build/Scripts/runTests.sh \
-            -p ${PHP_VERSION} \
+            -p ${{ matrix.packages.php }} \
             -s composerValidate
 
       - name: Functional tests with sqlite
