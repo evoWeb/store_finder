@@ -44,18 +44,22 @@ jobs:
             core: '^12.4'
             framework: '^8.0.2'
             prefer: ''
+            testpath: 'Tests/Functional'
           - php: '8.1'
             core: '^12.4'
             framework: '^8.0.2'
             prefer: '--prefer-lowest'
+            testpath: 'Tests/Functional'
           - php: '8.2'
             core: '^12.4'
             framework: '^8.0.2'
             prefer: ''
+            testpath: 'Tests/Functional'
           - php: '8.2'
             core: '^12.4'
             framework: '^8.0.2'
             prefer: '--prefer-lowest'
+            testpath: 'Tests/Functional'
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -99,7 +103,7 @@ jobs:
           Build/Scripts/runTests.sh \
             -p ${{ matrix.packages.php }} \
             -d sqlite \
-            -s functional Tests/Functional
+            -s functional ${{ matrix.packages.testpath }}
 
       - name: Cleanup
         run: |
