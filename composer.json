@@ -28,7 +28,8 @@
 		"sort-packages": true,
 		"allow-plugins": {
 			"typo3/cms-composer-installers": true,
-			"typo3/class-alias-loader": true
+			"typo3/class-alias-loader": true,
+			"php-http/discovery": true
 		}
 	},
 	"require": {

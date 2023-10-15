@@ -126,10 +126,11 @@ cleanTestFiles() {
     echo -n "Clean test related files ... "
     rm -rf \
         bin/ \
-        Build/phpunit/ \
+        Build/phpunit \
         public/ \
         typo3temp/ \
         vendor/ \
+        var/ \
         composer.lock
     git checkout composer.json
     echo "done"
