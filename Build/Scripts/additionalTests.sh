@@ -359,7 +359,7 @@ IMAGE_MEMCACHED="${IMAGE_PREFIX}memcached:1.5-alpine"
 IMAGE_MARIADB="${IMAGE_PREFIX}mariadb:${DBMS_VERSION}"
 IMAGE_MYSQL="${IMAGE_PREFIX}mysql:${DBMS_VERSION}"
 IMAGE_POSTGRES="${IMAGE_PREFIX}postgres:${DBMS_VERSION}-alpine"
-IMAGE_DOCUMENTATION="${TYPO3_IMAGE_PREFIX}t3docs/render-documentation:v3.0.dev30"
+IMAGE_DOCUMENTATION="ghcr.io/t3docs/render-documentation:v3.0.dev30"
 IMAGE_XLIFF="container.registry.gitlab.typo3.org/qa/example-extension:typo3-ci-xliff-lint"
 
 # Detect arm64 to use seleniarm image.
