@@ -19,7 +19,7 @@ use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 
 class FrontendUserService
 {
-    public static function getCurrentUser(): FrontendUserAuthentication
+    public static function getCurrentUser(): ?FrontendUserAuthentication
     {
         $request = $GLOBALS['TYPO3_REQUEST'];
         return $request->getAttribute('frontend.user');
