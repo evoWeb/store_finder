@@ -10,8 +10,8 @@ use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 
 call_user_func(function () {
     $cacheConfigurations =& $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'];
-    if (!is_array($cacheConfigurations['store_finder_coordinate'] ?? null)) {
-        $cacheConfigurations['store_finder_coordinate'] = [
+    if (!is_array($cacheConfigurations['store_finder_coordinate_cache'] ?? null)) {
+        $cacheConfigurations['store_finder_coordinate_cache'] = [
             'groups' => ['system'],
         ];
     }

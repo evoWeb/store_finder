@@ -16,9 +16,7 @@ namespace Evoweb\StoreFinder\Cache;
  */
 
 use Evoweb\StoreFinder\Domain\Model\Location;
-use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 
 class CoordinatesCache
@@ -31,54 +29,47 @@ class CoordinatesCache
     ) {
     }
 
-    public static function getInstance(): self
-    {
-        /** @var CacheManager $cacheManager */
-        $cacheManager = GeneralUtility::makeInstance(CacheManager::class);
-        $cacheFrontend = $cacheManager->getCache('store_finder_coordinate');
-
-        /** @var FrontendUserAuthentication $frontendUser */
-        $frontendUser = ($GLOBALS['TSFE'] ?? null) ? $GLOBALS['TSFE']->fe_user : null;
-
-        /** @var self $instance */
-        $instance = GeneralUtility::makeInstance(self::class, $cacheFrontend, $frontendUser);
-        return $instance;
-    }
-
     public function addCoordinateForAddress(Location $address, array $queryValues): void
     {
+        if (empty($queryValues)) {
+            return;
+        }
+
+        $fields = array_keys($queryValues);
+        $hash = md5(serialize(array_values($queryValues)));
         $coordinate = [
             'latitude' => $address->getLatitude(),
             'longitude' => $address->getLongitude()
         ];
 
-        $fields = array_keys($queryValues);
-        $hash = md5(serialize(array_values($queryValues)));
-        if (count($fields) == 2 || count($fields) == 3) {
+        if (count($fields) <= 3) {
             $this->setValueInCacheTable($hash, $coordinate);
-        } elseif (count($fields) > 3) {
+        } else {
             $this->setValueInSession($hash, $coordinate);
         }
     }
 
     public function getCoordinateByAddress(Location $address, array $queryValues): Location
     {
-        if ($queryValues) {
-            $fields = array_keys($queryValues);
-            $hash = md5(serialize(array_values($queryValues)));
-
-            $coordinate = null;
-            if (count($fields) <= 3) {
-                $coordinate = $this->getValueFromCacheTable($hash);
-            } elseif ($this->sessionHasKey($hash)) {
-                $coordinate = $this->getValueFromSession($hash);
-            }
-
-            if (is_array($coordinate)) {
-                $address->setLatitude($coordinate['latitude']);
-                $address->setLongitude($coordinate['longitude']);
-            }
+        if (empty($queryValues)) {
+            return $address;
         }
+
+        $fields = array_keys($queryValues);
+        $hash = md5(serialize(array_values($queryValues)));
+        $coordinate = null;
+
+        if (count($fields) <= 3) {
+            $coordinate = $this->getValueFromCacheTable($hash);
+        } elseif ($this->sessionHasKey($hash)) {
+            $coordinate = $this->getValueFromSession($hash);
+        }
+
+        if (is_array($coordinate)) {
+            $address->setLatitude($coordinate['latitude']);
+            $address->setLongitude($coordinate['longitude']);
+        }
+
         return $address;
     }
 
@@ -134,10 +125,6 @@ class CoordinatesCache
 
     /**
      * Check if cache table has key set
-     *
-     * @param string $key
-     *
-     * @return bool
      */
     public function cacheTableHasKey(string $key): bool
     {
@@ -146,10 +133,6 @@ class CoordinatesCache
 
     /**
      * Fetch value for hash from session
-     *
-     * @param string $key
-     *
-     * @return mixed
      */
     public function getValueFromCacheTable(string $key): mixed
     {
@@ -158,9 +141,6 @@ class CoordinatesCache
 
     /**
      * Store coordinate for hash in cache table
-     *
-     * @param string $key
-     * @param array $value
      */
     public function setValueInCacheTable(string $key, array $value): void
     {
