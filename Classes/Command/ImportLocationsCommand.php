@@ -111,7 +111,7 @@ class ImportLocationsCommand extends Command
             );
     }
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
         $io->title($this->getDescription());
@@ -132,7 +132,7 @@ class ImportLocationsCommand extends Command
 
         $file = $this->getFile($fileName);
         $this->processFile($file, $storagePid, $clearStorageFolder, $io);
-        return 0;
+        return self::SUCCESS;
     }
 
     protected function getFile(string $fileName): File

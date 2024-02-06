@@ -41,7 +41,7 @@ class GeocodeLocationsCommand extends Command
         parent::__construct();
     }
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
         $io->comment($this->getDescription());
@@ -69,6 +69,6 @@ class GeocodeLocationsCommand extends Command
 
         $io->writeln('A total of ' . $locationCount . ' locations were imported');
 
-        return 0;
+        return self::SUCCESS;
     }
 }
