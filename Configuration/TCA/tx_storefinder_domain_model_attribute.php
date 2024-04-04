@@ -46,7 +46,7 @@ return [
                 // no sys_language_uid = -1 allowed explicitly!
                 'foreign_table_where' =>
                     'AND tx_storefinder_domain_model_attribute.pid = ###CURRENT_PID###
-                     AND tx_storefinder_domain_model_attribute.sys_language_uid IN = 0',
+                     AND tx_storefinder_domain_model_attribute.sys_language_uid = 0',
                 'default' => 0
             ]
         ],
