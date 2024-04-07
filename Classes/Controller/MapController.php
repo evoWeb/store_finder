@@ -145,7 +145,7 @@ class MapController extends ActionController
         }
     }
 
-    protected function initializeAction()
+    protected function initializeAction(): void
     {
         if (is_array($this->settings['override'] ?? false)) {
             $override = $this->settings['override'];
@@ -599,7 +599,7 @@ class MapController extends ActionController
         return $this->view;
     }
 
-    protected function getErrorFlashMessage()
+    protected function getErrorFlashMessage(): bool
     {
         return false;
     }
