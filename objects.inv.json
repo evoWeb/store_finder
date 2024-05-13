@@ -1,0 +1,1040 @@
+{
+    "std:doc": {
+        "Administration\/Index": [
+            "-",
+            "-",
+            "Administration\/Index.html",
+            "Administration"
+        ],
+        "BreakingChanges\/Index": [
+            "-",
+            "-",
+            "BreakingChanges\/Index.html",
+            "Breaking Changes"
+        ],
+        "Configuration\/EventListener\/Index": [
+            "-",
+            "-",
+            "Configuration\/EventListener\/Index.html",
+            "Event listener"
+        ],
+        "Configuration\/Geocoding\/Index": [
+            "-",
+            "-",
+            "Configuration\/Geocoding\/Index.html",
+            "Geocoding provider"
+        ],
+        "Configuration\/Index": [
+            "-",
+            "-",
+            "Configuration\/Index.html",
+            "Configuration"
+        ],
+        "Configuration\/Persistence\/Index": [
+            "-",
+            "-",
+            "Configuration\/Persistence\/Index.html",
+            "Persistence"
+        ],
+        "Configuration\/Settings\/Index": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html",
+            "Settings"
+        ],
+        "Configuration\/Validation\/Index": [
+            "-",
+            "-",
+            "Configuration\/Validation\/Index.html",
+            "Validation"
+        ],
+        "Configuration\/View\/Index": [
+            "-",
+            "-",
+            "Configuration\/View\/Index.html",
+            "View"
+        ],
+        "Deprecation\/Index": [
+            "-",
+            "-",
+            "Deprecation\/Index.html",
+            "Deprecation"
+        ],
+        "ImportCommand\/Index": [
+            "-",
+            "-",
+            "ImportCommand\/Index.html",
+            "Import command"
+        ],
+        "Index": [
+            "-",
+            "-",
+            "Index.html",
+            "Store finder"
+        ],
+        "Introduction\/Index": [
+            "-",
+            "-",
+            "Introduction\/Index.html",
+            "Introduction"
+        ],
+        "Sitemap": [
+            "-",
+            "-",
+            "Sitemap.html",
+            "Sitemap"
+        ],
+        "Templating\/Index": [
+            "-",
+            "-",
+            "Templating\/Index.html",
+            "Templating"
+        ],
+        "Tutorial\/CustomEventListener\/Index": [
+            "-",
+            "-",
+            "Tutorial\/CustomEventListener\/Index.html",
+            "Custom Event Listener"
+        ],
+        "Tutorial\/HeadlessMap\/Index": [
+            "-",
+            "-",
+            "Tutorial\/HeadlessMap\/Index.html",
+            "Headless Map Rendering"
+        ],
+        "Tutorial\/Index": [
+            "-",
+            "-",
+            "Tutorial\/Index.html",
+            "Tutorial"
+        ],
+        "Tutorial\/Installation\/Index": [
+            "-",
+            "-",
+            "Tutorial\/Installation\/Index.html",
+            "Installation"
+        ],
+        "UserManual\/Index": [
+            "-",
+            "-",
+            "UserManual\/Index.html",
+            "User Manual"
+        ]
+    },
+    "std:label": {
+        "administration": [
+            "-",
+            "-",
+            "Administration\/Index.html#administration",
+            "Administration"
+        ],
+        "breaking-changes": [
+            "-",
+            "-",
+            "BreakingChanges\/Index.html#breaking-changes",
+            "Breaking Changes"
+        ],
+        "eventlistener": [
+            "-",
+            "-",
+            "Configuration\/EventListener\/Index.html#eventlistener",
+            "Event listener"
+        ],
+        "geocoding": [
+            "-",
+            "-",
+            "Configuration\/Geocoding\/Index.html#geocoding",
+            "Geocoding provider"
+        ],
+        "configuration": [
+            "-",
+            "-",
+            "Configuration\/Index.html#configuration",
+            "Configuration"
+        ],
+        "persistence": [
+            "-",
+            "-",
+            "Configuration\/Persistence\/Index.html#persistence",
+            "Persistence"
+        ],
+        "persistence-storagepid": [
+            "-",
+            "-",
+            "Configuration\/Persistence\/Index.html#persistence-storagePid",
+            "storagePid"
+        ],
+        "settings": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#settings",
+            "Settings"
+        ],
+        "settings-showbeforesearch": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#settings-showBeforeSearch",
+            "showBeforeSearch"
+        ],
+        "settings-showaftersearch": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#settings-showAfterSearch",
+            "showAfterSearch"
+        ],
+        "settings-apiv3layers": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#settings-apiV3Layers",
+            "apiV3Layers"
+        ],
+        "limit": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#limit",
+            "limit"
+        ],
+        "allowedcountries": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#allowedCountries",
+            "allowedCountries"
+        ],
+        "categories": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#categories",
+            "categories"
+        ],
+        "categorypriority": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#categoryPriority",
+            "categoryPriority"
+        ],
+        "singlelocationid": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#singleLocationId",
+            "singleLocationId"
+        ],
+        "geocoderprovider": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#geocoderProvider",
+            "geocoderProvider"
+        ],
+        "apiconsolekey": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#apiConsoleKey",
+            "apiConsoleKey"
+        ],
+        "apiconsolekeygeocoding": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#apiConsoleKeyGeocoding",
+            "apiConsoleKeyGeocoding"
+        ],
+        "distanceunit": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#distanceUnit",
+            "distanceUnit"
+        ],
+        "mc-language": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#mc-language",
+            "language"
+        ],
+        "showstoreimage": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#showStoreImage",
+            "showStoreImage"
+        ],
+        "resultpageid": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#resultPageId",
+            "resultPageId"
+        ],
+        "ms-height": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#ms-height",
+            "mapSize.height"
+        ],
+        "ms-width": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#ms-width",
+            "mapSize.width"
+        ],
+        "override": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#override",
+            "override"
+        ],
+        "disablefetchlocationinaction": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#disableFetchLocationInAction",
+            "disableFetchLocationInAction"
+        ],
+        "validation": [
+            "-",
+            "-",
+            "Configuration\/Validation\/Index.html#validation",
+            "Validation"
+        ],
+        "requiredvalidator": [
+            "-",
+            "-",
+            "Configuration\/Validation\/Index.html#RequiredValidator",
+            "RequiredValidator"
+        ],
+        "view": [
+            "-",
+            "-",
+            "Configuration\/View\/Index.html#view",
+            "View"
+        ],
+        "view-templaterootpaths": [
+            "-",
+            "-",
+            "Configuration\/View\/Index.html#view-templateRootPaths",
+            "templateRootPaths"
+        ],
+        "view-partialrootpaths": [
+            "-",
+            "-",
+            "Configuration\/View\/Index.html#view-partialRootPaths",
+            "partialRootPaths"
+        ],
+        "deprecation": [
+            "-",
+            "-",
+            "Deprecation\/Index.html#deprecation",
+            "Deprecation"
+        ],
+        "importcommand": [
+            "-",
+            "-",
+            "ImportCommand\/Index.html#importCommand",
+            "Import command"
+        ],
+        "introduction": [
+            "-",
+            "-",
+            "Introduction\/Index.html#introduction",
+            "Introduction"
+        ],
+        "templating": [
+            "-",
+            "-",
+            "Templating\/Index.html#templating",
+            "Templating"
+        ],
+        "customeventlistener": [
+            "-",
+            "-",
+            "Tutorial\/CustomEventListener\/Index.html#customEventListener",
+            "Custom Event Listener"
+        ],
+        "headlessmaprendering": [
+            "-",
+            "-",
+            "Tutorial\/HeadlessMap\/Index.html#headlessMapRendering",
+            "Headless Map Rendering"
+        ],
+        "tutorial": [
+            "-",
+            "-",
+            "Tutorial\/Index.html#tutorial",
+            "Tutorial"
+        ],
+        "installation": [
+            "-",
+            "-",
+            "Tutorial\/Installation\/Index.html#installation",
+            "Installation"
+        ],
+        "user-manual": [
+            "-",
+            "-",
+            "UserManual\/Index.html#user_manual",
+            "User Manual"
+        ]
+    },
+    "std:title": {
+        "administration-1": [
+            "-",
+            "-",
+            "Administration\/Index.html#administration-1",
+            "Administration"
+        ],
+        "configuration": [
+            "-",
+            "-",
+            "Administration\/Index.html#configuration",
+            "Configuration:"
+        ],
+        "cors-settings": [
+            "-",
+            "-",
+            "Administration\/Index.html#cors-settings",
+            "CORS settings:"
+        ],
+        "breaking-changes-1": [
+            "-",
+            "-",
+            "BreakingChanges\/Index.html#breaking-changes-1",
+            "Breaking Changes"
+        ],
+        "17-february-2023": [
+            "-",
+            "-",
+            "BreakingChanges\/Index.html#17-february-2023",
+            "17. February 2023"
+        ],
+        "remove-allowed-on-standard-page": [
+            "-",
+            "-",
+            "BreakingChanges\/Index.html#remove-allowed-on-standard-page",
+            "Remove allowed on standard page"
+        ],
+        "29-august-2022": [
+            "-",
+            "-",
+            "BreakingChanges\/Index.html#29-august-2022",
+            "29. August 2022"
+        ],
+        "15-february-2021": [
+            "-",
+            "-",
+            "BreakingChanges\/Index.html#15-february-2021",
+            "15. February 2021"
+        ],
+        "rename-property": [
+            "-",
+            "-",
+            "BreakingChanges\/Index.html#rename-property",
+            "Rename property"
+        ],
+        "01-mai-2020": [
+            "-",
+            "-",
+            "BreakingChanges\/Index.html#01-mai-2020",
+            "01. Mai 2020"
+        ],
+        "refactor-signal-slots-to-psr-14-events": [
+            "-",
+            "-",
+            "BreakingChanges\/Index.html#refactor-signal-slots-to-psr-14-events",
+            "Refactor signal slots to PSR-14 events"
+        ],
+        "03-october-2019": [
+            "-",
+            "-",
+            "BreakingChanges\/Index.html#03-october-2019",
+            "03. October 2019"
+        ],
+        "drop-migration-wizard": [
+            "-",
+            "-",
+            "BreakingChanges\/Index.html#drop-migration-wizard",
+            "Drop migration wizard"
+        ],
+        "change-geocoding": [
+            "-",
+            "-",
+            "BreakingChanges\/Index.html#change-geocoding",
+            "Change geocoding"
+        ],
+        "migration-steps": [
+            "-",
+            "-",
+            "BreakingChanges\/Index.html#migration-steps",
+            "Migration steps"
+        ],
+        "31-january-2019": [
+            "-",
+            "-",
+            "BreakingChanges\/Index.html#31-january-2019",
+            "31. January 2019"
+        ],
+        "18-may-2019": [
+            "-",
+            "-",
+            "BreakingChanges\/Index.html#18-may-2019",
+            "18. May 2019"
+        ],
+        "10-january-2019": [
+            "-",
+            "-",
+            "BreakingChanges\/Index.html#10-january-2019",
+            "10. January 2019"
+        ],
+        "event-listener": [
+            "-",
+            "-",
+            "Configuration\/EventListener\/Index.html#event-listener",
+            "Event listener"
+        ],
+        "introduction": [
+            "-",
+            "-",
+            "Configuration\/EventListener\/Index.html#introduction",
+            "Introduction"
+        ],
+        "adding-event-listeners": [
+            "-",
+            "-",
+            "Configuration\/EventListener\/Index.html#adding-event-listeners",
+            "Adding event listeners"
+        ],
+        "additional-configuration": [
+            "-",
+            "-",
+            "Configuration\/EventListener\/Index.html#additional-configuration",
+            "Additional configuration"
+        ],
+        "performance-improvement": [
+            "-",
+            "-",
+            "Configuration\/EventListener\/Index.html#performance-improvement",
+            "Performance improvement"
+        ],
+        "radius-not-automatically-detected": [
+            "-",
+            "-",
+            "Configuration\/EventListener\/Index.html#radius-not-automatically-detected",
+            "Radius not automatically detected"
+        ],
+        "modify-locations-in-storefindermiddleware": [
+            "-",
+            "-",
+            "Configuration\/EventListener\/Index.html#modify-locations-in-storefindermiddleware",
+            "Modify locations in StoreFinderMiddleware"
+        ],
+        "geocoding-provider": [
+            "-",
+            "-",
+            "Configuration\/Geocoding\/Index.html#geocoding-provider",
+            "Geocoding provider"
+        ],
+        "changing-geocoding-provider": [
+            "-",
+            "-",
+            "Configuration\/Geocoding\/Index.html#changing-geocoding-provider",
+            "Changing geocoding provider"
+        ],
+        "extension-configuration": [
+            "-",
+            "-",
+            "Configuration\/Geocoding\/Index.html#extension-configuration",
+            "Extension configuration"
+        ],
+        "typoscript-constants": [
+            "-",
+            "-",
+            "Configuration\/Geocoding\/Index.html#typoscript-constants",
+            "TypoScript constants"
+        ],
+        "configuration-1": [
+            "-",
+            "-",
+            "Configuration\/Index.html#configuration-1",
+            "Configuration"
+        ],
+        "persistence-1": [
+            "-",
+            "-",
+            "Configuration\/Persistence\/Index.html#persistence-1",
+            "Persistence"
+        ],
+        "storagepid": [
+            "-",
+            "-",
+            "Configuration\/Persistence\/Index.html#storagepid",
+            "storagePid"
+        ],
+        "settings-1": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#settings-1",
+            "Settings"
+        ],
+        "showbeforesearch": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#showbeforesearch",
+            "showBeforeSearch"
+        ],
+        "showaftersearch": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#showaftersearch",
+            "showAfterSearch"
+        ],
+        "apiv3layers": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#apiv3layers",
+            "apiV3Layers"
+        ],
+        "limit": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#limit",
+            "limit"
+        ],
+        "allowedcountries": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#allowedcountries",
+            "allowedCountries"
+        ],
+        "categories": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#categories",
+            "categories"
+        ],
+        "categorypriority": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#categorypriority",
+            "categoryPriority"
+        ],
+        "singlelocationid": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#singlelocationid",
+            "singleLocationId"
+        ],
+        "geocoderprovider": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#geocoderprovider",
+            "geocoderProvider"
+        ],
+        "apiconsolekey": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#apiconsolekey",
+            "apiConsoleKey"
+        ],
+        "apiconsolekeygeocoding": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#apiconsolekeygeocoding",
+            "apiConsoleKeyGeocoding"
+        ],
+        "distanceunit": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#distanceunit",
+            "distanceUnit"
+        ],
+        "language": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#language",
+            "language"
+        ],
+        "showstoreimage": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#showstoreimage",
+            "showStoreImage"
+        ],
+        "resultpageid": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#resultpageid",
+            "resultPageId"
+        ],
+        "mapsize-height": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#mapsize-height",
+            "mapSize.height"
+        ],
+        "mapsize-width": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#mapsize-width",
+            "mapSize.width"
+        ],
+        "override": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#override",
+            "override"
+        ],
+        "disablefetchlocationinaction": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#disablefetchlocationinaction",
+            "disableFetchLocationInAction"
+        ],
+        "validation-1": [
+            "-",
+            "-",
+            "Configuration\/Validation\/Index.html#validation-1",
+            "Validation"
+        ],
+        "purpose-of-validators": [
+            "-",
+            "-",
+            "Configuration\/Validation\/Index.html#purpose-of-validators",
+            "Purpose of Validators"
+        ],
+        "different-possibilities-of-assigning-validators": [
+            "-",
+            "-",
+            "Configuration\/Validation\/Index.html#different-possibilities-of-assigning-validators",
+            "Different possibilities of assigning validators"
+        ],
+        "remove-validators": [
+            "-",
+            "-",
+            "Configuration\/Validation\/Index.html#remove-validators",
+            "Remove validators"
+        ],
+        "assign-only-one-validator": [
+            "-",
+            "-",
+            "Configuration\/Validation\/Index.html#assign-only-one-validator",
+            "Assign only one validator"
+        ],
+        "assign-multiple-validators": [
+            "-",
+            "-",
+            "Configuration\/Validation\/Index.html#assign-multiple-validators",
+            "Assign multiple validators"
+        ],
+        "special-validators": [
+            "-",
+            "-",
+            "Configuration\/Validation\/Index.html#special-validators",
+            "Special validators"
+        ],
+        "prefixing-needed-for-non-extbase-validators": [
+            "-",
+            "-",
+            "Configuration\/Validation\/Index.html#prefixing-needed-for-non-extbase-validators",
+            "Prefixing needed for non extbase validators"
+        ],
+        "custom-validator-usage": [
+            "-",
+            "-",
+            "Configuration\/Validation\/Index.html#custom-validator-usage",
+            "Custom validator usage"
+        ],
+        "available-validators": [
+            "-",
+            "-",
+            "Configuration\/Validation\/Index.html#available-validators",
+            "Available validators"
+        ],
+        "requiredvalidator": [
+            "-",
+            "-",
+            "Configuration\/Validation\/Index.html#requiredvalidator",
+            "RequiredValidator"
+        ],
+        "view-1": [
+            "-",
+            "-",
+            "Configuration\/View\/Index.html#view-1",
+            "View"
+        ],
+        "templaterootpaths": [
+            "-",
+            "-",
+            "Configuration\/View\/Index.html#templaterootpaths",
+            "templateRootPaths"
+        ],
+        "partialrootpaths": [
+            "-",
+            "-",
+            "Configuration\/View\/Index.html#partialrootpaths",
+            "partialRootPaths"
+        ],
+        "deprecation-1": [
+            "-",
+            "-",
+            "Deprecation\/Index.html#deprecation-1",
+            "Deprecation"
+        ],
+        "version-6-0-0": [
+            "-",
+            "-",
+            "Deprecation\/Index.html#version-6-0-0",
+            "Version 6.0.0"
+        ],
+        "replaced-viewhelper": [
+            "-",
+            "-",
+            "Deprecation\/Index.html#replaced-viewhelper",
+            "Replaced ViewHelper"
+        ],
+        "removed-viewhelper": [
+            "-",
+            "-",
+            "Deprecation\/Index.html#removed-viewhelper",
+            "Removed ViewHelper"
+        ],
+        "import-command": [
+            "-",
+            "-",
+            "ImportCommand\/Index.html#import-command",
+            "Import command"
+        ],
+        "arguments": [
+            "-",
+            "-",
+            "ImportCommand\/Index.html#arguments",
+            "Arguments"
+        ],
+        "options": [
+            "-",
+            "-",
+            "ImportCommand\/Index.html#options",
+            "Options"
+        ],
+        "transformation": [
+            "-",
+            "-",
+            "ImportCommand\/Index.html#transformation",
+            "Transformation"
+        ],
+        "importing-constraints": [
+            "-",
+            "-",
+            "ImportCommand\/Index.html#importing-constraints",
+            "Importing constraints"
+        ],
+        "examples-of-import-command-calls": [
+            "-",
+            "-",
+            "ImportCommand\/Index.html#examples-of-import-command-calls",
+            "Examples of import command calls"
+        ],
+        "store-finder": [
+            "-",
+            "-",
+            "Index.html#store-finder",
+            "Store finder"
+        ],
+        "introduction-1": [
+            "-",
+            "-",
+            "Introduction\/Index.html#introduction-1",
+            "Introduction"
+        ],
+        "search-with-result-map-and-list": [
+            "-",
+            "-",
+            "Introduction\/Index.html#search-with-result-map-and-list",
+            "Search with result map and list"
+        ],
+        "search-form": [
+            "-",
+            "-",
+            "Introduction\/Index.html#search-form",
+            "Search form:"
+        ],
+        "result-map-and-list": [
+            "-",
+            "-",
+            "Introduction\/Index.html#result-map-and-list",
+            "Result map and list:"
+        ],
+        "single-points-of-interest": [
+            "-",
+            "-",
+            "Introduction\/Index.html#single-points-of-interest",
+            "Single points of interest"
+        ],
+        "how-geolocations-are-computed": [
+            "-",
+            "-",
+            "Introduction\/Index.html#how-geolocations-are-computed",
+            "How geolocations are computed"
+        ],
+        "sitemap": [
+            "-",
+            "-",
+            "Sitemap.html#sitemap",
+            "Sitemap"
+        ],
+        "templating-1": [
+            "-",
+            "-",
+            "Templating\/Index.html#templating-1",
+            "Templating"
+        ],
+        "templates-partials-and-layouts": [
+            "-",
+            "-",
+            "Templating\/Index.html#templates-partials-and-layouts",
+            "Templates, partials and layouts"
+        ],
+        "example": [
+            "-",
+            "-",
+            "Templating\/Index.html#example",
+            "Example:"
+        ],
+        "viewhelper": [
+            "-",
+            "-",
+            "Templating\/Index.html#viewhelper",
+            "Viewhelper"
+        ],
+        "register-namespace": [
+            "-",
+            "-",
+            "Templating\/Index.html#register-namespace",
+            "Register Namespace:"
+        ],
+        "minify-viewhelper": [
+            "-",
+            "-",
+            "Templating\/Index.html#minify-viewhelper",
+            "minify Viewhelper"
+        ],
+        "example-viewhelper": [
+            "-",
+            "-",
+            "Templating\/Index.html#example-viewhelper",
+            "Example viewhelper:"
+        ],
+        "example-output": [
+            "-",
+            "-",
+            "Templating\/Index.html#example-output",
+            "Example output:"
+        ],
+        "format-binaryand-viewhelper": [
+            "-",
+            "-",
+            "Templating\/Index.html#format-binaryand-viewhelper",
+            "format.binaryAnd Viewhelper"
+        ],
+        "form-selectcountries": [
+            "-",
+            "-",
+            "Templating\/Index.html#form-selectcountries",
+            "form.selectCountries"
+        ],
+        "custom-event-listener": [
+            "-",
+            "-",
+            "Tutorial\/CustomEventListener\/Index.html#custom-event-listener",
+            "Custom Event Listener"
+        ],
+        "adding-custom-event-listener": [
+            "-",
+            "-",
+            "Tutorial\/CustomEventListener\/Index.html#adding-custom-event-listener",
+            "Adding custom event listener"
+        ],
+        "headless-map-rendering": [
+            "-",
+            "-",
+            "Tutorial\/HeadlessMap\/Index.html#headless-map-rendering",
+            "Headless Map Rendering"
+        ],
+        "introduction-of-middleware": [
+            "-",
+            "-",
+            "Tutorial\/HeadlessMap\/Index.html#introduction-of-middleware",
+            "Introduction of middleware"
+        ],
+        "preparation-of-data": [
+            "-",
+            "-",
+            "Tutorial\/HeadlessMap\/Index.html#preparation-of-data",
+            "Preparation of data"
+        ],
+        "integration": [
+            "-",
+            "-",
+            "Tutorial\/HeadlessMap\/Index.html#integration",
+            "Integration"
+        ],
+        "template-example": [
+            "-",
+            "-",
+            "Tutorial\/HeadlessMap\/Index.html#template-example",
+            "Template example"
+        ],
+        "tutorial-1": [
+            "-",
+            "-",
+            "Tutorial\/Index.html#tutorial-1",
+            "Tutorial"
+        ],
+        "installation-1": [
+            "-",
+            "-",
+            "Tutorial\/Installation\/Index.html#installation-1",
+            "Installation"
+        ],
+        "installation": [
+            "-",
+            "-",
+            "Tutorial\/Installation\/Index.html#installation",
+            "Installation"
+        ],
+        "typoscript": [
+            "-",
+            "-",
+            "Tutorial\/Installation\/Index.html#typoscript",
+            "TypoScript"
+        ],
+        "structure": [
+            "-",
+            "-",
+            "Tutorial\/Installation\/Index.html#structure",
+            "Structure"
+        ],
+        "templating": [
+            "-",
+            "-",
+            "Tutorial\/Installation\/Index.html#templating",
+            "Templating"
+        ],
+        "api-keys": [
+            "-",
+            "-",
+            "Tutorial\/Installation\/Index.html#api-keys",
+            "API Keys"
+        ],
+        "set-default-coordinates": [
+            "-",
+            "-",
+            "Tutorial\/Installation\/Index.html#set-default-coordinates",
+            "Set default coordinates"
+        ],
+        "use-caching-map-action": [
+            "-",
+            "-",
+            "Tutorial\/Installation\/Index.html#use-caching-map-action",
+            "Use caching map action"
+        ],
+        "user-manual": [
+            "-",
+            "-",
+            "UserManual\/Index.html#user-manual",
+            "User Manual"
+        ]
+    }
+}

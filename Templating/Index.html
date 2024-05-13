@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+    <title>Templating documentation</title>
+
+    
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<meta content="phpdocumentor/guides" name="generator">
+<meta content="" name="docsearch:name">
+<meta content="" name="docsearch:package_type">
+<meta content="" name="docsearch:release">
+<meta content="" name="docsearch:version">
+<meta content="2024-05-13T12:29:29+00:00" name="docsearch:modified">
+<meta content="2024-05-13T12:29:29+00:00" name="dc.modified">
+<meta content="2024-05-13T12:29:29+00:00" property="article:modified_time">
+    <link href="http://purl.org/dc/elements/1.1/" rel="schema.dc">
+<link href="../_resources/css/theme.css" rel="stylesheet">
+<link href="https://docs.typo3.org/search/" rel="search" title="Search">
+<script src="https://typo3.azureedge.net/typo3infrastructure/universe/dist/webcomponents-loader.js"></script>
+<script src="https://typo3.azureedge.net/typo3infrastructure/universe/dist/typo3-universe.js" type="module"></script>
+                        <link href="../Configuration/EventListener/Index.html" rel="prev" title="Event listener"/>
+            <link href="../Tutorial/Index.html" rel="next" title="Tutorial"/>
+            <link href="../Index.html" rel="top" title="Store finder"/>
+    </head>
+<body>
+<div class="page">
+    
+<header>
+    <div class="page-topbar">
+        <div class="page-topbar-inner">
+            <typo3-universe active="documentation">
+                <div style="display: block; height: 44px; background-color: #313131;"></div>
+            </typo3-universe>
+        </div>
+    </div>
+    <div class="page-header">
+        <div class="page-header-inner">
+            <div class="row">
+                <div class="col-sm-3 col-md-4 col-lg-6">
+                    <a class="logo" href="https://docs.typo3.org/" title="TYPO3 Documentation">
+                        <img alt="TYPO3 Logo" class="logo-image" src="../_resources/img/typo3-logo.svg" width="484" height="130">
+                    </a>
+                </div>
+                <div class="col-sm-9 col-md-8 col-lg-6">
+                    <search role="search">
+                        <form action="https://docs.typo3.org/search/search" id="global-search-form" method="get">
+			                <div class="sr-only"><label for="globalsearchinput">TYPO3 documentation...</label></div>
+                            <div class="input-group mb-3 mt-sm-3">
+                                <select class="form-select search__scope" id="searchscope" name="scope">
+                                    <option value="">Search all</option>
+                                </select>
+                                <input autocomplete="off" class="form-control shadow-none" id="globalsearchinput" name="q" placeholder="TYPO3 documentation..." type="text" value="">
+                                <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i>&nbsp;<span class="d-none d-md-inline">Search</span></button>
+                            </div>
+                        </form>
+                    </search>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>    <main class="page-main">
+        <div class="page-main-inner">
+            <div class="page-main-navigation">
+                <nav>
+                    <input class="toc-checkbox" id="toggleToc" type="checkbox">
+
+                    
+<div class="toc-header">
+    <div class="toc-title">
+        <a class="toc-title-project" href="../Index.html"></a>
+            </div>
+    <div class="toc-actions">
+        <label class="toc-toggle" for="toggleToc">
+            Menu
+        </label>
+    </div>
+</div>                    <div class="toc-collapse">
+                                                <div aria-label="main navigation" class="toc" role="navigation">
+                                <div aria-label="Main navigation" class="main_menu" role="navigation">
+        
+    <ul class="menu-level-1">
+    <li class="">
+    <a href="../Introduction/Index.html">
+        Introduction
+    </a></li>    <li class="">
+    <a href="../UserManual/Index.html">
+        User Manual
+    </a></li>    <li class="">
+    <a href="../Administration/Index.html">
+        Administration
+    </a></li>    <li class="">
+    <a href="../Configuration/Index.html">
+        Configuration
+    </a>        <ul class="menu-level-1"><li class="">
+    <a href="../Configuration/Settings/Index.html">
+        Settings
+    </a></li><li class="">
+    <a href="../Configuration/View/Index.html">
+        View
+    </a></li><li class="">
+    <a href="../Configuration/Persistence/Index.html">
+        Persistence
+    </a></li><li class="">
+    <a href="../Configuration/Validation/Index.html">
+        Validation
+    </a></li><li class="">
+    <a href="../Configuration/Geocoding/Index.html">
+        Geocoding provider
+    </a></li><li class="">
+    <a href="../Configuration/EventListener/Index.html">
+        Event listener
+    </a></li></ul></li>    <li class=" current active">
+    <a href="#" aria-current="page">
+        Templating
+    </a></li>    <li class="">
+    <a href="../Tutorial/Index.html">
+        Tutorial
+    </a>        <ul class="menu-level-1"><li class="">
+    <a href="../Tutorial/Installation/Index.html">
+        Installation
+    </a></li><li class="">
+    <a href="../Tutorial/CustomEventListener/Index.html">
+        Custom Event Listener
+    </a></li><li class="">
+    <a href="../Tutorial/HeadlessMap/Index.html">
+        Headless Map Rendering
+    </a></li></ul></li>    <li class="">
+    <a href="../ImportCommand/Index.html">
+        Import command
+    </a></li>    <li class="">
+    <a href="../Deprecation/Index.html">
+        Deprecation
+    </a></li>    <li class="">
+    <a href="../BreakingChanges/Index.html">
+        Breaking Changes
+    </a></li>    </ul>
+    <ul class="menu-level-1">
+    <li class="">
+    <a href="../Sitemap.html">
+        Sitemap
+    </a></li>    </ul>
+    </div>
+    <div aria-label="Meta navigation" class="main_menu  d-block d-lg-none" role="navigation">
+    <hr/>
+    <p class="caption">Contributors Corner</p>
+    <ul class="menu-level-1">            <li><a href="../_sources/Templating/Index.rst.txt" rel="nofollow noopener" target="_blank">
+                    View source of current document
+            </a></li>
+                    <li><a href="https://docs.typo3.org/m/typo3/docs-how-to-document/main/en-us/WritingDocsOfficial/GithubMethod.html" rel="nofollow noopener" target="_blank">
+                    How to edit
+            </a></li>
+        </ul>
+</div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+            <div class="page-main-content">
+                <div class="rst-content">                        <nav aria-label="breadcrumbs navigation" class="breadcrumb-bar" role="navigation">
+        
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="../Index.html">Store finder</a></li>
+                    <li aria-current="page"  class="breadcrumb-item  active">Templating</li>
+        </ol>
+        <div class="breadcrumb-additions">    <a class="btn btn-sm btn-light" href="../_sources/Templating/Index.rst.txt" rel="nofollow noopener" target="_blank">
+        <span class="btn-icon"><span class="fas fa-code"></span></span>
+        <span class="btn-text">View source</span>
+    </a>
+        <a class="btn btn-sm btn-light" href="https://docs.typo3.org/m/typo3/docs-how-to-document/main/en-us/WritingDocsOfficial/GithubMethod.html" id="btnHowToEdit" rel="nofollow noopener" target="_blank">
+        <span class="btn-icon"><span class="fas fa-info-circle"></span></span>
+        <span class="btn-text">How to edit</span>
+    </a>
+    </div>    </nav>
+                    
+<article class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
+    <div itemprop="articleBody">
+        <!-- content start -->
+                
+<section class="section" id="templating-1" data-rst-anchor="templating">
+            <a id="templating"></a>
+            <h1>Templating<a class="headerlink" href="#templating-1" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h1>
+            <section class="section" id="templates-partials-and-layouts">
+            <h2>Templates, partials and layouts<a class="headerlink" href="#templates-partials-and-layouts" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h2>
+            
+    <p>Like every other extbase extension its possible to configure the fluid
+templates, partials and layout path via typoscript. Beside that is also
+possible to configure the templates and partials path in the plugin.</p>
+
+            <section class="section" id="example">
+            <h3>Example:<a class="headerlink" href="#example" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h3>
+                    <div class="code-block-caption">
+            <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript</span>
+        </div><div class="code-block-wrapper" translate="no">
+                        
+        <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.view {
+    templateRootPath =
+    partialRootPath =
+    layoutRootPath =
+}</code></pre>
+        <div>
+            <button class="code-block-copy" title="Copy to clipboard">
+                <i class="fa-regular fa-copy code-block-copy-icon"></i>
+                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+            </button>
+            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
+        </div>
+    </div>
+    </section>
+    </section>
+            <section class="section" id="viewhelper">
+            <h2>Viewhelper<a class="headerlink" href="#viewhelper" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h2>
+            
+    <p>Beside the default viewhelpers of fluid the extension comes with three
+additional viewhelpers. These are used to render the search like the
+form.selectCountries viewhelper, the map like the minify viewhelper and
+select what to render based on the configuration like the
+format.binaryAnd viewhelper.</p>
+
+            
+    <p>They are used by including the namespace in the file in which the
+viewhelper get used.</p>
+
+    </section>
+            <section class="section" id="register-namespace">
+            <h2>Register Namespace:<a class="headerlink" href="#register-namespace" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h2>
+            
+    <p>Add the xmlns to the html tag in the template</p>
+
+                    <div class="code-block-caption">
+            <span class="caption-text">EXT:my_extension/Resources/Private/Templates/Map/Map.html</span>
+        </div><div class="code-block-wrapper" translate="no">
+                        
+        <pre class="code-block"><code class="hljs xml">xmlns:sf="http://typo3.org/ns/Evoweb/StoreFinder/ViewHelpers"</code></pre>
+        <div>
+            <button class="code-block-copy" title="Copy to clipboard">
+                <i class="fa-regular fa-copy code-block-copy-icon"></i>
+                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+            </button>
+            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
+        </div>
+    </div>
+    </section>
+            <section class="section" id="minify-viewhelper">
+            <h2>minify Viewhelper<a class="headerlink" href="#minify-viewhelper" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h2>
+            
+    <p>This viewhelper gets used to minify the rendered json of the locations
+in the result map. The purpose is to reduce the traffic and clean the
+source code.
+So in stead of making the template unreadable the output gets minified
+on rendering time.</p>
+
+            <section class="section" id="example-viewhelper">
+            <h4>Example viewhelper:<a class="headerlink" href="#example-viewhelper" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h4>
+                    <div class="code-block-caption">
+            <span class="caption-text">EXT:my_extension/Resources/Private/Templates/Map/Map.html</span>
+        </div><div class="code-block-wrapper" translate="no">
+                        
+        <pre class="code-block"><code class="hljs xml">var mapConfiguration = {<span class="hljs-tag">&lt;<span class="hljs-name">sf:minify</span>&gt;</span>active: true,
+        <span class="hljs-tag">&lt;<span class="hljs-name">f:for</span> <span class="hljs-attr">each</span>=<span class="hljs-string">"{settings.mapConfiguration}"</span> <span class="hljs-attr">as</span>=<span class="hljs-string">"configuration"</span> <span class="hljs-attr">key</span>=<span class="hljs-string">"name"</span> <span class="hljs-attr">iteration</span>=<span class="hljs-string">"loop"</span>&gt;</span>{name}: '{configuration}',<span class="hljs-tag">&lt;/<span class="hljs-name">f:for</span>&gt;</span>
+    center: {
+        lat: <span class="hljs-tag">&lt;<span class="hljs-name">f:format.number</span> <span class="hljs-attr">decimals</span>=<span class="hljs-string">"7"</span>&gt;</span>{center.latitude}<span class="hljs-tag">&lt;/<span class="hljs-name">f:format.number</span>&gt;</span>,
+        lng: <span class="hljs-tag">&lt;<span class="hljs-name">f:format.number</span> <span class="hljs-attr">decimals</span>=<span class="hljs-string">"7"</span>&gt;</span>{center.longitude}<span class="hljs-tag">&lt;/<span class="hljs-name">f:format.number</span>&gt;</span>
+    },
+    zoom: '{center.zoom}'
+<span class="hljs-tag">&lt;/<span class="hljs-name">sf:minify</span>&gt;</span>};</code></pre>
+        <div>
+            <button class="code-block-copy" title="Copy to clipboard">
+                <i class="fa-regular fa-copy code-block-copy-icon"></i>
+                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+            </button>
+            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
+        </div>
+    </div>
+    </section>
+            <section class="section" id="example-output">
+            <h4>Example output:<a class="headerlink" href="#example-output" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h4>
+                    <div class="code-block-caption">
+            <span class="caption-text">EXT:my_extension/Resources/Private/Templates/Map/Map.html</span>
+        </div><div class="code-block-wrapper" translate="no">
+                        
+        <pre class="code-block"><code class="hljs xml">var mapConfiguration = {active:true,apiV3Layers:'',language:'de',center:{lat:50.1125089,lng:8.6521548},zoom:'11'}</code></pre>
+        <div>
+            <button class="code-block-copy" title="Copy to clipboard">
+                <i class="fa-regular fa-copy code-block-copy-icon"></i>
+                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+            </button>
+            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
+        </div>
+    </div>
+    </section>
+    </section>
+            <section class="section" id="format-binaryand-viewhelper">
+            <h2>format.binaryAnd Viewhelper<a class="headerlink" href="#format-binaryand-viewhelper" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h2>
+            
+    <p>To be able to select which partial should be rendered its necessary to
+compare with binary and if the part is check in the plugin. As the f:if
+viewhelper is not able to do so, a special viewhelper is needed for that.</p>
+
+            
+    <p>Basically what this means is, that the setting value, in this case
+showBeforeSearch, is formatted with a logical and for comparison like in
+the example below. Here we check if the list should be rendered because
+in the plugin the binary value 4 stands for list.</p>
+
+            <section class="section" id="example-viewhelper">
+            <h4>Example viewhelper:<a class="headerlink" href="#example-viewhelper" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h4>
+                    <div class="code-block-caption">
+            <span class="caption-text">EXT:my_extension/Resources/Private/Templates/Map/Map.html</span>
+        </div><div class="code-block-wrapper" translate="no">
+                        
+        <pre class="code-block"><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">f:if</span> <span class="hljs-attr">condition</span>=<span class="hljs-string">"{sf:format.binaryAnd(base: 4, content: settings.showBeforeSearch)} == 4"</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">f:if</span>&gt;</span></code></pre>
+        <div>
+            <button class="code-block-copy" title="Copy to clipboard">
+                <i class="fa-regular fa-copy code-block-copy-icon"></i>
+                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+            </button>
+            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
+        </div>
+    </div>
+    </section>
+    </section>
+            <section class="section" id="form-selectcountries">
+            <h2>form.selectCountries<a class="headerlink" href="#form-selectcountries" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h2>
+            
+    <p>The countries select viewhelper fetches the countries from
+static_info_tables and renders each country as option. All attributes from
+the fluid standard form.select are supported. Beside that if the optional
+attribute allowedCountries is set, only countries matching it get rendered.
+allowedCountries accepts a comma seperated list of ISO2 country codes.</p>
+
+            <section class="section" id="example-viewhelper">
+            <h4>Example viewhelper:<a class="headerlink" href="#example-viewhelper" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h4>
+                    <div class="code-block-caption">
+            <span class="caption-text">EXT:my_extension/Resources/Private/Templates/Map/Map.html</span>
+        </div><div class="code-block-wrapper" translate="no">
+                        
+        <pre class="code-block"><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">sf:form.selectCountries</span> <span class="hljs-attr">property</span>=<span class="hljs-string">"country"</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"sfrCountry"</span> <span class="hljs-attr">optionValueField</span>=<span class="hljs-string">"isoCodeA3"</span> <span class="hljs-attr">allowedCountries</span>=<span class="hljs-string">"{0: 'DE', 1: 'AT'}"</span> /&gt;</span></code></pre>
+        <div>
+            <button class="code-block-copy" title="Copy to clipboard">
+                <i class="fa-regular fa-copy code-block-copy-icon"></i>
+                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+            </button>
+            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
+        </div>
+    </div>
+    </section>
+    </section>
+    </section>
+        <!-- content end -->
+    </div>
+</article>
+                        
+            <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center"><li class="page-item">
+                            <a class="page-link" href="../Configuration/EventListener/Index.html"
+                               title="Accesskey Alt(+Shift)+p">
+                                Previous
+                            </a>
+                        </li>
+                    <li class="page-item">
+                            <a class="page-link" href="../Tutorial/Index.html"
+                               title="Accesskey Alt(+Shift)+n">
+                                Next
+                            </a>
+                        </li>
+                    </ul>
+        </nav>
+                    </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal fade" id="linkReferenceModal" tabindex="-1" aria-labelledby="linkReferenceModalLabel"
+    aria-hidden="true" data-current-filename="Templating/Index">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="linkReferenceModalLabel">Reference to the headline</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-success d-none" id="permalink-alert-success" role="alert"></div>
+                <div class="mb-3">
+                    <label for="permalink-uri" class="col-form-label">Permalink</label>
+                    <div class="input-group">
+                        <input class="form-control code" id="permalink-uri" readonly>
+                        <button type="button" class="btn btn-outline-secondary copy-button" data-target="permalink-uri"><i class="far fa-clone"></i></button>
+                    </div>
+                    <p>Copy and freely share the link</p>
+                </div>
+                <div class="mb-3">
+                    <div class="alert alert-warning alert-permalink-rst" role="alert">This link target has no permanent anchor assigned.The link below can be used, but is prone to change if the page gets moved.
+                    </div>
+                    <label for="permalink-rst" class="col-form-label">reStructuredText (reST):</label>
+                    <div class="input-group">
+                        <textarea class="form-control code" id="permalink-rst" readonly></textarea>
+                        <button type="button" class="btn btn-outline-secondary copy-button" data-target="permalink-rst"><i class="far fa-clone"></i></button>
+                    </div>
+                    <p>Copy this link into your TYPO3 manual. </p>
+                </div>
+                <div class="mb-3">
+                    <label for="permalink-html" class="col-form-label">HTML:</label>
+                    <div class="input-group">
+                        <textarea class="form-control code" id="permalink-html" readonly></textarea>
+                        <button type="button" class="btn btn-outline-secondary copy-button" data-target="permalink-html"><i class="far fa-clone"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div></div>
+
+
+<footer class="page-footer">
+    <div class="frame frame-ruler-before frame-background-dark">
+        <div class="frame-container">
+            <div class="frame-inner">
+                                <div class="footer-additional">
+                    <p class="text-center">Last rendered: May 13, 2024 12:29</p>
+                </div>
+                <div class="footer-meta">
+                    <ul class="footer-meta-navigation">
+                        <li><a href="https://typo3.org/legal-notice" rel="nofollow" target="_blank" title="Legal Notice">Legal Notice</a></li>
+                        <li><a href="https://typo3.org/privacy-policy" rel="nofollow" target="_blank" title="Privacy Policy">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<script src="../_resources/js/popper.min.js"></script>
+<script src="../_resources/js/bootstrap.min.js"></script>
+<script src="../_resources/js/theme.min.js"></script>
+
+<!--
+ Locally rendered. No tracking embedded.
+-->
+</body>
+</html>

@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+    <title>Validation documentation</title>
+
+    
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<meta content="phpdocumentor/guides" name="generator">
+<meta content="" name="docsearch:name">
+<meta content="" name="docsearch:package_type">
+<meta content="" name="docsearch:release">
+<meta content="" name="docsearch:version">
+<meta content="2024-05-13T12:29:29+00:00" name="docsearch:modified">
+<meta content="2024-05-13T12:29:29+00:00" name="dc.modified">
+<meta content="2024-05-13T12:29:29+00:00" property="article:modified_time">
+    <link href="http://purl.org/dc/elements/1.1/" rel="schema.dc">
+<link href="../../_resources/css/theme.css" rel="stylesheet">
+<link href="https://docs.typo3.org/search/" rel="search" title="Search">
+<script src="https://typo3.azureedge.net/typo3infrastructure/universe/dist/webcomponents-loader.js"></script>
+<script src="https://typo3.azureedge.net/typo3infrastructure/universe/dist/typo3-universe.js" type="module"></script>
+                        <link href="../Persistence/Index.html" rel="prev" title="Persistence"/>
+            <link href="../Geocoding/Index.html" rel="next" title="Geocoding provider"/>
+            <link href="../../Index.html" rel="top" title="Store finder"/>
+    </head>
+<body>
+<div class="page">
+    
+<header>
+    <div class="page-topbar">
+        <div class="page-topbar-inner">
+            <typo3-universe active="documentation">
+                <div style="display: block; height: 44px; background-color: #313131;"></div>
+            </typo3-universe>
+        </div>
+    </div>
+    <div class="page-header">
+        <div class="page-header-inner">
+            <div class="row">
+                <div class="col-sm-3 col-md-4 col-lg-6">
+                    <a class="logo" href="https://docs.typo3.org/" title="TYPO3 Documentation">
+                        <img alt="TYPO3 Logo" class="logo-image" src="../../_resources/img/typo3-logo.svg" width="484" height="130">
+                    </a>
+                </div>
+                <div class="col-sm-9 col-md-8 col-lg-6">
+                    <search role="search">
+                        <form action="https://docs.typo3.org/search/search" id="global-search-form" method="get">
+			                <div class="sr-only"><label for="globalsearchinput">TYPO3 documentation...</label></div>
+                            <div class="input-group mb-3 mt-sm-3">
+                                <select class="form-select search__scope" id="searchscope" name="scope">
+                                    <option value="">Search all</option>
+                                </select>
+                                <input autocomplete="off" class="form-control shadow-none" id="globalsearchinput" name="q" placeholder="TYPO3 documentation..." type="text" value="">
+                                <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i>&nbsp;<span class="d-none d-md-inline">Search</span></button>
+                            </div>
+                        </form>
+                    </search>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>    <main class="page-main">
+        <div class="page-main-inner">
+            <div class="page-main-navigation">
+                <nav>
+                    <input class="toc-checkbox" id="toggleToc" type="checkbox">
+
+                    
+<div class="toc-header">
+    <div class="toc-title">
+        <a class="toc-title-project" href="../../Index.html"></a>
+            </div>
+    <div class="toc-actions">
+        <label class="toc-toggle" for="toggleToc">
+            Menu
+        </label>
+    </div>
+</div>                    <div class="toc-collapse">
+                                                <div aria-label="main navigation" class="toc" role="navigation">
+                                <div aria-label="Main navigation" class="main_menu" role="navigation">
+        
+    <ul class="menu-level-1">
+    <li class="">
+    <a href="../../Introduction/Index.html">
+        Introduction
+    </a></li>    <li class="">
+    <a href="../../UserManual/Index.html">
+        User Manual
+    </a></li>    <li class="">
+    <a href="../../Administration/Index.html">
+        Administration
+    </a></li>    <li class=" active">
+    <a href="../Index.html">
+        Configuration
+    </a>        <ul class="menu-level-1"><li class="">
+    <a href="../Settings/Index.html">
+        Settings
+    </a></li><li class="">
+    <a href="../View/Index.html">
+        View
+    </a></li><li class="">
+    <a href="../Persistence/Index.html">
+        Persistence
+    </a></li><li class=" current active">
+    <a href="#" aria-current="page">
+        Validation
+    </a></li><li class="">
+    <a href="../Geocoding/Index.html">
+        Geocoding provider
+    </a></li><li class="">
+    <a href="../EventListener/Index.html">
+        Event listener
+    </a></li></ul></li>    <li class="">
+    <a href="../../Templating/Index.html">
+        Templating
+    </a></li>    <li class="">
+    <a href="../../Tutorial/Index.html">
+        Tutorial
+    </a>        <ul class="menu-level-1"><li class="">
+    <a href="../../Tutorial/Installation/Index.html">
+        Installation
+    </a></li><li class="">
+    <a href="../../Tutorial/CustomEventListener/Index.html">
+        Custom Event Listener
+    </a></li><li class="">
+    <a href="../../Tutorial/HeadlessMap/Index.html">
+        Headless Map Rendering
+    </a></li></ul></li>    <li class="">
+    <a href="../../ImportCommand/Index.html">
+        Import command
+    </a></li>    <li class="">
+    <a href="../../Deprecation/Index.html">
+        Deprecation
+    </a></li>    <li class="">
+    <a href="../../BreakingChanges/Index.html">
+        Breaking Changes
+    </a></li>    </ul>
+    <ul class="menu-level-1">
+    <li class="">
+    <a href="../../Sitemap.html">
+        Sitemap
+    </a></li>    </ul>
+    </div>
+    <div aria-label="Meta navigation" class="main_menu  d-block d-lg-none" role="navigation">
+    <hr/>
+    <p class="caption">Contributors Corner</p>
+    <ul class="menu-level-1">            <li><a href="../../_sources/Configuration/Validation/Index.rst.txt" rel="nofollow noopener" target="_blank">
+                    View source of current document
+            </a></li>
+                    <li><a href="https://docs.typo3.org/m/typo3/docs-how-to-document/main/en-us/WritingDocsOfficial/GithubMethod.html" rel="nofollow noopener" target="_blank">
+                    How to edit
+            </a></li>
+        </ul>
+</div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+            <div class="page-main-content">
+                <div class="rst-content">                        <nav aria-label="breadcrumbs navigation" class="breadcrumb-bar" role="navigation">
+        
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="../../Index.html">Store finder</a></li>
+        <li class="breadcrumb-item"><a href="../Index.html">Configuration</a></li>
+                    <li aria-current="page"  class="breadcrumb-item  active">Validation</li>
+        </ol>
+        <div class="breadcrumb-additions">    <a class="btn btn-sm btn-light" href="../../_sources/Configuration/Validation/Index.rst.txt" rel="nofollow noopener" target="_blank">
+        <span class="btn-icon"><span class="fas fa-code"></span></span>
+        <span class="btn-text">View source</span>
+    </a>
+        <a class="btn btn-sm btn-light" href="https://docs.typo3.org/m/typo3/docs-how-to-document/main/en-us/WritingDocsOfficial/GithubMethod.html" id="btnHowToEdit" rel="nofollow noopener" target="_blank">
+        <span class="btn-icon"><span class="fas fa-info-circle"></span></span>
+        <span class="btn-text">How to edit</span>
+    </a>
+    </div>    </nav>
+                    
+<article class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
+    <div itemprop="articleBody">
+        <!-- content start -->
+                
+<section class="section" id="validation-1" data-rst-anchor="validation">
+            <a id="validation"></a>
+            <h1>Validation<a class="headerlink" href="#validation-1" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h1>
+            <section class="section" id="purpose-of-validators">
+            <h2>Purpose of Validators<a class="headerlink" href="#purpose-of-validators" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h2>
+            
+    <p>Validators are a mechanism to ensure that all information given by the user
+meet the expectation of the extension. Either if the values make sense in terms
+of format like zip or in required information value like city.</p>
+
+            
+    <p>If values need to be enforce your should use the <a href="#RequiredValidator">RequiredValidator</a> because
+this validator does not only check if the value of the configured field is
+filled but it also serves as a signal for the Required Partial to render the
+corresponding flag.</p>
+
+            
+    <p>All validators are optional, could be set single or may be even assigned multiple
+times to a field. Despite the concept of extbase you are free to choose how many
+validators should take care of a value.</p>
+
+    </section>
+            <section class="section" id="different-possibilities-of-assigning-validators">
+            <h2>Different possibilities of assigning validators<a class="headerlink" href="#different-possibilities-of-assigning-validators" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h2>
+            
+    <p>In case you want to have no validation at all for a field was was configured
+by default as required you need to empty the associated validators. Look at the
+example given where the validators of the email gets removed.</p>
+
+            <section class="section" id="remove-validators">
+            <h3>Remove validators<a class="headerlink" href="#remove-validators" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h3>
+                    <div class="code-block-caption">
+            <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript</span>
+        </div><div class="code-block-wrapper" translate="no">
+                        
+        <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.settings.validation.zipcode &gt;</code></pre>
+        <div>
+            <button class="code-block-copy" title="Copy to clipboard">
+                <i class="fa-regular fa-copy code-block-copy-icon"></i>
+                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+            </button>
+            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
+        </div>
+    </div>
+            
+    <p>If only one validator is needed you could assign it directly to the field like
+below.</p>
+
+    </section>
+            <section class="section" id="assign-only-one-validator">
+            <h3>Assign only one validator<a class="headerlink" href="#assign-only-one-validator" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h3>
+                    <div class="code-block-caption">
+            <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript</span>
+        </div><div class="code-block-wrapper" translate="no">
+                        
+        <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.settings.validation.zipcode = Evoweb\StoreFinder\Validation\Validator\RequiredValidator</code></pre>
+        <div>
+            <button class="code-block-copy" title="Copy to clipboard">
+                <i class="fa-regular fa-copy code-block-copy-icon"></i>
+                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+            </button>
+            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
+        </div>
+    </div>
+            
+    <p>And finaly it&#039;s possible to have multiple validators for one field like in the
+next example.</p>
+
+    </section>
+            <section class="section" id="assign-multiple-validators">
+            <h3>Assign multiple validators<a class="headerlink" href="#assign-multiple-validators" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h3>
+                    <div class="code-block-caption">
+            <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript</span>
+        </div><div class="code-block-wrapper" translate="no">
+                        
+        <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.settings.validation.city {
+   <span class="hljs-title">1</span> = Evoweb\StoreFinder\Validation\Validator\RequiredValidator
+   <span class="hljs-title">2</span> = StringLength
+}</code></pre>
+        <div>
+            <button class="code-block-copy" title="Copy to clipboard">
+                <i class="fa-regular fa-copy code-block-copy-icon"></i>
+                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+            </button>
+            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
+        </div>
+    </div>
+            
+    <p>Regarding validator it&#039;s possible to have values attached to the assigned one.
+This is beneficial if you want to check against conditions that are not equal
+in different cases. One point where this is shown best with is the length of
+passwords.</p>
+
+            
+    <p>In total you have three possible combination of validator assignments for each
+field that you use in your form. You have none, one and multiple validators.
+And in case of a validator present you can add options too override the default
+that is set in the validator.</p>
+
+    </section>
+    </section>
+            <section class="section" id="special-validators">
+            <h2>Special validators<a class="headerlink" href="#special-validators" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h2>
+            
+    <p>The ConstraintValidator is not meant to be used for field validation. This validator
+is a special construct to make the configuration via TypoScript possible. All
+others are free to combine. If a validator is only suited for a certain field
+it will be mentioned in the detail configuration.</p>
+
+    </section>
+            <section class="section" id="prefixing-needed-for-non-extbase-validators">
+            <h2>Prefixing needed for non extbase validators<a class="headerlink" href="#prefixing-needed-for-non-extbase-validators" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h2>
+            
+    <p>To use the extension validators you need to prefix them in the TypoScript with
+EvowebStoreFinderValidationValidator. For all validators without this
+prefix the validation assumes that they are extbase specific validators and use
+them as such.</p>
+
+            
+    <p>Secondly this makes it possible to use custom validators that do not come with
+extbase or store_finder. Just code your validator and make it available for auto
+loading (either in an extbase standard path or via ext_autoload.php). Afterwards
+you are ready to use your validator like in the following example.</p>
+
+            <section class="section" id="custom-validator-usage">
+            <h3>Custom validator usage<a class="headerlink" href="#custom-validator-usage" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h3>
+                    <div class="code-block-caption">
+            <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript</span>
+        </div><div class="code-block-wrapper" translate="no">
+                        
+        <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.settings.validation.create.city {
+   <span class="hljs-title">1</span> = Evoweb\StoreFinder\Validation\Validator\RequiredValidator
+}</code></pre>
+        <div>
+            <button class="code-block-copy" title="Copy to clipboard">
+                <i class="fa-regular fa-copy code-block-copy-icon"></i>
+                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+            </button>
+            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
+        </div>
+    </div>
+    </section>
+    </section>
+            <section class="section" id="available-validators">
+            <h2>Available validators<a class="headerlink" href="#available-validators" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h2>
+            
+    <p>Beside the validators that come with extbase and which are although available
+in the different processes, the registration come with a set of specific ones
+that are tailored to the special need. The following lists all validators
+which are suited for the usage on fields.</p>
+
+            <section class="section" id="requiredvalidator" data-rst-anchor="RequiredValidator">
+            <a id="RequiredValidator"></a>
+            <h3>RequiredValidator<a class="headerlink" href="#requiredvalidator" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h3>
+            <dl>
+                        <dt><em class="aspect">Property</em></dt>
+        
+        <dd>RequiredValidator</dd>
+                                <dt><em class="aspect">Data type</em></dt>
+        
+        <dd><a href="https://docs.typo3.org/m/typo3/reference-typoscript/12.4/en-us/DataTypes/Index.html#data-type-string">string</a></dd>
+                                <dt><em class="aspect">Description</em></dt>
+        
+        <dd>This validator serves two purpose. First of check if the field contains
+a value and that it is not empty. Second the rendering uses this
+validator as condition to render required sign or not.</dd>
+            </dl>
+    </section>
+    </section>
+    </section>
+        <!-- content end -->
+    </div>
+</article>
+                        
+            <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center"><li class="page-item">
+                            <a class="page-link" href="../Persistence/Index.html"
+                               title="Accesskey Alt(+Shift)+p">
+                                Previous
+                            </a>
+                        </li>
+                    <li class="page-item">
+                            <a class="page-link" href="../Geocoding/Index.html"
+                               title="Accesskey Alt(+Shift)+n">
+                                Next
+                            </a>
+                        </li>
+                    </ul>
+        </nav>
+                    </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal fade" id="linkReferenceModal" tabindex="-1" aria-labelledby="linkReferenceModalLabel"
+    aria-hidden="true" data-current-filename="Configuration/Validation/Index">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="linkReferenceModalLabel">Reference to the headline</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-success d-none" id="permalink-alert-success" role="alert"></div>
+                <div class="mb-3">
+                    <label for="permalink-uri" class="col-form-label">Permalink</label>
+                    <div class="input-group">
+                        <input class="form-control code" id="permalink-uri" readonly>
+                        <button type="button" class="btn btn-outline-secondary copy-button" data-target="permalink-uri"><i class="far fa-clone"></i></button>
+                    </div>
+                    <p>Copy and freely share the link</p>
+                </div>
+                <div class="mb-3">
+                    <div class="alert alert-warning alert-permalink-rst" role="alert">This link target has no permanent anchor assigned.The link below can be used, but is prone to change if the page gets moved.
+                    </div>
+                    <label for="permalink-rst" class="col-form-label">reStructuredText (reST):</label>
+                    <div class="input-group">
+                        <textarea class="form-control code" id="permalink-rst" readonly></textarea>
+                        <button type="button" class="btn btn-outline-secondary copy-button" data-target="permalink-rst"><i class="far fa-clone"></i></button>
+                    </div>
+                    <p>Copy this link into your TYPO3 manual. </p>
+                </div>
+                <div class="mb-3">
+                    <label for="permalink-html" class="col-form-label">HTML:</label>
+                    <div class="input-group">
+                        <textarea class="form-control code" id="permalink-html" readonly></textarea>
+                        <button type="button" class="btn btn-outline-secondary copy-button" data-target="permalink-html"><i class="far fa-clone"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div></div>
+
+
+<footer class="page-footer">
+    <div class="frame frame-ruler-before frame-background-dark">
+        <div class="frame-container">
+            <div class="frame-inner">
+                                <div class="footer-additional">
+                    <p class="text-center">Last rendered: May 13, 2024 12:29</p>
+                </div>
+                <div class="footer-meta">
+                    <ul class="footer-meta-navigation">
+                        <li><a href="https://typo3.org/legal-notice" rel="nofollow" target="_blank" title="Legal Notice">Legal Notice</a></li>
+                        <li><a href="https://typo3.org/privacy-policy" rel="nofollow" target="_blank" title="Privacy Policy">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<script src="../../_resources/js/popper.min.js"></script>
+<script src="../../_resources/js/bootstrap.min.js"></script>
+<script src="../../_resources/js/theme.min.js"></script>
+
+<!--
+ Locally rendered. No tracking embedded.
+-->
+</body>
+</html>
