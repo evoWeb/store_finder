@@ -21,13 +21,14 @@ jobs:
       - name: Build documentation
         run: |
           docker run \
-            --rm --user $(id -u) ${CONTAINER_COMMON_PARAMS} \
-            -v ${PWD}:${PWD} \
+            --rm --user $(id -u) \
             -v ${PWD}:/project \
             ghcr.io/typo3-documentation/render-guides:latest render Documentation
 
       - name: Deploy to GitHub Pages 🚀
         uses: JamesIves/github-pages-deploy-action@v4.6.0
         with:
-          branch: develop
+          branch: gh-pages
           folder: Documentation-GENERATED-temp
+          target-folder: /
+          clean: true
