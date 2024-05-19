@@ -20,16 +20,21 @@ Adding event listeners
 
 Add the following code to the Configuration/Services.yaml of your sitepackage to use the example listener.
 
-.. code-block:: typoscript
-   :caption: EXT:my_extension/Configuration/Services.yaml
+.. code-block:: php
+   :caption: MapGetLocationsByConstraintsEventListener.php
 
-   services:
-     Evoweb\StoreFinder\EventListener\MapGetAllLocationsListener:
-       tags:
-         - name: event.listener
-           identifier: 'storefinder_mapcontroller_locationsfetched'
-           method: 'onLocationsFetchedEvent'
-           event: Evoweb\StoreFinder\Controller\Event\MapGetLocationsByConstraintsEvent
+   namespace Evoweb\StoreFinder\EventListener;
+
+   use Evoweb\StoreFinder\Controller\Event\MapGetLocationsByConstraintsEvent;
+   use TYPO3\CMS\Core\Attribute\AsEventListener;
+
+   class MapGetLocationsByConstraintsEventListener
+   {
+      #[AsEventListener('storefinder_mapcontroller_locationsfetched', MapGetLocationsByConstraintsEvent::class)]
+      public function __invoke(MapGetLocationsByConstraintsEvent $event): void
+      {
+      }
+   }
 
 More explanation for your custom event listener can be found in the `tutorial <_customEventListener>`
 
@@ -69,6 +74,16 @@ It's possible to change locations records from store finder middleware before
 sending the json response. Use the ModifyMiddlewareLocationsListener as an
 example of how to change values.
 
-.. code-block:: Services.yaml
-  Evoweb\StoreFinder\EventListener\ModifyMiddlewareLocationsListener:
-    tags: ['event.listener']
+The registration got simplified in TYPO3 13.x
+
+.. code-block:: php
+   :caption: ModifyMiddlewareLocationsEventListener.php
+   use Evoweb\StoreFinder\Middleware\Event\ModifyMiddlewareLocationsEvent;
+   use TYPO3\CMS\Core\Attribute\AsEventListener;
+   class ModifyMiddlewareLocationsEventListener
+   {
+      #[AsEventListener('your-extension-identifier', ModifyMiddlewareLocationsEvent::class)]
+      public function __invoke(ModifyMiddlewareLocationsEvent $event): void
+      {
+      }
+   }

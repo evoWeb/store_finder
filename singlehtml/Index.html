@@ -11,9 +11,9 @@
 <meta content="" name="docsearch:package_type">
 <meta content="" name="docsearch:release">
 <meta content="" name="docsearch:version">
-<meta content="2024-05-13T12:29:29+00:00" name="docsearch:modified">
-<meta content="2024-05-13T12:29:29+00:00" name="dc.modified">
-<meta content="2024-05-13T12:29:29+00:00" property="article:modified_time">
+<meta content="2024-05-19T14:06:32+00:00" name="docsearch:modified">
+<meta content="2024-05-19T14:06:32+00:00" name="dc.modified">
+<meta content="2024-05-19T14:06:32+00:00" property="article:modified_time">
     <link href="http://purl.org/dc/elements/1.1/" rel="schema.dc">
 <link href="../_resources/css/theme.css" rel="stylesheet">
 <link href="https://docs.typo3.org/search/" rel="search" title="Search">
@@ -144,7 +144,7 @@ license.</p>
 
         <dd class="field-odd">
             
-    <p>Mon, 13 May 2024 12:29:29 +0000</p>
+    <p>Sun, 19 May 2024 14:06:32 +0000</p>
         </dd>
     </dl>
             <hr />
@@ -320,7 +320,7 @@ license.</p>
 
         <dd class="field-odd">
             
-    <p>Mon, 13 May 2024 12:29:29 +0000</p>
+    <p>Sun, 19 May 2024 14:06:32 +0000</p>
         </dd>
     </dl>
             <hr />
@@ -1507,16 +1507,21 @@ the loading completly.</p>
     <p>Add the following code to the Configuration/Services.yaml of your sitepackage to use the example listener.</p>
 
                     <div class="code-block-caption">
-            <span class="caption-text">EXT:my_extension/Configuration/Services.yaml</span>
+            <span class="caption-text">MapGetLocationsByConstraintsEventListener.php</span>
         </div><div class="code-block-wrapper" translate="no">
                         
-        <pre class="code-block"><code class="hljs typoscript">services:
-  Evoweb\StoreFinder\EventListener\MapGetAllLocationsListener:
-    tags:
-      - name: event.listener
-        identifier: 'storefinder_mapcontroller_locationsfetched'
-        method: 'onLocationsFetchedEvent'
-        event: Evoweb\StoreFinder\Controller\Event\MapGetLocationsByConstraintsEvent</code></pre>
+        <pre class="code-block"><code class="hljs php"><span class="hljs-keyword">namespace</span> <span class="hljs-title">Evoweb</span>\<span class="hljs-title">StoreFinder</span>\<span class="hljs-title">EventListener</span>;
+
+<span class="hljs-keyword">use</span> <span class="hljs-title">Evoweb</span>\<span class="hljs-title">StoreFinder</span>\<span class="hljs-title">Controller</span>\<span class="hljs-title">Event</span>\<span class="hljs-title">MapGetLocationsByConstraintsEvent</span>;
+<span class="hljs-keyword">use</span> <span class="hljs-title">TYPO3</span>\<span class="hljs-title">CMS</span>\<span class="hljs-title">Core</span>\<span class="hljs-title">Attribute</span>\<span class="hljs-title">AsEventListener</span>;
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MapGetLocationsByConstraintsEventListener</span>
+</span>{
+   <span class="hljs-comment">#[AsEventListener('storefinder_mapcontroller_locationsfetched', MapGetLocationsByConstraintsEvent::class)]</span>
+   <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">__invoke</span><span class="hljs-params">(MapGetLocationsByConstraintsEvent $event)</span>: <span class="hljs-title">void</span>
+   </span>{
+   }
+}</code></pre>
         <div>
             <button class="code-block-copy" title="Copy to clipboard">
                 <i class="fa-regular fa-copy code-block-copy-icon"></i>
@@ -1584,18 +1589,9 @@ this case, you need to set the zoom level in the template OR the radius in TypoS
 sending the json response. Use the ModifyMiddlewareLocationsListener as an
 example of how to change values.</p>
 
-            <div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code>Evoweb\StoreFinder\EventListener\ModifyMiddlewareLocationsListener:
-  tags: [&#039;event.listener&#039;]</code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
-    </div>
+            
+    <p>The registration got simplified in TYPO3 13.x</p>
+
     </section>
     </section>
 
@@ -1941,16 +1937,21 @@ the clear cache flash.</p>
 my* with your own values, but keep the event name as it is.</p>
 
                     <div class="code-block-caption">
-            <span class="caption-text">EXT:my_extension/Configuration/Services.yaml</span>
+            <span class="caption-text">EXT:your_extension/Classes/EventListener/MapGetSpecialLocationsListener.php</span>
         </div><div class="code-block-wrapper" translate="no">
                         
-        <pre class="code-block"><code class="hljs typoscript">services:
-  MyVendor\MyExtension\EventListener\MapGetSpecialLocationsListener:
-    tags:
-      - name: event.listener
-        identifier: 'myextension_mapcontroller_fetchspeciallocations'
-        method: 'onFetchSpecialLocations'
-        event: Evoweb\StoreFinder\Controller\Event\MapGetLocationsByConstraintsEvent</code></pre>
+        <pre class="code-block"><code class="hljs php"><span class="hljs-keyword">namespace</span> <span class="hljs-title">MyVendor</span>\<span class="hljs-title">MyExtension</span>\<span class="hljs-title">EventListener</span>;
+
+<span class="hljs-keyword">use</span> <span class="hljs-title">Evoweb</span>\<span class="hljs-title">StoreFinder</span>\<span class="hljs-title">Controller</span>\<span class="hljs-title">Event</span>\<span class="hljs-title">MapGetLocationsByConstraintsEvent</span>;
+<span class="hljs-keyword">use</span> <span class="hljs-title">TYPO3</span>\<span class="hljs-title">CMS</span>\<span class="hljs-title">Core</span>\<span class="hljs-title">Attribute</span>\<span class="hljs-title">AsEventListener</span>;
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MapGetSpecialLocationsListener</span>
+</span>{
+   <span class="hljs-comment">#[AsEventListener('myextension_mapcontroller_fetchspeciallocations', MapGetLocationsByConstraintsEvent::class)]</span>
+   <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">__invoke</span><span class="hljs-params">(MapGetLocationsByConstraintsEvent $event)</span>: <span class="hljs-title">void</span>
+   </span>{
+   }
+}</code></pre>
         <div>
             <button class="code-block-copy" title="Copy to clipboard">
                 <i class="fa-regular fa-copy code-block-copy-icon"></i>
@@ -2397,7 +2398,7 @@ getCityRaw are dropped.</p>
         <div class="frame-container">
             <div class="frame-inner">
                                 <div class="footer-additional">
-                    <p class="text-center">Last rendered: May 13, 2024 12:29</p>
+                    <p class="text-center">Last rendered: May 19, 2024 14:06</p>
                 </div>
                 <div class="footer-meta">
                     <ul class="footer-meta-navigation">
