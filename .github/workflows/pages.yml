@@ -1,4 +1,4 @@
-name: Build and Deploy Github-Page
+name: Build and Commit Github-Page
 
 on:
   workflow_dispatch:
@@ -10,7 +10,7 @@ permissions:
   contents: write
 
 jobs:
-  build-and-deploy:
+  build-and-commit-github-page:
     runs-on: ubuntu-latest
     concurrency: ci-${{ github.ref }}
 
