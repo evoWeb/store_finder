@@ -15,6 +15,7 @@ namespace Evoweb\StoreFinder\Command;
  * LICENSE.txt file that was distributed with this source code.
  */
 
+use Doctrine\DBAL\ParameterType;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Worksheet\Row;
 use Symfony\Component\Console\Command\Command;
@@ -467,7 +468,7 @@ class ImportLocationsCommand extends Command
             ->where(
                 $expression->eq(
                     'pid',
-                    $queryBuilder->createNamedParameter($location['pid'], \PDO::PARAM_INT)
+                    $queryBuilder->createNamedParameter($location['pid'], ParameterType::INTEGER)
                 ),
                 $expression->eq(
                     'import_id',
@@ -501,7 +502,7 @@ class ImportLocationsCommand extends Command
             $queryBuilder->andWhere(
                 $expression->eq(
                     'uid_local',
-                    $queryBuilder->createNamedParameter($uidLocal, \PDO::PARAM_INT)
+                    $queryBuilder->createNamedParameter($uidLocal, ParameterType::INTEGER)
                 )
             );
         }
@@ -509,7 +510,7 @@ class ImportLocationsCommand extends Command
             $queryBuilder->andWhere(
                 $expression->eq(
                     'uid_foreign',
-                    $queryBuilder->createNamedParameter($uidForeign, \PDO::PARAM_INT)
+                    $queryBuilder->createNamedParameter($uidForeign, ParameterType::INTEGER)
                 )
             );
         }
@@ -517,7 +518,7 @@ class ImportLocationsCommand extends Command
             $queryBuilder->andWhere(
                 $expression->eq(
                     'deleted',
-                    $queryBuilder->createNamedParameter(0, \PDO::PARAM_INT)
+                    $queryBuilder->createNamedParameter(0, ParameterType::INTEGER)
                 )
             );
         }
@@ -568,11 +569,11 @@ class ImportLocationsCommand extends Command
                 ),
                 $expression->eq(
                     'uid_local',
-                    $queryBuilder->createNamedParameter($uidLocal, \PDO::PARAM_INT)
+                    $queryBuilder->createNamedParameter($uidLocal, ParameterType::INTEGER)
                 ),
                 $expression->eq(
                     'uid_foreign',
-                    $queryBuilder->createNamedParameter($uidForeign, \PDO::PARAM_INT)
+                    $queryBuilder->createNamedParameter($uidForeign, ParameterType::INTEGER)
                 )
             );
         if ($fieldName) {

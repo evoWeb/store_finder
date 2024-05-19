@@ -29,6 +29,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use SJBR\StaticInfoTables\Domain\Repository\CountryZoneRepository;
+use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Service\FlexFormService;
@@ -38,7 +39,11 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class StoreFinderMiddleware implements MiddlewareInterface
 {
-    protected EventDispatcherInterface $eventDispatcher;
+    public function __construct(
+        protected EventDispatcherInterface $eventDispatcher,
+        protected CacheManager $cacheManager
+    ) {
+    }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
@@ -48,15 +53,13 @@ class StoreFinderMiddleware implements MiddlewareInterface
         if (!str_contains($path, 'api/storefinder/') || !in_array($action, ['locations', 'categories'])) {
             return $handler->handle($request);
         }
-        $this->initializeObject();
 
         /** @var SiteLanguage $requestLanguage */
         $requestLanguage = $request->getAttribute('language');
         $contentUid = $queryParams['contentUid'] ?? 0;
         $cacheIdentifier = md5('store_finder' . $action . $contentUid . $requestLanguage->getLanguageId());
 
-        /** @var FrontendInterface $cache */
-        $cache = GeneralUtility::getContainer()->get('cache.store_finder.middleware_cache');
+        $cache = $this->cacheManager->getCache('store_finder_middleware_cache');
         if (empty($request->getBody()->getContents()) && $cache->has($cacheIdentifier)) {
             $rows = $cache->get($cacheIdentifier);
         } else {
@@ -69,11 +72,6 @@ class StoreFinderMiddleware implements MiddlewareInterface
         }
 
         return new JsonResponse($rows);
-    }
-
-    protected function initializeObject(): void
-    {
-        $this->eventDispatcher = GeneralUtility::makeInstance(EventDispatcherInterface::class);
     }
 
     protected function getSettings(ServerRequestInterface $request, int $contentUid): array

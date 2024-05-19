@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Evoweb\StoreFinder\Event;
+namespace Evoweb\StoreFinder\Middleware\Event;
 
 /*
  * This file is developed by evoWeb.
@@ -18,13 +18,13 @@ namespace Evoweb\StoreFinder\Event;
 use Evoweb\StoreFinder\Middleware\StoreFinderMiddleware;
 use Psr\Http\Message\ServerRequestInterface;
 
-final class ModifyMiddlewareLocationsEvent
+final class ModifyMiddlewareCategoriesEvent
 {
     public function __construct(
         protected ServerRequestInterface $request,
         protected StoreFinderMiddleware $storeFinderMiddleware,
         protected array $settings,
-        protected array $locations,
+        protected array $categories,
     ) {
     }
 
@@ -43,14 +43,14 @@ final class ModifyMiddlewareLocationsEvent
         return $this->request;
     }
 
-    public function getLocations(): array
+    public function getCategories(): array
     {
-        return $this->locations;
+        return $this->categories;
     }
 
-    public function setLocations(array $locations): self
+    public function setCategories(array $categories): self
     {
-        $this->locations = $locations;
+        $this->categories = $categories;
 
         return $this;
     }

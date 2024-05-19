@@ -8,10 +8,10 @@ $EM_CONF['store_finder'] = [
     'author_email' => 'store-finder@evoweb.de',
     'author_company' => 'evoWeb',
     'state' => 'stable',
-    'version' => '7.0.14',
+    'version' => '8.0.0',
     'constraints' => [
         'depends' => [
-            'typo3' => '12.4.0-12.4.99',
+            'typo3' => '13.1.0-13.4.99',
             'static_info_tables' => '11.5.2-',
         ],
     ],

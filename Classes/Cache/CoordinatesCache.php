@@ -23,6 +23,8 @@ class CoordinatesCache
 {
     protected array $fields = ['address', 'zipcode', 'city', 'state', 'country'];
 
+    protected string $sessionKey = 'tx_storefinder_coordinates';
+
     public function __construct(
         protected FrontendInterface $cacheFrontend,
         protected ?FrontendUserAuthentication $frontendUser = null
@@ -83,42 +85,38 @@ class CoordinatesCache
     }
 
     /**
-     * Check if session has key set and the value is not empty
-     *
-     * @param string $key
-     *
-     * @return bool
+     * Check if session has key set and return true if the value is not empty
      */
     public function sessionHasKey(string $key): bool
     {
-        $sessionData = $this->frontendUser?->getKey('ses', 'tx_storefinder_coordinates');
+        $sessionData = $this->frontendUser?->getKey('ses', $this->sessionKey);
 
         return is_array($sessionData) && !empty($sessionData[$key]);
     }
 
     public function getValueFromSession(string $key): array
     {
-        $sessionData = $this->frontendUser?->getKey('ses', 'tx_storefinder_coordinates');
+        $sessionData = $this->frontendUser?->getKey('ses', $this->sessionKey);
 
         return is_array($sessionData) && isset($sessionData[$key]) ? unserialize($sessionData[$key]) : [];
     }
 
     public function setValueInSession(string $key, array $value): void
     {
-        if ($this->frontendUser != null) {
-            $sessionData = $this->frontendUser->getKey('ses', 'tx_storefinder_coordinates');
+        if ($this->frontendUser instanceof FrontendUserAuthentication) {
+            $sessionData = $this->frontendUser->getKey('ses', $this->sessionKey);
 
             $sessionData[$key] = serialize($value);
 
-            $this->frontendUser->setKey('ses', 'tx_storefinder_coordinates', $sessionData);
+            $this->frontendUser->setKey('ses', $this->sessionKey, $sessionData);
             $this->frontendUser->storeSessionData();
         }
     }
 
     public function flushSessionCache(): void
     {
-        if ($this->frontendUser != null) {
-            $this->frontendUser->setKey('ses', 'tx_storefinder_coordinates', []);
+        if ($this->frontendUser instanceof FrontendUserAuthentication) {
+            $this->frontendUser->setKey('ses', $this->sessionKey, []);
             $this->frontendUser->storeSessionData();
         }
     }

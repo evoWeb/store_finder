@@ -129,7 +129,7 @@ class SelectCountriesViewHelper extends AbstractFormFieldViewHelper
     /**
      * Override the initialize method to load all available countries before rendering
      */
-    public function initialize()
+    public function initialize(): void
     {
         parent::initialize();
 
@@ -265,16 +265,22 @@ class SelectCountriesViewHelper extends AbstractFormFieldViewHelper
                         if (method_exists($key, '__toString')) {
                             $key = (string)$key;
                         } else {
-                            throw new Exception('Identifying value for object of class "' . get_debug_type($value) . '" was an object.', 1247827428);
+                            throw new Exception(
+                                'Identifying value for object of class "' . get_debug_type($value)
+                                . '" was an object.',
+                                1247827428
+                            );
                         }
                     }
-                } elseif ($this->persistenceManager->getIdentifierByObject($value) !== null) {
-                    // @todo use $this->persistenceManager->isNewObject() once it is implemented
+                } elseif ($this->persistenceManager->isNewObject($value)) {
                     $key = $this->persistenceManager->getIdentifierByObject($value);
                 } elseif (is_object($value) && method_exists($value, '__toString')) {
                     $key = (string)$value;
                 } elseif (is_object($value)) {
-                    throw new Exception('No identifying value for object of class "' . get_class($value) . '" found.', 1247826696);
+                    throw new Exception(
+                        'No identifying value for object of class "' . get_class($value) . '" found.',
+                        1247826696
+                    );
                 }
                 if ($this->hasArgument('optionLabelField')) {
                     $value = ObjectAccess::getPropertyPath($value, $this->arguments['optionLabelField']);
@@ -282,13 +288,16 @@ class SelectCountriesViewHelper extends AbstractFormFieldViewHelper
                         if (method_exists($value, '__toString')) {
                             $value = (string)$value;
                         } else {
-                            throw new Exception('Label value for object of class "' . get_class($value) . '" was an object without a __toString() method.', 1247827553);
+                            throw new Exception(
+                                'Label value for object of class "'
+                                . get_class($value) . '" was an object without a __toString() method.',
+                                1247827553
+                            );
                         }
                     }
                 } elseif (is_object($value) && method_exists($value, '__toString')) {
                     $value = (string)$value;
-                } elseif ($this->persistenceManager->getIdentifierByObject($value) !== null) {
-                    // @todo use $this->persistenceManager->isNewObject() once it is implemented
+                } elseif ($this->persistenceManager->isNewObject($value)) {
                     $value = $this->persistenceManager->getIdentifierByObject($value);
                 }
             }
@@ -351,8 +360,7 @@ class SelectCountriesViewHelper extends AbstractFormFieldViewHelper
             if ($this->hasArgument('optionValueField')) {
                 return (string)ObjectAccess::getPropertyPath($valueElement, $this->arguments['optionValueField']);
             }
-            // @todo use $this->persistenceManager->isNewObject() once it is implemented
-            if ($this->persistenceManager->getIdentifierByObject($valueElement) !== null) {
+            if ($this->persistenceManager->isNewObject($valueElement)) {
                 return (string)$this->persistenceManager->getIdentifierByObject($valueElement);
             }
             return (string)$valueElement;

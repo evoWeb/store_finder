@@ -39,34 +39,7 @@ class TceMainListener
     }
 
     /**
-     * Remap id for id and table
-     *
-     * @param string|int $NEW_id
-     * @param string $table
-     * @param DataHandler $parentObject
-     *
-     * @return array
-     */
-    protected function remapId(string|int $NEW_id, string $table, DataHandler $parentObject): array
-    {
-        if (array_key_exists($NEW_id, $parentObject->substNEWwithIDs)) {
-            $id = $parentObject->substNEWwithIDs[$NEW_id];
-            $table = $parentObject->substNEWwithIDs_table[$NEW_id];
-        } else {
-            $id = $NEW_id;
-        }
-
-        return [(int)$id, $table];
-    }
-
-    /**
      * After database operations hook
-     *
-     * @param string $status
-     * @param string $table
-     * @param string|int $id
-     * @param array $fieldValues
-     * @param DataHandler $parentObject
      */
     public function processDatamap_afterDatabaseOperations(
         string $status,
@@ -98,5 +71,20 @@ class TceMainListener
                 break;
             default:
         }
+    }
+
+    /**
+     * Remap id for id and table
+     */
+    protected function remapId(string|int $NEW_id, string $table, DataHandler $parentObject): array
+    {
+        if (array_key_exists($NEW_id, $parentObject->substNEWwithIDs)) {
+            $id = $parentObject->substNEWwithIDs[$NEW_id];
+            $table = $parentObject->substNEWwithIDs_table[$NEW_id];
+        } else {
+            $id = $NEW_id;
+        }
+
+        return [(int)$id, $table];
     }
 }

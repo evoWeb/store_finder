@@ -49,6 +49,7 @@ class MapController extends ActionController
     public function __construct(
         protected LocationRepository $locationRepository,
         protected CategoryRepository $categoryRepository,
+        protected CountryRepository $countryRepository,
         protected GeocodeService $geocodeService
     ) {
     }
@@ -163,13 +164,11 @@ class MapController extends ActionController
         if ($this->request->hasArgument('constraint')) {
             $constraint = $this->request->getArgument('constraint');
             if (!intval($constraint['country'])) {
-                /** @var CountryRepository $countryRepository */
-                $countryRepository = GeneralUtility::getContainer()->get(CountryRepository::class);
                 /** @var $value Country */
                 if (strlen($constraint['country']) === 2) {
-                    $value = $countryRepository->findByIsoCodeA2([$constraint['country']])->getFirst();
+                    $value = $this->countryRepository->findByIsoCodeA2([$constraint['country']])->getFirst();
                 } elseif (strlen($constraint['country']) === 3) {
-                    $value = $countryRepository->findByIsoCodeA3($constraint['country']);
+                    $value = $this->countryRepository->findByIsoCodeA3($constraint['country']);
                 } else {
                     $value = false;
                 }
@@ -258,12 +257,8 @@ class MapController extends ActionController
 
     /**
      * Action responsible for rendering search, map and list partial
-     *
-     * @param Constraint $constraint
-     *
-     * @return ResponseInterface
      */
-    #[Extbase\Validate(['validator' => ConstraintValidator::class, 'param' => 'constraint'])]
+    #[Extbase\Validate(['param' => 'constraint', 'validator' => ConstraintValidator::class])]
     public function searchAction(Constraint $constraint): ResponseInterface
     {
         [$locations, $constraint] = $this->getLocationsByConstraints($constraint);
@@ -396,11 +391,6 @@ class MapController extends ActionController
      * Get center from query result based on center of all coordinates. If only one
      * is found this is used. In case none was found the center based on the request
      * gets calculated
-     *
-     * @param Location $constraint
-     * @param QueryResultInterface $queryResult
-     *
-     * @return Location
      */
     protected function getCenterOfQueryResult(Location $constraint, QueryResultInterface $queryResult): Location
     {
@@ -444,10 +434,6 @@ class MapController extends ActionController
     /**
      * Add default constraints configured in typoscript and only set if property
      * in search is empty
-     *
-     * @param Constraint $search
-     *
-     * @return Constraint
      */
     protected function addDefaultConstraint(Constraint $search): Constraint
     {
@@ -467,15 +453,12 @@ class MapController extends ActionController
                     break;
 
                 case 'country':
-                    /** @var CountryRepository $countryRepository */
-                    $countryRepository = GeneralUtility::getContainer()->get(CountryRepository::class);
-
                     if ((int)($defaultConstraint['country'])) {
-                        $value = $countryRepository->findByUid((int)$defaultConstraint['country']);
+                        $value = $this->countryRepository->findByUid((int)$defaultConstraint['country']);
                     } elseif (strlen($defaultConstraint['country']) === 2) {
-                        $value = $countryRepository->findByIsoCodeA2([$defaultConstraint['country']])->getFirst();
+                        $value = $this->countryRepository->findByIsoCodeA2([$defaultConstraint['country']])->getFirst();
                     } elseif (strlen($defaultConstraint['country']) === 3) {
-                        $value = $countryRepository->findByIsoCodeA3($defaultConstraint['country']);
+                        $value = $this->countryRepository->findByIsoCodeA3($defaultConstraint['country']);
                     }
                     break;
             }
@@ -492,10 +475,6 @@ class MapController extends ActionController
 
     /**
      * Geocode requested address and use as center or fetch location that was flagged as center.
-     *
-     * @param ?Location $constraint
-     *
-     * @return Location
      */
     public function getCenter(Location $constraint = null): Location
     {
@@ -526,11 +505,6 @@ class MapController extends ActionController
 
     /**
      * Set zoom level for map based on maximum radius
-     *
-     * @param Location $center
-     * @param QueryResultInterface $locations
-     *
-     * @return Location
      */
     public function setZoomLevel(Location $center, QueryResultInterface $locations): Location
     {

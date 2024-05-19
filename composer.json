@@ -30,29 +30,29 @@
 		}
 	},
 	"require": {
-		"php": "^8.1",
-		"typo3/cms-core": "^12.4 || 12.4.x-dev || dev-main",
-		"typo3/cms-backend": "^12.4 || 12.4.x-dev || dev-main",
-		"typo3/cms-extbase": "^12.4 || 12.4.x-dev || dev-main",
-		"typo3/cms-fluid": "^12.4 || 12.4.x-dev || dev-main",
-		"typo3/cms-frontend": "^12.4 || 12.4.x-dev || dev-main",
-		"typo3/cms-install": "^12.4 || 12.4.x-dev || dev-main",
+		"php": "^8.2",
+		"typo3/cms-core": "^13.1 || 13.4.x-dev || dev-main",
+		"typo3/cms-backend": "^13.1 || 13.4.x-dev || dev-main",
+		"typo3/cms-extbase": "^13.1 || 13.4.x-dev || dev-main",
+		"typo3/cms-fluid": "^13.1 || 13.4.x-dev || dev-main",
+		"typo3/cms-frontend": "^13.1 || 13.4.x-dev || dev-main",
+		"typo3/cms-install": "^13.1 || 13.4.x-dev || dev-main",
 
-		"typo3/cms-extensionmanager": "^12.4 || 12.4.x-dev || dev-main",
 		"doctrine/annotations": "^1.13.3 || ^2.0",
-		"doctrine/dbal": "^3.7.2 || ^4.0",
-		"geocoder-php/google-maps-provider": "^4.7.0",
+		"doctrine/dbal": "^4.0.2",
 		"guzzlehttp/guzzle": "^7.7.0",
-		"phpoffice/phpspreadsheet": "^1.28.0",
 		"psr/event-dispatcher": "^1.0",
 		"psr/http-message": "^1.1 || ^2.0",
 		"psr/http-server-handler": "^1.0",
 		"psr/http-server-middleware": "^1.0",
-		"sjbr/static-info-tables": "dev-master",
-		"symfony/console": "^6.4 || ^7.0"
+		"symfony/console": "^7.0",
+		"geocoder-php/google-maps-provider": "^4.7.1",
+		"phpoffice/phpspreadsheet": "^2.0.0",
+		"sjbr/static-info-tables": "dev-master"
 	},
 	"require-dev": {
-		"typo3/testing-framework": "^8.0.2 || dev-main"
+		"typo3/cms-extensionmanager": "^13.1 || 13.4.x-dev || dev-main",
+		"typo3/testing-framework": "dev-main"
 	},
 	"extra": {
 		"typo3/cms": {

@@ -23,7 +23,7 @@ class QueryBuilderHelper
         );
 
         array_walk($parameters, function ($value, $key) use (&$sql, $types) {
-            if ($types[$key] == \PDO::PARAM_STR) {
+            if ($types[$key] == ParameterType::STRING) {
                 $value = '\'' . $value . '\'';
             } elseif ($types[$key] == ArrayParameterType::INTEGER) {
                 $value = implode(', ', $value);
@@ -121,9 +121,9 @@ class QueryBuilderHelper
      */
     public static function expandListParameters(string $query, array $params, array $types): array
     {
-        $isPositional   = is_int(key($params));
+        $isPositional = is_int(key($params));
         $arrayPositions = [];
-        $bindIndex      = -1;
+        $bindIndex = -1;
 
         if ($isPositional) {
             // make sure that $types has the same keys as $params
@@ -148,26 +148,26 @@ class QueryBuilderHelper
             $arrayPositions[$name] = false;
         }
 
-        if (( ! $arrayPositions && $isPositional)) {
+        if ((!$arrayPositions && $isPositional)) {
             return [$query, $params, $types];
         }
 
         if ($isPositional) {
             $paramOffset = 0;
             $queryOffset = 0;
-            $params      = array_values($params);
-            $types       = array_values($types);
+            $params = array_values($params);
+            $types = array_values($types);
 
             $paramPos = self::getPositionalPlaceholderPositions($query);
 
             foreach ($paramPos as $needle => $needlePos) {
-                if (! isset($arrayPositions[$needle])) {
+                if (!isset($arrayPositions[$needle])) {
                     continue;
                 }
 
-                $needle    += $paramOffset;
+                $needle += $paramOffset;
                 $needlePos += $queryOffset;
-                $count      = count($params[$needle]);
+                $count = count($params[$needle]);
 
                 $params = array_merge(
                     array_slice($params, 0, $needle),
@@ -180,13 +180,13 @@ class QueryBuilderHelper
                     $count ?
                         // array needles are at {@link \Doctrine\DBAL\ParameterType} constants
                         // + {@link \Doctrine\DBAL\Connection::ARRAY_PARAM_OFFSET}
-                        array_fill(0, $count, $types[$needle] - Connection::ARRAY_PARAM_OFFSET) :
+                        array_fill(0, $count, $types[$needle]) :
                         [],
                     array_slice($types, $needle + 1)
                 );
 
                 $expandStr = $count ? implode(', ', array_fill(0, $count, '?')) : 'NULL';
-                $query     = substr($query, 0, $needlePos) . $expandStr . substr($query, $needlePos + 1);
+                $query = substr($query, 0, $needlePos) . $expandStr . substr($query, $needlePos + 1);
 
                 $paramOffset += $count - 1; // Grows larger by number of parameters minus the replaced needle.
                 $queryOffset += strlen($expandStr) - 1;
@@ -196,36 +196,36 @@ class QueryBuilderHelper
         }
 
         $queryOffset = 0;
-        $typesOrd    = [];
-        $paramsOrd   = [];
+        $typesOrd = [];
+        $paramsOrd = [];
 
         $paramPos = self::getNamedPlaceholderPositions($query);
 
         foreach ($paramPos as $pos => $paramName) {
             $paramLen = strlen($paramName) + 1;
-            $value    = self::extractParam($paramName, $params, true);
+            $value = self::extractParam($paramName, $params, true);
 
-            if (! isset($arrayPositions[$paramName]) && ! isset($arrayPositions[':' . $paramName])) {
-                $pos         += $queryOffset;
+            if (!isset($arrayPositions[$paramName]) && !isset($arrayPositions[':' . $paramName])) {
+                $pos += $queryOffset;
                 $queryOffset -= $paramLen - 1;
-                $paramsOrd[]  = $value;
-                $typesOrd[]   = self::extractParam($paramName, $types, false, ParameterType::STRING);
-                $query        = substr($query, 0, $pos) . '?' . substr($query, $pos + $paramLen);
+                $paramsOrd[] = $value;
+                $typesOrd[] = self::extractParam($paramName, $types, false, ParameterType::STRING);
+                $query = substr($query, 0, $pos) . '?' . substr($query, $pos + $paramLen);
 
                 continue;
             }
 
-            $count     = count($value);
+            $count = count($value);
             $expandStr = $count > 0 ? implode(', ', array_fill(0, $count, '?')) : 'NULL';
 
             foreach ($value as $val) {
                 $paramsOrd[] = $val;
-                $typesOrd[]  = self::extractParam($paramName, $types, false) - Connection::ARRAY_PARAM_OFFSET;
+                $typesOrd[] = self::extractParam($paramName, $types, false);
             }
 
-            $pos         += $queryOffset;
+            $pos += $queryOffset;
             $queryOffset += strlen($expandStr) - $paramLen;
-            $query        = substr($query, 0, $pos) . $expandStr . substr($query, $pos + $paramLen);
+            $query = substr($query, 0, $pos) . $expandStr . substr($query, $pos + $paramLen);
         }
 
         return [$query, $paramsOrd, $typesOrd];
