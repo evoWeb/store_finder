@@ -24,6 +24,7 @@ jobs:
             --rm --user $(id -u) \
             -v ${PWD}:/project \
             ghcr.io/typo3-documentation/render-guides:latest render Documentation
+          mv Documentation-GENERATED-temp/Index.html Documentation-GENERATED-temp/index.html
 
       - name: Deploy to GitHub Pages 🚀
         uses: JamesIves/github-pages-deploy-action@v4.6.0
