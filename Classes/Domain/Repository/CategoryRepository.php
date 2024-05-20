@@ -51,9 +51,10 @@ class CategoryRepository extends Repository
 
     public function initializeObject(): void
     {
-        $querySettings = GeneralUtility::makeInstance(Typo3QuerySettings::class);
-        $querySettings->setRespectStoragePage(false);
-        $this->setDefaultQuerySettings($querySettings);
+        /** @var Typo3QuerySettings $defaultQuerySettings */
+        $defaultQuerySettings = $this->createQuery()->getQuerySettings();
+        $defaultQuerySettings->setRespectStoragePage(false);
+        $this->setDefaultQuerySettings($defaultQuerySettings);
     }
 
     public function findByUids(array $uids): QueryResultInterface

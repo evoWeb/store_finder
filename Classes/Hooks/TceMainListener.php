@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Evoweb\StoreFinder\EventListener;
+namespace Evoweb\StoreFinder\Hooks;
 
 /*
  * This file is developed by evoWeb.

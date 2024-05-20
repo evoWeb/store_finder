@@ -28,21 +28,20 @@ use Evoweb\StoreFinder\Validation\Validator\SettableInterface;
 use Psr\Http\Message\ResponseInterface;
 use SJBR\StaticInfoTables\Domain\Model\Country;
 use TYPO3\CMS\Core\Http\HtmlResponse;
+use TYPO3\CMS\Core\Pagination\ArrayPaginator;
 use TYPO3\CMS\Core\Pagination\SimplePagination;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Mvc\Controller\Arguments;
-use TYPO3Fluid\Fluid\View\ViewInterface;
 use TYPO3\CMS\Extbase\Annotation as Extbase;
 use TYPO3\CMS\Extbase\Http\ForwardResponse;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\Controller\Argument;
+use TYPO3\CMS\Extbase\Mvc\Controller\Arguments;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
-use TYPO3\CMS\Extbase\Pagination\QueryResultPaginator;
-use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Property\TypeConverter\PersistentObjectConverter;
-use TYPO3\CMS\Extbase\Validation\Validator\ValidatorInterface;
 use TYPO3\CMS\Extbase\Validation\ValidatorClassNameResolver;
+use TYPO3\CMS\Extbase\Validation\Validator\ValidatorInterface;
+use TYPO3Fluid\Fluid\View\ViewInterface;
 
 class MapController extends ActionController
 {
@@ -156,28 +155,10 @@ class MapController extends ActionController
         }
 
         $this->settings['static_info_tables'] = ExtensionManagementUtility::isLoaded('static_info_tables') ? 1 : 0;
-
         $this->settings['allowedCountries'] = explode(',', $this->settings['allowedCountries'] ?? '');
+
         $this->geocodeService->setSettings($this->settings);
         $this->locationRepository->setSettings($this->settings);
-
-        if ($this->request->hasArgument('constraint')) {
-            $constraint = $this->request->getArgument('constraint');
-            if (!intval($constraint['country'])) {
-                /** @var $value Country */
-                if (strlen($constraint['country']) === 2) {
-                    $value = $this->countryRepository->findByIsoCodeA2([$constraint['country']])->getFirst();
-                } elseif (strlen($constraint['country']) === 3) {
-                    $value = $this->countryRepository->findByIsoCodeA3($constraint['country']);
-                } else {
-                    $value = false;
-                }
-                if ($value) {
-                    $constraint['country'] = $value->getUid();
-                }
-                $this->request->getAttribute('extbase')->setArgument('constraint', $constraint);
-            }
-        }
 
         $this->setTypeConverter();
     }
@@ -193,66 +174,62 @@ class MapController extends ActionController
     public function mapAction(): ResponseInterface
     {
         if ($this->settings['location'] ?? false) {
-            $response = new ForwardResponse('show');
-        } else {
-            [$locations, $constraint] = $this->getLocationsByDefaultConstraints();
-
-            $event = new MapGetLocationsByConstraintsEvent($this, $locations, $constraint);
-            $this->eventDispatcher->dispatch($event);
-            $locations = $event->getLocations();
-            $constraint = $event->getConstraint();
-
-            $this->view->assign('afterSearch', 0);
-            $this->view->assign('constraint', $constraint);
-            $this->view->assign('locations', $locations);
-
-            if (count($locations) > 0 || $constraint->isGeocoded()) {
-                $center = $this->getCenterOfQueryResult($constraint, $locations);
-                $center = $this->setZoomLevel($center, $locations);
-                $this->view->assign('center', $center);
-            }
-
-            $this->addCategoryFromSettingsToView();
-            $this->addPaginator($locations);
-
-            $response = new HtmlResponse($this->view->render());
+            return new ForwardResponse('show');
         }
 
-        return $response;
+        [$locations, $constraint] = $this->getLocationsByDefaultConstraints();
+
+        $event = new MapGetLocationsByConstraintsEvent($this, $locations, $constraint);
+        $this->eventDispatcher->dispatch($event);
+        $locations = $event->getLocations();
+        $constraint = $event->getConstraint();
+
+        $this->view->assign('afterSearch', 0);
+        $this->view->assign('constraint', $constraint);
+        $this->view->assign('locations', $locations);
+
+        if (count($locations) || $constraint->isGeocoded()) {
+            $center = $this->getCenterOfQueryResult($constraint, $locations);
+            $center = $this->setZoomLevel($center, $locations);
+            $this->view->assign('center', $center);
+        }
+
+        $this->addCategoryFromSettingsToView();
+        $this->addPaginator($locations);
+
+        return new HtmlResponse($this->view->render());
     }
 
     /**
-     * Action responsible for rendering search, map and list partial
+     * Action responsible for rendering cached search, map and list partial
      */
     public function cachedMapAction(): ResponseInterface
     {
         if ($this->settings['location'] ?? false) {
-            $response = new ForwardResponse('show');
-        } else {
-            [$locations, $constraint] = $this->getLocationsByDefaultConstraints();
-
-            $event = new MapGetLocationsByConstraintsEvent($this, $locations, $constraint);
-            $this->eventDispatcher->dispatch($event);
-            $locations = $event->getLocations();
-            $constraint = $event->getConstraint();
-
-            $this->view->assign('afterSearch', 0);
-            $this->view->assign('constraint', $constraint);
-            $this->view->assign('locations', $locations);
-
-            if (count($locations) > 0 || $constraint->isGeocoded()) {
-                $center = $this->getCenterOfQueryResult($constraint, $locations);
-                $center = $this->setZoomLevel($center, $locations);
-                $this->view->assign('center', $center);
-            }
-
-            $this->addCategoryFromSettingsToView();
-            $this->addPaginator($locations);
-
-            $response = new HtmlResponse($this->view->render());
+            return new ForwardResponse('show');
         }
 
-        return $response;
+        [$locations, $constraint] = $this->getLocationsByDefaultConstraints();
+
+        $event = new MapGetLocationsByConstraintsEvent($this, $locations, $constraint);
+        $this->eventDispatcher->dispatch($event);
+        $locations = $event->getLocations();
+        $constraint = $event->getConstraint();
+
+        $this->view->assign('afterSearch', 0);
+        $this->view->assign('constraint', $constraint);
+        $this->view->assign('locations', $locations);
+
+        if (count($locations) || $constraint->isGeocoded()) {
+            $center = $this->getCenterOfQueryResult($constraint, $locations);
+            $center = $this->setZoomLevel($center, $locations);
+            $this->view->assign('center', $center);
+        }
+
+        $this->addCategoryFromSettingsToView();
+        $this->addPaginator($locations);
+
+        return new HtmlResponse($this->view->render());
     }
 
     /**
@@ -272,7 +249,7 @@ class MapController extends ActionController
         $this->view->assign('constraint', $constraint);
         $this->view->assign('locations', $locations);
 
-        if (count($locations) > 0 || $constraint->isGeocoded()) {
+        if (count($locations) || $constraint->isGeocoded()) {
             $center = $this->getCenterOfQueryResult($constraint, $locations);
             $center = $this->setZoomLevel($center, $locations);
             $this->view->assign('center', $center);
@@ -287,11 +264,7 @@ class MapController extends ActionController
     protected function getLocationsByConstraints(Constraint $constraint): array
     {
         if ($this->settings['disableLocationFetchLogic'] ?? false) {
-            $locations = $this->locationRepository->getEmptyResult();
-            return  [
-                $locations,
-                $constraint
-            ];
+            return [[], $constraint];
         }
 
         /** @var Constraint $constraint */
@@ -305,16 +278,13 @@ class MapController extends ActionController
 
     protected function getLocationsByDefaultConstraints(): array
     {
-        /** @var QueryResultInterface $locations */
+        /** @var array[] $locations */
+        $locations = [];
         /** @var Constraint $constraint */
         $constraint = GeneralUtility::makeInstance(Constraint::class);
 
         if ($this->settings['disableLocationFetchLogic'] ?? false) {
-            $locations = $this->locationRepository->getEmptyResult();
-            return [
-                $locations,
-                $constraint
-            ];
+            return [$locations, $constraint];
         }
 
         if (
@@ -328,8 +298,6 @@ class MapController extends ActionController
 
             if ($this->settings['showLocationsForDefaultConstraint'] ?? false) {
                 $locations = $this->locationRepository->findByConstraint($constraint);
-            } else {
-                $locations = $this->locationRepository->findOneByUid(-1);
             }
         }
 
@@ -341,11 +309,7 @@ class MapController extends ActionController
                 'name' => QueryInterface::ORDER_ASCENDING,
             ]);
 
-            $locations = $this->locationRepository->findAll();
-        }
-
-        if (empty($locations)) {
-            $locations = $this->locationRepository->getEmptyResult();
+            $locations = $this->locationRepository->findAll()->toArray();
         }
 
         return [$locations, $constraint];
@@ -359,20 +323,20 @@ class MapController extends ActionController
     public function showAction(Location $location = null): ResponseInterface
     {
         if ($location === null) {
-            $locations = $this->locationRepository->findOneByUid((int)($this->settings['location'] ?? -1));
-            $location = $locations->getFirst();
+            $location = $this->locationRepository->findOneByUid((int)($this->settings['location'] ?? -1));
         } else {
-            $locations = $this->locationRepository->findOneByUid($location->getUid());
+            $location = $this->locationRepository->findOneByUid($location->getUid());
         }
 
         $this->view->assign('afterSearch', 1);
-        $this->view->assign('locations', $locations);
+        $this->view->assign('locations', [$location]);
 
-        if (count($locations)) {
-            $center = $this->getCenterOfQueryResult($location, $locations);
-            $center = $this->setZoomLevel($center, $locations);
+        if ($location) {
+            $center = $this->getCenterOfQueryResult($location, []);
+            $center = $this->setZoomLevel($center, []);
             $this->view->assign('center', $center);
         }
+
         return new HtmlResponse($this->view->render());
     }
 
@@ -392,21 +356,21 @@ class MapController extends ActionController
      * is found this is used. In case none was found the center based on the request
      * gets calculated
      */
-    protected function getCenterOfQueryResult(Location $constraint, QueryResultInterface $queryResult): Location
+    protected function getCenterOfQueryResult(Location $constraint, array $locations): Location
     {
-        $count = $queryResult->count();
-        if ($count == 1) {
-            /** @var Location $center */
-            $center = $queryResult->getFirst();
-        } elseif (!$queryResult->count()) {
+        /** @var Location $center */
+        $count = count($locations);
+        if ($count == 0) {
             $center = $this->getCenter($constraint);
+        } elseif ($count == 1) {
+            $center = reset($locations);
         } else {
             $x = 0;
             $y = 0;
             $z = 0;
 
-            /** @var Location $location */
-            foreach ($queryResult as $location) {
+            /** @var Location[] $locations */
+            foreach ($locations as $location) {
                 $latitude = $location->getLatitude() * M_PI / 180;
                 $longitude = $location->getLongitude() * M_PI / 180;
 
@@ -506,7 +470,7 @@ class MapController extends ActionController
     /**
      * Set zoom level for map based on maximum radius
      */
-    public function setZoomLevel(Location $center, QueryResultInterface $locations): Location
+    public function setZoomLevel(Location $center, array $locations): Location
     {
         $radius = 0;
         /** @var Location $location */
@@ -545,13 +509,13 @@ class MapController extends ActionController
         return $center;
     }
 
-    protected function addPaginator(QueryResultInterface $locations): void
+    protected function addPaginator(array $locations): void
     {
         if ($this->settings['addPaginator'] ?? false) {
             $currentPage = $this->request->hasArgument('currentPage')
-                ? (int)$this->request->hasArgument('currentPage') : 1;
+                ? (int)$this->request->getArgument('currentPage') : 1;
 
-            $resultPaginator = new QueryResultPaginator(
+            $resultPaginator = new ArrayPaginator(
                 $locations,
                 $currentPage,
                 (int)($this->settings['limit'] ?? 10)

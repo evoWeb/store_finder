@@ -23,9 +23,9 @@ use Geocoder\Provider\GoogleMaps\GoogleMaps;
 use Geocoder\Provider\Provider;
 use Geocoder\Query\GeocodeQuery;
 use Geocoder\StatefulGeocoder;
-use Http\Adapter\Guzzle7\Client;
 use SJBR\StaticInfoTables\Domain\Model\Country;
 use SJBR\StaticInfoTables\Domain\Model\CountryZone;
+use TYPO3\CMS\Core\Http\Client\GuzzleClientFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class GeocodeService
@@ -37,7 +37,8 @@ class GeocodeService
     public bool $hasMultipleResults = false;
 
     public function __construct(
-        protected CoordinatesCache $coordinatesCache
+        protected CoordinatesCache $coordinatesCache,
+        private readonly GuzzleClientFactory $guzzleFactory
     ) {
     }
 
@@ -125,7 +126,11 @@ class GeocodeService
         }
 
         if (!isset($queryValues['country'])) {
-            throw new \Exception('Country may never be empty query: ' . var_export($queryValues, true), 1618235512);
+            throw new \Exception(
+                'Country may never be empty. Check your TypoScript setup to define a default constraint. Query: '
+                . var_export($queryValues, true),
+                1618235512
+            );
         }
 
         return $queryValues;
@@ -139,7 +144,7 @@ class GeocodeService
             $providerClass = $this->settings['geocoderProvider'];
         }
 
-        $httpClient = new Client();
+        $httpClient = $this->guzzleFactory->getClient();
         $provider = GeneralUtility::makeInstance(
             $providerClass,
             $httpClient,

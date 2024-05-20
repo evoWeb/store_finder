@@ -1,101 +1,99 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
-			xmlns:sf="http://typo3.org/ns/Evoweb/StoreFinder/ViewHelpers"
-			data-namespace-typo3-fluid="true">
+            xmlns:sf="http://typo3.org/ns/Evoweb/StoreFinder/ViewHelpers"
+            data-namespace-typo3-fluid="true">
 
 <f:section name="content">
 <h3 class="formHeader"><f:translate key="formHeader"/></h3>
 
 <f:form action="search" name="constraint" object="{constraint}" pageUid="{settings.resultPageId}">
-	<f:render partial="FormErrors" section="Main" arguments="{for: 'constraint'}" />
-	<f:render partial="FieldError" section="Main" arguments="{field: 'uid'}" />
+    <f:render partial="FormErrors" section="Main" arguments="{for: 'constraint'}" />
+    <f:render partial="FieldError" section="Main" arguments="{field: 'uid'}" />
 
-	<div class="form-row">
-		<div class="col-md-6 mb-3 name">
-			<label for="name"><f:translate key="name" /></label>
-			<f:render partial="FieldError" section="Main" arguments="{field: 'name'}" />
-			<f:form.textfield property="name" id="name" class="form-control"/>
-		</div>
+    <div class="form-row">
+        <div class="col-md-6 mb-3 name">
+            <label for="name"><f:translate key="name" /></label>
+            <f:render partial="FieldError" section="Main" arguments="{field: 'name'}" />
+            <f:form.textfield property="name" id="name" class="form-control"/>
+        </div>
 
-		<div class="col-md-6 mb-3 address">
-			<label for="address"><f:translate key="address" /></label>
-			<f:render partial="FieldError" section="Main" arguments="{field: 'address'}" />
-			<f:form.textfield property="address" id="address" class="form-control"/>
-		</div>
+        <div class="col-md-6 mb-3 address">
+            <label for="address"><f:translate key="address" /></label>
+            <f:render partial="FieldError" section="Main" arguments="{field: 'address'}" />
+            <f:form.textfield property="address" id="address" class="form-control"/>
+        </div>
 
-		<div class="col-md-6 mb-3 zipcode">
-			<label for="zipcode"><f:translate key="zipcode" /></label>
-			<f:render partial="FieldError" section="Main" arguments="{field: 'zipcode'}" />
-			<f:form.textfield property="zipcode" id="zipcode" class="form-control"/>
-		</div>
+        <div class="col-md-6 mb-3 zipcode">
+            <label for="zipcode"><f:translate key="zipcode" /></label>
+            <f:render partial="FieldError" section="Main" arguments="{field: 'zipcode'}" />
+            <f:form.textfield property="zipcode" id="zipcode" class="form-control"/>
+        </div>
 
-		<div class="col-md-6 mb-3 city">
-			<label for="city"><f:translate key="city" /></label>
-			<f:render partial="FieldError" section="Main" arguments="{field: 'city'}" />
-			<f:form.textfield property="city" id="city" class="form-control"/>
-		</div>
+        <div class="col-md-6 mb-3 city">
+            <label for="city"><f:translate key="city" /></label>
+            <f:render partial="FieldError" section="Main" arguments="{field: 'city'}" />
+            <f:form.textfield property="city" id="city" class="form-control"/>
+        </div>
 
-		<f:if condition="{settings.static_info_tables}">
-			<f:switch expression="{settings.countryValueType}">
-				<f:case value="uid"><f:variable name="value" value="{constraint.country.uid}" /></f:case>
-				<f:case value="isoCodeA2"><f:variable name="value" value="{constraint.country.isoCodeA2}" /></f:case>
-				<f:case value="isoCodeA3"><f:variable name="value" value="{constraint.country.isoCodeA3}" /></f:case>
-			</f:switch>
-			<div class="col-md-6 mb-3 country">
-				<label for="country"><f:translate key="country" /></label>
-				<f:render partial="FieldError" section="Main" arguments="{field: 'country'}" />
-				<sf:form.selectCountries
-					property="country"
-					id="country"
-					class="form-control"
-					optionValueField="{settings.countryValueType}"
-					allowedCountries="{settings.allowedCountries}"
-					value="{value}" />
-			</div>
-		</f:if>
-	</div>
+        <f:if condition="{settings.static_info_tables}">
+            <f:variable name="value" value="{constraint.country.uid}" />
+            <div class="col-md-6 mb-3 country">
+                <label for="country"><f:translate key="country" /></label>
+                <f:render partial="FieldError" section="Main" arguments="{field: 'country'}" />
+                <sf:form.selectCountries
+                    property="country"
+                    id="country"
+                    class="form-control"
+                    optionValueField="uid"
+                    prependOptionLabel="{f:translate(id: 'please-select-country')}"
+                    prependOptionValue="0"
+                    allowedCountries="{settings.allowedCountries}"
+                    value="{constraint.country.uid}" />
+            </div>
+        </f:if>
+    </div>
 
-	<div class="form-row">
-		<div class="col-md-6 mb-3 radius">
-			<label for="radius"><f:translate key="radius" /></label>
-			<f:render partial="FieldError" section="Main" arguments="{field: 'radius'}" />
-			<f:form.select property="radius" id="radius" options="{settings.radius}" class="form-control"/>
-		</div>
+    <div class="form-row">
+        <div class="col-md-6 mb-3 radius">
+            <label for="radius"><f:translate key="radius" /></label>
+            <f:render partial="FieldError" section="Main" arguments="{field: 'radius'}" />
+            <f:form.select property="radius" id="radius" options="{settings.radius}" class="form-control"/>
+        </div>
 
-		<f:if condition="{settings.categoryPriority}!='limitResultsToCategories'">
-		<f:else>
-			<div class="col-md-6 mb-3 category">
-				<label><f:translate key="category" /></label>
-				<f:render partial="FieldError" section="Main" arguments="{field: 'category'}" />
-				<f:render section="categoryTree" arguments="{categories: categories}" />
-			</div>
-		</f:else>
-		</f:if>
+        <f:if condition="{settings.categoryPriority}!='limitResultsToCategories'">
+        <f:else>
+            <div class="col-md-6 mb-3 category">
+                <label><f:translate key="category" /></label>
+                <f:render partial="FieldError" section="Main" arguments="{field: 'category'}" />
+                <f:render section="categoryTree" arguments="{categories: categories}" />
+            </div>
+        </f:else>
+        </f:if>
 
-		<div class="col-md-6 mb-3 products">
-			<label for="products"><f:translate key="products" /></label>
-			<f:render partial="FieldError" section="Main" arguments="{field: 'products'}" />
-			<f:form.textfield property="products" id="products" class="form-control"/>
-		</div>
+        <div class="col-md-6 mb-3 products">
+            <label for="products"><f:translate key="products" /></label>
+            <f:render partial="FieldError" section="Main" arguments="{field: 'products'}" />
+            <f:form.textfield property="products" id="products" class="form-control"/>
+        </div>
 
-		<div class="col-6 offset-md-6 text-md-right mb-3">
-			<f:form.submit value="{f:translate(key: 'submit_find')}" class="btn btn-primary" />
-		</div>
-	</div>
+        <div class="col-6 offset-md-6 text-md-right mb-3">
+            <f:form.submit value="{f:translate(key: 'submit_find')}" class="btn btn-primary" />
+        </div>
+    </div>
 </f:form>
 </f:section>
 
 <f:section name="categoryTree">
-	<ul>
-		<f:for each="{categories}" as="category">
-			<li>
-				<f:form.checkbox id="category-{category.uid}" property="category" value="{category.uid}" />
-				<label for="category-{category.uid}" title="{category.uid}">{category.title}</label>
-				<f:if condition="{category.children}">
-					<f:render section="categoryTree" arguments="{categories: category.children}" />
-				</f:if>
-			</li>
-		</f:for>
-	</ul>
+    <ul>
+        <f:for each="{categories}" as="category">
+            <li>
+                <f:form.checkbox id="category-{category.uid}" property="category" value="{category.uid}" />
+                <label for="category-{category.uid}" title="{category.uid}">{category.title}</label>
+                <f:if condition="{category.children}">
+                    <f:render section="categoryTree" arguments="{categories: category.children}" />
+                </f:if>
+            </li>
+        </f:for>
+    </ul>
 </f:section>
 
 </html>

@@ -221,7 +221,7 @@ class Location extends AbstractEntity
             : $this->state;
     }
 
-    public function setState(CountryZone $state): void
+    public function setState(?CountryZone $state): void
     {
         $this->state = $state;
     }
@@ -238,7 +238,7 @@ class Location extends AbstractEntity
             : $this->country;
     }
 
-    public function setCountry(Country $country): void
+    public function setCountry(?Country $country): void
     {
         $this->country = $country;
     }

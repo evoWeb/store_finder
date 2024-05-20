@@ -115,7 +115,7 @@ class SelectCountriesViewHelper extends AbstractFormFieldViewHelper
             'string',
             'If specified, will call the appropriate getter on each object to determine the value.',
             false,
-            'cnIso2'
+            'uid'
         );
         $this->registerArgument(
             'optionLabelField',

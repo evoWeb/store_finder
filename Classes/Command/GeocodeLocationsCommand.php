@@ -46,7 +46,7 @@ class GeocodeLocationsCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->comment($this->getDescription());
 
-        $locationsToGeocode = $this->locationRepository->findAllWithoutLatLon()->toArray();
+        $locationsToGeocode = $this->locationRepository->findAllWithoutLatLon();
         $locationCount = count($locationsToGeocode);
 
         $progressBar = $io->createProgressBar($locationCount);

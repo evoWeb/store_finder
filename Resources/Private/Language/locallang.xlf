@@ -42,6 +42,9 @@
 			<trans-unit id="route">
 				<source>Route</source>
 			</trans-unit>
+			<trans-unit id="please-select-country">
+				<source>Please select a country</source>
+			</trans-unit>
 			<trans-unit id="error_notvalidatable">
 				<source>Model is not validatable</source>
 			</trans-unit>

@@ -3,7 +3,7 @@
 defined('TYPO3') or die();
 
 use Evoweb\StoreFinder\Controller\MapController;
-use Evoweb\StoreFinder\EventListener\TceMainListener;
+use Evoweb\StoreFinder\Hooks\TceMainListener;
 use Evoweb\StoreFinder\Form\Element\ModifyLocationMap;
 use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 

@@ -54,10 +54,13 @@ services:
   Evoweb\StoreFinder\Domain\Repository\CountryRepository:
     public: true
 
-  Evoweb\StoreFinder\EventListener\TceMainListener:
+  Evoweb\StoreFinder\Hooks\TceMainListener:
     public: true
 
   Evoweb\StoreFinder\Middleware\StoreFinderMiddleware:
+    public: true
+
+  Evoweb\StoreFinder\Service\CacheService:
     public: true
 
   Evoweb\StoreFinder\Service\GeocodeService:

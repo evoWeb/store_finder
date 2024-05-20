@@ -24,6 +24,7 @@ use Psr\Log\NullLogger;
 use SJBR\StaticInfoTables\Domain\Model\Country;
 use SJBR\StaticInfoTables\Domain\Model\CountryZone;
 use TYPO3\CMS\Core\Cache\CacheManager;
+use TYPO3\CMS\Core\Http\Client\GuzzleClientFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
@@ -70,7 +71,7 @@ class AddLocationToCacheTest extends FunctionalTestCase
                     'zipcode' => substr(time(), -5),
                     'city' => uniqid('City'),
                     'state' => null,
-                    'country' => GeneralUtility::makeInstance(Country::class),
+                    'country' => new Country(),
                 ],
                 ['zipcode', 'city', 'country'],
                 ['zipcode', 'city', 'country'],
@@ -81,7 +82,7 @@ class AddLocationToCacheTest extends FunctionalTestCase
                     'zipcode' => substr(time(), -5),
                     'city' => uniqid('City'),
                     'state' => null,
-                    'country' => GeneralUtility::makeInstance(Country::class),
+                    'country' => new Country(),
                 ],
                 ['address', 'zipcode', 'city', 'state', 'country'],
                 ['zipcode', 'city', 'country'],
@@ -92,7 +93,7 @@ class AddLocationToCacheTest extends FunctionalTestCase
                     'zipcode' => substr(time(), -5),
                     'city' => uniqid('City'),
                     'state' => null,
-                    'country' => GeneralUtility::makeInstance(Country::class),
+                    'country' => new Country(),
                 ],
                 ['address', 'zipcode', 'city', 'state', 'country'],
                 ['address', 'zipcode', 'city', 'country'],
@@ -102,8 +103,8 @@ class AddLocationToCacheTest extends FunctionalTestCase
                     'address' => uniqid('Address'),
                     'zipcode' => substr(time(), -5),
                     'city' => uniqid('City'),
-                    'state' => GeneralUtility::makeInstance(CountryZone::class),
-                    'country' => GeneralUtility::makeInstance(Country::class),
+                    'state' => new CountryZone(),
+                    'country' => new Country(),
                 ],
                 ['address', 'zipcode', 'city', 'state', 'country'],
                 ['address', 'zipcode', 'city', 'state', 'country'],
@@ -132,12 +133,14 @@ class AddLocationToCacheTest extends FunctionalTestCase
 
         /** @var CacheManager $cacheManager */
         $cacheManager = GeneralUtility::makeInstance(CacheManager::class);
+        /** @var GuzzleClientFactory $guzzleFactory */
+        $guzzleFactory = GeneralUtility::makeInstance(GuzzleClientFactory::class);
         $cacheFrontend = $cacheManager->getCache('store_finder_coordinate_cache');
 
         $coordinatesCache = new CoordinatesCache($cacheFrontend, $frontendUser);
         $coordinatesCache->flushCache();
 
-        $geocodeService = new GeocodeService($coordinatesCache);
+        $geocodeService = new GeocodeService($coordinatesCache, $guzzleFactory);
 
         $queryValues = $geocodeService->prepareValuesForQuery($expected, $addFields);
         $coordinatesCache->addCoordinateForAddress($expected, $queryValues);

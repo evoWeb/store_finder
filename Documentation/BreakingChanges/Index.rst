@@ -6,6 +6,26 @@
 Breaking Changes
 ================
 
+20. Mai 2024
+============
+
+Result of location repository functions are either location model or array of
+location models.
+
+Removed QueryBuilderHelper. The queryBuilder gets assignment to the query as
+statement and let Extbase take care of the conversion.
+
+The country selector does not take string indexes anymore. If you used isoCodeA2
+or isoCodeA3 in TypoScript before, you need to change your Search.html partial
+to only use {constraint.country.uid} as value and set the optionValueField="uid"
+argument of the sf:form.selectCountries ViewHelper.
+
+The countryValueType setting in TypoScript is dropped.
+
+Refactor geocode service to use TYPO3\CMS\Core\Http\Client\GuzzleClientFactory
+instead of creating of using Http\Adapter\Guzzle7\Client directly
+
+
 17. February 2023
 =================
 

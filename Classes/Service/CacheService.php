@@ -18,6 +18,10 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 class CacheService
 {
+    public function __construct(readonly private CacheManager $cacheManager)
+    {
+    }
+
     public function addTagsForPost(Location $location): void
     {
         $this->addTagToPage('tx_storefinder_domain_model_location_' . $location->getUid());
@@ -43,7 +47,7 @@ class CacheService
 
     public function flushCacheByTags(array $tags): void
     {
-        GeneralUtility::makeInstance(CacheManager::class)
+        $this->cacheManager
             ->getCache('pages')
             ->flushByTags($tags);
     }

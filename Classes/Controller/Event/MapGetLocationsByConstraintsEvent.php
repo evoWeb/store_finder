@@ -23,7 +23,7 @@ class MapGetLocationsByConstraintsEvent
 {
     public function __construct(
         protected MapController $controller,
-        protected QueryResultInterface $locations,
+        protected array $locations,
         protected Constraint $constraint
     ) {
     }
@@ -33,12 +33,12 @@ class MapGetLocationsByConstraintsEvent
         return $this->controller;
     }
 
-    public function getLocations(): QueryResultInterface
+    public function getLocations(): array
     {
         return $this->locations;
     }
 
-    public function setLocations(QueryResultInterface $locations): void
+    public function setLocations(array $locations): void
     {
         $this->locations = $locations;
     }

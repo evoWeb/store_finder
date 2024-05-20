@@ -17,7 +17,6 @@ namespace Evoweb\StoreFinder\Domain\Repository;
 
 use SJBR\StaticInfoTables\Domain\Model\Country;
 use SJBR\StaticInfoTables\Domain\Repository\CountryRepository as SJBRCountryRepository;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
@@ -36,9 +35,10 @@ class CountryRepository extends SJBRCountryRepository
 
     public function initializeObject(): void
     {
-        $querySettings = GeneralUtility::makeInstance(Typo3QuerySettings::class);
-        $querySettings->setRespectStoragePage(false);
-        $this->setDefaultQuerySettings($querySettings);
+        /** @var Typo3QuerySettings $defaultQuerySettings */
+        $defaultQuerySettings = $this->createQuery()->getQuerySettings();
+        $defaultQuerySettings->setRespectStoragePage(false);
+        $this->setDefaultQuerySettings($defaultQuerySettings);
     }
 
     public function findByIsoCodeA2(array $isoCodeA2): QueryResultInterface

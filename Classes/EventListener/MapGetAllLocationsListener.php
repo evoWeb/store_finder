@@ -21,7 +21,7 @@ use Evoweb\StoreFinder\Domain\Model\Constraint;
 use Evoweb\StoreFinder\Domain\Repository\LocationRepository;
 use TYPO3\CMS\Core\Attribute\AsEventListener;
 
-class MapGetLocationsByConstraintsEventListener
+class MapGetAllLocationsListener
 {
     protected LocationRepository $locationRepository;
 
