@@ -11,9 +11,9 @@
 <meta content="" name="docsearch:package_type">
 <meta content="" name="docsearch:release">
 <meta content="" name="docsearch:version">
-<meta content="2024-05-20T19:47:48+00:00" name="docsearch:modified">
-<meta content="2024-05-20T19:47:48+00:00" name="dc.modified">
-<meta content="2024-05-20T19:47:48+00:00" property="article:modified_time">
+<meta content="2024-05-22T16:01:43+00:00" name="docsearch:modified">
+<meta content="2024-05-22T16:01:43+00:00" name="dc.modified">
+<meta content="2024-05-22T16:01:43+00:00" property="article:modified_time">
     <link href="http://purl.org/dc/elements/1.1/" rel="schema.dc">
 <link href="../../_resources/css/theme.css" rel="stylesheet">
 <link href="https://docs.typo3.org/search/" rel="search" title="Search">
@@ -194,11 +194,11 @@ the loading completly.</p>
             
     <p>Add the following code to the Configuration/Services.yaml of your sitepackage to use the example listener.</p>
 
-                    <div class="code-block-caption">
-            <span class="caption-text">MapGetLocationsByConstraintsEventListener.php</span>
-        </div><div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs php"><span class="hljs-keyword">namespace</span> <span class="hljs-title">Evoweb</span>\<span class="hljs-title">StoreFinder</span>\<span class="hljs-title">EventListener</span>;
+                <div class="code-block-caption">
+        <span class="caption-text">MapGetLocationsByConstraintsEventListener.php</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs php"><span class="hljs-keyword">namespace</span> <span class="hljs-title">Evoweb</span>\<span class="hljs-title">StoreFinder</span>\<span class="hljs-title">EventListener</span>;
 
 <span class="hljs-keyword">use</span> <span class="hljs-title">Evoweb</span>\<span class="hljs-title">StoreFinder</span>\<span class="hljs-title">Controller</span>\<span class="hljs-title">Event</span>\<span class="hljs-title">MapGetLocationsByConstraintsEvent</span>;
 <span class="hljs-keyword">use</span> <span class="hljs-title">TYPO3</span>\<span class="hljs-title">CMS</span>\<span class="hljs-title">Core</span>\<span class="hljs-title">Attribute</span>\<span class="hljs-title">AsEventListener</span>;
@@ -210,14 +210,13 @@ the loading completly.</p>
    </span>{
    }
 }</code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
+</div>
             
     <p>More explanation for your custom event listener can be found in the <code>tutorial &lt;_customEventListener&gt;</code></p>
 
@@ -231,19 +230,18 @@ the loading completly.</p>
 <code>plugin.tx_storefinder.settings.disableLocationFetchLogic = 1</code>
 to improve performance. By doing so, all default fetching will be disabled.</p>
 
-                    <div class="code-block-caption">
-            <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript</span>
-        </div><div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.settings.disableLocationFetchLogic = 1</code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
+                <div class="code-block-caption">
+        <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.settings.disableLocationFetchLogic = 1</code></pre>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
+</div>
             
     <p>Listener must follow the symfony/event concept [<a href="https://symfony.com/doc/current/event_dispatcher.html">https://symfony.com/doc/current/event_dispatcher.html</a>]</p>
 
@@ -255,19 +253,18 @@ to improve performance. By doing so, all default fetching will be disabled.</p>
 fill them on your own. In case the distance is empty the default zoom level detection has nothing to work with. In
 this case, you need to set the zoom level in the template OR the radius in TypoScript</p>
 
-                    <div class="code-block-caption">
-            <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript</span>
-        </div><div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.settings.defaultConstraint.radius = 20</code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
+                <div class="code-block-caption">
+        <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.settings.defaultConstraint.radius = 20</code></pre>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
+</div>
     </section>
     </section>
             <section class="section" id="modify-locations-in-storefindermiddleware">
@@ -355,7 +352,7 @@ example of how to change values.</p>
         <div class="frame-container">
             <div class="frame-inner">
                                 <div class="footer-additional">
-                    <p class="text-center">Last rendered: May 20, 2024 19:47</p>
+                    <p class="text-center">Last rendered: May 22, 2024 16:01</p>
                 </div>
                 <div class="footer-meta">
                     <ul class="footer-meta-navigation">

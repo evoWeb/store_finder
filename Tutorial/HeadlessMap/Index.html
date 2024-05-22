@@ -11,9 +11,9 @@
 <meta content="" name="docsearch:package_type">
 <meta content="" name="docsearch:release">
 <meta content="" name="docsearch:version">
-<meta content="2024-05-20T19:47:48+00:00" name="docsearch:modified">
-<meta content="2024-05-20T19:47:48+00:00" name="dc.modified">
-<meta content="2024-05-20T19:47:48+00:00" property="article:modified_time">
+<meta content="2024-05-22T16:01:43+00:00" name="docsearch:modified">
+<meta content="2024-05-22T16:01:43+00:00" name="dc.modified">
+<meta content="2024-05-22T16:01:43+00:00" property="article:modified_time">
     <link href="http://purl.org/dc/elements/1.1/" rel="schema.dc">
 <link href="../../_resources/css/theme.css" rel="stylesheet">
 <link href="https://docs.typo3.org/search/" rel="search" title="Search">
@@ -211,20 +211,19 @@ ModifyMiddlewareLocationsListener is present.</p>
             
     <p>To use the middleware, it&#039;s important to include th Ajax.yaml in the site config</p>
 
-                    <div class="code-block-caption">
-            <span class="caption-text">config/sites/{your-site}/config.yaml</span>
-        </div><div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs yaml"><span class="hljs-attr">imports:</span>
+                <div class="code-block-caption">
+        <span class="caption-text">config/sites/{your-site}/config.yaml</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs yaml"><span class="hljs-attr">imports:</span>
   <span class="hljs-bullet">-</span> <span class="hljs-string">{</span> <span class="hljs-attr">resource:</span> <span class="hljs-string">'EXT:store_finder/Configuration/Routes/Ajax.yaml'</span> <span class="hljs-string">}</span></code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
+</div>
             
     <p>Fields to output and conversion can be changed with TypoScript key plugin.tx_storefinder.ajax</p>
 
@@ -235,23 +234,22 @@ ModifyMiddlewareLocationsListener is present.</p>
     <p>Below is an example on how to use the configuration and endpoints with your
 custom code.</p>
 
-                    <div class="code-block-caption">
-            <span class="caption-text">Map.html</span>
-        </div><div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">store-finder-map</span>
+                <div class="code-block-caption">
+        <span class="caption-text">Map.html</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">store-finder-map</span>
     <span class="hljs-attr">showSearch</span>=<span class="hljs-string">"{sf:bitwiseIf(a: settings.showBeforeSearch, b: 1, then: 1, else: 0)}"</span>
     <span class="hljs-attr">showList</span>=<span class="hljs-string">"{sf:bitwiseIf(a: settings.showBeforeSearch, b: 4, then: 1, else: 0)}"</span>
     <span class="hljs-attr">categoriesEndpoint</span>=<span class="hljs-string">"{f:uri.typolink(parameter: '/api/storefinder/categories/{cObjectData.uid}')}"</span>
     <span class="hljs-attr">locationsEndpoint</span>=<span class="hljs-string">"{f:uri.typolink(parameter: '/api/storefinder/locations/{cObjectData.uid}')}"</span>/&gt;</span></code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
+</div>
     </section>
     </section>
         <!-- content end -->
@@ -327,7 +325,7 @@ custom code.</p>
         <div class="frame-container">
             <div class="frame-inner">
                                 <div class="footer-additional">
-                    <p class="text-center">Last rendered: May 20, 2024 19:47</p>
+                    <p class="text-center">Last rendered: May 22, 2024 16:01</p>
                 </div>
                 <div class="footer-meta">
                     <ul class="footer-meta-navigation">

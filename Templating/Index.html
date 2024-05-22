@@ -11,9 +11,9 @@
 <meta content="" name="docsearch:package_type">
 <meta content="" name="docsearch:release">
 <meta content="" name="docsearch:version">
-<meta content="2024-05-20T19:47:48+00:00" name="docsearch:modified">
-<meta content="2024-05-20T19:47:48+00:00" name="dc.modified">
-<meta content="2024-05-20T19:47:48+00:00" property="article:modified_time">
+<meta content="2024-05-22T16:01:43+00:00" name="docsearch:modified">
+<meta content="2024-05-22T16:01:43+00:00" name="dc.modified">
+<meta content="2024-05-22T16:01:43+00:00" property="article:modified_time">
     <link href="http://purl.org/dc/elements/1.1/" rel="schema.dc">
 <link href="../_resources/css/theme.css" rel="stylesheet">
 <link href="https://docs.typo3.org/search/" rel="search" title="Search">
@@ -189,23 +189,22 @@ possible to configure the templates and partials path in the plugin.</p>
 
             <section class="section" id="example">
             <h3>Example:<a class="headerlink" href="#example" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h3>
-                    <div class="code-block-caption">
-            <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript</span>
-        </div><div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.view {
+                <div class="code-block-caption">
+        <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.view {
     templateRootPath =
     partialRootPath =
     layoutRootPath =
 }</code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
+</div>
     </section>
     </section>
             <section class="section" id="viewhelper">
@@ -227,19 +226,18 @@ viewhelper get used.</p>
             
     <p>Add the xmlns to the html tag in the template</p>
 
-                    <div class="code-block-caption">
-            <span class="caption-text">EXT:my_extension/Resources/Private/Templates/Map/Map.html</span>
-        </div><div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs xml">xmlns:sf="http://typo3.org/ns/Evoweb/StoreFinder/ViewHelpers"</code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
+                <div class="code-block-caption">
+        <span class="caption-text">EXT:my_extension/Resources/Private/Templates/Map/Map.html</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs xml">xmlns:sf="http://typo3.org/ns/Evoweb/StoreFinder/ViewHelpers"</code></pre>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
+</div>
     </section>
             <section class="section" id="minify-viewhelper">
             <h2>minify Viewhelper<a class="headerlink" href="#minify-viewhelper" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h2>
@@ -252,11 +250,11 @@ on rendering time.</p>
 
             <section class="section" id="example-viewhelper">
             <h4>Example viewhelper:<a class="headerlink" href="#example-viewhelper" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h4>
-                    <div class="code-block-caption">
-            <span class="caption-text">EXT:my_extension/Resources/Private/Templates/Map/Map.html</span>
-        </div><div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs xml">var mapConfiguration = {<span class="hljs-tag">&lt;<span class="hljs-name">sf:minify</span>&gt;</span>active: true,
+                <div class="code-block-caption">
+        <span class="caption-text">EXT:my_extension/Resources/Private/Templates/Map/Map.html</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs xml">var mapConfiguration = {<span class="hljs-tag">&lt;<span class="hljs-name">sf:minify</span>&gt;</span>active: true,
         <span class="hljs-tag">&lt;<span class="hljs-name">f:for</span> <span class="hljs-attr">each</span>=<span class="hljs-string">"{settings.mapConfiguration}"</span> <span class="hljs-attr">as</span>=<span class="hljs-string">"configuration"</span> <span class="hljs-attr">key</span>=<span class="hljs-string">"name"</span> <span class="hljs-attr">iteration</span>=<span class="hljs-string">"loop"</span>&gt;</span>{name}: '{configuration}',<span class="hljs-tag">&lt;/<span class="hljs-name">f:for</span>&gt;</span>
     center: {
         lat: <span class="hljs-tag">&lt;<span class="hljs-name">f:format.number</span> <span class="hljs-attr">decimals</span>=<span class="hljs-string">"7"</span>&gt;</span>{center.latitude}<span class="hljs-tag">&lt;/<span class="hljs-name">f:format.number</span>&gt;</span>,
@@ -264,30 +262,28 @@ on rendering time.</p>
     },
     zoom: '{center.zoom}'
 <span class="hljs-tag">&lt;/<span class="hljs-name">sf:minify</span>&gt;</span>};</code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
+</div>
     </section>
             <section class="section" id="example-output">
             <h4>Example output:<a class="headerlink" href="#example-output" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h4>
-                    <div class="code-block-caption">
-            <span class="caption-text">EXT:my_extension/Resources/Private/Templates/Map/Map.html</span>
-        </div><div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs xml">var mapConfiguration = {active:true,apiV3Layers:'',language:'de',center:{lat:50.1125089,lng:8.6521548},zoom:'11'}</code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
+                <div class="code-block-caption">
+        <span class="caption-text">EXT:my_extension/Resources/Private/Templates/Map/Map.html</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs xml">var mapConfiguration = {active:true,apiV3Layers:'',language:'de',center:{lat:50.1125089,lng:8.6521548},zoom:'11'}</code></pre>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
+</div>
     </section>
     </section>
             <section class="section" id="format-binaryand-viewhelper">
@@ -305,19 +301,18 @@ in the plugin the binary value 4 stands for list.</p>
 
             <section class="section" id="example-viewhelper">
             <h4>Example viewhelper:<a class="headerlink" href="#example-viewhelper" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h4>
-                    <div class="code-block-caption">
-            <span class="caption-text">EXT:my_extension/Resources/Private/Templates/Map/Map.html</span>
-        </div><div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">f:if</span> <span class="hljs-attr">condition</span>=<span class="hljs-string">"{sf:format.binaryAnd(base: 4, content: settings.showBeforeSearch)} == 4"</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">f:if</span>&gt;</span></code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
+                <div class="code-block-caption">
+        <span class="caption-text">EXT:my_extension/Resources/Private/Templates/Map/Map.html</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">f:if</span> <span class="hljs-attr">condition</span>=<span class="hljs-string">"{sf:format.binaryAnd(base: 4, content: settings.showBeforeSearch)} == 4"</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">f:if</span>&gt;</span></code></pre>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
+</div>
     </section>
     </section>
             <section class="section" id="form-selectcountries">
@@ -331,19 +326,18 @@ allowedCountries accepts a comma seperated list of ISO2 country codes.</p>
 
             <section class="section" id="example-viewhelper">
             <h4>Example viewhelper:<a class="headerlink" href="#example-viewhelper" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h4>
-                    <div class="code-block-caption">
-            <span class="caption-text">EXT:my_extension/Resources/Private/Templates/Map/Map.html</span>
-        </div><div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">sf:form.selectCountries</span> <span class="hljs-attr">property</span>=<span class="hljs-string">"country"</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"sfrCountry"</span> <span class="hljs-attr">optionValueField</span>=<span class="hljs-string">"isoCodeA3"</span> <span class="hljs-attr">allowedCountries</span>=<span class="hljs-string">"{0: 'DE', 1: 'AT'}"</span> /&gt;</span></code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
+                <div class="code-block-caption">
+        <span class="caption-text">EXT:my_extension/Resources/Private/Templates/Map/Map.html</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">sf:form.selectCountries</span> <span class="hljs-attr">property</span>=<span class="hljs-string">"country"</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"sfrCountry"</span> <span class="hljs-attr">optionValueField</span>=<span class="hljs-string">"isoCodeA3"</span> <span class="hljs-attr">allowedCountries</span>=<span class="hljs-string">"{0: 'DE', 1: 'AT'}"</span> /&gt;</span></code></pre>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
+</div>
     </section>
     </section>
     </section>
@@ -420,7 +414,7 @@ allowedCountries accepts a comma seperated list of ISO2 country codes.</p>
         <div class="frame-container">
             <div class="frame-inner">
                                 <div class="footer-additional">
-                    <p class="text-center">Last rendered: May 20, 2024 19:47</p>
+                    <p class="text-center">Last rendered: May 22, 2024 16:01</p>
                 </div>
                 <div class="footer-meta">
                     <ul class="footer-meta-navigation">

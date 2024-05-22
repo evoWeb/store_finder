@@ -11,9 +11,9 @@
 <meta content="" name="docsearch:package_type">
 <meta content="" name="docsearch:release">
 <meta content="" name="docsearch:version">
-<meta content="2024-05-20T19:47:48+00:00" name="docsearch:modified">
-<meta content="2024-05-20T19:47:48+00:00" name="dc.modified">
-<meta content="2024-05-20T19:47:48+00:00" property="article:modified_time">
+<meta content="2024-05-22T16:01:43+00:00" name="docsearch:modified">
+<meta content="2024-05-22T16:01:43+00:00" name="dc.modified">
+<meta content="2024-05-22T16:01:43+00:00" property="article:modified_time">
     <link href="http://purl.org/dc/elements/1.1/" rel="schema.dc">
 <link href="../_resources/css/theme.css" rel="stylesheet">
 <link href="https://docs.typo3.org/search/" rel="search" title="Search">
@@ -284,11 +284,11 @@ In addition a configuration.handleCloseButtonCallback should be provided.</p>
             
     <p>Example:</p>
 
-                    <div class="code-block-caption">
-            <span class="caption-text">EXT:my_extension/Resources/Public/JavaScript/map.js</span>
-        </div><div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs javascript">configuration.renderSingleViewCallback = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">location, infoWindowTemplate</span>) </span>{
+                <div class="code-block-caption">
+        <span class="caption-text">EXT:my_extension/Resources/Public/JavaScript/map.js</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs javascript">configuration.renderSingleViewCallback = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">location, infoWindowTemplate</span>) </span>{
       location[<span class="hljs-string">'information'</span>][<span class="hljs-string">'staticMapCenter'</span>] = <span class="hljs-built_in">encodeURIComponent</span>(location.information.address) + <span class="hljs-string">',+'</span>
          + <span class="hljs-built_in">encodeURIComponent</span>(location.information.zipcode) + <span class="hljs-string">',+'</span>
          + <span class="hljs-built_in">encodeURIComponent</span>(location.information.city) + <span class="hljs-string">',+'</span>
@@ -313,14 +313,13 @@ configuration.handleCloseButtonCallback = <span class="hljs-function"><span clas
       $singleView.hide();
       $singleView.removeClass(<span class="hljs-string">'show'</span>);
 }</code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
+</div>
     </section>
             <section class="section" id="10-january-2019">
             <h2>10. January 2019<a class="headerlink" href="#10-january-2019" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h2>
@@ -413,7 +412,7 @@ getCityRaw are dropped.</p>
         <div class="frame-container">
             <div class="frame-inner">
                                 <div class="footer-additional">
-                    <p class="text-center">Last rendered: May 20, 2024 19:47</p>
+                    <p class="text-center">Last rendered: May 22, 2024 16:01</p>
                 </div>
                 <div class="footer-meta">
                     <ul class="footer-meta-navigation">

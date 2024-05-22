@@ -11,9 +11,9 @@
 <meta content="" name="docsearch:package_type">
 <meta content="" name="docsearch:release">
 <meta content="" name="docsearch:version">
-<meta content="2024-05-20T19:47:48+00:00" name="docsearch:modified">
-<meta content="2024-05-20T19:47:48+00:00" name="dc.modified">
-<meta content="2024-05-20T19:47:48+00:00" property="article:modified_time">
+<meta content="2024-05-22T16:01:43+00:00" name="docsearch:modified">
+<meta content="2024-05-22T16:01:43+00:00" name="dc.modified">
+<meta content="2024-05-22T16:01:43+00:00" property="article:modified_time">
     <link href="http://purl.org/dc/elements/1.1/" rel="schema.dc">
 <link href="../../_resources/css/theme.css" rel="stylesheet">
 <link href="https://docs.typo3.org/search/" rel="search" title="Search">
@@ -209,19 +209,18 @@ example given where the validators of the email gets removed.</p>
 
             <section class="section" id="remove-validators">
             <h3>Remove validators<a class="headerlink" href="#remove-validators" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h3>
-                    <div class="code-block-caption">
-            <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript</span>
-        </div><div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.settings.validation.zipcode &gt;</code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
+                <div class="code-block-caption">
+        <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.settings.validation.zipcode &gt;</code></pre>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
+</div>
             
     <p>If only one validator is needed you could assign it directly to the field like
 below.</p>
@@ -229,19 +228,18 @@ below.</p>
     </section>
             <section class="section" id="assign-only-one-validator">
             <h3>Assign only one validator<a class="headerlink" href="#assign-only-one-validator" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h3>
-                    <div class="code-block-caption">
-            <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript</span>
-        </div><div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.settings.validation.zipcode = Evoweb\StoreFinder\Validation\Validator\RequiredValidator</code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
+                <div class="code-block-caption">
+        <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.settings.validation.zipcode = Evoweb\StoreFinder\Validation\Validator\RequiredValidator</code></pre>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
+</div>
             
     <p>And finaly it&#039;s possible to have multiple validators for one field like in the
 next example.</p>
@@ -249,22 +247,21 @@ next example.</p>
     </section>
             <section class="section" id="assign-multiple-validators">
             <h3>Assign multiple validators<a class="headerlink" href="#assign-multiple-validators" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h3>
-                    <div class="code-block-caption">
-            <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript</span>
-        </div><div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.settings.validation.city {
+                <div class="code-block-caption">
+        <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.settings.validation.city {
    <span class="hljs-title">1</span> = Evoweb\StoreFinder\Validation\Validator\RequiredValidator
    <span class="hljs-title">2</span> = StringLength
 }</code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
+</div>
             
     <p>Regarding validator it&#039;s possible to have values attached to the assigned one.
 This is beneficial if you want to check against conditions that are not equal
@@ -304,21 +301,20 @@ you are ready to use your validator like in the following example.</p>
 
             <section class="section" id="custom-validator-usage">
             <h3>Custom validator usage<a class="headerlink" href="#custom-validator-usage" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h3>
-                    <div class="code-block-caption">
-            <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript</span>
-        </div><div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.settings.validation.create.city {
+                <div class="code-block-caption">
+        <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.settings.validation.create.city {
    <span class="hljs-title">1</span> = Evoweb\StoreFinder\Validation\Validator\RequiredValidator
 }</code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
+</div>
     </section>
     </section>
             <section class="section" id="available-validators">
@@ -421,7 +417,7 @@ validator as condition to render required sign or not.</dd>
         <div class="frame-container">
             <div class="frame-inner">
                                 <div class="footer-additional">
-                    <p class="text-center">Last rendered: May 20, 2024 19:47</p>
+                    <p class="text-center">Last rendered: May 22, 2024 16:01</p>
                 </div>
                 <div class="footer-meta">
                     <ul class="footer-meta-navigation">

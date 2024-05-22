@@ -11,9 +11,9 @@
 <meta content="" name="docsearch:package_type">
 <meta content="" name="docsearch:release">
 <meta content="" name="docsearch:version">
-<meta content="2024-05-20T19:47:48+00:00" name="docsearch:modified">
-<meta content="2024-05-20T19:47:48+00:00" name="dc.modified">
-<meta content="2024-05-20T19:47:48+00:00" property="article:modified_time">
+<meta content="2024-05-22T16:01:43+00:00" name="docsearch:modified">
+<meta content="2024-05-22T16:01:43+00:00" name="dc.modified">
+<meta content="2024-05-22T16:01:43+00:00" property="article:modified_time">
     <link href="http://purl.org/dc/elements/1.1/" rel="schema.dc">
 <link href="../../_resources/css/theme.css" rel="stylesheet">
 <link href="https://docs.typo3.org/search/" rel="search" title="Search">
@@ -220,19 +220,18 @@ locations of the created folder choose it as record storage page on tab behaviou
 and list part. Copy the folder from the extension to your local path like the fileadmin. To use these copies
 you can change the path either in the plugin field &quot;Partial path&quot; or via TypoScript:</p>
 
-                    <div class="code-block-caption">
-            <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript</span>
-        </div><div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.view.partialRootPaths.<span class="hljs-title">50</span> = ./yourpath/Partials/</code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
+                <div class="code-block-caption">
+        <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.view.partialRootPaths.<span class="hljs-title">50</span> = ./yourpath/Partials/</code></pre>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
+</div>
     </section>
             <section class="section" id="api-keys">
             <h2>API Keys<a class="headerlink" href="#api-keys" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h2>
@@ -268,11 +267,11 @@ would be possible that others use the key and by that causes you to pay for usag
 search was requested. In the example below the zoom, latitude and longitude values are set and then the
 coordinates are used to render search results that are near of them.</p>
 
-                    <div class="code-block-caption">
-            <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript:</span>
-        </div><div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.settings {
+                <div class="code-block-caption">
+        <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript:</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.settings {
    showLocationsForDefaultConstraint = 1
    defaultConstraint {
       zoom = 15
@@ -280,14 +279,13 @@ coordinates are used to render search results that are near of them.</p>
       longitude = <span class="hljs-title">7</span>.464
    }
 }</code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
+</div>
     </section>
             <section class="section" id="use-caching-map-action">
             <h2>Use caching map action<a class="headerlink" href="#use-caching-map-action" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h2>
@@ -375,7 +373,7 @@ the clear cache flash.</p>
         <div class="frame-container">
             <div class="frame-inner">
                                 <div class="footer-additional">
-                    <p class="text-center">Last rendered: May 20, 2024 19:47</p>
+                    <p class="text-center">Last rendered: May 22, 2024 16:01</p>
                 </div>
                 <div class="footer-meta">
                     <ul class="footer-meta-navigation">

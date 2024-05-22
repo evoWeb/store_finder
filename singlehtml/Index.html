@@ -11,9 +11,9 @@
 <meta content="" name="docsearch:package_type">
 <meta content="" name="docsearch:release">
 <meta content="" name="docsearch:version">
-<meta content="2024-05-20T19:47:48+00:00" name="docsearch:modified">
-<meta content="2024-05-20T19:47:48+00:00" name="dc.modified">
-<meta content="2024-05-20T19:47:48+00:00" property="article:modified_time">
+<meta content="2024-05-22T16:01:43+00:00" name="docsearch:modified">
+<meta content="2024-05-22T16:01:43+00:00" name="dc.modified">
+<meta content="2024-05-22T16:01:43+00:00" property="article:modified_time">
     <link href="http://purl.org/dc/elements/1.1/" rel="schema.dc">
 <link href="../_resources/css/theme.css" rel="stylesheet">
 <link href="https://docs.typo3.org/search/" rel="search" title="Search">
@@ -144,7 +144,7 @@ license.</p>
 
         <dd class="field-odd">
             
-    <p>Mon, 20 May 2024 19:47:48 +0000</p>
+    <p>Wed, 22 May 2024 16:01:43 +0000</p>
         </dd>
     </dl>
             <hr />
@@ -320,7 +320,7 @@ license.</p>
 
         <dd class="field-odd">
             
-    <p>Mon, 20 May 2024 19:47:48 +0000</p>
+    <p>Wed, 22 May 2024 16:01:43 +0000</p>
         </dd>
     </dl>
             <hr />
@@ -524,19 +524,18 @@ this point.</p>
             
     <p>The part for administrator is fairly simple. Just install the extension with</p>
 
-                    <div class="code-block-caption">
-            <span class="caption-text">Enter on shell</span>
-        </div><div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs bash">composer require evoweb/store-finder</code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
+                <div class="code-block-caption">
+        <span class="caption-text">Enter on shell</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs bash">composer require evoweb/store-finder</code></pre>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
+</div>
             
     <p>If you use a different google maps key, like for a business account, you need to
 configure the extension in the em. Just hit the gear on the line of the
@@ -567,44 +566,41 @@ in the field Url used for geocode.</p>
     <p>for backend rendering in locations records the content security policy header
 needs to be modified to allow loading images via https</p>
 <div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs apache"><span class="hljs-attribute">img</span>-src 'self' data: https:;</code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
-    </div></li>
+            
+    <pre class="code-block"><code class="hljs apache"><span class="hljs-attribute">img</span>-src 'self' data: https:;</code></pre>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
+    </div>
+</div></li>
     <li class="dash">
     <p>for frontend rendering of google AND OS map the csp header needs to be
 modified to allow script files via https</p>
 <div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs apache"><span class="hljs-attribute">script</span>-src 'self' 'unsafe-inline' blob: data: https:;</code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
-    </div></li>
+            
+    <pre class="code-block"><code class="hljs apache"><span class="hljs-attribute">script</span>-src 'self' 'unsafe-inline' blob: data: https:;</code></pre>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
+    </div>
+</div></li>
     <li class="dash">
     <p>in addition the frontend rendering of OS map needs the csp header to allow
 loading style files via https</p>
 <div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs apache"><span class="hljs-attribute">style</span>-src 'self' 'unsafe-inline' https:;</code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
-    </div></li>
+            
+    <pre class="code-block"><code class="hljs apache"><span class="hljs-attribute">style</span>-src 'self' 'unsafe-inline' https:;</code></pre>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
+    </div>
+</div></li>
 </ul>
 
     </section>
@@ -1123,23 +1119,22 @@ Use this only in combination with a listener for MapGetLocationsByConstraintsEve
             </dl></dd>
                                 <dt><em class="aspect">Example</em></dt>
         
-        <dd>        <div class="code-block-caption">
-            <span class="caption-text">EXT:site_package/Configuration/TypoScript/setup.typoscript</span>
-        </div><div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs typoscript">disableFetchLocationInAction {
+        <dd>    <div class="code-block-caption">
+        <span class="caption-text">EXT:site_package/Configuration/TypoScript/setup.typoscript</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs typoscript">disableFetchLocationInAction {
   0 = map
   <span class="hljs-title">1</span> = cachedMap
   <span class="hljs-title">2</span> = search
 }</code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
-    </div></dd>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
+    </div>
+</div></dd>
             </dl>
     </section>
     </section>
@@ -1164,23 +1159,22 @@ Use this only in combination with a listener for MapGetLocationsByConstraintsEve
         
         <dd>This defines in which path the templates are stored. This is needed to modify the template without modifing files in the extension.</dd>
             </dl>
-                    <div class="code-block-caption">
-            <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript</span>
-        </div><div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.view {
+                <div class="code-block-caption">
+        <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.view {
     templateRootPaths {
         <span class="hljs-title">100</span> = <span class="hljs-bullet">EXT:my_extension/Resources/Private/Templates/StoreFinder</span>
     }
 }</code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
+</div>
     </section>
             <section class="section" id="partialrootpaths" data-rst-anchor="view-partialRootPaths">
             <a id="view-partialRootPaths"></a>
@@ -1196,23 +1190,22 @@ Use this only in combination with a listener for MapGetLocationsByConstraintsEve
         
         <dd>This defines in which path the partials are stored. This is needed to modify the partials without modifing files in the extension.</dd>
             </dl>
-                    <div class="code-block-caption">
-            <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript</span>
-        </div><div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.view {
+                <div class="code-block-caption">
+        <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.view {
     partialRootPaths {
         <span class="hljs-title">100</span> = <span class="hljs-bullet">EXT:my_extension/Resources/Private/Partials/StoreFinder</span>
     }
 }</code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
+</div>
     </section>
     </section>
 
@@ -1273,19 +1266,18 @@ example given where the validators of the email gets removed.</p>
 
             <section class="section" id="remove-validators">
             <h3>Remove validators<a class="headerlink" href="#remove-validators" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h3>
-                    <div class="code-block-caption">
-            <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript</span>
-        </div><div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.settings.validation.zipcode &gt;</code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
+                <div class="code-block-caption">
+        <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.settings.validation.zipcode &gt;</code></pre>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
+</div>
             
     <p>If only one validator is needed you could assign it directly to the field like
 below.</p>
@@ -1293,19 +1285,18 @@ below.</p>
     </section>
             <section class="section" id="assign-only-one-validator">
             <h3>Assign only one validator<a class="headerlink" href="#assign-only-one-validator" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h3>
-                    <div class="code-block-caption">
-            <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript</span>
-        </div><div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.settings.validation.zipcode = Evoweb\StoreFinder\Validation\Validator\RequiredValidator</code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
+                <div class="code-block-caption">
+        <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.settings.validation.zipcode = Evoweb\StoreFinder\Validation\Validator\RequiredValidator</code></pre>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
+</div>
             
     <p>And finaly it&#039;s possible to have multiple validators for one field like in the
 next example.</p>
@@ -1313,22 +1304,21 @@ next example.</p>
     </section>
             <section class="section" id="assign-multiple-validators">
             <h3>Assign multiple validators<a class="headerlink" href="#assign-multiple-validators" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h3>
-                    <div class="code-block-caption">
-            <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript</span>
-        </div><div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.settings.validation.city {
+                <div class="code-block-caption">
+        <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.settings.validation.city {
    <span class="hljs-title">1</span> = Evoweb\StoreFinder\Validation\Validator\RequiredValidator
    <span class="hljs-title">2</span> = StringLength
 }</code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
+</div>
             
     <p>Regarding validator it&#039;s possible to have values attached to the assigned one.
 This is beneficial if you want to check against conditions that are not equal
@@ -1368,21 +1358,20 @@ you are ready to use your validator like in the following example.</p>
 
             <section class="section" id="custom-validator-usage">
             <h3>Custom validator usage<a class="headerlink" href="#custom-validator-usage" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h3>
-                    <div class="code-block-caption">
-            <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript</span>
-        </div><div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.settings.validation.create.city {
+                <div class="code-block-caption">
+        <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.settings.validation.create.city {
    <span class="hljs-title">1</span> = Evoweb\StoreFinder\Validation\Validator\RequiredValidator
 }</code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
+</div>
     </section>
     </section>
             <section class="section" id="available-validators">
@@ -1432,19 +1421,18 @@ found here <a href="https://github.com/geocoder-php/Geocoder#address">geocoder-p
             
     <p>This can be achieved by</p>
 
-                    <div class="code-block-caption">
-            <span class="caption-text">Enter on shell</span>
-        </div><div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs bash">composer require geocoder-php/nominatim-provider</code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
+                <div class="code-block-caption">
+        <span class="caption-text">Enter on shell</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs bash">composer require geocoder-php/nominatim-provider</code></pre>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
+</div>
     </section>
             <section class="section" id="extension-configuration">
             <h2>Extension configuration<a class="headerlink" href="#extension-configuration" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h2>
@@ -1452,38 +1440,36 @@ found here <a href="https://github.com/geocoder-php/Geocoder#address">geocoder-p
     <p>If you choose to use a different providers it&#039;s important to set the provider classname in the
 field geocoderProvider:</p>
 
-                    <div class="code-block-caption">
-            <span class="caption-text">Settings &gt; Extension configuration</span>
-        </div><div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs typoscript">geocoderProvider = Geocoder\Provider\Nominatim\Nominatim</code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
+                <div class="code-block-caption">
+        <span class="caption-text">Settings &gt; Extension configuration</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs typoscript">geocoderProvider = Geocoder\Provider\Nominatim\Nominatim</code></pre>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
+</div>
     </section>
             <section class="section" id="typoscript-constants">
             <h2>TypoScript constants<a class="headerlink" href="#typoscript-constants" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h2>
             
     <p>If you want to use the additional provider for geocoding search results too, you need to change the constant</p>
 
-                    <div class="code-block-caption">
-            <span class="caption-text">EXT:my_extension/Configuration/TypoScript/constants.typoscript</span>
-        </div><div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.geocoderProvider = Geocoder\Provider\Nominatim\Nominatim</code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
+                <div class="code-block-caption">
+        <span class="caption-text">EXT:my_extension/Configuration/TypoScript/constants.typoscript</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.geocoderProvider = Geocoder\Provider\Nominatim\Nominatim</code></pre>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
+</div>
     </section>
     </section>
 
@@ -1506,11 +1492,11 @@ the loading completly.</p>
             
     <p>Add the following code to the Configuration/Services.yaml of your sitepackage to use the example listener.</p>
 
-                    <div class="code-block-caption">
-            <span class="caption-text">MapGetLocationsByConstraintsEventListener.php</span>
-        </div><div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs php"><span class="hljs-keyword">namespace</span> <span class="hljs-title">Evoweb</span>\<span class="hljs-title">StoreFinder</span>\<span class="hljs-title">EventListener</span>;
+                <div class="code-block-caption">
+        <span class="caption-text">MapGetLocationsByConstraintsEventListener.php</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs php"><span class="hljs-keyword">namespace</span> <span class="hljs-title">Evoweb</span>\<span class="hljs-title">StoreFinder</span>\<span class="hljs-title">EventListener</span>;
 
 <span class="hljs-keyword">use</span> <span class="hljs-title">Evoweb</span>\<span class="hljs-title">StoreFinder</span>\<span class="hljs-title">Controller</span>\<span class="hljs-title">Event</span>\<span class="hljs-title">MapGetLocationsByConstraintsEvent</span>;
 <span class="hljs-keyword">use</span> <span class="hljs-title">TYPO3</span>\<span class="hljs-title">CMS</span>\<span class="hljs-title">Core</span>\<span class="hljs-title">Attribute</span>\<span class="hljs-title">AsEventListener</span>;
@@ -1522,14 +1508,13 @@ the loading completly.</p>
    </span>{
    }
 }</code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
+</div>
             
     <p>More explanation for your custom event listener can be found in the <code>tutorial &lt;_customEventListener&gt;</code></p>
 
@@ -1543,19 +1528,18 @@ the loading completly.</p>
 <code>plugin.tx_storefinder.settings.disableLocationFetchLogic = 1</code>
 to improve performance. By doing so, all default fetching will be disabled.</p>
 
-                    <div class="code-block-caption">
-            <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript</span>
-        </div><div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.settings.disableLocationFetchLogic = 1</code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
+                <div class="code-block-caption">
+        <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.settings.disableLocationFetchLogic = 1</code></pre>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
+</div>
             
     <p>Listener must follow the symfony/event concept [<a href="https://symfony.com/doc/current/event_dispatcher.html">https://symfony.com/doc/current/event_dispatcher.html</a>]</p>
 
@@ -1567,19 +1551,18 @@ to improve performance. By doing so, all default fetching will be disabled.</p>
 fill them on your own. In case the distance is empty the default zoom level detection has nothing to work with. In
 this case, you need to set the zoom level in the template OR the radius in TypoScript</p>
 
-                    <div class="code-block-caption">
-            <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript</span>
-        </div><div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.settings.defaultConstraint.radius = 20</code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
+                <div class="code-block-caption">
+        <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.settings.defaultConstraint.radius = 20</code></pre>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
+</div>
     </section>
     </section>
             <section class="section" id="modify-locations-in-storefindermiddleware">
@@ -1610,23 +1593,22 @@ possible to configure the templates and partials path in the plugin.</p>
 
             <section class="section" id="example">
             <h3>Example:<a class="headerlink" href="#example" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h3>
-                    <div class="code-block-caption">
-            <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript</span>
-        </div><div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.view {
+                <div class="code-block-caption">
+        <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.view {
     templateRootPath =
     partialRootPath =
     layoutRootPath =
 }</code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
+</div>
     </section>
     </section>
             <section class="section" id="viewhelper">
@@ -1648,19 +1630,18 @@ viewhelper get used.</p>
             
     <p>Add the xmlns to the html tag in the template</p>
 
-                    <div class="code-block-caption">
-            <span class="caption-text">EXT:my_extension/Resources/Private/Templates/Map/Map.html</span>
-        </div><div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs xml">xmlns:sf="http://typo3.org/ns/Evoweb/StoreFinder/ViewHelpers"</code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
+                <div class="code-block-caption">
+        <span class="caption-text">EXT:my_extension/Resources/Private/Templates/Map/Map.html</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs xml">xmlns:sf="http://typo3.org/ns/Evoweb/StoreFinder/ViewHelpers"</code></pre>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
+</div>
     </section>
             <section class="section" id="minify-viewhelper">
             <h2>minify Viewhelper<a class="headerlink" href="#minify-viewhelper" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h2>
@@ -1673,11 +1654,11 @@ on rendering time.</p>
 
             <section class="section" id="example-viewhelper">
             <h4>Example viewhelper:<a class="headerlink" href="#example-viewhelper" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h4>
-                    <div class="code-block-caption">
-            <span class="caption-text">EXT:my_extension/Resources/Private/Templates/Map/Map.html</span>
-        </div><div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs xml">var mapConfiguration = {<span class="hljs-tag">&lt;<span class="hljs-name">sf:minify</span>&gt;</span>active: true,
+                <div class="code-block-caption">
+        <span class="caption-text">EXT:my_extension/Resources/Private/Templates/Map/Map.html</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs xml">var mapConfiguration = {<span class="hljs-tag">&lt;<span class="hljs-name">sf:minify</span>&gt;</span>active: true,
         <span class="hljs-tag">&lt;<span class="hljs-name">f:for</span> <span class="hljs-attr">each</span>=<span class="hljs-string">"{settings.mapConfiguration}"</span> <span class="hljs-attr">as</span>=<span class="hljs-string">"configuration"</span> <span class="hljs-attr">key</span>=<span class="hljs-string">"name"</span> <span class="hljs-attr">iteration</span>=<span class="hljs-string">"loop"</span>&gt;</span>{name}: '{configuration}',<span class="hljs-tag">&lt;/<span class="hljs-name">f:for</span>&gt;</span>
     center: {
         lat: <span class="hljs-tag">&lt;<span class="hljs-name">f:format.number</span> <span class="hljs-attr">decimals</span>=<span class="hljs-string">"7"</span>&gt;</span>{center.latitude}<span class="hljs-tag">&lt;/<span class="hljs-name">f:format.number</span>&gt;</span>,
@@ -1685,30 +1666,28 @@ on rendering time.</p>
     },
     zoom: '{center.zoom}'
 <span class="hljs-tag">&lt;/<span class="hljs-name">sf:minify</span>&gt;</span>};</code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
+</div>
     </section>
             <section class="section" id="example-output">
             <h4>Example output:<a class="headerlink" href="#example-output" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h4>
-                    <div class="code-block-caption">
-            <span class="caption-text">EXT:my_extension/Resources/Private/Templates/Map/Map.html</span>
-        </div><div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs xml">var mapConfiguration = {active:true,apiV3Layers:'',language:'de',center:{lat:50.1125089,lng:8.6521548},zoom:'11'}</code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
+                <div class="code-block-caption">
+        <span class="caption-text">EXT:my_extension/Resources/Private/Templates/Map/Map.html</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs xml">var mapConfiguration = {active:true,apiV3Layers:'',language:'de',center:{lat:50.1125089,lng:8.6521548},zoom:'11'}</code></pre>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
+</div>
     </section>
     </section>
             <section class="section" id="format-binaryand-viewhelper">
@@ -1726,19 +1705,18 @@ in the plugin the binary value 4 stands for list.</p>
 
             <section class="section" id="example-viewhelper">
             <h4>Example viewhelper:<a class="headerlink" href="#example-viewhelper" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h4>
-                    <div class="code-block-caption">
-            <span class="caption-text">EXT:my_extension/Resources/Private/Templates/Map/Map.html</span>
-        </div><div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">f:if</span> <span class="hljs-attr">condition</span>=<span class="hljs-string">"{sf:format.binaryAnd(base: 4, content: settings.showBeforeSearch)} == 4"</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">f:if</span>&gt;</span></code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
+                <div class="code-block-caption">
+        <span class="caption-text">EXT:my_extension/Resources/Private/Templates/Map/Map.html</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">f:if</span> <span class="hljs-attr">condition</span>=<span class="hljs-string">"{sf:format.binaryAnd(base: 4, content: settings.showBeforeSearch)} == 4"</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">f:if</span>&gt;</span></code></pre>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
+</div>
     </section>
     </section>
             <section class="section" id="form-selectcountries">
@@ -1752,19 +1730,18 @@ allowedCountries accepts a comma seperated list of ISO2 country codes.</p>
 
             <section class="section" id="example-viewhelper">
             <h4>Example viewhelper:<a class="headerlink" href="#example-viewhelper" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h4>
-                    <div class="code-block-caption">
-            <span class="caption-text">EXT:my_extension/Resources/Private/Templates/Map/Map.html</span>
-        </div><div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">sf:form.selectCountries</span> <span class="hljs-attr">property</span>=<span class="hljs-string">"country"</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"sfrCountry"</span> <span class="hljs-attr">optionValueField</span>=<span class="hljs-string">"isoCodeA3"</span> <span class="hljs-attr">allowedCountries</span>=<span class="hljs-string">"{0: 'DE', 1: 'AT'}"</span> /&gt;</span></code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
+                <div class="code-block-caption">
+        <span class="caption-text">EXT:my_extension/Resources/Private/Templates/Map/Map.html</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">sf:form.selectCountries</span> <span class="hljs-attr">property</span>=<span class="hljs-string">"country"</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"sfrCountry"</span> <span class="hljs-attr">optionValueField</span>=<span class="hljs-string">"isoCodeA3"</span> <span class="hljs-attr">allowedCountries</span>=<span class="hljs-string">"{0: 'DE', 1: 'AT'}"</span> /&gt;</span></code></pre>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
+</div>
     </section>
     </section>
     </section>
@@ -1841,19 +1818,18 @@ locations of the created folder choose it as record storage page on tab behaviou
 and list part. Copy the folder from the extension to your local path like the fileadmin. To use these copies
 you can change the path either in the plugin field &quot;Partial path&quot; or via TypoScript:</p>
 
-                    <div class="code-block-caption">
-            <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript</span>
-        </div><div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.view.partialRootPaths.<span class="hljs-title">50</span> = ./yourpath/Partials/</code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
+                <div class="code-block-caption">
+        <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.view.partialRootPaths.<span class="hljs-title">50</span> = ./yourpath/Partials/</code></pre>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
+</div>
     </section>
             <section class="section" id="api-keys">
             <h2>API Keys<a class="headerlink" href="#api-keys" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h2>
@@ -1889,11 +1865,11 @@ would be possible that others use the key and by that causes you to pay for usag
 search was requested. In the example below the zoom, latitude and longitude values are set and then the
 coordinates are used to render search results that are near of them.</p>
 
-                    <div class="code-block-caption">
-            <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript:</span>
-        </div><div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.settings {
+                <div class="code-block-caption">
+        <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript:</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.settings {
    showLocationsForDefaultConstraint = 1
    defaultConstraint {
       zoom = 15
@@ -1901,14 +1877,13 @@ coordinates are used to render search results that are near of them.</p>
       longitude = <span class="hljs-title">7</span>.464
    }
 }</code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
+</div>
     </section>
             <section class="section" id="use-caching-map-action">
             <h2>Use caching map action<a class="headerlink" href="#use-caching-map-action" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h2>
@@ -1936,11 +1911,11 @@ the clear cache flash.</p>
     <p>To add an custom listener, add the code below and replace the following and replace all the
 my* with your own values, but keep the event name as it is.</p>
 
-                    <div class="code-block-caption">
-            <span class="caption-text">EXT:your_extension/Classes/EventListener/MapGetSpecialLocationsListener.php</span>
-        </div><div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs php"><span class="hljs-keyword">namespace</span> <span class="hljs-title">MyVendor</span>\<span class="hljs-title">MyExtension</span>\<span class="hljs-title">EventListener</span>;
+                <div class="code-block-caption">
+        <span class="caption-text">EXT:your_extension/Classes/EventListener/MapGetSpecialLocationsListener.php</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs php"><span class="hljs-keyword">namespace</span> <span class="hljs-title">MyVendor</span>\<span class="hljs-title">MyExtension</span>\<span class="hljs-title">EventListener</span>;
 
 <span class="hljs-keyword">use</span> <span class="hljs-title">Evoweb</span>\<span class="hljs-title">StoreFinder</span>\<span class="hljs-title">Controller</span>\<span class="hljs-title">Event</span>\<span class="hljs-title">MapGetLocationsByConstraintsEvent</span>;
 <span class="hljs-keyword">use</span> <span class="hljs-title">TYPO3</span>\<span class="hljs-title">CMS</span>\<span class="hljs-title">Core</span>\<span class="hljs-title">Attribute</span>\<span class="hljs-title">AsEventListener</span>;
@@ -1952,14 +1927,13 @@ my* with your own values, but keep the event name as it is.</p>
    </span>{
    }
 }</code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
+</div>
     </section>
     </section>
 
@@ -1999,20 +1973,19 @@ ModifyMiddlewareLocationsListener is present.</p>
             
     <p>To use the middleware, it&#039;s important to include th Ajax.yaml in the site config</p>
 
-                    <div class="code-block-caption">
-            <span class="caption-text">config/sites/{your-site}/config.yaml</span>
-        </div><div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs yaml"><span class="hljs-attr">imports:</span>
+                <div class="code-block-caption">
+        <span class="caption-text">config/sites/{your-site}/config.yaml</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs yaml"><span class="hljs-attr">imports:</span>
   <span class="hljs-bullet">-</span> <span class="hljs-string">{</span> <span class="hljs-attr">resource:</span> <span class="hljs-string">'EXT:store_finder/Configuration/Routes/Ajax.yaml'</span> <span class="hljs-string">}</span></code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
+</div>
             
     <p>Fields to output and conversion can be changed with TypoScript key plugin.tx_storefinder.ajax</p>
 
@@ -2023,23 +1996,22 @@ ModifyMiddlewareLocationsListener is present.</p>
     <p>Below is an example on how to use the configuration and endpoints with your
 custom code.</p>
 
-                    <div class="code-block-caption">
-            <span class="caption-text">Map.html</span>
-        </div><div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">store-finder-map</span>
+                <div class="code-block-caption">
+        <span class="caption-text">Map.html</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">store-finder-map</span>
     <span class="hljs-attr">showSearch</span>=<span class="hljs-string">"{sf:bitwiseIf(a: settings.showBeforeSearch, b: 1, then: 1, else: 0)}"</span>
     <span class="hljs-attr">showList</span>=<span class="hljs-string">"{sf:bitwiseIf(a: settings.showBeforeSearch, b: 4, then: 1, else: 0)}"</span>
     <span class="hljs-attr">categoriesEndpoint</span>=<span class="hljs-string">"{f:uri.typolink(parameter: '/api/storefinder/categories/{cObjectData.uid}')}"</span>
     <span class="hljs-attr">locationsEndpoint</span>=<span class="hljs-string">"{f:uri.typolink(parameter: '/api/storefinder/locations/{cObjectData.uid}')}"</span>/&gt;</span></code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
+</div>
     </section>
     </section>
 
@@ -2120,11 +2092,11 @@ The result is, that the locations has three images referenced</li>
     </section>
             <section class="section" id="examples-of-import-command-calls">
             <h2>Examples of import command calls<a class="headerlink" href="#examples-of-import-command-calls" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h2>
-                    <div class="code-block-caption">
-            <span class="caption-text">On command line</span>
-        </div><div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs bash">vendor/bin/typo3 storefinder:import --storagePid=202 --clearStorageFolder=1 filename
+                <div class="code-block-caption">
+        <span class="caption-text">On command line</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs bash">vendor/bin/typo3 storefinder:import --storagePid=202 --clearStorageFolder=1 filename
 
 vendor/bin/typo3 storefinder:import --columnMap=<span class="hljs-string">"{\"A\":\"import_id\",\"B\":\"name\",\"D\":\"city\"}"</span> <span class="hljs-string">"1:/user_upload/ExportExcel.xlsx"</span>
 vendor/bin/typo3 storefinder:import \
@@ -2132,14 +2104,13 @@ vendor/bin/typo3 storefinder:import \
   --storagePid=2
   -o<span class="hljs-string">"{\"A\":\"import_id\",\"B\":\"name\",\"D\":\"city\"}"</span> \
   <span class="hljs-string">"1:/user_upload/ExportExcel.xlsx"</span></code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
+</div>
     </section>
     </section>
 
@@ -2156,32 +2127,30 @@ vendor/bin/typo3 storefinder:import \
             
     <p>The binary handling is replaced in the Partials/Map.html</p>
 
-                    <div class="code-block-caption">
-            <span class="caption-text">Before</span>
-        </div><div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">f:if</span> <span class="hljs-attr">condition</span>=<span class="hljs-string">"{sf:format.binaryAnd(base: 1, content: settings.showBeforeSearch)} == 1"</span>&gt;</span></code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
+                <div class="code-block-caption">
+        <span class="caption-text">Before</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">f:if</span> <span class="hljs-attr">condition</span>=<span class="hljs-string">"{sf:format.binaryAnd(base: 1, content: settings.showBeforeSearch)} == 1"</span>&gt;</span></code></pre>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
-                    <div class="code-block-caption">
-            <span class="caption-text">After</span>
-        </div><div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">sf:bitwiseIf</span> <span class="hljs-attr">a</span>=<span class="hljs-string">"{comparisonValue}"</span> <span class="hljs-attr">b</span>=<span class="hljs-string">"1"</span>&gt;</span></code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
+</div>
+                <div class="code-block-caption">
+        <span class="caption-text">After</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">sf:bitwiseIf</span> <span class="hljs-attr">a</span>=<span class="hljs-string">"{comparisonValue}"</span> <span class="hljs-attr">b</span>=<span class="hljs-string">"1"</span>&gt;</span></code></pre>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
+</div>
     </section>
             <section class="section" id="removed-viewhelper">
             <h3>Removed ViewHelper<a class="headerlink" href="#removed-viewhelper" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h3>
@@ -2302,11 +2271,11 @@ In addition a configuration.handleCloseButtonCallback should be provided.</p>
             
     <p>Example:</p>
 
-                    <div class="code-block-caption">
-            <span class="caption-text">EXT:my_extension/Resources/Public/JavaScript/map.js</span>
-        </div><div class="code-block-wrapper" translate="no">
-                        
-        <pre class="code-block"><code class="hljs javascript">configuration.renderSingleViewCallback = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">location, infoWindowTemplate</span>) </span>{
+                <div class="code-block-caption">
+        <span class="caption-text">EXT:my_extension/Resources/Public/JavaScript/map.js</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs javascript">configuration.renderSingleViewCallback = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">location, infoWindowTemplate</span>) </span>{
       location[<span class="hljs-string">'information'</span>][<span class="hljs-string">'staticMapCenter'</span>] = <span class="hljs-built_in">encodeURIComponent</span>(location.information.address) + <span class="hljs-string">',+'</span>
          + <span class="hljs-built_in">encodeURIComponent</span>(location.information.zipcode) + <span class="hljs-string">',+'</span>
          + <span class="hljs-built_in">encodeURIComponent</span>(location.information.city) + <span class="hljs-string">',+'</span>
@@ -2331,14 +2300,13 @@ configuration.handleCloseButtonCallback = <span class="hljs-function"><span clas
       $singleView.hide();
       $singleView.removeClass(<span class="hljs-string">'show'</span>);
 }</code></pre>
-        <div>
-            <button class="code-block-copy" title="Copy to clipboard">
-                <i class="fa-regular fa-copy code-block-copy-icon"></i>
-                <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
-            </button>
-            <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
-        </div>
+    <div>        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
+</div>
     </section>
             <section class="section" id="10-january-2019">
             <h2>10. January 2019<a class="headerlink" href="#10-january-2019" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h2>
@@ -2422,7 +2390,7 @@ getCityRaw are dropped.</p>
         <div class="frame-container">
             <div class="frame-inner">
                                 <div class="footer-additional">
-                    <p class="text-center">Last rendered: May 20, 2024 19:47</p>
+                    <p class="text-center">Last rendered: May 22, 2024 16:01</p>
                 </div>
                 <div class="footer-meta">
                     <ul class="footer-meta-navigation">
