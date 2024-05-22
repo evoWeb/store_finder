@@ -41,6 +41,7 @@ class MapGetAllLocationsListener
     // #[AsEventListener('storefinder_controller_isoverride', MapGetLocationsByConstraintsEvent::class)]
     public function isOverrideLocations(MapGetLocationsByConstraintsEvent $event): bool
     {
+        // @extensionScannerIgnoreLine
         $controller = $event->getController();
         $constraint = $controller->getArguments()->hasArgument('constraint') ?
             $controller->getArguments()->getArgument('constraint')->getValue() :

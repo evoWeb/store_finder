@@ -109,6 +109,7 @@ class CoordinatesCache
             $sessionData[$key] = serialize($value);
 
             $this->frontendUser->setKey('ses', $this->sessionKey, $sessionData);
+            // @extensionScannerIgnoreLine
             $this->frontendUser->storeSessionData();
         }
     }
@@ -117,6 +118,7 @@ class CoordinatesCache
     {
         if ($this->frontendUser instanceof FrontendUserAuthentication) {
             $this->frontendUser->setKey('ses', $this->sessionKey, []);
+            // @extensionScannerIgnoreLine
             $this->frontendUser->storeSessionData();
         }
     }

@@ -56,6 +56,7 @@ class StoreFinderMiddleware implements MiddlewareInterface
         /** @var SiteLanguage $requestLanguage */
         $requestLanguage = $request->getAttribute('language');
         $contentUid = $queryParams['contentUid'] ?? 0;
+        // @extensionScannerIgnoreLine
         $cacheIdentifier = md5('store_finder' . $action . $contentUid . $requestLanguage->getLanguageId());
 
         $cache = $this->cacheManager->getCache('store_finder_middleware_cache');
@@ -88,7 +89,9 @@ class StoreFinderMiddleware implements MiddlewareInterface
         $settings['storagePid'] = $row['pages'];
 
         $controller = $request->getAttribute('frontend.controller');
+        // @extensionScannerIgnoreLine
         $controller->id = $row['pid'];
+        // @extensionScannerIgnoreLine
         $controller->determineId($request);
         $request = $controller->getFromCache($request);
 

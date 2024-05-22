@@ -168,6 +168,7 @@ class SelectCountriesViewHelper extends AbstractFormFieldViewHelper
             $name .= '[]';
         }
         $this->tag->addAttribute('name', $name);
+        // @extensionScannerIgnoreLine
         $options = $this->getOptions();
 
         $viewHelperVariableContainer = $this->renderingContext->getViewHelperVariableContainer();
