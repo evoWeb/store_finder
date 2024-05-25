@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-namespace Evoweb\StoreFinder\EventListener;
-
 /*
  * This file is developed by evoWeb.
  *
@@ -15,6 +13,7 @@ namespace Evoweb\StoreFinder\EventListener;
  * LICENSE.txt file that was distributed with this source code.
  */
 
+namespace Evoweb\StoreFinder\EventListener;
 
 use Evoweb\StoreFinder\Controller\Event\MapGetLocationsByConstraintsEvent;
 use Evoweb\StoreFinder\Domain\Model\Constraint;

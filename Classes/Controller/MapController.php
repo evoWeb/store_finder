@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-namespace Evoweb\StoreFinder\Controller;
-
 /*
  * This file is developed by evoWeb.
  *
@@ -14,6 +12,8 @@ namespace Evoweb\StoreFinder\Controller;
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  */
+
+namespace Evoweb\StoreFinder\Controller;
 
 use Doctrine\Common\Annotations\DocParser;
 use Evoweb\StoreFinder\Controller\Event\MapGetLocationsByConstraintsEvent;
@@ -26,7 +26,6 @@ use Evoweb\StoreFinder\Service\GeocodeService;
 use Evoweb\StoreFinder\Validation\Validator\ConstraintValidator;
 use Evoweb\StoreFinder\Validation\Validator\SettableInterface;
 use Psr\Http\Message\ResponseInterface;
-use SJBR\StaticInfoTables\Domain\Model\Country;
 use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Pagination\ArrayPaginator;
 use TYPO3\CMS\Core\Pagination\SimplePagination;
@@ -39,8 +38,8 @@ use TYPO3\CMS\Extbase\Mvc\Controller\Argument;
 use TYPO3\CMS\Extbase\Mvc\Controller\Arguments;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Property\TypeConverter\PersistentObjectConverter;
-use TYPO3\CMS\Extbase\Validation\ValidatorClassNameResolver;
 use TYPO3\CMS\Extbase\Validation\Validator\ValidatorInterface;
+use TYPO3\CMS\Extbase\Validation\ValidatorClassNameResolver;
 use TYPO3Fluid\Fluid\View\ViewInterface;
 
 class MapController extends ActionController
@@ -50,8 +49,7 @@ class MapController extends ActionController
         protected CategoryRepository $categoryRepository,
         protected CountryRepository $countryRepository,
         protected GeocodeService $geocodeService
-    ) {
-    }
+    ) {}
 
     protected function initializeActionMethodValidators(): void
     {

@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-namespace Evoweb\StoreFinder\Service;
-
 /*
  * This file is developed by evoWeb.
  *
@@ -14,6 +12,8 @@ namespace Evoweb\StoreFinder\Service;
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  */
+
+namespace Evoweb\StoreFinder\Service;
 
 use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 

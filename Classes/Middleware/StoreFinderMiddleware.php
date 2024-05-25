@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-namespace Evoweb\StoreFinder\Middleware;
-
 /*
  * This file is developed by evoWeb.
  *
@@ -14,6 +12,8 @@ namespace Evoweb\StoreFinder\Middleware;
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  */
+
+namespace Evoweb\StoreFinder\Middleware;
 
 use Evoweb\StoreFinder\Domain\Model\Constraint;
 use Evoweb\StoreFinder\Domain\Repository\CategoryRepository;
@@ -41,8 +41,7 @@ class StoreFinderMiddleware implements MiddlewareInterface
     public function __construct(
         protected EventDispatcherInterface $eventDispatcher,
         protected CacheManager $cacheManager
-    ) {
-    }
+    ) {}
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {

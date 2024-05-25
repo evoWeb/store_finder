@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-namespace Evoweb\StoreFinder\Cache;
-
 /*
  * This file is developed by evoWeb.
  *
@@ -14,6 +12,8 @@ namespace Evoweb\StoreFinder\Cache;
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  */
+
+namespace Evoweb\StoreFinder\Cache;
 
 use Evoweb\StoreFinder\Domain\Model\Location;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
@@ -28,8 +28,7 @@ class CoordinatesCache
     public function __construct(
         protected FrontendInterface $cacheFrontend,
         protected ?FrontendUserAuthentication $frontendUser = null
-    ) {
-    }
+    ) {}
 
     public function addCoordinateForAddress(Location $address, array $queryValues): void
     {
@@ -41,7 +40,7 @@ class CoordinatesCache
         $hash = md5(serialize(array_values($queryValues)));
         $coordinate = [
             'latitude' => $address->getLatitude(),
-            'longitude' => $address->getLongitude()
+            'longitude' => $address->getLongitude(),
         ];
 
         if (count($fields) <= 3) {

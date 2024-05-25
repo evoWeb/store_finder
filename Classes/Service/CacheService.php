@@ -2,25 +2,26 @@
 
 declare(strict_types=1);
 
-namespace Evoweb\StoreFinder\Service;
-
 /*
- * This file is part of the package t3g/blog.
+ * This file is developed by evoWeb.
+ *
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
  *
  * For the full copyright and license information, please read the
- * LICENSE file that was distributed with this source code.
+ * LICENSE.txt file that was distributed with this source code.
  */
+
+namespace Evoweb\StoreFinder\Service;
 
 use Evoweb\StoreFinder\Domain\Model\Location;
 use TYPO3\CMS\Core\Cache\CacheManager;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 class CacheService
 {
-    public function __construct(readonly private CacheManager $cacheManager)
-    {
-    }
+    public function __construct(readonly private CacheManager $cacheManager) {}
 
     public function addTagsForPost(Location $location): void
     {

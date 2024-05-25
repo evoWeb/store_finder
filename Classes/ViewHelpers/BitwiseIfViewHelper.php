@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-namespace Evoweb\StoreFinder\ViewHelpers;
-
 /*
  * This file is developed by evoWeb.
  *
@@ -15,22 +13,21 @@ namespace Evoweb\StoreFinder\ViewHelpers;
  * LICENSE.txt file that was distributed with this source code.
  */
 
+namespace Evoweb\StoreFinder\ViewHelpers;
+
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractConditionViewHelper;
 
 class BitwiseIfViewHelper extends AbstractConditionViewHelper
 {
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
         $this->registerArgument('a', 'int', 'Operand a', true);
         $this->registerArgument('b', 'int', 'Operand b', true);
     }
 
-    /**
-     * @return bool
-     */
-    public static function verdict(array $arguments, RenderingContextInterface $renderingContext)
+    public static function verdict(array $arguments, RenderingContextInterface $renderingContext): bool
     {
         return (bool)($arguments['a'] & $arguments['b']);
     }

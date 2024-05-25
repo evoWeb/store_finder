@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-namespace Evoweb\StoreFinder\Controller\Event;
-
 /*
  * This file is developed by evoWeb.
  *
@@ -15,9 +13,10 @@ namespace Evoweb\StoreFinder\Controller\Event;
  * LICENSE.txt file that was distributed with this source code.
  */
 
+namespace Evoweb\StoreFinder\Controller\Event;
+
 use Evoweb\StoreFinder\Controller\MapController;
 use Evoweb\StoreFinder\Domain\Model\Constraint;
-use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
 class MapGetLocationsByConstraintsEvent
 {
@@ -25,8 +24,7 @@ class MapGetLocationsByConstraintsEvent
         protected MapController $controller,
         protected array $locations,
         protected Constraint $constraint
-    ) {
-    }
+    ) {}
 
     public function getController(): MapController
     {

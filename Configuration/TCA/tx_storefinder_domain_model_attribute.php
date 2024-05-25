@@ -47,8 +47,8 @@ return [
                 'foreign_table_where' =>
                     'AND tx_storefinder_domain_model_attribute.pid = ###CURRENT_PID###
                      AND tx_storefinder_domain_model_attribute.sys_language_uid = 0',
-                'default' => 0
-            ]
+                'default' => 0,
+            ],
         ],
         'l10n_source' => [
             'config' => [
@@ -73,7 +73,7 @@ return [
                         'invertStateDisplay' => true,
                     ],
                 ],
-            ]
+            ],
         ],
 
         'name' => [
@@ -83,8 +83,8 @@ return [
                 'size' => 50,
                 'max' => 255,
                 'eval' => 'trim',
-                'required' => true
-            ]
+                'required' => true,
+            ],
         ],
 
         'icon' => [
@@ -105,7 +105,7 @@ return [
                 'rows' => 15,
                 'enableRichtext' => true,
                 'softref' => 'typolink_tag,images,email[subst],url',
-            ]
+            ],
         ],
 
         'css_class' => [
@@ -115,7 +115,7 @@ return [
                 'size' => 50,
                 'max' => 255,
                 'eval' => 'trim',
-            ]
+            ],
         ],
     ],
 
@@ -128,8 +128,8 @@ return [
                     --palette--;;language,
                 --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,
                     --palette--;;hidden,
-            '
-        ]
+            ',
+        ],
     ],
     'palettes' => [
         'language' => [
@@ -144,5 +144,5 @@ return [
                 hidden;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:field.default.hidden
             ',
         ],
-    ]
+    ],
 ];

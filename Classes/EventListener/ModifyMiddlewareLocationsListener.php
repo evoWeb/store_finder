@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-namespace Evoweb\StoreFinder\EventListener;
-
 /*
  * This file is developed by evoWeb.
  *
@@ -15,15 +13,15 @@ namespace Evoweb\StoreFinder\EventListener;
  * LICENSE.txt file that was distributed with this source code.
  */
 
+namespace Evoweb\StoreFinder\EventListener;
+
 use Evoweb\StoreFinder\Middleware\Event\ModifyMiddlewareLocationsEvent;
 use TYPO3\CMS\Core\Attribute\AsEventListener;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 class ModifyMiddlewareLocationsListener
 {
-    public function __construct(private ContentObjectRenderer $contentObjectRenderer)
-    {
-    }
+    public function __construct(private ContentObjectRenderer $contentObjectRenderer) {}
 
     // #[AsEventListener('storefinder_middleware_locationsfetched', ModifyMiddlewareLocationsEvent::class)]
     public function __invoke(ModifyMiddlewareLocationsEvent $event): void

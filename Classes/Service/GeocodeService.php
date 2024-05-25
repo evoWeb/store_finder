@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-namespace Evoweb\StoreFinder\Service;
-
 /*
  * This file is developed by evoWeb.
  *
@@ -14,6 +12,8 @@ namespace Evoweb\StoreFinder\Service;
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  */
+
+namespace Evoweb\StoreFinder\Service;
 
 use Evoweb\StoreFinder\Cache\CoordinatesCache;
 use Evoweb\StoreFinder\Domain\Model\Constraint;
@@ -39,8 +39,7 @@ class GeocodeService
     public function __construct(
         protected CoordinatesCache $coordinatesCache,
         private readonly GuzzleClientFactory $guzzleFactory
-    ) {
-    }
+    ) {}
 
     public function setSettings(array $settings): void
     {

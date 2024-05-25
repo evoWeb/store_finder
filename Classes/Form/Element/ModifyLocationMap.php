@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-namespace Evoweb\StoreFinder\Form\Element;
-
 /*
  * This file is developed by evoWeb.
  *
@@ -14,6 +12,8 @@ namespace Evoweb\StoreFinder\Form\Element;
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  */
+
+namespace Evoweb\StoreFinder\Form\Element;
 
 use TYPO3\CMS\Backend\Form\Element\AbstractFormElement;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
@@ -45,7 +45,7 @@ class ModifyLocationMap extends AbstractFormElement
             'uid' => $row['uid'],
             'latitude' => (float)($row['latitude'] ?: $configuration['latitude'] ?? 51.4583912),
             'longitude' => (float)($row['longitude'] ?: $configuration['longitude'] ?? 7.0157931),
-            'zoom' => (int)($configuration['zoom'] ?? 16)
+            'zoom' => (int)($configuration['zoom'] ?? 16),
         ]);
 
         return $resultArray;

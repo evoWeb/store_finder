@@ -140,7 +140,7 @@ return [
                 'size' => 50,
                 'max' => 255,
                 'eval' => 'trim',
-                'required' => true
+                'required' => true,
             ],
         ],
 
@@ -186,7 +186,7 @@ return [
                 'type' => 'input',
                 'size' => 30,
                 'eval' => 'trim',
-                'required' => true
+                'required' => true,
             ],
         ],
 
@@ -439,7 +439,7 @@ return [
                 'rows' => 15,
                 'enableRichtext' => true,
                 'softref' => 'typolink_tag,images,email[subst],url',
-            ]
+            ],
         ],
 
         'url' => [
@@ -477,7 +477,7 @@ return [
             'config' => [
                 'type' => 'file',
                 'allowed' => 'common-media-types',
-            ]
+            ],
         ],
 
         'layer' => [
@@ -487,7 +487,7 @@ return [
                 'type' => 'file',
                 'minitems' => 0,
                 'maxitems' => 1,
-                'allowed' => [ 'svg', 'kml', 'geojson' ]
+                'allowed' => [ 'svg', 'kml', 'geojson' ],
             ],
         ],
 

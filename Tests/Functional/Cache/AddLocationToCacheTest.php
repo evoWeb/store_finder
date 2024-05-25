@@ -1,7 +1,5 @@
 <?php
 
-namespace Evoweb\StoreFinder\Tests\Functional\Cache;
-
 /*
  * This file is developed by evoWeb.
  *
@@ -12,6 +10,8 @@ namespace Evoweb\StoreFinder\Tests\Functional\Cache;
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  */
+
+namespace Evoweb\StoreFinder\Tests\Functional\Cache;
 
 use Evoweb\StoreFinder\Cache\CoordinatesCache;
 use Evoweb\StoreFinder\Domain\Model\Constraint;
@@ -49,17 +49,17 @@ class AddLocationToCacheTest extends FunctionalTestCase
         'EXTENSIONS' => [
             'static_info_tables' => [
                 'enableManager' => false,
-            ]
+            ],
         ],
         'SYS' => [
             'caching' => [
                 'cacheConfigurations' => [
                     'store_finder_coordinate_cache' => [
                         'groups' => ['system'],
-                    ]
-                ]
-            ]
-        ]
+                    ],
+                ],
+            ],
+        ],
     ];
 
     public static function cacheDataProvider(): array

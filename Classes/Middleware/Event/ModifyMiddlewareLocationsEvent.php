@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-namespace Evoweb\StoreFinder\Middleware\Event;
-
 /*
  * This file is developed by evoWeb.
  *
@@ -15,6 +13,8 @@ namespace Evoweb\StoreFinder\Middleware\Event;
  * LICENSE.txt file that was distributed with this source code.
  */
 
+namespace Evoweb\StoreFinder\Middleware\Event;
+
 use Evoweb\StoreFinder\Middleware\StoreFinderMiddleware;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -25,8 +25,7 @@ final class ModifyMiddlewareLocationsEvent
         protected StoreFinderMiddleware $storeFinderMiddleware,
         protected array $settings,
         protected array $locations,
-    ) {
-    }
+    ) {}
 
     public function getStoreFinderMiddleware(): StoreFinderMiddleware
     {

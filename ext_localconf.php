@@ -3,12 +3,12 @@
 defined('TYPO3') or die();
 
 use Evoweb\StoreFinder\Controller\MapController;
-use Evoweb\StoreFinder\Hooks\TceMainListener;
 use Evoweb\StoreFinder\Form\Element\ModifyLocationMap;
+use Evoweb\StoreFinder\Hooks\TceMainListener;
 use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 
 call_user_func(function () {
-    $cacheConfigurations =& $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'];
+    $cacheConfigurations = & $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'];
     if (!is_array($cacheConfigurations['store_finder_coordinate_cache'] ?? null)) {
         $cacheConfigurations['store_finder_coordinate_cache'] = [
             'groups' => ['system'],
