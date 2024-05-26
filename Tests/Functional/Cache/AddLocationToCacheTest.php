@@ -24,6 +24,7 @@ use Psr\Log\NullLogger;
 use SJBR\StaticInfoTables\Domain\Model\Country;
 use SJBR\StaticInfoTables\Domain\Model\CountryZone;
 use TYPO3\CMS\Core\Cache\CacheManager;
+use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Http\Client\GuzzleClientFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
@@ -119,10 +120,15 @@ class AddLocationToCacheTest extends FunctionalTestCase
         $expected = $this->getConstraintStub($data);
         $actual = unserialize(serialize($expected));
 
-        /** @var ServerRequestInterface|MockObject $request */
-        $request = $this->getMockBuilder(ServerRequestInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        /** @var ServerRequestInterface $request */
+        $request = new ServerRequest(
+            '/',
+            'POST',
+            'php://input',
+            [],
+            [],
+            null,
+        );
 
         $frontendUser = new FrontendUserAuthentication();
         $frontendUser->setLogger(new NullLogger());

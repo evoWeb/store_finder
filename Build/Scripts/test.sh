@@ -78,6 +78,11 @@ runFunctionalTests () {
         -s lintPhp || exit 1 ; \
         EXIT_CODE_LINT=$?
 
+    ./runTests.sh \
+        -p ${PHP_VERSION} \
+        -s composerInstall; \
+        EXIT_CODE_LINT=$?
+
     ./additionalTests.sh \
         -p ${PHP_VERSION} \
         -s composerInstallPackage \
@@ -138,14 +143,16 @@ cleanup () {
     echo "Cleaned up all test related files"
 }
 
-DEBUG_TESTS=false
+LOWEST="--prefer-lowest"
+TPATH="Tests/Functional"
+
+DEBUG_TESTS=true
 if [[ $DEBUG_TESTS != true ]]; then
     checkResources
 
-    LOWEST="--prefer-lowest"
     TCORE="^13.1"
     TFRAMEWORK="dev-main"
-    TPATH="Tests/Functional"
+
     runFunctionalTests "8.2" ${TCORE} ${TFRAMEWORK} ${TPATH} || exit 1
     runFunctionalTests "8.2" ${TCORE} ${TFRAMEWORK} ${TPATH} ${LOWEST} || exit 1
     runFunctionalTests "8.3" ${TCORE} ${TFRAMEWORK} ${TPATH} || exit 1
@@ -155,9 +162,5 @@ else
     #runFunctionalTests "8.2" "^13.0" "dev-main" "Tests/Functional" || exit 1
     # ./runTests.sh -x -p 8.2 -d sqlite -s functional -e "--group selected" Tests/Functional12
     # ./runTests.sh -p "8.1" -x -d sqlite -s functional Tests/Functional;
-    ./runTests.sh \
-        -p "8.2" \
-        -d sqlite \
-        -s functional "Tests/Functional" || exit 1 ; \
-        EXIT_CODE_FUNCTIONAL=$?
+    runFunctionalTests "8.3" "^13.1" "dev-main" ${TPATH} ${LOWEST} || exit 1
 fi
