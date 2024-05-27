@@ -65,7 +65,7 @@ So, it's advised to have both keys
  - apiConsoleKey (protected by restriction for your domains)
  - apiConsoleKeyGeocoding (unrestricted for the usage in php)
 
-To obtain a key please visit https://developers.google.com/maps/gmp-get-started
+To obtain a key please visit https://developers.google.com/maps/get-started
 
 
 Set default coordinates
