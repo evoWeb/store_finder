@@ -1,6 +1,6 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
-            xmlns:sf="http://typo3.org/ns/Evoweb/StoreFinder/ViewHelpers"
-            data-namespace-typo3-fluid="true">
+      xmlns:sf="http://typo3.org/ns/Evoweb/StoreFinder/ViewHelpers"
+      data-namespace-typo3-fluid="true">
 
 <f:section name="content">
 <h3 class="formHeader"><f:translate key="formHeader"/></h3>
@@ -44,6 +44,7 @@
                     id="country"
                     class="form-control"
                     optionValueField="uid"
+                    optionLabelField="shortNameEn"
                     prependOptionLabel="{f:translate(id: 'please-select-country')}"
                     prependOptionValue="0"
                     allowedCountries="{settings.allowedCountries}"

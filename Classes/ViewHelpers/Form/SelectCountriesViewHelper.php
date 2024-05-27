@@ -39,9 +39,8 @@ class SelectCountriesViewHelper extends AbstractFormFieldViewHelper
      */
     protected $tagName = 'select';
 
-    public function __construct(
-        protected CountryRepository $countryRepository
-    ) {
+    public function __construct(protected CountryRepository $countryRepository)
+    {
         parent::__construct();
     }
 
@@ -145,7 +144,7 @@ class SelectCountriesViewHelper extends AbstractFormFieldViewHelper
                 $orderedResults = [];
                 foreach ($this->arguments['allowedCountries'] as $countryKey) {
                     foreach ($options as $country) {
-                        if ($country->getIsoCodeA2() == $countryKey) {
+                        if (strtolower($country->getIsoCodeA2()) == strtolower($countryKey)) {
                             $orderedResults[] = $country;
                         }
                     }
