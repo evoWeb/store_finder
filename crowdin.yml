@@ -7,7 +7,6 @@ files:
       - /Resources/Private/Language/pl.*
       - /Resources/Private/Language/ru.*
       - /Resources/Private/Language/zh.*
-
   - source: /Resources/Private/Language/
     translation: /Resources/Private/Language/%two_letters_code%.locallang_be.xlf
     ignore:
@@ -16,7 +15,6 @@ files:
       - /Resources/Private/Language/pl.*
       - /Resources/Private/Language/ru.*
       - /Resources/Private/Language/zh.*
-
   - source: /Resources/Private/Language/
     translation: /Resources/Private/Language/%two_letters_code%.locallang_csh.xlf
     ignore:
@@ -26,7 +24,6 @@ files:
       - /Resources/Private/Language/pl.*
       - /Resources/Private/Language/ru.*
       - /Resources/Private/Language/zh.*
-
   - source: /Resources/Private/Language/
     translation: /Resources/Private/Language/%two_letters_code%.locallang_db.xlf
     ignore:
