@@ -1,29 +1,192 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
-  <file source-language="en" datatype="plaintext" original="messages" date="2018-05-06T14:18:57Z" product-name="store_finder" target-language="pl">
+  <file source-language="en" datatype="plaintext" original="messages" date="2018-05-06T14:19:01Z" product-name="store_finder" target-language="pl">
     <header/>
     <body>
-      <trans-unit id="title.description" xml:space="preserve">
-				<source>Enter the title of the page or folder.</source>
-			<target state="needs-translation">Enter the title of the page or folder.</target></trans-unit>
-      <trans-unit id="title.syntax" xml:space="preserve">
-				<source>You must enter a page title. The field is required.</source>
-			<target state="needs-translation">You must enter a page title. The field is required.</target></trans-unit>
-      <trans-unit id="doktype.description" xml:space="preserve">
-				<source>Select the page type. This affects . . . ses.</source>
-			<target state="needs-translation">Select the page type. This affects . . . ses.</target></trans-unit>
-      <trans-unit id="doktype.details" xml:space="preserve">
-				<source>The 'Standard' type represents a . . . any problems).</source>
-			<target state="needs-translation">The 'Standard' type represents a . . . any problems).</target></trans-unit>
-      <trans-unit id="TSconfig.description" xml:space="preserve">
-				<source>Page TypoScript configuration.</source>
-			<target state="needs-translation">Page TypoScript configuration.</target></trans-unit>
-      <trans-unit id="TSconfig.details" xml:space="preserve">
-				<source>Basically 'TypoScript' is a . . . alled).</source>
-			<target state="needs-translation">Basically 'TypoScript' is a . . . alled).</target></trans-unit>
-      <trans-unit id="TSconfig.syntax" xml:space="preserve">
-				<source>Basic TypoScr. . . 'Conditions' and 'Constants'.</source>
-			<target state="needs-translation">Basic TypoScr. . . 'Conditions' and 'Constants'.</target></trans-unit>
+      <trans-unit id="tx_storefinder_domain_model_location">
+        <source>Store Location</source>
+        <target state="needs-translation">Store Location</target>
+      </trans-unit>
+      <trans-unit id="tx_storefinder_domain_model_location.hidden">
+        <source>Visibility of location</source>
+        <target state="needs-translation">Visibility of location</target>
+      </trans-unit>
+      <trans-unit id="tx_storefinder_domain_model_location.name">
+        <source>Store Name</source>
+        <target state="needs-translation">Store Name</target>
+      </trans-unit>
+      <trans-unit id="tx_storefinder_domain_model_location.related">
+        <source>Related to location</source>
+        <target state="needs-translation">Related to location</target>
+      </trans-unit>
+      <trans-unit id="tx_storefinder_domain_model_location.storeid">
+        <source>Store Id</source>
+        <target state="needs-translation">Store Id</target>
+      </trans-unit>
+      <trans-unit id="tx_storefinder_domain_model_location.attributes">
+        <source>Attributes</source>
+        <target state="needs-translation">Attributes</target>
+      </trans-unit>
+      <trans-unit id="tx_storefinder_domain_model_location.address">
+        <source>Address</source>
+        <target state="needs-translation">Address</target>
+      </trans-unit>
+      <trans-unit id="tx_storefinder_domain_model_location.additionaladdress">
+        <source>Additional address</source>
+        <target state="needs-translation">Additional address</target>
+      </trans-unit>
+      <trans-unit id="tx_storefinder_domain_model_location.person">
+        <source>Contact person</source>
+        <target state="needs-translation">Contact person</target>
+      </trans-unit>
+      <trans-unit id="tx_storefinder_domain_model_location.city">
+        <source>City</source>
+        <target state="needs-translation">City</target>
+      </trans-unit>
+      <trans-unit id="tx_storefinder_domain_model_location.state">
+        <source>State</source>
+        <target state="needs-translation">State</target>
+      </trans-unit>
+      <trans-unit id="tx_storefinder_domain_model_location.zipcode">
+        <source>ZIP / Postal Code</source>
+        <target state="needs-translation">ZIP / Postal Code</target>
+      </trans-unit>
+      <trans-unit id="tx_storefinder_domain_model_location.country">
+        <source>Country</source>
+        <target state="needs-translation">Country</target>
+      </trans-unit>
+      <trans-unit id="tx_storefinder_domain_model_location.products">
+        <source>Products</source>
+        <target state="needs-translation">Products</target>
+      </trans-unit>
+      <trans-unit id="tx_storefinder_domain_model_location.phone">
+        <source>Phone</source>
+        <target state="needs-translation">Phone</target>
+      </trans-unit>
+      <trans-unit id="tx_storefinder_domain_model_location.mobile">
+        <source>Cellular</source>
+        <target state="needs-translation">Cellular</target>
+      </trans-unit>
+      <trans-unit id="tx_storefinder_domain_model_location.fax">
+        <source>Fax</source>
+        <target state="needs-translation">Fax</target>
+      </trans-unit>
+      <trans-unit id="tx_storefinder_domain_model_location.email">
+        <source>Email</source>
+        <target state="needs-translation">Email</target>
+      </trans-unit>
+      <trans-unit id="tx_storefinder_domain_model_location.hours">
+        <source>Hours</source>
+        <target state="needs-translation">Hours</target>
+      </trans-unit>
+      <trans-unit id="tx_storefinder_domain_model_location.url">
+        <source>URL</source>
+        <target state="needs-translation">URL</target>
+      </trans-unit>
+      <trans-unit id="tx_storefinder_domain_model_location.notes">
+        <source>Notes</source>
+        <target state="needs-translation">Notes</target>
+      </trans-unit>
+      <trans-unit id="tx_storefinder_domain_model_location.media">
+        <source>Media</source>
+        <target state="needs-translation">Media</target>
+      </trans-unit>
+      <trans-unit id="tx_storefinder_domain_model_location.image">
+        <source>Images</source>
+        <target state="needs-translation">Images</target>
+      </trans-unit>
+      <trans-unit id="tx_storefinder_domain_model_location.icon">
+        <source>Icon</source>
+        <target state="needs-translation">Icon</target>
+      </trans-unit>
+      <trans-unit id="tx_storefinder_domain_model_location.layer">
+        <source>Layer</source>
+        <target state="needs-translation">Layer</target>
+      </trans-unit>
+      <trans-unit id="tx_storefinder_domain_model_location.layer.addFileReference">
+        <source>Add layer file</source>
+        <target state="needs-translation">Add layer file</target>
+      </trans-unit>
+      <trans-unit id="tx_storefinder_domain_model_location.content_elements">
+        <source>Content Elements</source>
+        <target state="needs-translation">Content Elements</target>
+      </trans-unit>
+      <trans-unit id="tx_storefinder_domain_model_location.categories">
+        <source>Categories</source>
+        <target state="needs-translation">Categories</target>
+      </trans-unit>
+      <trans-unit id="tx_storefinder_domain_model_location.latitude">
+        <source>Latitude</source>
+        <target state="needs-translation">Latitude</target>
+      </trans-unit>
+      <trans-unit id="tx_storefinder_domain_model_location.longitude">
+        <source>Longitude</source>
+        <target state="needs-translation">Longitude</target>
+      </trans-unit>
+      <trans-unit id="tx_storefinder_domain_model_location.center">
+        <source>Use as center</source>
+        <target state="needs-translation">Use as center</target>
+      </trans-unit>
+      <trans-unit id="tx_storefinder_domain_model_location.geocode">
+        <source>Geocode this location</source>
+        <target state="needs-translation">Geocode this location</target>
+      </trans-unit>
+      <trans-unit id="tx_storefinder_domain_model_location.distance">
+        <source>Calculated value by search query</source>
+        <target state="needs-translation">Calculated value by search query</target>
+      </trans-unit>
+      <trans-unit id="tx_storefinder_domain_model_location.modifyLocationMap">
+        <source>Modify location coordinate</source>
+        <target state="needs-translation">Modify location coordinate</target>
+      </trans-unit>
+      <trans-unit id="sys_category.add">
+        <source>Add category</source>
+        <target state="needs-translation">Add category</target>
+      </trans-unit>
+      <trans-unit id="div-address">
+        <source>Address</source>
+        <target state="needs-translation">Address</target>
+      </trans-unit>
+      <trans-unit id="div-contact">
+        <source>Contact</source>
+        <target state="needs-translation">Contact</target>
+      </trans-unit>
+      <trans-unit id="div-informations">
+        <source>Informations</source>
+        <target state="needs-translation">Informations</target>
+      </trans-unit>
+      <trans-unit id="div-relations">
+        <source>Relations</source>
+        <target state="needs-translation">Relations</target>
+      </trans-unit>
+      <trans-unit id="palette-coordinates">
+        <source>Coordinates</source>
+        <target state="needs-translation">Coordinates</target>
+      </trans-unit>
+      <trans-unit id="tx_storefinder_domain_model_attribute">
+        <source>Store Attributes</source>
+        <target state="needs-translation">Store Attributes</target>
+      </trans-unit>
+      <trans-unit id="tx_storefinder_domain_model_attribute.name">
+        <source>Name</source>
+        <target state="needs-translation">Name</target>
+      </trans-unit>
+      <trans-unit id="tx_storefinder_domain_model_attribute.icon">
+        <source>Icon</source>
+        <target state="needs-translation">Icon</target>
+      </trans-unit>
+      <trans-unit id="tx_storefinder_domain_model_attribute.description">
+        <source>Description</source>
+        <target state="needs-translation">Description</target>
+      </trans-unit>
+      <trans-unit id="tx_storefinder_domain_model_attribute.css_class">
+        <source>CSS Class</source>
+        <target state="needs-translation">CSS Class</target>
+      </trans-unit>
+      <trans-unit id="sys_category.children">
+        <source>Child categories</source>
+        <target state="needs-translation">Child categories</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
