@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" datatype="plaintext" original="messages" date="2013-01-04T12:14:30Z" product-name="store_finder" target-language="no">
+    <header/>
+    <body>
+      <trans-unit id="name">
+        <source>Storename</source>
+        <target state="needs-translation">Storename</target>
+      </trans-unit>
+      <trans-unit id="address">
+        <source>Address</source>
+        <target state="needs-translation">Address</target>
+      </trans-unit>
+      <trans-unit id="zipcode">
+        <source>Zipcode</source>
+        <target state="needs-translation">Zipcode</target>
+      </trans-unit>
+      <trans-unit id="city">
+        <source>City</source>
+        <target state="needs-translation">City</target>
+      </trans-unit>
+      <trans-unit id="phonenumber">
+        <source>Phonenumber</source>
+        <target state="needs-translation">Phonenumber</target>
+      </trans-unit>
+      <trans-unit id="country">
+        <source>Country</source>
+        <target state="needs-translation">Country</target>
+      </trans-unit>
+      <trans-unit id="latitude">
+        <source>Latitude</source>
+        <target state="needs-translation">Latitude</target>
+      </trans-unit>
+      <trans-unit id="longitude">
+        <source>Longitude</source>
+        <target state="needs-translation">Longitude</target>
+      </trans-unit>
+      <trans-unit id="products">
+        <source>Products comma separated</source>
+        <target state="needs-translation">Products comma separated</target>
+      </trans-unit>
+      <trans-unit id="category">
+        <source>Restrict on Categories</source>
+        <target state="needs-translation">Restrict on Categories</target>
+      </trans-unit>
+      <trans-unit id="radius">
+        <source>Radius (km)</source>
+        <target state="needs-translation">Radius (km)</target>
+      </trans-unit>
+      <trans-unit id="submit_find">
+        <source>Find Store</source>
+        <target state="needs-translation">Find Store</target>
+      </trans-unit>
+      <trans-unit id="route">
+        <source>Route</source>
+        <target state="needs-translation">Route</target>
+      </trans-unit>
+      <trans-unit id="please-select-country">
+        <source>Please select a country</source>
+        <target state="needs-translation">Please select a country</target>
+      </trans-unit>
+      <trans-unit id="error_notvalidatable">
+        <source>Model is not validatable</source>
+        <target state="needs-translation">Model is not validatable</target>
+      </trans-unit>
+      <trans-unit id="error_required">
+        <source>Required field may not be empty</source>
+        <target state="needs-translation">Required field may not be empty</target>
+      </trans-unit>
+      <trans-unit id="error_either">
+        <source>At least one of the required fields need to be filled in</source>
+        <target state="needs-translation">At least one of the required fields need to be filled in</target>
+      </trans-unit>
+      <trans-unit id="error_notexists">
+        <source>Field does not exists</source>
+        <target state="needs-translation">Field does not exists</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
