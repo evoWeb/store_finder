@@ -1,73 +1,67 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-	<file source-language="en" datatype="plaintext" original="messages" date="2013-01-04T12:14:30Z" product-name="store_finder">
-		<header/>
+	<file source-language="en" target-language="cs" original="messages" datatype="plaintext" product-name="store_finder" date="2024-08-02T16:39:12+02:00">
+		<header></header>
 		<body>
-			<trans-unit id="name">
-				<source>Storename</source>
-				<target>Name</target>
-			</trans-unit>
-			<trans-unit id="address">
+			<trans-unit id="address" resname="address">
 				<source>Address</source>
 				<target>Anschrift</target>
 			</trans-unit>
-			<trans-unit id="zipcode">
-				<source>Zipcode</source>
-				<target>PSČ</target>
-			</trans-unit>
-			<trans-unit id="city">
-				<source>City</source>
-				<target>Místo</target>
-			</trans-unit>
-			<trans-unit id="phonenumber">
-				<source>Phonenumber</source>
-				<target>Telefonnummer</target>
-			</trans-unit>
-			<trans-unit id="country">
-				<source>Country</source>
-				<target>Země</target>
-			</trans-unit>
-			<trans-unit id="latitude">
-				<source>Latitude</source>
-				<target>Längengrad</target>
-			</trans-unit>
-			<trans-unit id="longitude">
-				<source>Longitude</source>
-				<target>Breitengrad</target>
-			</trans-unit>
-			<trans-unit id="products">
-				<source>Products comma separated</source>
-				<target>Produkte (Komma-separiert)</target>
-			</trans-unit>
-			<trans-unit id="category">
+			<trans-unit id="category" resname="category">
 				<source>Restrict on Categories</source>
 				<target>Beschränkt auf Kategorien</target>
 			</trans-unit>
-			<trans-unit id="radius">
-				<source>Radius (km)</source>
+			<trans-unit id="city" resname="city">
+				<source>City</source>
+				<target>Místo</target>
 			</trans-unit>
-			<trans-unit id="submit_find">
-				<source>Find Store</source>
-				<target>Geschäft finden</target>
+			<trans-unit id="country" resname="country">
+				<source>Country</source>
+				<target>Země</target>
 			</trans-unit>
-			<trans-unit id="route">
-				<source>Route</source>
-			</trans-unit>
-			<trans-unit id="error_notvalidatable">
-				<source>Model is not validatable</source>
-				<target>Model ist nicht validierbar</target>
-			</trans-unit>
-			<trans-unit id="error_required">
-				<source>Required field may not be empty</source>
-				<target>Pflichtfeld darf nicht leer sein</target>
-			</trans-unit>
-			<trans-unit id="error_either">
+			<trans-unit id="error_either" resname="error_either">
 				<source>At least one of the required fields need to be filled in</source>
 				<target>Mindestens eines der Pflichtfelder muss gefüllt sein.</target>
 			</trans-unit>
-			<trans-unit id="error_notexists">
+			<trans-unit id="error_notexists" resname="error_notexists">
 				<source>Field does not exists</source>
 				<target>Diese Feld gibt es nicht</target>
+			</trans-unit>
+			<trans-unit id="error_notvalidatable" resname="error_notvalidatable">
+				<source>Model is not validatable</source>
+				<target>Model ist nicht validierbar</target>
+			</trans-unit>
+			<trans-unit id="error_required" resname="error_required">
+				<source>Required field may not be empty</source>
+				<target>Pflichtfeld darf nicht leer sein</target>
+			</trans-unit>
+			<trans-unit id="latitude" resname="latitude">
+				<source>Latitude</source>
+				<target>Längengrad</target>
+			</trans-unit>
+			<trans-unit id="longitude" resname="longitude">
+				<source>Longitude</source>
+				<target>Breitengrad</target>
+			</trans-unit>
+			<trans-unit id="name" resname="name">
+				<source>Storename</source>
+				<target>Name</target>
+			</trans-unit>
+			<trans-unit id="phonenumber" resname="phonenumber">
+				<source>Phonenumber</source>
+				<target>Telefonnummer</target>
+			</trans-unit>
+			<trans-unit id="products" resname="products">
+				<source>Products comma separated</source>
+				<target>Produkte (Komma-separiert)</target>
+			</trans-unit>
+			<trans-unit id="submit_find" resname="submit_find">
+				<source>Find Store</source>
+				<target>Geschäft finden</target>
+			</trans-unit>
+			<trans-unit id="zipcode" resname="zipcode">
+				<source>Zipcode</source>
+				<target>PSČ</target>
 			</trans-unit>
 		</body>
 	</file>
