@@ -1,29 +1,80 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
-  <file source-language="en" datatype="plaintext" original="messages" date="2018-05-06T14:18:57Z" product-name="store_finder" target-language="ar">
+  <file source-language="en" original="messages" datatype="plaintext" product-name="store_finder" date="2024-08-02T16:39:12+02:00" target-language="ar">
     <header/>
     <body>
-      <trans-unit id="title.description" xml:space="preserve">
-				<source>Enter the title of the page or folder.</source>
-			<target state="needs-translation">Enter the title of the page or folder.</target></trans-unit>
-      <trans-unit id="title.syntax" xml:space="preserve">
-				<source>You must enter a page title. The field is required.</source>
-			<target state="needs-translation">You must enter a page title. The field is required.</target></trans-unit>
-      <trans-unit id="doktype.description" xml:space="preserve">
-				<source>Select the page type. This affects . . . ses.</source>
-			<target state="needs-translation">Select the page type. This affects . . . ses.</target></trans-unit>
-      <trans-unit id="doktype.details" xml:space="preserve">
-				<source>The 'Standard' type represents a . . . any problems).</source>
-			<target state="needs-translation">The 'Standard' type represents a . . . any problems).</target></trans-unit>
-      <trans-unit id="TSconfig.description" xml:space="preserve">
-				<source>Page TypoScript configuration.</source>
-			<target state="needs-translation">Page TypoScript configuration.</target></trans-unit>
-      <trans-unit id="TSconfig.details" xml:space="preserve">
-				<source>Basically 'TypoScript' is a . . . alled).</source>
-			<target state="needs-translation">Basically 'TypoScript' is a . . . alled).</target></trans-unit>
-      <trans-unit id="TSconfig.syntax" xml:space="preserve">
-				<source>Basic TypoScr. . . 'Conditions' and 'Constants'.</source>
-			<target state="needs-translation">Basic TypoScr. . . 'Conditions' and 'Constants'.</target></trans-unit>
+      <trans-unit id="address" resname="address">
+        <source>Address</source>
+        <target state="needs-translation">Address</target>
+      </trans-unit>
+      <trans-unit id="category" resname="category">
+        <source>Restrict on Categories</source>
+        <target state="needs-translation">Restrict on Categories</target>
+      </trans-unit>
+      <trans-unit id="city" resname="city">
+        <source>City</source>
+        <target state="needs-translation">City</target>
+      </trans-unit>
+      <trans-unit id="country" resname="country">
+        <source>Country</source>
+        <target state="needs-translation">Country</target>
+      </trans-unit>
+      <trans-unit id="error_either" resname="error_either">
+        <source>At least one of the required fields need to be filled in</source>
+        <target state="needs-translation">At least one of the required fields need to be filled in</target>
+      </trans-unit>
+      <trans-unit id="error_notexists" resname="error_notexists">
+        <source>Field does not exists</source>
+        <target state="needs-translation">Field does not exists</target>
+      </trans-unit>
+      <trans-unit id="error_notvalidatable" resname="error_notvalidatable">
+        <source>Model is not validatable</source>
+        <target state="needs-translation">Model is not validatable</target>
+      </trans-unit>
+      <trans-unit id="error_required" resname="error_required">
+        <source>Required field may not be empty</source>
+        <target state="needs-translation">Required field may not be empty</target>
+      </trans-unit>
+      <trans-unit id="latitude" resname="latitude">
+        <source>Latitude</source>
+        <target state="needs-translation">Latitude</target>
+      </trans-unit>
+      <trans-unit id="longitude" resname="longitude">
+        <source>Longitude</source>
+        <target state="needs-translation">Longitude</target>
+      </trans-unit>
+      <trans-unit id="name" resname="name">
+        <source>Storename</source>
+        <target state="needs-translation">Storename</target>
+      </trans-unit>
+      <trans-unit id="phonenumber" resname="phonenumber">
+        <source>Phonenumber</source>
+        <target state="needs-translation">Phonenumber</target>
+      </trans-unit>
+      <trans-unit id="please-select-country" resname="please-select-country">
+        <source>Please select a country</source>
+        <target state="needs-translation">Please select a country</target>
+      </trans-unit>
+      <trans-unit id="products" resname="products">
+        <source>Products comma separated</source>
+        <target state="needs-translation">Products comma separated</target>
+      </trans-unit>
+      <trans-unit id="radius" resname="radius">
+        <source>Radius (km)</source>
+        <target state="needs-translation">Radius (km)</target>
+      </trans-unit>
+      <trans-unit id="route" resname="route">
+        <source>Route</source>
+        <target state="needs-translation">Route</target>
+      </trans-unit>
+      <trans-unit id="submit_find" resname="submit_find">
+        <source>Find Store</source>
+        <target state="needs-translation">Find Store</target>
+      </trans-unit>
+      <trans-unit id="zipcode" resname="zipcode">
+        <source>Zipcode</source>
+        <target state="needs-translation">Zipcode</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
