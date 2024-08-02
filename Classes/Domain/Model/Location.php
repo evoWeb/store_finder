@@ -21,7 +21,6 @@ use TYPO3\CMS\Extbase\Annotation as Extbase;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
-use TYPO3\CMS\Extbase\Persistence\Generic\LazyObjectStorage;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 class Location extends AbstractEntity
@@ -76,49 +75,49 @@ class Location extends AbstractEntity
      * @var ObjectStorage<Attribute>
      */
     #[Extbase\ORM\Lazy]
-    protected ObjectStorage|LazyObjectStorage $attributes;
+    protected ObjectStorage $attributes;
 
     /**
      * @var ObjectStorage<Category>
      */
     #[Extbase\ORM\Lazy]
-    protected ObjectStorage|LazyObjectStorage $categories;
+    protected ObjectStorage $categories;
 
     /**
      * @var ObjectStorage<Content>
      */
     #[Extbase\ORM\Lazy]
-    protected ObjectStorage|LazyObjectStorage $contentElements;
+    protected ObjectStorage $contentElements;
 
     /**
      * @var ObjectStorage<Location>
      */
     #[Extbase\ORM\Lazy]
-    protected ObjectStorage|LazyObjectStorage $related;
+    protected ObjectStorage $related;
 
     /**
      * @var ObjectStorage<FileReference>
      */
     #[Extbase\ORM\Lazy]
-    protected ObjectStorage|LazyObjectStorage $image;
+    protected ObjectStorage $image;
 
     /**
      * @var ObjectStorage<FileReference>
      */
     #[Extbase\ORM\Lazy]
-    protected ObjectStorage|LazyObjectStorage $media;
+    protected ObjectStorage $media;
 
     /**
      * @var ObjectStorage<FileReference>
      */
     #[Extbase\ORM\Lazy]
-    protected ObjectStorage|LazyObjectStorage $layer;
+    protected ObjectStorage $layer;
 
     /**
      * @var ObjectStorage<FileReference>
      */
     #[Extbase\ORM\Lazy]
-    protected ObjectStorage|LazyObjectStorage $icon;
+    protected ObjectStorage $icon;
 
     protected float $distance = 0.0;
 
