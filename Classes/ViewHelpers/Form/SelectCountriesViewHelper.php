@@ -47,13 +47,6 @@ class SelectCountriesViewHelper extends AbstractFormFieldViewHelper
     public function initializeArguments(): void
     {
         parent::initializeArguments();
-        $this->registerUniversalTagAttributes();
-        $this->registerTagAttribute('size', 'string', 'Size of input field');
-        $this->registerTagAttribute(
-            'disabled',
-            'string',
-            'Specifies that the input element should be disabled when the page loads'
-        );
         $this->registerArgument(
             'options',
             'array',
@@ -101,7 +94,7 @@ class SelectCountriesViewHelper extends AbstractFormFieldViewHelper
         );
         $this->registerArgument('multiple', 'boolean', 'If set multiple options may be selected.', false, false);
         $this->registerArgument('required', 'boolean', 'If set no empty value is allowed.', false, false);
-        $this->overrideArgument('sortByOptionLabel', 'bool', 'If true, List will be sorted by label.', false, true);
+        $this->registerArgument('sortByOptionLabel', 'bool', 'If true, List will be sorted by label.', false, true);
         $this->registerArgument(
             'allowedCountries',
             'array',
@@ -114,14 +107,14 @@ class SelectCountriesViewHelper extends AbstractFormFieldViewHelper
             'string',
             'If specified, will call the appropriate getter on each object to determine the value.',
             false,
-            'uid'
+            'alpha2IsoCode'
         );
         $this->registerArgument(
             'optionLabelField',
             'string',
             'If specified, will call the appropriate getter on each object to determine the label.',
             false,
-            'cnOfficialNameEn'
+            'localizedNameLabel'
         );
     }
 
