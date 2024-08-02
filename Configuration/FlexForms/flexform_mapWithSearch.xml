@@ -19,16 +19,16 @@
                             <default>1</default>
                             <items type="array">
                                 <numIndex index="0" type="array">
-                                    <numIndex index="0">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.showItems.search</numIndex>
-                                    <numIndex index="1">1</numIndex>
+                                    <numIndex index="label">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.showItems.search</numIndex>
+                                    <numIndex index="value">1</numIndex>
                                 </numIndex>
                                 <numIndex index="1" type="array">
-                                    <numIndex index="0">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.showItems.map</numIndex>
-                                    <numIndex index="1">2</numIndex>
+                                    <numIndex index="label">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.showItems.map</numIndex>
+                                    <numIndex index="value">2</numIndex>
                                 </numIndex>
                                 <numIndex index="2" type="array">
-                                    <numIndex index="0">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.showItems.list</numIndex>
-                                    <numIndex index="1">4</numIndex>
+                                    <numIndex index="label">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.showItems.list</numIndex>
+                                    <numIndex index="value">4</numIndex>
                                 </numIndex>
                             </items>
                         </config>
@@ -42,16 +42,16 @@
                             <default>6</default>
                             <items type="array">
                                 <numIndex index="0" type="array">
-                                    <numIndex index="0">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.showItems.search</numIndex>
-                                    <numIndex index="1">1</numIndex>
+                                    <numIndex index="label">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.showItems.search</numIndex>
+                                    <numIndex index="value">1</numIndex>
                                 </numIndex>
                                 <numIndex index="1" type="array">
-                                    <numIndex index="0">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.showItems.map</numIndex>
-                                    <numIndex index="1">2</numIndex>
+                                    <numIndex index="label">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.showItems.map</numIndex>
+                                    <numIndex index="value">2</numIndex>
                                 </numIndex>
                                 <numIndex index="2" type="array">
-                                    <numIndex index="0">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.showItems.list</numIndex>
-                                    <numIndex index="1">4</numIndex>
+                                    <numIndex index="label">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.showItems.list</numIndex>
+                                    <numIndex index="value">4</numIndex>
                                 </numIndex>
                             </items>
                         </config>
@@ -65,16 +65,16 @@
                             <renderType>selectCheckBox</renderType>
                             <items type="array">
                                 <numIndex index="0" type="array">
-                                    <numIndex index="0">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.apiV3Layers.trafficOverlay</numIndex>
-                                    <numIndex index="1">traffic</numIndex>
+                                    <numIndex index="label">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.apiV3Layers.trafficOverlay</numIndex>
+                                    <numIndex index="value">traffic</numIndex>
                                 </numIndex>
                                 <numIndex index="1" type="array">
-                                    <numIndex index="0">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.apiV3Layers.bicyclingOverlay</numIndex>
-                                    <numIndex index="1">bicycling</numIndex>
+                                    <numIndex index="label">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.apiV3Layers.bicyclingOverlay</numIndex>
+                                    <numIndex index="value">bicycling</numIndex>
                                 </numIndex>
                                 <numIndex index="2" type="array">
-                                    <numIndex index="0">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.apiV3Layers.kmlOverlay</numIndex>
-                                    <numIndex index="1">kml</numIndex>
+                                    <numIndex index="label">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.apiV3Layers.kmlOverlay</numIndex>
+                                    <numIndex index="value">kml</numIndex>
                                 </numIndex>
                             </items>
                             <maxitems>3</maxitems>
@@ -157,16 +157,16 @@
                             <renderType>selectSingle</renderType>
                             <items type="array">
                                 <numIndex index="0" type="array">
-                                    <numIndex index="0">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.categoryPriority.useAsFilterInFrontend</numIndex>
-                                    <numIndex index="1">useAsFilterInFrontend</numIndex>
+                                    <numIndex index="label">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.categoryPriority.useAsFilterInFrontend</numIndex>
+                                    <numIndex index="value">useAsFilterInFrontend</numIndex>
                                 </numIndex>
                                 <numIndex index="1" type="array">
-                                    <numIndex index="0">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.categoryPriority.useParentIfNoFilterSelected</numIndex>
-                                    <numIndex index="1">useParentIfNoFilterSelected</numIndex>
+                                    <numIndex index="label">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.categoryPriority.useParentIfNoFilterSelected</numIndex>
+                                    <numIndex index="value">useParentIfNoFilterSelected</numIndex>
                                 </numIndex>
                                 <numIndex index="2" type="array">
-                                    <numIndex index="0">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.categoryPriority.limitResultsToCategories</numIndex>
-                                    <numIndex index="1">limitResultsToCategories</numIndex>
+                                    <numIndex index="label">LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi_flexform.categoryPriority.limitResultsToCategories</numIndex>
+                                    <numIndex index="value">limitResultsToCategories</numIndex>
                                 </numIndex>
                             </items>
                         </config>
