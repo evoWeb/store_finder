@@ -1,191 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
-  <file source-language="en" original="messages" datatype="plaintext" product-name="store_finder" date="2024-08-02T16:41:21+02:00" target-language="uk">
+  <file source-language="en" original="messages" datatype="plaintext" product-name="store_finder" date="2024-08-02T16:39:12+02:00" target-language="uk">
     <header/>
     <body>
-      <trans-unit id="div-address" resname="div-address">
+      <trans-unit id="address" resname="address">
         <source>Address</source>
         <target state="needs-translation">Address</target>
       </trans-unit>
-      <trans-unit id="div-contact" resname="div-contact">
-        <source>Contact</source>
-        <target state="needs-translation">Contact</target>
+      <trans-unit id="category" resname="category">
+        <source>Restrict on Categories</source>
+        <target state="needs-translation">Restrict on Categories</target>
       </trans-unit>
-      <trans-unit id="div-informations" resname="div-informations">
-        <source>Informations</source>
-        <target state="needs-translation">Informations</target>
-      </trans-unit>
-      <trans-unit id="div-relations" resname="div-relations">
-        <source>Relations</source>
-        <target state="needs-translation">Relations</target>
-      </trans-unit>
-      <trans-unit id="palette-coordinates" resname="palette-coordinates">
-        <source>Coordinates</source>
-        <target state="needs-translation">Coordinates</target>
-      </trans-unit>
-      <trans-unit id="sys_category.add" resname="sys_category.add">
-        <source>Add category</source>
-        <target state="needs-translation">Add category</target>
-      </trans-unit>
-      <trans-unit id="sys_category.children" resname="sys_category.children">
-        <source>Child categories</source>
-        <target state="needs-translation">Child categories</target>
-      </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_attribute" resname="tx_storefinder_domain_model_attribute">
-        <source>Store Attributes</source>
-        <target state="needs-translation">Store Attributes</target>
-      </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_attribute.css_class" resname="tx_storefinder_domain_model_attribute.css_class">
-        <source>CSS Class</source>
-        <target state="needs-translation">CSS Class</target>
-      </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_attribute.description" resname="tx_storefinder_domain_model_attribute.description">
-        <source>Description</source>
-        <target state="needs-translation">Description</target>
-      </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_attribute.icon" resname="tx_storefinder_domain_model_attribute.icon">
-        <source>Icon</source>
-        <target state="needs-translation">Icon</target>
-      </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_attribute.name" resname="tx_storefinder_domain_model_attribute.name">
-        <source>Name</source>
-        <target state="needs-translation">Name</target>
-      </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location" resname="tx_storefinder_domain_model_location">
-        <source>Store Location</source>
-        <target state="needs-translation">Store Location</target>
-      </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.additionaladdress" resname="tx_storefinder_domain_model_location.additionaladdress">
-        <source>Additional address</source>
-        <target state="needs-translation">Additional address</target>
-      </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.address" resname="tx_storefinder_domain_model_location.address">
-        <source>Address</source>
-        <target state="needs-translation">Address</target>
-      </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.attributes" resname="tx_storefinder_domain_model_location.attributes">
-        <source>Attributes</source>
-        <target state="needs-translation">Attributes</target>
-      </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.categories" resname="tx_storefinder_domain_model_location.categories">
-        <source>Categories</source>
-        <target state="needs-translation">Categories</target>
-      </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.center" resname="tx_storefinder_domain_model_location.center">
-        <source>Use as center</source>
-        <target state="needs-translation">Use as center</target>
-      </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.city" resname="tx_storefinder_domain_model_location.city">
+      <trans-unit id="city" resname="city">
         <source>City</source>
         <target state="needs-translation">City</target>
       </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.content_elements" resname="tx_storefinder_domain_model_location.content_elements">
-        <source>Content Elements</source>
-        <target state="needs-translation">Content Elements</target>
-      </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.country" resname="tx_storefinder_domain_model_location.country">
+      <trans-unit id="country" resname="country">
         <source>Country</source>
         <target state="needs-translation">Country</target>
       </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.distance" resname="tx_storefinder_domain_model_location.distance">
-        <source>Calculated value by search query</source>
-        <target state="needs-translation">Calculated value by search query</target>
+      <trans-unit id="error_either" resname="error_either">
+        <source>At least one of the required fields need to be filled in</source>
+        <target state="needs-translation">At least one of the required fields need to be filled in</target>
       </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.email" resname="tx_storefinder_domain_model_location.email">
-        <source>Email</source>
-        <target state="needs-translation">Email</target>
+      <trans-unit id="error_notexists" resname="error_notexists">
+        <source>Field does not exists</source>
+        <target state="needs-translation">Field does not exists</target>
       </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.fax" resname="tx_storefinder_domain_model_location.fax">
-        <source>Fax</source>
-        <target state="needs-translation">Fax</target>
+      <trans-unit id="error_notvalidatable" resname="error_notvalidatable">
+        <source>Model is not validatable</source>
+        <target state="needs-translation">Model is not validatable</target>
       </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.geocode" resname="tx_storefinder_domain_model_location.geocode">
-        <source>Geocode this location</source>
-        <target state="needs-translation">Geocode this location</target>
+      <trans-unit id="error_required" resname="error_required">
+        <source>Required field may not be empty</source>
+        <target state="needs-translation">Required field may not be empty</target>
       </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.hidden" resname="tx_storefinder_domain_model_location.hidden">
-        <source>Visibility of location</source>
-        <target state="needs-translation">Visibility of location</target>
-      </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.hours" resname="tx_storefinder_domain_model_location.hours">
-        <source>Hours</source>
-        <target state="needs-translation">Hours</target>
-      </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.icon" resname="tx_storefinder_domain_model_location.icon">
-        <source>Icon</source>
-        <target state="needs-translation">Icon</target>
-      </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.image" resname="tx_storefinder_domain_model_location.image">
-        <source>Images</source>
-        <target state="needs-translation">Images</target>
-      </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.latitude" resname="tx_storefinder_domain_model_location.latitude">
+      <trans-unit id="latitude" resname="latitude">
         <source>Latitude</source>
         <target state="needs-translation">Latitude</target>
       </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.layer" resname="tx_storefinder_domain_model_location.layer">
-        <source>Layer</source>
-        <target state="needs-translation">Layer</target>
-      </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.layer.addFileReference" resname="tx_storefinder_domain_model_location.layer.addFileReference">
-        <source>Add layer file</source>
-        <target state="needs-translation">Add layer file</target>
-      </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.longitude" resname="tx_storefinder_domain_model_location.longitude">
+      <trans-unit id="longitude" resname="longitude">
         <source>Longitude</source>
         <target state="needs-translation">Longitude</target>
       </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.media" resname="tx_storefinder_domain_model_location.media">
-        <source>Media</source>
-        <target state="needs-translation">Media</target>
+      <trans-unit id="name" resname="name">
+        <source>Storename</source>
+        <target state="needs-translation">Storename</target>
       </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.mobile" resname="tx_storefinder_domain_model_location.mobile">
-        <source>Cellular</source>
-        <target state="needs-translation">Cellular</target>
+      <trans-unit id="phonenumber" resname="phonenumber">
+        <source>Phonenumber</source>
+        <target state="needs-translation">Phonenumber</target>
       </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.modifyLocationMap" resname="tx_storefinder_domain_model_location.modifyLocationMap">
-        <source>Modify location coordinate</source>
-        <target state="needs-translation">Modify location coordinate</target>
+      <trans-unit id="please-select-country" resname="please-select-country">
+        <source>Please select a country</source>
+        <target state="needs-translation">Please select a country</target>
       </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.name" resname="tx_storefinder_domain_model_location.name">
-        <source>Store Name</source>
-        <target state="needs-translation">Store Name</target>
+      <trans-unit id="products" resname="products">
+        <source>Products comma separated</source>
+        <target state="needs-translation">Products comma separated</target>
       </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.notes" resname="tx_storefinder_domain_model_location.notes">
-        <source>Notes</source>
-        <target state="needs-translation">Notes</target>
+      <trans-unit id="radius" resname="radius">
+        <source>Radius (km)</source>
+        <target state="needs-translation">Radius (km)</target>
       </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.person" resname="tx_storefinder_domain_model_location.person">
-        <source>Contact person</source>
-        <target state="needs-translation">Contact person</target>
+      <trans-unit id="route" resname="route">
+        <source>Route</source>
+        <target state="needs-translation">Route</target>
       </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.phone" resname="tx_storefinder_domain_model_location.phone">
-        <source>Phone</source>
-        <target state="needs-translation">Phone</target>
+      <trans-unit id="submit_find" resname="submit_find">
+        <source>Find Store</source>
+        <target state="needs-translation">Find Store</target>
       </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.products" resname="tx_storefinder_domain_model_location.products">
-        <source>Products</source>
-        <target state="needs-translation">Products</target>
-      </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.related" resname="tx_storefinder_domain_model_location.related">
-        <source>Related to location</source>
-        <target state="needs-translation">Related to location</target>
-      </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.state" resname="tx_storefinder_domain_model_location.state">
-        <source>State</source>
-        <target state="needs-translation">State</target>
-      </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.storeid" resname="tx_storefinder_domain_model_location.storeid">
-        <source>Store Id</source>
-        <target state="needs-translation">Store Id</target>
-      </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.url" resname="tx_storefinder_domain_model_location.url">
-        <source>URL</source>
-        <target state="needs-translation">URL</target>
-      </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.zipcode" resname="tx_storefinder_domain_model_location.zipcode">
-        <source>ZIP / Postal Code</source>
-        <target state="needs-translation">ZIP / Postal Code</target>
+      <trans-unit id="zipcode" resname="zipcode">
+        <source>Zipcode</source>
+        <target state="needs-translation">Zipcode</target>
       </trans-unit>
     </body>
   </file>
