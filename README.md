@@ -32,3 +32,7 @@ be cleared to see changes. To counter this problem you can add a snippet to the 
 ```
 With the condition above, we can make sure that only a certain page or folder is affected by the automatic cache
 clearing. Please see [TYPO3 Documentation](https://docs.typo3.org/m/typo3/reference-tsconfig/main/en-us/PageTsconfig/TceMain.html#clearcachecmd) for more information.
+
+## Translation proposal
+
+If you need new translations of existing labels, this can be done on [crowdin](https://crowdin.com/project/typo3-extension-storefinder).
