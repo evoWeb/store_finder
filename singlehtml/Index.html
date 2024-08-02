@@ -11,9 +11,9 @@
 <meta content="" name="docsearch:package_type">
 <meta content="" name="docsearch:release">
 <meta content="" name="docsearch:version">
-<meta content="2024-08-02T13:01:02+00:00" name="docsearch:modified">
-<meta content="2024-08-02T13:01:02+00:00" name="dc.modified">
-<meta content="2024-08-02T13:01:02+00:00" property="article:modified_time">
+<meta content="2024-08-02T14:44:12+00:00" name="docsearch:modified">
+<meta content="2024-08-02T14:44:12+00:00" name="dc.modified">
+<meta content="2024-08-02T14:44:12+00:00" property="article:modified_time">
     <link href="http://purl.org/dc/elements/1.1/" rel="schema.dc">
 <link href="../_resources/css/theme.css" rel="stylesheet">
 <link href="https://docs.typo3.org/search/" rel="search" title="Search">
@@ -144,7 +144,7 @@ license.</p>
 
         <dd class="field-odd">
             
-    <p>Fri, 02 Aug 2024 13:01:02 +0000</p>
+    <p>Fri, 02 Aug 2024 14:44:12 +0000</p>
         </dd>
     </dl>
             <hr />
@@ -320,7 +320,7 @@ license.</p>
 
         <dd class="field-odd">
             
-    <p>Fri, 02 Aug 2024 13:01:02 +0000</p>
+    <p>Fri, 02 Aug 2024 14:44:12 +0000</p>
         </dd>
     </dl>
             <hr />
@@ -1722,8 +1722,8 @@ in the plugin the binary value 4 stands for list.</p>
             <section class="section" id="form-selectcountries">
             <h2>form.selectCountries<a class="headerlink" href="#form-selectcountries" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h2>
             
-    <p>The countries select viewhelper fetches the countries from
-static_info_tables and renders each country as option. All attributes from
+    <p>The countries select viewhelper fetches the countries from the country
+provider and renders each country as option. All attributes from
 the fluid standard form.select are supported. Beside that if the optional
 attribute allowedCountries is set, only countries matching it get rendered.
 allowedCountries accepts a comma seperated list of ISO2 country codes.</p>
@@ -1734,7 +1734,7 @@ allowedCountries accepts a comma seperated list of ISO2 country codes.</p>
         <span class="caption-text">EXT:my_extension/Resources/Private/Templates/Map/Map.html</span>
     </div><div class="code-block-wrapper" translate="no">
             
-    <pre class="code-block"><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">sf:form.selectCountries</span> <span class="hljs-attr">property</span>=<span class="hljs-string">"country"</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"sfrCountry"</span> <span class="hljs-attr">optionValueField</span>=<span class="hljs-string">"isoCodeA3"</span> <span class="hljs-attr">allowedCountries</span>=<span class="hljs-string">"{0: 'DE', 1: 'AT'}"</span> /&gt;</span></code></pre>
+    <pre class="code-block"><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">sf:form.selectCountries</span> <span class="hljs-attr">property</span>=<span class="hljs-string">"country"</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"sfrCountry"</span> <span class="hljs-attr">optionValueField</span>=<span class="hljs-string">"alpha2IsoCode"</span> <span class="hljs-attr">allowedCountries</span>=<span class="hljs-string">"{0: 'DE', 1: 'AT'}"</span> /&gt;</span></code></pre>
     <div>        <button class="code-block-copy" title="Copy to clipboard">
             <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
             <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
@@ -2167,6 +2167,24 @@ vendor/bin/typo3 storefinder:import \
 <section class="section" id="breaking-changes-1" data-rst-anchor="breaking-changes">
             <a id="breaking-changes"></a>
             <h1>Breaking Changes<a class="headerlink" href="#breaking-changes-1" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h1>
+            <section class="section" id="02-august-2024">
+            <h2>02. August 2024<a class="headerlink" href="#02-august-2024" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h2>
+            
+    <p>Replacing CountryRepository with CountryProvider</p>
+
+            
+    <p>CountryRepository relayed on EXT:static_info_tables. As the core now is
+providing countries, the installation of that extension is not needed
+anymore.</p>
+
+            
+    <p>An install tool migration to update the locations records is provided.</p>
+
+            
+    <p>If you override a partial. You need to get the language select in sync
+with the provided one.</p>
+
+    </section>
             <section class="section" id="20-mai-2024">
             <h2>20. Mai 2024<a class="headerlink" href="#20-mai-2024" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h2>
             
@@ -2410,7 +2428,7 @@ getCityRaw are dropped.</p>
         <div class="frame-container">
             <div class="frame-inner">
                                 <div class="footer-additional">
-                    <p class="text-center">Last rendered: Aug 02, 2024 13:01</p>
+                    <p class="text-center">Last rendered: Aug 02, 2024 14:44</p>
                 </div>
                 <div class="footer-meta">
                     <ul class="footer-meta-navigation">
