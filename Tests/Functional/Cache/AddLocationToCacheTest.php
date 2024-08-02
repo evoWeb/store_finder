@@ -21,10 +21,8 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\NullLogger;
-use SJBR\StaticInfoTables\Domain\Model\Country;
-use SJBR\StaticInfoTables\Domain\Model\CountryZone;
+use TYPO3\CMS\Core\Country\Country;
 use TYPO3\CMS\Core\Cache\CacheManager;
-use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Http\Client\GuzzleClientFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
@@ -37,7 +35,6 @@ class AddLocationToCacheTest extends FunctionalTestCase
 {
     protected array $testExtensionsToLoad = [
         'typo3conf/ext/store_finder',
-        'typo3conf/ext/static_info_tables',
     ];
 
     protected array $coreExtensionsToLoad = [
@@ -47,11 +44,6 @@ class AddLocationToCacheTest extends FunctionalTestCase
     ];
 
     protected array $configurationToUseInTestInstance = [
-        'EXTENSIONS' => [
-            'static_info_tables' => [
-                'enableManager' => false,
-            ],
-        ],
         'SYS' => [
             'caching' => [
                 'cacheConfigurations' => [
@@ -72,7 +64,14 @@ class AddLocationToCacheTest extends FunctionalTestCase
                     'zipcode' => substr(time(), -5),
                     'city' => uniqid('City'),
                     'state' => null,
-                    'country' => new Country(),
+                    'country' => new Country(
+                        '',
+                        '',
+                        '',
+                        '',
+                        '',
+                        '',
+                    ),
                 ],
                 ['zipcode', 'city', 'country'],
                 ['zipcode', 'city', 'country'],
@@ -83,7 +82,14 @@ class AddLocationToCacheTest extends FunctionalTestCase
                     'zipcode' => substr(time(), -5),
                     'city' => uniqid('City'),
                     'state' => null,
-                    'country' => new Country(),
+                    'country' => new Country(
+                        '',
+                        '',
+                        '',
+                        '',
+                        '',
+                        '',
+                    ),
                 ],
                 ['address', 'zipcode', 'city', 'state', 'country'],
                 ['zipcode', 'city', 'country'],
@@ -93,22 +99,17 @@ class AddLocationToCacheTest extends FunctionalTestCase
                     'address' => uniqid('Address'),
                     'zipcode' => substr(time(), -5),
                     'city' => uniqid('City'),
-                    'state' => null,
-                    'country' => new Country(),
+                    'country' => new Country(
+                        '',
+                        '',
+                        '',
+                        '',
+                        '',
+                        '',
+                    ),
                 ],
-                ['address', 'zipcode', 'city', 'state', 'country'],
                 ['address', 'zipcode', 'city', 'country'],
-            ],
-            'address zip city state country' => [
-                [
-                    'address' => uniqid('Address'),
-                    'zipcode' => substr(time(), -5),
-                    'city' => uniqid('City'),
-                    'state' => new CountryZone(),
-                    'country' => new Country(),
-                ],
-                ['address', 'zipcode', 'city', 'state', 'country'],
-                ['address', 'zipcode', 'city', 'state', 'country'],
+                ['address', 'zipcode', 'city', 'country'],
             ],
         ];
     }
@@ -121,14 +122,7 @@ class AddLocationToCacheTest extends FunctionalTestCase
         $actual = unserialize(serialize($expected));
 
         /** @var ServerRequestInterface $request */
-        $request = new ServerRequest(
-            '/',
-            'POST',
-            'php://input',
-            [],
-            [],
-            null,
-        );
+        $request = $this->createServerRequest('https://typo3-testing.local/typo3/');
 
         $frontendUser = new FrontendUserAuthentication();
         $frontendUser->setLogger(new NullLogger());

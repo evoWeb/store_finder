@@ -34,23 +34,19 @@
             <f:form.textfield property="city" id="city" class="form-control"/>
         </div>
 
-        <f:if condition="{settings.static_info_tables}">
-            <f:variable name="value" value="{constraint.country.uid}" />
-            <div class="col-md-6 mb-3 country">
-                <label for="country"><f:translate key="country" /></label>
-                <f:render partial="FieldError" section="Main" arguments="{field: 'country'}" />
-                <sf:form.selectCountries
+        <div class="col-md-6 mb-3 country">
+            <label for="country"><f:translate key="country" /></label>
+            <f:render partial="FieldError" section="Main" arguments="{field: 'country'}" />
+            <sf:form.selectCountries
                     property="country"
                     id="country"
                     class="form-control"
-                    optionValueField="uid"
-                    optionLabelField="shortNameEn"
+                    optionValueField="alpha2IsoCode"
+                    optionLabelField="localizedNameLabel"
                     prependOptionLabel="{f:translate(id: 'please-select-country')}"
                     prependOptionValue="0"
-                    allowedCountries="{settings.allowedCountries}"
-                    value="{constraint.country.uid}" />
-            </div>
-        </f:if>
+                    allowedCountries="{settings.allowedCountries}" />
+        </div>
     </div>
 
     <div class="form-row">

@@ -16,6 +16,7 @@ declare(strict_types=1);
 namespace Evoweb\StoreFinder\ViewHelpers\Form;
 
 use Evoweb\StoreFinder\Domain\Repository\CountryRepository;
+use TYPO3\CMS\Core\Country\CountryProvider;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 use TYPO3\CMS\Fluid\ViewHelpers\Form\AbstractFormFieldViewHelper;
@@ -39,7 +40,7 @@ class SelectCountriesViewHelper extends AbstractFormFieldViewHelper
      */
     protected $tagName = 'select';
 
-    public function __construct(protected CountryRepository $countryRepository)
+    public function __construct(protected CountryProvider $countryProvider)
     {
         parent::__construct();
     }
@@ -125,28 +126,16 @@ class SelectCountriesViewHelper extends AbstractFormFieldViewHelper
     {
         parent::initialize();
 
-        if (ExtensionManagementUtility::isLoaded('static_info_tables')) {
-            if ($this->hasArgument('allowedCountries') && count($this->arguments['allowedCountries'])) {
-                $options = $this->countryRepository->findByIsoCodeA2($this->arguments['allowedCountries']);
-            } else {
-                $options = $this->countryRepository->findAll();
+        if ($this->hasArgument('allowedCountries') && count($this->arguments['allowedCountries'])) {
+            $options = [];
+            foreach ($this->arguments['allowedCountries'] as $alpha2IsoCode) {
+                $options[] = $this->countryProvider->getByAlpha2IsoCode(strtoupper($alpha2IsoCode));
             }
-            $options = $options->toArray();
-
-            if (!empty($this->arguments['allowedCountries'])) {
-                $orderedResults = [];
-                foreach ($this->arguments['allowedCountries'] as $countryKey) {
-                    foreach ($options as $country) {
-                        if (strtolower($country->getIsoCodeA2()) == strtolower($countryKey)) {
-                            $orderedResults[] = $country;
-                        }
-                    }
-                }
-                $options = $orderedResults;
-            }
-
-            $this->arguments['options'] = $options;
+        } else {
+            $options = $this->countryProvider->getAll();
         }
+
+        $this->arguments['options'] = $options;
     }
 
     public function render(): string

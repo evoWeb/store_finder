@@ -18,24 +18,10 @@ The recommended way to install TYPO3 Console is by using [Composer](https://getc
 Download and install the extension with the extension manager module or directly from the
 [TER](https://typo3.org/extensions/repository/view/store_finder).
 
-## TYPO3 10.x compatibility
-
-As long as there is no compatible sjbr/static-info-tables by the vendor, a fork
-will be provided at https://github.com/garbast/static_info_tables. To make use of
-it add the following to your project composer.json.
-
-```
-"repositories": [
-    {
-        "url": "https://github.com/garbast/static_info_tables.git",
-        "type": "git"
-    }
-],
-```
-
 ## Caching
 
-The frontend middlewares are heavily cached and for every change in a location or category record the cache needs to be cleared to see changes. To counter this problem you can add a snippet to the sites TCEMAIN.tsconfig.
+The frontend middlewares are heavily cached and for every change in a location or category record the cache needs to
+be cleared to see changes. To counter this problem you can add a snippet to the sites TCEMAIN.tsconfig.
 
 ```
 [traverse(page, "uid") == 70]
@@ -44,4 +30,5 @@ The frontend middlewares are heavily cached and for every change in a location o
   }
 [end]
 ```
-With the condition at the top, we can make sure that only a certain page or folder is affected by the automatic cache clearing. Please see [TYPO3 Documentation](https://docs.typo3.org/m/typo3/reference-tsconfig/main/en-us/PageTsconfig/TceMain.html#clearcachecmd) for more information.
+With the condition above, we can make sure that only a certain page or folder is affected by the automatic cache
+clearing. Please see [TYPO3 Documentation](https://docs.typo3.org/m/typo3/reference-tsconfig/main/en-us/PageTsconfig/TceMain.html#clearcachecmd) for more information.

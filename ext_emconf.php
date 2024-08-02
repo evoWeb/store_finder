@@ -12,7 +12,6 @@ $EM_CONF['store_finder'] = [
     'constraints' => [
         'depends' => [
             'typo3' => '13.1.0-13.4.99',
-            'static_info_tables' => '11.5.2-',
         ],
     ],
 ];

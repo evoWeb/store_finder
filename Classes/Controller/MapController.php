@@ -20,12 +20,12 @@ use Evoweb\StoreFinder\Controller\Event\MapGetLocationsByConstraintsEvent;
 use Evoweb\StoreFinder\Domain\Model\Constraint;
 use Evoweb\StoreFinder\Domain\Model\Location;
 use Evoweb\StoreFinder\Domain\Repository\CategoryRepository;
-use Evoweb\StoreFinder\Domain\Repository\CountryRepository;
 use Evoweb\StoreFinder\Domain\Repository\LocationRepository;
 use Evoweb\StoreFinder\Service\GeocodeService;
 use Evoweb\StoreFinder\Validation\Validator\ConstraintValidator;
 use Evoweb\StoreFinder\Validation\Validator\SettableInterface;
 use Psr\Http\Message\ResponseInterface;
+use TYPO3\CMS\Core\Country\CountryProvider;
 use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Pagination\ArrayPaginator;
 use TYPO3\CMS\Core\Pagination\SimplePagination;
@@ -47,7 +47,7 @@ class MapController extends ActionController
     public function __construct(
         protected LocationRepository $locationRepository,
         protected CategoryRepository $categoryRepository,
-        protected CountryRepository $countryRepository,
+        protected CountryProvider $countryProvider,
         protected GeocodeService $geocodeService
     ) {}
 
@@ -152,7 +152,6 @@ class MapController extends ActionController
             $this->settings = array_merge($this->settings, $override);
         }
 
-        $this->settings['static_info_tables'] = ExtensionManagementUtility::isLoaded('static_info_tables') ? 1 : 0;
         $this->settings['allowedCountries'] = explode(',', $this->settings['allowedCountries'] ?? '');
 
         $this->geocodeService->setSettings($this->settings);
@@ -415,13 +414,10 @@ class MapController extends ActionController
                     break;
 
                 case 'country':
-                    if ((int)($defaultConstraint['country'])) {
-                        $value = $this->countryRepository->findByUid((int)$defaultConstraint['country']);
-                    } elseif (strlen($defaultConstraint['country']) === 2) {
-                        $value = $this->countryRepository->findByIsoCodeA2([$defaultConstraint['country']])->getFirst();
-                    } elseif (strlen($defaultConstraint['country']) === 3) {
-                        $value = $this->countryRepository->findByIsoCodeA3($defaultConstraint['country']);
+                    if (strlen($defaultConstraint['country']) !== 2) {
+                        throw new \Exception('Invalid country code provided in settings.defaultConstraint');
                     }
+                    $value = $this->countryProvider->getByIsoCode($defaultConstraint['country']);
                     break;
             }
 

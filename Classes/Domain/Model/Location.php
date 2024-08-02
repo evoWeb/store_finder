@@ -15,8 +15,8 @@ declare(strict_types=1);
 
 namespace Evoweb\StoreFinder\Domain\Model;
 
-use SJBR\StaticInfoTables\Domain\Model\Country;
 use SJBR\StaticInfoTables\Domain\Model\CountryZone;
+use TYPO3\CMS\Core\Country\Country;
 use TYPO3\CMS\Extbase\Annotation as Extbase;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
@@ -244,7 +244,7 @@ class Location extends AbstractEntity
 
     public function getCountryName(): string
     {
-        return $this->getCountry() ? $this->getCountry()->getShortNameEn() : '';
+        return $this->getCountry() ? $this->getCountry()->getLocalizedNameLabel() : '';
     }
 
     public function getAdditionaladdress(): string

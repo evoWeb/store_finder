@@ -6,6 +6,20 @@
 Breaking Changes
 ================
 
+02. August 2024
+===============
+
+Replacing CountryRepository with CountryProvider
+
+CountryRepository relayed on EXT:static_info_tables. As the core now is
+providing countries, the installation of that extension is not needed
+anymore.
+
+An install tool migration to update the locations records is provided.
+
+If you override a partial. You need to get the language select in sync
+with the provided one.
+
 20. Mai 2024
 ============
 

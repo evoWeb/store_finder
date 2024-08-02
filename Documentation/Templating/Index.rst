@@ -112,8 +112,8 @@ Example viewhelper:
 form.selectCountries
 ====================
 
-The countries select viewhelper fetches the countries from
-static_info_tables and renders each country as option. All attributes from
+The countries select viewhelper fetches the countries from the country
+provider and renders each country as option. All attributes from
 the fluid standard form.select are supported. Beside that if the optional
 attribute allowedCountries is set, only countries matching it get rendered.
 allowedCountries accepts a comma seperated list of ISO2 country codes.
@@ -125,5 +125,5 @@ Example viewhelper:
 .. code-block:: html
    :caption: EXT:my_extension/Resources/Private/Templates/Map/Map.html
 
-    <sf:form.selectCountries property="country" id="sfrCountry" optionValueField="isoCodeA3" allowedCountries="{0: 'DE', 1: 'AT'}" />
+    <sf:form.selectCountries property="country" id="sfrCountry" optionValueField="alpha2IsoCode" allowedCountries="{0: 'DE', 1: 'AT'}" />
 
