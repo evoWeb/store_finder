@@ -37,15 +37,17 @@
         <div class="col-md-6 mb-3 country">
             <label for="country"><f:translate key="country" /></label>
             <f:render partial="FieldError" section="Main" arguments="{field: 'country'}" />
-            <sf:form.selectCountries
+            <f:form.countrySelect
                     property="country"
                     id="country"
                     class="form-control"
-                    optionValueField="alpha2IsoCode"
                     optionLabelField="localizedNameLabel"
+                    alternativeLanguage="en"
+                    sortByOptionLabel="true"
                     prependOptionLabel="{f:translate(id: 'please-select-country')}"
-                    prependOptionValue="0"
-                    allowedCountries="{settings.allowedCountries}" />
+                    prependOptionValue=""
+                    onlyCountries="{settings.allowedCountries}"
+            />
         </div>
     </div>
 

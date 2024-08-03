@@ -17,7 +17,8 @@ anymore.
 
 An install tool migration to update the locations records is provided.
 
-If you override a partial. You need to get the language select in sync
+The sf:form.selectCountries viewHelper got dropped in favor of f:form.countrySelect.
+If you override a partial. You need to get the country select in sync
 with the provided one.
 
 20. Mai 2024
