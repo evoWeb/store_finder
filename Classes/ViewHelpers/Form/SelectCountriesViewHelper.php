@@ -15,10 +15,9 @@ declare(strict_types=1);
 
 namespace Evoweb\StoreFinder\ViewHelpers\Form;
 
-use Evoweb\StoreFinder\Domain\Repository\CountryRepository;
 use TYPO3\CMS\Core\Country\CountryProvider;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Fluid\ViewHelpers\Form\AbstractFormFieldViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\Exception;
 
@@ -241,47 +240,11 @@ class SelectCountriesViewHelper extends AbstractFormFieldViewHelper
         $optionsArgument = $this->arguments['options'];
         foreach ($optionsArgument as $key => $value) {
             if (is_object($value) || is_array($value)) {
-                if ($this->hasArgument('optionValueField')) {
-                    $key = ObjectAccess::getPropertyPath($value, $this->arguments['optionValueField']);
-                    if (is_object($key)) {
-                        if (method_exists($key, '__toString')) {
-                            $key = (string)$key;
-                        } else {
-                            throw new Exception(
-                                'Identifying value for object of class "' . get_debug_type($value)
-                                . '" was an object.',
-                                1247827428
-                            );
-                        }
-                    }
-                } elseif ($this->persistenceManager->isNewObject($value)) {
-                    $key = $this->persistenceManager->getIdentifierByObject($value);
-                } elseif (is_object($value) && method_exists($value, '__toString')) {
-                    $key = (string)$value;
-                } elseif (is_object($value)) {
-                    throw new Exception(
-                        'No identifying value for object of class "' . get_class($value) . '" found.',
-                        1247826696
-                    );
-                }
-                if ($this->hasArgument('optionLabelField')) {
-                    $value = ObjectAccess::getPropertyPath($value, $this->arguments['optionLabelField']);
-                    if (is_object($value)) {
-                        if (method_exists($value, '__toString')) {
-                            $value = (string)$value;
-                        } else {
-                            throw new Exception(
-                                'Label value for object of class "'
-                                . get_class($value) . '" was an object without a __toString() method.',
-                                1247827553
-                            );
-                        }
-                    }
-                } elseif (is_object($value) && method_exists($value, '__toString')) {
-                    $value = (string)$value;
-                } elseif ($this->persistenceManager->isNewObject($value)) {
-                    $value = $this->persistenceManager->getIdentifierByObject($value);
-                }
+                $key = $this->getOptionKeyFromValue($value);
+                $value = $this->getOptionValueFromComplexValue($value);
+            }
+            if (str_starts_with($value, 'LLL:')) {
+                $value = LocalizationUtility::translate($value);
             }
             $options[$key] = $value;
         }
@@ -289,6 +252,58 @@ class SelectCountriesViewHelper extends AbstractFormFieldViewHelper
             asort($options, SORT_LOCALE_STRING);
         }
         return $options;
+    }
+
+    protected function getOptionKeyFromValue($value): string
+    {
+        $key = '';
+        if ($this->hasArgument('optionValueField')) {
+            $key = ObjectAccess::getPropertyPath($value, $this->arguments['optionValueField']);
+            if (is_object($key)) {
+                if (method_exists($key, '__toString')) {
+                    $key = (string)$key;
+                } else {
+                    throw new Exception(
+                        'Identifying value for object of class "' . get_debug_type($value)
+                        . '" was an object.',
+                        1247827428
+                    );
+                }
+            }
+        } elseif ($this->persistenceManager->isNewObject($value)) {
+            $key = $this->persistenceManager->getIdentifierByObject($value);
+        } elseif (is_object($value) && method_exists($value, '__toString')) {
+            $key = (string)$value;
+        } elseif (is_object($value)) {
+            throw new Exception(
+                'No identifying value for object of class "' . get_class($value) . '" found.',
+                1247826696
+            );
+        }
+        return $key;
+    }
+
+    protected function getOptionValueFromComplexValue($value): string
+    {
+        if ($this->hasArgument('optionLabelField')) {
+            $value = ObjectAccess::getPropertyPath($value, $this->arguments['optionLabelField']);
+            if (is_object($value)) {
+                if (method_exists($value, '__toString')) {
+                    $value = (string)$value;
+                } else {
+                    throw new Exception(
+                        'Label value for object of class "'
+                        . get_class($value) . '" was an object without a __toString() method.',
+                        1247827553
+                    );
+                }
+            }
+        } elseif (is_object($value) && method_exists($value, '__toString')) {
+            $value = (string)$value;
+        } elseif ($this->persistenceManager->isNewObject($value)) {
+            $value = $this->persistenceManager->getIdentifierByObject($value);
+        }
+        return $value;
     }
 
     /**
