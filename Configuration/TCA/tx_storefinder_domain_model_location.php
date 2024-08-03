@@ -1,6 +1,6 @@
 <?php
 
-use SJBR\StaticInfoTables\Hook\Backend\Form\FormDataProvider\TcaSelectItemsProcessor;
+use Evoweb\StoreFinder\Hooks\TcaItemsProcessorFunctions;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 $languageFile = 'LLL:EXT:store_finder/Resources/Private/Language/locallang_db.xlf:';
@@ -202,7 +202,7 @@ return [
                 ],
             ],
         ],
-
+/*
         'state' => [
             'label' => $languageFile . 'tx_storefinder_domain_model_location.state',
             'displayCond' => 'FIELD:country:>:0',
@@ -223,7 +223,7 @@ return [
                 ],
             ],
         ],
-
+*/
         'country' => [
             'label' => $languageFile . 'tx_storefinder_domain_model_location.country',
             'onChange' => 'reload',
@@ -231,11 +231,9 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => [
-                    ['label' => '', 'value' => 0],
+                    ['label' => '', 'value' => ''],
                 ],
-                'foreign_table' => 'static_countries',
-                'itemsProcFunc' =>
-                    TcaSelectItemsProcessor::class . '->translateCountriesSelector',
+                'itemsProcFunc' => TcaItemsProcessorFunctions::class . '->populateCountryItems',
                 'size' => 1,
                 'minitems' => 1,
                 'maxitems' => 1,
@@ -561,7 +559,7 @@ return [
                 --linebreak--,
                 zipcode, city,
                 --linebreak--,
-                state, country
+                country
             ',
         ],
         'contact' => [
