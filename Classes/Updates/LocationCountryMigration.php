@@ -13,7 +13,7 @@ declare(strict_types=1);
  * LICENSE.txt file that was distributed with this source code.
  */
 
-namespace Evoweb\SfRegister\Updates;
+namespace Evoweb\StoreFinder\Updates;
 
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Result;
