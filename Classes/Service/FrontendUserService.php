@@ -21,7 +21,6 @@ class FrontendUserService
 {
     public static function getCurrentUser(): ?FrontendUserAuthentication
     {
-        $request = $GLOBALS['TYPO3_REQUEST'];
-        return $request->getAttribute('frontend.user');
+        return isset($GLOBALS['TYPO3_REQUEST']) ? $GLOBALS['TYPO3_REQUEST']->getAttribute('frontend.user') : null;
     }
 }
