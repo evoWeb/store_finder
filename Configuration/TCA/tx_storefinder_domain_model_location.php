@@ -34,104 +34,6 @@ return [
     ],
 
     'columns' => [
-        'hidden' => [
-            'exclude' => true,
-            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:pages.hidden_toggle',
-            'config' => [
-                'type' => 'check',
-                'renderType' => 'checkboxToggle',
-                'items' => [
-                    [
-                        'label' => '',
-                        'invertStateDisplay' => true,
-                    ],
-                ],
-            ],
-        ],
-        'starttime' => [
-            'exclude' => true,
-            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.starttime',
-            'config' => [
-                'type' => 'datetime',
-                'default' => 0,
-            ],
-            'l10n_mode' => 'exclude',
-            'l10n_display' => 'defaultAsReadonly',
-        ],
-        'endtime' => [
-            'exclude' => true,
-            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.endtime',
-            'config' => [
-                'type' => 'datetime',
-                'default' => 0,
-                'range' => [
-                    'upper' => mktime(0, 0, 0, 1, 1, 2038),
-                ],
-            ],
-            'l10n_mode' => 'exclude',
-            'l10n_display' => 'defaultAsReadonly',
-        ],
-        'fe_group' => [
-            'exclude' => true,
-            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.fe_group',
-            'config' => [
-                'type' => 'select',
-                'renderType' => 'selectMultipleSideBySide',
-                'size' => 5,
-                'maxitems' => 20,
-                'items' => [
-                    [
-                        'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.hide_at_login',
-                        'value' => -1,
-                    ],
-                    [
-                        'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.any_login',
-                        'value' => -2,
-                    ],
-                    [
-                        'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.usergroups',
-                        'value' => '--div--',
-                    ],
-                ],
-                'exclusiveKeys' => '-1,-2',
-                'foreign_table' => 'fe_groups',
-            ],
-        ],
-        'sys_language_uid' => [
-            'exclude' => true,
-            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
-            'config' => [
-                'type' => 'language',
-            ],
-        ],
-        'l18n_parent' => [
-            'displayCond' => 'FIELD:sys_language_uid:>:0',
-            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
-            'config' => [
-                'type' => 'select',
-                'renderType' => 'selectSingle',
-                'items' => [
-                    ['label' => '', 'value' => 0],
-                ],
-                'foreign_table' => 'tx_storefinder_domain_model_location',
-                'foreign_table_where' =>
-                    'AND tx_storefinder_domain_model_location.pid = ###CURRENT_PID###
-                     AND tx_storefinder_domain_model_location.sys_language_uid = 0',
-                'default' => 0,
-            ],
-        ],
-        'l10n_source' => [
-            'config' => [
-                'type' => 'passthrough',
-            ],
-        ],
-        'l18n_diffsource' => [
-            'config' => [
-                'type' => 'passthrough',
-                'default' => '',
-            ],
-        ],
-
         // address
         'name' => [
             'label' => $languageFile . 'tx_storefinder_domain_model_location.name',
@@ -150,7 +52,11 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 30,
+                'max' => 60,
                 'eval' => 'trim',
+                'behaviour' => [
+                    'allowLanguageSynchronization' => true,
+                ],
             ],
         ],
 
@@ -185,8 +91,12 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 30,
+                'max' => 10,
                 'eval' => 'trim',
                 'required' => true,
+                'behaviour' => [
+                    'allowLanguageSynchronization' => true,
+                ],
             ],
         ],
 
@@ -202,10 +112,10 @@ return [
                 ],
             ],
         ],
-/*
+
         'state' => [
             'label' => $languageFile . 'tx_storefinder_domain_model_location.state',
-            'displayCond' => 'FIELD:country:>:0',
+            'displayCond' => 'FIELD:country:REQ:true',
             'config' => [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
@@ -213,9 +123,9 @@ return [
                     ['label' => '', 'value' => 0],
                 ],
                 'foreign_table' => 'static_country_zones',
-                'foreign_table_where' => 'AND zn_country_uid = ###REC_FIELD_country###
+                'foreign_table_where' =>
+                    'AND {#static_country_zones}.{#zn_country_iso_2}=\'###REC_FIELD_country###\'
                     ORDER BY static_country_zones.zn_name_local',
-                'size' => 1,
                 'minitems' => 0,
                 'maxitems' => 1,
                 'behaviour' => [
@@ -223,7 +133,7 @@ return [
                 ],
             ],
         ],
-*/
+
         'country' => [
             'label' => $languageFile . 'tx_storefinder_domain_model_location.country',
             'onChange' => 'reload',
@@ -233,8 +143,10 @@ return [
                 'items' => [
                     ['label' => '', 'value' => ''],
                 ],
+                'sortItems' => [
+                    'label' => 'asc',
+                ],
                 'itemsProcFunc' => TcaItemsProcessorFunctions::class . '->populateCountryItems',
-                'size' => 1,
                 'minitems' => 1,
                 'maxitems' => 1,
                 'behaviour' => [
@@ -261,6 +173,7 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 30,
+                'max' => 20,
                 'eval' => 'trim',
                 'behaviour' => [
                     'allowLanguageSynchronization' => true,
@@ -273,6 +186,7 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 30,
+                'max' => 20,
                 'eval' => 'trim',
                 'behaviour' => [
                     'allowLanguageSynchronization' => true,
@@ -285,6 +199,7 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 30,
+                'max' => 20,
                 'eval' => 'trim',
                 'behaviour' => [
                     'allowLanguageSynchronization' => true,
@@ -324,13 +239,10 @@ return [
                 'type' => 'group',
                 'allowed' => 'tx_storefinder_domain_model_location',
                 'foreign_table' => 'tx_storefinder_domain_model_location',
-                'foreign_table_where' => 'AND tx_storefinder_domain_model_location.uid != ###THIS_UID###
+                'foreign_table_where' =>
+                    'AND {#tx_storefinder_domain_model_location}.{#uid} != ###THIS_UID###
                     ORDER BY tx_storefinder_domain_model_location.name',
                 'MM' => 'tx_storefinder_location_location_mm',
-                'MM_match_fields' => [
-                    'tablenames' => 'tx_storefinder_domain_model_location',
-                    'fieldname' => 'related',
-                ],
             ],
         ],
 
@@ -351,13 +263,9 @@ return [
                 'renderType' => 'selectMultipleSideBySide',
                 'foreign_table' => 'tx_storefinder_domain_model_attribute',
                 'foreign_table_where' =>
-                    'AND tx_storefinder_domain_model_attribute.pid = ###CURRENT_PID###
-                     AND tx_storefinder_domain_model_attribute.sys_language_uid IN (-1,0)',
+                    'AND {#tx_storefinder_domain_model_attribute}.{#pid} = ###CURRENT_PID###
+                     AND {#tx_storefinder_domain_model_attribute}.{#sys_language_uid} IN (-1,0)',
                 'MM' => 'tx_storefinder_location_attribute_mm',
-                'MM_match_fields' => [
-                    'tablenames' => 'tx_storefinder_domain_model_attribute',
-                    'fieldname' => 'attributes',
-                ],
                 'size' => 10,
                 'maxitems' => 30,
             ],
@@ -368,6 +276,8 @@ return [
             'label' => $languageFile . 'tx_storefinder_domain_model_location.latitude',
             'config' => [
                 'type' => 'input',
+                // 'format' => 'decimal',
+                // 'precision' => 7,
                 'size' => 10,
                 'default' => 0,
             ],
@@ -378,6 +288,8 @@ return [
             'label' => $languageFile . 'tx_storefinder_domain_model_location.longitude',
             'config' => [
                 'type' => 'input',
+                // 'format' => 'decimal',
+                // 'precision' => 7,
                 'size' => 10,
                 'default' => 0,
             ],
@@ -400,6 +312,7 @@ return [
                 'size' => 10,
             ],
         ],
+
         'geocode' => [
             'l10n_mode' => 'exclude',
             'exclude' => true,
@@ -408,6 +321,7 @@ return [
                 'type' => 'check',
             ],
         ],
+
         'map' => [
             'l10n_mode' => 'exclude',
             'exclude' => true,
@@ -512,6 +426,12 @@ return [
                 ],
             ],
         ],
+
+        'import_id' => [
+            'config' => [
+                'type' => 'number'
+            ]
+        ],
     ],
 
     'types' => [
@@ -533,7 +453,7 @@ return [
                     image,
                     media,
                     layer,
-                    content,
+                    content_elements,
                 --div--;' . $languageFile . 'div-relations,
                     related,
                     attributes,
@@ -559,7 +479,7 @@ return [
                 --linebreak--,
                 zipcode, city,
                 --linebreak--,
-                country
+                state, country
             ',
         ],
         'contact' => [
