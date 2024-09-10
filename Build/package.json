@@ -5,10 +5,10 @@
 	"readme": "../README.md",
 	"homepage": "https://github.com/evoWeb/store_finder/",
 	"author": "Sebastian Fischer",
-	"version": "4.0.0",
+	"version": "8.0.0",
 	"license": "GPL-2.0-or-later",
 	"engines": {
-		"node": ">=14.15.0 <19.0.0",
+		"node": ">=19.0.0 <21.0.0",
 		"npm": ">=9.0.0 <11.0.0"
 	},
 	"dependencies": {
@@ -16,37 +16,41 @@
 		"mustache": "^4.2.0"
 	},
 	"devDependencies": {
-		"webpack": "^5.93.0",
+		"webpack": "^5.94.0",
 		"webpack-cli": "^5.1.4",
 
-		"mini-css-extract-plugin": "^2.9.0",
+		"mini-css-extract-plugin": "^2.9.1",
 		"css-loader": "^6.11.0",
 		"postcss-loader": "^7.3.4",
-		"sass-loader": "^13.3.3",
-		"node-sass": "^8.0.0",
+		"sass-loader": "^16.0.1",
+		"node-sass": "^9.0.0",
 
 		"ts-loader": "^9.5.1",
-		"rollup": "^2.79.1",
-		"rollup-plugin-terser": "^7.0.2",
-		"terser": "^5.31.3",
+		"rollup": "^2.0.0",
+		"@rollup/plugin-terser": "^0.4.4",
+		"terser": "^5.31.6",
 
-		"@types/google.maps": "^3.55.12",
+		"@types/google.maps": "^3.58.0",
 		"@types/leaflet": "^1.9.12",
 		"@types/mustache": "^4.2.5",
-		"@typescript-eslint/eslint-plugin": "^6.21.0",
-		"@typescript-eslint/parser": "^6.21.0",
-		"@typescript-eslint/typescript-estree": "^6.21.0",
-		"eslint": "^8.57.0",
-		"eslint-plugin-lit": "^1.14.0",
-		"eslint-plugin-wc": "^1.5.0",
+		"@stylistic/eslint-plugin": "^2.8.0",
+		"@typescript-eslint/eslint-plugin": "^8.4.0",
+		"@typescript-eslint/parser": "^8.4.0",
+		"@typescript-eslint/typescript-estree": "^8.4.0",
+		"@eslint/js": "^9.10.0",
+		"@eslint/eslintrc": "^3.1.0",
+		"eslint": "^9.10.0",
+		"eslint-plugin-lit": "^1.15.0",
+		"eslint-plugin-wc": "^2.1.1",
 		"postcss-scss": "^4.0.9",
-		"stylelint": "^16.8.1",
+		"stylelint": "^16.9.0",
 		"stylelint-order": "^6.0.4",
-		"typescript": "^5.5.4"
+		"stylelint-scss": "^6.5.1",
+		"typescript": "< 5.6.0"
 	},
 	"scripts": {
 		"lint:css": "stylelint Sources/Scss/*.scss",
-		"lint:ts": "eslint -c .eslintrc.js Sources/TypeScript/*.ts",
+		"lint:ts": "eslint -c eslint.config.mjs Sources/TypeScript/*.ts",
 		"build:css": "webpack --mode=production --config webpack.css.config.js",
 		"build:js": "npm run lint:ts && webpack --mode=development --config webpack.js.config.js && webpack --mode=production --config webpack.js.config.js",
 		"build:module": "tsc --project tsconfig.build.json && rollup -c"
