@@ -23,7 +23,7 @@ services:
   Evoweb\StoreFinder\Cache\CoordinatesCache:
     arguments:
       $cacheFrontend: '@cache.store_finder.coordinate_cache'
-      $frontendUser: '@frontend.user'
+      $userSessionManager: '@TYPO3\CMS\Core\Session\UserSessionManager'
     shared: false
     autoconfigure: false
     autowire: false

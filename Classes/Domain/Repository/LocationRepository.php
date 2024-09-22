@@ -169,11 +169,10 @@ class LocationRepository extends Repository
 
         $expression = $queryBuilder->expr();
 
-        $queryBuilder->innerJoin('l', 'static_countries', 'sc', '(l.country = sc.uid)');
         $queryBuilder->andWhere(
             $expression->eq(
-                'sc.uid',
-                $queryBuilder->createNamedParameter($constraint->getCountry()->getUid(), Connection::PARAM_INT)
+                'l.country',
+                $queryBuilder->createNamedParameter($constraint->getCountry()->getAlpha2IsoCode())
             )
         );
 

@@ -16,7 +16,11 @@ declare(strict_types=1);
 namespace Evoweb\StoreFinder\Cache;
 
 use Evoweb\StoreFinder\Domain\Model\Location;
+use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
+use TYPO3\CMS\Core\Http\SetCookieService;
+use TYPO3\CMS\Core\Session\UserSession;
+use TYPO3\CMS\Core\Session\UserSessionManager;
 use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 
 class CoordinatesCache
@@ -25,10 +29,20 @@ class CoordinatesCache
 
     protected string $sessionKey = 'tx_storefinder_coordinates';
 
+    protected UserSessionManager $userSessionManager;
+
+    protected UserSession $session;
+
     public function __construct(
         protected FrontendInterface $cacheFrontend,
-        protected ?FrontendUserAuthentication $frontendUser = null
-    ) {}
+        ?UserSessionManager $userSessionManager = null,
+    ) {
+        $this->userSessionManager = $userSessionManager ?? UserSessionManager::create('FE');
+        $this->session = $userSessionManager->createFromRequestOrAnonymous(
+            $this->getRequest(),
+            FrontendUserAuthentication::getCookieName(),
+        );
+    }
 
     public function addCoordinateForAddress(Location $address, array $queryValues): void
     {
@@ -88,46 +102,33 @@ class CoordinatesCache
      */
     public function sessionHasKey(string $key): bool
     {
-        $sessionData = $this->frontendUser?->getKey('ses', $this->sessionKey);
-
-        return is_array($sessionData) && !empty($sessionData[$key]);
+        return !empty($this->session->getData()[$this->sessionKey][$key] ?? []);
     }
 
     public function getValueFromSession(string $key): array
     {
-        $sessionData = $this->frontendUser?->getKey('ses', $this->sessionKey);
+        $sessionData = $this->session->get($this->sessionKey);
 
         return is_array($sessionData) && isset($sessionData[$key]) ? unserialize($sessionData[$key]) : [];
     }
 
     public function setValueInSession(string $key, array $value): void
     {
-        if ($this->frontendUser instanceof FrontendUserAuthentication) {
-            $sessionData = $this->frontendUser->getKey('ses', $this->sessionKey);
-
+        if ($this->session instanceof UserSession) {
+            $sessionData = $this->session->get($this->sessionKey);
             $sessionData[$key] = serialize($value);
 
-            $this->frontendUser->setKey('ses', $this->sessionKey, $sessionData);
-            // @extensionScannerIgnoreLine
-            $this->frontendUser->storeSessionData();
+            $this->session->set($this->sessionKey, $sessionData);
+            $this->userSessionManager->updateSession($this->session);
         }
     }
 
     public function flushSessionCache(): void
     {
-        if ($this->frontendUser instanceof FrontendUserAuthentication) {
-            $this->frontendUser->setKey('ses', $this->sessionKey, []);
-            // @extensionScannerIgnoreLine
-            $this->frontendUser->storeSessionData();
+        if ($this->session instanceof UserSession) {
+            $this->session->set($this->sessionKey, []);
+            $this->userSessionManager->updateSession($this->session);
         }
-    }
-
-    /**
-     * Check if cache table has key set
-     */
-    public function cacheTableHasKey(string $key): bool
-    {
-        return $this->cacheFrontend->has($key) && $this->getValueFromCacheTable($key) !== false;
     }
 
     /**
@@ -152,5 +153,10 @@ class CoordinatesCache
     public function flushCacheTable(): void
     {
         $this->cacheFrontend->flush();
+    }
+
+    public function getRequest(): ServerRequestInterface
+    {
+        return $GLOBALS['TYPO3_REQUEST'];
     }
 }

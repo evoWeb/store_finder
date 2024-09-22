@@ -18,12 +18,15 @@ use Evoweb\StoreFinder\Domain\Model\Constraint;
 use Evoweb\StoreFinder\Service\GeocodeService;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\NullLogger;
+use SJBR\StaticInfoTables\Domain\Model\CountryZone;
 use TYPO3\CMS\Core\Country\Country;
 use TYPO3\CMS\Core\Cache\CacheManager;
+use TYPO3\CMS\Core\Country\CountryProvider;
 use TYPO3\CMS\Core\Http\Client\GuzzleClientFactory;
+use TYPO3\CMS\Core\Http\NormalizedParams;
+use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
@@ -158,9 +161,11 @@ class AddLocationToCacheTest extends FunctionalTestCase
             $setter = 'set' . ucfirst($field);
             if (method_exists($constraint, $setter) && !empty($value)) {
                 if ($field === 'country') {
-                    $value->setIsoCodeA2('de');
+                    /** @var Country $value */
+                    $value = GeneralUtility::makeInstance(CountryProvider::class)->getByAlpha2IsoCode('de');
                 }
                 if ($field === 'state') {
+                    /** @var CountryZone $value */
                     $value->setLocalName('Nordrhein-Westfalen');
                 }
                 $constraint->{$setter}($value);
@@ -171,5 +176,44 @@ class AddLocationToCacheTest extends FunctionalTestCase
         $constraint->setLongitude(10.451526);
 
         return $constraint;
+    }
+
+    private function createServerRequest(string $url, string $method = 'GET'): ServerRequestInterface
+    {
+        $requestUrlParts = parse_url($url);
+        $docRoot = $this->instancePath;
+
+        $serverParams = [
+            'DOCUMENT_ROOT' => $docRoot,
+            'HTTP_USER_AGENT' => 'TYPO3 Functional Test Request',
+            'HTTP_HOST' => $requestUrlParts['host'] ?? 'localhost',
+            'SERVER_NAME' => $requestUrlParts['host'] ?? 'localhost',
+            'SERVER_ADDR' => '127.0.0.1',
+            'REMOTE_ADDR' => '127.0.0.1',
+            'SCRIPT_NAME' => '/index.php',
+            'PHP_SELF' => '/index.php',
+            'SCRIPT_FILENAME' => $docRoot . '/index.php',
+            'PATH_TRANSLATED' => $docRoot . '/index.php',
+            'QUERY_STRING' => $requestUrlParts['query'] ?? '',
+            'REQUEST_URI' => $requestUrlParts['path'] . (isset($requestUrlParts['query']) ? '?' . $requestUrlParts['query'] : ''),
+            'REQUEST_METHOD' => $method,
+        ];
+        // Define HTTPS and server port
+        if (isset($requestUrlParts['scheme'])) {
+            if ($requestUrlParts['scheme'] === 'https') {
+                $serverParams['HTTPS'] = 'on';
+                $serverParams['SERVER_PORT'] = '443';
+            } else {
+                $serverParams['SERVER_PORT'] = '80';
+            }
+        }
+
+        // Define a port if used in the URL
+        if (isset($requestUrlParts['port'])) {
+            $serverParams['SERVER_PORT'] = $requestUrlParts['port'];
+        }
+        // set up normalizedParams
+        $request = new ServerRequest($url, $method, null, [], $serverParams);
+        return $request->withAttribute('normalizedParams', NormalizedParams::createFromRequest($request));
     }
 }
