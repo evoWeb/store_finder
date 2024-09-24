@@ -23,8 +23,8 @@ use Geocoder\Provider\GoogleMaps\GoogleMaps;
 use Geocoder\Provider\Provider;
 use Geocoder\Query\GeocodeQuery;
 use Geocoder\StatefulGeocoder;
-use SJBR\StaticInfoTables\Domain\Model\Country;
 use SJBR\StaticInfoTables\Domain\Model\CountryZone;
+use TYPO3\CMS\Core\Country\Country;
 use TYPO3\CMS\Core\Http\Client\GuzzleClientFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -106,7 +106,7 @@ class GeocodeService
                 // to enhance the map api query result
                 case 'country':
                     if ($value instanceof Country) {
-                        $value = $value->getIsoCodeA2();
+                        $value = $value->getAlpha2IsoCode();
                     }
                     break;
 

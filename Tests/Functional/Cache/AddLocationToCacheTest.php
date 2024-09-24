@@ -19,7 +19,6 @@ use Evoweb\StoreFinder\Service\GeocodeService;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Log\NullLogger;
 use SJBR\StaticInfoTables\Domain\Model\CountryZone;
 use TYPO3\CMS\Core\Country\Country;
 use TYPO3\CMS\Core\Cache\CacheManager;
@@ -27,8 +26,8 @@ use TYPO3\CMS\Core\Country\CountryProvider;
 use TYPO3\CMS\Core\Http\Client\GuzzleClientFactory;
 use TYPO3\CMS\Core\Http\NormalizedParams;
 use TYPO3\CMS\Core\Http\ServerRequest;
+use TYPO3\CMS\Core\Session\UserSessionManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 /**
@@ -126,23 +125,19 @@ class AddLocationToCacheTest extends FunctionalTestCase
 
         /** @var ServerRequestInterface $request */
         $request = $this->createServerRequest('https://typo3-testing.local/typo3/');
-
-        $frontendUser = new FrontendUserAuthentication();
-        $frontendUser->setLogger(new NullLogger());
-        $frontendUser->start($request);
-
-        $request = $request->withAttribute('frontend.user', $frontendUser);
         $GLOBALS['TYPO3_REQUEST'] = $request;
 
         /** @var CacheManager $cacheManager */
         $cacheManager = GeneralUtility::makeInstance(CacheManager::class);
-        /** @var GuzzleClientFactory $guzzleFactory */
-        $guzzleFactory = GeneralUtility::makeInstance(GuzzleClientFactory::class);
         $cacheFrontend = $cacheManager->getCache('store_finder_coordinate_cache');
 
-        $coordinatesCache = new CoordinatesCache($cacheFrontend, $frontendUser);
+        $userSessionManagerMock = $this->createMock(UserSessionManager::class);
+        $coordinatesCache = new CoordinatesCache($cacheFrontend);
+        $coordinatesCache->initializeUserSessionManager($userSessionManagerMock);
         $coordinatesCache->flushCache();
 
+        /** @var GuzzleClientFactory $guzzleFactory */
+        $guzzleFactory = GeneralUtility::makeInstance(GuzzleClientFactory::class);
         $geocodeService = new GeocodeService($coordinatesCache, $guzzleFactory);
 
         $queryValues = $geocodeService->prepareValuesForQuery($expected, $addFields);
@@ -195,7 +190,8 @@ class AddLocationToCacheTest extends FunctionalTestCase
             'SCRIPT_FILENAME' => $docRoot . '/index.php',
             'PATH_TRANSLATED' => $docRoot . '/index.php',
             'QUERY_STRING' => $requestUrlParts['query'] ?? '',
-            'REQUEST_URI' => $requestUrlParts['path'] . (isset($requestUrlParts['query']) ? '?' . $requestUrlParts['query'] : ''),
+            'REQUEST_URI' => $requestUrlParts['path']
+                . (isset($requestUrlParts['query']) ? '?' . $requestUrlParts['query'] : ''),
             'REQUEST_METHOD' => $method,
         ];
         // Define HTTPS and server port

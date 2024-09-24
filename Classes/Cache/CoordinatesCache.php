@@ -18,29 +18,33 @@ namespace Evoweb\StoreFinder\Cache;
 use Evoweb\StoreFinder\Domain\Model\Location;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
+use TYPO3\CMS\Core\Http\NormalizedParams;
 use TYPO3\CMS\Core\Http\SetCookieService;
 use TYPO3\CMS\Core\Session\UserSession;
 use TYPO3\CMS\Core\Session\UserSessionManager;
-use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 
 class CoordinatesCache
 {
     protected array $fields = ['address', 'zipcode', 'city', 'state', 'country'];
 
-    protected string $sessionKey = 'tx_storefinder_coordinates';
+    protected string $sessionName = 'evoweb-storefinder-session';
+
+    protected string $sessionKey = 'coordinates';
 
     protected UserSessionManager $userSessionManager;
 
     protected UserSession $session;
 
-    public function __construct(
-        protected FrontendInterface $cacheFrontend,
-        ?UserSessionManager $userSessionManager = null,
-    ) {
+    public function __construct(protected FrontendInterface $cacheFrontend)
+    {
+    }
+
+    public function initializeUserSessionManager(?UserSessionManager $userSessionManager = null): void
+    {
         $this->userSessionManager = $userSessionManager ?? UserSessionManager::create('FE');
         $this->session = $userSessionManager->createFromRequestOrAnonymous(
             $this->getRequest(),
-            FrontendUserAuthentication::getCookieName(),
+            $this->sessionName,
         );
     }
 
@@ -114,21 +118,22 @@ class CoordinatesCache
 
     public function setValueInSession(string $key, array $value): void
     {
-        if ($this->session instanceof UserSession) {
-            $sessionData = $this->session->get($this->sessionKey);
-            $sessionData[$key] = serialize($value);
+        $sessionData = $this->session->get($this->sessionKey);
+        $sessionData[$key] = serialize($value);
 
-            $this->session->set($this->sessionKey, $sessionData);
-            $this->userSessionManager->updateSession($this->session);
-        }
+        $this->session->set($this->sessionKey, $sessionData);
+        $this->userSessionManager->updateSession($this->session);
+        $setCookieService = SetCookieService::create($this->sessionName, 'FE');
+        $normalizedParams = NormalizedParams::createFromRequest($this->getRequest());
+        $setCookieService->setSessionCookie($this->session, $normalizedParams);
     }
 
     public function flushSessionCache(): void
     {
-        if ($this->session instanceof UserSession) {
-            $this->session->set($this->sessionKey, []);
-            $this->userSessionManager->updateSession($this->session);
-        }
+        $this->userSessionManager->removeSession($this->session);
+        $setCookieService = SetCookieService::create($this->sessionName, 'FE');
+        $normalizedParams = NormalizedParams::createFromRequest($this->getRequest());
+        $setCookieService->removeCookie($normalizedParams);
     }
 
     /**
