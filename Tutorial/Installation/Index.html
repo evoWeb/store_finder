@@ -11,9 +11,9 @@
 <meta content="" name="docsearch:package_type">
 <meta content="" name="docsearch:release">
 <meta content="" name="docsearch:version">
-<meta content="2024-09-08T18:08:04+00:00" name="docsearch:modified">
-<meta content="2024-09-08T18:08:04+00:00" name="dc.modified">
-<meta content="2024-09-08T18:08:04+00:00" property="article:modified_time">
+<meta content="2024-09-25T18:34:26+00:00" name="docsearch:modified">
+<meta content="2024-09-25T18:34:26+00:00" name="dc.modified">
+<meta content="2024-09-25T18:34:26+00:00" property="article:modified_time">
     <link href="http://purl.org/dc/elements/1.1/" rel="schema.dc">
 <link href="../../_resources/css/theme.css" rel="stylesheet">
 <link href="https://docs.typo3.org/search/" rel="search" title="Search">
@@ -180,9 +180,9 @@
                 
 <section class="section" id="installation-1" data-rst-anchor="installation">
             <a id="installation"></a>
-            <h1>Installation<a class="headerlink" href="#installation-1" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h1>
+            <h1>Installation<a class="headerlink" href="#installation-1" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline"><i class="fa-solid fa-paragraph"></i></a></h1>
             <section class="section" id="installation">
-            <h2>Installation<a class="headerlink" href="#installation" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h2>
+            <h2>Installation<a class="headerlink" href="#installation" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline"><i class="fa-solid fa-paragraph"></i></a></h2>
             
     <p>To install the extension go to the &quot;Admin Tools&quot; section and select the &quot;Extension Manager&quot;. On the top
 selectbox choose &quot;Manage Extensions&quot; and enter store_finder in the search field. Click add to install
@@ -199,14 +199,14 @@ geocoding process. For the search in the frontend you need to change it in TypoS
 
     </section>
             <section class="section" id="typoscript">
-            <h2>TypoScript<a class="headerlink" href="#typoscript" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h2>
+            <h2>TypoScript<a class="headerlink" href="#typoscript" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline"><i class="fa-solid fa-paragraph"></i></a></h2>
             
     <p>In general its a good idea to add the include static of the extension to you typoscript record. Otherwise
 its not possible to use the country selector which is used in the default template.</p>
 
     </section>
             <section class="section" id="structure">
-            <h2>Structure<a class="headerlink" href="#structure" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h2>
+            <h2>Structure<a class="headerlink" href="#structure" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline"><i class="fa-solid fa-paragraph"></i></a></h2>
             
     <p>Location records can only be added in folders that&#039;s why you need to add at least one folder for storage.
 Additionally you need a page with the store_finder plugin. In the plugin configure your needs. To use
@@ -214,7 +214,7 @@ locations of the created folder choose it as record storage page on tab behaviou
 
     </section>
             <section class="section" id="templating">
-            <h2>Templating<a class="headerlink" href="#templating" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h2>
+            <h2>Templating<a class="headerlink" href="#templating" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline"><i class="fa-solid fa-paragraph"></i></a></h2>
             
     <p>To change the frontend templates you most likely need to change the partials. These contain of search, map
 and list part. Copy the folder from the extension to your local path like the fileadmin. To use these copies
@@ -234,7 +234,7 @@ you can change the path either in the plugin field &quot;Partial path&quot; or v
 </div>
     </section>
             <section class="section" id="api-keys">
-            <h2>API Keys<a class="headerlink" href="#api-keys" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h2>
+            <h2>API Keys<a class="headerlink" href="#api-keys" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline"><i class="fa-solid fa-paragraph"></i></a></h2>
             
     <p>If you need to geocode coordinates, either on saving a store record or in bulk with the geocode console command
 you need to add an additional key in TypoScript constants apiConsoleKeyGeocoding. This key will never be visible
@@ -260,10 +260,32 @@ would be possible that others use the key and by that causes you to pay for usag
     <p>To obtain a key please visit <a href="https://developers.google.com/maps/get-started">https://developers.google.com/maps/get-started</a></p>
 
     </section>
-            <section class="section" id="set-default-coordinates">
-            <h2>Set default coordinates<a class="headerlink" href="#set-default-coordinates" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h2>
+            <section class="section" id="key-for-the-frontend">
+            <h2>Key for the frontend<a class="headerlink" href="#key-for-the-frontend" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline"><i class="fa-solid fa-paragraph"></i></a></h2>
+            <figure>
+    <img
+    src="Images/frontend_key.png"
+    width="711px"            alt="Search form"        />
+
+
             
-    <p>In TypoScript setup it&#039;s possible to set defaultConstraints these are filled in the contraints object if no
+            </figure>
+    </section>
+            <section class="section" id="key-for-the-geocoding">
+            <h2>Key for the geocoding<a class="headerlink" href="#key-for-the-geocoding" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline"><i class="fa-solid fa-paragraph"></i></a></h2>
+            <figure>
+    <img
+    src="Images/geocoding_key.png"
+    width="711px"            alt="Result map and list"        />
+
+
+            
+            </figure>
+    </section>
+            <section class="section" id="set-default-coordinates">
+            <h2>Set default coordinates<a class="headerlink" href="#set-default-coordinates" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline"><i class="fa-solid fa-paragraph"></i></a></h2>
+            
+    <p>In TypoScript setup it&#039;s possible to set defaultConstraints these are filled in the constraints object if no
 search was requested. In the example below the zoom, latitude and longitude values are set and then the
 coordinates are used to render search results that are near of them.</p>
 
@@ -288,7 +310,7 @@ coordinates are used to render search results that are near of them.</p>
 </div>
     </section>
             <section class="section" id="use-caching-map-action">
-            <h2>Use caching map action<a class="headerlink" href="#use-caching-map-action" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">¶</a></h2>
+            <h2>Use caching map action<a class="headerlink" href="#use-caching-map-action" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline"><i class="fa-solid fa-paragraph"></i></a></h2>
             
     <p>As of version 6.1.0 a cached map action is available. To use it with custom templates it importand to
 copy the <code>Templates/Map/CachedMap.html</code> to your sitepackage.</p>
@@ -393,7 +415,7 @@ the clear cache flash.</p>
         <div class="frame-container">
             <div class="frame-inner">
                                 <div class="footer-additional">
-                    <p class="text-center">Last rendered: Sep 08, 2024 18:08</p>
+                    <p class="text-center">Last rendered: Sep 25, 2024 18:34</p>
                 </div>
                 <div class="footer-meta">
                     <ul class="footer-meta-navigation">

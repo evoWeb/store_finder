@@ -1030,6 +1030,18 @@
             "Tutorial\/Installation\/Index.html#api-keys",
             "API Keys"
         ],
+        "key-for-the-frontend": [
+            "-",
+            "-",
+            "Tutorial\/Installation\/Index.html#key-for-the-frontend",
+            "Key for the frontend"
+        ],
+        "key-for-the-geocoding": [
+            "-",
+            "-",
+            "Tutorial\/Installation\/Index.html#key-for-the-geocoding",
+            "Key for the geocoding"
+        ],
         "set-default-coordinates": [
             "-",
             "-",
