@@ -68,10 +68,26 @@ So, it's advised to have both keys
 To obtain a key please visit https://developers.google.com/maps/get-started
 
 
+Key for the frontend
+====================
+
+.. figure:: Images/frontend_key.png
+   :alt: Search form
+   :width: 711px
+
+
+Key for the geocoding
+=====================
+
+.. figure:: Images/geocoding_key.png
+   :alt: Result map and list
+   :width: 711px
+
+
 Set default coordinates
 =======================
 
-In TypoScript setup it's possible to set defaultConstraints these are filled in the contraints object if no
+In TypoScript setup it's possible to set defaultConstraints these are filled in the constraints object if no
 search was requested. In the example below the zoom, latitude and longitude values are set and then the
 coordinates are used to render search results that are near of them.
 

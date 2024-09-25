@@ -123,6 +123,11 @@ class Location extends AbstractEntity
 
     public function __construct()
     {
+        $this->initializeObject();
+    }
+
+    public function initializeObject(): void
+    {
         $this->attributes = new ObjectStorage();
         $this->categories = new ObjectStorage();
         $this->contentElements = new ObjectStorage();

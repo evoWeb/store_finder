@@ -30,6 +30,11 @@ class Category extends ExtbaseCategory
 
     public function __construct()
     {
+        $this->initializeObject();
+    }
+
+    public function initializeObject(): void
+    {
         $this->children = new ObjectStorage();
     }
 
