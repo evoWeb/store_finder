@@ -21,6 +21,7 @@ use Evoweb\StoreFinder\Domain\Model\Constraint;
 use Evoweb\StoreFinder\Domain\Model\Location;
 use Evoweb\StoreFinder\Domain\Repository\CategoryRepository;
 use Evoweb\StoreFinder\Domain\Repository\LocationRepository;
+use Evoweb\StoreFinder\Property\TypeConverter\CountryConverter;
 use Evoweb\StoreFinder\Service\GeocodeService;
 use Evoweb\StoreFinder\Validation\Validator\ConstraintValidator;
 use Evoweb\StoreFinder\Validation\Validator\SettableInterface;
@@ -37,6 +38,7 @@ use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\Controller\Argument;
 use TYPO3\CMS\Extbase\Mvc\Controller\Arguments;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
+use TYPO3\CMS\Extbase\Property\PropertyMappingConfiguration;
 use TYPO3\CMS\Extbase\Property\TypeConverter\PersistentObjectConverter;
 use TYPO3\CMS\Extbase\Validation\Validator\ValidatorInterface;
 use TYPO3\CMS\Extbase\Validation\ValidatorClassNameResolver;
@@ -48,7 +50,7 @@ class MapController extends ActionController
         protected LocationRepository $locationRepository,
         protected CategoryRepository $categoryRepository,
         protected CountryProvider $countryProvider,
-        protected GeocodeService $geocodeService
+        protected GeocodeService $geocodeService,
     ) {}
 
     protected function initializeActionMethodValidators(): void
@@ -56,7 +58,7 @@ class MapController extends ActionController
         if ($this->arguments->hasArgument('constraint')) {
             $this->modifyValidatorsBasedOnSettings(
                 $this->arguments->getArgument('constraint'),
-                $this->settings['validation'] ?? []
+                $this->settings['validation'] ?? [],
             );
         } else {
             parent::initializeActionMethodValidators();
@@ -65,7 +67,7 @@ class MapController extends ActionController
 
     protected function modifyValidatorsBasedOnSettings(
         Argument $argument,
-        array $configuredValidators
+        array $configuredValidators,
     ): void {
         $parser = new DocParser();
 
@@ -75,7 +77,7 @@ class MapController extends ActionController
             if (!is_array($configuredValidator)) {
                 $validatorInstance = $this->getValidatorByConfiguration(
                     $configuredValidator,
-                    $parser
+                    $parser,
                 );
 
                 if ($validatorInstance instanceof SettableInterface) {
@@ -86,7 +88,7 @@ class MapController extends ActionController
                 foreach ($configuredValidator as $individualConfiguredValidator) {
                     $individualValidatorInstance = $this->getValidatorByConfiguration(
                         $individualConfiguredValidator,
-                        $parser
+                        $parser,
                     );
 
                     if ($individualValidatorInstance instanceof SettableInterface) {
@@ -111,10 +113,10 @@ class MapController extends ActionController
 
         /** @var Extbase\Validate $validateAnnotation */
         $validateAnnotation = current($parser->parse(
-            '@TYPO3\CMS\Extbase\Annotation\Validate(' . $configuration . ')'
+            '@TYPO3\CMS\Extbase\Annotation\Validate(' . $configuration . ')',
         ));
         $validatorObjectName = ValidatorClassNameResolver::resolve(
-            $validateAnnotation->validator
+            $validateAnnotation->validator,
         );
         /** @var ValidatorInterface $validator */
         $validator = GeneralUtility::makeInstance($validatorObjectName, $validateAnnotation->options);
@@ -123,24 +125,38 @@ class MapController extends ActionController
 
     protected function setTypeConverter(): void
     {
-        if ($this->request->hasArgument('constraint')) {
+        $argumentName = 'constraint';
+        if ($this->request->hasArgument($argumentName)) {
             /** @var array $constraint */
-            $constraint = $this->request->getArgument('constraint');
+            $constraint = $this->request->getArgument($argumentName);
             if (!is_array($constraint['category'] ?? '')) {
                 $constraint['category'] = array_filter(explode(',', $constraint['category'] ?? ''));
-                $this->request->getAttribute('extbase')->setArgument('constraint', $constraint);
+                $this->request->getAttribute('extbase')->setArgument($argumentName, $constraint);
             }
 
-            if ($this->arguments->hasArgument('constraint')) {
-                $configuration = $this->arguments->getArgument('constraint')->getPropertyMappingConfiguration();
-                $configuration->allowProperties('category');
-                $configuration->setTypeConverterOption(
-                    PersistentObjectConverter::class,
-                    (string)PersistentObjectConverter::CONFIGURATION_CREATION_ALLOWED,
-                    true
-                );
+            if ($this->arguments->hasArgument($argumentName)) {
+                $configuration = $this->arguments[$argumentName]->getPropertyMappingConfiguration();
+                $this->getPropertyMappingConfiguration($configuration);
             }
         }
+    }
+
+    protected function getPropertyMappingConfiguration(
+        ?PropertyMappingConfiguration $configuration
+    ): PropertyMappingConfiguration {
+        $configuration->allowProperties('category');
+        $configuration->setTypeConverterOption(
+            PersistentObjectConverter::class,
+            (string)PersistentObjectConverter::CONFIGURATION_CREATION_ALLOWED,
+            true,
+        );
+        $configuration->forProperty('country')
+            ->setTypeConverterOptions(
+                CountryConverter::class,
+                [],
+            );
+
+        return $configuration;
     }
 
     protected function initializeAction(): void
@@ -341,7 +357,7 @@ class MapController extends ActionController
     {
         if ($this->settings['categories'] ?? false) {
             $categories = $this->categoryRepository->findByUids(
-                GeneralUtility::intExplode(',', $this->settings['categories'], true)
+                GeneralUtility::intExplode(',', $this->settings['categories'], true),
             );
 
             $this->view->assign('categories', $categories);
@@ -512,7 +528,7 @@ class MapController extends ActionController
             $resultPaginator = new ArrayPaginator(
                 $locations,
                 $currentPage,
-                (int)($this->settings['limit'] ?? 10)
+                (int)($this->settings['limit'] ?? 10),
             );
             $pagination = new SimplePagination($resultPaginator);
 
@@ -521,7 +537,7 @@ class MapController extends ActionController
                     'paginator' => $resultPaginator,
                     'pagination' => $pagination,
                     'pages' => range(1, $pagination->getLastPageNumber()),
-                ]
+                ],
             );
         }
     }

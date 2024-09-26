@@ -138,7 +138,7 @@ return [
             'label' => $languageFile . 'tx_storefinder_domain_model_location.country',
             'onChange' => 'reload',
             'config' => [
-                'type' => 'select',
+                'type' => 'input',
                 'renderType' => 'selectSingle',
                 'items' => [
                     ['label' => '', 'value' => ''],

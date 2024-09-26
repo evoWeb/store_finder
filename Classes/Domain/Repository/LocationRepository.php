@@ -131,7 +131,7 @@ class LocationRepository extends Repository
             ->from($tableName, 'l')
             ->distinct()
             ->select('l.*')
-            ->selectLiteral(
+            ->addSelectLiteral(
                 '(acos(
                     sin(' . $constraint->getLatitude() * M_PI . ' / 180) *
                     sin(latitude * ' . M_PI . ' / 180) +
@@ -156,6 +156,7 @@ class LocationRepository extends Repository
         $queryBuilder = $this->addFulltextSearchQueryParts($constraint, $queryBuilder);
         $queryBuilder = $this->addLanguagePart($tableName, 'l', $queryBuilder);
 
+        $t = $queryBuilder->getSQL();
         $query->statement($queryBuilder);
 
         return $query->execute($raw)->toArray();
@@ -172,7 +173,7 @@ class LocationRepository extends Repository
         $queryBuilder->andWhere(
             $expression->eq(
                 'l.country',
-                $queryBuilder->createNamedParameter($constraint->getCountry()->getAlpha2IsoCode())
+                $queryBuilder->createNamedParameter(strtoupper($constraint->getCountry()->getAlpha2IsoCode()))
             )
         );
 

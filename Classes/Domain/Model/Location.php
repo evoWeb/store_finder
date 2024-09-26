@@ -17,6 +17,8 @@ namespace Evoweb\StoreFinder\Domain\Model;
 
 use SJBR\StaticInfoTables\Domain\Model\CountryZone;
 use TYPO3\CMS\Core\Country\Country;
+use TYPO3\CMS\Core\Country\CountryProvider;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Annotation as Extbase;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
@@ -65,8 +67,9 @@ class Location extends AbstractEntity
 
     protected int $zoom = 0;
 
-    #[Extbase\ORM\Lazy]
-    protected null|Country|LazyLoadingProxy $country = null;
+    protected string $country = '';
+
+    protected ?Country $countryShadow = null;
 
     #[Extbase\ORM\Lazy]
     protected null|CountryZone|LazyLoadingProxy $state = null;
@@ -235,16 +238,26 @@ class Location extends AbstractEntity
         return $this->getState() ? $this->getState()->getNameEn() : '';
     }
 
-    public function getCountry(): ?Country
+    public function getCountry(): null|Country
     {
-        return $this->country instanceof LazyLoadingProxy
-            ? $this->country->_loadRealInstance()
-            : $this->country;
+        if ($this->countryShadow === null && $this->country !== '') {
+            $countryProvider = GeneralUtility::makeInstance(CountryProvider::class);
+            $this->countryShadow = $countryProvider->getByAlpha2IsoCode($this->country);
+        }
+        return $this->countryShadow;
     }
 
-    public function setCountry(?Country $country): void
+    /**
+     * @param string $country
+     */
+    public function setCountry($country): void
     {
-        $this->country = $country;
+        if ($country instanceof Country) {
+            $this->countryShadow = $country;
+            $this->country = $country->getAlpha2IsoCode();
+        } else {
+            $this->country = $country;
+        }
     }
 
     public function getCountryName(): string

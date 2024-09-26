@@ -39,6 +39,13 @@ services:
         description: 'Query google geocode service to get lat/lon for locations that are not geocode already'
         schedulable: true
 
+  Evoweb\StoreFinder\Property\TypeConverter\CountryConverter:
+    tags:
+      - name: extbase.type_converter
+        priority: 10
+        target: TYPO3\CMS\Core\Country\Country
+        sources: string
+
   Evoweb\StoreFinder\Domain\Repository\CategoryRepository:
     public: true
 
