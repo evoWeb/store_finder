@@ -73,10 +73,15 @@ runFunctionalTests () {
 
     ./runTests.sh -s cleanTests
 
-    ./additionalTests.sh \
+    ./runTests.sh \
         -p ${PHP_VERSION} \
         -s lintPhp || exit 1 ; \
         EXIT_CODE_LINT=$?
+
+    ./runTests.sh \
+        -p ${PHP_VERSION} \
+        -s composerInstall || exit 1 ; \
+        EXIT_CODE_CORE=$?
 
     ./additionalTests.sh \
         -p ${PHP_VERSION} \

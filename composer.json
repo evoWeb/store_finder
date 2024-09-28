@@ -23,7 +23,9 @@
 	"config": {
 		"bin-dir": "bin",
 		"platform": {
-			"php": "8.2.0"
+			"php": "8.2.0",
+			"ext-gd": "8.2.1",
+			"ext-intl": "8.2.1"
 		},
 		"allow-plugins": {
 			"typo3/class-alias-loader": true,
@@ -33,7 +35,7 @@
 	},
 	"require": {
 		"php": "^8.2",
-		"typo3/cms-core": "^13.3 || 13.4.x-dev || dev-main",
+		"typo3/cms-core": "^13.3",
 		"typo3/cms-backend": "^13.3 || 13.4.x-dev || dev-main",
 		"typo3/cms-extbase": "^13.3 || 13.4.x-dev || dev-main",
 		"typo3/cms-fluid": "^13.3 || 13.4.x-dev || dev-main",
@@ -49,12 +51,14 @@
 		"psr/http-server-middleware": "^1.0",
 		"symfony/console": "^7.1",
 		"geocoder-php/google-maps-provider": "^4.7.1",
-		"phpoffice/phpspreadsheet": "^2.2.0"
+		"phpoffice/phpspreadsheet": "^2.2.0",
+		"php-http/guzzle7-adapter": "*",
+		"psr/http-factory-implementation": "*"
 	},
 	"require-dev": {
 		"friendsofphp/php-cs-fixer": "^3.64.0",
-		"phpstan/phpstan": "^1.12.4",
-		"typo3/cms-extensionmanager": "^13.3 || 13.4.x-dev || dev-main",
+		"friendsoftypo3/phpstan-typo3": "^0.9.0",
+		"phpstan/phpstan": "^1.12.5",
 		"typo3/testing-framework": "dev-main"
 	},
 	"minimum-stability": "dev",
