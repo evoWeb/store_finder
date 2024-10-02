@@ -42,7 +42,7 @@ class CoordinatesCache
     public function initializeUserSessionManager(?UserSessionManager $userSessionManager = null): void
     {
         $this->userSessionManager = $userSessionManager ?? UserSessionManager::create('FE');
-        $this->session = $userSessionManager->createFromRequestOrAnonymous(
+        $this->session = $this->userSessionManager->createFromRequestOrAnonymous(
             $this->getRequest(),
             $this->sessionName,
         );

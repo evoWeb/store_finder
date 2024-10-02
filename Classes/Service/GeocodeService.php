@@ -39,7 +39,9 @@ class GeocodeService
     public function __construct(
         protected CoordinatesCache $coordinatesCache,
         private readonly GuzzleClientFactory $guzzleFactory
-    ) {}
+    ) {
+        $this->coordinatesCache->initializeUserSessionManager();
+    }
 
     public function setSettings(array $settings): void
     {
