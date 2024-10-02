@@ -1,19 +1,20 @@
-const path = require('path');
-const baseConfig = require('./webpack.config');
+import path from 'path';
+import baseConfig from './webpack.config.js';
 
+const __dirname = path.resolve();
 const outPath = '/tmp';
 const entry = {
   layout: path.resolve(__dirname, './Sources/Scss/layout.scss'),
 };
 
-module.exports = (env, argv) => {
+export default (env, argv) => {
   return {
     ...baseConfig,
     entry: entry,
     mode: argv.mode,
     output: {
       path: outPath,
-      filename: '[name].pack.js'
+      filename: '[name].min.js'
     }
   };
 };

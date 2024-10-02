@@ -1,13 +1,14 @@
-const path = require('path');
-const baseConfig = require('./webpack.config');
+import path from 'path';
+import baseConfig from './webpack.config.js';
 
+const __dirname = path.resolve();
 const outPath = path.resolve(__dirname, '../Resources/Public/JavaScript');
 const entry = {
   FrontendGoogleMap: path.resolve(__dirname, './Sources/TypeScript/FrontendGoogleMap.ts'),
   FrontendOsmMap: path.resolve(__dirname, './Sources/TypeScript/FrontendOsmMap.ts'),
 };
 
-module.exports = (env, argv) => {
+export default (env, argv) => {
   return {
     ...baseConfig,
     entry: entry,

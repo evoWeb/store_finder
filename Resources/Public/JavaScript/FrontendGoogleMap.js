@@ -76,6 +76,16 @@ class FrontendMap {
         // do nothing.
     }
     /* eslint-enable */
+    removeMarker(location) {
+        console.log(location, 'removeMarker should be overridden');
+    }
+    removeLocation(location) {
+        this.removeMarker(location);
+        const position = this.locations.indexOf(location);
+        if (position > -1) {
+            this.locations.splice(position, 1);
+        }
+    }
     /**
      * Process single location
      */
@@ -1060,7 +1070,7 @@ class FrontendGoogleMap extends _FrontendMap__WEBPACK_IMPORTED_MODULE_0__["defau
         const mapOptions = {
             zoom: this.mapConfiguration.zoom,
             center: center,
-            disableDefaultUI: true,
+            disableDefaultUI: true, // a way to quickly hide all controls
             zoomControl: true,
             styles: [],
             zoomControlOptions: {

@@ -1,6 +1,6 @@
-const fs = require('fs');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const path = require('path');
+import fs from 'fs';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import path from 'path';
 
 class RemovePlugin {
   static name = 'Remove *.LICENSE.txt';
@@ -24,6 +24,7 @@ class RemovePlugin {
   }
 }
 
+const __dirname = path.resolve();
 const WebpackDefault = {
   // bundling mode
   mode: 'development',
@@ -63,4 +64,4 @@ const WebpackDefault = {
   ]
 };
 
-module.exports = WebpackDefault;
+export default WebpackDefault;
