@@ -216,6 +216,40 @@ apiConsoleKeyGeocoding
 :aspect:`Default`
 
 
+.. _mapId:
+
+mapId:
+======
+
+:aspect:`Property`
+         mapId
+
+:aspect:`Data type`
+         string
+
+:aspect:`Description`
+         Map id to identify the map and configure it's rendering
+
+:aspect:`Default`
+
+
+.. _googleLibraries:
+
+googleLibraries
+===============
+
+:aspect:`Property`
+         googleLibraries
+
+:aspect:`Data type`
+         string
+
+:aspect:`Description`
+         Used to define what modules should be loaded. Default are core, map and marker.
+
+:aspect:`Default`
+
+
 .. _distanceUnit:
 
 distanceUnit

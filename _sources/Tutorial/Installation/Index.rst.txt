@@ -50,8 +50,8 @@ you can change the path either in the plugin field "Partial path" or via TypoScr
    plugin.tx_storefinder.view.partialRootPaths.50 = ./yourpath/Partials/
 
 
-API Keys
-========
+API Keys and Map ID
+===================
 
 If you need to geocode coordinates, either on saving a store record or in bulk with the geocode console command
 you need to add an additional key in TypoScript constants apiConsoleKeyGeocoding. This key will never be visible
@@ -67,6 +67,8 @@ So, it's advised to have both keys
 
 To obtain a key please visit https://developers.google.com/maps/get-started
 
+In addition each map should have a unique ID. This can be created on this page
+https://developers.google.com/maps/documentation/get-map-id?hl=de#create-a-map-id.
 
 Key for the frontend
 ====================

@@ -236,6 +236,18 @@
             "Configuration\/Settings\/Index.html#apiConsoleKeyGeocoding",
             "apiConsoleKeyGeocoding"
         ],
+        "mapid": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#mapId",
+            "mapId:"
+        ],
+        "googlelibraries": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#googleLibraries",
+            "googleLibraries"
+        ],
         "distanceunit": [
             "-",
             "-",
@@ -646,6 +658,18 @@
             "Configuration\/Settings\/Index.html#apiconsolekeygeocoding",
             "apiConsoleKeyGeocoding"
         ],
+        "mapid": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#mapid",
+            "mapId:"
+        ],
+        "googlelibraries": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#googlelibraries",
+            "googleLibraries"
+        ],
         "distanceunit": [
             "-",
             "-",
@@ -1024,11 +1048,11 @@
             "Tutorial\/Installation\/Index.html#templating",
             "Templating"
         ],
-        "api-keys": [
+        "api-keys-and-map-id": [
             "-",
             "-",
-            "Tutorial\/Installation\/Index.html#api-keys",
-            "API Keys"
+            "Tutorial\/Installation\/Index.html#api-keys-and-map-id",
+            "API Keys and Map ID"
         ],
         "key-for-the-frontend": [
             "-",
