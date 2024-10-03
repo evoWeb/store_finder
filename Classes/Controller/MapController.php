@@ -169,6 +169,7 @@ class MapController extends ActionController
         }
 
         $this->settings['allowedCountries'] = explode(',', $this->settings['allowedCountries'] ?? '');
+        $this->settings['mapConfiguration']['libraries'] = explode(',', $this->settings['mapConfiguration']['libraries'] ?? '');
 
         $this->geocodeService->setSettings($this->settings);
         $this->locationRepository->setSettings($this->settings);

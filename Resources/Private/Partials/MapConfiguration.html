@@ -6,11 +6,20 @@
 <f:variable name="latitude"><f:format.number decimals="7"><f:if condition="{center.latitude}"><f:then>{center.latitude}</f:then><f:else>{constraint.latitude}</f:else></f:if></f:format.number></f:variable>
 <f:variable name="longitude"><f:format.number decimals="7"><f:if condition="{center.longitude}"><f:then>{center.longitude}</f:then><f:else>{constraint.longitude}</f:else></f:if></f:format.number></f:variable>
 <f:variable name="mapConfiguration">
-var mapConfiguration = {
+var mapConfiguration = {<f:format.raw/>
     active: true,
     zoom: {zoom},
-    apiConsoleKey: "{settings.apiConsoleKey}",
-    <f:for each="{settings.mapConfiguration}" as="configuration" key="name">{name}: "{configuration}",</f:for>
+    apiConsoleKey: '{settings.apiConsoleKey}',
+    libraries: [
+        'maps',
+        'marker'
+        <f:for each="{settings.mapConfiguration.libraries}" as="library" iteration="iterator">, '{library}'</f:for>
+    ],
+    <f:for each="{settings.mapConfiguration}" as="configuration" key="name"><f:switch expression="{name}">
+        <f:case value="libraries"/>
+        <f:case value="markerIcon"></f:case>
+        <f:defaultCase>{name}: '{configuration}',</f:defaultCase>
+    </f:switch></f:for>
     center: {<f:format.raw/>
         lat: {latitude},
         lng: {longitude}

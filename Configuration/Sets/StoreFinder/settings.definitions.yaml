@@ -24,6 +24,14 @@ settings:
     default: ''
     type: string
     category: store-finder.common
+  evoweb.store-finder.mapId:
+    default: ''
+    type: string
+    category: store-finder.common
+  evoweb.store-finder.googleLibraries:
+    default: ''
+    type: string
+    category: store-finder.common
   evoweb.store-finder.addPaginator:
     default: 0
     type: bool

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
 	<file source-language="en" original="messages" datatype="plaintext" product-name="store_finder" date="2024-08-02T16:40:16+02:00">
-		<header></header>
+		<header/>
 		<body>
 			<trans-unit id="addPaginator" resname="addPaginator">
 				<source>Add paginator to lists</source>
@@ -17,6 +17,12 @@
 			</trans-unit>
 			<trans-unit id="geocoderProvider" resname="geocoderProvider">
 				<source>Class of the geocoder to use, leave as is if now extra geocoder is installed</source>
+			</trans-unit>
+			<trans-unit id="mapId" resname="mapId">
+				<source>MapID to identify a map and configure the map rendering</source>
+			</trans-unit>
+			<trans-unit id="googleLibraries" resname="googleLibraries">
+				<source>Comma separated list of Google map libraries to load. Core, maps and marker are always added by the configuration partial.</source>
 			</trans-unit>
 			<trans-unit id="latitude" resname="latitude">
 				<source>Default latitude in location record form</source>

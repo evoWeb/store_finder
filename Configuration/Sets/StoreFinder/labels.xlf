@@ -32,6 +32,15 @@
 			<trans-unit id="settings.description.evoweb.store-finder.geocoderLocale" resname="settings.description.evoweb.store-finder.geocoderLocale">
 				<source/>
 			</trans-unit>
+			<trans-unit id="settings.evoweb.store-finder.mapId" resname="settings.evoweb.store-finder.mapId">
+				<source>MapID to identify a map and configure the map rendering</source>
+			</trans-unit>
+			<trans-unit id="settings.evoweb.store-finder.googleLibraries" resname="settings.evoweb.store-finder.googleLibraries">
+				<source>Comma separated list of Google map libraries to load</source>
+			</trans-unit>
+			<trans-unit id="settings.description.evoweb.store-finder.googleLibraries" resname="settings.description.evoweb.store-finder.googleLibraries">
+				<source>Core, maps and marker are always added by the configuration partial</source>
+			</trans-unit>
 			<trans-unit id="settings.evoweb.store-finder.apiConsoleKey" resname="settings.evoweb.store-finder.apiConsoleKey">
 				<source>Key for frontend map rendering</source>
 			</trans-unit>
