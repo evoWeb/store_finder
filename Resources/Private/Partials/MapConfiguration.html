@@ -17,7 +17,7 @@ var mapConfiguration = {<f:format.raw/>
     ],
     <f:for each="{settings.mapConfiguration}" as="configuration" key="name"><f:switch expression="{name}">
         <f:case value="libraries"/>
-        <f:case value="markerIcon"></f:case>
+        <f:case value="markerIcon">{name}: '<f:uri.image src="{configuration}" absolute="1"/>',</f:case>
         <f:defaultCase>{name}: '{configuration}',</f:defaultCase>
     </f:switch></f:for>
     center: {<f:format.raw/>

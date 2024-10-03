@@ -14559,7 +14559,6 @@ class FrontendMap {
             },
             zoom: 18,
             apiConsoleKey: '',
-            apiUrl: '',
             language: '',
             markerIcon: '',
             apiV3Layers: '',

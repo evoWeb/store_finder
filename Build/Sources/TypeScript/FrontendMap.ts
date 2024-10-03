@@ -22,7 +22,6 @@ export default class FrontendMap {
     zoom: 18,
 
     apiConsoleKey: '',
-    apiUrl: '',
     language: '',
 
     markerIcon: '',

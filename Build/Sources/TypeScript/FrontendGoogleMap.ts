@@ -9,8 +9,8 @@
  * LICENSE.txt file that was distributed with this source code.
  */
 
-
 import FrontendMap from './FrontendMap';
+import { LoaderOptions, Library, Loader } from '@googlemaps/js-api-loader';
 
 /**
  * Module: Evoweb/StoreFinder/FrontendGoogleMap
@@ -43,8 +43,10 @@ class FrontendGoogleMap extends FrontendMap {
       },
     };
 
-    if (self.mapConfiguration.mapStyles) {
-      mapOptions.styles = self.mapConfiguration.mapStyles;
+    if (this.mapConfiguration.mapId) {
+      mapOptions.mapId = this.mapConfiguration.mapId;
+    } else if (this.mapConfiguration.mapStyles) {
+      mapOptions.styles = this.mapConfiguration.mapStyles;
     }
 
     this.map = new google.maps.Map(document.getElementById('tx_storefinder_map'), mapOptions);
@@ -84,13 +86,13 @@ class FrontendGoogleMap extends FrontendMap {
   /**
    * Close previously open info window, renders new content and opens the window
    */
-  showInformation(location: Location, marker: google.maps.Marker): void {
+  showInformation(location: Location, marker: google.maps.marker.AdvancedMarkerElement): void {
     if (typeof this.mapConfiguration.renderSingleViewCallback === 'function') {
       this.mapConfiguration.renderSingleViewCallback(location, this.infoWindowTemplate);
     } else {
       this.infoWindow.close();
       this.infoWindow.setContent(this.renderInfoWindowContent(location));
-      this.infoWindow.setPosition(marker.getPosition());
+      this.infoWindow.setPosition(marker.position);
       this.infoWindow.open(this.map, marker);
     }
   }
@@ -98,20 +100,35 @@ class FrontendGoogleMap extends FrontendMap {
   /**
    * Create marker and add to map
    */
-  createMarker(location: Location, icon: string): google.maps.Marker {
-    const options = {
-        title: location.name,
-        position: new google.maps.LatLng(location.lat, location.lng),
-        icon: icon,
-      },
-      marker = new google.maps.Marker(options);
-    marker.setMap(this.map);
+  createMarker(location: Location, iconPath: string): google.maps.marker.AdvancedMarkerElement {
+    const markerOptions: MarkerOptions = {
+      map: this.map,
+      title: location.name,
+      position: new google.maps.LatLng(location.lat, location.lng),
+    };
+
+    if (iconPath !== '') {
+      markerOptions.content = this.createIcon(location, iconPath);
+    }
+
+    const marker = new google.maps.marker.AdvancedMarkerElement(markerOptions);
 
     marker.addListener('click', () => {
       this.showInformation(location, marker);
     });
 
     return marker;
+  }
+
+  createIcon(location: Location, path: string): HTMLElement {
+    const content = document.createElement('div');
+    content.classList.add('property');
+    content.innerHTML = `
+      <div class="icon">
+          <img src="${path}" alt="${location.name}" title="${location.name}"/>
+      </div>
+    `;
+    return content;
   }
 
   /**
@@ -139,32 +156,20 @@ class FrontendGoogleMap extends FrontendMap {
    * Load google map script
    */
   loadScript(): void {
-    let apiUrl = 'https://maps.googleapis.com/maps/api/js?v=3.exp',
-      parameter = '&key=' + this.mapConfiguration.apiConsoleKey;
+    const loaderOptions: LoaderOptions = {
+      apiKey: this.mapConfiguration.apiConsoleKey,
+      version: 'weekly',
+      libraries: this.mapConfiguration.libraries as unknown as Library[]
+    }
 
     if (this.mapConfiguration.language !== '') {
-      parameter += '&language=' + this.mapConfiguration.language;
+      loaderOptions.language = this.mapConfiguration.language;
     }
 
-    if (Object.prototype.hasOwnProperty.call(this.mapConfiguration, 'apiUrl')) {
-      apiUrl = this.mapConfiguration.apiUrl;
-    }
-
-    Promise.all([
-      this.createFilePromise(apiUrl + parameter)
-    ])
+    (new Loader(loaderOptions))
+      .importLibrary('core')
       .then(() => {
-        const wait = () => {
-          if (typeof google !== 'undefined') {
-            this.postLoadScript();
-          } else {
-            window.requestAnimationFrame(wait);
-          }
-        }
-        window.requestAnimationFrame(wait);
-      })
-      .catch(() => {
-        console.log('Failed loading resources.');
+        this.postLoadScript();
       });
   }
 }
