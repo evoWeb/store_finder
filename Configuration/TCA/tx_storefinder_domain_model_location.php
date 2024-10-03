@@ -1,6 +1,5 @@
 <?php
 
-use Evoweb\StoreFinder\Hooks\TcaItemsProcessorFunctions;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 $languageFile = 'LLL:EXT:store_finder/Resources/Private/Language/locallang_db.xlf:';
@@ -141,12 +140,11 @@ return [
                 'type' => 'input',
                 'renderType' => 'selectSingle',
                 'items' => [
-                    ['label' => '', 'value' => ''],
+                    ['label' =>  $languageFile . 'tx_storefinder_domain_model_location.country.default', 'value' => ''],
                 ],
                 'sortItems' => [
                     'label' => 'asc',
                 ],
-                'itemsProcFunc' => TcaItemsProcessorFunctions::class . '->populateCountryItems',
                 'minitems' => 1,
                 'maxitems' => 1,
                 'behaviour' => [

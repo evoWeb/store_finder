@@ -4,7 +4,9 @@ defined('TYPO3') or die();
 
 use Evoweb\StoreFinder\Controller\MapController;
 use Evoweb\StoreFinder\Form\Element\ModifyLocationMap;
+use Evoweb\StoreFinder\Form\FormDataGroup\LocationCountryItems;
 use Evoweb\StoreFinder\Hooks\TceMainListener;
+use TYPO3\CMS\Backend\Form\FormDataProvider\TcaSelectItems as TcaSelectItems;
 use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 
 call_user_func(function () {
@@ -30,6 +32,14 @@ call_user_func(function () {
         'nodeName' => 'modifyLocationMap',
         'priority' => '70',
         'class' => ModifyLocationMap::class,
+    ];
+
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['tcaDatabaseRecord'][
+        LocationCountryItems::class
+    ] = [
+        'depends' => [
+            TcaSelectItems::class,
+        ]
     ];
 
     ExtensionUtility::configurePlugin(

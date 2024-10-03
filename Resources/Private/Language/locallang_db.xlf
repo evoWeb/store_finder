@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
 	<file source-language="en" original="messages" datatype="plaintext" product-name="store_finder" date="2024-08-02T16:41:21+02:00">
-		<header></header>
+		<header/>
 		<body>
 			<trans-unit id="div-address" resname="div-address">
 				<source>Address</source>
@@ -65,6 +65,9 @@
 			</trans-unit>
 			<trans-unit id="tx_storefinder_domain_model_location.country" resname="tx_storefinder_domain_model_location.country">
 				<source>Country</source>
+			</trans-unit>
+			<trans-unit id="tx_storefinder_domain_model_location.country.default" resname="tx_storefinder_domain_model_location.country.default">
+				<source>Please select a country</source>
 			</trans-unit>
 			<trans-unit id="tx_storefinder_domain_model_location.distance" resname="tx_storefinder_domain_model_location.distance">
 				<source>Calculated value by search query</source>

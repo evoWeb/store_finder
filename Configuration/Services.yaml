@@ -58,11 +58,6 @@ services:
   Evoweb\StoreFinder\Domain\Repository\CountryRepository:
     public: true
 
-  Evoweb\StoreFinder\Hooks\TcaItemsProcessorFunctions:
-    arguments:
-      $countryProvider: '@TYPO3\CMS\Core\Country\CountryProvider'
-    public: true
-
   Evoweb\StoreFinder\Hooks\TceMainListener:
     public: true
 
