@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 defined('TYPO3') or die();
 
 use Evoweb\StoreFinder\Controller\MapController;
@@ -9,17 +11,17 @@ use Evoweb\StoreFinder\Hooks\TceMainListener;
 use TYPO3\CMS\Backend\Form\FormDataProvider\TcaSelectItems as TcaSelectItems;
 use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 
-call_user_func(function () {
+(static function () {
     $cacheConfigurations = & $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'];
     if (!is_array($cacheConfigurations['store_finder_coordinate_cache'] ?? null)) {
         $cacheConfigurations['store_finder_coordinate_cache'] = [
-            'groups' => ['system'],
+            'groups' => [ 'system' ],
         ];
     }
 
     if (!is_array($cacheConfigurations['store_finder_middleware_cache'] ?? null)) {
         $cacheConfigurations['store_finder_middleware_cache'] = [
-            'groups' => ['pages'],
+            'groups' => [ 'pages' ],
         ];
     }
 
@@ -37,29 +39,30 @@ call_user_func(function () {
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['tcaDatabaseRecord'][
         LocationCountryItems::class
     ] = [
-        'depends' => [
-            TcaSelectItems::class,
-        ]
+        'depends' => [ TcaSelectItems::class ]
     ];
 
     ExtensionUtility::configurePlugin(
         'StoreFinder',
         'Map',
-        [MapController::class => 'map, search, show'],
-        [MapController::class => 'map, search, show']
+        [ MapController::class => 'map, search, show' ],
+        [ MapController::class => 'map, search, show' ],
+        ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
     );
 
     ExtensionUtility::configurePlugin(
         'StoreFinder',
         'Cached',
-        [MapController::class => 'cachedMap, map, search, show'],
-        [MapController::class => 'map, search, show']
+        [ MapController::class => 'cachedMap, map, search, show' ],
+        [ MapController::class => 'map, search, show' ],
+        ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
     );
 
     ExtensionUtility::configurePlugin(
         'StoreFinder',
         'Show',
-        [MapController::class => 'show'],
-        [MapController::class => 'show']
+        [ MapController::class => 'show' ],
+        [ MapController::class => 'show' ],
+        ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
     );
-});
+})();
