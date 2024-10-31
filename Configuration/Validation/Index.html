@@ -11,9 +11,9 @@
 <meta content="" name="docsearch:package_type">
 <meta content="" name="docsearch:release">
 <meta content="" name="docsearch:version">
-<meta content="2024-10-05T08:27:44+00:00" name="docsearch:modified">
-<meta content="2024-10-05T08:27:44+00:00" name="dc.modified">
-<meta content="2024-10-05T08:27:44+00:00" property="article:modified_time">
+<meta content="2024-10-31T15:03:27+00:00" name="docsearch:modified">
+<meta content="2024-10-31T15:03:27+00:00" name="dc.modified">
+<meta content="2024-10-31T15:03:27+00:00" property="article:modified_time">
     <link href="http://purl.org/dc/elements/1.1/" rel="schema.dc">
 <link href="../../_resources/css/theme.css" rel="stylesheet">
 <link href="https://docs.typo3.org/search/" rel="search" title="Search">
@@ -37,24 +37,27 @@
     <div class="page-header">
         <div class="page-header-inner">
             <div class="row">
-                <div class="col-sm-3 col-md-4 col-lg-6">
+                <div class="col-md-2 col-lg-4">
                     <a class="logo" href="https://docs.typo3.org/" title="TYPO3 Documentation">
                         <img alt="TYPO3 Logo" class="logo-image" src="../../_resources/img/typo3-logo.svg" width="484" height="130">
                     </a>
                 </div>
-                <div class="col-sm-9 col-md-8 col-lg-6">
-                    <search role="search">
-                        <form action="https://docs.typo3.org/search/search" id="global-search-form" method="get">
-			                <div class="sr-only"><label for="globalsearchinput">TYPO3 documentation...</label></div>
-                            <div class="input-group mb-3 mt-sm-3">
-                                <select class="form-select search__scope" id="searchscope" name="scope">
-                                    <option value="">Search all</option>
-                                </select>
-                                <input autocomplete="off" class="form-control shadow-none" id="globalsearchinput" name="q" placeholder="TYPO3 documentation..." type="text" value="">
-                                <button class="btn btn-light search__submit" type="submit"><i class="fa fa-search"></i>&nbsp;<span class="d-none d-md-inline">Search</span></button>
-                            </div>
-                        </form>
-                    </search>
+                <div class="col-md-10 col-lg-8">
+                    <div class="menu-search-wrapper">
+                        <all-documentations-menu data-override-url="https://render-guides.ddev.site/menu-proxy.php"></all-documentations-menu>
+                                                <search role="search">
+                            <form action="https://docs.typo3.org/search/search" id="global-search-form" method="get">
+                                <div class="sr-only"><label for="globalsearchinput">TYPO3 documentation...</label></div>
+                                <div class="input-group mb-3 mt-sm-3">
+                                    <select class="form-select search__scope" id="searchscope" name="scope">
+                                        <option value="">Search all</option>
+                                    </select>
+                                    <input autocomplete="off" class="form-control shadow-none" id="globalsearchinput" name="q" placeholder="TYPO3 documentation..." type="text" value="">
+                                    <button class="btn btn-light search__submit" type="submit"><i class="fa fa-search"></i>&nbsp;<span class="d-none d-md-inline">Search</span></button>
+                                </div>
+                            </form>
+                        </search>
+                    </div>
                 </div>
             </div>
         </div>
@@ -78,8 +81,7 @@
 </div>                    <div class="toc-collapse">
                                                 <div aria-label="main navigation" class="toc" role="navigation">
                                 <div aria-label="Main navigation" class="main_menu" role="navigation">
-        
-    <ul class="menu-level-1">
+            <ul class="menu-level-1">
     <li class="">
     <a href="../../Introduction/Index.html">
         Introduction
@@ -134,8 +136,7 @@
     </a></li>    <li class="">
     <a href="../../BreakingChanges/Index.html">
         Breaking Changes
-    </a></li>    </ul>
-    <ul class="menu-level-1">
+    </a></li>    </ul>    <ul class="menu-level-1">
     <li class="">
     <a href="../../Sitemap.html">
         Sitemap
@@ -214,7 +215,7 @@ example given where the validators of the email gets removed.</p>
     </div><div class="code-block-wrapper" translate="no">
             
     <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.settings.validation.zipcode &gt;</code></pre>
-    <div>        <button class="code-block-copy" title="Copy to clipboard">
+    <div class="code-block-actions">        <button class="code-block-copy" title="Copy to clipboard">
             <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
             <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
         </button>
@@ -233,7 +234,7 @@ below.</p>
     </div><div class="code-block-wrapper" translate="no">
             
     <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.settings.validation.zipcode = Evoweb\StoreFinder\Validation\Validator\RequiredValidator</code></pre>
-    <div>        <button class="code-block-copy" title="Copy to clipboard">
+    <div class="code-block-actions">        <button class="code-block-copy" title="Copy to clipboard">
             <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
             <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
         </button>
@@ -255,7 +256,7 @@ next example.</p>
    <span class="hljs-title">1</span> = Evoweb\StoreFinder\Validation\Validator\RequiredValidator
    <span class="hljs-title">2</span> = StringLength
 }</code></pre>
-    <div>        <button class="code-block-copy" title="Copy to clipboard">
+    <div class="code-block-actions">        <button class="code-block-copy" title="Copy to clipboard">
             <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
             <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
         </button>
@@ -308,7 +309,7 @@ you are ready to use your validator like in the following example.</p>
     <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.settings.validation.create.city {
    <span class="hljs-title">1</span> = Evoweb\StoreFinder\Validation\Validator\RequiredValidator
 }</code></pre>
-    <div>        <button class="code-block-copy" title="Copy to clipboard">
+    <div class="code-block-actions">        <button class="code-block-copy" title="Copy to clipboard">
             <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
             <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
         </button>
@@ -334,7 +335,7 @@ which are suited for the usage on fields.</p>
         <dd>RequiredValidator</dd>
                                 <dt><em class="aspect">Data type</em></dt>
         
-        <dd><a href="https://docs.typo3.org/m/typo3/reference-typoscript/12.4/en-us/DataTypes/Index.html#data-type-string">string</a></dd>
+        <dd><a href="https://docs.typo3.org/m/typo3/reference-typoscript/13.4/en-us/DataTypes/Index.html#data-type-string">string</a></dd>
                                 <dt><em class="aspect">Description</em></dt>
         
         <dd>This validator serves two purpose. First of check if the field contains
@@ -437,7 +438,7 @@ validator as condition to render required sign or not.</dd>
         <div class="frame-container">
             <div class="frame-inner">
                                 <div class="footer-additional">
-                    <p class="text-center">Last rendered: Oct 05, 2024 08:27</p>
+                    <p class="text-center">Last rendered: Oct 31, 2024 15:03</p>
                 </div>
                 <div class="footer-meta">
                     <ul class="footer-meta-navigation">

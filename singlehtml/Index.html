@@ -11,9 +11,9 @@
 <meta content="" name="docsearch:package_type">
 <meta content="" name="docsearch:release">
 <meta content="" name="docsearch:version">
-<meta content="2024-10-05T08:27:44+00:00" name="docsearch:modified">
-<meta content="2024-10-05T08:27:44+00:00" name="dc.modified">
-<meta content="2024-10-05T08:27:44+00:00" property="article:modified_time">
+<meta content="2024-10-31T15:03:27+00:00" name="docsearch:modified">
+<meta content="2024-10-31T15:03:27+00:00" name="dc.modified">
+<meta content="2024-10-31T15:03:27+00:00" property="article:modified_time">
     <link href="http://purl.org/dc/elements/1.1/" rel="schema.dc">
 <link href="../_resources/css/theme.css" rel="stylesheet">
 <link href="https://docs.typo3.org/search/" rel="search" title="Search">
@@ -34,24 +34,27 @@
     <div class="page-header">
         <div class="page-header-inner">
             <div class="row">
-                <div class="col-sm-3 col-md-4 col-lg-6">
+                <div class="col-md-2 col-lg-4">
                     <a class="logo" href="https://docs.typo3.org/" title="TYPO3 Documentation">
                         <img alt="TYPO3 Logo" class="logo-image" src="../_resources/img/typo3-logo.svg" width="484" height="130">
                     </a>
                 </div>
-                <div class="col-sm-9 col-md-8 col-lg-6">
-                    <search role="search">
-                        <form action="https://docs.typo3.org/search/search" id="global-search-form" method="get">
-			                <div class="sr-only"><label for="globalsearchinput">TYPO3 documentation...</label></div>
-                            <div class="input-group mb-3 mt-sm-3">
-                                <select class="form-select search__scope" id="searchscope" name="scope">
-                                    <option value="">Search all</option>
-                                </select>
-                                <input autocomplete="off" class="form-control shadow-none" id="globalsearchinput" name="q" placeholder="TYPO3 documentation..." type="text" value="">
-                                <button class="btn btn-light search__submit" type="submit"><i class="fa fa-search"></i>&nbsp;<span class="d-none d-md-inline">Search</span></button>
-                            </div>
-                        </form>
-                    </search>
+                <div class="col-md-10 col-lg-8">
+                    <div class="menu-search-wrapper">
+                        <all-documentations-menu data-override-url="https://render-guides.ddev.site/menu-proxy.php"></all-documentations-menu>
+                                                <search role="search">
+                            <form action="https://docs.typo3.org/search/search" id="global-search-form" method="get">
+                                <div class="sr-only"><label for="globalsearchinput">TYPO3 documentation...</label></div>
+                                <div class="input-group mb-3 mt-sm-3">
+                                    <select class="form-select search__scope" id="searchscope" name="scope">
+                                        <option value="">Search all</option>
+                                    </select>
+                                    <input autocomplete="off" class="form-control shadow-none" id="globalsearchinput" name="q" placeholder="TYPO3 documentation..." type="text" value="">
+                                    <button class="btn btn-light search__submit" type="submit"><i class="fa fa-search"></i>&nbsp;<span class="d-none d-md-inline">Search</span></button>
+                                </div>
+                            </form>
+                        </search>
+                    </div>
                 </div>
             </div>
         </div>
@@ -144,7 +147,7 @@ license.</p>
 
         <dd class="field-odd">
             
-    <p>Sat, 05 Oct 2024 08:27:44 +0000</p>
+    <p>Thu, 31 Oct 2024 15:03:27 +0000</p>
         </dd>
     </dl>
             <hr />
@@ -320,7 +323,7 @@ license.</p>
 
         <dd class="field-odd">
             
-    <p>Sat, 05 Oct 2024 08:27:44 +0000</p>
+    <p>Thu, 31 Oct 2024 15:03:27 +0000</p>
         </dd>
     </dl>
             <hr />
@@ -529,7 +532,7 @@ this point.</p>
     </div><div class="code-block-wrapper" translate="no">
             
     <pre class="code-block"><code class="hljs bash">composer require evoweb/store-finder</code></pre>
-    <div>        <button class="code-block-copy" title="Copy to clipboard">
+    <div class="code-block-actions">        <button class="code-block-copy" title="Copy to clipboard">
             <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
             <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
         </button>
@@ -563,7 +566,7 @@ needs to be modified to allow loading images via https</p>
 <div class="code-block-wrapper" translate="no">
             
     <pre class="code-block"><code class="hljs apache"><span class="hljs-attribute">img</span>-src 'self' data: https:;</code></pre>
-    <div>        <button class="code-block-copy" title="Copy to clipboard">
+    <div class="code-block-actions">        <button class="code-block-copy" title="Copy to clipboard">
             <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
             <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
         </button>
@@ -576,7 +579,7 @@ modified to allow script files via https</p>
 <div class="code-block-wrapper" translate="no">
             
     <pre class="code-block"><code class="hljs apache"><span class="hljs-attribute">script</span>-src 'self' 'unsafe-inline' blob: data: https:;</code></pre>
-    <div>        <button class="code-block-copy" title="Copy to clipboard">
+    <div class="code-block-actions">        <button class="code-block-copy" title="Copy to clipboard">
             <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
             <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
         </button>
@@ -589,7 +592,7 @@ loading style files via https</p>
 <div class="code-block-wrapper" translate="no">
             
     <pre class="code-block"><code class="hljs apache"><span class="hljs-attribute">style</span>-src 'self' 'unsafe-inline' https:;</code></pre>
-    <div>        <button class="code-block-copy" title="Copy to clipboard">
+    <div class="code-block-actions">        <button class="code-block-copy" title="Copy to clipboard">
             <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
             <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
         </button>
@@ -767,7 +770,7 @@ loading style files via https</p>
         <dd>showBeforeSearch</dd>
                                 <dt><em class="aspect">Data type</em></dt>
         
-        <dd><a href="https://docs.typo3.org/m/typo3/reference-typoscript/12.4/en-us/DataTypes/Index.html#data-type-integer">integer</a></dd>
+        <dd><a href="https://docs.typo3.org/m/typo3/reference-typoscript/13.4/en-us/DataTypes/Index.html#data-type-integer">integer</a></dd>
                                 <dt><em class="aspect">Description</em></dt>
         
         <dd>Defines what should get displayed before the search was triggered</dd>
@@ -788,7 +791,7 @@ loading style files via https</p>
         <dd>showBeforeSearch</dd>
                                 <dt><em class="aspect">Data type</em></dt>
         
-        <dd><a href="https://docs.typo3.org/m/typo3/reference-typoscript/12.4/en-us/DataTypes/Index.html#data-type-integer">integer</a></dd>
+        <dd><a href="https://docs.typo3.org/m/typo3/reference-typoscript/13.4/en-us/DataTypes/Index.html#data-type-integer">integer</a></dd>
                                 <dt><em class="aspect">Description</em></dt>
         
         <dd>Defines what should get displayed after the search was triggered</dd>
@@ -1169,7 +1172,7 @@ Use this only in combination with a listener for MapGetLocationsByConstraintsEve
   <span class="hljs-title">1</span> = cachedMap
   <span class="hljs-title">2</span> = search
 }</code></pre>
-    <div>        <button class="code-block-copy" title="Copy to clipboard">
+    <div class="code-block-actions">        <button class="code-block-copy" title="Copy to clipboard">
             <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
             <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
         </button>
@@ -1209,7 +1212,7 @@ Use this only in combination with a listener for MapGetLocationsByConstraintsEve
         <span class="hljs-title">100</span> = <span class="hljs-bullet">EXT:my_extension/Resources/Private/Templates/StoreFinder</span>
     }
 }</code></pre>
-    <div>        <button class="code-block-copy" title="Copy to clipboard">
+    <div class="code-block-actions">        <button class="code-block-copy" title="Copy to clipboard">
             <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
             <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
         </button>
@@ -1240,7 +1243,7 @@ Use this only in combination with a listener for MapGetLocationsByConstraintsEve
         <span class="hljs-title">100</span> = <span class="hljs-bullet">EXT:my_extension/Resources/Private/Partials/StoreFinder</span>
     }
 }</code></pre>
-    <div>        <button class="code-block-copy" title="Copy to clipboard">
+    <div class="code-block-actions">        <button class="code-block-copy" title="Copy to clipboard">
             <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
             <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
         </button>
@@ -1265,7 +1268,7 @@ Use this only in combination with a listener for MapGetLocationsByConstraintsEve
         <dd>storagePid</dd>
                                 <dt><em class="aspect">Data type</em></dt>
         
-        <dd>List of <a href="https://docs.typo3.org/m/typo3/reference-typoscript/12.4/en-us/DataTypes/Index.html#data-type-integer">storage folder pids</a></dd>
+        <dd>List of <a href="https://docs.typo3.org/m/typo3/reference-typoscript/13.4/en-us/DataTypes/Index.html#data-type-integer">storage folder pids</a></dd>
                                 <dt><em class="aspect">Description</em></dt>
         
         <dd>Comma-separated list of storage page ids. In content elements please use the <code class="code-inline" translate="no">Record Storage Page</code> field of the plugin.</dd>
@@ -1312,7 +1315,7 @@ example given where the validators of the email gets removed.</p>
     </div><div class="code-block-wrapper" translate="no">
             
     <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.settings.validation.zipcode &gt;</code></pre>
-    <div>        <button class="code-block-copy" title="Copy to clipboard">
+    <div class="code-block-actions">        <button class="code-block-copy" title="Copy to clipboard">
             <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
             <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
         </button>
@@ -1331,7 +1334,7 @@ below.</p>
     </div><div class="code-block-wrapper" translate="no">
             
     <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.settings.validation.zipcode = Evoweb\StoreFinder\Validation\Validator\RequiredValidator</code></pre>
-    <div>        <button class="code-block-copy" title="Copy to clipboard">
+    <div class="code-block-actions">        <button class="code-block-copy" title="Copy to clipboard">
             <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
             <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
         </button>
@@ -1353,7 +1356,7 @@ next example.</p>
    <span class="hljs-title">1</span> = Evoweb\StoreFinder\Validation\Validator\RequiredValidator
    <span class="hljs-title">2</span> = StringLength
 }</code></pre>
-    <div>        <button class="code-block-copy" title="Copy to clipboard">
+    <div class="code-block-actions">        <button class="code-block-copy" title="Copy to clipboard">
             <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
             <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
         </button>
@@ -1406,7 +1409,7 @@ you are ready to use your validator like in the following example.</p>
     <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.settings.validation.create.city {
    <span class="hljs-title">1</span> = Evoweb\StoreFinder\Validation\Validator\RequiredValidator
 }</code></pre>
-    <div>        <button class="code-block-copy" title="Copy to clipboard">
+    <div class="code-block-actions">        <button class="code-block-copy" title="Copy to clipboard">
             <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
             <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
         </button>
@@ -1432,7 +1435,7 @@ which are suited for the usage on fields.</p>
         <dd>RequiredValidator</dd>
                                 <dt><em class="aspect">Data type</em></dt>
         
-        <dd><a href="https://docs.typo3.org/m/typo3/reference-typoscript/12.4/en-us/DataTypes/Index.html#data-type-string">string</a></dd>
+        <dd><a href="https://docs.typo3.org/m/typo3/reference-typoscript/13.4/en-us/DataTypes/Index.html#data-type-string">string</a></dd>
                                 <dt><em class="aspect">Description</em></dt>
         
         <dd>This validator serves two purpose. First of check if the field contains
@@ -1467,7 +1470,7 @@ found here <a href="https://github.com/geocoder-php/Geocoder#address">geocoder-p
     </div><div class="code-block-wrapper" translate="no">
             
     <pre class="code-block"><code class="hljs bash">composer require geocoder-php/nominatim-provider</code></pre>
-    <div>        <button class="code-block-copy" title="Copy to clipboard">
+    <div class="code-block-actions">        <button class="code-block-copy" title="Copy to clipboard">
             <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
             <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
         </button>
@@ -1486,7 +1489,7 @@ field geocoderProvider:</p>
     </div><div class="code-block-wrapper" translate="no">
             
     <pre class="code-block"><code class="hljs typoscript">geocoderProvider = Geocoder\Provider\Nominatim\Nominatim</code></pre>
-    <div>        <button class="code-block-copy" title="Copy to clipboard">
+    <div class="code-block-actions">        <button class="code-block-copy" title="Copy to clipboard">
             <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
             <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
         </button>
@@ -1504,7 +1507,7 @@ field geocoderProvider:</p>
     </div><div class="code-block-wrapper" translate="no">
             
     <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.geocoderProvider = Geocoder\Provider\Nominatim\Nominatim</code></pre>
-    <div>        <button class="code-block-copy" title="Copy to clipboard">
+    <div class="code-block-actions">        <button class="code-block-copy" title="Copy to clipboard">
             <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
             <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
         </button>
@@ -1549,7 +1552,7 @@ the loading completly.</p>
    </span>{
    }
 }</code></pre>
-    <div>        <button class="code-block-copy" title="Copy to clipboard">
+    <div class="code-block-actions">        <button class="code-block-copy" title="Copy to clipboard">
             <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
             <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
         </button>
@@ -1574,7 +1577,7 @@ to improve performance. By doing so, all default fetching will be disabled.</p>
     </div><div class="code-block-wrapper" translate="no">
             
     <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.settings.disableLocationFetchLogic = 1</code></pre>
-    <div>        <button class="code-block-copy" title="Copy to clipboard">
+    <div class="code-block-actions">        <button class="code-block-copy" title="Copy to clipboard">
             <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
             <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
         </button>
@@ -1597,7 +1600,7 @@ this case, you need to set the zoom level in the template OR the radius in TypoS
     </div><div class="code-block-wrapper" translate="no">
             
     <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.settings.defaultConstraint.radius = 20</code></pre>
-    <div>        <button class="code-block-copy" title="Copy to clipboard">
+    <div class="code-block-actions">        <button class="code-block-copy" title="Copy to clipboard">
             <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
             <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
         </button>
@@ -1643,7 +1646,7 @@ possible to configure the templates and partials path in the plugin.</p>
     partialRootPath =
     layoutRootPath =
 }</code></pre>
-    <div>        <button class="code-block-copy" title="Copy to clipboard">
+    <div class="code-block-actions">        <button class="code-block-copy" title="Copy to clipboard">
             <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
             <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
         </button>
@@ -1676,7 +1679,7 @@ viewhelper get used.</p>
     </div><div class="code-block-wrapper" translate="no">
             
     <pre class="code-block"><code class="hljs xml">xmlns:sf="http://typo3.org/ns/Evoweb/StoreFinder/ViewHelpers"</code></pre>
-    <div>        <button class="code-block-copy" title="Copy to clipboard">
+    <div class="code-block-actions">        <button class="code-block-copy" title="Copy to clipboard">
             <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
             <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
         </button>
@@ -1707,7 +1710,7 @@ on rendering time.</p>
     },
     zoom: '{center.zoom}'
 <span class="hljs-tag">&lt;/<span class="hljs-name">sf:minify</span>&gt;</span>};</code></pre>
-    <div>        <button class="code-block-copy" title="Copy to clipboard">
+    <div class="code-block-actions">        <button class="code-block-copy" title="Copy to clipboard">
             <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
             <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
         </button>
@@ -1722,7 +1725,7 @@ on rendering time.</p>
     </div><div class="code-block-wrapper" translate="no">
             
     <pre class="code-block"><code class="hljs xml">var mapConfiguration = {active:true,apiV3Layers:'',language:'de',center:{lat:50.1125089,lng:8.6521548},zoom:'11'}</code></pre>
-    <div>        <button class="code-block-copy" title="Copy to clipboard">
+    <div class="code-block-actions">        <button class="code-block-copy" title="Copy to clipboard">
             <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
             <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
         </button>
@@ -1751,7 +1754,7 @@ in the plugin the binary value 4 stands for list.</p>
     </div><div class="code-block-wrapper" translate="no">
             
     <pre class="code-block"><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">f:if</span> <span class="hljs-attr">condition</span>=<span class="hljs-string">"{sf:format.binaryAnd(base: 4, content: settings.showBeforeSearch)} == 4"</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">f:if</span>&gt;</span></code></pre>
-    <div>        <button class="code-block-copy" title="Copy to clipboard">
+    <div class="code-block-actions">        <button class="code-block-copy" title="Copy to clipboard">
             <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
             <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
         </button>
@@ -1776,7 +1779,7 @@ allowedCountries accepts a comma seperated list of ISO2 country codes.</p>
     </div><div class="code-block-wrapper" translate="no">
             
     <pre class="code-block"><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">sf:form.selectCountries</span> <span class="hljs-attr">property</span>=<span class="hljs-string">"country"</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"sfrCountry"</span> <span class="hljs-attr">optionValueField</span>=<span class="hljs-string">"alpha2IsoCode"</span> <span class="hljs-attr">allowedCountries</span>=<span class="hljs-string">"{0: 'DE', 1: 'AT'}"</span> /&gt;</span></code></pre>
-    <div>        <button class="code-block-copy" title="Copy to clipboard">
+    <div class="code-block-actions">        <button class="code-block-copy" title="Copy to clipboard">
             <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
             <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
         </button>
@@ -1864,7 +1867,7 @@ you can change the path either in the plugin field &quot;Partial path&quot; or v
     </div><div class="code-block-wrapper" translate="no">
             
     <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.view.partialRootPaths.<span class="hljs-title">50</span> = ./yourpath/Partials/</code></pre>
-    <div>        <button class="code-block-copy" title="Copy to clipboard">
+    <div class="code-block-actions">        <button class="code-block-copy" title="Copy to clipboard">
             <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
             <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
         </button>
@@ -1944,7 +1947,7 @@ coordinates are used to render search results that are near of them.</p>
       longitude = <span class="hljs-title">7</span>.464
    }
 }</code></pre>
-    <div>        <button class="code-block-copy" title="Copy to clipboard">
+    <div class="code-block-actions">        <button class="code-block-copy" title="Copy to clipboard">
             <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
             <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
         </button>
@@ -1994,7 +1997,7 @@ my* with your own values, but keep the event name as it is.</p>
    </span>{
    }
 }</code></pre>
-    <div>        <button class="code-block-copy" title="Copy to clipboard">
+    <div class="code-block-actions">        <button class="code-block-copy" title="Copy to clipboard">
             <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
             <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
         </button>
@@ -2046,7 +2049,7 @@ ModifyMiddlewareLocationsListener is present.</p>
             
     <pre class="code-block"><code class="hljs yaml"><span class="hljs-attr">imports:</span>
   <span class="hljs-bullet">-</span> <span class="hljs-string">{</span> <span class="hljs-attr">resource:</span> <span class="hljs-string">'EXT:store_finder/Configuration/Routes/Ajax.yaml'</span> <span class="hljs-string">}</span></code></pre>
-    <div>        <button class="code-block-copy" title="Copy to clipboard">
+    <div class="code-block-actions">        <button class="code-block-copy" title="Copy to clipboard">
             <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
             <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
         </button>
@@ -2072,7 +2075,7 @@ custom code.</p>
     <span class="hljs-attr">showList</span>=<span class="hljs-string">"{sf:bitwiseIf(a: settings.showBeforeSearch, b: 4, then: 1, else: 0)}"</span>
     <span class="hljs-attr">categoriesEndpoint</span>=<span class="hljs-string">"{f:uri.typolink(parameter: '/api/storefinder/categories/{cObjectData.uid}')}"</span>
     <span class="hljs-attr">locationsEndpoint</span>=<span class="hljs-string">"{f:uri.typolink(parameter: '/api/storefinder/locations/{cObjectData.uid}')}"</span>/&gt;</span></code></pre>
-    <div>        <button class="code-block-copy" title="Copy to clipboard">
+    <div class="code-block-actions">        <button class="code-block-copy" title="Copy to clipboard">
             <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
             <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
         </button>
@@ -2171,7 +2174,7 @@ vendor/bin/typo3 storefinder:import \
   --storagePid=2
   -o<span class="hljs-string">"{\"A\":\"import_id\",\"B\":\"name\",\"D\":\"city\"}"</span> \
   <span class="hljs-string">"1:/user_upload/ExportExcel.xlsx"</span></code></pre>
-    <div>        <button class="code-block-copy" title="Copy to clipboard">
+    <div class="code-block-actions">        <button class="code-block-copy" title="Copy to clipboard">
             <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
             <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
         </button>
@@ -2199,7 +2202,7 @@ vendor/bin/typo3 storefinder:import \
     </div><div class="code-block-wrapper" translate="no">
             
     <pre class="code-block"><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">f:if</span> <span class="hljs-attr">condition</span>=<span class="hljs-string">"{sf:format.binaryAnd(base: 1, content: settings.showBeforeSearch)} == 1"</span>&gt;</span></code></pre>
-    <div>        <button class="code-block-copy" title="Copy to clipboard">
+    <div class="code-block-actions">        <button class="code-block-copy" title="Copy to clipboard">
             <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
             <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
         </button>
@@ -2211,7 +2214,7 @@ vendor/bin/typo3 storefinder:import \
     </div><div class="code-block-wrapper" translate="no">
             
     <pre class="code-block"><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">sf:bitwiseIf</span> <span class="hljs-attr">a</span>=<span class="hljs-string">"{comparisonValue}"</span> <span class="hljs-attr">b</span>=<span class="hljs-string">"1"</span>&gt;</span></code></pre>
-    <div>        <button class="code-block-copy" title="Copy to clipboard">
+    <div class="code-block-actions">        <button class="code-block-copy" title="Copy to clipboard">
             <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
             <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
         </button>
@@ -2386,7 +2389,7 @@ configuration.handleCloseButtonCallback = <span class="hljs-function"><span clas
       $singleView.hide();
       $singleView.removeClass(<span class="hljs-string">'show'</span>);
 }</code></pre>
-    <div>        <button class="code-block-copy" title="Copy to clipboard">
+    <div class="code-block-actions">        <button class="code-block-copy" title="Copy to clipboard">
             <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
             <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
         </button>
@@ -2496,7 +2499,7 @@ getCityRaw are dropped.</p>
         <div class="frame-container">
             <div class="frame-inner">
                                 <div class="footer-additional">
-                    <p class="text-center">Last rendered: Oct 05, 2024 08:27</p>
+                    <p class="text-center">Last rendered: Oct 31, 2024 15:03</p>
                 </div>
                 <div class="footer-meta">
                     <ul class="footer-meta-navigation">
