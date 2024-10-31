@@ -146,11 +146,11 @@ cleanup () {
 LOWEST="--prefer-lowest"
 TPATH="Tests/Functional"
 
-DEBUG_TESTS=true
+DEBUG_TESTS=false
 if [[ $DEBUG_TESTS != true ]]; then
     checkResources
 
-    TCORE="^13.3"
+    TCORE="^13.1"
     TFRAMEWORK="dev-main"
 
     runFunctionalTests "8.2" ${TCORE} ${TFRAMEWORK} ${TPATH} || exit 1

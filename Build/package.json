@@ -8,33 +8,32 @@
 	"version": "8.0.0",
 	"license": "GPL-2.0-or-later",
 	"engines": {
-		"node": ">=19.0.0 <21.0.0",
+		"node": ">=22.0.0 <23.0.0",
 		"npm": ">=10.0.0"
 	},
 	"type": "module",
 	"dependencies": {
 		"@googlemaps/js-api-loader": "^1.16.8",
+		"@types/google.maps": "^3.58.1",
+		"@types/leaflet": "^1.9.14",
+		"@types/mustache": "^4.2.5",
 		"leaflet": "^1.9.4",
 		"mustache": "^4.2.0"
 	},
 	"devDependencies": {
-		"webpack": "^5.95.0",
-		"webpack-cli": "^5.1.4",
+		"autoprefixer": "^10.4.20",
+		"css-minify": "^2.0.1",
+		"postcss-cli": "^11.0.0",
 
-		"mini-css-extract-plugin": "^2.9.1",
-		"css-loader": "^6.11.0",
-		"postcss-loader": "^7.3.4",
-		"sass-loader": "^16.0.2",
-		"sass": "^1.79.4",
+		"stylelint": "^16.9.0",
+		"stylelint-order": "^6.0.4",
 
-		"ts-loader": "^9.5.1",
+		"typescript": "< 5.6.0",
 		"rollup": "^4.24.0",
+		"@rollup/plugin-node-resolve": "^15.3.0",
 		"@rollup/plugin-terser": "^0.4.4",
 		"terser": "^5.34.1",
 
-		"@types/google.maps": "^3.58.1",
-		"@types/leaflet": "^1.9.12",
-		"@types/mustache": "^4.2.5",
 		"@stylistic/eslint-plugin": "^2.8.0",
 		"@typescript-eslint/eslint-plugin": "^8.8.0",
 		"@typescript-eslint/parser": "^8.8.0",
@@ -43,18 +42,24 @@
 		"@eslint/eslintrc": "^3.1.0",
 		"eslint": "^9.11.1",
 		"eslint-plugin-lit": "^1.15.0",
-		"eslint-plugin-wc": "^2.1.1",
-		"postcss-scss": "^4.0.9",
-		"stylelint": "^16.9.0",
-		"stylelint-order": "^6.0.4",
-		"stylelint-scss": "^6.7.0",
-		"typescript": "< 5.6.0"
+		"eslint-plugin-wc": "^2.1.1"
 	},
 	"scripts": {
-		"lint:css": "stylelint Sources/Scss/*.scss",
+		"lint:css": "stylelint Sources/Css/*.css",
+		"prefix:css": "postcss --use autoprefixer -m -d ../Resources/Public/Stylesheet/ Sources/Css/*.css",
+		"minify:css": "css-minify -d ../Resources/Public/Stylesheet/ -o ../Resources/Public/Stylesheet",
+		"build:css": "npm run lint:css && npm run prefix:css && npm run minify:css",
+		"update:backend:leaflet": "mkdir -p ../Resources/Public/JavaScript/leaflet && cp node_modules/leaflet/dist/leaflet-src.esm.js* ../Resources/Public/JavaScript/leaflet/ && cp node_modules/leaflet/dist/leaflet.css ../Resources/Public/JavaScript/leaflet/ && cp -r node_modules/leaflet/dist/images ../Resources/Public/JavaScript/leaflet/",
 		"lint:ts": "eslint -c eslint.config.mjs Sources/TypeScript/*.ts",
-		"build:css": "webpack --mode=production --config webpack.css.config.js",
-		"build:js": "npm run lint:ts && webpack --mode=development --config webpack.js.config.js && webpack --mode=production --config webpack.js.config.js",
-		"build:module": "tsc --project tsconfig.build.json && rollup -c"
+		"compile:ts": "tsc --project tsconfig.build.json",
+		"rollup:ts": "npm run rollup:ts:backend && npm run rollup:ts:googlemap && npm run rollup:ts:openstreetmap",
+		"rollup:ts:backend": "rollup --config rollup-backend.config.mjs",
+		"rollup:ts:googlemap": "rollup --config rollup-googlemap.config.mjs",
+		"rollup:ts:openstreetmap": "rollup --config rollup-openstreetmap.config.mjs",
+		"minify:ts": "npm run minify:ts:backend && npm run minify:ts:googlemap && npm run minify:ts:openstreetmap",
+		"minify:ts:backend": "rollup --environment COMPRESS --config rollup-backend.config.mjs",
+		"minify:ts:googlemap": "rollup --environment COMPRESS --config rollup-googlemap.config.mjs",
+		"minify:ts:openstreetmap": "rollup --environment COMPRESS --config rollup-openstreetmap.config.mjs",
+		"build:js": "npm run lint:ts && npm run compile:ts && npm run rollup:ts && npm run minify:ts && npm run update:backend:leaflet"
 	}
 }

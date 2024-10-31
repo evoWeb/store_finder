@@ -10,8 +10,8 @@
     position: relative;
 
     #tx_storefinder_map {
-        height: 400px;
         width: 100% !important;
+        height: 400px;
     }
 
     .gm-style-iw {
