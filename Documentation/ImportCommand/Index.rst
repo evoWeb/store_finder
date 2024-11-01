@@ -1,6 +1,6 @@
-.. include:: /Includes.rst.txt
-
-.. _importCommand:
+..  include:: /Includes.rst.txt
+..  index::  Import command
+..  _importCommand:
 
 ==============
 Import command
@@ -10,28 +10,42 @@ By using the import command its possible to import locations from a a spreadshee
 into a storage folder. If given references to attributes, categories and files are
 created.
 
-
 Arguments
 =========
 
 * fileName
   StorageId (most likely 1) and path and filename of excel file that should be imported relatively to the storage (fileadmin) Eg: 1:/user_upload/locations.xlsx
 
-
 Options
 =======
 
 * --storagePid -s
-  Page id of storage folder. Default is 1.
+    Page id of storage folder. Default is 1.
 * --clearStorageFolder -c
-  Flag if storage folder should be emptied before importing
+    Flag if storage folder should be emptied before importing
 * --columnMap -o
-  Json encoded column map array. Defaults to {"A":"import_id","B":{0:"name",1:"storeid"}},"C":"address","D":"city","E":"zipcode","F":"country","G":"state","H":"person","I":"url","J":"image"}
-* --attributeMap -a
-  Json encoded attribute map array. Defaults to {"K":{"att1":1}}
-* --categoryMap -t
-  Json encoded attribute map array. Defaults to {"L":{"cat1":1}}
+    Json encoded column map array.
 
+    ..  code-block:: json
+        :caption: Default
+
+        {"A":"import_id","B":{0:"name",1:"storeid"}},"C":"address","D":"city","E":"zipcode","F":"country","G":"state","H":"person","I":"url","J":"image"}
+
+* --attributeMap -a
+    Json encoded attribute map array.
+
+    ..  code-block:: json
+        :caption: Default
+
+        {"K":{"att1":1}}
+
+* --categoryMap -t
+    Json encoded attribute map array.
+
+    ..  code-block:: json
+        :caption: Default
+
+        {"L":{"cat1":1}}
 
 Transformation
 ==============
@@ -47,7 +61,6 @@ Transformation
   * icon is a file path and name relative to file storage like 1:/user_upload/icon.jpg and is referenced by sys_file_reference
 * references to attributes, categories and files are removed if not present any more
 
-
 Importing constraints
 =====================
 
@@ -62,16 +75,22 @@ Importing constraints
   {..."H":"image","I":"image","J":"image"...}
   The result is, that the locations has three images referenced
 
-
 Examples of import command calls
 ================================
 
-.. code-block:: bash
-   :caption: On command line
+..  code-block:: bash
+    :caption: Simple command call
 
     vendor/bin/typo3 storefinder:import --storagePid=202 --clearStorageFolder=1 filename
 
-    vendor/bin/typo3 storefinder:import --columnMap="{\"A\":\"import_id\",\"B\":\"name\",\"D\":\"city\"}" "1:/user_upload/ExportExcel.xlsx"
+..  code-block:: bash
+    :caption: Command call with column map
+
+    vendor/bin/typo3 storefinder:import --storagePid=4 --columnMap="{\"A\":\"import_id\",\"B\":\"name\",\"D\":\"city\"}" "1:/user_upload/ExportExcel.xlsx"
+
+..  code-block:: bash
+    :caption: Multiline command call
+
     vendor/bin/typo3 storefinder:import \
       -c \
       --storagePid=2

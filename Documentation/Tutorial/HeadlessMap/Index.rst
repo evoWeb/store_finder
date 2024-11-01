@@ -1,11 +1,10 @@
-.. include:: /Includes.rst.txt
-
-.. _headlessMapRendering:
+..  include:: /Includes.rst.txt
+..  index:: Headless Map Rendering
+..  _headlessMapRendering:
 
 ======================
 Headless Map Rendering
 ======================
-
 
 Introduction of middleware
 ==========================

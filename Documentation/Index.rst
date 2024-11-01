@@ -1,5 +1,7 @@
 .. include:: /Includes.rst.txt
 
+..  _start:
+
 ============
 Store finder
 ============
@@ -16,15 +18,6 @@ Store finder
 :Language:
     en
 
-:Description:
-    Search for stores based on local address with coordinates compiled with google maps api.
-
-:Keywords:
-    Store Finder, POI Map, Google Maps, Configuration
-
-:Copyright:
-    2014-2023
-
 :Author:
     Sebastian Fischer
 
@@ -36,7 +29,14 @@ Store finder
 :Rendered:
     |today|
 
+:Copyright:
+    2014-2024
+
 ----
+
+Search for stores based on local address with coordinates compiled with google maps api.
+
+Store Finder, POI Map, Google Maps, Configuration
 
 The content of this document is related to TYPO3,
 a GNU/GPL CMS/Framework available from http://typo3.org

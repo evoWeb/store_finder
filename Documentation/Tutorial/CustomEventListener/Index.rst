@@ -1,11 +1,10 @@
-.. include:: /Includes.rst.txt
-
-.. _customEventListener:
+..  include:: /Includes.rst.txt
+..  index:: Custom Event Listener
+..  _customEventListener:
 
 =====================
 Custom Event Listener
 =====================
-
 
 Adding custom event listener
 ============================

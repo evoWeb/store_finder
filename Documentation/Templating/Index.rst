@@ -1,11 +1,10 @@
-.. include:: /Includes.rst.txt
-
-.. _templating:
+..  include:: /Includes.rst.txt
+..  index:: Templating
+..  _templating:
 
 ==========
 Templating
 ==========
-
 
 Templates, partials and layouts
 ===============================
@@ -13,7 +12,6 @@ Templates, partials and layouts
 Like every other extbase extension its possible to configure the fluid
 templates, partials and layout path via typoscript. Beside that is also
 possible to configure the templates and partials path in the plugin.
-
 
 Example:
 ________
@@ -27,7 +25,6 @@ ________
         layoutRootPath =
     }
 
-
 Viewhelper
 ==========
 
@@ -40,7 +37,6 @@ format.binaryAnd viewhelper.
 They are used by including the namespace in the file in which the
 viewhelper get used.
 
-
 Register Namespace:
 ===================
 
@@ -51,7 +47,6 @@ Add the xmlns to the html tag in the template
 
     xmlns:sf="http://typo3.org/ns/Evoweb/StoreFinder/ViewHelpers"
 
-
 minify Viewhelper
 =================
 
@@ -60,7 +55,6 @@ in the result map. The purpose is to reduce the traffic and clean the
 source code.
 So in stead of making the template unreadable the output gets minified
 on rendering time.
-
 
 Example viewhelper:
 -------------------
@@ -77,7 +71,6 @@ Example viewhelper:
         zoom: '{center.zoom}'
     </sf:minify>};
 
-
 Example output:
 ---------------
 
@@ -85,7 +78,6 @@ Example output:
    :caption: EXT:my_extension/Resources/Private/Templates/Map/Map.html
 
     var mapConfiguration = {active:true,apiV3Layers:'',language:'de',center:{lat:50.1125089,lng:8.6521548},zoom:'11'}
-
 
 format.binaryAnd Viewhelper
 ===========================
@@ -99,7 +91,6 @@ showBeforeSearch, is formatted with a logical and for comparison like in
 the example below. Here we check if the list should be rendered because
 in the plugin the binary value 4 stands for list.
 
-
 Example viewhelper:
 -------------------
 
@@ -107,7 +98,6 @@ Example viewhelper:
    :caption: EXT:my_extension/Resources/Private/Templates/Map/Map.html
 
     <f:if condition="{sf:format.binaryAnd(base: 4, content: settings.showBeforeSearch)} == 4">...</f:if>
-
 
 form.selectCountries
 ====================
@@ -118,7 +108,6 @@ the fluid standard form.select are supported. Beside that if the optional
 attribute allowedCountries is set, only countries matching it get rendered.
 allowedCountries accepts a comma seperated list of ISO2 country codes.
 
-
 Example viewhelper:
 -------------------
 
@@ -126,4 +115,3 @@ Example viewhelper:
    :caption: EXT:my_extension/Resources/Private/Templates/Map/Map.html
 
     <sf:form.selectCountries property="country" id="sfrCountry" optionValueField="alpha2IsoCode" allowedCountries="{0: 'DE', 1: 'AT'}" />
-

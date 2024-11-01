@@ -1,6 +1,6 @@
-.. include:: /Includes.rst.txt
-
-.. _user_manual:
+..  include:: /Includes.rst.txt
+..  index:: User Manual
+..  _user_manual:
 
 ===========
 User Manual

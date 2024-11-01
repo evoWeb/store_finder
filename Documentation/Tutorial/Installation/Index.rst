@@ -1,11 +1,10 @@
-.. include:: /Includes.rst.txt
-
-.. _installation:
+..  include:: /Includes.rst.txt
+..  index:: Installation
+..  _installation:
 
 ============
 Installation
 ============
-
 
 Installation
 ============
@@ -21,13 +20,11 @@ In rare case that the api url changes and the extensions was not update quick en
 url used for the geocooding in the same configuration. Be aware that this url only gets used in the
 geocoding process. For the search in the frontend you need to change it in TypoScript too.
 
-
 TypoScript
 ==========
 
 In general its a good idea to add the include static of the extension to you typoscript record. Otherwise
 its not possible to use the country selector which is used in the default template.
-
 
 Structure
 =========
@@ -35,7 +32,6 @@ Structure
 Location records can only be added in folders that's why you need to add at least one folder for storage.
 Additionally you need a page with the store_finder plugin. In the plugin configure your needs. To use
 locations of the created folder choose it as record storage page on tab behaviour.
-
 
 Templating
 ==========
@@ -48,7 +44,6 @@ you can change the path either in the plugin field "Partial path" or via TypoScr
    :caption: EXT:my_extension/Configuration/TypoScript/setup.typoscript
 
    plugin.tx_storefinder.view.partialRootPaths.50 = ./yourpath/Partials/
-
 
 API Keys and Map ID
 ===================
@@ -77,7 +72,6 @@ Key for the frontend
    :alt: Search form
    :width: 711px
 
-
 Key for the geocoding
 =====================
 
@@ -85,13 +79,13 @@ Key for the geocoding
    :alt: Result map and list
    :width: 711px
 
-
 Set default coordinates
 =======================
 
-In TypoScript setup it's possible to set defaultConstraints these are filled in the constraints object if no
-search was requested. In the example below the zoom, latitude and longitude values are set and then the
-coordinates are used to render search results that are near of them.
+In TypoScript setup it's possible to set defaultConstraints these are filled in
+the constraints object if no search was requested. In the example below the
+zoom, latitude and longitude values are set and then the coordinates are used
+to render search results that are near of them.
 
 .. code-block:: typoscript
    :caption: EXT:my_extension/Configuration/TypoScript/setup.typoscript:
@@ -104,7 +98,6 @@ coordinates are used to render search results that are near of them.
          longitude = 7.464
       }
    }
-
 
 Use caching map action
 ======================
