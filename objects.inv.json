@@ -158,11 +158,11 @@
             "Configuration\/Persistence\/Index.html#persistence",
             "Persistence"
         ],
-        "persistence-storagepid": [
+        "storagepid": [
             "-",
             "-",
-            "Configuration\/Persistence\/Index.html#persistence-storagePid",
-            "storagePid"
+            "Configuration\/Persistence\/Index.html#storagePid",
+            "-"
         ],
         "settings": [
             "-",
@@ -170,131 +170,131 @@
             "Configuration\/Settings\/Index.html#settings",
             "Settings"
         ],
-        "settings-showbeforesearch": [
+        "showbeforesearch": [
             "-",
             "-",
-            "Configuration\/Settings\/Index.html#settings-showBeforeSearch",
-            "showBeforeSearch"
+            "Configuration\/Settings\/Index.html#showBeforeSearch",
+            "-"
         ],
-        "settings-showaftersearch": [
+        "showaftersearch": [
             "-",
             "-",
-            "Configuration\/Settings\/Index.html#settings-showAfterSearch",
-            "showAfterSearch"
+            "Configuration\/Settings\/Index.html#showAfterSearch",
+            "-"
         ],
-        "settings-apiv3layers": [
+        "apiv3layers": [
             "-",
             "-",
-            "Configuration\/Settings\/Index.html#settings-apiV3Layers",
-            "apiV3Layers"
+            "Configuration\/Settings\/Index.html#apiV3Layers",
+            "-"
         ],
         "limit": [
             "-",
             "-",
             "Configuration\/Settings\/Index.html#limit",
-            "limit"
+            "-"
         ],
         "allowedcountries": [
             "-",
             "-",
             "Configuration\/Settings\/Index.html#allowedCountries",
-            "allowedCountries"
+            "-"
         ],
         "categories": [
             "-",
             "-",
             "Configuration\/Settings\/Index.html#categories",
-            "categories"
+            "-"
         ],
         "categorypriority": [
             "-",
             "-",
             "Configuration\/Settings\/Index.html#categoryPriority",
-            "categoryPriority"
+            "-"
         ],
         "singlelocationid": [
             "-",
             "-",
             "Configuration\/Settings\/Index.html#singleLocationId",
-            "singleLocationId"
+            "-"
         ],
         "geocoderprovider": [
             "-",
             "-",
             "Configuration\/Settings\/Index.html#geocoderProvider",
-            "geocoderProvider"
+            "-"
         ],
         "apiconsolekey": [
             "-",
             "-",
             "Configuration\/Settings\/Index.html#apiConsoleKey",
-            "apiConsoleKey"
+            "-"
         ],
         "apiconsolekeygeocoding": [
             "-",
             "-",
             "Configuration\/Settings\/Index.html#apiConsoleKeyGeocoding",
-            "apiConsoleKeyGeocoding"
+            "-"
         ],
         "mapid": [
             "-",
             "-",
             "Configuration\/Settings\/Index.html#mapId",
-            "mapId:"
+            "-"
         ],
         "googlelibraries": [
             "-",
             "-",
             "Configuration\/Settings\/Index.html#googleLibraries",
-            "googleLibraries"
+            "-"
         ],
         "distanceunit": [
             "-",
             "-",
             "Configuration\/Settings\/Index.html#distanceUnit",
-            "distanceUnit"
+            "-"
         ],
-        "mc-language": [
+        "language": [
             "-",
             "-",
-            "Configuration\/Settings\/Index.html#mc-language",
-            "language"
+            "Configuration\/Settings\/Index.html#language",
+            "-"
         ],
         "showstoreimage": [
             "-",
             "-",
             "Configuration\/Settings\/Index.html#showStoreImage",
-            "showStoreImage"
+            "-"
         ],
         "resultpageid": [
             "-",
             "-",
             "Configuration\/Settings\/Index.html#resultPageId",
-            "resultPageId"
+            "-"
         ],
-        "ms-height": [
+        "mapsize-height": [
             "-",
             "-",
-            "Configuration\/Settings\/Index.html#ms-height",
-            "mapSize.height"
+            "Configuration\/Settings\/Index.html#mapSize-height",
+            "-"
         ],
-        "ms-width": [
+        "mapsize-width": [
             "-",
             "-",
-            "Configuration\/Settings\/Index.html#ms-width",
-            "mapSize.width"
+            "Configuration\/Settings\/Index.html#mapSize-width",
+            "-"
         ],
         "override": [
             "-",
             "-",
             "Configuration\/Settings\/Index.html#override",
-            "override"
+            "-"
         ],
         "disablefetchlocationinaction": [
             "-",
             "-",
             "Configuration\/Settings\/Index.html#disableFetchLocationInAction",
-            "disableFetchLocationInAction"
+            "-"
         ],
         "validation": [
             "-",
@@ -306,7 +306,7 @@
             "-",
             "-",
             "Configuration\/Validation\/Index.html#RequiredValidator",
-            "RequiredValidator"
+            "-"
         ],
         "view": [
             "-",
@@ -314,17 +314,17 @@
             "Configuration\/View\/Index.html#view",
             "View"
         ],
-        "view-templaterootpaths": [
+        "templaterootpaths": [
             "-",
             "-",
-            "Configuration\/View\/Index.html#view-templateRootPaths",
-            "templateRootPaths"
+            "Configuration\/View\/Index.html#templateRootPaths",
+            "-"
         ],
-        "view-partialrootpaths": [
+        "partialrootpaths": [
             "-",
             "-",
-            "Configuration\/View\/Index.html#view-partialRootPaths",
-            "partialRootPaths"
+            "Configuration\/View\/Index.html#partialRootPaths",
+            "-"
         ],
         "deprecation": [
             "-",
@@ -337,6 +337,12 @@
             "-",
             "ImportCommand\/Index.html#importCommand",
             "Import command"
+        ],
+        "start": [
+            "-",
+            "-",
+            "Index.html#start",
+            "Store finder"
         ],
         "introduction": [
             "-",
@@ -580,143 +586,11 @@
             "Configuration\/Persistence\/Index.html#persistence-1",
             "Persistence"
         ],
-        "storagepid": [
-            "-",
-            "-",
-            "Configuration\/Persistence\/Index.html#storagepid",
-            "storagePid"
-        ],
         "settings-1": [
             "-",
             "-",
             "Configuration\/Settings\/Index.html#settings-1",
             "Settings"
-        ],
-        "showbeforesearch": [
-            "-",
-            "-",
-            "Configuration\/Settings\/Index.html#showbeforesearch",
-            "showBeforeSearch"
-        ],
-        "showaftersearch": [
-            "-",
-            "-",
-            "Configuration\/Settings\/Index.html#showaftersearch",
-            "showAfterSearch"
-        ],
-        "apiv3layers": [
-            "-",
-            "-",
-            "Configuration\/Settings\/Index.html#apiv3layers",
-            "apiV3Layers"
-        ],
-        "limit": [
-            "-",
-            "-",
-            "Configuration\/Settings\/Index.html#limit",
-            "limit"
-        ],
-        "allowedcountries": [
-            "-",
-            "-",
-            "Configuration\/Settings\/Index.html#allowedcountries",
-            "allowedCountries"
-        ],
-        "categories": [
-            "-",
-            "-",
-            "Configuration\/Settings\/Index.html#categories",
-            "categories"
-        ],
-        "categorypriority": [
-            "-",
-            "-",
-            "Configuration\/Settings\/Index.html#categorypriority",
-            "categoryPriority"
-        ],
-        "singlelocationid": [
-            "-",
-            "-",
-            "Configuration\/Settings\/Index.html#singlelocationid",
-            "singleLocationId"
-        ],
-        "geocoderprovider": [
-            "-",
-            "-",
-            "Configuration\/Settings\/Index.html#geocoderprovider",
-            "geocoderProvider"
-        ],
-        "apiconsolekey": [
-            "-",
-            "-",
-            "Configuration\/Settings\/Index.html#apiconsolekey",
-            "apiConsoleKey"
-        ],
-        "apiconsolekeygeocoding": [
-            "-",
-            "-",
-            "Configuration\/Settings\/Index.html#apiconsolekeygeocoding",
-            "apiConsoleKeyGeocoding"
-        ],
-        "mapid": [
-            "-",
-            "-",
-            "Configuration\/Settings\/Index.html#mapid",
-            "mapId:"
-        ],
-        "googlelibraries": [
-            "-",
-            "-",
-            "Configuration\/Settings\/Index.html#googlelibraries",
-            "googleLibraries"
-        ],
-        "distanceunit": [
-            "-",
-            "-",
-            "Configuration\/Settings\/Index.html#distanceunit",
-            "distanceUnit"
-        ],
-        "language": [
-            "-",
-            "-",
-            "Configuration\/Settings\/Index.html#language",
-            "language"
-        ],
-        "showstoreimage": [
-            "-",
-            "-",
-            "Configuration\/Settings\/Index.html#showstoreimage",
-            "showStoreImage"
-        ],
-        "resultpageid": [
-            "-",
-            "-",
-            "Configuration\/Settings\/Index.html#resultpageid",
-            "resultPageId"
-        ],
-        "mapsize-height": [
-            "-",
-            "-",
-            "Configuration\/Settings\/Index.html#mapsize-height",
-            "mapSize.height"
-        ],
-        "mapsize-width": [
-            "-",
-            "-",
-            "Configuration\/Settings\/Index.html#mapsize-width",
-            "mapSize.width"
-        ],
-        "override": [
-            "-",
-            "-",
-            "Configuration\/Settings\/Index.html#override",
-            "override"
-        ],
-        "disablefetchlocationinaction": [
-            "-",
-            "-",
-            "Configuration\/Settings\/Index.html#disablefetchlocationinaction",
-            "disableFetchLocationInAction"
         ],
         "validation-1": [
             "-",
@@ -778,29 +652,11 @@
             "Configuration\/Validation\/Index.html#available-validators",
             "Available validators"
         ],
-        "requiredvalidator": [
-            "-",
-            "-",
-            "Configuration\/Validation\/Index.html#requiredvalidator",
-            "RequiredValidator"
-        ],
         "view-1": [
             "-",
             "-",
             "Configuration\/View\/Index.html#view-1",
             "View"
-        ],
-        "templaterootpaths": [
-            "-",
-            "-",
-            "Configuration\/View\/Index.html#templaterootpaths",
-            "templateRootPaths"
-        ],
-        "partialrootpaths": [
-            "-",
-            "-",
-            "Configuration\/View\/Index.html#partialrootpaths",
-            "partialRootPaths"
         ],
         "deprecation-1": [
             "-",
@@ -884,13 +740,13 @@
             "-",
             "-",
             "Introduction\/Index.html#search-form",
-            "Search form:"
+            "Search form"
         ],
         "result-map-and-list": [
             "-",
             "-",
             "Introduction\/Index.html#result-map-and-list",
-            "Result map and list:"
+            "Result map and list"
         ],
         "single-points-of-interest": [
             "-",
@@ -1083,6 +939,184 @@
             "-",
             "UserManual\/Index.html#user-manual",
             "User Manual"
+        ]
+    },
+    "std:confval-menu": {
+        "persistence-reference": [
+            "-",
+            "-",
+            "Configuration\/Persistence\/Index.html#persistence-reference",
+            ""
+        ],
+        "settings-reference": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#settings-reference",
+            ""
+        ],
+        "validator-reference": [
+            "-",
+            "-",
+            "Configuration\/Validation\/Index.html#validator-reference",
+            ""
+        ],
+        "view-reference": [
+            "-",
+            "-",
+            "Configuration\/View\/Index.html#view-reference",
+            ""
+        ]
+    },
+    "std:confval": {
+        "storagepid": [
+            "-",
+            "-",
+            "Configuration\/Persistence\/Index.html#storagepid",
+            "storagePid"
+        ],
+        "showbeforesearch": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#showbeforesearch",
+            "showBeforeSearch"
+        ],
+        "showaftersearch": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#showaftersearch",
+            "showAfterSearch"
+        ],
+        "apiv3layers": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#apiv3layers",
+            "apiV3Layers"
+        ],
+        "limit": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#limit",
+            "limit"
+        ],
+        "allowedcountries": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#allowedcountries",
+            "allowedCountries"
+        ],
+        "categories": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#categories",
+            "categories"
+        ],
+        "categorypriority": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#categorypriority",
+            "categoryPriority"
+        ],
+        "singlelocationid": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#singlelocationid",
+            "singleLocationId"
+        ],
+        "geocoderprovider": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#geocoderprovider",
+            "geocoderProvider"
+        ],
+        "apiconsolekey": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#apiconsolekey",
+            "apiConsoleKey"
+        ],
+        "apiconsolekeygeocoding": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#apiconsolekeygeocoding",
+            "apiConsoleKeyGeocoding"
+        ],
+        "mapid": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#mapid",
+            "mapId"
+        ],
+        "googlelibraries": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#googlelibraries",
+            "googleLibraries"
+        ],
+        "distanceunit": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#distanceunit",
+            "distanceUnit"
+        ],
+        "language": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#language",
+            "language"
+        ],
+        "showstoreimage": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#showstoreimage",
+            "showStoreImage"
+        ],
+        "resultpageid": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#resultpageid",
+            "resultPageId"
+        ],
+        "mapsize-height": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#mapsize-height",
+            "mapSize.height"
+        ],
+        "mapsize-width": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#mapsize-width",
+            "mapSize.width"
+        ],
+        "override": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#override",
+            "override"
+        ],
+        "disablefetchlocationinaction": [
+            "-",
+            "-",
+            "Configuration\/Settings\/Index.html#disablefetchlocationinaction",
+            "disableFetchLocationInAction"
+        ],
+        "requiredvalidator": [
+            "-",
+            "-",
+            "Configuration\/Validation\/Index.html#requiredvalidator",
+            "RequiredValidator"
+        ],
+        "templaterootpaths": [
+            "-",
+            "-",
+            "Configuration\/View\/Index.html#templaterootpaths",
+            "templateRootPaths"
+        ],
+        "partialrootpaths": [
+            "-",
+            "-",
+            "Configuration\/View\/Index.html#partialrootpaths",
+            "partialRootPaths"
         ]
     }
 }

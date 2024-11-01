@@ -1,413 +1,210 @@
-.. include:: /Includes.rst.txt
-
-.. _settings:
+..  include:: /Includes.rst.txt
+..  index:: Settings
+..  _settings:
 
 ========
 Settings
 ========
 
-.. contents::
-   :local:
+..  confval-menu::
+    :name: settings-reference
+    :display: table
+    :type:
+    :Default:
 
-.. _settings-showBeforeSearch:
+    ..  _showBeforeSearch:
 
-showBeforeSearch
-================
+    ..  confval:: showBeforeSearch
+        :type: :ref:`integer <t3tsref:data-type-integer>`
+        :Default: 1
+        :Possible values: 1 & 2 & 4
 
-:aspect:`Property`
-         showBeforeSearch
+        Defines what should get displayed before the search was triggered. Must
+        be used as binary flags
 
-:aspect:`Data type`
-         :ref:`integer <t3tsref:data-type-integer>`
+        - 1 show search
+        - 2 show map
+        - 4 show list
 
-:aspect:`Description`
-         Defines what should get displayed before the search was triggered
+    ..  _showAfterSearch:
 
-:aspect:`Default`
-         1
+    ..  confval:: showAfterSearch
+        :type: :ref:`integer <t3tsref:data-type-integer>`
+        :Default: 6
+        :Possible values: 1 & 2 & 4
 
-:aspect:`Possible values`
-         1 & 2 & 4
+        Defines what should get displayed after the search was triggered. Must
+        be used as binary flags
 
+        - 1 show search
+        - 2 show map
+        - 4 show list
 
-.. _settings-showAfterSearch:
+    ..  _apiV3Layers:
 
-showAfterSearch
-===============
+    ..  confval:: apiV3Layers
+        :type: list of :ref:`string <t3tsref:data-type-string>`
+        :Possible values: traffic, bicycling, kml
 
-:aspect:`Property`
-         showBeforeSearch
+        Select which layers should be rendered in the map
 
-:aspect:`Data type`
-         :ref:`integer <t3tsref:data-type-integer>`
+    ..  _limit:
 
-:aspect:`Description`
-         Defines what should get displayed after the search was triggered
+    ..  confval:: limit
+        :type: :ref:`integer <t3tsref:data-type-integer>`
+        :Default: 20
 
-:aspect:`Default`
-         6
+        Amount of records per page in the result list
 
-:aspect:`Possible values`
-         1 & 2 & 4
+    ..  _allowedCountries:
 
+    ..  confval:: allowedCountries
+        :type: list of :ref:`string <t3tsref:data-type-string>`
 
-.. _settings-apiV3Layers:
+        List of country ISO2 codes that may be rendered in country select of search form
 
-apiV3Layers
-===========
+    ..  _categories:
 
-:aspect:`Property`
-         mapConfiguration.apiV3Layers
+    ..  confval:: categories
+        :type: list of :ref:`integer <t3tsref:data-type-integer>`
 
-:aspect:`Data type`
-         list
+        List of categories as base to render category tree in search form
 
-:aspect:`Description`
-         Select which layers should be rendered in the map
+    ..  _categoryPriority:
 
-:aspect:`Default`
-         none
+    ..  confval:: categoryPriority
+        :type: :ref:`string <t3tsref:data-type-string>`
+        :Default: useAsFilterInFrontend
+        :Possible values: useAsFilterInFrontend, useParentIfNoFilterSelected, limitResultsToCategories
 
-:aspect:`Possible values`
-         traffic, bicycling, kml
+        List of categories as base to render category tree in search form
 
+    ..  _singleLocationId:
 
-.. _limit:
+    ..  confval:: singleLocationId
+        :type: :ref:`integer <t3tsref:data-type-integer>`
 
-limit
-=====
+        Id of an single location record to get rendered in map without search query
 
-:aspect:`Property`
-         limit
+    ..  _geocoderProvider:
 
-:aspect:`Data type`
-         integer
+    ..  confval:: geocoderProvider
+        :type: :ref:`string <t3tsref:data-type-string>`
 
-:aspect:`Description`
-         //@todo check if still needed List of country ISO2 codes that may be rendered in country select of search form
+        Contains class name of geocoding provider to enable changing to different services
 
-:aspect:`Default`
-         20
+    ..  _apiConsoleKey:
 
+    ..  confval:: apiConsoleKey
+        :type: :ref:`string <t3tsref:data-type-string>`
 
-.. _allowedCountries:
+        Used for geocoding and reverse geocoding of addresses via Google Maps
+        Geocoding API. Must have access for Google Maps Geocoding API and can
+        only be restricted by ip addresses.
 
-allowedCountries
-================
+    ..  _apiConsoleKeyGeocoding:
 
-:aspect:`Property`
-         allowedCountries
+    ..  confval:: apiConsoleKeyGeocoding
+        :type: :ref:`string <t3tsref:data-type-string>`
 
-:aspect:`Data type`
-         list
+        Used for output map via Google Maps JavaScript API. Must have access for
+        Google Maps JavaScript API and can only be restricted by domains.
 
-:aspect:`Description`
-         List of country ISO2 codes that may be rendered in country select of search form
+    ..  _mapId:
 
-:aspect:`Default`
-         none
+    ..  confval:: mapId
+        :type: :ref:`string <t3tsref:data-type-string>`
 
+        Map id to identify the map and configure it's rendering
 
-.. _categories:
+    ..  _googleLibraries:
 
-categories
-==========
+    ..  confval:: googleLibraries
+        :type: list of :ref:`string <t3tsref:data-type-string>`
 
-:aspect:`Property`
-         categories
+        Used to define what modules should be loaded. The modules core, map and marker are always added this list.
 
-:aspect:`Data type`
-         list
+    ..  _distanceUnit:
 
-:aspect:`Description`
-         List of categories as base to render category tree in search form
+    ..  confval:: distanceUnit
+        :type: :ref:`string <t3tsref:data-type-string>`
+        :Default: kilometer
+        :Possible values: kilometer, miles
 
-:aspect:`Default`
-         none
+        Base of distance values given in range select of search form. If miles is set the range gets multiplied with 1.6
 
+    ..  _language:
 
-.. _categoryPriority:
+    ..  confval:: language
+        :type: :ref:`string <t3tsref:data-type-string>`
+        :Default: en
+        :Possible values: All possible ISO2 language values
 
-categoryPriority
-================
+        ISO2 definition for language to use by google map
 
-:aspect:`Property`
-         categoryPriority
+    ..  _showStoreImage:
 
-:aspect:`Data type`
-         string
+    ..  confval:: showStoreImage
+        :type: :ref:`boolean <t3tsref:data-type-boolean>`
+        :Default: 1
 
-:aspect:`Description`
-         List of categories as base to render category tree in search form
+        If set the location store image gets rendered in result mapBubble
 
-:aspect:`Default`
-         useAsFilterInFrontend
+    ..  _resultPageId:
 
-:aspect:`Possible values`
-         useAsFilterInFrontend, useParentIfNoFilterSelected, limitResultsToCategories
+    ..  confval:: resultPageId
+        :type: :ref:`integer <t3tsref:data-type-integer>`
 
+        If set the search result gets rendered on a different page. If empty
+        the current page is used
 
-.. _singleLocationId:
+    ..  _mapSize-height:
 
-singleLocationId
-================
+    ..  confval:: mapSize.height
+        :type: :ref:`integer <t3tsref:data-type-integer>`
+        :Default: 400
 
-:aspect:`Property`
-         singleLocationId
+        Default height of map used in inline style
 
-:aspect:`Data type`
-         integer
+    ..  _mapSize-width:
 
-:aspect:`Description`
-         Id of an single location record to get rendered in map without search query
+    ..  confval:: mapSize.width
+        :type: :ref:`integer <t3tsref:data-type-integer>`
+        :Default: 600
 
-:aspect:`Default`
-         none
+        Default width of map used in inline style
 
+    ..  _override:
 
-.. _geocoderProvider:
+    ..  confval:: override
+        :type: array of options
+        :Default: 600
 
-geocoderProvider
-================
+        Sometimes the admin want to restrict configuration available in the flexform.
+        With the override its possible to define values that should override the configuration done in the flexform.
 
-:aspect:`Property`
-         geocoderProvider
+    ..  _disableFetchLocationInAction:
 
-:aspect:`Data type`
-         string
+    ..  confval:: disableFetchLocationInAction
+        :type: array of :ref:`string <t3tsref:data-type-string>`
+        :Possible values: map, cachedMap, search
 
-:aspect:`Description`
-         Contains class name of geocoding provider to enable changing to different services
+        Disabling the fetching of locations based on constraints individually.
+        This disables the fetching of locations in map, cachedMap and search action.
+        Use this only in combination with a listener for
+        MapGetLocationsByConstraintsEvent or you do not get any output at all.
 
-:aspect:`Default`
+        - **map** the default map action
+        - **cachedMap** the cached map action
+        - **search** the search action
 
+        :Example:
 
-.. _apiConsoleKey:
+        ..  code-block:: typoscript
+            :caption: EXT:site_package/Configuration/TypoScript/setup.typoscript
 
-apiConsoleKey
-=============
-
-:aspect:`Property`
-         apiConsoleKey
-
-:aspect:`Data type`
-         string
-
-:aspect:`Description`
-         Used for geocoding and reverse geocoding of addresses via Google Maps Geocoding API. Must have access for Google Maps Geocoding API and can only be restricted by ip addresses.
-
-:aspect:`Default`
-
-
-.. _apiConsoleKeyGeocoding:
-
-apiConsoleKeyGeocoding
-======================
-
-:aspect:`Property`
-         apiConsoleKeyGeocoding
-
-:aspect:`Data type`
-         string
-
-:aspect:`Description`
-         Used for output map via Google Maps JavaScript API. Must have access for Google Maps JavaScript API and can only be restricted by domains.
-
-:aspect:`Default`
-
-
-.. _mapId:
-
-mapId:
-======
-
-:aspect:`Property`
-         mapId
-
-:aspect:`Data type`
-         string
-
-:aspect:`Description`
-         Map id to identify the map and configure it's rendering
-
-:aspect:`Default`
-
-
-.. _googleLibraries:
-
-googleLibraries
-===============
-
-:aspect:`Property`
-         googleLibraries
-
-:aspect:`Data type`
-         string
-
-:aspect:`Description`
-         Used to define what modules should be loaded. Default are core, map and marker.
-
-:aspect:`Default`
-
-
-.. _distanceUnit:
-
-distanceUnit
-============
-
-:aspect:`Property`
-         distanceUnit
-
-:aspect:`Data type`
-         string
-
-:aspect:`Description`
-         Base of distance values given in range select of search form. If miles is set the range gets multiplied with 1.6
-
-:aspect:`Default`
-         kilometer
-
-:aspect:`Possible values`
-         miles, kilometer
-
-
-.. _mc-language:
-
-language
-========
-
-:aspect:`Property`
-         mapConfiguration.language
-
-:aspect:`Data type`
-         string
-
-:aspect:`Description`
-         ISO2 definition for language to use by google map
-
-:aspect:`Default`
-         en
-
-
-.. _showStoreImage:
-
-showStoreImage
-==============
-
-:aspect:`Property`
-         showStoreImage
-
-:aspect:`Data type`
-         boolean
-
-:aspect:`Description`
-         If set the location store image gets rendered in result mapBubble
-
-:aspect:`Default`
-         1
-
-
-.. _resultPageId:
-
-resultPageId
-============
-
-:aspect:`Property`
-         resultPageId
-
-:aspect:`Data type`
-         integer
-
-:aspect:`Description`
-         If set the search result gets rendered on a different page
-
-:aspect:`Default`
-         none
-
-
-.. _ms-height:
-
-mapSize.height
-==============
-
-:aspect:`Property`
-         mapSize.height
-
-:aspect:`Data type`
-         integer
-
-:aspect:`Description`
-      :aspect:`Default` height of map used in inline style
-
-:aspect:`Default`
-         400
-
-
-.. _ms-width:
-
-mapSize.width
-=============
-
-:aspect:`Property`
-         mapSize.width
-
-:aspect:`Data type`
-         integer
-
-:aspect:`Description`
-      :aspect:`Default` width of map used in inline style
-
-:aspect:`Default`
-         600
-
-
-.. _override:
-
-override
-========
-
-:aspect:`Property`
-         override
-
-:aspect:`Data type`
-         array
-
-:aspect:`Description`
-         Sometimes the admin want to restrict configuration available in the flexform.
-         With the override its possible to define values that should override the configuration done in the flexform.
-
-
-.. _disableFetchLocationInAction:
-
-disableFetchLocationInAction
-============================
-
-:aspect:`Property`
-         disableFetchLocationInAction
-
-:aspect:`Data type`
-         array of strings
-
-:aspect:`Description`
-         Disabling the fetching of locations based on constraints individually.
-         This disables the fetching of locations in map, cachedMap and search action.
-         Use this only in combination with a listener for MapGetLocationsByConstraintsEvent or you do not get any output at all.
-
-         0 = map
-             this is the default map action
-
-         1 = cachedMap
-             this is the cached map action
-
-         2 = search
-             this is the search action
-
-:aspect:`Example`
-   .. code-block:: typoscript
-      :caption: EXT:site_package/Configuration/TypoScript/setup.typoscript
-
-      disableFetchLocationInAction {
-        0 = map
-        1 = cachedMap
-        2 = search
-      }
+            disableFetchLocationInAction {
+                0 = map
+                1 = cachedMap
+                2 = search
+            }

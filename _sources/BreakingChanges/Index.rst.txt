@@ -1,6 +1,6 @@
-.. include:: /Includes.rst.txt
-
-.. _breaking-changes:
+..  include:: /Includes.rst.txt
+..  index:: Breaking changes
+..  _breaking-changes:
 
 ================
 Breaking Changes
@@ -48,12 +48,11 @@ Remove allowed on standard page
 -------------------------------
 Records of attributes and locations are not allowed on standard pages anymore.
 
-
 29. August 2022
 ===============
 
-The import command is refactored and the arguments and options are cleaned up. Please read the :ref:`docs <importCommand>` for the changes
-
+The import command is refactored and the arguments and options are cleaned up.
+Please read the :ref:`docs <importCommand>` for the changes
 
 15. February 2021
 =================
@@ -62,33 +61,33 @@ Rename property
 ---------------
 Rename content to contentElement in location model
 
-
 01. Mai 2020
 ============
 
 Refactor signal slots to PSR-14 events
 --------------------------------------
 All slots are replaced with events
-Evoweb\StoreFinder\Controller\MapController mapActionWithConstraint with MapGetLocationsByConstraintsEvent
-
+Evoweb\StoreFinder\Controller\MapController mapActionWithConstraint with
+MapGetLocationsByConstraintsEvent
 
 03. October 2019
 ================
 
 Drop migration wizard
 ---------------------
-Dropped support of LocationMigrationWizard. It's now more then three years that locator is not really supported
-anymore. Who every wants to migrate locations should use version 3.x and upgrade afterwards.
+Dropped support of LocationMigrationWizard. It's now more then three years that
+locator is not really supported anymore. Who every wants to migrate locations
+should use version 3.x and upgrade afterwards.
 
 Change geocoding
 ----------------
-Change to use geocoder-php/geocoder for geocoding locations. By this a hole spectrum of `providers/geocoders <https://github.com/geocoder-php/Geocoder#world>`_
+Change to use geocoder-php/geocoder for geocoding locations. By this a hole
+spectrum of `providers/geocoders <https://github.com/geocoder-php/Geocoder#world>`_
 are available now
 
 Migration steps
 ---------------
 Please check the extension configuration whether the api key assignment still works
-
 
 31. January 2019
 ================
@@ -96,7 +95,6 @@ Drop already deprecated GeocodeLocationsTask in favor of GeocodeLocationsCommand
 
 Deprecate GeocodeLocationsCommandController to be replaced with GeocodeLocationsCommand once support for
 TYPO3 8.7 gets dropped.
-
 
 18. May 2019
 ============

@@ -11,9 +11,9 @@
 <meta content="" name="docsearch:package_type">
 <meta content="" name="docsearch:release">
 <meta content="" name="docsearch:version">
-<meta content="2024-11-01T09:33:42+00:00" name="docsearch:modified">
-<meta content="2024-11-01T09:33:42+00:00" name="dc.modified">
-<meta content="2024-11-01T09:33:42+00:00" property="article:modified_time">
+<meta content="2024-11-01T15:50:03+00:00" name="docsearch:modified">
+<meta content="2024-11-01T15:50:03+00:00" name="dc.modified">
+<meta content="2024-11-01T15:50:03+00:00" property="article:modified_time">
     <link href="http://purl.org/dc/elements/1.1/" rel="schema.dc">
 <link href="../_resources/css/theme.css" rel="stylesheet">
 <link href="https://docs.typo3.org/search/" rel="search" title="Search">
@@ -201,16 +201,70 @@ StorageId (most likely 1) and path and filename of excel file that should be imp
             
 
 <ul>
-    <li>--storagePid -s
-Page id of storage folder. Default is 1.</li>
-    <li>--clearStorageFolder -c
-Flag if storage folder should be emptied before importing</li>
-    <li>--columnMap -o
-Json encoded column map array. Defaults to {&quot;A&quot;:&quot;import_id&quot;,&quot;B&quot;:{0:&quot;name&quot;,1:&quot;storeid&quot;}},&quot;C&quot;:&quot;address&quot;,&quot;D&quot;:&quot;city&quot;,&quot;E&quot;:&quot;zipcode&quot;,&quot;F&quot;:&quot;country&quot;,&quot;G&quot;:&quot;state&quot;,&quot;H&quot;:&quot;person&quot;,&quot;I&quot;:&quot;url&quot;,&quot;J&quot;:&quot;image&quot;}</li>
-    <li>--attributeMap -a
-Json encoded attribute map array. Defaults to {&quot;K&quot;:{&quot;att1&quot;:1}}</li>
-    <li>--categoryMap -t
-Json encoded attribute map array. Defaults to {&quot;L&quot;:{&quot;cat1&quot;:1}}</li>
+    <li><dl>
+                        <dt>--storagePid -s</dt>
+        
+        <dd>Page id of storage folder. Default is 1.</dd>
+            </dl></li>
+    <li><dl>
+                        <dt>--clearStorageFolder -c</dt>
+        
+        <dd>Flag if storage folder should be emptied before importing</dd>
+            </dl></li>
+    <li><dl>
+                        <dt>--columnMap -o</dt>
+        
+        <dd>
+    <p>Json encoded column map array.</p>
+    <div class="code-block-caption">
+        <span class="caption-text">Default</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs json">{<span class="hljs-attr">"A"</span>:<span class="hljs-string">"import_id"</span>,<span class="hljs-attr">"B"</span>:{0:<span class="hljs-string">"name"</span>,1:<span class="hljs-string">"storeid"</span>}},<span class="hljs-string">"C"</span>:<span class="hljs-string">"address"</span>,<span class="hljs-string">"D"</span>:<span class="hljs-string">"city"</span>,<span class="hljs-string">"E"</span>:<span class="hljs-string">"zipcode"</span>,<span class="hljs-string">"F"</span>:<span class="hljs-string">"country"</span>,<span class="hljs-string">"G"</span>:<span class="hljs-string">"state"</span>,<span class="hljs-string">"H"</span>:<span class="hljs-string">"person"</span>,<span class="hljs-string">"I"</span>:<span class="hljs-string">"url"</span>,<span class="hljs-string">"J"</span>:<span class="hljs-string">"image"</span>}</code></pre>
+    <div class="code-block-actions">        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
+    </div>
+</div></dd>
+            </dl></li>
+    <li><dl>
+                        <dt>--attributeMap -a</dt>
+        
+        <dd>
+    <p>Json encoded attribute map array.</p>
+    <div class="code-block-caption">
+        <span class="caption-text">Default</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs json">{<span class="hljs-attr">"K"</span>:{<span class="hljs-attr">"att1"</span>:<span class="hljs-number">1</span>}}</code></pre>
+    <div class="code-block-actions">        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
+    </div>
+</div></dd>
+            </dl></li>
+    <li><dl>
+                        <dt>--categoryMap -t</dt>
+        
+        <dd>
+    <p>Json encoded attribute map array.</p>
+    <div class="code-block-caption">
+        <span class="caption-text">Default</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs json">{<span class="hljs-attr">"L"</span>:{<span class="hljs-attr">"cat1"</span>:<span class="hljs-number">1</span>}}</code></pre>
+    <div class="code-block-actions">        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
+    </div>
+</div></dd>
+            </dl></li>
 </ul>
 
     </section>
@@ -253,13 +307,34 @@ The result is, that the locations has three images referenced</li>
             <section class="section" id="examples-of-import-command-calls">
             <h2>Examples of import command calls<a class="headerlink" href="#examples-of-import-command-calls" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline"><i class="fa-solid fa-paragraph"></i></a></h2>
                 <div class="code-block-caption">
-        <span class="caption-text">On command line</span>
+        <span class="caption-text">Simple command call</span>
     </div><div class="code-block-wrapper" translate="no">
             
-    <pre class="code-block"><code class="hljs bash">vendor/bin/typo3 storefinder:import --storagePid=202 --clearStorageFolder=1 filename
-
-vendor/bin/typo3 storefinder:import --columnMap=<span class="hljs-string">"{\"A\":\"import_id\",\"B\":\"name\",\"D\":\"city\"}"</span> <span class="hljs-string">"1:/user_upload/ExportExcel.xlsx"</span>
-vendor/bin/typo3 storefinder:import \
+    <pre class="code-block"><code class="hljs bash">vendor/bin/typo3 storefinder:import --storagePid=202 --clearStorageFolder=1 filename</code></pre>
+    <div class="code-block-actions">        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
+    </div>
+</div>
+                <div class="code-block-caption">
+        <span class="caption-text">Command call with column map</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs bash">vendor/bin/typo3 storefinder:import --storagePid=4 --columnMap=<span class="hljs-string">"{\"A\":\"import_id\",\"B\":\"name\",\"D\":\"city\"}"</span> <span class="hljs-string">"1:/user_upload/ExportExcel.xlsx"</span></code></pre>
+    <div class="code-block-actions">        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
+    </div>
+</div>
+                <div class="code-block-caption">
+        <span class="caption-text">Multiline command call</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs bash">vendor/bin/typo3 storefinder:import \
   -c \
   --storagePid=2
   -o<span class="hljs-string">"{\"A\":\"import_id\",\"B\":\"name\",\"D\":\"city\"}"</span> \
@@ -366,7 +441,7 @@ vendor/bin/typo3 storefinder:import \
         <div class="frame-container">
             <div class="frame-inner">
                                 <div class="footer-additional">
-                    <p class="text-center">Last rendered: Nov 01, 2024 09:33</p>
+                    <p class="text-center">Last rendered: Nov 01, 2024 15:50</p>
                 </div>
                 <div class="footer-meta">
                     <ul class="footer-meta-navigation">

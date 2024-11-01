@@ -11,9 +11,9 @@
 <meta content="" name="docsearch:package_type">
 <meta content="" name="docsearch:release">
 <meta content="" name="docsearch:version">
-<meta content="2024-11-01T09:33:42+00:00" name="docsearch:modified">
-<meta content="2024-11-01T09:33:42+00:00" name="dc.modified">
-<meta content="2024-11-01T09:33:42+00:00" property="article:modified_time">
+<meta content="2024-11-01T15:50:03+00:00" name="docsearch:modified">
+<meta content="2024-11-01T15:50:03+00:00" name="dc.modified">
+<meta content="2024-11-01T15:50:03+00:00" property="article:modified_time">
     <link href="http://purl.org/dc/elements/1.1/" rel="schema.dc">
 <link href="../../_resources/css/theme.css" rel="stylesheet">
 <link href="https://docs.typo3.org/search/" rel="search" title="Search">
@@ -242,7 +242,7 @@ below.</p>
     </div>
 </div>
             
-    <p>And finaly it&#039;s possible to have multiple validators for one field like in the
+    <p>And finally it&#039;s possible to have multiple validators for one field like in the
 next example.</p>
 
     </section>
@@ -253,8 +253,8 @@ next example.</p>
     </div><div class="code-block-wrapper" translate="no">
             
     <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.settings.validation.city {
-   <span class="hljs-title">1</span> = Evoweb\StoreFinder\Validation\Validator\RequiredValidator
-   <span class="hljs-title">2</span> = StringLength
+    <span class="hljs-title">1</span> = Evoweb\StoreFinder\Validation\Validator\RequiredValidator
+    <span class="hljs-title">2</span> = StringLength
 }</code></pre>
     <div class="code-block-actions">        <button class="code-block-copy" title="Copy to clipboard">
             <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
@@ -307,7 +307,7 @@ you are ready to use your validator like in the following example.</p>
     </div><div class="code-block-wrapper" translate="no">
             
     <pre class="code-block"><code class="hljs typoscript">plugin.tx_storefinder.settings.validation.create.city {
-   <span class="hljs-title">1</span> = Evoweb\StoreFinder\Validation\Validator\RequiredValidator
+    <span class="hljs-title">1</span> = Evoweb\StoreFinder\Validation\Validator\RequiredValidator
 }</code></pre>
     <div class="code-block-actions">        <button class="code-block-copy" title="Copy to clipboard">
             <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
@@ -326,23 +326,72 @@ in the different processes, the registration come with a set of specific ones
 that are tailored to the special need. The following lists all validators
 which are suited for the usage on fields.</p>
 
-            <section class="section" id="requiredvalidator" data-rst-anchor="RequiredValidator">
+            
+
+
+
+
+<div class="table-responsive confval-table" id="confval-menu-validator-reference">
+    <table class="table table-hover caption-top">        <thead>
+        <tr>
+            <th scope="col">Name</th>
+            
+                                    <th scope="col">Type</th>
+                            
+                                    <th scope="col">Default</th>
+                                    </tr>
+        </thead>
+                        <tr>
+        <td><div class="confval-label ps-0"><a href="#confval-requiredvalidator">Required<wbr>Validator</a></div></td>
+                    <td>
+                            <a href="https://docs.typo3.org/m/typo3/reference-typoscript/13.4/en-us/DataTypes/Index.html#data-type-string">string</a>
+                        </td>
+                    <td>
+                        </td>
+            </tr>
+                
+            </table>
+</div>
             <a id="RequiredValidator"></a>
-            <h3>RequiredValidator<a class="headerlink" href="#requiredvalidator" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline"><i class="fa-solid fa-paragraph"></i></a></h3>
-            <dl>
-                        <dt><em class="aspect">Property</em></dt>
-        
-        <dd>RequiredValidator</dd>
-                                <dt><em class="aspect">Data type</em></dt>
-        
-        <dd><a href="https://docs.typo3.org/m/typo3/reference-typoscript/13.4/en-us/DataTypes/Index.html#data-type-string">string</a></dd>
-                                <dt><em class="aspect">Description</em></dt>
-        
-        <dd>This validator serves two purpose. First of check if the field contains
+                <section data-search-title="RequiredValidator"
+         data-search-id="confval-requiredvalidator"
+         data-search-facet="Option"
+         class="confval-section"
+>
+    <h3 class="sr-only">RequiredValidator</h3>
+    <dl class="confval">
+        <dt id="confval-requiredvalidator"            class="d-flex justify-content-between">
+            <div class="confval-header">
+                <code class="sig-name descname"><span
+                        class="pre">Required<wbr>Validator</span></code>
+                                    <a class="headerlink" href="#confval-requiredvalidator"
+                       data-bs-toggle="modal"
+                       data-bs-target="#linkReferenceModal"
+                       data-id="confval-requiredvalidator"
+                       data-rstCode=":confval:`RequiredValidator &lt;somemanual:requiredvalidator&gt;`"
+                       title="Reference this configuration value"><i
+                            class="fa-solid fa-paragraph"></i></a>
+                </div>
+            <div class="confval-back-to-top">                    <a href="#" class="backToTop" title="Back to top"><i
+                            class="fa-solid fa-arrow-up fa-xs"></i></a>            </div>
+        </dt>
+        <dd>
+                            <dl class="field-list simple">
+                                            <dt class="field-even">Type</dt>
+                        <dd class="field-even"><a href="https://docs.typo3.org/m/typo3/reference-typoscript/13.4/en-us/DataTypes/Index.html#data-type-string">string</a>
+                        </dd>
+                    </dl>
+                        <div class="confval-description">
+                
+    <p>This validator serves two purpose. First of check if the field contains
 a value and that it is not empty. Second the rendering uses this
-validator as condition to render required sign or not.</dd>
-            </dl>
-    </section>
+validator as condition to render required sign or not.</p>
+
+            </div>
+        </dd>
+    </dl>
+</section>
+    
     </section>
     </section>
         <!-- content end -->
@@ -438,7 +487,7 @@ validator as condition to render required sign or not.</dd>
         <div class="frame-container">
             <div class="frame-inner">
                                 <div class="footer-additional">
-                    <p class="text-center">Last rendered: Nov 01, 2024 09:33</p>
+                    <p class="text-center">Last rendered: Nov 01, 2024 15:50</p>
                 </div>
                 <div class="footer-meta">
                     <ul class="footer-meta-navigation">

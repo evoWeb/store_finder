@@ -1,54 +1,46 @@
-.. include:: /Includes.rst.txt
-
-.. _view:
+..  include:: /Includes.rst.txt
+..  index:: View
+..  _view:
 
 ====
 View
 ====
 
-.. _view-templateRootPaths:
+..  confval-menu::
+    :name: view-reference
+    :display: table
+    :type:
 
-templateRootPaths
-=================
+    ..  _templateRootPaths:
 
-:aspect:`Property`
-   templateRootPaths
+    ..  confval:: templateRootPaths
+        :type: array of :ref:`path <t3tsref:data-type-path>`
 
-:aspect:`Data type`
-   array of file paths
+        This defines in which path the templates are stored. This is needed to
+        modify the template without modifying files in the extension.
 
-:aspect:`Description`
-   This defines in which path the templates are stored. This is needed to modify the template without modifing files in the extension.
+        .. code-block:: typoscript
+           :caption: EXT:my_extension/Configuration/TypoScript/setup.typoscript
 
-.. code-block:: typoscript
-   :caption: EXT:my_extension/Configuration/TypoScript/setup.typoscript
+           plugin.tx_storefinder.view {
+               templateRootPaths {
+                   100 = EXT:my_extension/Resources/Private/Templates/StoreFinder
+               }
+           }
 
-   plugin.tx_storefinder.view {
-       templateRootPaths {
-           100 = EXT:my_extension/Resources/Private/Templates/StoreFinder
-       }
-   }
+    ..  _partialRootPaths:
 
+    ..  confval:: partialRootPaths
+        :type: array of :ref:`path <t3tsref:data-type-path>`
 
-.. _view-partialRootPaths:
+        This defines in which path the partials are stored. This is needed to
+        modify the partials without modifying files in the extension.
 
-partialRootPaths
-================
+        .. code-block:: typoscript
+           :caption: EXT:my_extension/Configuration/TypoScript/setup.typoscript
 
-:aspect:`Property`
-   partialRootPaths
-
-:aspect:`Data type`
-   array of file paths
-
-:aspect:`Description`
-   This defines in which path the partials are stored. This is needed to modify the partials without modifing files in the extension.
-
-.. code-block:: typoscript
-   :caption: EXT:my_extension/Configuration/TypoScript/setup.typoscript
-
-   plugin.tx_storefinder.view {
-       partialRootPaths {
-           100 = EXT:my_extension/Resources/Private/Partials/StoreFinder
-       }
-   }
+           plugin.tx_storefinder.view {
+               partialRootPaths {
+                   100 = EXT:my_extension/Resources/Private/Partials/StoreFinder
+               }
+           }

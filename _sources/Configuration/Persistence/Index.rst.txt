@@ -1,21 +1,20 @@
-.. include:: /Includes.rst.txt
-
-.. _persistence:
+..  include:: /Includes.rst.txt
+..  index:: Persistence
+..  _persistence:
 
 ===========
 Persistence
 ===========
 
-.. _persistence-storagePid:
+..  confval-menu::
+    :name: persistence-reference
+    :display: table
+    :type:
 
-storagePid
-==========
+    ..  _storagePid:
 
-:aspect:`Property`
-   storagePid
+    ..  confval:: storagePid
+        :type: list of :ref:`integer <t3tsref:data-type-integer>`
 
-:aspect:`Data type`
-   List of :ref:`storage folder pids <t3tsref:data-type-integer>`
-
-:aspect:`Description`
-   Comma-separated list of storage page ids. In content elements please use the `Record Storage Page` field of the plugin.
+        Comma-separated list of storage page ids. In content elements please use
+        the `Record Storage Page` field of the plugin.

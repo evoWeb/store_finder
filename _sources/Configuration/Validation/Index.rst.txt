@@ -1,11 +1,10 @@
-.. include:: /Includes.rst.txt
-
-.. _validation:
+..  include:: /Includes.rst.txt
+..  index:: Validation
+..  _validation:
 
 ==========
 Validation
 ==========
-
 
 Purpose of Validators
 =====================
@@ -23,7 +22,6 @@ All validators are optional, could be set single or may be even assigned multipl
 times to a field. Despite the concept of extbase you are free to choose how many
 validators should take care of a value.
 
-
 Different possibilities of assigning validators
 ===============================================
 
@@ -34,10 +32,10 @@ example given where the validators of the email gets removed.
 Remove validators
 -----------------
 
-.. code-block:: typoscript
-   :caption: EXT:my_extension/Configuration/TypoScript/setup.typoscript
+..  code-block:: typoscript
+    :caption: EXT:my_extension/Configuration/TypoScript/setup.typoscript
 
-   plugin.tx_storefinder.settings.validation.zipcode >
+    plugin.tx_storefinder.settings.validation.zipcode >
 
 If only one validator is needed you could assign it directly to the field like
 below.
@@ -45,24 +43,24 @@ below.
 Assign only one validator
 -------------------------
 
-.. code-block:: typoscript
-   :caption: EXT:my_extension/Configuration/TypoScript/setup.typoscript
+..  code-block:: typoscript
+    :caption: EXT:my_extension/Configuration/TypoScript/setup.typoscript
 
-   plugin.tx_storefinder.settings.validation.zipcode = Evoweb\StoreFinder\Validation\Validator\RequiredValidator
+    plugin.tx_storefinder.settings.validation.zipcode = Evoweb\StoreFinder\Validation\Validator\RequiredValidator
 
-And finaly it's possible to have multiple validators for one field like in the
+And finally it's possible to have multiple validators for one field like in the
 next example.
 
 Assign multiple validators
 --------------------------
 
-.. code-block:: typoscript
-   :caption: EXT:my_extension/Configuration/TypoScript/setup.typoscript
+..  code-block:: typoscript
+    :caption: EXT:my_extension/Configuration/TypoScript/setup.typoscript
 
-   plugin.tx_storefinder.settings.validation.city {
-      1 = Evoweb\StoreFinder\Validation\Validator\RequiredValidator
-      2 = StringLength
-   }
+    plugin.tx_storefinder.settings.validation.city {
+        1 = Evoweb\StoreFinder\Validation\Validator\RequiredValidator
+        2 = StringLength
+    }
 
 Regarding validator it's possible to have values attached to the assigned one.
 This is beneficial if you want to check against conditions that are not equal
@@ -74,7 +72,6 @@ field that you use in your form. You have none, one and multiple validators.
 And in case of a validator present you can add options too override the default
 that is set in the validator.
 
-
 Special validators
 ==================
 
@@ -82,7 +79,6 @@ The ConstraintValidator is not meant to be used for field validation. This valid
 is a special construct to make the configuration via TypoScript possible. All
 others are free to combine. If a validator is only suited for a certain field
 it will be mentioned in the detail configuration.
-
 
 Prefixing needed for non extbase validators
 ===========================================
@@ -100,13 +96,12 @@ you are ready to use your validator like in the following example.
 Custom validator usage
 ----------------------
 
-.. code-block:: typoscript
-   :caption: EXT:my_extension/Configuration/TypoScript/setup.typoscript
+..  code-block:: typoscript
+    :caption: EXT:my_extension/Configuration/TypoScript/setup.typoscript
 
-   plugin.tx_storefinder.settings.validation.create.city {
-      1 = Evoweb\StoreFinder\Validation\Validator\RequiredValidator
-   }
-
+    plugin.tx_storefinder.settings.validation.create.city {
+        1 = Evoweb\StoreFinder\Validation\Validator\RequiredValidator
+    }
 
 Available validators
 ====================
@@ -116,18 +111,17 @@ in the different processes, the registration come with a set of specific ones
 that are tailored to the special need. The following lists all validators
 which are suited for the usage on fields.
 
-.. _RequiredValidator:
+..  confval-menu::
+    :name: validator-reference
+    :display: table
+    :type:
+    :Default:
 
-RequiredValidator
------------------
+    ..  _RequiredValidator:
 
-:aspect:`Property`
-   RequiredValidator
+    ..  confval:: RequiredValidator
+        :type: :ref:`string <t3tsref:data-type-string>`
 
-:aspect:`Data type`
-   :ref:`string <t3tsref:data-type-string>`
-
-:aspect:`Description`
-   This validator serves two purpose. First of check if the field contains
-   a value and that it is not empty. Second the rendering uses this
-   validator as condition to render required sign or not.
+        This validator serves two purpose. First of check if the field contains
+        a value and that it is not empty. Second the rendering uses this
+        validator as condition to render required sign or not.

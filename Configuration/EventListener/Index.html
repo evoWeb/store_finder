@@ -11,9 +11,9 @@
 <meta content="" name="docsearch:package_type">
 <meta content="" name="docsearch:release">
 <meta content="" name="docsearch:version">
-<meta content="2024-11-01T09:33:42+00:00" name="docsearch:modified">
-<meta content="2024-11-01T09:33:42+00:00" name="dc.modified">
-<meta content="2024-11-01T09:33:42+00:00" property="article:modified_time">
+<meta content="2024-11-01T15:50:03+00:00" name="docsearch:modified">
+<meta content="2024-11-01T15:50:03+00:00" name="dc.modified">
+<meta content="2024-11-01T15:50:03+00:00" property="article:modified_time">
     <link href="http://purl.org/dc/elements/1.1/" rel="schema.dc">
 <link href="../../_resources/css/theme.css" rel="stylesheet">
 <link href="https://docs.typo3.org/search/" rel="search" title="Search">
@@ -206,10 +206,10 @@ the loading completly.</p>
 
 <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MapGetLocationsByConstraintsEventListener</span>
 </span>{
-   <span class="hljs-comment">#[AsEventListener('storefinder_mapcontroller_locationsfetched', MapGetLocationsByConstraintsEvent::class)]</span>
-   <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">__invoke</span><span class="hljs-params">(MapGetLocationsByConstraintsEvent $event)</span>: <span class="hljs-title">void</span>
-   </span>{
-   }
+    <span class="hljs-comment">#[AsEventListener('storefinder_mapcontroller_locationsfetched', MapGetLocationsByConstraintsEvent::class)]</span>
+    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">__invoke</span><span class="hljs-params">(MapGetLocationsByConstraintsEvent $event)</span>: <span class="hljs-title">void</span>
+    </span>{
+    }
 }</code></pre>
     <div class="code-block-actions">        <button class="code-block-copy" title="Copy to clipboard">
             <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
@@ -278,6 +278,26 @@ example of how to change values.</p>
             
     <p>The registration got simplified in TYPO3 13.x</p>
 
+                <div class="code-block-caption">
+        <span class="caption-text">ModifyMiddlewareLocationsEventListener.php</span>
+    </div><div class="code-block-wrapper" translate="no">
+            
+    <pre class="code-block"><code class="hljs php"><span class="hljs-keyword">use</span> <span class="hljs-title">Evoweb</span>\<span class="hljs-title">StoreFinder</span>\<span class="hljs-title">Middleware</span>\<span class="hljs-title">Event</span>\<span class="hljs-title">ModifyMiddlewareLocationsEvent</span>;
+<span class="hljs-keyword">use</span> <span class="hljs-title">TYPO3</span>\<span class="hljs-title">CMS</span>\<span class="hljs-title">Core</span>\<span class="hljs-title">Attribute</span>\<span class="hljs-title">AsEventListener</span>;
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ModifyMiddlewareLocationsEventListener</span>
+</span>{
+    <span class="hljs-comment">#[AsEventListener('your-extension-identifier', ModifyMiddlewareLocationsEvent::class)]</span>
+    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">__invoke</span><span class="hljs-params">(ModifyMiddlewareLocationsEvent $event)</span>: <span class="hljs-title">void</span>
+    </span>{
+    }
+}</code></pre>
+    <div class="code-block-actions">        <button class="code-block-copy" title="Copy to clipboard">
+            <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
+            <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
+        </button>
+        <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
+    </div>
+</div>
     </section>
     </section>
         <!-- content end -->
@@ -373,7 +393,7 @@ example of how to change values.</p>
         <div class="frame-container">
             <div class="frame-inner">
                                 <div class="footer-additional">
-                    <p class="text-center">Last rendered: Nov 01, 2024 09:33</p>
+                    <p class="text-center">Last rendered: Nov 01, 2024 15:50</p>
                 </div>
                 <div class="footer-meta">
                     <ul class="footer-meta-navigation">

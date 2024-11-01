@@ -11,9 +11,9 @@
 <meta content="" name="docsearch:package_type">
 <meta content="" name="docsearch:release">
 <meta content="" name="docsearch:version">
-<meta content="2024-11-01T09:33:42+00:00" name="docsearch:modified">
-<meta content="2024-11-01T09:33:42+00:00" name="dc.modified">
-<meta content="2024-11-01T09:33:42+00:00" property="article:modified_time">
+<meta content="2024-11-01T15:50:03+00:00" name="docsearch:modified">
+<meta content="2024-11-01T15:50:03+00:00" name="dc.modified">
+<meta content="2024-11-01T15:50:03+00:00" property="article:modified_time">
     <link href="http://purl.org/dc/elements/1.1/" rel="schema.dc">
 <link href="../../_resources/css/theme.css" rel="stylesheet">
 <link href="https://docs.typo3.org/search/" rel="search" title="Search">
@@ -182,21 +182,69 @@
 <section class="section" id="view-1" data-rst-anchor="view">
             <a id="view"></a>
             <h1>View<a class="headerlink" href="#view-1" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline"><i class="fa-solid fa-paragraph"></i></a></h1>
-            <section class="section" id="templaterootpaths" data-rst-anchor="view-templateRootPaths">
-            <a id="view-templateRootPaths"></a>
-            <h2>templateRootPaths<a class="headerlink" href="#templaterootpaths" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline"><i class="fa-solid fa-paragraph"></i></a></h2>
-            <dl>
-                        <dt><em class="aspect">Property</em></dt>
-        
-        <dd>templateRootPaths</dd>
-                                <dt><em class="aspect">Data type</em></dt>
-        
-        <dd>array of file paths</dd>
-                                <dt><em class="aspect">Description</em></dt>
-        
-        <dd>This defines in which path the templates are stored. This is needed to modify the template without modifing files in the extension.</dd>
-            </dl>
-                <div class="code-block-caption">
+            
+
+
+
+
+<div class="table-responsive confval-table" id="confval-menu-view-reference">
+    <table class="table table-hover caption-top">        <thead>
+        <tr>
+            <th scope="col">Name</th>
+            
+                                    <th scope="col">Type</th>
+                                    </tr>
+        </thead>
+                        <tr>
+        <td><div class="confval-label ps-0"><a href="#confval-templaterootpaths">template<wbr>Root<wbr>Paths</a></div></td>
+                    <td>
+                            array of <a href="https://docs.typo3.org/m/typo3/reference-typoscript/13.4/en-us/DataTypes/Index.html#data-type-path">path</a>
+                        </td>
+            </tr>
+                            
+                        <tr>
+        <td><div class="confval-label ps-0"><a href="#confval-partialrootpaths">partial<wbr>Root<wbr>Paths</a></div></td>
+                    <td>
+                            array of <a href="https://docs.typo3.org/m/typo3/reference-typoscript/13.4/en-us/DataTypes/Index.html#data-type-path">path</a>
+                        </td>
+            </tr>
+                            
+            </table>
+</div>
+            <a id="templateRootPaths"></a>
+                <section data-search-title="templateRootPaths"
+         data-search-id="confval-templaterootpaths"
+         data-search-facet="Option"
+         class="confval-section"
+>
+    <h3 class="sr-only">templateRootPaths</h3>
+    <dl class="confval">
+        <dt id="confval-templaterootpaths"            class="d-flex justify-content-between">
+            <div class="confval-header">
+                <code class="sig-name descname"><span
+                        class="pre">template<wbr>Root<wbr>Paths</span></code>
+                                    <a class="headerlink" href="#confval-templaterootpaths"
+                       data-bs-toggle="modal"
+                       data-bs-target="#linkReferenceModal"
+                       data-id="confval-templaterootpaths"
+                       data-rstCode=":confval:`templateRootPaths &lt;somemanual:templaterootpaths&gt;`"
+                       title="Reference this configuration value"><i
+                            class="fa-solid fa-paragraph"></i></a>
+                </div>
+            <div class="confval-back-to-top">                    <a href="#" class="backToTop" title="Back to top"><i
+                            class="fa-solid fa-arrow-up fa-xs"></i></a>            </div>
+        </dt>
+        <dd>
+                            <dl class="field-list simple">
+                                            <dt class="field-even">Type</dt>
+                        <dd class="field-even">array of <a href="https://docs.typo3.org/m/typo3/reference-typoscript/13.4/en-us/DataTypes/Index.html#data-type-path">path</a>
+                        </dd>
+                    </dl>
+                        <div class="confval-description">
+                
+    <p>This defines in which path the templates are stored. This is needed to
+modify the template without modifying files in the extension.</p>
+    <div class="code-block-caption">
         <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript</span>
     </div><div class="code-block-wrapper" translate="no">
             
@@ -212,22 +260,44 @@
         <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
 </div>
-    </section>
-            <section class="section" id="partialrootpaths" data-rst-anchor="view-partialRootPaths">
-            <a id="view-partialRootPaths"></a>
-            <h2>partialRootPaths<a class="headerlink" href="#partialrootpaths" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline"><i class="fa-solid fa-paragraph"></i></a></h2>
-            <dl>
-                        <dt><em class="aspect">Property</em></dt>
-        
-        <dd>partialRootPaths</dd>
-                                <dt><em class="aspect">Data type</em></dt>
-        
-        <dd>array of file paths</dd>
-                                <dt><em class="aspect">Description</em></dt>
-        
-        <dd>This defines in which path the partials are stored. This is needed to modify the partials without modifing files in the extension.</dd>
-            </dl>
-                <div class="code-block-caption">
+            </div>
+        </dd>
+    </dl>
+</section>
+                <a id="partialRootPaths"></a>
+                <section data-search-title="partialRootPaths"
+         data-search-id="confval-partialrootpaths"
+         data-search-facet="Option"
+         class="confval-section"
+>
+    <h3 class="sr-only">partialRootPaths</h3>
+    <dl class="confval">
+        <dt id="confval-partialrootpaths"            class="d-flex justify-content-between">
+            <div class="confval-header">
+                <code class="sig-name descname"><span
+                        class="pre">partial<wbr>Root<wbr>Paths</span></code>
+                                    <a class="headerlink" href="#confval-partialrootpaths"
+                       data-bs-toggle="modal"
+                       data-bs-target="#linkReferenceModal"
+                       data-id="confval-partialrootpaths"
+                       data-rstCode=":confval:`partialRootPaths &lt;somemanual:partialrootpaths&gt;`"
+                       title="Reference this configuration value"><i
+                            class="fa-solid fa-paragraph"></i></a>
+                </div>
+            <div class="confval-back-to-top">                    <a href="#" class="backToTop" title="Back to top"><i
+                            class="fa-solid fa-arrow-up fa-xs"></i></a>            </div>
+        </dt>
+        <dd>
+                            <dl class="field-list simple">
+                                            <dt class="field-even">Type</dt>
+                        <dd class="field-even">array of <a href="https://docs.typo3.org/m/typo3/reference-typoscript/13.4/en-us/DataTypes/Index.html#data-type-path">path</a>
+                        </dd>
+                    </dl>
+                        <div class="confval-description">
+                
+    <p>This defines in which path the partials are stored. This is needed to
+modify the partials without modifying files in the extension.</p>
+    <div class="code-block-caption">
         <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript</span>
     </div><div class="code-block-wrapper" translate="no">
             
@@ -243,7 +313,11 @@
         <span class="code-block-check-tooltip code-block-hide" aria-live="polite">Copied!</span>
     </div>
 </div>
-    </section>
+            </div>
+        </dd>
+    </dl>
+</section>
+    
     </section>
         <!-- content end -->
     </div>
@@ -338,7 +412,7 @@
         <div class="frame-container">
             <div class="frame-inner">
                                 <div class="footer-additional">
-                    <p class="text-center">Last rendered: Nov 01, 2024 09:33</p>
+                    <p class="text-center">Last rendered: Nov 01, 2024 15:50</p>
                 </div>
                 <div class="footer-meta">
                     <ul class="footer-meta-navigation">
