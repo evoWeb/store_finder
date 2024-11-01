@@ -302,10 +302,10 @@
             "Configuration\/Validation\/Index.html#validation",
             "Validation"
         ],
-        "requiredvalidator": [
+        "required-validator": [
             "-",
             "-",
-            "Configuration\/Validation\/Index.html#RequiredValidator",
+            "Configuration\/Validation\/Index.html#required-validator",
             "-"
         ],
         "view": [
@@ -398,13 +398,13 @@
             "-",
             "-",
             "Administration\/Index.html#configuration",
-            "Configuration:"
+            "Configuration"
         ],
         "cors-settings": [
             "-",
             "-",
             "Administration\/Index.html#cors-settings",
-            "CORS settings:"
+            "CORS settings"
         ],
         "breaking-changes-1": [
             "-",
@@ -788,37 +788,37 @@
             "-",
             "-",
             "Templating\/Index.html#viewhelper",
-            "Viewhelper"
+            "ViewHelper"
         ],
         "register-namespace": [
             "-",
             "-",
             "Templating\/Index.html#register-namespace",
-            "Register Namespace:"
+            "Register Namespace"
         ],
         "minify-viewhelper": [
             "-",
             "-",
             "Templating\/Index.html#minify-viewhelper",
-            "minify Viewhelper"
+            "minify ViewHelper"
         ],
         "example-viewhelper": [
             "-",
             "-",
             "Templating\/Index.html#example-viewhelper",
-            "Example viewhelper:"
+            "Example ViewHelper"
         ],
         "example-output": [
             "-",
             "-",
             "Templating\/Index.html#example-output",
-            "Example output:"
+            "Example output"
         ],
         "format-binaryand-viewhelper": [
             "-",
             "-",
             "Templating\/Index.html#format-binaryand-viewhelper",
-            "format.binaryAnd Viewhelper"
+            "format.binaryAnd ViewHelper"
         ],
         "form-selectcountries": [
             "-",

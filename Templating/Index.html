@@ -11,9 +11,9 @@
 <meta content="" name="docsearch:package_type">
 <meta content="" name="docsearch:release">
 <meta content="" name="docsearch:version">
-<meta content="2024-11-01T15:50:03+00:00" name="docsearch:modified">
-<meta content="2024-11-01T15:50:03+00:00" name="dc.modified">
-<meta content="2024-11-01T15:50:03+00:00" property="article:modified_time">
+<meta content="2024-11-01T16:08:43+00:00" name="docsearch:modified">
+<meta content="2024-11-01T16:08:43+00:00" name="dc.modified">
+<meta content="2024-11-01T16:08:43+00:00" property="article:modified_time">
     <link href="http://purl.org/dc/elements/1.1/" rel="schema.dc">
 <link href="../_resources/css/theme.css" rel="stylesheet">
 <link href="https://docs.typo3.org/search/" rel="search" title="Search">
@@ -209,21 +209,21 @@ possible to configure the templates and partials path in the plugin.</p>
     </section>
     </section>
             <section class="section" id="viewhelper">
-            <h2>Viewhelper<a class="headerlink" href="#viewhelper" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline"><i class="fa-solid fa-paragraph"></i></a></h2>
+            <h2>ViewHelper<a class="headerlink" href="#viewhelper" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline"><i class="fa-solid fa-paragraph"></i></a></h2>
             
-    <p>Beside the default viewhelpers of fluid the extension comes with three
-additional viewhelpers. These are used to render the search like the
-form.selectCountries viewhelper, the map like the minify viewhelper and
+    <p>Beside the default ViewHelper of fluid the extension comes with three
+additional ViewHelper. These are used to render the search like the
+form.selectCountries ViewHelper, the map like the minify ViewHelper and
 select what to render based on the configuration like the
-format.binaryAnd viewhelper.</p>
+format.binaryAnd ViewHelper.</p>
 
             
     <p>They are used by including the namespace in the file in which the
-viewhelper get used.</p>
+ViewHelper get used.</p>
 
     </section>
             <section class="section" id="register-namespace">
-            <h2>Register Namespace:<a class="headerlink" href="#register-namespace" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline"><i class="fa-solid fa-paragraph"></i></a></h2>
+            <h2>Register Namespace<a class="headerlink" href="#register-namespace" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline"><i class="fa-solid fa-paragraph"></i></a></h2>
             
     <p>Add the xmlns to the html tag in the template</p>
 
@@ -241,16 +241,16 @@ viewhelper get used.</p>
 </div>
     </section>
             <section class="section" id="minify-viewhelper">
-            <h2>minify Viewhelper<a class="headerlink" href="#minify-viewhelper" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline"><i class="fa-solid fa-paragraph"></i></a></h2>
+            <h2>minify ViewHelper<a class="headerlink" href="#minify-viewhelper" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline"><i class="fa-solid fa-paragraph"></i></a></h2>
             
-    <p>This viewhelper gets used to minify the rendered json of the locations
+    <p>This ViewHelper gets used to minify the rendered json of the locations
 in the result map. The purpose is to reduce the traffic and clean the
 source code.
 So in stead of making the template unreadable the output gets minified
 on rendering time.</p>
 
             <section class="section" id="example-viewhelper">
-            <h4>Example viewhelper:<a class="headerlink" href="#example-viewhelper" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline"><i class="fa-solid fa-paragraph"></i></a></h4>
+            <h4>Example ViewHelper<a class="headerlink" href="#example-viewhelper" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline"><i class="fa-solid fa-paragraph"></i></a></h4>
                 <div class="code-block-caption">
         <span class="caption-text">EXT:my_extension/Resources/Private/Templates/Map/Map.html</span>
     </div><div class="code-block-wrapper" translate="no">
@@ -272,7 +272,7 @@ on rendering time.</p>
 </div>
     </section>
             <section class="section" id="example-output">
-            <h4>Example output:<a class="headerlink" href="#example-output" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline"><i class="fa-solid fa-paragraph"></i></a></h4>
+            <h4>Example output<a class="headerlink" href="#example-output" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline"><i class="fa-solid fa-paragraph"></i></a></h4>
                 <div class="code-block-caption">
         <span class="caption-text">EXT:my_extension/Resources/Private/Templates/Map/Map.html</span>
     </div><div class="code-block-wrapper" translate="no">
@@ -288,11 +288,11 @@ on rendering time.</p>
     </section>
     </section>
             <section class="section" id="format-binaryand-viewhelper">
-            <h2>format.binaryAnd Viewhelper<a class="headerlink" href="#format-binaryand-viewhelper" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline"><i class="fa-solid fa-paragraph"></i></a></h2>
+            <h2>format.binaryAnd ViewHelper<a class="headerlink" href="#format-binaryand-viewhelper" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline"><i class="fa-solid fa-paragraph"></i></a></h2>
             
     <p>To be able to select which partial should be rendered its necessary to
 compare with binary and if the part is check in the plugin. As the f:if
-viewhelper is not able to do so, a special viewhelper is needed for that.</p>
+ViewHelper is not able to do so, a special ViewHelper is needed for that.</p>
 
             
     <p>Basically what this means is, that the setting value, in this case
@@ -301,7 +301,7 @@ the example below. Here we check if the list should be rendered because
 in the plugin the binary value 4 stands for list.</p>
 
             <section class="section" id="example-viewhelper">
-            <h4>Example viewhelper:<a class="headerlink" href="#example-viewhelper" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline"><i class="fa-solid fa-paragraph"></i></a></h4>
+            <h4>Example ViewHelper<a class="headerlink" href="#example-viewhelper" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline"><i class="fa-solid fa-paragraph"></i></a></h4>
                 <div class="code-block-caption">
         <span class="caption-text">EXT:my_extension/Resources/Private/Templates/Map/Map.html</span>
     </div><div class="code-block-wrapper" translate="no">
@@ -319,19 +319,20 @@ in the plugin the binary value 4 stands for list.</p>
             <section class="section" id="form-selectcountries">
             <h2>form.selectCountries<a class="headerlink" href="#form-selectcountries" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline"><i class="fa-solid fa-paragraph"></i></a></h2>
             
-    <p>The countries select viewhelper fetches the countries from the country
+    <p>The countries select ViewHelper fetches the countries from the country
 provider and renders each country as option. All attributes from
 the fluid standard form.select are supported. Beside that if the optional
 attribute allowedCountries is set, only countries matching it get rendered.
 allowedCountries accepts a comma seperated list of ISO2 country codes.</p>
 
             <section class="section" id="example-viewhelper">
-            <h4>Example viewhelper:<a class="headerlink" href="#example-viewhelper" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline"><i class="fa-solid fa-paragraph"></i></a></h4>
+            <h4>Example ViewHelper<a class="headerlink" href="#example-viewhelper" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline"><i class="fa-solid fa-paragraph"></i></a></h4>
                 <div class="code-block-caption">
         <span class="caption-text">EXT:my_extension/Resources/Private/Templates/Map/Map.html</span>
     </div><div class="code-block-wrapper" translate="no">
             
-    <pre class="code-block"><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">sf:form.selectCountries</span> <span class="hljs-attr">property</span>=<span class="hljs-string">"country"</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"sfrCountry"</span> <span class="hljs-attr">optionValueField</span>=<span class="hljs-string">"alpha2IsoCode"</span> <span class="hljs-attr">allowedCountries</span>=<span class="hljs-string">"{0: 'DE', 1: 'AT'}"</span> /&gt;</span></code></pre>
+    <pre class="code-block"><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">sf:form.selectCountries</span> <span class="hljs-attr">property</span>=<span class="hljs-string">"country"</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"sfrCountry"</span>
+    <span class="hljs-attr">optionValueField</span>=<span class="hljs-string">"alpha2IsoCode"</span> <span class="hljs-attr">allowedCountries</span>=<span class="hljs-string">"{0: 'DE', 1: 'AT'}"</span> /&gt;</span></code></pre>
     <div class="code-block-actions">        <button class="code-block-copy" title="Copy to clipboard">
             <i class="icon fa-regular fa-copy code-block-copy-icon"></i>
             <i class="fa-solid fa-check code-block-check-icon code-block-hide"></i>
@@ -435,7 +436,7 @@ allowedCountries accepts a comma seperated list of ISO2 country codes.</p>
         <div class="frame-container">
             <div class="frame-inner">
                                 <div class="footer-additional">
-                    <p class="text-center">Last rendered: Nov 01, 2024 15:50</p>
+                    <p class="text-center">Last rendered: Nov 01, 2024 16:08</p>
                 </div>
                 <div class="footer-meta">
                     <ul class="footer-meta-navigation">

@@ -14,7 +14,8 @@ Arguments
 =========
 
 * fileName
-  StorageId (most likely 1) and path and filename of excel file that should be imported relatively to the storage (fileadmin) Eg: 1:/user_upload/locations.xlsx
+    StorageId (most likely 1) and path and filename of excel file that should be
+    imported relatively to the storage (fileadmin) Eg: 1:/user_upload/locations.xlsx
 
 Options
 =======
