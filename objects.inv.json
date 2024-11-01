@@ -1,1120 +1,1120 @@
 {
     "std:doc": {
         "Administration\/Index": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Administration\/Index.html",
             "Administration"
         ],
         "BreakingChanges\/Index": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "BreakingChanges\/Index.html",
             "Breaking Changes"
         ],
         "Configuration\/EventListener\/Index": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/EventListener\/Index.html",
             "Event listener"
         ],
         "Configuration\/Geocoding\/Index": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Geocoding\/Index.html",
             "Geocoding provider"
         ],
         "Configuration\/Index": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Index.html",
             "Configuration"
         ],
         "Configuration\/Persistence\/Index": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Persistence\/Index.html",
             "Persistence"
         ],
         "Configuration\/Settings\/Index": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Settings\/Index.html",
             "Settings"
         ],
         "Configuration\/Validation\/Index": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Validation\/Index.html",
             "Validation"
         ],
         "Configuration\/View\/Index": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/View\/Index.html",
             "View"
         ],
         "Deprecation\/Index": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Deprecation\/Index.html",
             "Deprecation"
         ],
         "ImportCommand\/Index": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "ImportCommand\/Index.html",
             "Import command"
         ],
         "Index": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Index.html",
             "Store finder"
         ],
         "Introduction\/Index": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Introduction\/Index.html",
             "Introduction"
         ],
         "Sitemap": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Sitemap.html",
             "Sitemap"
         ],
         "Templating\/Index": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Templating\/Index.html",
             "Templating"
         ],
         "Tutorial\/CustomEventListener\/Index": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Tutorial\/CustomEventListener\/Index.html",
             "Custom Event Listener"
         ],
         "Tutorial\/HeadlessMap\/Index": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Tutorial\/HeadlessMap\/Index.html",
             "Headless Map Rendering"
         ],
         "Tutorial\/Index": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Tutorial\/Index.html",
             "Tutorial"
         ],
         "Tutorial\/Installation\/Index": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Tutorial\/Installation\/Index.html",
             "Installation"
         ],
         "UserManual\/Index": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "UserManual\/Index.html",
             "User Manual"
         ]
     },
     "std:label": {
         "administration": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Administration\/Index.html#administration",
             "Administration"
         ],
         "breaking-changes": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "BreakingChanges\/Index.html#breaking-changes",
             "Breaking Changes"
         ],
         "eventlistener": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/EventListener\/Index.html#eventlistener",
             "Event listener"
         ],
         "geocoding": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Geocoding\/Index.html#geocoding",
             "Geocoding provider"
         ],
         "configuration": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Index.html#configuration",
             "Configuration"
         ],
         "persistence": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Persistence\/Index.html#persistence",
             "Persistence"
         ],
         "storagepid": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Persistence\/Index.html#storagePid",
             "-"
         ],
         "settings": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Settings\/Index.html#settings",
             "Settings"
         ],
         "showbeforesearch": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Settings\/Index.html#showBeforeSearch",
             "-"
         ],
         "showaftersearch": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Settings\/Index.html#showAfterSearch",
             "-"
         ],
         "apiv3layers": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Settings\/Index.html#apiV3Layers",
             "-"
         ],
         "limit": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Settings\/Index.html#limit",
             "-"
         ],
         "allowedcountries": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Settings\/Index.html#allowedCountries",
             "-"
         ],
         "categories": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Settings\/Index.html#categories",
             "-"
         ],
         "categorypriority": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Settings\/Index.html#categoryPriority",
             "-"
         ],
         "singlelocationid": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Settings\/Index.html#singleLocationId",
             "-"
         ],
         "geocoderprovider": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Settings\/Index.html#geocoderProvider",
             "-"
         ],
         "apiconsolekey": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Settings\/Index.html#apiConsoleKey",
             "-"
         ],
         "apiconsolekeygeocoding": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Settings\/Index.html#apiConsoleKeyGeocoding",
             "-"
         ],
         "mapid": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Settings\/Index.html#mapId",
             "-"
         ],
         "googlelibraries": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Settings\/Index.html#googleLibraries",
             "-"
         ],
         "distanceunit": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Settings\/Index.html#distanceUnit",
             "-"
         ],
         "language": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Settings\/Index.html#language",
             "-"
         ],
         "showstoreimage": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Settings\/Index.html#showStoreImage",
             "-"
         ],
         "resultpageid": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Settings\/Index.html#resultPageId",
             "-"
         ],
         "mapsize-height": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Settings\/Index.html#mapSize-height",
             "-"
         ],
         "mapsize-width": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Settings\/Index.html#mapSize-width",
             "-"
         ],
         "override": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Settings\/Index.html#override",
             "-"
         ],
         "disablefetchlocationinaction": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Settings\/Index.html#disableFetchLocationInAction",
             "-"
         ],
         "validation": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Validation\/Index.html#validation",
             "Validation"
         ],
         "required-validator": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Validation\/Index.html#required-validator",
             "-"
         ],
         "view": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/View\/Index.html#view",
             "View"
         ],
         "templaterootpaths": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/View\/Index.html#templateRootPaths",
             "-"
         ],
         "partialrootpaths": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/View\/Index.html#partialRootPaths",
             "-"
         ],
         "deprecation": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Deprecation\/Index.html#deprecation",
             "Deprecation"
         ],
         "importcommand": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "ImportCommand\/Index.html#importCommand",
             "Import command"
         ],
         "start": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Index.html#start",
             "Store finder"
         ],
         "introduction": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Introduction\/Index.html#introduction",
             "Introduction"
         ],
         "templating": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Templating\/Index.html#templating",
             "Templating"
         ],
         "customeventlistener": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Tutorial\/CustomEventListener\/Index.html#customEventListener",
             "Custom Event Listener"
         ],
         "headlessmaprendering": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Tutorial\/HeadlessMap\/Index.html#headlessMapRendering",
             "Headless Map Rendering"
         ],
         "tutorial": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Tutorial\/Index.html#tutorial",
             "Tutorial"
         ],
         "installation": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Tutorial\/Installation\/Index.html#installation",
             "Installation"
         ],
         "user-manual": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "UserManual\/Index.html#user_manual",
             "User Manual"
         ]
     },
     "std:title": {
         "administration-1": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Administration\/Index.html#administration-1",
             "Administration"
         ],
         "configuration": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Administration\/Index.html#configuration",
             "Configuration"
         ],
         "cors-settings": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Administration\/Index.html#cors-settings",
             "CORS settings"
         ],
         "breaking-changes-1": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "BreakingChanges\/Index.html#breaking-changes-1",
             "Breaking Changes"
         ],
         "02-august-2024": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "BreakingChanges\/Index.html#02-august-2024",
             "02. August 2024"
         ],
         "20-mai-2024": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "BreakingChanges\/Index.html#20-mai-2024",
             "20. Mai 2024"
         ],
         "17-february-2023": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "BreakingChanges\/Index.html#17-february-2023",
             "17. February 2023"
         ],
         "remove-allowed-on-standard-page": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "BreakingChanges\/Index.html#remove-allowed-on-standard-page",
             "Remove allowed on standard page"
         ],
         "29-august-2022": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "BreakingChanges\/Index.html#29-august-2022",
             "29. August 2022"
         ],
         "15-february-2021": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "BreakingChanges\/Index.html#15-february-2021",
             "15. February 2021"
         ],
         "rename-property": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "BreakingChanges\/Index.html#rename-property",
             "Rename property"
         ],
         "01-mai-2020": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "BreakingChanges\/Index.html#01-mai-2020",
             "01. Mai 2020"
         ],
         "refactor-signal-slots-to-psr-14-events": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "BreakingChanges\/Index.html#refactor-signal-slots-to-psr-14-events",
             "Refactor signal slots to PSR-14 events"
         ],
         "03-october-2019": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "BreakingChanges\/Index.html#03-october-2019",
             "03. October 2019"
         ],
         "drop-migration-wizard": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "BreakingChanges\/Index.html#drop-migration-wizard",
             "Drop migration wizard"
         ],
         "change-geocoding": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "BreakingChanges\/Index.html#change-geocoding",
             "Change geocoding"
         ],
         "migration-steps": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "BreakingChanges\/Index.html#migration-steps",
             "Migration steps"
         ],
         "31-january-2019": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "BreakingChanges\/Index.html#31-january-2019",
             "31. January 2019"
         ],
         "18-may-2019": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "BreakingChanges\/Index.html#18-may-2019",
             "18. May 2019"
         ],
         "10-january-2019": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "BreakingChanges\/Index.html#10-january-2019",
             "10. January 2019"
         ],
         "event-listener": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/EventListener\/Index.html#event-listener",
             "Event listener"
         ],
         "introduction": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/EventListener\/Index.html#introduction",
             "Introduction"
         ],
         "adding-event-listeners": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/EventListener\/Index.html#adding-event-listeners",
             "Adding event listeners"
         ],
         "additional-configuration": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/EventListener\/Index.html#additional-configuration",
             "Additional configuration"
         ],
         "performance-improvement": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/EventListener\/Index.html#performance-improvement",
             "Performance improvement"
         ],
         "radius-not-automatically-detected": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/EventListener\/Index.html#radius-not-automatically-detected",
             "Radius not automatically detected"
         ],
         "modify-locations-in-storefindermiddleware": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/EventListener\/Index.html#modify-locations-in-storefindermiddleware",
             "Modify locations in StoreFinderMiddleware"
         ],
         "geocoding-provider": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Geocoding\/Index.html#geocoding-provider",
             "Geocoding provider"
         ],
         "changing-geocoding-provider": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Geocoding\/Index.html#changing-geocoding-provider",
             "Changing geocoding provider"
         ],
         "extension-configuration": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Geocoding\/Index.html#extension-configuration",
             "Extension configuration"
         ],
         "typoscript-constants": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Geocoding\/Index.html#typoscript-constants",
             "TypoScript constants"
         ],
         "configuration-1": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Index.html#configuration-1",
             "Configuration"
         ],
         "persistence-1": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Persistence\/Index.html#persistence-1",
             "Persistence"
         ],
         "settings-1": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Settings\/Index.html#settings-1",
             "Settings"
         ],
         "validation-1": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Validation\/Index.html#validation-1",
             "Validation"
         ],
         "purpose-of-validators": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Validation\/Index.html#purpose-of-validators",
             "Purpose of Validators"
         ],
         "different-possibilities-of-assigning-validators": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Validation\/Index.html#different-possibilities-of-assigning-validators",
             "Different possibilities of assigning validators"
         ],
         "remove-validators": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Validation\/Index.html#remove-validators",
             "Remove validators"
         ],
         "assign-only-one-validator": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Validation\/Index.html#assign-only-one-validator",
             "Assign only one validator"
         ],
         "assign-multiple-validators": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Validation\/Index.html#assign-multiple-validators",
             "Assign multiple validators"
         ],
         "special-validators": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Validation\/Index.html#special-validators",
             "Special validators"
         ],
         "prefixing-needed-for-non-extbase-validators": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Validation\/Index.html#prefixing-needed-for-non-extbase-validators",
             "Prefixing needed for non extbase validators"
         ],
         "custom-validator-usage": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Validation\/Index.html#custom-validator-usage",
             "Custom validator usage"
         ],
         "available-validators": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Validation\/Index.html#available-validators",
             "Available validators"
         ],
         "view-1": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/View\/Index.html#view-1",
             "View"
         ],
         "deprecation-1": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Deprecation\/Index.html#deprecation-1",
             "Deprecation"
         ],
         "version-6-0-0": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Deprecation\/Index.html#version-6-0-0",
             "Version 6.0.0"
         ],
         "replaced-viewhelper": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Deprecation\/Index.html#replaced-viewhelper",
             "Replaced ViewHelper"
         ],
         "removed-viewhelper": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Deprecation\/Index.html#removed-viewhelper",
             "Removed ViewHelper"
         ],
         "import-command": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "ImportCommand\/Index.html#import-command",
             "Import command"
         ],
         "arguments": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "ImportCommand\/Index.html#arguments",
             "Arguments"
         ],
         "options": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "ImportCommand\/Index.html#options",
             "Options"
         ],
         "transformation": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "ImportCommand\/Index.html#transformation",
             "Transformation"
         ],
         "importing-constraints": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "ImportCommand\/Index.html#importing-constraints",
             "Importing constraints"
         ],
         "examples-of-import-command-calls": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "ImportCommand\/Index.html#examples-of-import-command-calls",
             "Examples of import command calls"
         ],
         "store-finder": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Index.html#store-finder",
             "Store finder"
         ],
         "introduction-1": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Introduction\/Index.html#introduction-1",
             "Introduction"
         ],
         "search-with-result-map-and-list": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Introduction\/Index.html#search-with-result-map-and-list",
             "Search with result map and list"
         ],
         "search-form": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Introduction\/Index.html#search-form",
             "Search form"
         ],
         "result-map-and-list": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Introduction\/Index.html#result-map-and-list",
             "Result map and list"
         ],
         "single-points-of-interest": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Introduction\/Index.html#single-points-of-interest",
             "Single points of interest"
         ],
         "how-geolocations-are-computed": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Introduction\/Index.html#how-geolocations-are-computed",
             "How geolocations are computed"
         ],
         "sitemap": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Sitemap.html#sitemap",
             "Sitemap"
         ],
         "templating-1": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Templating\/Index.html#templating-1",
             "Templating"
         ],
         "templates-partials-and-layouts": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Templating\/Index.html#templates-partials-and-layouts",
             "Templates, partials and layouts"
         ],
         "example": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Templating\/Index.html#example",
             "Example:"
         ],
         "viewhelper": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Templating\/Index.html#viewhelper",
             "ViewHelper"
         ],
         "register-namespace": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Templating\/Index.html#register-namespace",
             "Register Namespace"
         ],
         "minify-viewhelper": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Templating\/Index.html#minify-viewhelper",
             "minify ViewHelper"
         ],
         "example-viewhelper": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Templating\/Index.html#example-viewhelper",
             "Example ViewHelper"
         ],
         "example-output": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Templating\/Index.html#example-output",
             "Example output"
         ],
         "format-binaryand-viewhelper": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Templating\/Index.html#format-binaryand-viewhelper",
             "format.binaryAnd ViewHelper"
         ],
         "form-selectcountries": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Templating\/Index.html#form-selectcountries",
             "form.selectCountries"
         ],
         "custom-event-listener": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Tutorial\/CustomEventListener\/Index.html#custom-event-listener",
             "Custom Event Listener"
         ],
         "adding-custom-event-listener": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Tutorial\/CustomEventListener\/Index.html#adding-custom-event-listener",
             "Adding custom event listener"
         ],
         "headless-map-rendering": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Tutorial\/HeadlessMap\/Index.html#headless-map-rendering",
             "Headless Map Rendering"
         ],
         "introduction-of-middleware": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Tutorial\/HeadlessMap\/Index.html#introduction-of-middleware",
             "Introduction of middleware"
         ],
         "preparation-of-data": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Tutorial\/HeadlessMap\/Index.html#preparation-of-data",
             "Preparation of data"
         ],
         "integration": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Tutorial\/HeadlessMap\/Index.html#integration",
             "Integration"
         ],
         "template-example": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Tutorial\/HeadlessMap\/Index.html#template-example",
             "Template example"
         ],
         "tutorial-1": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Tutorial\/Index.html#tutorial-1",
             "Tutorial"
         ],
         "installation-1": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Tutorial\/Installation\/Index.html#installation-1",
             "Installation"
         ],
         "installation": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Tutorial\/Installation\/Index.html#installation",
             "Installation"
         ],
         "typoscript": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Tutorial\/Installation\/Index.html#typoscript",
             "TypoScript"
         ],
         "structure": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Tutorial\/Installation\/Index.html#structure",
             "Structure"
         ],
         "templating": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Tutorial\/Installation\/Index.html#templating",
             "Templating"
         ],
         "api-keys-and-map-id": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Tutorial\/Installation\/Index.html#api-keys-and-map-id",
             "API Keys and Map ID"
         ],
         "key-for-the-frontend": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Tutorial\/Installation\/Index.html#key-for-the-frontend",
             "Key for the frontend"
         ],
         "key-for-the-geocoding": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Tutorial\/Installation\/Index.html#key-for-the-geocoding",
             "Key for the geocoding"
         ],
         "set-default-coordinates": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Tutorial\/Installation\/Index.html#set-default-coordinates",
             "Set default coordinates"
         ],
         "use-caching-map-action": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Tutorial\/Installation\/Index.html#use-caching-map-action",
             "Use caching map action"
         ],
         "user-manual": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "UserManual\/Index.html#user-manual",
             "User Manual"
         ]
     },
     "std:confval-menu": {
         "persistence-reference": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Persistence\/Index.html#persistence-reference",
             ""
         ],
         "settings-reference": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Settings\/Index.html#settings-reference",
             ""
         ],
         "validator-reference": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Validation\/Index.html#validator-reference",
             ""
         ],
         "view-reference": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/View\/Index.html#view-reference",
             ""
         ]
     },
     "std:confval": {
         "storagepid": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Persistence\/Index.html#storagepid",
             "storagePid"
         ],
         "showbeforesearch": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Settings\/Index.html#showbeforesearch",
             "showBeforeSearch"
         ],
         "showaftersearch": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Settings\/Index.html#showaftersearch",
             "showAfterSearch"
         ],
         "apiv3layers": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Settings\/Index.html#apiv3layers",
             "apiV3Layers"
         ],
         "limit": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Settings\/Index.html#limit",
             "limit"
         ],
         "allowedcountries": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Settings\/Index.html#allowedcountries",
             "allowedCountries"
         ],
         "categories": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Settings\/Index.html#categories",
             "categories"
         ],
         "categorypriority": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Settings\/Index.html#categorypriority",
             "categoryPriority"
         ],
         "singlelocationid": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Settings\/Index.html#singlelocationid",
             "singleLocationId"
         ],
         "geocoderprovider": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Settings\/Index.html#geocoderprovider",
             "geocoderProvider"
         ],
         "apiconsolekey": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Settings\/Index.html#apiconsolekey",
             "apiConsoleKey"
         ],
         "apiconsolekeygeocoding": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Settings\/Index.html#apiconsolekeygeocoding",
             "apiConsoleKeyGeocoding"
         ],
         "mapid": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Settings\/Index.html#mapid",
             "mapId"
         ],
         "googlelibraries": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Settings\/Index.html#googlelibraries",
             "googleLibraries"
         ],
         "distanceunit": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Settings\/Index.html#distanceunit",
             "distanceUnit"
         ],
         "language": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Settings\/Index.html#language",
             "language"
         ],
         "showstoreimage": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Settings\/Index.html#showstoreimage",
             "showStoreImage"
         ],
         "resultpageid": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Settings\/Index.html#resultpageid",
             "resultPageId"
         ],
         "mapsize-height": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Settings\/Index.html#mapsize-height",
             "mapSize.height"
         ],
         "mapsize-width": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Settings\/Index.html#mapsize-width",
             "mapSize.width"
         ],
         "override": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Settings\/Index.html#override",
             "override"
         ],
         "disablefetchlocationinaction": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Settings\/Index.html#disablefetchlocationinaction",
             "disableFetchLocationInAction"
         ],
         "requiredvalidator": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/Validation\/Index.html#requiredvalidator",
             "RequiredValidator"
         ],
         "templaterootpaths": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/View\/Index.html#templaterootpaths",
             "templateRootPaths"
         ],
         "partialrootpaths": [
-            "-",
-            "-",
+            "Store Finder",
+            "8.0.0",
             "Configuration\/View\/Index.html#partialrootpaths",
             "partialRootPaths"
         ]
