@@ -13,7 +13,8 @@ Validators are a mechanism to ensure that all information given by the user
 meet the expectation of the extension. Either if the values make sense in terms
 of format like zip or in required information value like city.
 
-If values need to be enforce your should use the RequiredValidator_ because
+If values need to be enforce your should use the
+`RequiredValidator <required-validator>`_ because
 this validator does not only check if the value of the configured field is
 filled but it also serves as a signal for the Required Partial to render the
 corresponding flag.
@@ -117,7 +118,7 @@ which are suited for the usage on fields.
     :type:
     :Default:
 
-    ..  _RequiredValidator:
+    ..  _required-validator:
 
     ..  confval:: RequiredValidator
         :type: :ref:`string <t3tsref:data-type-string>`

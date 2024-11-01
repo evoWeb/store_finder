@@ -102,9 +102,9 @@ to render search results that are near of them.
 Use caching map action
 ======================
 
-As of version 6.1.0 a cached map action is available. To use it with custom templates it importand to
-copy the ``Templates/Map/CachedMap.html`` to your sitepackage.
+As of version 6.1.0 a cached map action is available. To use it with custom
+templates it important to copy the ``Templates/Map/CachedMap.html`` to your sitepackage.
 
-In addition to that it's importand to add the ``<sf:cache location="{location}"/>`` ViewHelper to the
-``Partials/Locations.html`` to be able to clear cache on additing a location record without manually click
+In addition to that it's important to add the ``<sf:cache location="{location}"/>`` ViewHelper to the
+``Partials/Locations.html`` to be able to clear cache on adding a location record without manually click
 the clear cache flash.

@@ -17,14 +17,14 @@ In case the google maps geocode url changes and the extension has no update for,
 that the url can be changed in the same configuration part. Just enter the url
 in the field Url used for geocode.
 
-Configuration:
-==============
+Configuration
+=============
 
 ..  figure:: Images/admin_config.png
     :alt: Search form
 
-CORS settings:
-==============
+CORS settings
+=============
 
 - for backend rendering in locations records the content security policy header
   needs to be modified to allow loading images via https

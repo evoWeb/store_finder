@@ -11,7 +11,7 @@ Introduction
 
 It is possible to use various custom event listener to use custom location loading logic. If you need
 a modified sorting or locations based on other constraints then the provided, it is possible to override
-the loading completly.
+the loading completely.
 
 Adding event listeners
 ======================
@@ -42,7 +42,7 @@ Additional configuration
 Performance improvement
 -----------------------
 
-When using event listeners it's adviced to set typoscript setup
+When using event listeners it's advised to set typoscript setup
 `plugin.tx_storefinder.settings.disableLocationFetchLogic = 1`
 to improve performance. By doing so, all default fetching will be disabled.
 
@@ -56,9 +56,10 @@ Listener must follow the symfony/event concept [https://symfony.com/doc/current/
 Radius not automatically detected
 ---------------------------------
 
-If you use a custom location loading mechanism, the location::distance property will be emtpy. Atleast if you do not
-fill them on your own. In case the distance is empty the default zoom level detection has nothing to work with. In
-this case, you need to set the zoom level in the template OR the radius in TypoScript
+If you use a custom location loading mechanism, the location::distance property
+will be empty. At least if you do not fill them on your own. In case the distance
+is empty the default zoom level detection has nothing to work with. In this
+case, you need to set the zoom level in the template OR the radius in TypoScript
 
 ..  code-block:: typoscript
     :caption: EXT:my_extension/Configuration/TypoScript/setup.typoscript
