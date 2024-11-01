@@ -30,7 +30,7 @@ Store finder
     |today|
 
 :Copyright:
-    2014-2024
+    2013-2024
 
 ----
 

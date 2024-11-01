@@ -15,7 +15,7 @@
                typo3-core-preferred="stable"
                interlink-shortcode="evoweb/store-finder"
     />
-    <project title="store_finder"
+    <project title="Store Finder"
              release="8.0.0"
              version="8.0.0"
              copyright="since 2013 by evoWeb"
