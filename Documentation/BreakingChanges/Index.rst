@@ -40,7 +40,6 @@ The countryValueType setting in TypoScript is dropped.
 Refactor geocode service to use TYPO3\CMS\Core\Http\Client\GuzzleClientFactory
 instead of creating of using Http\Adapter\Guzzle7\Client directly
 
-
 17. February 2023
 =================
 
