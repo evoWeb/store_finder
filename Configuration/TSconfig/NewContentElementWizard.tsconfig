@@ -7,19 +7,17 @@ mod.wizards.newContentElement.wizardItems.store_finder {
       title = LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi1_title_map
       description = LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi1_description_map
       tt_content_defValues {
-        CType = list
-        list_type = storefinder_map
+        CType = storefinder_map
       }
     }
 
     storefinder_cached {
-        iconIdentifier = store-finder-plugin
-        title = LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi1_title_cached
-        description = LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi1_description_cached
-        tt_content_defValues {
-            CType = list
-            list_type = storefinder_cached
-        }
+      iconIdentifier = store-finder-plugin
+      title = LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi1_title_cached
+      description = LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi1_description_cached
+      tt_content_defValues {
+        CType = storefinder_cached
+      }
     }
 
     storefinder_show {
@@ -27,8 +25,7 @@ mod.wizards.newContentElement.wizardItems.store_finder {
       title = LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi1_title_show
       description = LLL:EXT:store_finder/Resources/Private/Language/locallang_be.xlf:pi1_description_show
       tt_content_defValues {
-        CType = list
-        list_type = storefinder_show
+        CType = storefinder_show
       }
     }
   }
@@ -36,7 +33,7 @@ mod.wizards.newContentElement.wizardItems.store_finder {
   show = *
 }
 
-mod.web_layout.tt_content.preview.list {
+mod.web_layout.tt_content.preview {
   storefinder_map = EXT:store_finder/Resources/Private/Templates/Preview/Map.html
   storefinder_cached = EXT:store_finder/Resources/Private/Templates/Preview/Map.html
   storefinder_show = EXT:store_finder/Resources/Private/Templates/Preview/Show.html

@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-namespace Evoweb\StoreFinder\Service;
-
 /*
  * This file is developed by evoWeb.
  *
@@ -15,6 +13,8 @@ namespace Evoweb\StoreFinder\Service;
  * LICENSE.txt file that was distributed with this source code.
  */
 
+namespace Evoweb\StoreFinder\Service;
+
 use Evoweb\StoreFinder\Cache\CoordinatesCache;
 use Evoweb\StoreFinder\Domain\Model\Constraint;
 use Evoweb\StoreFinder\Domain\Model\Location;
@@ -23,9 +23,9 @@ use Geocoder\Provider\GoogleMaps\GoogleMaps;
 use Geocoder\Provider\Provider;
 use Geocoder\Query\GeocodeQuery;
 use Geocoder\StatefulGeocoder;
-use Http\Adapter\Guzzle7\Client;
-use SJBR\StaticInfoTables\Domain\Model\Country;
 use SJBR\StaticInfoTables\Domain\Model\CountryZone;
+use TYPO3\CMS\Core\Country\Country;
+use TYPO3\CMS\Core\Http\Client\GuzzleClientFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class GeocodeService
@@ -37,8 +37,10 @@ class GeocodeService
     public bool $hasMultipleResults = false;
 
     public function __construct(
-        protected CoordinatesCache $coordinatesCache
+        protected CoordinatesCache $coordinatesCache,
+        private readonly GuzzleClientFactory $guzzleFactory
     ) {
+        $this->coordinatesCache->initializeUserSessionManager();
     }
 
     public function setSettings(array $settings): void
@@ -106,7 +108,7 @@ class GeocodeService
                 // to enhance the map api query result
                 case 'country':
                     if ($value instanceof Country) {
-                        $value = $value->getIsoCodeA2();
+                        $value = $value->getAlpha2IsoCode();
                     }
                     break;
 
@@ -125,7 +127,11 @@ class GeocodeService
         }
 
         if (!isset($queryValues['country'])) {
-            throw new \Exception('Country may never be empty query: ' . var_export($queryValues, true), 1618235512);
+            throw new \Exception(
+                'Country may never be empty. Check your TypoScript setup to define a default constraint. Query: '
+                . var_export($queryValues, true),
+                1618235512
+            );
         }
 
         return $queryValues;
@@ -139,7 +145,7 @@ class GeocodeService
             $providerClass = $this->settings['geocoderProvider'];
         }
 
-        $httpClient = new Client();
+        $httpClient = $this->guzzleFactory->getClient();
         $provider = GeneralUtility::makeInstance(
             $providerClass,
             $httpClient,

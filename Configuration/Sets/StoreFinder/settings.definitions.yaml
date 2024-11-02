@@ -1,0 +1,66 @@
+categories:
+  store-finder: ~
+  store-finder.common:
+    parent: store-finder
+  store-finder.plugin:
+    parent: store-finder
+  store-finder.ajax:
+    parent: store-finder
+
+settings:
+  evoweb.store-finder.geocoderProvider:
+    default: 'Geocoder\Provider\GoogleMaps\GoogleMaps'
+    type: string
+    category: store-finder.common
+  evoweb.store-finder.geocoderLocale:
+    default: 'en'
+    type: string
+    category: store-finder.common
+  evoweb.store-finder.apiConsoleKey:
+    default: ''
+    type: string
+    category: store-finder.common
+  evoweb.store-finder.apiConsoleKeyGeocoding:
+    default: ''
+    type: string
+    category: store-finder.common
+  evoweb.store-finder.mapId:
+    default: ''
+    type: string
+    category: store-finder.common
+  evoweb.store-finder.googleLibraries:
+    default: ''
+    type: string
+    category: store-finder.common
+  evoweb.store-finder.addPaginator:
+    default: 0
+    type: bool
+    category: store-finder.common
+  evoweb.store-finder.templateRootPaths:
+    default: 'EXT:store_finder/Resources/Private/Templates/'
+    type: string
+    category: store-finder.plugin
+  evoweb.store-finder.partialRootPaths:
+    default: 'EXT:store_finder/Resources/Private/Partials/'
+    type: string
+    category: store-finder.plugin
+  evoweb.store-finder.layoutRootPaths:
+    default: 'EXT:store_finder/Resources/Private/Layouts/'
+    type: string
+    category: store-finder.plugin
+  evoweb.store-finder.ajax.templateRootPaths:
+    default: 'EXT:store_finder/Resources/Private/Templates/'
+    type: string
+    category: store-finder.ajax
+  evoweb.store-finder.ajax.partialRootPaths:
+    default: 'EXT:store_finder/Resources/Private/Partials/'
+    type: string
+    category: store-finder.ajax
+  evoweb.store-finder.ajax.layoutRootPaths:
+    default: 'EXT:store_finder/Resources/Private/Layouts/'
+    type: string
+    category: store-finder.ajax
+  evoweb.store-finder.ajax.storagePid:
+    default: ''
+    type: string
+    category: store-finder.ajax

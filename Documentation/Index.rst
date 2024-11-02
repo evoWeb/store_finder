@@ -1,36 +1,42 @@
-.. include:: /Includes.rst.txt
+..  include:: /Includes.rst.txt
+
+..  _start:
 
 ============
 Store finder
 ============
 
 :Extension Key:
-   store_finder
+    store_finder
+
+:Package name:
+    evoweb/store-finder
 
 :Version:
-   |release|
+    |release|
 
 :Language:
-   en
-
-:Description:
-   Search for stores based on local address with coordinates compiled with google maps api.
-
-:Keywords:
-   Store Finder, POI Map, Google Maps, Configuration
-
-:Copyright:
-   2014-2023
+    en
 
 :Author:
-   Sebastian Fischer
+    Sebastian Fischer
 
 :License:
-   This document is published under the
-   `Open Publication License <https://www.opencontent.org/openpub/>`__.
+    This document is published under the
+    `Open Publication <https://www.opencontent.org/openpub/>`__.
+    license.
 
 :Rendered:
-   |today|
+    |today|
+
+:Copyright:
+    2013-2024
+
+----
+
+Search for stores based on local address with coordinates compiled with google maps api.
+
+Store Finder, POI Map, Google Maps, Configuration
 
 The content of this document is related to TYPO3,
 a GNU/GPL CMS/Framework available from http://typo3.org
@@ -59,4 +65,3 @@ a GNU/GPL CMS/Framework available from http://typo3.org
    :hidden:
 
    Sitemap
-   genindex

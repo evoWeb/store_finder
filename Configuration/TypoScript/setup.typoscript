@@ -1,13 +1,12 @@
 plugin.tx_storefinder.settings {
   includeStyleSheet = true
 
-  geocoderProvider = {$plugin.tx_storefinder.geocoderProvider}
-  geocoderLocale = {$plugin.tx_storefinder.geocoderLocale}
-  # Used for https://developers.google.com/maps/documentation/geocoding/start
-  # used for https://developers.google.com/maps/documentation/javascript/tutorial
-  apiConsoleKey = {$plugin.tx_storefinder.apiConsoleKey}
-  # starting with June 2018 google map only provides premium access.
-  apiConsoleKeyGeocoding = {$plugin.tx_storefinder.apiConsoleKeyGeocoding}
+  geocoderProvider = {$plugin.tx_storefinder.geocoderProvider ?? $evoweb.store-finder.geocoderProvider}
+  geocoderLocale = {$plugin.tx_storefinder.geocoderLocale ?? $evoweb.store-finder.geocoderLocale}
+  # Used for https://developers.google.com/maps/documentation/javascript/tutorial
+  apiConsoleKey = {$plugin.tx_storefinder.apiConsoleKey ?? $evoweb.store-finder.apiConsoleKey}
+  # Used for https://developers.google.com/maps/documentation/geocoding/requests-geocoding
+  apiConsoleKeyGeocoding = {$plugin.tx_storefinder.apiConsoleKeyGeocoding ?? $evoweb.store-finder.apiConsoleKeyGeocoding}
 
   categories =
   allowedCountries =
@@ -15,7 +14,7 @@ plugin.tx_storefinder.settings {
   categoryPriority = useAsFilterInFrontend
 
   limit = 20
-  addPaginator = {$plugin.tx_storefinder.addPaginator}
+  addPaginator = {$plugin.tx_storefinder.addPaginator ?? $evoweb.store-finder.addPaginator}
 
   radius {
     15 = 15
@@ -23,10 +22,6 @@ plugin.tx_storefinder.settings {
     50 = 50
     100 = 100
   }
-
-  # either uid if country field contains integer relation to static_country record
-  # or isoCodeA3 if the field contains iso3 country codes
-  countryValueType = uid
 
   # [miles, kilometer]
   distanceUnit = kilometer
@@ -61,6 +56,8 @@ plugin.tx_storefinder.settings {
     # traffic, bicycling, kml
     apiV3Layers =
     language = en
+    mapId = {$plugin.tx_storefinder.mapId ?? $evoweb.store-finder.mapId}
+    libraries = {$plugin.tx_storefinder.googleLibraries ?? $evoweb.store-finder.googleLibraries}
   }
 
   mapSize {
@@ -83,13 +80,13 @@ plugin.tx_storefinder_show.settings {
 
 plugin.tx_storefinder.view {
   templateRootPaths.0 = EXT:store_finder/Resources/Private/Templates/
-  templateRootPaths.1 = {$plugin.tx_storefinder.templateRootPaths}
+  templateRootPaths.1 = {$plugin.tx_storefinder.templateRootPaths ?? $evoweb.store-finder.templateRootPaths}
 
   partialRootPaths.0 = EXT:store_finder/Resources/Private/Partials/
-  partialRootPaths.1 = {$plugin.tx_storefinder.partialRootPaths}
+  partialRootPaths.1 = {$plugin.tx_storefinder.partialRootPaths ?? $evoweb.store-finder.partialRootPaths}
 
   layoutRootPaths.0 = EXT:store_finder/Resources/Private/Layouts/
-  layoutRootPaths.1 = {$plugin.tx_storefinder.layoutRootPaths}
+  layoutRootPaths.1 = {$plugin.tx_storefinder.layoutRootPaths ?? $evoweb.store-finder.layoutRootPaths}
 }
 
 plugin.tx_storefinder.fieldError = TEXT
@@ -199,8 +196,8 @@ mapAjaxPage {
   10.settings < plugin.tx_storefinder.settings
   10.settings.ajax = 1
   10.view < plugin.tx_storefinder.view
-  10.view.templateRootPaths.200 = {$plugin.tx_storefinder.ajax.templateRootPaths}
-  10.view.partialRootPaths.200 = {$plugin.tx_storefinder.ajax.partialRootPaths}
-  10.view.layoutRootPaths.200 = {$plugin.tx_storefinder.ajax.layoutRootPaths}
-  10.persistence.storagePid = {$plugin.tx_storefinder.ajax.storagePid}
+  10.view.templateRootPaths.200 = {$plugin.tx_storefinder.ajax.templateRootPaths ?? $evoweb.store-finder.ajax.templateRootPaths}
+  10.view.partialRootPaths.200 = {$plugin.tx_storefinder.ajax.partialRootPaths ?? $evoweb.store-finder.ajax.partialRootPaths}
+  10.view.layoutRootPaths.200 = {$plugin.tx_storefinder.ajax.layoutRootPaths ?? $evoweb.store-finder.ajax.layoutRootPaths}
+  10.persistence.storagePid = {$plugin.tx_storefinder.ajax.storagePid ?? $evoweb.store-finder.ajax.storagePid}
 }

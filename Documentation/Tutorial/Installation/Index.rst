@@ -1,11 +1,10 @@
-.. include:: /Includes.rst.txt
-
-.. _installation:
+..  include:: /Includes.rst.txt
+..  index:: Installation
+..  _installation:
 
 ============
 Installation
 ============
-
 
 Installation
 ============
@@ -21,13 +20,11 @@ In rare case that the api url changes and the extensions was not update quick en
 url used for the geocooding in the same configuration. Be aware that this url only gets used in the
 geocoding process. For the search in the frontend you need to change it in TypoScript too.
 
-
 TypoScript
 ==========
 
 In general its a good idea to add the include static of the extension to you typoscript record. Otherwise
 its not possible to use the country selector which is used in the default template.
-
 
 Structure
 =========
@@ -35,7 +32,6 @@ Structure
 Location records can only be added in folders that's why you need to add at least one folder for storage.
 Additionally you need a page with the store_finder plugin. In the plugin configure your needs. To use
 locations of the created folder choose it as record storage page on tab behaviour.
-
 
 Templating
 ==========
@@ -49,9 +45,8 @@ you can change the path either in the plugin field "Partial path" or via TypoScr
 
    plugin.tx_storefinder.view.partialRootPaths.50 = ./yourpath/Partials/
 
-
-API Keys
-========
+API Keys and Map ID
+===================
 
 If you need to geocode coordinates, either on saving a store record or in bulk with the geocode console command
 you need to add an additional key in TypoScript constants apiConsoleKeyGeocoding. This key will never be visible
@@ -65,15 +60,32 @@ So, it's advised to have both keys
  - apiConsoleKey (protected by restriction for your domains)
  - apiConsoleKeyGeocoding (unrestricted for the usage in php)
 
-To obtain a key please visit https://developers.google.com/maps/gmp-get-started
+To obtain a key please visit https://developers.google.com/maps/get-started
 
+In addition each map should have a unique ID. This can be created on this page
+https://developers.google.com/maps/documentation/get-map-id?hl=de#create-a-map-id.
+
+Key for the frontend
+====================
+
+.. figure:: Images/frontend_key.png
+   :alt: Search form
+   :width: 711px
+
+Key for the geocoding
+=====================
+
+.. figure:: Images/geocoding_key.png
+   :alt: Result map and list
+   :width: 711px
 
 Set default coordinates
 =======================
 
-In TypoScript setup it's possible to set defaultConstraints these are filled in the contraints object if no
-search was requested. In the example below the zoom, latitude and longitude values are set and then the
-coordinates are used to render search results that are near of them.
+In TypoScript setup it's possible to set defaultConstraints these are filled in
+the constraints object if no search was requested. In the example below the
+zoom, latitude and longitude values are set and then the coordinates are used
+to render search results that are near of them.
 
 .. code-block:: typoscript
    :caption: EXT:my_extension/Configuration/TypoScript/setup.typoscript:
@@ -87,13 +99,12 @@ coordinates are used to render search results that are near of them.
       }
    }
 
-
 Use caching map action
 ======================
 
-As of version 6.1.0 a cached map action is available. To use it with custom templates it importand to
-copy the ``Templates/Map/CachedMap.html`` to your sitepackage.
+As of version 6.1.0 a cached map action is available. To use it with custom
+templates it important to copy the ``Templates/Map/CachedMap.html`` to your sitepackage.
 
-In addition to that it's importand to add the ``<sf:cache location="{location}"/>`` ViewHelper to the
-``Partials/Locations.html`` to be able to clear cache on additing a location record without manually click
+In addition to that it's important to add the ``<sf:cache location="{location}"/>`` ViewHelper to the
+``Partials/Locations.html`` to be able to clear cache on adding a location record without manually click
 the clear cache flash.

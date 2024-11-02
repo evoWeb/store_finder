@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-namespace Evoweb\StoreFinder\Service;
-
 /*
  * This file is developed by evoWeb.
  *
@@ -15,13 +13,14 @@ namespace Evoweb\StoreFinder\Service;
  * LICENSE.txt file that was distributed with this source code.
  */
 
+namespace Evoweb\StoreFinder\Service;
+
 use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 
 class FrontendUserService
 {
     public static function getCurrentUser(): ?FrontendUserAuthentication
     {
-        $request = $GLOBALS['TYPO3_REQUEST'];
-        return $request->getAttribute('frontend.user');
+        return isset($GLOBALS['TYPO3_REQUEST']) ? $GLOBALS['TYPO3_REQUEST']->getAttribute('frontend.user') : null;
     }
 }

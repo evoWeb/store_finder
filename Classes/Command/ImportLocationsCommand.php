@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-namespace Evoweb\StoreFinder\Command;
-
 /*
  * This file is developed by evoWeb.
  *
@@ -15,6 +13,9 @@ namespace Evoweb\StoreFinder\Command;
  * LICENSE.txt file that was distributed with this source code.
  */
 
+namespace Evoweb\StoreFinder\Command;
+
+use Doctrine\DBAL\ParameterType;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Worksheet\Row;
 use Symfony\Component\Console\Command\Command;
@@ -52,7 +53,7 @@ class ImportLocationsCommand extends Command
     private array $categoryMap = [
         'L' => [
             'cat1' => 1,
-        ]
+        ],
     ];
 
     private array $countryCache = [];
@@ -327,11 +328,11 @@ class ImportLocationsCommand extends Command
 
     protected function fetchFile(string $value): string
     {
-        return (
+        return
             $value === ''
                 ? '0'
                 : (string)$this->resourceFactory->getFileObjectFromCombinedIdentifier($value)?->getUid()
-        );
+        ;
     }
 
     protected function processLocation(array $location): array
@@ -426,7 +427,7 @@ class ImportLocationsCommand extends Command
                 );
             } else {
                 $data = [
-                    'description' => $location['name']
+                    'description' => $location['name'],
                 ];
 
                 $connection = $this->connectionPool->getConnectionForTable($table);
@@ -437,7 +438,7 @@ class ImportLocationsCommand extends Command
                         'tablenames' => $tableName,
                         'fieldname' => $files[$reference['uid_local']],
                         'uid_local' => $reference['uid_local'],
-                        'uid_foreign' => $location['uid']
+                        'uid_foreign' => $location['uid'],
                     ]
                 );
                 unset($files[$reference['uid_local']]);
@@ -450,7 +451,7 @@ class ImportLocationsCommand extends Command
                 'tstamp' => time(),
                 'crdate' => time(),
                 'table_local' => 'sys_file',
-                'description' => $location['name']
+                'description' => $location['name'],
             ];
 
             $this->addReference($table, $tableName, $fieldName, $uid, $location['uid'], $data);
@@ -467,7 +468,7 @@ class ImportLocationsCommand extends Command
             ->where(
                 $expression->eq(
                     'pid',
-                    $queryBuilder->createNamedParameter($location['pid'], \PDO::PARAM_INT)
+                    $queryBuilder->createNamedParameter($location['pid'], ParameterType::INTEGER)
                 ),
                 $expression->eq(
                     'import_id',
@@ -501,7 +502,7 @@ class ImportLocationsCommand extends Command
             $queryBuilder->andWhere(
                 $expression->eq(
                     'uid_local',
-                    $queryBuilder->createNamedParameter($uidLocal, \PDO::PARAM_INT)
+                    $queryBuilder->createNamedParameter($uidLocal, ParameterType::INTEGER)
                 )
             );
         }
@@ -509,7 +510,7 @@ class ImportLocationsCommand extends Command
             $queryBuilder->andWhere(
                 $expression->eq(
                     'uid_foreign',
-                    $queryBuilder->createNamedParameter($uidForeign, \PDO::PARAM_INT)
+                    $queryBuilder->createNamedParameter($uidForeign, ParameterType::INTEGER)
                 )
             );
         }
@@ -517,7 +518,7 @@ class ImportLocationsCommand extends Command
             $queryBuilder->andWhere(
                 $expression->eq(
                     'deleted',
-                    $queryBuilder->createNamedParameter(0, \PDO::PARAM_INT)
+                    $queryBuilder->createNamedParameter(0, ParameterType::INTEGER)
                 )
             );
         }
@@ -568,11 +569,11 @@ class ImportLocationsCommand extends Command
                 ),
                 $expression->eq(
                     'uid_local',
-                    $queryBuilder->createNamedParameter($uidLocal, \PDO::PARAM_INT)
+                    $queryBuilder->createNamedParameter($uidLocal, ParameterType::INTEGER)
                 ),
                 $expression->eq(
                     'uid_foreign',
-                    $queryBuilder->createNamedParameter($uidForeign, \PDO::PARAM_INT)
+                    $queryBuilder->createNamedParameter($uidForeign, ParameterType::INTEGER)
                 )
             );
         if ($fieldName) {

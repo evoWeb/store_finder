@@ -8,13 +8,22 @@ services:
   Evoweb\StoreFinder\:
     resource: '../Classes/*'
 
+  cache.store_finder.coordinate_cache:
+    class: 'TYPO3\CMS\Core\Cache\Frontend\FrontendInterface'
+    factory: ['@TYPO3\CMS\Core\Cache\CacheManager', 'getCache']
+    arguments:
+      $identifier: 'store_finder_coordinate_cache'
+    public: true
+
+  frontend.user:
+    class: 'TYPO3\CMS\Core\Cache\Frontend\FrontendInterface'
+    factory: ['@Evoweb\StoreFinder\Service\FrontendUserService', 'getCurrentUser']
+    public: true
+
   Evoweb\StoreFinder\Cache\CoordinatesCache:
     arguments:
       $cacheFrontend: '@cache.store_finder.coordinate_cache'
-      $frontendUser: '@frontend.user'
-    shared: false
-    autoconfigure: false
-    autowire: false
+    public: true
 
   Evoweb\StoreFinder\Command\ImportLocationsCommand:
     tags:
@@ -30,24 +39,12 @@ services:
         description: 'Query google geocode service to get lat/lon for locations that are not geocode already'
         schedulable: true
 
-  cache.store_finder.coordinate_cache:
-    class: 'TYPO3\CMS\Core\Cache\Frontend\FrontendInterface'
-    factory: ['@TYPO3\CMS\Core\Cache\CacheManager', 'getCache']
-    arguments:
-      $identifier: 'store_finder_coordinate_cache'
-    public: true
-
-  cache.store_finder.middleware_cache:
-    class: 'TYPO3\CMS\Core\Cache\Frontend\FrontendInterface'
-    factory: ['@TYPO3\CMS\Core\Cache\CacheManager', 'getCache']
-    arguments:
-      $identifier: 'store_finder_middleware_cache'
-    public: true
-
-  frontend.user:
-    class: 'TYPO3\CMS\Core\Cache\Frontend\FrontendInterface'
-    factory: ['@Evoweb\StoreFinder\Service\FrontendUserService', 'getCurrentUser']
-    public: true
+  Evoweb\StoreFinder\Property\TypeConverter\CountryConverter:
+    tags:
+      - name: extbase.type_converter
+        priority: 10
+        target: TYPO3\CMS\Core\Country\Country
+        sources: string
 
   Evoweb\StoreFinder\Domain\Repository\CategoryRepository:
     public: true
@@ -61,16 +58,16 @@ services:
   Evoweb\StoreFinder\Domain\Repository\CountryRepository:
     public: true
 
-  Evoweb\StoreFinder\EventListener\TceMainListener:
+  Evoweb\StoreFinder\Hooks\TceMainListener:
     public: true
 
   Evoweb\StoreFinder\Middleware\StoreFinderMiddleware:
     public: true
 
-  Evoweb\StoreFinder\Service\GeocodeService:
+  Evoweb\StoreFinder\Service\CacheService:
     public: true
 
-  Evoweb\StoreFinder\ViewHelpers\Form\SelectCountriesViewHelper:
+  Evoweb\StoreFinder\Service\GeocodeService:
     public: true
 
   SJBR\StaticInfoTables\Domain\Repository\TerritoryRepository:

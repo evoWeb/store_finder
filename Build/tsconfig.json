@@ -22,7 +22,6 @@
 				"form-engine/*"
 			]
 		},
-		"outDir": "../Resources/Public/JavaScript",
 		"types": [
 			"Evoweb",
 			"google.maps",

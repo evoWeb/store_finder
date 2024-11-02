@@ -1,6 +1,6 @@
-.. include:: /Includes.rst.txt
-
-.. _deprecation:
+..  include:: /Includes.rst.txt
+..  index:: Deprecation
+..  _deprecation:
 
 ===========
 Deprecation

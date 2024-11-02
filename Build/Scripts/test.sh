@@ -14,7 +14,7 @@ cd "$THIS_SCRIPT_DIR" || exit 1
 #################################################
 checkResources () {
     echo "#################################################################" >&2
-    echo "Checking documentation, TypeScript and Scss files" >&2
+    echo " Checking documentation, TypeScript and Scss files" >&2
     echo "#################################################################" >&2
 
     ./additionalTests.sh -s lintScss
@@ -30,7 +30,7 @@ checkResources () {
     EXIT_CODE_DOCUMENTATION=$?
 
     echo "#################################################################" >&2
-    echo "Checked documentation, TypeScript and Scss files" >&2
+    echo " Checked documentation, TypeScript and Scss files" >&2
     if [[ ${EXIT_CODE_SCSS} -eq 0 ]] && \
         [[ ${EXIT_CODE_TYPESCRIPT} -eq 0 ]] && \
         [[ ${EXIT_CODE_XLIFF} -eq 0 ]] && \
@@ -42,6 +42,8 @@ checkResources () {
     fi
     echo "#################################################################" >&2
     echo "" >&2
+
+    cleanup
 }
 
 #################################################
@@ -71,7 +73,7 @@ runFunctionalTests () {
 
     ./runTests.sh -s cleanTests
 
-    ./additionalTests.sh \
+    ./runTests.sh \
         -p ${PHP_VERSION} \
         -s lintPhp || exit 1 ; \
         EXIT_CODE_LINT=$?
@@ -79,7 +81,7 @@ runFunctionalTests () {
     ./runTests.sh \
         -p ${PHP_VERSION} \
         -s composerInstall || exit 1 ; \
-        EXIT_CODE_LINT=$?
+        EXIT_CODE_CORE=$?
 
     ./additionalTests.sh \
         -p ${PHP_VERSION} \
@@ -127,6 +129,7 @@ runFunctionalTests () {
     fi
     echo "#################################################################" >&2
     echo "" >&2
+    cleanup
 }
 
 #################################################
@@ -137,16 +140,27 @@ runFunctionalTests () {
 cleanup () {
     ./runTests.sh -s clean
     ./additionalTests.sh -s clean
-    git checkout ../../composer.json
+    echo "Cleaned up all test related files"
 }
 
-checkResources
+LOWEST="--prefer-lowest"
+TPATH="Tests/Functional"
 
-runFunctionalTests "8.1" "^12.4" "^8.0.2" "Tests/Functional" || exit 1
-cleanup
-runFunctionalTests "8.1" "^12.4" "^8.0.2" "Tests/Functional" "--prefer-lowest" || exit 1
-cleanup
-runFunctionalTests "8.2" "^12.4" "^8.0.2" "Tests/Functional" || exit 1
-cleanup
-runFunctionalTests "8.2" "^12.4" "^8.0.2" "Tests/Functional" "--prefer-lowest" || exit 1
-cleanup
+DEBUG_TESTS=false
+if [[ $DEBUG_TESTS != true ]]; then
+    checkResources
+
+    TCORE="^13.1"
+    TFRAMEWORK="dev-main"
+
+    runFunctionalTests "8.2" ${TCORE} ${TFRAMEWORK} ${TPATH} || exit 1
+    runFunctionalTests "8.2" ${TCORE} ${TFRAMEWORK} ${TPATH} ${LOWEST} || exit 1
+    runFunctionalTests "8.3" ${TCORE} ${TFRAMEWORK} ${TPATH} || exit 1
+    runFunctionalTests "8.3" ${TCORE} ${TFRAMEWORK} ${TPATH} ${LOWEST} || exit 1
+else
+    #cleanup
+    runFunctionalTests "8.3" "^13.3" "dev-main" ${TPATH} ${LOWEST} || exit 1
+    #runFunctionalTests "8.2" "^13.0" "dev-main" "Tests/Functional" || exit 1
+    # ./runTests.sh -x -p 8.2 -d sqlite -s functional -e "--group selected" Tests/Functional12
+    # ./runTests.sh -p "8.1" -x -d sqlite -s functional Tests/Functional;
+fi

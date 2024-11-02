@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-namespace Evoweb\StoreFinder\ViewHelpers\Format;
-
 /*
  * This file is developed by evoWeb.
  *
@@ -15,12 +13,14 @@ namespace Evoweb\StoreFinder\ViewHelpers\Format;
  * LICENSE.txt file that was distributed with this source code.
  */
 
+namespace Evoweb\StoreFinder\ViewHelpers\Format;
+
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 class RemoveEscapingViewHelper extends AbstractViewHelper
 {
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
 
@@ -29,18 +29,12 @@ class RemoveEscapingViewHelper extends AbstractViewHelper
 
     /**
      * Replace escaping of curly braces
-     *
-     * @param array $arguments
-     * @param \Closure $renderChildrenClosure
-     * @param RenderingContextInterface $renderingContext
-     *
-     * @return string
      */
     public static function renderStatic(
         array $arguments,
         \Closure $renderChildrenClosure,
         RenderingContextInterface $renderingContext
-    ) {
+    ): string {
         $content = $arguments['content'] ?? $renderChildrenClosure();
         return str_replace(['\{', '\}'], ['{', '}'], $content);
     }

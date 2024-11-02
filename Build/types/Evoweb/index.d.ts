@@ -27,7 +27,7 @@ declare module '@evoweb/store-finder/leaflet/leaflet-src.esm.js' {
 }
 
 declare interface MapConfiguration {
-  active: Boolean,
+  active: boolean,
   afterSearch: number;
   center?: {
     lat: number,
@@ -36,8 +36,9 @@ declare interface MapConfiguration {
   zoom?: number;
 
   apiConsoleKey: string,
-  apiUrl: string,
   language: string,
+  mapId?: string,
+  libraries?: Array<string>,
 
   markerIcon: string,
   apiV3Layers: string,
@@ -49,6 +50,13 @@ declare interface MapConfiguration {
 
   renderSingleViewCallback(location: object, template: string): void,
   handleCloseButtonCallback(button: object): void,
+}
+
+declare interface MarkerOptions {
+  map: google.maps.Map;
+  title: string;
+  position: google.maps.LatLng;
+  content?: HTMLElement;
 }
 
 declare interface BackendConfiguration {

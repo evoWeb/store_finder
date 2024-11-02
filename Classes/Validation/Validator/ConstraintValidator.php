@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-namespace Evoweb\StoreFinder\Validation\Validator;
-
 /*
  * This file is developed by evoWeb.
  *
@@ -15,6 +13,8 @@ namespace Evoweb\StoreFinder\Validation\Validator;
  * LICENSE.txt file that was distributed with this source code.
  */
 
+namespace Evoweb\StoreFinder\Validation\Validator;
+
 use Evoweb\StoreFinder\Domain\Model\Constraint;
 use TYPO3\CMS\Extbase\Error\Result;
 use TYPO3\CMS\Extbase\Validation\Validator\AbstractGenericObjectValidator;
@@ -24,8 +24,6 @@ class ConstraintValidator extends AbstractGenericObjectValidator
 {
     /**
      * Model that gets validated currently
-     *
-     * @var Constraint
      */
     protected Constraint $model;
 

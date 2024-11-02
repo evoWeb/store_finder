@@ -1,11 +1,10 @@
-.. include:: /Includes.rst.txt
-
-.. _templating:
+..  include:: /Includes.rst.txt
+..  index:: Templating
+..  _templating:
 
 ==========
 Templating
 ==========
-
 
 Templates, partials and layouts
 ===============================
@@ -13,7 +12,6 @@ Templates, partials and layouts
 Like every other extbase extension its possible to configure the fluid
 templates, partials and layout path via typoscript. Beside that is also
 possible to configure the templates and partials path in the plugin.
-
 
 Example:
 ________
@@ -27,22 +25,20 @@ ________
         layoutRootPath =
     }
 
-
-Viewhelper
+ViewHelper
 ==========
 
-Beside the default viewhelpers of fluid the extension comes with three
-additional viewhelpers. These are used to render the search like the
-form.selectCountries viewhelper, the map like the minify viewhelper and
+Beside the default ViewHelper of fluid the extension comes with three
+additional ViewHelper. These are used to render the search like the
+form.selectCountries ViewHelper, the map like the minify ViewHelper and
 select what to render based on the configuration like the
-format.binaryAnd viewhelper.
+format.binaryAnd ViewHelper.
 
 They are used by including the namespace in the file in which the
-viewhelper get used.
+ViewHelper get used.
 
-
-Register Namespace:
-===================
+Register Namespace
+==================
 
 Add the xmlns to the html tag in the template
 
@@ -51,19 +47,17 @@ Add the xmlns to the html tag in the template
 
     xmlns:sf="http://typo3.org/ns/Evoweb/StoreFinder/ViewHelpers"
 
-
-minify Viewhelper
+minify ViewHelper
 =================
 
-This viewhelper gets used to minify the rendered json of the locations
+This ViewHelper gets used to minify the rendered json of the locations
 in the result map. The purpose is to reduce the traffic and clean the
 source code.
 So in stead of making the template unreadable the output gets minified
 on rendering time.
 
-
-Example viewhelper:
--------------------
+Example ViewHelper
+------------------
 
 .. code-block:: html
    :caption: EXT:my_extension/Resources/Private/Templates/Map/Map.html
@@ -77,53 +71,48 @@ Example viewhelper:
         zoom: '{center.zoom}'
     </sf:minify>};
 
-
-Example output:
----------------
+Example output
+--------------
 
 .. code-block:: html
    :caption: EXT:my_extension/Resources/Private/Templates/Map/Map.html
 
     var mapConfiguration = {active:true,apiV3Layers:'',language:'de',center:{lat:50.1125089,lng:8.6521548},zoom:'11'}
 
-
-format.binaryAnd Viewhelper
+format.binaryAnd ViewHelper
 ===========================
 
 To be able to select which partial should be rendered its necessary to
 compare with binary and if the part is check in the plugin. As the f:if
-viewhelper is not able to do so, a special viewhelper is needed for that.
+ViewHelper is not able to do so, a special ViewHelper is needed for that.
 
 Basically what this means is, that the setting value, in this case
 showBeforeSearch, is formatted with a logical and for comparison like in
 the example below. Here we check if the list should be rendered because
 in the plugin the binary value 4 stands for list.
 
-
-Example viewhelper:
--------------------
+Example ViewHelper
+------------------
 
 .. code-block:: html
    :caption: EXT:my_extension/Resources/Private/Templates/Map/Map.html
 
     <f:if condition="{sf:format.binaryAnd(base: 4, content: settings.showBeforeSearch)} == 4">...</f:if>
 
-
 form.selectCountries
 ====================
 
-The countries select viewhelper fetches the countries from
-static_info_tables and renders each country as option. All attributes from
+The countries select ViewHelper fetches the countries from the country
+provider and renders each country as option. All attributes from
 the fluid standard form.select are supported. Beside that if the optional
 attribute allowedCountries is set, only countries matching it get rendered.
 allowedCountries accepts a comma seperated list of ISO2 country codes.
 
-
-Example viewhelper:
--------------------
+Example ViewHelper
+------------------
 
 .. code-block:: html
    :caption: EXT:my_extension/Resources/Private/Templates/Map/Map.html
 
-    <sf:form.selectCountries property="country" id="sfrCountry" optionValueField="isoCodeA3" allowedCountries="{0: 'DE', 1: 'AT'}" />
-
+    <sf:form.selectCountries property="country" id="sfrCountry"
+        optionValueField="alpha2IsoCode" allowedCountries="{0: 'DE', 1: 'AT'}" />

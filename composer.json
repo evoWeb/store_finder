@@ -7,6 +7,8 @@
 		"GPL-2.0-or-later"
 	],
 	"keywords": [
+		"TYPO3",
+		"extension",
 		"store finder",
 		"store locator",
 		"poi",
@@ -21,42 +23,48 @@
 		"docs": "https://docs.typo3.org/p/evoweb/store-finder/main/en-us/"
 	},
 	"config": {
+		"vendor-dir": "Build/vendor",
 		"bin-dir": "bin",
-		"sort-packages": true,
 		"allow-plugins": {
-			"typo3/cms-composer-installers": true,
 			"typo3/class-alias-loader": true,
+			"typo3/cms-composer-installers": true,
 			"php-http/discovery": true
 		}
 	},
 	"require": {
-		"php": "^8.1",
-		"typo3/cms-core": "^12.4 || 12.4.x-dev || dev-main",
-		"typo3/cms-backend": "^12.4 || 12.4.x-dev || dev-main",
-		"typo3/cms-extbase": "^12.4 || 12.4.x-dev || dev-main",
-		"typo3/cms-fluid": "^12.4 || 12.4.x-dev || dev-main",
-		"typo3/cms-frontend": "^12.4 || 12.4.x-dev || dev-main",
-		"typo3/cms-install": "^12.4 || 12.4.x-dev || dev-main",
+		"php": "^8.2",
+		"typo3/cms-core": "^13.3 || 13.4.x-dev || dev-main",
+		"typo3/cms-backend": "^13.3 || 13.4.x-dev || dev-main",
+		"typo3/cms-extbase": "^13.3 || 13.4.x-dev || dev-main",
+		"typo3/cms-fluid": "^13.3 || 13.4.x-dev || dev-main",
+		"typo3/cms-frontend": "^13.3 || 13.4.x-dev || dev-main",
+		"typo3/cms-install": "^13.3 || 13.4.x-dev || dev-main",
 
-		"typo3/cms-extensionmanager": "^12.4 || 12.4.x-dev || dev-main",
-		"doctrine/annotations": "^1.13.3 || ^2.0",
-		"doctrine/dbal": "^3.7.2",
-		"geocoder-php/google-maps-provider": "^4.7.0",
-		"guzzlehttp/guzzle": "^7.7.0",
-		"phpoffice/phpspreadsheet": "^1.28.0",
+		"doctrine/annotations": "^2.0.2",
+		"doctrine/dbal": "^4.1.1",
+		"guzzlehttp/guzzle": "^7.9.2",
 		"psr/event-dispatcher": "^1.0",
 		"psr/http-message": "^1.1 || ^2.0",
 		"psr/http-server-handler": "^1.0",
 		"psr/http-server-middleware": "^1.0",
-		"sjbr/static-info-tables": "dev-master",
-		"symfony/console": "^6.4 || ^7.0"
+		"symfony/console": "^7.1",
+		"geocoder-php/google-maps-provider": "^4.7.1",
+		"php-http/discovery": "^1.16",
+		"phpoffice/phpspreadsheet": "^2.2.0"
 	},
 	"require-dev": {
-		"typo3/testing-framework": "^8.0.2 || dev-main"
+		"friendsofphp/php-cs-fixer": "^3.64.0",
+		"friendsoftypo3/phpstan-typo3": "^0.9.0",
+		"phpstan/phpstan": "^1.12.5",
+		"typo3/testing-framework": "dev-main"
 	},
+	"minimum-stability": "dev",
+	"prefer-stable": true,
 	"extra": {
 		"typo3/cms": {
-			"extension-key": "store_finder"
+			"extension-key": "store_finder",
+			"app-dir": "Build",
+			"web-dir": "Build/Web"
 		}
 	},
 	"scripts": {
@@ -69,10 +77,13 @@
 			"sed -i \"s/version' => '.*'/version' => '$(echo ${GITHUB_REF} | cut -d / -f 3)'/\" ext_emconf.php\n"
 		],
 		"post-install-cmd": [
-			"ln -sf ../vendor/typo3/testing-framework/Resources/Core/Build/ Build/phpunit;"
+			"ln -sf vendor/typo3/testing-framework/Resources/Core/Build/ Build/phpunit;"
 		],
 		"post-update-cmd": [
 			"@post-install-cmd"
+		],
+		"post-autoload-dump": [
+			"TYPO3\\TestingFramework\\Composer\\ExtensionTestEnvironment::prepare"
 		]
 	},
 	"autoload": {
@@ -83,12 +94,6 @@
 	"autoload-dev": {
 		"psr-4": {
 			"Evoweb\\StoreFinder\\Tests\\": "Tests/"
-		}
-	},
-	"repositories": {
-		"static-info-tables": {
-			"type": "git",
-			"url": "https://github.com/garbast/static_info_tables.git"
 		}
 	}
 }

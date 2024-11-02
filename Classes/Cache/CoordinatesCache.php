@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-namespace Evoweb\StoreFinder\Cache;
-
 /*
  * This file is developed by evoWeb.
  *
@@ -15,18 +13,39 @@ namespace Evoweb\StoreFinder\Cache;
  * LICENSE.txt file that was distributed with this source code.
  */
 
+namespace Evoweb\StoreFinder\Cache;
+
 use Evoweb\StoreFinder\Domain\Model\Location;
+use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
-use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
+use TYPO3\CMS\Core\Http\NormalizedParams;
+use TYPO3\CMS\Core\Http\SetCookieService;
+use TYPO3\CMS\Core\Session\UserSession;
+use TYPO3\CMS\Core\Session\UserSessionManager;
 
 class CoordinatesCache
 {
     protected array $fields = ['address', 'zipcode', 'city', 'state', 'country'];
 
-    public function __construct(
-        protected FrontendInterface $cacheFrontend,
-        protected ?FrontendUserAuthentication $frontendUser = null
-    ) {
+    protected string $sessionName = 'evoweb-storefinder-session';
+
+    protected string $sessionKey = 'coordinates';
+
+    protected UserSessionManager $userSessionManager;
+
+    protected UserSession $session;
+
+    public function __construct(protected FrontendInterface $cacheFrontend)
+    {
+    }
+
+    public function initializeUserSessionManager(?UserSessionManager $userSessionManager = null): void
+    {
+        $this->userSessionManager = $userSessionManager ?? UserSessionManager::create('FE');
+        $this->session = $this->userSessionManager->createFromRequestOrAnonymous(
+            $this->getRequest(),
+            $this->sessionName,
+        );
     }
 
     public function addCoordinateForAddress(Location $address, array $queryValues): void
@@ -39,7 +58,7 @@ class CoordinatesCache
         $hash = md5(serialize(array_values($queryValues)));
         $coordinate = [
             'latitude' => $address->getLatitude(),
-            'longitude' => $address->getLongitude()
+            'longitude' => $address->getLongitude(),
         ];
 
         if (count($fields) <= 3) {
@@ -83,52 +102,38 @@ class CoordinatesCache
     }
 
     /**
-     * Check if session has key set and the value is not empty
-     *
-     * @param string $key
-     *
-     * @return bool
+     * Check if session has key set and return true if the value is not empty
      */
     public function sessionHasKey(string $key): bool
     {
-        $sessionData = $this->frontendUser?->getKey('ses', 'tx_storefinder_coordinates');
-
-        return is_array($sessionData) && !empty($sessionData[$key]);
+        return !empty($this->session->getData()[$this->sessionKey][$key] ?? []);
     }
 
     public function getValueFromSession(string $key): array
     {
-        $sessionData = $this->frontendUser?->getKey('ses', 'tx_storefinder_coordinates');
+        $sessionData = $this->session->get($this->sessionKey);
 
         return is_array($sessionData) && isset($sessionData[$key]) ? unserialize($sessionData[$key]) : [];
     }
 
     public function setValueInSession(string $key, array $value): void
     {
-        if ($this->frontendUser != null) {
-            $sessionData = $this->frontendUser->getKey('ses', 'tx_storefinder_coordinates');
+        $sessionData = $this->session->get($this->sessionKey);
+        $sessionData[$key] = serialize($value);
 
-            $sessionData[$key] = serialize($value);
-
-            $this->frontendUser->setKey('ses', 'tx_storefinder_coordinates', $sessionData);
-            $this->frontendUser->storeSessionData();
-        }
+        $this->session->set($this->sessionKey, $sessionData);
+        $this->userSessionManager->updateSession($this->session);
+        $setCookieService = SetCookieService::create($this->sessionName, 'FE');
+        $normalizedParams = NormalizedParams::createFromRequest($this->getRequest());
+        $setCookieService->setSessionCookie($this->session, $normalizedParams);
     }
 
     public function flushSessionCache(): void
     {
-        if ($this->frontendUser != null) {
-            $this->frontendUser->setKey('ses', 'tx_storefinder_coordinates', []);
-            $this->frontendUser->storeSessionData();
-        }
-    }
-
-    /**
-     * Check if cache table has key set
-     */
-    public function cacheTableHasKey(string $key): bool
-    {
-        return $this->cacheFrontend->has($key) && $this->getValueFromCacheTable($key) !== false;
+        $this->userSessionManager->removeSession($this->session);
+        $setCookieService = SetCookieService::create($this->sessionName, 'FE');
+        $normalizedParams = NormalizedParams::createFromRequest($this->getRequest());
+        $setCookieService->removeCookie($normalizedParams);
     }
 
     /**
@@ -153,5 +158,10 @@ class CoordinatesCache
     public function flushCacheTable(): void
     {
         $this->cacheFrontend->flush();
+    }
+
+    public function getRequest(): ServerRequestInterface
+    {
+        return $GLOBALS['TYPO3_REQUEST'];
     }
 }

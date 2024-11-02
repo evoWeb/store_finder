@@ -1,11 +1,10 @@
-.. include:: /Includes.rst.txt
-
-.. _geocoding:
+..  include:: /Includes.rst.txt
+..  index:: Geocoding provider
+..  _geocoding:
 
 ==================
 Geocoding provider
 ==================
-
 
 Changing geocoding provider
 ===========================
@@ -18,10 +17,10 @@ found here `geocoder-php/Geocoder <https://github.com/geocoder-php/Geocoder#addr
 
 This can be achieved by
 
-.. code-block:: bash
-   :caption: Enter on shell
+..  code-block:: bash
+    :caption: Enter on shell
 
-   composer require geocoder-php/nominatim-provider
+    composer require geocoder-php/nominatim-provider
 
 
 Extension configuration
@@ -30,10 +29,10 @@ Extension configuration
 If you choose to use a different providers it's important to set the provider classname in the
 field geocoderProvider:
 
-.. code-block:: typoscript
-   :caption: Settings > Extension configuration
+..  code-block:: typoscript
+    :caption: Settings > Extension configuration
 
-   geocoderProvider = Geocoder\Provider\Nominatim\Nominatim
+    geocoderProvider = Geocoder\Provider\Nominatim\Nominatim
 
 
 TypoScript constants
@@ -41,7 +40,7 @@ TypoScript constants
 
 If you want to use the additional provider for geocoding search results too, you need to change the constant
 
-.. code-block:: typoscript
-   :caption: EXT:my_extension/Configuration/TypoScript/constants.typoscript
+..  code-block:: typoscript
+    :caption: EXT:my_extension/Configuration/TypoScript/constants.typoscript
 
-   plugin.tx_storefinder.geocoderProvider = Geocoder\Provider\Nominatim\Nominatim
+    plugin.tx_storefinder.geocoderProvider = Geocoder\Provider\Nominatim\Nominatim

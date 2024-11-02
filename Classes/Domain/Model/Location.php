@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-namespace Evoweb\StoreFinder\Domain\Model;
-
 /*
  * This file is developed by evoWeb.
  *
@@ -15,13 +13,16 @@ namespace Evoweb\StoreFinder\Domain\Model;
  * LICENSE.txt file that was distributed with this source code.
  */
 
-use SJBR\StaticInfoTables\Domain\Model\Country;
+namespace Evoweb\StoreFinder\Domain\Model;
+
 use SJBR\StaticInfoTables\Domain\Model\CountryZone;
+use TYPO3\CMS\Core\Country\Country;
+use TYPO3\CMS\Core\Country\CountryProvider;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Annotation as Extbase;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
-use TYPO3\CMS\Extbase\Persistence\Generic\LazyObjectStorage;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 class Location extends AbstractEntity
@@ -66,8 +67,9 @@ class Location extends AbstractEntity
 
     protected int $zoom = 0;
 
-    #[Extbase\ORM\Lazy]
-    protected null|Country|LazyLoadingProxy $country = null;
+    protected string $country = '';
+
+    protected ?Country $countryShadow = null;
 
     #[Extbase\ORM\Lazy]
     protected null|CountryZone|LazyLoadingProxy $state = null;
@@ -76,53 +78,58 @@ class Location extends AbstractEntity
      * @var ObjectStorage<Attribute>
      */
     #[Extbase\ORM\Lazy]
-    protected ObjectStorage|LazyObjectStorage $attributes;
+    protected ObjectStorage $attributes;
 
     /**
      * @var ObjectStorage<Category>
      */
     #[Extbase\ORM\Lazy]
-    protected ObjectStorage|LazyObjectStorage $categories;
+    protected ObjectStorage $categories;
 
     /**
      * @var ObjectStorage<Content>
      */
     #[Extbase\ORM\Lazy]
-    protected ObjectStorage|LazyObjectStorage $contentElements;
+    protected ObjectStorage $contentElements;
 
     /**
      * @var ObjectStorage<Location>
      */
     #[Extbase\ORM\Lazy]
-    protected ObjectStorage|LazyObjectStorage $related;
+    protected ObjectStorage $related;
 
     /**
      * @var ObjectStorage<FileReference>
      */
     #[Extbase\ORM\Lazy]
-    protected ObjectStorage|LazyObjectStorage $image;
+    protected ObjectStorage $image;
 
     /**
      * @var ObjectStorage<FileReference>
      */
     #[Extbase\ORM\Lazy]
-    protected ObjectStorage|LazyObjectStorage $media;
+    protected ObjectStorage $media;
 
     /**
      * @var ObjectStorage<FileReference>
      */
     #[Extbase\ORM\Lazy]
-    protected ObjectStorage|LazyObjectStorage $layer;
+    protected ObjectStorage $layer;
 
     /**
      * @var ObjectStorage<FileReference>
      */
     #[Extbase\ORM\Lazy]
-    protected ObjectStorage|LazyObjectStorage $icon;
+    protected ObjectStorage $icon;
 
     protected float $distance = 0.0;
 
     public function __construct()
+    {
+        $this->initializeObject();
+    }
+
+    public function initializeObject(): void
     {
         $this->attributes = new ObjectStorage();
         $this->categories = new ObjectStorage();
@@ -221,7 +228,7 @@ class Location extends AbstractEntity
             : $this->state;
     }
 
-    public function setState(CountryZone $state): void
+    public function setState(?CountryZone $state): void
     {
         $this->state = $state;
     }
@@ -231,21 +238,31 @@ class Location extends AbstractEntity
         return $this->getState() ? $this->getState()->getNameEn() : '';
     }
 
-    public function getCountry(): ?Country
+    public function getCountry(): null|Country
     {
-        return $this->country instanceof LazyLoadingProxy
-            ? $this->country->_loadRealInstance()
-            : $this->country;
+        if ($this->countryShadow === null && $this->country !== '') {
+            $countryProvider = GeneralUtility::makeInstance(CountryProvider::class);
+            $this->countryShadow = $countryProvider->getByAlpha2IsoCode($this->country);
+        }
+        return $this->countryShadow;
     }
 
-    public function setCountry(Country $country): void
+    /**
+     * @param string $country
+     */
+    public function setCountry($country): void
     {
-        $this->country = $country;
+        if ($country instanceof Country) {
+            $this->countryShadow = $country;
+            $this->country = $country->getAlpha2IsoCode();
+        } else {
+            $this->country = $country;
+        }
     }
 
     public function getCountryName(): string
     {
-        return $this->getCountry() ? $this->getCountry()->getShortNameEn() : '';
+        return $this->getCountry() ? $this->getCountry()->getLocalizedNameLabel() : '';
     }
 
     public function getAdditionaladdress(): string

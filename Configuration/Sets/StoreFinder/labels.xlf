@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+	<file source-language="en" datatype="plaintext" original="EXT:fluid_styled_content/Configuration/Sets/FluidStyledContent/labels.xlf" date="2024-09-05T08:00:00Z" product-name="fluid_styled_content">
+		<header/>
+		<body>
+			<trans-unit id="label" resname="label">
+				<source>Store Finder</source>
+			</trans-unit>
+
+			<trans-unit id="categories.store-finder" resname="categories.store-finder">
+				<source>Store Finder</source>
+			</trans-unit>
+			<trans-unit id="categories.store-finder.common" resname="categories.store-finder.common">
+				<source>Common</source>
+			</trans-unit>
+			<trans-unit id="categories.store-finder.plugin" resname="categories.store-finder.plugin">
+				<source>Plugin</source>
+			</trans-unit>
+			<trans-unit id="categories.store-finder.ajax" resname="categories.store-finder.ajax">
+				<source>Ajax</source>
+			</trans-unit>
+
+			<trans-unit id="settings.evoweb.store-finder.geocoderProvider" resname="settings.evoweb.store-finder.geocoderProvider">
+				<source>Class of the geocoder to use</source>
+			</trans-unit>
+			<trans-unit id="settings.description.evoweb.store-finder.geocoderProvider" resname="settings.description.evoweb.store-finder.geocoderProvider">
+				<source>Leave as is if now extra geocoder is installed</source>
+			</trans-unit>
+			<trans-unit id="settings.evoweb.store-finder.geocoderLocale" resname="settings.evoweb.store-finder.geocoderLocale">
+				<source>Locale for geocoder</source>
+			</trans-unit>
+			<trans-unit id="settings.description.evoweb.store-finder.geocoderLocale" resname="settings.description.evoweb.store-finder.geocoderLocale">
+				<source/>
+			</trans-unit>
+			<trans-unit id="settings.evoweb.store-finder.mapId" resname="settings.evoweb.store-finder.mapId">
+				<source>MapID to identify a map and configure the map rendering</source>
+			</trans-unit>
+			<trans-unit id="settings.evoweb.store-finder.googleLibraries" resname="settings.evoweb.store-finder.googleLibraries">
+				<source>Comma separated list of Google map libraries to load</source>
+			</trans-unit>
+			<trans-unit id="settings.description.evoweb.store-finder.googleLibraries" resname="settings.description.evoweb.store-finder.googleLibraries">
+				<source>Core, maps and marker are always added by the configuration partial</source>
+			</trans-unit>
+			<trans-unit id="settings.evoweb.store-finder.apiConsoleKey" resname="settings.evoweb.store-finder.apiConsoleKey">
+				<source>Key for frontend map rendering</source>
+			</trans-unit>
+			<trans-unit id="settings.description.evoweb.store-finder.apiConsoleKey" resname="settings.description.evoweb.store-finder.apiConsoleKey">
+				<source>This key needs to be configured in Google Cloud Console with limit by domain on which to render the map see https://developers.google.com/maps/documentation/javascript/tutorial</source>
+			</trans-unit>
+			<trans-unit id="settings.evoweb.store-finder.apiConsoleKeyGeocoding" resname="settings.evoweb.store-finder.apiConsoleKeyGeocoding">
+				<source>Key for geocoding in php</source>
+			</trans-unit>
+			<trans-unit id="settings.description.evoweb.store-finder.apiConsoleKeyGeocoding" resname="settings.description.evoweb.store-finder.apiConsoleKeyGeocoding">
+				<source>This key needs to be configured in Google Cloud Console without limit see https://developers.google.com/maps/documentation/geocoding/requests-geocoding</source>
+			</trans-unit>
+			<trans-unit id="settings.evoweb.store-finder.addPaginator" resname="settings.evoweb.store-finder.addPaginator">
+				<source>Add paginator to lists</source>
+			</trans-unit>
+			<trans-unit id="settings.description.evoweb.store-finder.addPaginator" resname="settings.description.evoweb.store-finder.addPaginator">
+				<source/>
+			</trans-unit>
+			<trans-unit id="settings.evoweb.store-finder.templateRootPaths" resname="settings.evoweb.store-finder.templateRootPaths">
+				<source>Template root path for plugin rendering</source>
+			</trans-unit>
+			<trans-unit id="settings.description.evoweb.store-finder.templateRootPaths" resname="settings.description.evoweb.store-finder.templateRootPaths">
+				<source/>
+			</trans-unit>
+			<trans-unit id="settings.evoweb.store-finder.partialRootPaths" resname="settings.evoweb.store-finder.partialRootPaths">
+				<source>Partial root path for plugin rendering</source>
+			</trans-unit>
+			<trans-unit id="settings.description.evoweb.store-finder.partialRootPaths" resname="settings.description.evoweb.store-finder.partialRootPaths">
+				<source/>
+			</trans-unit>
+			<trans-unit id="settings.evoweb.store-finder.layoutRootPaths" resname="settings.evoweb.store-finder.layoutRootPaths">
+				<source>Layout root path for plugin rendering</source>
+			</trans-unit>
+			<trans-unit id="settings.description.evoweb.store-finder.layoutRootPaths" resname="settings.description.evoweb.store-finder.layoutRootPaths">
+				<source/>
+			</trans-unit>
+			<trans-unit id="settings.evoweb.store-finder.ajax.templateRootPaths" resname="settings.evoweb.store-finder.ajax.templateRootPaths">
+				<source>Template root path for ajax rendering</source>
+			</trans-unit>
+			<trans-unit id="settings.description.evoweb.store-finder.ajax.templateRootPaths" resname="settings.description.evoweb.store-finder.ajax.templateRootPaths">
+				<source/>
+			</trans-unit>
+			<trans-unit id="settings.evoweb.store-finder.ajax.partialRootPaths" resname="settings.evoweb.store-finder.ajax.partialRootPaths">
+				<source>Partial root path for ajax rendering</source>
+			</trans-unit>
+			<trans-unit id="settings.description.evoweb.store-finder.ajax.partialRootPaths" resname="settings.description.evoweb.store-finder.ajax.partialRootPaths">
+				<source/>
+			</trans-unit>
+			<trans-unit id="settings.evoweb.store-finder.ajax.layoutRootPaths" resname="settings.evoweb.store-finder.ajax.layoutRootPaths">
+				<source>Layout root path for ajax rendering</source>
+			</trans-unit>
+			<trans-unit id="settings.description.evoweb.store-finder.ajax.layoutRootPaths" resname="settings.description.evoweb.store-finder.ajax.layoutRootPaths">
+				<source/>
+			</trans-unit>
+			<trans-unit id="settings.evoweb.store-finder.ajax.storagePid" resname="settings.evoweb.store-finder.ajax.storagePid">
+				<source>Comma separated list of page IDs of folder in which the locations are stored</source>
+			</trans-unit>
+			<trans-unit id="settings.description.evoweb.store-finder.ajax.storagePid" resname="settings.description.evoweb.store-finder.ajax.storagePid">
+				<source/>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

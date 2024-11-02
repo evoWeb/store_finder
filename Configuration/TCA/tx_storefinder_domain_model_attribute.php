@@ -26,56 +26,6 @@ return [
     ],
 
     'columns' => [
-        'sys_language_uid' => [
-            'exclude' => true,
-            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
-            'config' => [
-                'type' => 'language',
-            ],
-        ],
-        'l18n_parent' => [
-            'displayCond' => 'FIELD:sys_language_uid:>:0',
-            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
-            'config' => [
-                'type' => 'select',
-                'renderType' => 'selectSingle',
-                'items' => [
-                    ['label' => '', 'value' => 0],
-                ],
-                'foreign_table' => 'tx_storefinder_domain_model_attribute',
-                // no sys_language_uid = -1 allowed explicitly!
-                'foreign_table_where' =>
-                    'AND tx_storefinder_domain_model_attribute.pid = ###CURRENT_PID###
-                     AND tx_storefinder_domain_model_attribute.sys_language_uid = 0',
-                'default' => 0
-            ]
-        ],
-        'l10n_source' => [
-            'config' => [
-                'type' => 'passthrough',
-            ],
-        ],
-        'l18n_diffsource' => [
-            'config' => [
-                'type' => 'passthrough',
-                'default' => '',
-            ],
-        ],
-        'hidden' => [
-            'exclude' => true,
-            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.visible',
-            'config' => [
-                'type' => 'check',
-                'renderType' => 'checkboxToggle',
-                'items' => [
-                    [
-                        'label' => '',
-                        'invertStateDisplay' => true,
-                    ],
-                ],
-            ]
-        ],
-
         'name' => [
             'label' => $languageFile . 'tx_storefinder_domain_model_attribute.name',
             'config' => [
@@ -83,8 +33,11 @@ return [
                 'size' => 50,
                 'max' => 255,
                 'eval' => 'trim',
-                'required' => true
-            ]
+                'required' => true,
+                'behaviour' => [
+                    'allowLanguageSynchronization' => true,
+                ],
+            ],
         ],
 
         'icon' => [
@@ -105,7 +58,10 @@ return [
                 'rows' => 15,
                 'enableRichtext' => true,
                 'softref' => 'typolink_tag,images,email[subst],url',
-            ]
+                'behaviour' => [
+                    'allowLanguageSynchronization' => true,
+                ],
+            ],
         ],
 
         'css_class' => [
@@ -115,6 +71,14 @@ return [
                 'size' => 50,
                 'max' => 255,
                 'eval' => 'trim',
+                'behaviour' => [
+                    'allowLanguageSynchronization' => true,
+                ],
+            ],
+        ],
+        'import_id' => [
+            'config' => [
+                'type' => 'number'
             ]
         ],
     ],
@@ -128,8 +92,8 @@ return [
                     --palette--;;language,
                 --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,
                     --palette--;;hidden,
-            '
-        ]
+            ',
+        ],
     ],
     'palettes' => [
         'language' => [
@@ -144,5 +108,5 @@ return [
                 hidden;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:field.default.hidden
             ',
         ],
-    ]
+    ],
 ];

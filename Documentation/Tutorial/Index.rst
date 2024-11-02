@@ -1,13 +1,12 @@
-.. include:: /Includes.rst.txt
-
-.. _tutorial:
+..  include:: /Includes.rst.txt
+..  index:: Tutorial
+..  _tutorial:
 
 ========
 Tutorial
 ========
 
 .. toctree::
-   :maxdepth: 5
    :titlesonly:
    :glob:
 

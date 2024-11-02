@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-namespace Evoweb\StoreFinder\EventListener;
-
 /*
  * This file is developed by evoWeb.
  *
@@ -15,10 +13,12 @@ namespace Evoweb\StoreFinder\EventListener;
  * LICENSE.txt file that was distributed with this source code.
  */
 
+namespace Evoweb\StoreFinder\EventListener;
 
 use Evoweb\StoreFinder\Controller\Event\MapGetLocationsByConstraintsEvent;
 use Evoweb\StoreFinder\Domain\Model\Constraint;
 use Evoweb\StoreFinder\Domain\Repository\LocationRepository;
+use TYPO3\CMS\Core\Attribute\AsEventListener;
 
 class MapGetAllLocationsListener
 {
@@ -29,6 +29,7 @@ class MapGetAllLocationsListener
         $this->locationRepository = $locationRepository;
     }
 
+    // #[AsEventListener('storefinder_controller_locationsfetched', MapGetLocationsByConstraintsEvent::class)]
     public function onLocationsFetchedEvent(MapGetLocationsByConstraintsEvent $event): void
     {
         if ($this->isOverrideLocations($event)) {
@@ -36,8 +37,10 @@ class MapGetAllLocationsListener
         }
     }
 
+    // #[AsEventListener('storefinder_controller_isoverride', MapGetLocationsByConstraintsEvent::class)]
     public function isOverrideLocations(MapGetLocationsByConstraintsEvent $event): bool
     {
+        // @extensionScannerIgnoreLine
         $controller = $event->getController();
         $constraint = $controller->getArguments()->hasArgument('constraint') ?
             $controller->getArguments()->getArgument('constraint')->getValue() :
