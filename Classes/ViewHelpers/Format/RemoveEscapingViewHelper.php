@@ -15,7 +15,6 @@ declare(strict_types=1);
 
 namespace Evoweb\StoreFinder\ViewHelpers\Format;
 
-use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 class RemoveEscapingViewHelper extends AbstractViewHelper
@@ -30,12 +29,9 @@ class RemoveEscapingViewHelper extends AbstractViewHelper
     /**
      * Replace escaping of curly braces
      */
-    public static function renderStatic(
-        array $arguments,
-        \Closure $renderChildrenClosure,
-        RenderingContextInterface $renderingContext
-    ): string {
-        $content = $arguments['content'] ?? $renderChildrenClosure();
+    public function render(): string
+    {
+        $content = $this->arguments['content'] ?? $this->renderChildren();
         return str_replace(['\{', '\}'], ['{', '}'], $content);
     }
 }

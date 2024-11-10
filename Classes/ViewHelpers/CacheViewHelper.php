@@ -17,23 +17,22 @@ namespace Evoweb\StoreFinder\ViewHelpers;
 
 use Evoweb\StoreFinder\Domain\Model\Location;
 use Evoweb\StoreFinder\Service\CacheService;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 class CacheViewHelper extends AbstractViewHelper
 {
+    public function __construct(protected CacheService $cacheService)
+    {
+    }
+
     public function initializeArguments(): void
     {
         $this->registerArgument('location', Location::class, 'the location to tag', true);
     }
 
-    public static function renderStatic(
-        array $arguments,
-        \Closure $renderChildrenClosure,
-        RenderingContextInterface $renderingContext
-    ): void {
-        $location = $arguments['location'];
-        GeneralUtility::makeInstance(CacheService::class)->addTagsForPost($location);
+    public function render(): void
+    {
+        $location = $this->arguments['location'];
+        $this->cacheService->addTagsForPost($location);
     }
 }

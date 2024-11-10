@@ -15,14 +15,10 @@ declare(strict_types=1);
 
 namespace Evoweb\StoreFinder\ViewHelpers;
 
-use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
-use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
 
 class MinifyViewHelper extends AbstractViewHelper
 {
-    use CompileWithRenderStatic;
-
     /**
      * @var bool
      */
@@ -49,13 +45,10 @@ class MinifyViewHelper extends AbstractViewHelper
     /**
      * Renders the content minified
      */
-    public static function renderStatic(
-        array $arguments,
-        \Closure $renderChildrenClosure,
-        RenderingContextInterface $renderingContext
-    ): string {
-        $content = $arguments['content'];
-        $content = $content ?: $renderChildrenClosure();
+    public function render(): string
+    {
+        $content = $this->arguments['content'];
+        $content = $content ?: $this->renderChildren();
 
         /* remove comments */
         $content = str_replace('://', "\xff", $content);

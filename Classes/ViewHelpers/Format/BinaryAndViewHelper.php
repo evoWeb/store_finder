@@ -15,14 +15,10 @@ declare(strict_types=1);
 
 namespace Evoweb\StoreFinder\ViewHelpers\Format;
 
-use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
-use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
 
 class BinaryAndViewHelper extends AbstractViewHelper
 {
-    use CompileWithRenderStatic;
-
     public function initializeArguments(): void
     {
         parent::initializeArguments();
@@ -44,13 +40,10 @@ class BinaryAndViewHelper extends AbstractViewHelper
     /**
      * Make a binary addition and return the result
      */
-    public static function renderStatic(
-        array $arguments,
-        \Closure $renderChildrenClosure,
-        RenderingContextInterface $renderingContext
-    ): int {
-        $content = $arguments['content'];
-        $base = $arguments['base'];
-        return ($content ?: $renderChildrenClosure()) & $base;
+    public function render(): int
+    {
+        $content = $this->arguments['content'];
+        $base = $this->arguments['base'];
+        return ($content ?: $this->renderChildren()) & $base;
     }
 }
