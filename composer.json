@@ -55,8 +55,11 @@
 	"require-dev": {
 		"friendsofphp/php-cs-fixer": "^3.64.0",
 		"friendsoftypo3/phpstan-typo3": "^0.9.0",
+		"phpstan/phpdoc-parser": "^1.30.0",
 		"phpstan/phpstan": "^1.12.5",
-		"typo3/testing-framework": "dev-main"
+		"phpunit/phpunit": "^11.0.3",
+		"typo3/testing-framework": "dev-main",
+		"sjbr/static-info-tables": "dev-master"
 	},
 	"minimum-stability": "dev",
 	"prefer-stable": true,
@@ -94,6 +97,12 @@
 	"autoload-dev": {
 		"psr-4": {
 			"Evoweb\\StoreFinder\\Tests\\": "Tests/"
+		}
+	},
+	"repositories": {
+		"static_info_tables": {
+			"url": "https://github.com/garbast/static_info_tables.git",
+			"type": "git"
 		}
 	}
 }

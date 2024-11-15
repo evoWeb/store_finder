@@ -25,6 +25,9 @@ use TYPO3\CMS\Core\Session\UserSessionManager;
 
 class CoordinatesCache
 {
+    /**
+     * @var string[]
+     */
     protected array $fields = ['address', 'zipcode', 'city', 'state', 'country'];
 
     protected string $sessionName = 'evoweb-storefinder-session';
@@ -48,6 +51,9 @@ class CoordinatesCache
         );
     }
 
+    /**
+     * @param array<string, mixed> $queryValues
+     */
     public function addCoordinateForAddress(Location $address, array $queryValues): void
     {
         if (empty($queryValues)) {
@@ -68,6 +74,9 @@ class CoordinatesCache
         }
     }
 
+    /**
+     * @param array<string, mixed> $queryValues
+     */
     public function getCoordinateByAddress(Location $address, array $queryValues): Location
     {
         if (empty($queryValues)) {
@@ -109,6 +118,9 @@ class CoordinatesCache
         return !empty($this->session->getData()[$this->sessionKey][$key] ?? []);
     }
 
+    /**
+     * @return array<string, double>
+     */
     public function getValueFromSession(string $key): array
     {
         $sessionData = $this->session->get($this->sessionKey);
@@ -116,6 +128,9 @@ class CoordinatesCache
         return is_array($sessionData) && isset($sessionData[$key]) ? unserialize($sessionData[$key]) : [];
     }
 
+    /**
+     * @param array<string, double> $value
+     */
     public function setValueInSession(string $key, array $value): void
     {
         $sessionData = $this->session->get($this->sessionKey);
@@ -146,6 +161,7 @@ class CoordinatesCache
 
     /**
      * Store coordinate for hash in cache table
+     * @param array<string, double> $value
      */
     public function setValueInCacheTable(string $key, array $value): void
     {

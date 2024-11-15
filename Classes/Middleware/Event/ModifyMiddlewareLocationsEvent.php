@@ -20,6 +20,10 @@ use Psr\Http\Message\ServerRequestInterface;
 
 final class ModifyMiddlewareLocationsEvent
 {
+    /**
+     * @param array<string, mixed> $settings
+     * @param array<array<string, mixed>> $locations
+     */
     public function __construct(
         protected ServerRequestInterface $request,
         protected StoreFinderMiddleware $storeFinderMiddleware,
@@ -32,6 +36,9 @@ final class ModifyMiddlewareLocationsEvent
         return $this->storeFinderMiddleware;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getSettings(): array
     {
         return $this->settings;
@@ -42,15 +49,19 @@ final class ModifyMiddlewareLocationsEvent
         return $this->request;
     }
 
+    /**
+     * @return array<array<string, mixed>>
+     */
     public function getLocations(): array
     {
         return $this->locations;
     }
 
-    public function setLocations(array $locations): self
+    /**
+     * @param array<array<string, mixed>> $locations
+     */
+    public function setLocations(array $locations): void
     {
         $this->locations = $locations;
-
-        return $this;
     }
 }

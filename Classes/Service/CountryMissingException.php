@@ -13,18 +13,8 @@ declare(strict_types=1);
  * LICENSE.txt file that was distributed with this source code.
  */
 
-namespace Evoweb\StoreFinder\Domain\Repository;
+namespace Evoweb\StoreFinder\Service;
 
-use Evoweb\StoreFinder\Domain\Model\Attribute;
-use TYPO3\CMS\Extbase\Persistence\QueryInterface;
-use TYPO3\CMS\Extbase\Persistence\Repository;
-
-/**
- * A repository for attributes
- *
- * @extends Repository<Attribute>
- */
-class AttributeRepository extends Repository
+class CountryMissingException extends \Exception
 {
-    protected $defaultOrderings = ['sorting' => QueryInterface::ORDER_ASCENDING];
 }

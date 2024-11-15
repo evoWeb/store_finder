@@ -141,81 +141,129 @@ class Location extends AbstractEntity
         $this->icon = new ObjectStorage();
     }
 
+    /**
+     * @return ObjectStorage<Attribute>
+     */
     public function getAttributes(): ObjectStorage
     {
         return $this->attributes;
     }
 
+    /**
+     * @param ObjectStorage<Attribute> $attributes
+     */
     public function setAttributes(ObjectStorage $attributes): void
     {
         $this->attributes = $attributes;
     }
 
+    /**
+     * @return ObjectStorage<Category>
+     */
     public function getCategories(): ObjectStorage
     {
         return $this->categories;
     }
 
+    /**
+     * @param ObjectStorage<Category> $categories
+     */
     public function setCategories(ObjectStorage $categories): void
     {
         $this->categories = $categories;
     }
 
+    /**
+     * @return ObjectStorage<Content>
+     */
     public function getContentElements(): ObjectStorage
     {
         return $this->contentElements;
     }
 
+    /**
+     * @param ObjectStorage<Content> $contentElements
+     */
     public function setContentElements(ObjectStorage $contentElements): void
     {
         $this->contentElements = $contentElements;
     }
 
+    /**
+     * @return ObjectStorage<Location>
+     */
     public function getRelated(): ObjectStorage
     {
         return $this->related;
     }
 
+    /**
+     * @param ObjectStorage<Location> $related
+     */
     public function setRelated(ObjectStorage $related): void
     {
         $this->related = $related;
     }
 
+    /**
+     * @return ObjectStorage<FileReference>
+     */
     public function getIcon(): ObjectStorage
     {
         return $this->icon;
     }
 
+    /**
+     * @param ObjectStorage<FileReference> $icon
+     */
     public function setIcon(ObjectStorage $icon): void
     {
         $this->icon = $icon;
     }
 
+    /**
+     * @return ObjectStorage<FileReference>
+     */
     public function getLayer(): ObjectStorage
     {
         return $this->layer;
     }
 
+    /**
+     * @param ObjectStorage<FileReference> $layer
+     */
     public function setLayer(ObjectStorage $layer): void
     {
         $this->layer = $layer;
     }
 
+    /**
+     * @return ObjectStorage<FileReference>
+     */
     public function getImage(): ObjectStorage
     {
         return $this->image;
     }
 
+    /**
+     * @param ObjectStorage<FileReference> $image
+     */
     public function setImage(ObjectStorage $image): void
     {
         $this->image = $image;
     }
 
+    /**
+     * @return ObjectStorage<FileReference>
+     */
     public function getMedia(): ObjectStorage
     {
         return $this->media;
     }
 
+    /**
+     * @param ObjectStorage<FileReference> $media
+     */
     public function setMedia(ObjectStorage $media): void
     {
         $this->media = $media;
@@ -250,7 +298,7 @@ class Location extends AbstractEntity
     /**
      * @param string $country
      */
-    public function setCountry($country): void
+    public function setCountry(string|Country $country): void
     {
         if ($country instanceof Country) {
             $this->countryShadow = $country;

@@ -18,6 +18,8 @@ namespace Evoweb\StoreFinder\Service;
 use Evoweb\StoreFinder\Cache\CoordinatesCache;
 use Evoweb\StoreFinder\Domain\Model\Constraint;
 use Evoweb\StoreFinder\Domain\Model\Location;
+use Geocoder\Exception\Exception;
+use Geocoder\Http\Provider\AbstractHttpProvider;
 use Geocoder\Model\Coordinates;
 use Geocoder\Provider\GoogleMaps\GoogleMaps;
 use Geocoder\Provider\Provider;
@@ -30,8 +32,14 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class GeocodeService
 {
+    /**
+     * @var array<string, mixed>
+     */
     protected array $settings = [];
 
+    /**
+     * @var string[]
+     */
     protected array $fields = ['address', 'zipcode', 'city', 'state', 'country'];
 
     public bool $hasMultipleResults = false;
@@ -43,6 +51,9 @@ class GeocodeService
         $this->coordinatesCache->initializeUserSessionManager();
     }
 
+    /**
+     * @param array<string, mixed> $settings
+     */
     public function setSettings(array $settings): void
     {
         $this->settings = $settings;
@@ -68,6 +79,11 @@ class GeocodeService
         return $geoCodedAddress;
     }
 
+    /**
+     * @param string[] $queryValues
+     * @throws CountryMissingException
+     * @throws Exception
+     */
     protected function processAddress(Location $location, array $queryValues): Location
     {
         if (empty($queryValues)) {
@@ -95,6 +111,11 @@ class GeocodeService
         return $location;
     }
 
+    /**
+     * @param string[] $fields
+     * @return array<string, string>
+     * @throws CountryMissingException
+     */
     public function prepareValuesForQuery(Location $location, array $fields): array
     {
         // for url encoding
@@ -127,7 +148,7 @@ class GeocodeService
         }
 
         if (!isset($queryValues['country'])) {
-            throw new \Exception(
+            throw new CountryMissingException(
                 'Country may never be empty. Check your TypoScript setup to define a default constraint. Query: '
                 . var_export($queryValues, true),
                 1618235512
@@ -137,6 +158,10 @@ class GeocodeService
         return $queryValues;
     }
 
+    /**
+     * @param array<string, string> $queryValues
+     * @throws Exception
+     */
     protected function getCoordinatesFromProvider(array $queryValues): Coordinates
     {
         if (!str_contains($this->settings['geocoderProvider'], '\\')) {
@@ -146,6 +171,8 @@ class GeocodeService
         }
 
         $httpClient = $this->guzzleFactory->getClient();
+        /** @var class-string<AbstractHttpProvider> $providerClass */
+        /** @var AbstractHttpProvider $provider */
         $provider = GeneralUtility::makeInstance(
             $providerClass,
             $httpClient,

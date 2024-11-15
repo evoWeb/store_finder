@@ -20,6 +20,8 @@ use Evoweb\StoreFinder\Service\CacheService;
 use Evoweb\StoreFinder\Service\GeocodeService;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
+use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
+use TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 
 class TceMainListener
@@ -40,6 +42,9 @@ class TceMainListener
 
     /**
      * After database operations hook
+     * @param array<string, mixed> $fieldValues
+     * @throws IllegalObjectTypeException
+     * @throws UnknownObjectException
      */
     public function processDatamap_afterDatabaseOperations(
         string $status,
@@ -75,6 +80,7 @@ class TceMainListener
 
     /**
      * Remap id for id and table
+     * @return array<int|string>
      */
     protected function remapId(string|int $NEW_id, string $table, DataHandler $parentObject): array
     {

@@ -41,6 +41,9 @@ class RecordsViewHelper extends AbstractViewHelper
         $this->registerArgument('uids', 'string', 'list of uids', true);
     }
 
+    /**
+     * @return array<string, mixed>[]
+     */
     public function render(): array
     {
         $table = $this->arguments['table'];
@@ -51,6 +54,10 @@ class RecordsViewHelper extends AbstractViewHelper
         return $this->getRecordsFromTable($table, $uids);
     }
 
+    /**
+     * @param int[] $uids
+     * @return array<string, mixed>[]
+     */
     protected function getRecordsFromTable(string $table, array $uids): array
     {
         $queryBuilder = $this->connectionPool->getQueryBuilderForTable($table);

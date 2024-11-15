@@ -6,12 +6,11 @@ routes:
 routeEnhancers:
   StoreFinderAjax:
     type: Simple
-    routePath: /api/storefinder/{action}/{contentUid}
+    routePath: '/api/storefinder/{action}/{content}'
     requirements:
-      action: '[a-zA-Z0-9].*'
+      action: '(categories|locations)'
       contentUid: '[0-9].*'
       language: '.*'
     _arguments:
       action: 'action'
-      contentUid: 'contentUid'
-      language: 'language'
+      content: 'contentUid'

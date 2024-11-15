@@ -25,6 +25,10 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class LocationCountryItems extends AbstractItemProvider implements FormDataProviderInterface
 {
+    /**
+     * @param array<string, mixed> $result
+     * @return array<string, mixed>
+     */
     public function addData(array $result): array
     {
         $table = $result['tableName'];
@@ -33,12 +37,10 @@ class LocationCountryItems extends AbstractItemProvider implements FormDataProvi
             $fieldName = '';
 
             /** @var CountryProvider $countryProvider */
-            $countryProvider = null;
+            $countryProvider = GeneralUtility::makeInstance(CountryProvider::class);
             foreach ($result['processedTca']['columns'] as $fieldName => $fieldConfig) {
                 if ($fieldName !== 'country') {
                     continue;
-                } elseif ($countryProvider === null) {
-                    $countryProvider = GeneralUtility::makeInstance(CountryProvider::class);
                 }
 
                 foreach ($countryProvider->getAll() as $country) {

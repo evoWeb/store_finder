@@ -30,16 +30,18 @@ use TYPO3\CMS\Core\Country\CountryProvider;
 use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Pagination\ArrayPaginator;
 use TYPO3\CMS\Core\Pagination\SimplePagination;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Annotation as Extbase;
 use TYPO3\CMS\Extbase\Http\ForwardResponse;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\Controller\Argument;
 use TYPO3\CMS\Extbase\Mvc\Controller\Arguments;
+use TYPO3\CMS\Extbase\Persistence\Generic\Exception as Exception;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Property\PropertyMappingConfiguration;
 use TYPO3\CMS\Extbase\Property\TypeConverter\PersistentObjectConverter;
+use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
+use TYPO3\CMS\Extbase\Validation\Validator\ConjunctionValidator;
 use TYPO3\CMS\Extbase\Validation\Validator\ValidatorInterface;
 use TYPO3\CMS\Extbase\Validation\ValidatorClassNameResolver;
 use TYPO3Fluid\Fluid\View\ViewInterface;
@@ -65,6 +67,9 @@ class MapController extends ActionController
         }
     }
 
+    /**
+     * @param array<string, string|string[]> $configuredValidators
+     */
     protected function modifyValidatorsBasedOnSettings(
         Argument $argument,
         array $configuredValidators,
@@ -84,7 +89,8 @@ class MapController extends ActionController
                     $validatorInstance->setPropertyName($fieldName);
                 }
             } else {
-                $validatorInstance = GeneralUtility::makeInstance(ConstraintValidator::class);
+                /** @var ConjunctionValidator $validatorInstance */
+                $validatorInstance = GeneralUtility::makeInstance(ConjunctionValidator::class);
                 foreach ($configuredValidator as $individualConfiguredValidator) {
                     $individualValidatorInstance = $this->getValidatorByConfiguration(
                         $individualConfiguredValidator,
@@ -115,6 +121,7 @@ class MapController extends ActionController
         $validateAnnotation = current($parser->parse(
             '@TYPO3\CMS\Extbase\Annotation\Validate(' . $configuration . ')',
         ));
+        /** @var class-string<AbstractValidator> $validatorObjectName */
         $validatorObjectName = ValidatorClassNameResolver::resolve(
             $validateAnnotation->validator,
         );
@@ -127,7 +134,7 @@ class MapController extends ActionController
     {
         $argumentName = 'constraint';
         if ($this->request->hasArgument($argumentName)) {
-            /** @var array $constraint */
+            /** @var array<string, mixed> $constraint */
             $constraint = $this->request->getArgument($argumentName);
             if (!is_array($constraint['category'] ?? '')) {
                 $constraint['category'] = array_filter(explode(',', $constraint['category'] ?? ''));
@@ -275,6 +282,10 @@ class MapController extends ActionController
         return new HtmlResponse($this->view->render());
     }
 
+    /**
+     * @return array<Location[]|Constraint>
+     * @throws Exception
+     */
     protected function getLocationsByConstraints(Constraint $constraint): array
     {
         if ($this->settings['disableLocationFetchLogic'] ?? false) {
@@ -290,9 +301,13 @@ class MapController extends ActionController
         return [$locations, $constraint];
     }
 
+    /**
+     * @return array<Location[]|Constraint>
+     * @throws Exception
+     */
     protected function getLocationsByDefaultConstraints(): array
     {
-        /** @var array[] $locations */
+        /** @var Location[] $locations */
         $locations = [];
         /** @var Constraint $constraint */
         $constraint = GeneralUtility::makeInstance(Constraint::class);
@@ -311,6 +326,7 @@ class MapController extends ActionController
             }
 
             if ($this->settings['showLocationsForDefaultConstraint'] ?? false) {
+                /** @var Constraint $constraint */
                 $locations = $this->locationRepository->findByConstraint($constraint);
             }
         }
@@ -329,9 +345,15 @@ class MapController extends ActionController
         return [$locations, $constraint];
     }
 
+    /**
+     * @param array<string, array<string, mixed>> $settings
+     */
     protected function isDisabledFetchLocation(string $action, array $settings): bool
     {
-        return in_array(str_replace('Action', '', $action), ($settings['disableFetchLocationInAction'] ?? []));
+        return in_array(
+            str_replace('Action', '', $action),
+            ($settings['disableFetchLocationInAction'] ?? [])
+        );
     }
 
     public function showAction(Location $location = null): ResponseInterface
@@ -369,10 +391,10 @@ class MapController extends ActionController
      * Get center from query result based on center of all coordinates. If only one
      * is found this is used. In case none was found the center based on the request
      * gets calculated
+     * @param Location[] $locations
      */
     protected function getCenterOfQueryResult(Location $constraint, array $locations): Location
     {
-        /** @var Location $center */
         $count = count($locations);
         if ($count == 0) {
             $center = $this->getCenter($constraint);
@@ -383,7 +405,6 @@ class MapController extends ActionController
             $y = 0;
             $z = 0;
 
-            /** @var Location[] $locations */
             foreach ($locations as $location) {
                 $latitude = $location->getLatitude() * M_PI / 180;
                 $longitude = $location->getLongitude() * M_PI / 180;
@@ -480,6 +501,7 @@ class MapController extends ActionController
 
     /**
      * Set zoom level for map based on maximum radius
+     * @param Location[] $locations
      */
     public function setZoomLevel(Location $center, array $locations): Location
     {
@@ -520,6 +542,9 @@ class MapController extends ActionController
         return $center;
     }
 
+    /**
+     * @param Location[] $locations
+     */
     protected function addPaginator(array $locations): void
     {
         if ($this->settings['addPaginator'] ?? false) {
@@ -553,6 +578,9 @@ class MapController extends ActionController
         return false;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getSettings(): array
     {
         return $this->settings;

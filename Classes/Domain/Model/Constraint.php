@@ -19,6 +19,9 @@ class Constraint extends Location
 {
     protected string $search = '';
 
+    /**
+     * @var int[]
+     */
     protected array $category = [];
 
     protected int $radius = 0;
@@ -37,11 +40,17 @@ class Constraint extends Location
         return $this->search;
     }
 
+    /**
+     * @param int[] $category
+     */
     public function setCategory(array $category): void
     {
         $this->category = $category;
     }
 
+    /**
+     * @return int[]
+     */
     public function getCategory(): array
     {
         return array_filter($this->category);

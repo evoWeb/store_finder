@@ -19,7 +19,7 @@ use Evoweb\StoreFinder\Domain\Model\Constraint;
 
 interface SettableInterface
 {
-    public function setModel(Constraint $model);
+    public function setModel(Constraint $model): void;
 
-    public function setPropertyName(string $propertyName);
+    public function setPropertyName(string $propertyName): void;
 }

@@ -33,20 +33,27 @@ class EitherValidator extends AbstractValidator implements ValidatorInterface
      */
     protected $acceptsEmptyValues = false;
 
+    /** @var array<string, string[]> */
     protected $supportedOptions = [
-        'properties' => [ '', 'Properties to check in either', 'string' ],
+        'properties' => ['', 'Properties to check in either', 'string'],
     ];
 
+    /**
+     * @var string[]
+     */
     protected array $properties = [];
 
     protected ?Constraint $model = null;
 
     protected string $propertyName = '';
 
+    /**
+     * @param array<string, string> $options
+     */
     public function setOptions(array $options = []): void
     {
-        if (isset($this->options['properties'])) {
-            $this->properties = GeneralUtility::trimExplode(',', $this->options['properties'], true);
+        if (isset($options['properties'])) {
+            $this->properties = GeneralUtility::trimExplode(',', $options['properties'], true);
         }
     }
 

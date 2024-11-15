@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 namespace Evoweb\StoreFinder\Command;
 
+use Doctrine\DBAL\Exception as DbalException;
 use Doctrine\DBAL\ParameterType;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Worksheet\Row;
@@ -31,6 +32,9 @@ use TYPO3\CMS\Core\Resource\ResourceFactory;
 
 class ImportLocationsCommand extends Command
 {
+    /**
+     * @var array<string, mixed>
+     */
     private array $columnMap = [
         'A' => 'import_id',
         'B' => ['name', 'storeid'],
@@ -44,20 +48,32 @@ class ImportLocationsCommand extends Command
         'J' => 'image',
     ];
 
+    /**
+     * @var array<string, array<string, int>>
+     */
     private array $attributeMap = [
         'K' => [
             'att1' => 1,
         ],
     ];
 
+    /**
+     * @var array<string, array<string, int>>
+     */
     private array $categoryMap = [
         'L' => [
             'cat1' => 1,
         ],
     ];
 
+    /**
+     * @var array<string, array<string, mixed>>
+     */
     private array $countryCache = [];
 
+    /**
+     * @var array<string, array<string, mixed>>
+     */
     private array $stateCache = [];
 
     public function __construct(
@@ -335,6 +351,11 @@ class ImportLocationsCommand extends Command
         ;
     }
 
+    /**
+     * @param array<string, mixed> $location
+     * @return array<string, mixed>
+     * @throws DbalException
+     */
     protected function processLocation(array $location): array
     {
         $table = 'tx_storefinder_domain_model_location';
@@ -347,12 +368,16 @@ class ImportLocationsCommand extends Command
         } else {
             $location['crdate'] = $location['tstamp'];
             $connection->insert($table, $location);
-            $locationUid = (int)$connection->lastInsertId($table);
+            $locationUid = (int)$connection->lastInsertId();
         }
         $location['uid'] = $locationUid;
         return $location;
     }
 
+    /**
+     * @param int[] $attributes
+     * @throws DbalException
+     */
     protected function processAttributes(int $locationUid, array $attributes): void
     {
         $table = 'tx_storefinder_location_attribute_mm';
@@ -381,6 +406,10 @@ class ImportLocationsCommand extends Command
         }
     }
 
+    /**
+     * @param int[] $currentCategories
+     * @throws DbalException
+     */
     protected function processCategories(int $locationUid, array $currentCategories): void
     {
         $table = 'sys_category_record_mm';
@@ -409,6 +438,11 @@ class ImportLocationsCommand extends Command
         }
     }
 
+    /**
+     * @param array<string, mixed> $location
+     * @param string[] $files
+     * @throws DbalException
+     */
     protected function processFiles(array $location, array $files): void
     {
         $table = 'sys_file_reference';
@@ -458,6 +492,10 @@ class ImportLocationsCommand extends Command
         }
     }
 
+    /**
+     * @param array<string, mixed> $location
+     * @throws DbalException
+     */
     protected function getCurrentRecordUid(array $location, string $table): int
     {
         $queryBuilder = $this->getQueryBuilderForTable($table);
@@ -480,6 +518,10 @@ class ImportLocationsCommand extends Command
         return (int)$result;
     }
 
+    /**
+     * @return array<array<string, mixed>>
+     * @throws DbalException
+     */
     protected function getReferences(
         string $table,
         string $tableName,
@@ -528,6 +570,9 @@ class ImportLocationsCommand extends Command
             ->fetchAllAssociative();
     }
 
+    /**
+     * @param array<string, mixed> $additionalData
+     */
     protected function addReference(
         string $table,
         string $tableName,

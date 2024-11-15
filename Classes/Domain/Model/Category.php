@@ -23,7 +23,7 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 class Category extends ExtbaseCategory
 {
     /**
-     * @var ObjectStorage<Category>|LazyObjectStorage
+     * @var ObjectStorage<Category>|LazyObjectStorage<Category>
      */
     #[Extbase\ORM\Lazy]
     protected ObjectStorage|LazyObjectStorage $children;
@@ -38,11 +38,17 @@ class Category extends ExtbaseCategory
         $this->children = new ObjectStorage();
     }
 
-    public function getChildren(): ?ObjectStorage
+    /**
+     * @return ObjectStorage<Category>
+     */
+    public function getChildren(): ObjectStorage
     {
         return $this->children;
     }
 
+    /**
+     * @param ObjectStorage<Category> $children
+     */
     public function setChildren(ObjectStorage $children): void
     {
         $this->children = $children;

@@ -17,7 +17,7 @@ namespace Evoweb\StoreFinder\Service;
 
 use Evoweb\StoreFinder\Domain\Model\Location;
 use TYPO3\CMS\Core\Cache\CacheManager;
-use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
+use TYPO3\CMS\Core\Cache\CacheTag;
 
 class CacheService
 {
@@ -36,25 +36,33 @@ class CacheService
         $this->addTagsToPage([$tag]);
     }
 
+    /**
+     * @param string[] $tags
+     */
     public function addTagsToPage(array $tags): void
     {
-        $this->getTypoScriptFrontendController()->addCacheTags($tags);
+        $cacheDataCollector = $GLOBALS['TYPO3_REQUEST']->getAttribute('frontend.cache.collector');
+        $cacheDataCollector->addCacheTags(...array_map(fn(string $tag) => new CacheTag($tag), $tags));
     }
 
     public function flushCacheByTag(string $tag): void
     {
-        $this->flushCacheByTags([$tag]);
+        try {
+            $this->cacheManager
+                ->getCache('pages')
+                ->flushByTag($tag);
+        } catch (\Exception) {}
     }
 
+    /**
+     * @param string[] $tags
+     */
     public function flushCacheByTags(array $tags): void
     {
-        $this->cacheManager
-            ->getCache('pages')
-            ->flushByTags($tags);
-    }
-
-    protected function getTypoScriptFrontendController(): ?TypoScriptFrontendController
-    {
-        return $GLOBALS['TSFE'];
+        try {
+            $this->cacheManager
+                ->getCache('pages')
+                ->flushByTags($tags);
+        } catch (\Exception) {}
     }
 }

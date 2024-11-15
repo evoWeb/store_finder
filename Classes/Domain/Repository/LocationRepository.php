@@ -16,24 +16,28 @@ declare(strict_types=1);
 namespace Evoweb\StoreFinder\Domain\Repository;
 
 use Doctrine\DBAL\ArrayParameterType;
+use Doctrine\DBAL\Exception as DbalException;
 use Evoweb\StoreFinder\Domain\Model\Constraint;
 use Evoweb\StoreFinder\Domain\Model\Location;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\LanguageAspect;
-use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Persistence\Generic\Exception;
 use TYPO3\CMS\Extbase\Persistence\Generic\Query;
+use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\Repository;
 
+/**
+ * A repository for locations
+ *
+ * @extends Repository<Location>
+ */
 class LocationRepository extends Repository
 {
-    /**
-     * @var array
-     */
     protected $defaultOrderings = [
         'zipcode' => QueryInterface::ORDER_ASCENDING,
         'city' => QueryInterface::ORDER_ASCENDING,
@@ -59,16 +63,24 @@ class LocationRepository extends Repository
      */
     public const ZOOM_MAX = 21;
 
+    /**
+     * @var array<string, mixed>
+     */
     protected array $settings = [];
 
     public function __construct(
         protected ConnectionPool $connectionPool,
-        protected CategoryRepository $categoryRepository
+        protected CategoryRepository $categoryRepository,
+        protected PersistenceManagerInterface $persistenceManager,
+        protected PageRepository $pageRepository,
     ) {
         parent::__construct();
         $this->objectType = Location::class;
     }
 
+    /**
+     * @param array<string, mixed> $settings
+     */
     public function setSettings(array $settings): void
     {
         $this->settings = $settings;
@@ -76,7 +88,7 @@ class LocationRepository extends Repository
 
     public function findByUidInBackend(int $uid): ?Location
     {
-        /** @var Query $query */
+        /** @var Query<Location> $query */
         $query = $this->createQuery();
         $query
             ->getQuerySettings()
@@ -95,7 +107,7 @@ class LocationRepository extends Repository
 
     public function findOneByUid(int $uid): ?Location
     {
-        /** @var Query $query */
+        /** @var Query<Location> $query */
         $query = $this->createQuery();
         $query
             ->getQuerySettings()
@@ -110,13 +122,17 @@ class LocationRepository extends Repository
         return $location;
     }
 
+    /**
+     * @return array<Location|array<string, mixed>>
+     * @throws \TYPO3\CMS\Extbase\Persistence\Generic\Exception
+     */
     public function findByConstraint(Constraint $constraint, bool $raw = false): array
     {
         if (!$constraint->isGeocoded()) {
             return [];
         }
 
-        /** @var Query $query */
+        /** @var Query<Location> $query */
         $query = $this->createQuery();
 
         $storagePid = $query
@@ -159,7 +175,11 @@ class LocationRepository extends Repository
         $t = $queryBuilder->getSQL();
         $query->statement($queryBuilder);
 
-        return $query->execute($raw)->toArray();
+        if ($raw) {
+            return $this->persistenceManager->getObjectDataByQuery($query);
+        } else {
+            return $query->execute()->toArray();
+        }
     }
 
     protected function addCountryQueryPart(Constraint $constraint, QueryBuilder $queryBuilder): QueryBuilder
@@ -438,7 +458,7 @@ class LocationRepository extends Repository
 
     public function findCenterByLatitudeAndLongitude(): Location
     {
-        /** @var Query $query */
+        /** @var Query<Location> $query */
         $query = $this->createQuery();
 
         $query->setOrderings(['latitude' => QueryInterface::ORDER_ASCENDING]);
@@ -493,7 +513,7 @@ class LocationRepository extends Repository
 
     public function findOneByCenter(): ?Location
     {
-        /** @var Query $query */
+        /** @var Query<Location> $query */
         $query = $this->createQuery();
 
         $query->setOrderings(['sorting' => QueryInterface::ORDER_ASCENDING]);
@@ -529,10 +549,12 @@ class LocationRepository extends Repository
     /**
      * Query location repository for all locations that
      * have latitude or longitude empty or geocode set to 1
+     * @return Location[]
+     * @throws Exception
      */
     public function findAllWithoutLatLon(int $limit = 500): array
     {
-        /** @var Query $query */
+        /** @var Query<Location> $query */
         $query = $this->createQuery();
         $query
             ->getQuerySettings()
@@ -553,6 +575,10 @@ class LocationRepository extends Repository
         return $query->execute()->toArray();
     }
 
+    /**
+     * @return array<array<string, mixed>>
+     * @throws DbalException
+     */
     public function getLocations(Constraint $constraint): array
     {
         $table = 'tx_storefinder_domain_model_location';
@@ -622,22 +648,16 @@ class LocationRepository extends Repository
             );
         }
 
-        /** @var array[] $locations */
+        /** @var array<array<string, mixed>> $locations */
         $locations = $queryBuilder
             ->executeQuery()
             ->fetchAllAssociative();
 
-        $pageRepository = $this->getPageRepository();
         foreach ($locations as &$location) {
-            $location = $pageRepository->getLanguageOverlay('tx_storefinder_domain_model_location', $location);
+            $location = $this->pageRepository->getLanguageOverlay('tx_storefinder_domain_model_location', $location);
         }
 
         return $locations;
-    }
-
-    protected function getPageRepository(): PageRepository
-    {
-        return GeneralUtility::makeInstance(PageRepository::class);
     }
 
     protected function getQueryBuilderForTable(string $table): QueryBuilder

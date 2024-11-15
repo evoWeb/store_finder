@@ -16,26 +16,34 @@ declare(strict_types=1);
 namespace Evoweb\StoreFinder\Domain\Repository;
 
 use Doctrine\DBAL\ArrayParameterType;
+use Doctrine\DBAL\Exception;
 use Evoweb\StoreFinder\Domain\Model\Category;
 use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\Context\Exception\AspectNotFoundException as AspectNotFoundException;
 use TYPO3\CMS\Core\Context\LanguageAspect;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Persistence\Repository;
 
+/**
+ * A repository for categories
+ *
+ * @extends Repository<Category>
+ */
 class CategoryRepository extends Repository
 {
-    /**
-     * @var array
-     */
     protected $defaultOrderings = ['sorting' => QueryInterface::ORDER_ASCENDING];
 
+    /**
+     * @var array<string, mixed>
+     */
     protected array $settings = [];
 
     public function __construct(
@@ -44,6 +52,9 @@ class CategoryRepository extends Repository
         parent::__construct();
     }
 
+    /**
+     * @param array<string, mixed> $settings
+     */
     public function setSettings(array $settings): void
     {
         $this->settings = $settings;
@@ -57,6 +68,11 @@ class CategoryRepository extends Repository
         $this->setDefaultQuerySettings($defaultQuerySettings);
     }
 
+    /**
+     * @param int[] $uids
+     * @return QueryResultInterface<int, Category>
+     * @throws InvalidQueryException
+     */
     public function findByUids(array $uids): QueryResultInterface
     {
         $query = $this->createQuery();
@@ -69,6 +85,9 @@ class CategoryRepository extends Repository
         return $query->execute();
     }
 
+    /**
+     * @return QueryResultInterface<int, Category>
+     */
     public function findByParent(int $parentUid): QueryResultInterface
     {
         $query = $this->createQuery();
@@ -76,21 +95,31 @@ class CategoryRepository extends Repository
         return $query->execute();
     }
 
-    public function findByParentRecursive(array $subCategories, array $categories = []): array
+    /**
+     * @param int[] $categories
+     * @param int[] $result
+     * @return int[]
+     */
+    public function findByParentRecursive(array $categories, array $result = []): array
     {
-        /** @var Category $subCategory */
-        foreach ($subCategories as $subCategory) {
-            $categories[] = $subcategoryUid = (int)(is_object($subCategory) ? $subCategory->getUid() : $subCategory);
+        foreach ($categories as $category) {
+            $result[] = $category;
 
-            $foundCategories = $this->findByParent($subcategoryUid);
-            $foundCategories->rewind();
+            $foundCategories = $this->findByParent($category)->toArray();
+            $foundCategoriesUid = array_map(fn(Category $category):int => $category->getUid(), $foundCategories);
 
-            $categories = $this->findByParentRecursive($foundCategories->toArray(), $categories);
+            $result = $this->findByParentRecursive($foundCategoriesUid, $result);
         }
 
-        return array_unique($categories);
+        return array_unique($result);
     }
 
+    /**
+     * @param int[] $selectedCategories
+     * @return array<array<string, mixed>>
+     * @throws Exception
+     * @throws AspectNotFoundException
+     */
     public function getCategoriesByParents(array $selectedCategories): array
     {
         $categories = $this
@@ -107,6 +136,12 @@ class CategoryRepository extends Repository
         return $categories;
     }
 
+    /**
+     * @param int[] $selectedCategories
+     * @return array<array<string, mixed>>
+     * @throws Exception
+     * @throws AspectNotFoundException
+     */
     protected function findCategoryByParent(array $selectedCategories, int $parentUid): array
     {
         $queryBuilder = $this->getCommonQuery('sys_category', []);
@@ -133,6 +168,10 @@ class CategoryRepository extends Repository
         return $categoryChildren;
     }
 
+    /**
+     * @param int[] $selectedCategories
+     * @throws AspectNotFoundException
+     */
     protected function getCommonQuery(string $table, array $selectedCategories): QueryBuilder
     {
         $queryBuilder = $this->getQueryBuilderForTable($table);
@@ -184,6 +223,11 @@ class CategoryRepository extends Repository
         return GeneralUtility::makeInstance(PageRepository::class);
     }
 
+    /**
+     * @param int[] $categories
+     * @return int[]
+     * @throws Exception
+     */
     public function enrichCategoriesWithChildren(array $categories): array
     {
         $result = $categories;

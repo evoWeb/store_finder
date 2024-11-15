@@ -17,9 +17,13 @@ namespace Evoweb\StoreFinder\Controller\Event;
 
 use Evoweb\StoreFinder\Controller\MapController;
 use Evoweb\StoreFinder\Domain\Model\Constraint;
+use Evoweb\StoreFinder\Domain\Model\Location;
 
 class MapGetLocationsByConstraintsEvent
 {
+    /**
+     * @param Location[] $locations
+     */
     public function __construct(
         protected MapController $controller,
         protected array $locations,
@@ -31,11 +35,17 @@ class MapGetLocationsByConstraintsEvent
         return $this->controller;
     }
 
+    /**
+     * @return Location[]
+     */
     public function getLocations(): array
     {
         return $this->locations;
     }
 
+    /**
+     * @param Location[] $locations
+     */
     public function setLocations(array $locations): void
     {
         $this->locations = $locations;

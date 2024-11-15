@@ -22,6 +22,9 @@ use TYPO3\CMS\Core\Utility\StringUtility;
 
 class ModifyLocationMap extends AbstractFormElement
 {
+    /**
+     * @return array<string, mixed>
+     */
     public function render(): array
     {
         try {
