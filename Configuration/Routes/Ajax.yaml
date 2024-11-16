@@ -10,7 +10,6 @@ routeEnhancers:
     requirements:
       action: '(categories|locations)'
       contentUid: '[0-9].*'
-      language: '.*'
     _arguments:
       action: 'action'
       content: 'contentUid'

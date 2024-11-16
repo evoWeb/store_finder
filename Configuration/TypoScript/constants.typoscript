@@ -29,6 +29,7 @@ plugin.tx_storefinder {
     partialRootPaths = EXT:store_finder/Resources/Private/Partials/
     layoutRootPaths = EXT:store_finder/Resources/Private/Layouts/
 
+    categories =
     storagePid =
   }
 }

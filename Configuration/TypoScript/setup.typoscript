@@ -8,7 +8,7 @@ plugin.tx_storefinder.settings {
   # Used for https://developers.google.com/maps/documentation/geocoding/requests-geocoding
   apiConsoleKeyGeocoding = {$plugin.tx_storefinder.apiConsoleKeyGeocoding ?? $evoweb.store-finder.apiConsoleKeyGeocoding}
 
-  categories =
+  categories = {$plugin.tx_storefinder.categories ?? $evoweb.store-finder.categories}
   allowedCountries =
 
   categoryPriority = useAsFilterInFrontend
@@ -117,7 +117,6 @@ plugin.tx_storefinder.ajax {
       fields {
         uid =
         title =
-        slug =
       }
       sortBy {
         field = c.sorting
@@ -132,7 +131,6 @@ plugin.tx_storefinder.ajax {
         address =
         zipcode =
         city =
-        dont_show_address =
         person =
         phone =
         email =
@@ -145,6 +143,7 @@ plugin.tx_storefinder.ajax {
         image =
         icon =
         categories =
+        sorting =
       }
       sortBy {
         field = l.sorting
@@ -155,6 +154,8 @@ plugin.tx_storefinder.ajax {
 
   country = 0
   state = 0
+
+  categories = {$plugin.tx_storefinder.ajax.categories ?? $evoweb.store-finder.ajax.categories}
 
   fulltextSearchFields {
     10 = name
@@ -184,12 +185,12 @@ mapAjaxPage {
 
   # disable header code
   config {
-    disableAllHeaderCode = 1
-    additionalHeaders = Content-type: application/json, utf-8
-
-    xhtml_cleaning = 0
-    admPanel = 0
+    no_cache = 1
     debug = 0
+    admPanel = 0
+    disableAllHeaderCode = 1
+    additionalHeaders.10.header = Content-Type: application/json; charset=utf-8
+    additionalHeaders.10.replace = 1
   }
 
   10 < tt_content.list.20.storefinder_map

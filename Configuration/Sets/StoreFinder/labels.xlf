@@ -77,6 +77,9 @@
 			<trans-unit id="settings.description.evoweb.store-finder.layoutRootPaths" resname="settings.description.evoweb.store-finder.layoutRootPaths">
 				<source/>
 			</trans-unit>
+			<trans-unit id="settings.description.evoweb.store-finder.categories" resname="settings.description.evoweb.store-finder.categories">
+				<source>List of parent category</source>
+			</trans-unit>
 			<trans-unit id="settings.evoweb.store-finder.ajax.templateRootPaths" resname="settings.evoweb.store-finder.ajax.templateRootPaths">
 				<source>Template root path for ajax rendering</source>
 			</trans-unit>
@@ -99,7 +102,13 @@
 				<source>Comma separated list of page IDs of folder in which the locations are stored</source>
 			</trans-unit>
 			<trans-unit id="settings.description.evoweb.store-finder.ajax.storagePid" resname="settings.description.evoweb.store-finder.ajax.storagePid">
-				<source/>
+				<source>List of storage pid</source>
+			</trans-unit>
+			<trans-unit id="settings.evoweb.store-finder.ajax.categories" resname="settings.evoweb.store-finder.ajax.categories">
+				<source>Comma separated list of parent categories</source>
+			</trans-unit>
+			<trans-unit id="settings.description.evoweb.store-finder.ajax.categories" resname="settings.description.evoweb.store-finder.ajax.categories">
+				<source>List of parent categories</source>
 			</trans-unit>
 		</body>
 	</file>

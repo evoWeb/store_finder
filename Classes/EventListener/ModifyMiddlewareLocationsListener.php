@@ -23,7 +23,7 @@ class ModifyMiddlewareLocationsListener
 {
     public function __construct(private ContentObjectRenderer $contentObjectRenderer) {}
 
-    // #[AsEventListener('storefinder_middleware_locationsfetched', ModifyMiddlewareLocationsEvent::class)]
+    #[AsEventListener('storefinder_middleware_locationsfetched', ModifyMiddlewareLocationsEvent::class)]
     public function __invoke(ModifyMiddlewareLocationsEvent $event): void
     {
         /* do what ever you need to change */
