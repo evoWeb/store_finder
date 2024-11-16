@@ -106,7 +106,7 @@ final readonly class StoreFinderMiddleware implements MiddlewareInterface
     protected function getCache(): ?FrontendInterface
     {
         try {
-            $cache = $this->cacheManager->getCache('store_finder_middleware_cache') ?? null;
+            $cache = $this->cacheManager->getCache('store_finder_middleware_cache');
         } catch (NoSuchCacheException) {
             $cache = null;
         }
