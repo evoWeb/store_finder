@@ -48,11 +48,13 @@
 		"psr/http-message": "^1.1 || ^2.0",
 		"psr/http-server-handler": "^1.0",
 		"psr/http-server-middleware": "^1.0",
-		"sjbr/static-info-tables": "dev-master",
 		"symfony/console": "^6.4 || ^7.0"
 	},
 	"require-dev": {
 		"typo3/testing-framework": "^8.0.2 || dev-main"
+	},
+	"suggest": {
+		"sjbr/static-info-tables": "^12.4.4 "
 	},
 	"extra": {
 		"typo3/cms": {
