@@ -87,11 +87,5 @@
 		"psr-4": {
 			"Evoweb\\StoreFinder\\Tests\\": "Tests/"
 		}
-	},
-	"repositories": {
-		"static-info-tables": {
-			"type": "git",
-			"url": "https://github.com/garbast/static_info_tables.git"
-		}
 	}
 }
