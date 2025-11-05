@@ -385,13 +385,187 @@
             "8.0.0",
             "UserManual\/Index.html#user_manual",
             "User Manual"
+        ],
+        "confval-menu-persistence-reference": [
+            "Store Finder",
+            "8.0.0",
+            "Configuration\/Persistence\/Index.html#confval-menu-persistence-reference",
+            ""
+        ],
+        "confval-storagepid": [
+            "Store Finder",
+            "8.0.0",
+            "Configuration\/Persistence\/Index.html#confval-storagepid",
+            "storagePid"
+        ],
+        "confval-menu-settings-reference": [
+            "Store Finder",
+            "8.0.0",
+            "Configuration\/Settings\/Index.html#confval-menu-settings-reference",
+            ""
+        ],
+        "confval-showbeforesearch": [
+            "Store Finder",
+            "8.0.0",
+            "Configuration\/Settings\/Index.html#confval-showbeforesearch",
+            "showBeforeSearch"
+        ],
+        "confval-showaftersearch": [
+            "Store Finder",
+            "8.0.0",
+            "Configuration\/Settings\/Index.html#confval-showaftersearch",
+            "showAfterSearch"
+        ],
+        "confval-apiv3layers": [
+            "Store Finder",
+            "8.0.0",
+            "Configuration\/Settings\/Index.html#confval-apiv3layers",
+            "apiV3Layers"
+        ],
+        "confval-limit": [
+            "Store Finder",
+            "8.0.0",
+            "Configuration\/Settings\/Index.html#confval-limit",
+            "limit"
+        ],
+        "confval-allowedcountries": [
+            "Store Finder",
+            "8.0.0",
+            "Configuration\/Settings\/Index.html#confval-allowedcountries",
+            "allowedCountries"
+        ],
+        "confval-categories": [
+            "Store Finder",
+            "8.0.0",
+            "Configuration\/Settings\/Index.html#confval-categories",
+            "categories"
+        ],
+        "confval-categorypriority": [
+            "Store Finder",
+            "8.0.0",
+            "Configuration\/Settings\/Index.html#confval-categorypriority",
+            "categoryPriority"
+        ],
+        "confval-singlelocationid": [
+            "Store Finder",
+            "8.0.0",
+            "Configuration\/Settings\/Index.html#confval-singlelocationid",
+            "singleLocationId"
+        ],
+        "confval-geocoderprovider": [
+            "Store Finder",
+            "8.0.0",
+            "Configuration\/Settings\/Index.html#confval-geocoderprovider",
+            "geocoderProvider"
+        ],
+        "confval-apiconsolekey": [
+            "Store Finder",
+            "8.0.0",
+            "Configuration\/Settings\/Index.html#confval-apiconsolekey",
+            "apiConsoleKey"
+        ],
+        "confval-apiconsolekeygeocoding": [
+            "Store Finder",
+            "8.0.0",
+            "Configuration\/Settings\/Index.html#confval-apiconsolekeygeocoding",
+            "apiConsoleKeyGeocoding"
+        ],
+        "confval-mapid": [
+            "Store Finder",
+            "8.0.0",
+            "Configuration\/Settings\/Index.html#confval-mapid",
+            "mapId"
+        ],
+        "confval-googlelibraries": [
+            "Store Finder",
+            "8.0.0",
+            "Configuration\/Settings\/Index.html#confval-googlelibraries",
+            "googleLibraries"
+        ],
+        "confval-distanceunit": [
+            "Store Finder",
+            "8.0.0",
+            "Configuration\/Settings\/Index.html#confval-distanceunit",
+            "distanceUnit"
+        ],
+        "confval-language": [
+            "Store Finder",
+            "8.0.0",
+            "Configuration\/Settings\/Index.html#confval-language",
+            "language"
+        ],
+        "confval-showstoreimage": [
+            "Store Finder",
+            "8.0.0",
+            "Configuration\/Settings\/Index.html#confval-showstoreimage",
+            "showStoreImage"
+        ],
+        "confval-resultpageid": [
+            "Store Finder",
+            "8.0.0",
+            "Configuration\/Settings\/Index.html#confval-resultpageid",
+            "resultPageId"
+        ],
+        "confval-mapsize-height": [
+            "Store Finder",
+            "8.0.0",
+            "Configuration\/Settings\/Index.html#confval-mapsize-height",
+            "mapSize.height"
+        ],
+        "confval-mapsize-width": [
+            "Store Finder",
+            "8.0.0",
+            "Configuration\/Settings\/Index.html#confval-mapsize-width",
+            "mapSize.width"
+        ],
+        "confval-override": [
+            "Store Finder",
+            "8.0.0",
+            "Configuration\/Settings\/Index.html#confval-override",
+            "override"
+        ],
+        "confval-disablefetchlocationinaction": [
+            "Store Finder",
+            "8.0.0",
+            "Configuration\/Settings\/Index.html#confval-disablefetchlocationinaction",
+            "disableFetchLocationInAction"
+        ],
+        "confval-menu-validator-reference": [
+            "Store Finder",
+            "8.0.0",
+            "Configuration\/Validation\/Index.html#confval-menu-validator-reference",
+            ""
+        ],
+        "confval-requiredvalidator": [
+            "Store Finder",
+            "8.0.0",
+            "Configuration\/Validation\/Index.html#confval-requiredvalidator",
+            "RequiredValidator"
+        ],
+        "confval-menu-view-reference": [
+            "Store Finder",
+            "8.0.0",
+            "Configuration\/View\/Index.html#confval-menu-view-reference",
+            ""
+        ],
+        "confval-templaterootpaths": [
+            "Store Finder",
+            "8.0.0",
+            "Configuration\/View\/Index.html#confval-templaterootpaths",
+            "templateRootPaths"
+        ],
+        "confval-partialrootpaths": [
+            "Store Finder",
+            "8.0.0",
+            "Configuration\/View\/Index.html#confval-partialrootpaths",
+            "partialRootPaths"
         ]
     },
     "std:title": {
         "administration-1": [
             "Store Finder",
             "8.0.0",
-            "Administration\/Index.html#administration-1",
+            "Administration\/Index.html#administration",
             "Administration"
         ],
         "configuration": [
@@ -409,7 +583,7 @@
         "breaking-changes-1": [
             "Store Finder",
             "8.0.0",
-            "BreakingChanges\/Index.html#breaking-changes-1",
+            "BreakingChanges\/Index.html#breaking-changes",
             "Breaking Changes"
         ],
         "02-august-2024": [
@@ -511,7 +685,7 @@
         "event-listener": [
             "Store Finder",
             "8.0.0",
-            "Configuration\/EventListener\/Index.html#event-listener",
+            "Configuration\/EventListener\/Index.html#eventlistener",
             "Event listener"
         ],
         "introduction": [
@@ -553,7 +727,7 @@
         "geocoding-provider": [
             "Store Finder",
             "8.0.0",
-            "Configuration\/Geocoding\/Index.html#geocoding-provider",
+            "Configuration\/Geocoding\/Index.html#geocoding",
             "Geocoding provider"
         ],
         "changing-geocoding-provider": [
@@ -577,25 +751,25 @@
         "configuration-1": [
             "Store Finder",
             "8.0.0",
-            "Configuration\/Index.html#configuration-1",
+            "Configuration\/Index.html#configuration",
             "Configuration"
         ],
         "persistence-1": [
             "Store Finder",
             "8.0.0",
-            "Configuration\/Persistence\/Index.html#persistence-1",
+            "Configuration\/Persistence\/Index.html#persistence",
             "Persistence"
         ],
         "settings-1": [
             "Store Finder",
             "8.0.0",
-            "Configuration\/Settings\/Index.html#settings-1",
+            "Configuration\/Settings\/Index.html#settings",
             "Settings"
         ],
         "validation-1": [
             "Store Finder",
             "8.0.0",
-            "Configuration\/Validation\/Index.html#validation-1",
+            "Configuration\/Validation\/Index.html#validation",
             "Validation"
         ],
         "purpose-of-validators": [
@@ -655,13 +829,13 @@
         "view-1": [
             "Store Finder",
             "8.0.0",
-            "Configuration\/View\/Index.html#view-1",
+            "Configuration\/View\/Index.html#view",
             "View"
         ],
         "deprecation-1": [
             "Store Finder",
             "8.0.0",
-            "Deprecation\/Index.html#deprecation-1",
+            "Deprecation\/Index.html#deprecation",
             "Deprecation"
         ],
         "version-6-0-0": [
@@ -685,7 +859,7 @@
         "import-command": [
             "Store Finder",
             "8.0.0",
-            "ImportCommand\/Index.html#import-command",
+            "ImportCommand\/Index.html#importCommand",
             "Import command"
         ],
         "arguments": [
@@ -721,13 +895,13 @@
         "store-finder": [
             "Store Finder",
             "8.0.0",
-            "Index.html#store-finder",
+            "Index.html#start",
             "Store finder"
         ],
         "introduction-1": [
             "Store Finder",
             "8.0.0",
-            "Introduction\/Index.html#introduction-1",
+            "Introduction\/Index.html#introduction",
             "Introduction"
         ],
         "search-with-result-map-and-list": [
@@ -769,7 +943,7 @@
         "templating-1": [
             "Store Finder",
             "8.0.0",
-            "Templating\/Index.html#templating-1",
+            "Templating\/Index.html#templating",
             "Templating"
         ],
         "templates-partials-and-layouts": [
@@ -829,7 +1003,7 @@
         "custom-event-listener": [
             "Store Finder",
             "8.0.0",
-            "Tutorial\/CustomEventListener\/Index.html#custom-event-listener",
+            "Tutorial\/CustomEventListener\/Index.html#customEventListener",
             "Custom Event Listener"
         ],
         "adding-custom-event-listener": [
@@ -841,7 +1015,7 @@
         "headless-map-rendering": [
             "Store Finder",
             "8.0.0",
-            "Tutorial\/HeadlessMap\/Index.html#headless-map-rendering",
+            "Tutorial\/HeadlessMap\/Index.html#headlessMapRendering",
             "Headless Map Rendering"
         ],
         "introduction-of-middleware": [
@@ -871,13 +1045,13 @@
         "tutorial-1": [
             "Store Finder",
             "8.0.0",
-            "Tutorial\/Index.html#tutorial-1",
+            "Tutorial\/Index.html#tutorial",
             "Tutorial"
         ],
         "installation-1": [
             "Store Finder",
             "8.0.0",
-            "Tutorial\/Installation\/Index.html#installation-1",
+            "Tutorial\/Installation\/Index.html#installation",
             "Installation"
         ],
         "installation": [
@@ -937,7 +1111,7 @@
         "user-manual": [
             "Store Finder",
             "8.0.0",
-            "UserManual\/Index.html#user-manual",
+            "UserManual\/Index.html#user_manual",
             "User Manual"
         ]
     },
@@ -945,25 +1119,25 @@
         "persistence-reference": [
             "Store Finder",
             "8.0.0",
-            "Configuration\/Persistence\/Index.html#persistence-reference",
+            "Configuration\/Persistence\/Index.html#confval-menu-persistence-reference",
             ""
         ],
         "settings-reference": [
             "Store Finder",
             "8.0.0",
-            "Configuration\/Settings\/Index.html#settings-reference",
+            "Configuration\/Settings\/Index.html#confval-menu-settings-reference",
             ""
         ],
         "validator-reference": [
             "Store Finder",
             "8.0.0",
-            "Configuration\/Validation\/Index.html#validator-reference",
+            "Configuration\/Validation\/Index.html#confval-menu-validator-reference",
             ""
         ],
         "view-reference": [
             "Store Finder",
             "8.0.0",
-            "Configuration\/View\/Index.html#view-reference",
+            "Configuration\/View\/Index.html#confval-menu-view-reference",
             ""
         ]
     },
@@ -971,151 +1145,151 @@
         "storagepid": [
             "Store Finder",
             "8.0.0",
-            "Configuration\/Persistence\/Index.html#storagepid",
+            "Configuration\/Persistence\/Index.html#confval-storagepid",
             "storagePid"
         ],
         "showbeforesearch": [
             "Store Finder",
             "8.0.0",
-            "Configuration\/Settings\/Index.html#showbeforesearch",
+            "Configuration\/Settings\/Index.html#confval-showbeforesearch",
             "showBeforeSearch"
         ],
         "showaftersearch": [
             "Store Finder",
             "8.0.0",
-            "Configuration\/Settings\/Index.html#showaftersearch",
+            "Configuration\/Settings\/Index.html#confval-showaftersearch",
             "showAfterSearch"
         ],
         "apiv3layers": [
             "Store Finder",
             "8.0.0",
-            "Configuration\/Settings\/Index.html#apiv3layers",
+            "Configuration\/Settings\/Index.html#confval-apiv3layers",
             "apiV3Layers"
         ],
         "limit": [
             "Store Finder",
             "8.0.0",
-            "Configuration\/Settings\/Index.html#limit",
+            "Configuration\/Settings\/Index.html#confval-limit",
             "limit"
         ],
         "allowedcountries": [
             "Store Finder",
             "8.0.0",
-            "Configuration\/Settings\/Index.html#allowedcountries",
+            "Configuration\/Settings\/Index.html#confval-allowedcountries",
             "allowedCountries"
         ],
         "categories": [
             "Store Finder",
             "8.0.0",
-            "Configuration\/Settings\/Index.html#categories",
+            "Configuration\/Settings\/Index.html#confval-categories",
             "categories"
         ],
         "categorypriority": [
             "Store Finder",
             "8.0.0",
-            "Configuration\/Settings\/Index.html#categorypriority",
+            "Configuration\/Settings\/Index.html#confval-categorypriority",
             "categoryPriority"
         ],
         "singlelocationid": [
             "Store Finder",
             "8.0.0",
-            "Configuration\/Settings\/Index.html#singlelocationid",
+            "Configuration\/Settings\/Index.html#confval-singlelocationid",
             "singleLocationId"
         ],
         "geocoderprovider": [
             "Store Finder",
             "8.0.0",
-            "Configuration\/Settings\/Index.html#geocoderprovider",
+            "Configuration\/Settings\/Index.html#confval-geocoderprovider",
             "geocoderProvider"
         ],
         "apiconsolekey": [
             "Store Finder",
             "8.0.0",
-            "Configuration\/Settings\/Index.html#apiconsolekey",
+            "Configuration\/Settings\/Index.html#confval-apiconsolekey",
             "apiConsoleKey"
         ],
         "apiconsolekeygeocoding": [
             "Store Finder",
             "8.0.0",
-            "Configuration\/Settings\/Index.html#apiconsolekeygeocoding",
+            "Configuration\/Settings\/Index.html#confval-apiconsolekeygeocoding",
             "apiConsoleKeyGeocoding"
         ],
         "mapid": [
             "Store Finder",
             "8.0.0",
-            "Configuration\/Settings\/Index.html#mapid",
+            "Configuration\/Settings\/Index.html#confval-mapid",
             "mapId"
         ],
         "googlelibraries": [
             "Store Finder",
             "8.0.0",
-            "Configuration\/Settings\/Index.html#googlelibraries",
+            "Configuration\/Settings\/Index.html#confval-googlelibraries",
             "googleLibraries"
         ],
         "distanceunit": [
             "Store Finder",
             "8.0.0",
-            "Configuration\/Settings\/Index.html#distanceunit",
+            "Configuration\/Settings\/Index.html#confval-distanceunit",
             "distanceUnit"
         ],
         "language": [
             "Store Finder",
             "8.0.0",
-            "Configuration\/Settings\/Index.html#language",
+            "Configuration\/Settings\/Index.html#confval-language",
             "language"
         ],
         "showstoreimage": [
             "Store Finder",
             "8.0.0",
-            "Configuration\/Settings\/Index.html#showstoreimage",
+            "Configuration\/Settings\/Index.html#confval-showstoreimage",
             "showStoreImage"
         ],
         "resultpageid": [
             "Store Finder",
             "8.0.0",
-            "Configuration\/Settings\/Index.html#resultpageid",
+            "Configuration\/Settings\/Index.html#confval-resultpageid",
             "resultPageId"
         ],
         "mapsize-height": [
             "Store Finder",
             "8.0.0",
-            "Configuration\/Settings\/Index.html#mapsize-height",
+            "Configuration\/Settings\/Index.html#confval-mapsize-height",
             "mapSize.height"
         ],
         "mapsize-width": [
             "Store Finder",
             "8.0.0",
-            "Configuration\/Settings\/Index.html#mapsize-width",
+            "Configuration\/Settings\/Index.html#confval-mapsize-width",
             "mapSize.width"
         ],
         "override": [
             "Store Finder",
             "8.0.0",
-            "Configuration\/Settings\/Index.html#override",
+            "Configuration\/Settings\/Index.html#confval-override",
             "override"
         ],
         "disablefetchlocationinaction": [
             "Store Finder",
             "8.0.0",
-            "Configuration\/Settings\/Index.html#disablefetchlocationinaction",
+            "Configuration\/Settings\/Index.html#confval-disablefetchlocationinaction",
             "disableFetchLocationInAction"
         ],
         "requiredvalidator": [
             "Store Finder",
             "8.0.0",
-            "Configuration\/Validation\/Index.html#requiredvalidator",
+            "Configuration\/Validation\/Index.html#confval-requiredvalidator",
             "RequiredValidator"
         ],
         "templaterootpaths": [
             "Store Finder",
             "8.0.0",
-            "Configuration\/View\/Index.html#templaterootpaths",
+            "Configuration\/View\/Index.html#confval-templaterootpaths",
             "templateRootPaths"
         ],
         "partialrootpaths": [
             "Store Finder",
             "8.0.0",
-            "Configuration\/View\/Index.html#partialrootpaths",
+            "Configuration\/View\/Index.html#confval-partialrootpaths",
             "partialRootPaths"
         ]
     }

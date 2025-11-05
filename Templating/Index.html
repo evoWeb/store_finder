@@ -12,22 +12,21 @@
 <meta content="" name="docsearch:package_type">
 <meta content="8.0.0" name="docsearch:release">
 <meta content="8.0.0" name="docsearch:version">
-<meta content="2024-11-16T20:44:48+00:00" name="docsearch:modified">
-<meta content="2024-11-16T20:44:48+00:00" name="dc.modified">
-<meta content="2024-11-16T20:44:48+00:00" property="article:modified_time">
+<meta content="2025-11-05T16:16:07+00:00" name="docsearch:modified">
+<meta content="2025-11-05T16:16:07+00:00" name="dc.modified">
+<meta content="2025-11-05T16:16:07+00:00" property="article:modified_time">
     <link href="http://purl.org/dc/elements/1.1/" rel="schema.dc">
 <link href="../_resources/css/theme.css" rel="stylesheet">
 <link href="https://docs.typo3.org/search/" rel="search" title="Search">
-<script src="https://typo3.azureedge.net/typo3infrastructure/universe/dist/webcomponents-loader.js"></script>
-<script src="https://typo3.azureedge.net/typo3infrastructure/universe/dist/typo3-universe.js" type="module"></script>
+<script src="https://cdn.typo3.com/typo3infrastructure/universe/dist/webcomponents-loader.js"></script>
+<script src="https://cdn.typo3.com/typo3infrastructure/universe/dist/typo3-universe.js" type="module"></script>
                         <link href="../Configuration/EventListener/Index.html" rel="prev" title="Event listener"/>
             <link href="../Tutorial/Index.html" rel="next" title="Tutorial"/>
             <link href="../Index.html" rel="top" title="Store finder"/>
     </head>
 <body>
 <div class="page">
-    
-<header>
+    <header>
     <div class="page-topbar">
         <div class="page-topbar-inner">
             <typo3-universe active="documentation">
@@ -37,15 +36,37 @@
     </div>
     <div class="page-header">
         <div class="page-header-inner">
-            <div class="row">
-                <div class="col-md-2 col-lg-4">
+            <div class="d-flex flex-wrap">
+                <div class="logo-wrapper">
                     <a class="logo" href="https://docs.typo3.org/" title="TYPO3 Documentation">
                         <img alt="TYPO3 Logo" class="logo-image" src="../_resources/img/typo3-logo.svg" width="484" height="130">
                     </a>
                 </div>
-                <div class="col-md-10 col-lg-8">
+                <div class="align-self-center order-lg-2 order-last">
+                    
+<div class="toc-header">
+    <div class="toc-title pe-3">
+                            <a class="toc-title-project" href="../Index.html">Store finder</a>
+            </div>
+    <label for="languageSelect" class="visually-hidden">Select language</label>
+        <select id="languageSelect" class="form-select d-none">
+        </select>
+
+                                  
+        <label for="versionSelect" class="visually-hidden">Select version</label>
+        <select id="versionSelect" class="form-select"
+                data-current-version="8.0.0"
+            data-override-url-proxy="../_resources/js/versions-proxy.php?url=" data-override-url-self="https://docs.typo3.org/m/typo3/tutorial-getting-started/12.4/en-us/Concepts/Index.html"
+        >
+            <option disabled selected>Loading versions...</option>
+        </select>
+    </div>                </div>
+                <div class="ms-auto order-lg-3 d-flex">
                     <div class="menu-search-wrapper">
-                        <all-documentations-menu data-override-url="https://render-guides.ddev.site/_resources/js/menu-proxy.php"></all-documentations-menu>
+                        <button id="toc-toggle" class="btn btn-light d-block d-lg-none" tabindex="0" aria-controls="toc-collapse" aria-expanded="false">
+                            <i class="fas fa-bars"></i> <span class="visually-hidden">Mobile Menu</span>
+                        </button>
+                        <all-documentations-menu data-override-url="../_resources/js/menu-proxy.php"></all-documentations-menu>
                                                 <search role="search">
                             <form action="https://docs.typo3.org/search/search" id="global-search-form" method="get">
                                 <div class="sr-only"><label for="globalsearchinput">TYPO3 documentation...</label></div>
@@ -54,10 +75,44 @@
                                         <option value="">Search all</option>
                                     </select>
                                     <input autocomplete="off" class="form-control shadow-none" id="globalsearchinput" name="q" placeholder="TYPO3 documentation..." type="text" value="">
-                                    <button class="btn btn-light search__submit" type="submit"><i class="fa fa-search"></i>&nbsp;<span class="d-none d-md-inline">Search</span></button>
+                                    <button class="btn btn-light" type="submit"><i class="fa fa-search"></i>&nbsp;<span class="d-none d-md-inline">Search</span></button>
                                 </div>
                             </form>
+                            <div id="global-search-root"></div>
                         </search>
+                        <div class="position-relative d-inline-block">
+                            <button id="options-toggle" class="btn btn-light d-block" type="button" aria-expanded="false">
+                                <i class="fas fa-cog"></i> <span class="visually-hidden">Options</span>
+                            </button>
+
+                            <div id="options-panel"
+                                 class="shadow p-3"
+                                 role="menu"
+                                 aria-hidden="true">
+                                <h6 class="dropdown-header text-muted text-uppercase small mb-2">Options</h6>
+
+                                                                                                            <a class="dropdown-item d-flex align-items-center gap-2" href="https://github.com/evoWeb/store_finder/issues/new/choose?title=Problem+on+https%3A%2F%2Fgithub.com%2FevoWeb%2Fstore_finder%2FTemplating%2FIndex.html" id="btnReportIssue" rel="nofollow noopener" target="_blank">
+        <i class="fas fa-comment-dots"></i>
+        Give feedback
+    </a>
+    <a class="dropdown-item d-flex align-items-center gap-2" href="../_sources/Templating/Index.rst.txt" rel="nofollow noopener" target="_blank">
+        <i class="fas fa-code"></i>
+        View source
+    </a>
+    <a class="dropdown-item d-flex align-items-center gap-2" href="https://docs.typo3.org/m/typo3/docs-how-to-document/main/en-us/WritingDocsOfficial/GithubMethod.html" id="btnHowToEdit" rel="nofollow noopener" target="_blank">
+        <i class="fas fa-info-circle"></i>
+        How to edit
+    </a>
+    <a class="dropdown-item d-flex align-items-center gap-2" href="https://github.com/evoWeb/store_finder/edit/develop/Documentation/Templating/Index.rst" id="btnEditOnGitHub" rel="nofollow noopener" target="_blank">
+        <i class="fab fa-github"></i>
+        Edit on GitHub
+    </a>
+                                                                                                                <a class="dropdown-item d-flex align-items-center gap-2" href="../singlehtml/Index.html" target="_blank" rel="noopener">
+                                            <i class="fas fa-print"></i>
+                                            Full documentation (single file)
+                                        </a>
+                                                                                                </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -67,34 +122,14 @@
         <div class="page-main-inner">
             <div class="page-main-navigation">
                 <nav>
-                    
-<div class="toc-header">
-    <div class="toc-title">
-        <a class="toc-title-project" href="../Index.html">Store Finder</a>
-            <div class="toc-version-wrapper" id="toc-version-wrapper">
-                <!--
-                    LOCAL RENDERING NOTICE:
-                    https://docs.typo3.org/other/t3docs/render-guides/main/en-us/Developer/AjaxVersions.html
-                -->
 
-                <div id="toc-version" class="toc-version" data-override-url-proxy="https://render-guides.ddev.site/_resources/js/versions-proxy.php?url=" data-override-url-self="https://docs.typo3.org/m/typo3/tutorial-getting-started/12.4/en-us/Concepts/Index.html">
-                
-                    <span class="toc-version-prefix">Release:</span>
-                    <span class="toc-version-number" tabindex="0">8.0.0</span>
-                </div>
-                <div id="toc-version-options" class="toc-version-options">
-                    <p><span class="fa fa-spinner fa-spin"></span> Loading data.</p>
-                </div>
-            </div></div>
-    <div class="toc-actions">
-        <button id="toc-toggle" class="btn btn-light d-block d-lg-none" tabindex="0" aria-controls="toc-collapse" aria-expanded="false">
-            Menu
-        </button>
-    </div>
-</div>                    <div id="toc-collapse">
+                    <div id="toc-collapse">
                                                 <div aria-label="main navigation" class="toc"
                              role="navigation">
-                                <div aria-label="Main navigation" class="main_menu" role="navigation">
+                                <all-documentations-menu-mobile
+        data-override-url="../_resources/js/menu-proxy.php"></all-documentations-menu-mobile>
+    <div aria-label="Main navigation" class="main_menu" role="navigation">
+                <p class="caption">Store finder</p>
             <ul class="menu-level-1" role="menubar">
     <li class="" role="menuitem">
     <a href="../Introduction/Index.html">
@@ -156,22 +191,6 @@
         Sitemap
     </a></li>    </ul>
     </div>
-    <div aria-label="Meta navigation" class="main_menu  d-block d-lg-none" role="navigation">
-    <hr/>
-    <p class="caption">Contributors Corner</p>
-    <ul class="menu-level-1">            <li><a href="../_sources/Templating/Index.rst.txt" rel="nofollow noopener" target="_blank">
-                    View source of current document
-            </a></li>
-                    <li><a href="https://docs.typo3.org/m/typo3/docs-how-to-document/main/en-us/WritingDocsOfficial/GithubMethod.html" rel="nofollow noopener" target="_blank">
-                    How to edit
-            </a></li>
-                    <li><a href="https://github.com/evoWeb/store_finder/edit/develop/Documentation/Templating/Index.rst" rel="nofollow noopener" target="_blank">
-                    Edit current document on GitHub
-            </a></li>
-        </ul>
-</div>
-    <all-documentations-menu-mobile
-        data-override-url="https://render-guides.ddev.site/_resources/js/menu-proxy.php"></all-documentations-menu-mobile>
                         </div>
                     </div>
                 </nav>
@@ -183,23 +202,16 @@
     <li class="breadcrumb-item"><a href="../Index.html">Store finder</a></li>
                     <li aria-current="page"  class="breadcrumb-item  active">Templating</li>
         </ol>
-        <div class="breadcrumb-additions">        <a class="btn btn-sm btn-light" href="https://github.com/evoWeb/store_finder/issues/new/choose?title=Problem+on+https%3A%2F%2Fgithub.com%2FevoWeb%2Fstore_finder%2FTemplating%2FIndex.html" id="btnReportIssue" rel="nofollow noopener" target="_blank">
-            <span class="btn-icon"><i class="fas fa-bug"></i></span>
-            <span class="btn-text">Report issue</span>
-        </a>
-        <a class="btn btn-sm btn-light" href="../_sources/Templating/Index.rst.txt" rel="nofollow noopener" target="_blank">
-        <span class="btn-icon"><span class="fas fa-code"></span></span>
-        <span class="btn-text">View source</span>
-    </a>
-        <a class="btn btn-sm btn-light" href="https://docs.typo3.org/m/typo3/docs-how-to-document/main/en-us/WritingDocsOfficial/GithubMethod.html" id="btnHowToEdit" rel="nofollow noopener" target="_blank">
-        <span class="btn-icon"><span class="fas fa-info-circle"></span></span>
-        <span class="btn-text">How to edit</span>
-    </a>
-        <a class="btn btn-sm btn-secondary" href="https://github.com/evoWeb/store_finder/edit/develop/Documentation/Templating/Index.rst" id="btnEditOnGitHub" rel="nofollow noopener" target="_blank">
-        <span class="btn-icon"><span class="fab fa-github"></span></span>
-        <span class="btn-text">Edit on GitHub</span>
-    </a>
-    </div>    </nav>
+        <div class="breadcrumb-additions">                <a class="btn btn-sm btn-light" href="https://github.com/evoWeb/store_finder/issues/new/choose?title=Problem+on+https%3A%2F%2Fgithub.com%2FevoWeb%2Fstore_finder%2FTemplating%2FIndex.html" id="btnReportIssue" rel="nofollow noopener" target="_blank">
+                    <span class="btn-icon"><i class="fas fa-comment-dots"></i></span>
+                    <span class="btn-text">Give feedback</span>
+                </a>
+                            <a class="btn btn-sm btn-secondary" href="https://github.com/evoWeb/store_finder/edit/develop/Documentation/Templating/Index.rst" id="btnEditOnGitHub" rel="nofollow noopener" target="_blank">
+                    <span class="btn-icon"><span class="fab fa-github"></span></span>
+                    <span class="btn-text">Edit on GitHub</span>
+                </a>
+            </div>
+    </nav>
                     
 <article class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
     <div itemprop="articleBody">
@@ -207,16 +219,16 @@
                 
 <section class="section" id="templating-1" data-rst-anchor="templating">
             <a id="templating"></a>
-            <h1>Templating<a class="headerlink" href="#templating-1" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline"><i class="fa-solid fa-paragraph"></i></a></h1>
+            <h1>Templating<a class="headerlink" href="#templating-1" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">&nbsp;<i class="fa-solid fa-link"></i></a></h1>
             <section class="section" id="templates-partials-and-layouts">
-            <h2>Templates, partials and layouts<a class="headerlink" href="#templates-partials-and-layouts" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline"><i class="fa-solid fa-paragraph"></i></a></h2>
+            <h2>Templates, partials and layouts<a class="headerlink" href="#templates-partials-and-layouts" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">&nbsp;<i class="fa-solid fa-link"></i></a></h2>
             
     <p>Like every other extbase extension its possible to configure the fluid
 templates, partials and layout path via typoscript. Beside that is also
 possible to configure the templates and partials path in the plugin.</p>
 
             <section class="section" id="example">
-            <h3>Example:<a class="headerlink" href="#example" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline"><i class="fa-solid fa-paragraph"></i></a></h3>
+            <h3>Example:<a class="headerlink" href="#example" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">&nbsp;<i class="fa-solid fa-link"></i></a></h3>
                 <div class="code-block-caption">
         <span class="caption-text">EXT:my_extension/Configuration/TypoScript/setup.typoscript</span>
     </div><div class="code-block-wrapper" translate="no">
@@ -236,7 +248,7 @@ possible to configure the templates and partials path in the plugin.</p>
     </section>
     </section>
             <section class="section" id="viewhelper">
-            <h2>ViewHelper<a class="headerlink" href="#viewhelper" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline"><i class="fa-solid fa-paragraph"></i></a></h2>
+            <h2>ViewHelper<a class="headerlink" href="#viewhelper" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">&nbsp;<i class="fa-solid fa-link"></i></a></h2>
             
     <p>Beside the default ViewHelper of fluid the extension comes with three
 additional ViewHelper. These are used to render the search like the
@@ -250,7 +262,7 @@ ViewHelper get used.</p>
 
     </section>
             <section class="section" id="register-namespace">
-            <h2>Register Namespace<a class="headerlink" href="#register-namespace" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline"><i class="fa-solid fa-paragraph"></i></a></h2>
+            <h2>Register Namespace<a class="headerlink" href="#register-namespace" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">&nbsp;<i class="fa-solid fa-link"></i></a></h2>
             
     <p>Add the xmlns to the html tag in the template</p>
 
@@ -268,7 +280,7 @@ ViewHelper get used.</p>
 </div>
     </section>
             <section class="section" id="minify-viewhelper">
-            <h2>minify ViewHelper<a class="headerlink" href="#minify-viewhelper" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline"><i class="fa-solid fa-paragraph"></i></a></h2>
+            <h2>minify ViewHelper<a class="headerlink" href="#minify-viewhelper" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">&nbsp;<i class="fa-solid fa-link"></i></a></h2>
             
     <p>This ViewHelper gets used to minify the rendered json of the locations
 in the result map. The purpose is to reduce the traffic and clean the
@@ -277,7 +289,7 @@ So in stead of making the template unreadable the output gets minified
 on rendering time.</p>
 
             <section class="section" id="example-viewhelper">
-            <h4>Example ViewHelper<a class="headerlink" href="#example-viewhelper" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline"><i class="fa-solid fa-paragraph"></i></a></h4>
+            <h4>Example ViewHelper<a class="headerlink" href="#example-viewhelper" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">&nbsp;<i class="fa-solid fa-link"></i></a></h4>
                 <div class="code-block-caption">
         <span class="caption-text">EXT:my_extension/Resources/Private/Templates/Map/Map.html</span>
     </div><div class="code-block-wrapper" translate="no">
@@ -299,7 +311,7 @@ on rendering time.</p>
 </div>
     </section>
             <section class="section" id="example-output">
-            <h4>Example output<a class="headerlink" href="#example-output" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline"><i class="fa-solid fa-paragraph"></i></a></h4>
+            <h4>Example output<a class="headerlink" href="#example-output" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">&nbsp;<i class="fa-solid fa-link"></i></a></h4>
                 <div class="code-block-caption">
         <span class="caption-text">EXT:my_extension/Resources/Private/Templates/Map/Map.html</span>
     </div><div class="code-block-wrapper" translate="no">
@@ -315,7 +327,7 @@ on rendering time.</p>
     </section>
     </section>
             <section class="section" id="format-binaryand-viewhelper">
-            <h2>format.binaryAnd ViewHelper<a class="headerlink" href="#format-binaryand-viewhelper" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline"><i class="fa-solid fa-paragraph"></i></a></h2>
+            <h2>format.binaryAnd ViewHelper<a class="headerlink" href="#format-binaryand-viewhelper" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">&nbsp;<i class="fa-solid fa-link"></i></a></h2>
             
     <p>To be able to select which partial should be rendered its necessary to
 compare with binary and if the part is check in the plugin. As the f:if
@@ -328,7 +340,7 @@ the example below. Here we check if the list should be rendered because
 in the plugin the binary value 4 stands for list.</p>
 
             <section class="section" id="example-viewhelper">
-            <h4>Example ViewHelper<a class="headerlink" href="#example-viewhelper" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline"><i class="fa-solid fa-paragraph"></i></a></h4>
+            <h4>Example ViewHelper<a class="headerlink" href="#example-viewhelper" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">&nbsp;<i class="fa-solid fa-link"></i></a></h4>
                 <div class="code-block-caption">
         <span class="caption-text">EXT:my_extension/Resources/Private/Templates/Map/Map.html</span>
     </div><div class="code-block-wrapper" translate="no">
@@ -344,7 +356,7 @@ in the plugin the binary value 4 stands for list.</p>
     </section>
     </section>
             <section class="section" id="form-selectcountries">
-            <h2>form.selectCountries<a class="headerlink" href="#form-selectcountries" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline"><i class="fa-solid fa-paragraph"></i></a></h2>
+            <h2>form.selectCountries<a class="headerlink" href="#form-selectcountries" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">&nbsp;<i class="fa-solid fa-link"></i></a></h2>
             
     <p>The countries select ViewHelper fetches the countries from the country
 provider and renders each country as option. All attributes from
@@ -353,7 +365,7 @@ attribute allowedCountries is set, only countries matching it get rendered.
 allowedCountries accepts a comma seperated list of ISO2 country codes.</p>
 
             <section class="section" id="example-viewhelper">
-            <h4>Example ViewHelper<a class="headerlink" href="#example-viewhelper" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline"><i class="fa-solid fa-paragraph"></i></a></h4>
+            <h4>Example ViewHelper<a class="headerlink" href="#example-viewhelper" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">&nbsp;<i class="fa-solid fa-link"></i></a></h4>
                 <div class="code-block-caption">
         <span class="caption-text">EXT:my_extension/Resources/Private/Templates/Map/Map.html</span>
     </div><div class="code-block-wrapper" translate="no">
@@ -378,13 +390,13 @@ allowedCountries accepts a comma seperated list of ISO2 country codes.</p>
             <ul class="pagination justify-content-center"><li class="page-item">
                             <a class="page-link" href="../Configuration/EventListener/Index.html"
                                title="Accesskey Alt(+Shift)+p">
-                                Previous
+                                <i class="fa-solid fa-chevron-left"></i> Previous
                             </a>
                         </li>
                     <li class="page-item">
                             <a class="page-link" href="../Tutorial/Index.html"
                                title="Accesskey Alt(+Shift)+n">
-                                Next
+                                Next <i class="fa-solid fa-chevron-right"></i>
                             </a>
                         </li>
                     </ul>
@@ -405,17 +417,19 @@ allowedCountries accepts a comma seperated list of ISO2 country codes.</p>
             <div class="modal-body">
                 <div class="alert alert-success d-none" id="permalink-alert-success" role="alert"></div>
                 <div class="mb-3">
+                    <div class="permalink-short-wrapper">
+                        <label for="permalink-short" class="col-form-label">Permalink (Shortlink)</label>
+                        <div class="input-group">
+                            <input class="form-control code" id="permalink-short" readonly>
+                            <button type="button" class="btn btn-outline-secondary copy-button" data-target="permalink-short"><i class="far fa-clone"></i></button>
+                        </div>
+                        <p><em>Copy and freely share the link</em></p>
+                    </div>
                     <label for="permalink-uri" class="col-form-label">URL</label>
                     <div class="input-group">
                         <input class="form-control code" id="permalink-uri" readonly>
                         <button type="button" class="btn btn-outline-secondary copy-button" data-target="permalink-uri"><i class="far fa-clone"></i></button>
                     </div>
-                    <label for="permalink-short" class="col-form-label">Permalink (Shortlink)</label>
-                    <div class="input-group">
-                        <input class="form-control code" id="permalink-short" readonly>
-                        <button type="button" class="btn btn-outline-secondary copy-button" data-target="permalink-short"><i class="far fa-clone"></i></button>
-                    </div>
-                    <p><em>Copy and freely share the link</em></p>
                 </div>
                 <div class="mb-3">
                     <div class="alert alert-warning alert-permalink-rst" role="alert">This link target has no permanent anchor assigned.                        You can make a <a href="https://github.com/evoWeb/store_finder/edit/develop/Documentation/Templating/Index.rst">pull request on GitHub</a> to suggest an anchor.
@@ -427,6 +441,13 @@ allowedCountries accepts a comma seperated list of ISO2 country codes.</p>
                         <button type="button" class="btn btn-outline-secondary copy-button" data-target="permalink-rst"><i class="far fa-clone"></i></button>
                     </div>
                     <p><em>Copy this link into your TYPO3 manual.</em></p>
+                </div>
+                <div class="mb-3">
+                    <label for="permalink-md" class="col-form-label">Link in Markdown</label>
+                    <div class="input-group">
+                        <textarea class="form-control code" id="permalink-md" readonly></textarea>
+                        <button type="button" class="btn btn-outline-secondary copy-button" data-target="permalink-md"><i class="far fa-clone"></i></button>
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label for="permalink-html" class="col-form-label">Link in HTML</label>
@@ -474,7 +495,7 @@ allowedCountries accepts a comma seperated list of ISO2 country codes.</p>
                                                 <li><a href="https://github.com/evoWeb/store_finder/issues" rel="nofollow noopener" title="Issues"><span>Issues</span></a></li>
                                                 <li><a href="https://github.com/evoWeb/store_finder" rel="nofollow noopener" title="Repository"><span>Repository</span></a></li>
                                             </ul>                <div class="footer-additional">
-                    <p class="text-center">Last rendered: Nov 16, 2024 20:44</p>
+                    <p class="text-center">Last rendered: Nov 05, 2025 16:16</p>
                 </div>
                 <div class="footer-meta">
                                         <div class="footer-meta-copyright">

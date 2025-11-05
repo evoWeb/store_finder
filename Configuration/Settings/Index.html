@@ -12,22 +12,21 @@
 <meta content="" name="docsearch:package_type">
 <meta content="8.0.0" name="docsearch:release">
 <meta content="8.0.0" name="docsearch:version">
-<meta content="2024-11-16T20:44:48+00:00" name="docsearch:modified">
-<meta content="2024-11-16T20:44:48+00:00" name="dc.modified">
-<meta content="2024-11-16T20:44:48+00:00" property="article:modified_time">
+<meta content="2025-11-05T16:16:07+00:00" name="docsearch:modified">
+<meta content="2025-11-05T16:16:07+00:00" name="dc.modified">
+<meta content="2025-11-05T16:16:07+00:00" property="article:modified_time">
     <link href="http://purl.org/dc/elements/1.1/" rel="schema.dc">
 <link href="../../_resources/css/theme.css" rel="stylesheet">
 <link href="https://docs.typo3.org/search/" rel="search" title="Search">
-<script src="https://typo3.azureedge.net/typo3infrastructure/universe/dist/webcomponents-loader.js"></script>
-<script src="https://typo3.azureedge.net/typo3infrastructure/universe/dist/typo3-universe.js" type="module"></script>
+<script src="https://cdn.typo3.com/typo3infrastructure/universe/dist/webcomponents-loader.js"></script>
+<script src="https://cdn.typo3.com/typo3infrastructure/universe/dist/typo3-universe.js" type="module"></script>
                         <link href="../Index.html" rel="prev" title="Configuration"/>
             <link href="../View/Index.html" rel="next" title="View"/>
             <link href="../../Index.html" rel="top" title="Store finder"/>
     </head>
 <body>
 <div class="page">
-    
-<header>
+    <header>
     <div class="page-topbar">
         <div class="page-topbar-inner">
             <typo3-universe active="documentation">
@@ -37,15 +36,37 @@
     </div>
     <div class="page-header">
         <div class="page-header-inner">
-            <div class="row">
-                <div class="col-md-2 col-lg-4">
+            <div class="d-flex flex-wrap">
+                <div class="logo-wrapper">
                     <a class="logo" href="https://docs.typo3.org/" title="TYPO3 Documentation">
                         <img alt="TYPO3 Logo" class="logo-image" src="../../_resources/img/typo3-logo.svg" width="484" height="130">
                     </a>
                 </div>
-                <div class="col-md-10 col-lg-8">
+                <div class="align-self-center order-lg-2 order-last">
+                    
+<div class="toc-header">
+    <div class="toc-title pe-3">
+                            <a class="toc-title-project" href="../../Index.html">Store finder</a>
+            </div>
+    <label for="languageSelect" class="visually-hidden">Select language</label>
+        <select id="languageSelect" class="form-select d-none">
+        </select>
+
+                                  
+        <label for="versionSelect" class="visually-hidden">Select version</label>
+        <select id="versionSelect" class="form-select"
+                data-current-version="8.0.0"
+            data-override-url-proxy="../../_resources/js/versions-proxy.php?url=" data-override-url-self="https://docs.typo3.org/m/typo3/tutorial-getting-started/12.4/en-us/Concepts/Index.html"
+        >
+            <option disabled selected>Loading versions...</option>
+        </select>
+    </div>                </div>
+                <div class="ms-auto order-lg-3 d-flex">
                     <div class="menu-search-wrapper">
-                        <all-documentations-menu data-override-url="https://render-guides.ddev.site/_resources/js/menu-proxy.php"></all-documentations-menu>
+                        <button id="toc-toggle" class="btn btn-light d-block d-lg-none" tabindex="0" aria-controls="toc-collapse" aria-expanded="false">
+                            <i class="fas fa-bars"></i> <span class="visually-hidden">Mobile Menu</span>
+                        </button>
+                        <all-documentations-menu data-override-url="../../_resources/js/menu-proxy.php"></all-documentations-menu>
                                                 <search role="search">
                             <form action="https://docs.typo3.org/search/search" id="global-search-form" method="get">
                                 <div class="sr-only"><label for="globalsearchinput">TYPO3 documentation...</label></div>
@@ -54,10 +75,44 @@
                                         <option value="">Search all</option>
                                     </select>
                                     <input autocomplete="off" class="form-control shadow-none" id="globalsearchinput" name="q" placeholder="TYPO3 documentation..." type="text" value="">
-                                    <button class="btn btn-light search__submit" type="submit"><i class="fa fa-search"></i>&nbsp;<span class="d-none d-md-inline">Search</span></button>
+                                    <button class="btn btn-light" type="submit"><i class="fa fa-search"></i>&nbsp;<span class="d-none d-md-inline">Search</span></button>
                                 </div>
                             </form>
+                            <div id="global-search-root"></div>
                         </search>
+                        <div class="position-relative d-inline-block">
+                            <button id="options-toggle" class="btn btn-light d-block" type="button" aria-expanded="false">
+                                <i class="fas fa-cog"></i> <span class="visually-hidden">Options</span>
+                            </button>
+
+                            <div id="options-panel"
+                                 class="shadow p-3"
+                                 role="menu"
+                                 aria-hidden="true">
+                                <h6 class="dropdown-header text-muted text-uppercase small mb-2">Options</h6>
+
+                                                                                                            <a class="dropdown-item d-flex align-items-center gap-2" href="https://github.com/evoWeb/store_finder/issues/new/choose?title=Problem+on+https%3A%2F%2Fgithub.com%2FevoWeb%2Fstore_finder%2FConfiguration%2FSettings%2FIndex.html" id="btnReportIssue" rel="nofollow noopener" target="_blank">
+        <i class="fas fa-comment-dots"></i>
+        Give feedback
+    </a>
+    <a class="dropdown-item d-flex align-items-center gap-2" href="../../_sources/Configuration/Settings/Index.rst.txt" rel="nofollow noopener" target="_blank">
+        <i class="fas fa-code"></i>
+        View source
+    </a>
+    <a class="dropdown-item d-flex align-items-center gap-2" href="https://docs.typo3.org/m/typo3/docs-how-to-document/main/en-us/WritingDocsOfficial/GithubMethod.html" id="btnHowToEdit" rel="nofollow noopener" target="_blank">
+        <i class="fas fa-info-circle"></i>
+        How to edit
+    </a>
+    <a class="dropdown-item d-flex align-items-center gap-2" href="https://github.com/evoWeb/store_finder/edit/develop/Documentation/Configuration/Settings/Index.rst" id="btnEditOnGitHub" rel="nofollow noopener" target="_blank">
+        <i class="fab fa-github"></i>
+        Edit on GitHub
+    </a>
+                                                                                                                <a class="dropdown-item d-flex align-items-center gap-2" href="../../singlehtml/Index.html" target="_blank" rel="noopener">
+                                            <i class="fas fa-print"></i>
+                                            Full documentation (single file)
+                                        </a>
+                                                                                                </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -67,34 +122,14 @@
         <div class="page-main-inner">
             <div class="page-main-navigation">
                 <nav>
-                    
-<div class="toc-header">
-    <div class="toc-title">
-        <a class="toc-title-project" href="../../Index.html">Store Finder</a>
-            <div class="toc-version-wrapper" id="toc-version-wrapper">
-                <!--
-                    LOCAL RENDERING NOTICE:
-                    https://docs.typo3.org/other/t3docs/render-guides/main/en-us/Developer/AjaxVersions.html
-                -->
 
-                <div id="toc-version" class="toc-version" data-override-url-proxy="https://render-guides.ddev.site/_resources/js/versions-proxy.php?url=" data-override-url-self="https://docs.typo3.org/m/typo3/tutorial-getting-started/12.4/en-us/Concepts/Index.html">
-                
-                    <span class="toc-version-prefix">Release:</span>
-                    <span class="toc-version-number" tabindex="0">8.0.0</span>
-                </div>
-                <div id="toc-version-options" class="toc-version-options">
-                    <p><span class="fa fa-spinner fa-spin"></span> Loading data.</p>
-                </div>
-            </div></div>
-    <div class="toc-actions">
-        <button id="toc-toggle" class="btn btn-light d-block d-lg-none" tabindex="0" aria-controls="toc-collapse" aria-expanded="false">
-            Menu
-        </button>
-    </div>
-</div>                    <div id="toc-collapse">
+                    <div id="toc-collapse">
                                                 <div aria-label="main navigation" class="toc"
                              role="navigation">
-                                <div aria-label="Main navigation" class="main_menu" role="navigation">
+                                <all-documentations-menu-mobile
+        data-override-url="../../_resources/js/menu-proxy.php"></all-documentations-menu-mobile>
+    <div aria-label="Main navigation" class="main_menu" role="navigation">
+                <p class="caption">Store finder</p>
             <ul class="menu-level-1" role="menubar">
     <li class="" role="menuitem">
     <a href="../../Introduction/Index.html">
@@ -156,22 +191,6 @@
         Sitemap
     </a></li>    </ul>
     </div>
-    <div aria-label="Meta navigation" class="main_menu  d-block d-lg-none" role="navigation">
-    <hr/>
-    <p class="caption">Contributors Corner</p>
-    <ul class="menu-level-1">            <li><a href="../../_sources/Configuration/Settings/Index.rst.txt" rel="nofollow noopener" target="_blank">
-                    View source of current document
-            </a></li>
-                    <li><a href="https://docs.typo3.org/m/typo3/docs-how-to-document/main/en-us/WritingDocsOfficial/GithubMethod.html" rel="nofollow noopener" target="_blank">
-                    How to edit
-            </a></li>
-                    <li><a href="https://github.com/evoWeb/store_finder/edit/develop/Documentation/Configuration/Settings/Index.rst" rel="nofollow noopener" target="_blank">
-                    Edit current document on GitHub
-            </a></li>
-        </ul>
-</div>
-    <all-documentations-menu-mobile
-        data-override-url="https://render-guides.ddev.site/_resources/js/menu-proxy.php"></all-documentations-menu-mobile>
                         </div>
                     </div>
                 </nav>
@@ -184,23 +203,16 @@
         <li class="breadcrumb-item"><a href="../Index.html">Configuration</a></li>
                     <li aria-current="page"  class="breadcrumb-item  active">Settings</li>
         </ol>
-        <div class="breadcrumb-additions">        <a class="btn btn-sm btn-light" href="https://github.com/evoWeb/store_finder/issues/new/choose?title=Problem+on+https%3A%2F%2Fgithub.com%2FevoWeb%2Fstore_finder%2FConfiguration%2FSettings%2FIndex.html" id="btnReportIssue" rel="nofollow noopener" target="_blank">
-            <span class="btn-icon"><i class="fas fa-bug"></i></span>
-            <span class="btn-text">Report issue</span>
-        </a>
-        <a class="btn btn-sm btn-light" href="../../_sources/Configuration/Settings/Index.rst.txt" rel="nofollow noopener" target="_blank">
-        <span class="btn-icon"><span class="fas fa-code"></span></span>
-        <span class="btn-text">View source</span>
-    </a>
-        <a class="btn btn-sm btn-light" href="https://docs.typo3.org/m/typo3/docs-how-to-document/main/en-us/WritingDocsOfficial/GithubMethod.html" id="btnHowToEdit" rel="nofollow noopener" target="_blank">
-        <span class="btn-icon"><span class="fas fa-info-circle"></span></span>
-        <span class="btn-text">How to edit</span>
-    </a>
-        <a class="btn btn-sm btn-secondary" href="https://github.com/evoWeb/store_finder/edit/develop/Documentation/Configuration/Settings/Index.rst" id="btnEditOnGitHub" rel="nofollow noopener" target="_blank">
-        <span class="btn-icon"><span class="fab fa-github"></span></span>
-        <span class="btn-text">Edit on GitHub</span>
-    </a>
-    </div>    </nav>
+        <div class="breadcrumb-additions">                <a class="btn btn-sm btn-light" href="https://github.com/evoWeb/store_finder/issues/new/choose?title=Problem+on+https%3A%2F%2Fgithub.com%2FevoWeb%2Fstore_finder%2FConfiguration%2FSettings%2FIndex.html" id="btnReportIssue" rel="nofollow noopener" target="_blank">
+                    <span class="btn-icon"><i class="fas fa-comment-dots"></i></span>
+                    <span class="btn-text">Give feedback</span>
+                </a>
+                            <a class="btn btn-sm btn-secondary" href="https://github.com/evoWeb/store_finder/edit/develop/Documentation/Configuration/Settings/Index.rst" id="btnEditOnGitHub" rel="nofollow noopener" target="_blank">
+                    <span class="btn-icon"><span class="fab fa-github"></span></span>
+                    <span class="btn-text">Edit on GitHub</span>
+                </a>
+            </div>
+    </nav>
                     
 <article class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
     <div itemprop="articleBody">
@@ -208,13 +220,13 @@
                 
 <section class="section" id="settings-1" data-rst-anchor="settings">
             <a id="settings"></a>
-            <h1>Settings<a class="headerlink" href="#settings-1" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline"><i class="fa-solid fa-paragraph"></i></a></h1>
+            <h1>Settings<a class="headerlink" href="#settings-1" data-bs-toggle="modal" data-bs-target="#linkReferenceModal"  title="Reference this headline">&nbsp;<i class="fa-solid fa-link"></i></a></h1>
             
 
 
 
-
-<div class="table-responsive confval-table" id="confval-menu-settings-reference">
+<a id="confval-menu-settings-reference"></a>
+<div class="table-responsive confval-table">
     <table class="table table-hover caption-top">        <thead>
         <tr>
             <th scope="col">Name</th>
@@ -227,7 +239,7 @@
                         <tr>
         <td><div class="confval-label ps-0"><a href="#confval-showbeforesearch">show<wbr>Before<wbr>Search</a></div></td>
                     <td>
-                            <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/DataTypes/Index.html#data-type-integer">integer</a>
+                            <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/Syntax/StringFormats/Index.html#data-type-integer">integer</a>
                         </td>
                     <td>
                                     1
@@ -237,7 +249,7 @@
                         <tr>
         <td><div class="confval-label ps-0"><a href="#confval-showaftersearch">show<wbr>After<wbr>Search</a></div></td>
                     <td>
-                            <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/DataTypes/Index.html#data-type-integer">integer</a>
+                            <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/Syntax/StringFormats/Index.html#data-type-integer">integer</a>
                         </td>
                     <td>
                                     6
@@ -247,7 +259,7 @@
                         <tr>
         <td><div class="confval-label ps-0"><a href="#confval-apiv3layers">api<wbr>V3Layers</a></div></td>
                     <td>
-                            list of <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/DataTypes/Index.html#data-type-string">string</a>
+                            list of <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/Syntax/StringFormats/Index.html#data-type-string">string</a>
                         </td>
                     <td>
                         </td>
@@ -256,7 +268,7 @@
                         <tr>
         <td><div class="confval-label ps-0"><a href="#confval-limit">limit</a></div></td>
                     <td>
-                            <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/DataTypes/Index.html#data-type-integer">integer</a>
+                            <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/Syntax/StringFormats/Index.html#data-type-integer">integer</a>
                         </td>
                     <td>
                                     20
@@ -266,7 +278,7 @@
                         <tr>
         <td><div class="confval-label ps-0"><a href="#confval-allowedcountries">allowed<wbr>Countries</a></div></td>
                     <td>
-                            list of <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/DataTypes/Index.html#data-type-string">string</a>
+                            list of <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/Syntax/StringFormats/Index.html#data-type-string">string</a>
                         </td>
                     <td>
                         </td>
@@ -275,7 +287,7 @@
                         <tr>
         <td><div class="confval-label ps-0"><a href="#confval-categories">categories</a></div></td>
                     <td>
-                            list of <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/DataTypes/Index.html#data-type-integer">integer</a>
+                            list of <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/Syntax/StringFormats/Index.html#data-type-integer">integer</a>
                         </td>
                     <td>
                         </td>
@@ -284,7 +296,7 @@
                         <tr>
         <td><div class="confval-label ps-0"><a href="#confval-categorypriority">category<wbr>Priority</a></div></td>
                     <td>
-                            <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/DataTypes/Index.html#data-type-string">string</a>
+                            <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/Syntax/StringFormats/Index.html#data-type-string">string</a>
                         </td>
                     <td>
                                     useAsFilterInFrontend
@@ -294,7 +306,7 @@
                         <tr>
         <td><div class="confval-label ps-0"><a href="#confval-singlelocationid">single<wbr>Location<wbr>Id</a></div></td>
                     <td>
-                            <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/DataTypes/Index.html#data-type-integer">integer</a>
+                            <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/Syntax/StringFormats/Index.html#data-type-integer">integer</a>
                         </td>
                     <td>
                         </td>
@@ -303,7 +315,7 @@
                         <tr>
         <td><div class="confval-label ps-0"><a href="#confval-geocoderprovider">geocoder<wbr>Provider</a></div></td>
                     <td>
-                            <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/DataTypes/Index.html#data-type-string">string</a>
+                            <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/Syntax/StringFormats/Index.html#data-type-string">string</a>
                         </td>
                     <td>
                         </td>
@@ -312,7 +324,7 @@
                         <tr>
         <td><div class="confval-label ps-0"><a href="#confval-apiconsolekey">api<wbr>Console<wbr>Key</a></div></td>
                     <td>
-                            <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/DataTypes/Index.html#data-type-string">string</a>
+                            <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/Syntax/StringFormats/Index.html#data-type-string">string</a>
                         </td>
                     <td>
                         </td>
@@ -321,7 +333,7 @@
                         <tr>
         <td><div class="confval-label ps-0"><a href="#confval-apiconsolekeygeocoding">api<wbr>Console<wbr>Key<wbr>Geocoding</a></div></td>
                     <td>
-                            <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/DataTypes/Index.html#data-type-string">string</a>
+                            <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/Syntax/StringFormats/Index.html#data-type-string">string</a>
                         </td>
                     <td>
                         </td>
@@ -330,7 +342,7 @@
                         <tr>
         <td><div class="confval-label ps-0"><a href="#confval-mapid">map<wbr>Id</a></div></td>
                     <td>
-                            <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/DataTypes/Index.html#data-type-string">string</a>
+                            <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/Syntax/StringFormats/Index.html#data-type-string">string</a>
                         </td>
                     <td>
                         </td>
@@ -339,7 +351,7 @@
                         <tr>
         <td><div class="confval-label ps-0"><a href="#confval-googlelibraries">google<wbr>Libraries</a></div></td>
                     <td>
-                            list of <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/DataTypes/Index.html#data-type-string">string</a>
+                            list of <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/Syntax/StringFormats/Index.html#data-type-string">string</a>
                         </td>
                     <td>
                         </td>
@@ -348,7 +360,7 @@
                         <tr>
         <td><div class="confval-label ps-0"><a href="#confval-distanceunit">distance<wbr>Unit</a></div></td>
                     <td>
-                            <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/DataTypes/Index.html#data-type-string">string</a>
+                            <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/Syntax/StringFormats/Index.html#data-type-string">string</a>
                         </td>
                     <td>
                                     kilometer
@@ -358,7 +370,7 @@
                         <tr>
         <td><div class="confval-label ps-0"><a href="#confval-language">language</a></div></td>
                     <td>
-                            <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/DataTypes/Index.html#data-type-string">string</a>
+                            <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/Syntax/StringFormats/Index.html#data-type-string">string</a>
                         </td>
                     <td>
                                     en
@@ -368,7 +380,7 @@
                         <tr>
         <td><div class="confval-label ps-0"><a href="#confval-showstoreimage">show<wbr>Store<wbr>Image</a></div></td>
                     <td>
-                            <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/DataTypes/Index.html#data-type-boolean">boolean</a>
+                            <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/Syntax/StringFormats/Index.html#data-type-boolean">boolean</a>
                         </td>
                     <td>
                                     1
@@ -378,7 +390,7 @@
                         <tr>
         <td><div class="confval-label ps-0"><a href="#confval-resultpageid">result<wbr>Page<wbr>Id</a></div></td>
                     <td>
-                            <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/DataTypes/Index.html#data-type-integer">integer</a>
+                            <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/Syntax/StringFormats/Index.html#data-type-integer">integer</a>
                         </td>
                     <td>
                         </td>
@@ -387,7 +399,7 @@
                         <tr>
         <td><div class="confval-label ps-0"><a href="#confval-mapsize-height">map<wbr>Size.<wbr>height</a></div></td>
                     <td>
-                            <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/DataTypes/Index.html#data-type-integer">integer</a>
+                            <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/Syntax/StringFormats/Index.html#data-type-integer">integer</a>
                         </td>
                     <td>
                                     400
@@ -397,7 +409,7 @@
                         <tr>
         <td><div class="confval-label ps-0"><a href="#confval-mapsize-width">map<wbr>Size.<wbr>width</a></div></td>
                     <td>
-                            <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/DataTypes/Index.html#data-type-integer">integer</a>
+                            <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/Syntax/StringFormats/Index.html#data-type-integer">integer</a>
                         </td>
                     <td>
                                     600
@@ -417,7 +429,7 @@
                         <tr>
         <td><div class="confval-label ps-0"><a href="#confval-disablefetchlocationinaction">disable<wbr>Fetch<wbr>Location<wbr>In<wbr>Action</a></div></td>
                     <td>
-                            array of <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/DataTypes/Index.html#data-type-string">string</a>
+                            array of <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/Syntax/StringFormats/Index.html#data-type-string">string</a>
                         </td>
                     <td>
                         </td>
@@ -425,33 +437,34 @@
                                                     
             </table>
 </div>
-            <a id="showBeforeSearch"></a>
-                <section data-search-title="showBeforeSearch"
+                <a id="showBeforeSearch"></a>
+                        <section data-search-title="showBeforeSearch"
          data-search-id="confval-showbeforesearch"
          data-search-facet="Option"
          class="confval-section"
+         id="confval-showbeforesearch"
 >
     <h3 class="sr-only">showBeforeSearch</h3>
     <dl class="confval">
-        <dt id="confval-showbeforesearch"            class="d-flex justify-content-between">
-            <div class="confval-header">
+        <dt             class="d-flex justify-content-between">
+            <div class="confval-header flex-grow-1">
                 <code class="sig-name descname"><span
                         class="pre">show<wbr>Before<wbr>Search</span></code>
                                     <a class="headerlink" href="#confval-showbeforesearch"
                        data-bs-toggle="modal"
                        data-bs-target="#linkReferenceModal"
                        data-id="confval-showbeforesearch"
-                       data-rstCode=":confval:`showBeforeSearch &lt;evoweb/store-finder:showbeforesearch&gt;`"
                        title="Reference this configuration value"><i
                             class="fa-solid fa-paragraph"></i></a>
                 </div>
-            <div class="confval-back-to-top">                    <a href="#" class="backToTop" title="Back to top"><i
-                            class="fa-solid fa-arrow-up fa-xs"></i></a>            </div>
-        </dt>
+            <div class="confval-back-to-top">                    <a href="#confval-menu-settings-reference" class="backToList"
+                       title="Back to list"><i
+                            class="fa-solid fa-angles-up fa-xs"></i></a>
+                            </div>        </dt>
         <dd>
                             <dl class="field-list simple">
                                             <dt class="field-even">Type</dt>
-                        <dd class="field-even"><a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/DataTypes/Index.html#data-type-integer">integer</a>
+                        <dd class="field-even"><a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/Syntax/StringFormats/Index.html#data-type-integer">integer</a>
                         </dd>
                                                 <dt class="field-even">Default</dt>
                             <dd class="field-even">1
@@ -476,33 +489,34 @@ be used as binary flags</p>
         </dd>
     </dl>
 </section>
-                <a id="showAfterSearch"></a>
-                <section data-search-title="showAfterSearch"
+                        <a id="showAfterSearch"></a>
+                        <section data-search-title="showAfterSearch"
          data-search-id="confval-showaftersearch"
          data-search-facet="Option"
          class="confval-section"
+         id="confval-showaftersearch"
 >
     <h3 class="sr-only">showAfterSearch</h3>
     <dl class="confval">
-        <dt id="confval-showaftersearch"            class="d-flex justify-content-between">
-            <div class="confval-header">
+        <dt             class="d-flex justify-content-between">
+            <div class="confval-header flex-grow-1">
                 <code class="sig-name descname"><span
                         class="pre">show<wbr>After<wbr>Search</span></code>
                                     <a class="headerlink" href="#confval-showaftersearch"
                        data-bs-toggle="modal"
                        data-bs-target="#linkReferenceModal"
                        data-id="confval-showaftersearch"
-                       data-rstCode=":confval:`showAfterSearch &lt;evoweb/store-finder:showaftersearch&gt;`"
                        title="Reference this configuration value"><i
                             class="fa-solid fa-paragraph"></i></a>
                 </div>
-            <div class="confval-back-to-top">                    <a href="#" class="backToTop" title="Back to top"><i
-                            class="fa-solid fa-arrow-up fa-xs"></i></a>            </div>
-        </dt>
+            <div class="confval-back-to-top">                    <a href="#confval-menu-settings-reference" class="backToList"
+                       title="Back to list"><i
+                            class="fa-solid fa-angles-up fa-xs"></i></a>
+                            </div>        </dt>
         <dd>
                             <dl class="field-list simple">
                                             <dt class="field-even">Type</dt>
-                        <dd class="field-even"><a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/DataTypes/Index.html#data-type-integer">integer</a>
+                        <dd class="field-even"><a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/Syntax/StringFormats/Index.html#data-type-integer">integer</a>
                         </dd>
                                                 <dt class="field-even">Default</dt>
                             <dd class="field-even">6
@@ -527,33 +541,34 @@ be used as binary flags</p>
         </dd>
     </dl>
 </section>
-                <a id="apiV3Layers"></a>
-                <section data-search-title="apiV3Layers"
+                        <a id="apiV3Layers"></a>
+                        <section data-search-title="apiV3Layers"
          data-search-id="confval-apiv3layers"
          data-search-facet="Option"
          class="confval-section"
+         id="confval-apiv3layers"
 >
     <h3 class="sr-only">apiV3Layers</h3>
     <dl class="confval">
-        <dt id="confval-apiv3layers"            class="d-flex justify-content-between">
-            <div class="confval-header">
+        <dt             class="d-flex justify-content-between">
+            <div class="confval-header flex-grow-1">
                 <code class="sig-name descname"><span
                         class="pre">api<wbr>V3Layers</span></code>
                                     <a class="headerlink" href="#confval-apiv3layers"
                        data-bs-toggle="modal"
                        data-bs-target="#linkReferenceModal"
                        data-id="confval-apiv3layers"
-                       data-rstCode=":confval:`apiV3Layers &lt;evoweb/store-finder:apiv3layers&gt;`"
                        title="Reference this configuration value"><i
                             class="fa-solid fa-paragraph"></i></a>
                 </div>
-            <div class="confval-back-to-top">                    <a href="#" class="backToTop" title="Back to top"><i
-                            class="fa-solid fa-arrow-up fa-xs"></i></a>            </div>
-        </dt>
+            <div class="confval-back-to-top">                    <a href="#confval-menu-settings-reference" class="backToList"
+                       title="Back to list"><i
+                            class="fa-solid fa-angles-up fa-xs"></i></a>
+                            </div>        </dt>
         <dd>
                             <dl class="field-list simple">
                                             <dt class="field-even">Type</dt>
-                        <dd class="field-even">list of <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/DataTypes/Index.html#data-type-string">string</a>
+                        <dd class="field-even">list of <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/Syntax/StringFormats/Index.html#data-type-string">string</a>
                         </dd>
                                                 <dt class="field-even">Possible values</dt>
                             <dd class="field-even">traffic, bicycling, kml
@@ -567,33 +582,34 @@ be used as binary flags</p>
         </dd>
     </dl>
 </section>
-                <a id="limit"></a>
-                <section data-search-title="limit"
+                        <a id="limit"></a>
+                        <section data-search-title="limit"
          data-search-id="confval-limit"
          data-search-facet="Option"
          class="confval-section"
+         id="confval-limit"
 >
     <h3 class="sr-only">limit</h3>
     <dl class="confval">
-        <dt id="confval-limit"            class="d-flex justify-content-between">
-            <div class="confval-header">
+        <dt             class="d-flex justify-content-between">
+            <div class="confval-header flex-grow-1">
                 <code class="sig-name descname"><span
                         class="pre">limit</span></code>
                                     <a class="headerlink" href="#confval-limit"
                        data-bs-toggle="modal"
                        data-bs-target="#linkReferenceModal"
                        data-id="confval-limit"
-                       data-rstCode=":confval:`limit &lt;evoweb/store-finder:limit&gt;`"
                        title="Reference this configuration value"><i
                             class="fa-solid fa-paragraph"></i></a>
                 </div>
-            <div class="confval-back-to-top">                    <a href="#" class="backToTop" title="Back to top"><i
-                            class="fa-solid fa-arrow-up fa-xs"></i></a>            </div>
-        </dt>
+            <div class="confval-back-to-top">                    <a href="#confval-menu-settings-reference" class="backToList"
+                       title="Back to list"><i
+                            class="fa-solid fa-angles-up fa-xs"></i></a>
+                            </div>        </dt>
         <dd>
                             <dl class="field-list simple">
                                             <dt class="field-even">Type</dt>
-                        <dd class="field-even"><a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/DataTypes/Index.html#data-type-integer">integer</a>
+                        <dd class="field-even"><a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/Syntax/StringFormats/Index.html#data-type-integer">integer</a>
                         </dd>
                                                 <dt class="field-even">Default</dt>
                             <dd class="field-even">20
@@ -607,33 +623,34 @@ be used as binary flags</p>
         </dd>
     </dl>
 </section>
-                <a id="allowedCountries"></a>
-                <section data-search-title="allowedCountries"
+                        <a id="allowedCountries"></a>
+                        <section data-search-title="allowedCountries"
          data-search-id="confval-allowedcountries"
          data-search-facet="Option"
          class="confval-section"
+         id="confval-allowedcountries"
 >
     <h3 class="sr-only">allowedCountries</h3>
     <dl class="confval">
-        <dt id="confval-allowedcountries"            class="d-flex justify-content-between">
-            <div class="confval-header">
+        <dt             class="d-flex justify-content-between">
+            <div class="confval-header flex-grow-1">
                 <code class="sig-name descname"><span
                         class="pre">allowed<wbr>Countries</span></code>
                                     <a class="headerlink" href="#confval-allowedcountries"
                        data-bs-toggle="modal"
                        data-bs-target="#linkReferenceModal"
                        data-id="confval-allowedcountries"
-                       data-rstCode=":confval:`allowedCountries &lt;evoweb/store-finder:allowedcountries&gt;`"
                        title="Reference this configuration value"><i
                             class="fa-solid fa-paragraph"></i></a>
                 </div>
-            <div class="confval-back-to-top">                    <a href="#" class="backToTop" title="Back to top"><i
-                            class="fa-solid fa-arrow-up fa-xs"></i></a>            </div>
-        </dt>
+            <div class="confval-back-to-top">                    <a href="#confval-menu-settings-reference" class="backToList"
+                       title="Back to list"><i
+                            class="fa-solid fa-angles-up fa-xs"></i></a>
+                            </div>        </dt>
         <dd>
                             <dl class="field-list simple">
                                             <dt class="field-even">Type</dt>
-                        <dd class="field-even">list of <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/DataTypes/Index.html#data-type-string">string</a>
+                        <dd class="field-even">list of <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/Syntax/StringFormats/Index.html#data-type-string">string</a>
                         </dd>
                     </dl>
                         <div class="confval-description">
@@ -644,33 +661,34 @@ be used as binary flags</p>
         </dd>
     </dl>
 </section>
-                <a id="categories"></a>
-                <section data-search-title="categories"
+                        <a id="categories"></a>
+                        <section data-search-title="categories"
          data-search-id="confval-categories"
          data-search-facet="Option"
          class="confval-section"
+         id="confval-categories"
 >
     <h3 class="sr-only">categories</h3>
     <dl class="confval">
-        <dt id="confval-categories"            class="d-flex justify-content-between">
-            <div class="confval-header">
+        <dt             class="d-flex justify-content-between">
+            <div class="confval-header flex-grow-1">
                 <code class="sig-name descname"><span
                         class="pre">categories</span></code>
                                     <a class="headerlink" href="#confval-categories"
                        data-bs-toggle="modal"
                        data-bs-target="#linkReferenceModal"
                        data-id="confval-categories"
-                       data-rstCode=":confval:`categories &lt;evoweb/store-finder:categories&gt;`"
                        title="Reference this configuration value"><i
                             class="fa-solid fa-paragraph"></i></a>
                 </div>
-            <div class="confval-back-to-top">                    <a href="#" class="backToTop" title="Back to top"><i
-                            class="fa-solid fa-arrow-up fa-xs"></i></a>            </div>
-        </dt>
+            <div class="confval-back-to-top">                    <a href="#confval-menu-settings-reference" class="backToList"
+                       title="Back to list"><i
+                            class="fa-solid fa-angles-up fa-xs"></i></a>
+                            </div>        </dt>
         <dd>
                             <dl class="field-list simple">
                                             <dt class="field-even">Type</dt>
-                        <dd class="field-even">list of <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/DataTypes/Index.html#data-type-integer">integer</a>
+                        <dd class="field-even">list of <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/Syntax/StringFormats/Index.html#data-type-integer">integer</a>
                         </dd>
                     </dl>
                         <div class="confval-description">
@@ -681,33 +699,34 @@ be used as binary flags</p>
         </dd>
     </dl>
 </section>
-                <a id="categoryPriority"></a>
-                <section data-search-title="categoryPriority"
+                        <a id="categoryPriority"></a>
+                        <section data-search-title="categoryPriority"
          data-search-id="confval-categorypriority"
          data-search-facet="Option"
          class="confval-section"
+         id="confval-categorypriority"
 >
     <h3 class="sr-only">categoryPriority</h3>
     <dl class="confval">
-        <dt id="confval-categorypriority"            class="d-flex justify-content-between">
-            <div class="confval-header">
+        <dt             class="d-flex justify-content-between">
+            <div class="confval-header flex-grow-1">
                 <code class="sig-name descname"><span
                         class="pre">category<wbr>Priority</span></code>
                                     <a class="headerlink" href="#confval-categorypriority"
                        data-bs-toggle="modal"
                        data-bs-target="#linkReferenceModal"
                        data-id="confval-categorypriority"
-                       data-rstCode=":confval:`categoryPriority &lt;evoweb/store-finder:categorypriority&gt;`"
                        title="Reference this configuration value"><i
                             class="fa-solid fa-paragraph"></i></a>
                 </div>
-            <div class="confval-back-to-top">                    <a href="#" class="backToTop" title="Back to top"><i
-                            class="fa-solid fa-arrow-up fa-xs"></i></a>            </div>
-        </dt>
+            <div class="confval-back-to-top">                    <a href="#confval-menu-settings-reference" class="backToList"
+                       title="Back to list"><i
+                            class="fa-solid fa-angles-up fa-xs"></i></a>
+                            </div>        </dt>
         <dd>
                             <dl class="field-list simple">
                                             <dt class="field-even">Type</dt>
-                        <dd class="field-even"><a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/DataTypes/Index.html#data-type-string">string</a>
+                        <dd class="field-even"><a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/Syntax/StringFormats/Index.html#data-type-string">string</a>
                         </dd>
                                                 <dt class="field-even">Default</dt>
                             <dd class="field-even">useAsFilterInFrontend
@@ -724,33 +743,34 @@ be used as binary flags</p>
         </dd>
     </dl>
 </section>
-                <a id="singleLocationId"></a>
-                <section data-search-title="singleLocationId"
+                        <a id="singleLocationId"></a>
+                        <section data-search-title="singleLocationId"
          data-search-id="confval-singlelocationid"
          data-search-facet="Option"
          class="confval-section"
+         id="confval-singlelocationid"
 >
     <h3 class="sr-only">singleLocationId</h3>
     <dl class="confval">
-        <dt id="confval-singlelocationid"            class="d-flex justify-content-between">
-            <div class="confval-header">
+        <dt             class="d-flex justify-content-between">
+            <div class="confval-header flex-grow-1">
                 <code class="sig-name descname"><span
                         class="pre">single<wbr>Location<wbr>Id</span></code>
                                     <a class="headerlink" href="#confval-singlelocationid"
                        data-bs-toggle="modal"
                        data-bs-target="#linkReferenceModal"
                        data-id="confval-singlelocationid"
-                       data-rstCode=":confval:`singleLocationId &lt;evoweb/store-finder:singlelocationid&gt;`"
                        title="Reference this configuration value"><i
                             class="fa-solid fa-paragraph"></i></a>
                 </div>
-            <div class="confval-back-to-top">                    <a href="#" class="backToTop" title="Back to top"><i
-                            class="fa-solid fa-arrow-up fa-xs"></i></a>            </div>
-        </dt>
+            <div class="confval-back-to-top">                    <a href="#confval-menu-settings-reference" class="backToList"
+                       title="Back to list"><i
+                            class="fa-solid fa-angles-up fa-xs"></i></a>
+                            </div>        </dt>
         <dd>
                             <dl class="field-list simple">
                                             <dt class="field-even">Type</dt>
-                        <dd class="field-even"><a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/DataTypes/Index.html#data-type-integer">integer</a>
+                        <dd class="field-even"><a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/Syntax/StringFormats/Index.html#data-type-integer">integer</a>
                         </dd>
                     </dl>
                         <div class="confval-description">
@@ -761,33 +781,34 @@ be used as binary flags</p>
         </dd>
     </dl>
 </section>
-                <a id="geocoderProvider"></a>
-                <section data-search-title="geocoderProvider"
+                        <a id="geocoderProvider"></a>
+                        <section data-search-title="geocoderProvider"
          data-search-id="confval-geocoderprovider"
          data-search-facet="Option"
          class="confval-section"
+         id="confval-geocoderprovider"
 >
     <h3 class="sr-only">geocoderProvider</h3>
     <dl class="confval">
-        <dt id="confval-geocoderprovider"            class="d-flex justify-content-between">
-            <div class="confval-header">
+        <dt             class="d-flex justify-content-between">
+            <div class="confval-header flex-grow-1">
                 <code class="sig-name descname"><span
                         class="pre">geocoder<wbr>Provider</span></code>
                                     <a class="headerlink" href="#confval-geocoderprovider"
                        data-bs-toggle="modal"
                        data-bs-target="#linkReferenceModal"
                        data-id="confval-geocoderprovider"
-                       data-rstCode=":confval:`geocoderProvider &lt;evoweb/store-finder:geocoderprovider&gt;`"
                        title="Reference this configuration value"><i
                             class="fa-solid fa-paragraph"></i></a>
                 </div>
-            <div class="confval-back-to-top">                    <a href="#" class="backToTop" title="Back to top"><i
-                            class="fa-solid fa-arrow-up fa-xs"></i></a>            </div>
-        </dt>
+            <div class="confval-back-to-top">                    <a href="#confval-menu-settings-reference" class="backToList"
+                       title="Back to list"><i
+                            class="fa-solid fa-angles-up fa-xs"></i></a>
+                            </div>        </dt>
         <dd>
                             <dl class="field-list simple">
                                             <dt class="field-even">Type</dt>
-                        <dd class="field-even"><a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/DataTypes/Index.html#data-type-string">string</a>
+                        <dd class="field-even"><a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/Syntax/StringFormats/Index.html#data-type-string">string</a>
                         </dd>
                     </dl>
                         <div class="confval-description">
@@ -798,33 +819,34 @@ be used as binary flags</p>
         </dd>
     </dl>
 </section>
-                <a id="apiConsoleKey"></a>
-                <section data-search-title="apiConsoleKey"
+                        <a id="apiConsoleKey"></a>
+                        <section data-search-title="apiConsoleKey"
          data-search-id="confval-apiconsolekey"
          data-search-facet="Option"
          class="confval-section"
+         id="confval-apiconsolekey"
 >
     <h3 class="sr-only">apiConsoleKey</h3>
     <dl class="confval">
-        <dt id="confval-apiconsolekey"            class="d-flex justify-content-between">
-            <div class="confval-header">
+        <dt             class="d-flex justify-content-between">
+            <div class="confval-header flex-grow-1">
                 <code class="sig-name descname"><span
                         class="pre">api<wbr>Console<wbr>Key</span></code>
                                     <a class="headerlink" href="#confval-apiconsolekey"
                        data-bs-toggle="modal"
                        data-bs-target="#linkReferenceModal"
                        data-id="confval-apiconsolekey"
-                       data-rstCode=":confval:`apiConsoleKey &lt;evoweb/store-finder:apiconsolekey&gt;`"
                        title="Reference this configuration value"><i
                             class="fa-solid fa-paragraph"></i></a>
                 </div>
-            <div class="confval-back-to-top">                    <a href="#" class="backToTop" title="Back to top"><i
-                            class="fa-solid fa-arrow-up fa-xs"></i></a>            </div>
-        </dt>
+            <div class="confval-back-to-top">                    <a href="#confval-menu-settings-reference" class="backToList"
+                       title="Back to list"><i
+                            class="fa-solid fa-angles-up fa-xs"></i></a>
+                            </div>        </dt>
         <dd>
                             <dl class="field-list simple">
                                             <dt class="field-even">Type</dt>
-                        <dd class="field-even"><a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/DataTypes/Index.html#data-type-string">string</a>
+                        <dd class="field-even"><a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/Syntax/StringFormats/Index.html#data-type-string">string</a>
                         </dd>
                     </dl>
                         <div class="confval-description">
@@ -837,33 +859,34 @@ only be restricted by ip addresses.</p>
         </dd>
     </dl>
 </section>
-                <a id="apiConsoleKeyGeocoding"></a>
-                <section data-search-title="apiConsoleKeyGeocoding"
+                        <a id="apiConsoleKeyGeocoding"></a>
+                        <section data-search-title="apiConsoleKeyGeocoding"
          data-search-id="confval-apiconsolekeygeocoding"
          data-search-facet="Option"
          class="confval-section"
+         id="confval-apiconsolekeygeocoding"
 >
     <h3 class="sr-only">apiConsoleKeyGeocoding</h3>
     <dl class="confval">
-        <dt id="confval-apiconsolekeygeocoding"            class="d-flex justify-content-between">
-            <div class="confval-header">
+        <dt             class="d-flex justify-content-between">
+            <div class="confval-header flex-grow-1">
                 <code class="sig-name descname"><span
                         class="pre">api<wbr>Console<wbr>Key<wbr>Geocoding</span></code>
                                     <a class="headerlink" href="#confval-apiconsolekeygeocoding"
                        data-bs-toggle="modal"
                        data-bs-target="#linkReferenceModal"
                        data-id="confval-apiconsolekeygeocoding"
-                       data-rstCode=":confval:`apiConsoleKeyGeocoding &lt;evoweb/store-finder:apiconsolekeygeocoding&gt;`"
                        title="Reference this configuration value"><i
                             class="fa-solid fa-paragraph"></i></a>
                 </div>
-            <div class="confval-back-to-top">                    <a href="#" class="backToTop" title="Back to top"><i
-                            class="fa-solid fa-arrow-up fa-xs"></i></a>            </div>
-        </dt>
+            <div class="confval-back-to-top">                    <a href="#confval-menu-settings-reference" class="backToList"
+                       title="Back to list"><i
+                            class="fa-solid fa-angles-up fa-xs"></i></a>
+                            </div>        </dt>
         <dd>
                             <dl class="field-list simple">
                                             <dt class="field-even">Type</dt>
-                        <dd class="field-even"><a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/DataTypes/Index.html#data-type-string">string</a>
+                        <dd class="field-even"><a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/Syntax/StringFormats/Index.html#data-type-string">string</a>
                         </dd>
                     </dl>
                         <div class="confval-description">
@@ -875,33 +898,34 @@ Google Maps JavaScript API and can only be restricted by domains.</p>
         </dd>
     </dl>
 </section>
-                <a id="mapId"></a>
-                <section data-search-title="mapId"
+                        <a id="mapId"></a>
+                        <section data-search-title="mapId"
          data-search-id="confval-mapid"
          data-search-facet="Option"
          class="confval-section"
+         id="confval-mapid"
 >
     <h3 class="sr-only">mapId</h3>
     <dl class="confval">
-        <dt id="confval-mapid"            class="d-flex justify-content-between">
-            <div class="confval-header">
+        <dt             class="d-flex justify-content-between">
+            <div class="confval-header flex-grow-1">
                 <code class="sig-name descname"><span
                         class="pre">map<wbr>Id</span></code>
                                     <a class="headerlink" href="#confval-mapid"
                        data-bs-toggle="modal"
                        data-bs-target="#linkReferenceModal"
                        data-id="confval-mapid"
-                       data-rstCode=":confval:`mapId &lt;evoweb/store-finder:mapid&gt;`"
                        title="Reference this configuration value"><i
                             class="fa-solid fa-paragraph"></i></a>
                 </div>
-            <div class="confval-back-to-top">                    <a href="#" class="backToTop" title="Back to top"><i
-                            class="fa-solid fa-arrow-up fa-xs"></i></a>            </div>
-        </dt>
+            <div class="confval-back-to-top">                    <a href="#confval-menu-settings-reference" class="backToList"
+                       title="Back to list"><i
+                            class="fa-solid fa-angles-up fa-xs"></i></a>
+                            </div>        </dt>
         <dd>
                             <dl class="field-list simple">
                                             <dt class="field-even">Type</dt>
-                        <dd class="field-even"><a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/DataTypes/Index.html#data-type-string">string</a>
+                        <dd class="field-even"><a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/Syntax/StringFormats/Index.html#data-type-string">string</a>
                         </dd>
                     </dl>
                         <div class="confval-description">
@@ -912,33 +936,34 @@ Google Maps JavaScript API and can only be restricted by domains.</p>
         </dd>
     </dl>
 </section>
-                <a id="googleLibraries"></a>
-                <section data-search-title="googleLibraries"
+                        <a id="googleLibraries"></a>
+                        <section data-search-title="googleLibraries"
          data-search-id="confval-googlelibraries"
          data-search-facet="Option"
          class="confval-section"
+         id="confval-googlelibraries"
 >
     <h3 class="sr-only">googleLibraries</h3>
     <dl class="confval">
-        <dt id="confval-googlelibraries"            class="d-flex justify-content-between">
-            <div class="confval-header">
+        <dt             class="d-flex justify-content-between">
+            <div class="confval-header flex-grow-1">
                 <code class="sig-name descname"><span
                         class="pre">google<wbr>Libraries</span></code>
                                     <a class="headerlink" href="#confval-googlelibraries"
                        data-bs-toggle="modal"
                        data-bs-target="#linkReferenceModal"
                        data-id="confval-googlelibraries"
-                       data-rstCode=":confval:`googleLibraries &lt;evoweb/store-finder:googlelibraries&gt;`"
                        title="Reference this configuration value"><i
                             class="fa-solid fa-paragraph"></i></a>
                 </div>
-            <div class="confval-back-to-top">                    <a href="#" class="backToTop" title="Back to top"><i
-                            class="fa-solid fa-arrow-up fa-xs"></i></a>            </div>
-        </dt>
+            <div class="confval-back-to-top">                    <a href="#confval-menu-settings-reference" class="backToList"
+                       title="Back to list"><i
+                            class="fa-solid fa-angles-up fa-xs"></i></a>
+                            </div>        </dt>
         <dd>
                             <dl class="field-list simple">
                                             <dt class="field-even">Type</dt>
-                        <dd class="field-even">list of <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/DataTypes/Index.html#data-type-string">string</a>
+                        <dd class="field-even">list of <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/Syntax/StringFormats/Index.html#data-type-string">string</a>
                         </dd>
                     </dl>
                         <div class="confval-description">
@@ -949,33 +974,34 @@ Google Maps JavaScript API and can only be restricted by domains.</p>
         </dd>
     </dl>
 </section>
-                <a id="distanceUnit"></a>
-                <section data-search-title="distanceUnit"
+                        <a id="distanceUnit"></a>
+                        <section data-search-title="distanceUnit"
          data-search-id="confval-distanceunit"
          data-search-facet="Option"
          class="confval-section"
+         id="confval-distanceunit"
 >
     <h3 class="sr-only">distanceUnit</h3>
     <dl class="confval">
-        <dt id="confval-distanceunit"            class="d-flex justify-content-between">
-            <div class="confval-header">
+        <dt             class="d-flex justify-content-between">
+            <div class="confval-header flex-grow-1">
                 <code class="sig-name descname"><span
                         class="pre">distance<wbr>Unit</span></code>
                                     <a class="headerlink" href="#confval-distanceunit"
                        data-bs-toggle="modal"
                        data-bs-target="#linkReferenceModal"
                        data-id="confval-distanceunit"
-                       data-rstCode=":confval:`distanceUnit &lt;evoweb/store-finder:distanceunit&gt;`"
                        title="Reference this configuration value"><i
                             class="fa-solid fa-paragraph"></i></a>
                 </div>
-            <div class="confval-back-to-top">                    <a href="#" class="backToTop" title="Back to top"><i
-                            class="fa-solid fa-arrow-up fa-xs"></i></a>            </div>
-        </dt>
+            <div class="confval-back-to-top">                    <a href="#confval-menu-settings-reference" class="backToList"
+                       title="Back to list"><i
+                            class="fa-solid fa-angles-up fa-xs"></i></a>
+                            </div>        </dt>
         <dd>
                             <dl class="field-list simple">
                                             <dt class="field-even">Type</dt>
-                        <dd class="field-even"><a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/DataTypes/Index.html#data-type-string">string</a>
+                        <dd class="field-even"><a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/Syntax/StringFormats/Index.html#data-type-string">string</a>
                         </dd>
                                                 <dt class="field-even">Default</dt>
                             <dd class="field-even">kilometer
@@ -992,33 +1018,34 @@ Google Maps JavaScript API and can only be restricted by domains.</p>
         </dd>
     </dl>
 </section>
-                <a id="language"></a>
-                <section data-search-title="language"
+                        <a id="language"></a>
+                        <section data-search-title="language"
          data-search-id="confval-language"
          data-search-facet="Option"
          class="confval-section"
+         id="confval-language"
 >
     <h3 class="sr-only">language</h3>
     <dl class="confval">
-        <dt id="confval-language"            class="d-flex justify-content-between">
-            <div class="confval-header">
+        <dt             class="d-flex justify-content-between">
+            <div class="confval-header flex-grow-1">
                 <code class="sig-name descname"><span
                         class="pre">language</span></code>
                                     <a class="headerlink" href="#confval-language"
                        data-bs-toggle="modal"
                        data-bs-target="#linkReferenceModal"
                        data-id="confval-language"
-                       data-rstCode=":confval:`language &lt;evoweb/store-finder:language&gt;`"
                        title="Reference this configuration value"><i
                             class="fa-solid fa-paragraph"></i></a>
                 </div>
-            <div class="confval-back-to-top">                    <a href="#" class="backToTop" title="Back to top"><i
-                            class="fa-solid fa-arrow-up fa-xs"></i></a>            </div>
-        </dt>
+            <div class="confval-back-to-top">                    <a href="#confval-menu-settings-reference" class="backToList"
+                       title="Back to list"><i
+                            class="fa-solid fa-angles-up fa-xs"></i></a>
+                            </div>        </dt>
         <dd>
                             <dl class="field-list simple">
                                             <dt class="field-even">Type</dt>
-                        <dd class="field-even"><a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/DataTypes/Index.html#data-type-string">string</a>
+                        <dd class="field-even"><a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/Syntax/StringFormats/Index.html#data-type-string">string</a>
                         </dd>
                                                 <dt class="field-even">Default</dt>
                             <dd class="field-even">en
@@ -1035,33 +1062,34 @@ Google Maps JavaScript API and can only be restricted by domains.</p>
         </dd>
     </dl>
 </section>
-                <a id="showStoreImage"></a>
-                <section data-search-title="showStoreImage"
+                        <a id="showStoreImage"></a>
+                        <section data-search-title="showStoreImage"
          data-search-id="confval-showstoreimage"
          data-search-facet="Option"
          class="confval-section"
+         id="confval-showstoreimage"
 >
     <h3 class="sr-only">showStoreImage</h3>
     <dl class="confval">
-        <dt id="confval-showstoreimage"            class="d-flex justify-content-between">
-            <div class="confval-header">
+        <dt             class="d-flex justify-content-between">
+            <div class="confval-header flex-grow-1">
                 <code class="sig-name descname"><span
                         class="pre">show<wbr>Store<wbr>Image</span></code>
                                     <a class="headerlink" href="#confval-showstoreimage"
                        data-bs-toggle="modal"
                        data-bs-target="#linkReferenceModal"
                        data-id="confval-showstoreimage"
-                       data-rstCode=":confval:`showStoreImage &lt;evoweb/store-finder:showstoreimage&gt;`"
                        title="Reference this configuration value"><i
                             class="fa-solid fa-paragraph"></i></a>
                 </div>
-            <div class="confval-back-to-top">                    <a href="#" class="backToTop" title="Back to top"><i
-                            class="fa-solid fa-arrow-up fa-xs"></i></a>            </div>
-        </dt>
+            <div class="confval-back-to-top">                    <a href="#confval-menu-settings-reference" class="backToList"
+                       title="Back to list"><i
+                            class="fa-solid fa-angles-up fa-xs"></i></a>
+                            </div>        </dt>
         <dd>
                             <dl class="field-list simple">
                                             <dt class="field-even">Type</dt>
-                        <dd class="field-even"><a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/DataTypes/Index.html#data-type-boolean">boolean</a>
+                        <dd class="field-even"><a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/Syntax/StringFormats/Index.html#data-type-boolean">boolean</a>
                         </dd>
                                                 <dt class="field-even">Default</dt>
                             <dd class="field-even">1
@@ -1075,33 +1103,34 @@ Google Maps JavaScript API and can only be restricted by domains.</p>
         </dd>
     </dl>
 </section>
-                <a id="resultPageId"></a>
-                <section data-search-title="resultPageId"
+                        <a id="resultPageId"></a>
+                        <section data-search-title="resultPageId"
          data-search-id="confval-resultpageid"
          data-search-facet="Option"
          class="confval-section"
+         id="confval-resultpageid"
 >
     <h3 class="sr-only">resultPageId</h3>
     <dl class="confval">
-        <dt id="confval-resultpageid"            class="d-flex justify-content-between">
-            <div class="confval-header">
+        <dt             class="d-flex justify-content-between">
+            <div class="confval-header flex-grow-1">
                 <code class="sig-name descname"><span
                         class="pre">result<wbr>Page<wbr>Id</span></code>
                                     <a class="headerlink" href="#confval-resultpageid"
                        data-bs-toggle="modal"
                        data-bs-target="#linkReferenceModal"
                        data-id="confval-resultpageid"
-                       data-rstCode=":confval:`resultPageId &lt;evoweb/store-finder:resultpageid&gt;`"
                        title="Reference this configuration value"><i
                             class="fa-solid fa-paragraph"></i></a>
                 </div>
-            <div class="confval-back-to-top">                    <a href="#" class="backToTop" title="Back to top"><i
-                            class="fa-solid fa-arrow-up fa-xs"></i></a>            </div>
-        </dt>
+            <div class="confval-back-to-top">                    <a href="#confval-menu-settings-reference" class="backToList"
+                       title="Back to list"><i
+                            class="fa-solid fa-angles-up fa-xs"></i></a>
+                            </div>        </dt>
         <dd>
                             <dl class="field-list simple">
                                             <dt class="field-even">Type</dt>
-                        <dd class="field-even"><a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/DataTypes/Index.html#data-type-integer">integer</a>
+                        <dd class="field-even"><a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/Syntax/StringFormats/Index.html#data-type-integer">integer</a>
                         </dd>
                     </dl>
                         <div class="confval-description">
@@ -1113,33 +1142,34 @@ the current page is used</p>
         </dd>
     </dl>
 </section>
-                <a id="mapSize-height"></a>
-                <section data-search-title="mapSize.height"
+                        <a id="mapSize-height"></a>
+                        <section data-search-title="mapSize.height"
          data-search-id="confval-mapsize-height"
          data-search-facet="Option"
          class="confval-section"
+         id="confval-mapsize-height"
 >
     <h3 class="sr-only">mapSize.height</h3>
     <dl class="confval">
-        <dt id="confval-mapsize-height"            class="d-flex justify-content-between">
-            <div class="confval-header">
+        <dt             class="d-flex justify-content-between">
+            <div class="confval-header flex-grow-1">
                 <code class="sig-name descname"><span
                         class="pre">map<wbr>Size.<wbr>height</span></code>
                                     <a class="headerlink" href="#confval-mapsize-height"
                        data-bs-toggle="modal"
                        data-bs-target="#linkReferenceModal"
                        data-id="confval-mapsize-height"
-                       data-rstCode=":confval:`mapSize.height &lt;evoweb/store-finder:mapsize-height&gt;`"
                        title="Reference this configuration value"><i
                             class="fa-solid fa-paragraph"></i></a>
                 </div>
-            <div class="confval-back-to-top">                    <a href="#" class="backToTop" title="Back to top"><i
-                            class="fa-solid fa-arrow-up fa-xs"></i></a>            </div>
-        </dt>
+            <div class="confval-back-to-top">                    <a href="#confval-menu-settings-reference" class="backToList"
+                       title="Back to list"><i
+                            class="fa-solid fa-angles-up fa-xs"></i></a>
+                            </div>        </dt>
         <dd>
                             <dl class="field-list simple">
                                             <dt class="field-even">Type</dt>
-                        <dd class="field-even"><a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/DataTypes/Index.html#data-type-integer">integer</a>
+                        <dd class="field-even"><a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/Syntax/StringFormats/Index.html#data-type-integer">integer</a>
                         </dd>
                                                 <dt class="field-even">Default</dt>
                             <dd class="field-even">400
@@ -1153,33 +1183,34 @@ the current page is used</p>
         </dd>
     </dl>
 </section>
-                <a id="mapSize-width"></a>
-                <section data-search-title="mapSize.width"
+                        <a id="mapSize-width"></a>
+                        <section data-search-title="mapSize.width"
          data-search-id="confval-mapsize-width"
          data-search-facet="Option"
          class="confval-section"
+         id="confval-mapsize-width"
 >
     <h3 class="sr-only">mapSize.width</h3>
     <dl class="confval">
-        <dt id="confval-mapsize-width"            class="d-flex justify-content-between">
-            <div class="confval-header">
+        <dt             class="d-flex justify-content-between">
+            <div class="confval-header flex-grow-1">
                 <code class="sig-name descname"><span
                         class="pre">map<wbr>Size.<wbr>width</span></code>
                                     <a class="headerlink" href="#confval-mapsize-width"
                        data-bs-toggle="modal"
                        data-bs-target="#linkReferenceModal"
                        data-id="confval-mapsize-width"
-                       data-rstCode=":confval:`mapSize.width &lt;evoweb/store-finder:mapsize-width&gt;`"
                        title="Reference this configuration value"><i
                             class="fa-solid fa-paragraph"></i></a>
                 </div>
-            <div class="confval-back-to-top">                    <a href="#" class="backToTop" title="Back to top"><i
-                            class="fa-solid fa-arrow-up fa-xs"></i></a>            </div>
-        </dt>
+            <div class="confval-back-to-top">                    <a href="#confval-menu-settings-reference" class="backToList"
+                       title="Back to list"><i
+                            class="fa-solid fa-angles-up fa-xs"></i></a>
+                            </div>        </dt>
         <dd>
                             <dl class="field-list simple">
                                             <dt class="field-even">Type</dt>
-                        <dd class="field-even"><a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/DataTypes/Index.html#data-type-integer">integer</a>
+                        <dd class="field-even"><a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/Syntax/StringFormats/Index.html#data-type-integer">integer</a>
                         </dd>
                                                 <dt class="field-even">Default</dt>
                             <dd class="field-even">600
@@ -1193,29 +1224,30 @@ the current page is used</p>
         </dd>
     </dl>
 </section>
-                <a id="override"></a>
-                <section data-search-title="override"
+                        <a id="override"></a>
+                        <section data-search-title="override"
          data-search-id="confval-override"
          data-search-facet="Option"
          class="confval-section"
+         id="confval-override"
 >
     <h3 class="sr-only">override</h3>
     <dl class="confval">
-        <dt id="confval-override"            class="d-flex justify-content-between">
-            <div class="confval-header">
+        <dt             class="d-flex justify-content-between">
+            <div class="confval-header flex-grow-1">
                 <code class="sig-name descname"><span
                         class="pre">override</span></code>
                                     <a class="headerlink" href="#confval-override"
                        data-bs-toggle="modal"
                        data-bs-target="#linkReferenceModal"
                        data-id="confval-override"
-                       data-rstCode=":confval:`override &lt;evoweb/store-finder:override&gt;`"
                        title="Reference this configuration value"><i
                             class="fa-solid fa-paragraph"></i></a>
                 </div>
-            <div class="confval-back-to-top">                    <a href="#" class="backToTop" title="Back to top"><i
-                            class="fa-solid fa-arrow-up fa-xs"></i></a>            </div>
-        </dt>
+            <div class="confval-back-to-top">                    <a href="#confval-menu-settings-reference" class="backToList"
+                       title="Back to list"><i
+                            class="fa-solid fa-angles-up fa-xs"></i></a>
+                            </div>        </dt>
         <dd>
                             <dl class="field-list simple">
                                             <dt class="field-even">Type</dt>
@@ -1234,33 +1266,34 @@ With the override its possible to define values that should override the configu
         </dd>
     </dl>
 </section>
-                <a id="disableFetchLocationInAction"></a>
-                <section data-search-title="disableFetchLocationInAction"
+                        <a id="disableFetchLocationInAction"></a>
+                        <section data-search-title="disableFetchLocationInAction"
          data-search-id="confval-disablefetchlocationinaction"
          data-search-facet="Option"
          class="confval-section"
+         id="confval-disablefetchlocationinaction"
 >
     <h3 class="sr-only">disableFetchLocationInAction</h3>
     <dl class="confval">
-        <dt id="confval-disablefetchlocationinaction"            class="d-flex justify-content-between">
-            <div class="confval-header">
+        <dt             class="d-flex justify-content-between">
+            <div class="confval-header flex-grow-1">
                 <code class="sig-name descname"><span
                         class="pre">disable<wbr>Fetch<wbr>Location<wbr>In<wbr>Action</span></code>
                                     <a class="headerlink" href="#confval-disablefetchlocationinaction"
                        data-bs-toggle="modal"
                        data-bs-target="#linkReferenceModal"
                        data-id="confval-disablefetchlocationinaction"
-                       data-rstCode=":confval:`disableFetchLocationInAction &lt;evoweb/store-finder:disablefetchlocationinaction&gt;`"
                        title="Reference this configuration value"><i
                             class="fa-solid fa-paragraph"></i></a>
                 </div>
-            <div class="confval-back-to-top">                    <a href="#" class="backToTop" title="Back to top"><i
-                            class="fa-solid fa-arrow-up fa-xs"></i></a>            </div>
-        </dt>
+            <div class="confval-back-to-top">                    <a href="#confval-menu-settings-reference" class="backToList"
+                       title="Back to list"><i
+                            class="fa-solid fa-angles-up fa-xs"></i></a>
+                            </div>        </dt>
         <dd>
                             <dl class="field-list simple">
                                             <dt class="field-even">Type</dt>
-                        <dd class="field-even">array of <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/DataTypes/Index.html#data-type-string">string</a>
+                        <dd class="field-even">array of <a href="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/Syntax/StringFormats/Index.html#data-type-string">string</a>
                         </dd>
                                                 <dt class="field-even">Possible values</dt>
                             <dd class="field-even">map, cachedMap, search
@@ -1305,7 +1338,7 @@ MapGetLocationsByConstraintsEvent or you do not get any output at all.</p>
         </dd>
     </dl>
 </section>
-    
+        
     </section>
         <!-- content end -->
     </div>
@@ -1315,13 +1348,13 @@ MapGetLocationsByConstraintsEvent or you do not get any output at all.</p>
             <ul class="pagination justify-content-center"><li class="page-item">
                             <a class="page-link" href="../Index.html"
                                title="Accesskey Alt(+Shift)+p">
-                                Previous
+                                <i class="fa-solid fa-chevron-left"></i> Previous
                             </a>
                         </li>
                     <li class="page-item">
                             <a class="page-link" href="../View/Index.html"
                                title="Accesskey Alt(+Shift)+n">
-                                Next
+                                Next <i class="fa-solid fa-chevron-right"></i>
                             </a>
                         </li>
                     </ul>
@@ -1342,17 +1375,19 @@ MapGetLocationsByConstraintsEvent or you do not get any output at all.</p>
             <div class="modal-body">
                 <div class="alert alert-success d-none" id="permalink-alert-success" role="alert"></div>
                 <div class="mb-3">
+                    <div class="permalink-short-wrapper">
+                        <label for="permalink-short" class="col-form-label">Permalink (Shortlink)</label>
+                        <div class="input-group">
+                            <input class="form-control code" id="permalink-short" readonly>
+                            <button type="button" class="btn btn-outline-secondary copy-button" data-target="permalink-short"><i class="far fa-clone"></i></button>
+                        </div>
+                        <p><em>Copy and freely share the link</em></p>
+                    </div>
                     <label for="permalink-uri" class="col-form-label">URL</label>
                     <div class="input-group">
                         <input class="form-control code" id="permalink-uri" readonly>
                         <button type="button" class="btn btn-outline-secondary copy-button" data-target="permalink-uri"><i class="far fa-clone"></i></button>
                     </div>
-                    <label for="permalink-short" class="col-form-label">Permalink (Shortlink)</label>
-                    <div class="input-group">
-                        <input class="form-control code" id="permalink-short" readonly>
-                        <button type="button" class="btn btn-outline-secondary copy-button" data-target="permalink-short"><i class="far fa-clone"></i></button>
-                    </div>
-                    <p><em>Copy and freely share the link</em></p>
                 </div>
                 <div class="mb-3">
                     <div class="alert alert-warning alert-permalink-rst" role="alert">This link target has no permanent anchor assigned.                        You can make a <a href="https://github.com/evoWeb/store_finder/edit/develop/Documentation/Configuration/Settings/Index.rst">pull request on GitHub</a> to suggest an anchor.
@@ -1364,6 +1399,13 @@ MapGetLocationsByConstraintsEvent or you do not get any output at all.</p>
                         <button type="button" class="btn btn-outline-secondary copy-button" data-target="permalink-rst"><i class="far fa-clone"></i></button>
                     </div>
                     <p><em>Copy this link into your TYPO3 manual.</em></p>
+                </div>
+                <div class="mb-3">
+                    <label for="permalink-md" class="col-form-label">Link in Markdown</label>
+                    <div class="input-group">
+                        <textarea class="form-control code" id="permalink-md" readonly></textarea>
+                        <button type="button" class="btn btn-outline-secondary copy-button" data-target="permalink-md"><i class="far fa-clone"></i></button>
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label for="permalink-html" class="col-form-label">Link in HTML</label>
@@ -1411,7 +1453,7 @@ MapGetLocationsByConstraintsEvent or you do not get any output at all.</p>
                                                 <li><a href="https://github.com/evoWeb/store_finder/issues" rel="nofollow noopener" title="Issues"><span>Issues</span></a></li>
                                                 <li><a href="https://github.com/evoWeb/store_finder" rel="nofollow noopener" title="Repository"><span>Repository</span></a></li>
                                             </ul>                <div class="footer-additional">
-                    <p class="text-center">Last rendered: Nov 16, 2024 20:44</p>
+                    <p class="text-center">Last rendered: Nov 05, 2025 16:16</p>
                 </div>
                 <div class="footer-meta">
                                         <div class="footer-meta-copyright">
