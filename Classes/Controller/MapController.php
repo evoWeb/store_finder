@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * It is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
+ * of the License or any later version.
  *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
@@ -31,7 +31,7 @@ use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Pagination\ArrayPaginator;
 use TYPO3\CMS\Core\Pagination\SimplePagination;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Annotation as Extbase;
+use TYPO3\CMS\Extbase\Attribute as Extbase;
 use TYPO3\CMS\Extbase\Http\ForwardResponse;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\Controller\Argument;
@@ -44,7 +44,7 @@ use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
 use TYPO3\CMS\Extbase\Validation\Validator\ConjunctionValidator;
 use TYPO3\CMS\Extbase\Validation\Validator\ValidatorInterface;
 use TYPO3\CMS\Extbase\Validation\ValidatorClassNameResolver;
-use TYPO3Fluid\Fluid\View\ViewInterface;
+use TYPO3\CMS\Core\View\ViewInterface;
 
 class MapController extends ActionController
 {
@@ -53,7 +53,8 @@ class MapController extends ActionController
         protected CategoryRepository $categoryRepository,
         protected CountryProvider $countryProvider,
         protected GeocodeService $geocodeService,
-    ) {}
+    ) {
+    }
 
     protected function initializeActionMethodValidators(): void
     {
@@ -176,7 +177,9 @@ class MapController extends ActionController
         }
 
         $this->settings['allowedCountries'] = explode(',', $this->settings['allowedCountries'] ?? '');
-        $this->settings['mapConfiguration']['libraries'] = explode(',', $this->settings['mapConfiguration']['libraries'] ?? '');
+        $this->settings['mapConfiguration']['libraries'] = $this->settings['mapConfiguration']['libraries'] ?
+            explode(',', $this->settings['mapConfiguration']['libraries'] ?? '') :
+            [];
 
         $this->geocodeService->setSettings($this->settings);
         $this->locationRepository->setSettings($this->settings);
@@ -356,7 +359,7 @@ class MapController extends ActionController
         );
     }
 
-    public function showAction(Location $location = null): ResponseInterface
+    public function showAction(?Location $location = null): ResponseInterface
     {
         if ($location === null) {
             $location = $this->locationRepository->findOneByUid((int)($this->settings['location'] ?? -1));
@@ -388,8 +391,8 @@ class MapController extends ActionController
     }
 
     /**
-     * Get center from query result based on center of all coordinates. If only one
-     * is found this is used. In case none was found the center based on the request
+     * Get center from a query result based on a center of all coordinates. If only one
+     * is found, this is used. In case none was found, the center based on the request
      * gets calculated
      * @param Location[] $locations
      */
@@ -431,7 +434,7 @@ class MapController extends ActionController
     }
 
     /**
-     * Add default constraints configured in typoscript and only set if property
+     * Add default constraints configured in TypoScript and only set if the property
      * in search is empty
      */
     protected function addDefaultConstraint(Constraint $search): Constraint
@@ -470,9 +473,9 @@ class MapController extends ActionController
     }
 
     /**
-     * Geocode requested address and use as center or fetch location that was flagged as center.
+     * Geocode requested address and use as a center or fetch location that was flagged as a center.
      */
-    public function getCenter(Location $constraint = null): Location
+    public function getCenter(?Location $constraint = null): Location
     {
         $center = null;
 
@@ -500,13 +503,12 @@ class MapController extends ActionController
     }
 
     /**
-     * Set zoom level for map based on maximum radius
+     * Set the zoom level for a map based on the maximum radius
      * @param Location[] $locations
      */
     public function setZoomLevel(Location $center, array $locations): Location
     {
         $radius = 0;
-        /** @var Location $location */
         foreach ($locations as $location) {
             $radius = max($radius, $location->getDistance());
         }

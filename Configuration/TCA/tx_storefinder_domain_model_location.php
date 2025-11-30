@@ -1,12 +1,8 @@
 <?php
 
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+defined('TYPO3') or die();
 
-$languageFile = 'LLL:EXT:store_finder/Resources/Private/Language/locallang_db.xlf:';
-
-ExtensionManagementUtility::addToInsertRecords(
-    'tx_storefinder_domain_model_location'
-);
+$languageFile = 'store_finder.db:';
 
 return [
     'ctrl' => [
@@ -26,7 +22,6 @@ return [
             'endtime' => 'endtime',
             'fe_group' => 'fe_group',
         ],
-        'searchFields' => 'name, storeid, zipcode, city, address, country, notes',
         'typeicon_classes' => [
             'default' => 'store-finder-attribute',
         ],
@@ -274,8 +269,8 @@ return [
             'label' => $languageFile . 'tx_storefinder_domain_model_location.latitude',
             'config' => [
                 'type' => 'input',
-                // 'format' => 'decimal',
-                // 'precision' => 7,
+                'format' => 'decimal',
+                'precision' => 7,
                 'size' => 10,
                 'default' => 0,
             ],
@@ -286,8 +281,8 @@ return [
             'label' => $languageFile . 'tx_storefinder_domain_model_location.longitude',
             'config' => [
                 'type' => 'input',
-                // 'format' => 'decimal',
-                // 'precision' => 7,
+                'format' => 'decimal',
+                'precision' => 7,
                 'size' => 10,
                 'default' => 0,
             ],

@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * It is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
+ * of the License or any later version.
  *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
@@ -21,14 +21,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
+use TYPO3\CMS\Core\Attribute\UpgradeWizard;
+use TYPO3\CMS\Core\Upgrades\UpgradeWizardInterface;
+use TYPO3\CMS\Core\Upgrades\DatabaseUpdatedPrerequisite;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Install\Attribute\UpgradeWizard;
-use TYPO3\CMS\Install\Updates\ChattyInterface;
-use TYPO3\CMS\Install\Updates\DatabaseUpdatedPrerequisite;
-use TYPO3\CMS\Install\Updates\UpgradeWizardInterface;
 
 #[UpgradeWizard('sfLocationCountryMigration')]
-class LocationCountryMigration implements UpgradeWizardInterface, ChattyInterface
+class LocationCountryMigration implements UpgradeWizardInterface
 {
     private const TABLE_NAME = 'tx_storefinder_domain_model_location';
 
@@ -324,7 +323,7 @@ class LocationCountryMigration implements UpgradeWizardInterface, ChattyInterfac
         } catch (Exception) {
             $necessary = 0;
         }
-        return $necessary;
+        return $necessary > 0;
     }
 
     public function executeUpdate(): bool

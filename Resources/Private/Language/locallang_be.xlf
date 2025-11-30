@@ -33,24 +33,6 @@
 			<trans-unit id="pages" resname="pages">
 				<source>Record Storage Page</source>
 			</trans-unit>
-			<trans-unit id="pi1_description_cached" resname="pi1_description_cached">
-				<source>Adds a store finder cached map.</source>
-			</trans-unit>
-			<trans-unit id="pi1_description_map" resname="pi1_description_map">
-				<source>Adds a store finder search form with map and result list.</source>
-			</trans-unit>
-			<trans-unit id="pi1_description_show" resname="pi1_description_show">
-				<source>Adds a map for a single location to display.</source>
-			</trans-unit>
-			<trans-unit id="pi1_title_cached" resname="pi1_title_cached">
-				<source>Store Finder - Cached map</source>
-			</trans-unit>
-			<trans-unit id="pi1_title_map" resname="pi1_title_map">
-				<source>Map with search and list</source>
-			</trans-unit>
-			<trans-unit id="pi1_title_show" resname="pi1_title_show">
-				<source>Single location map</source>
-			</trans-unit>
 			<trans-unit id="pi_flexform._blank.label" resname="pi_flexform._blank.label">
 				<source>_blank</source>
 			</trans-unit>
@@ -308,15 +290,6 @@
 			</trans-unit>
 			<trans-unit id="pi_flexform.zoom" resname="pi_flexform.zoom">
 				<source>Zoom</source>
-			</trans-unit>
-			<trans-unit id="tt_content.list_type_cached" resname="tt_content.list_type_cached">
-				<source>Store Finder: Cached map </source>
-			</trans-unit>
-			<trans-unit id="tt_content.list_type_map" resname="tt_content.list_type_map">
-				<source>Store Finder: Map with search and list</source>
-			</trans-unit>
-			<trans-unit id="tt_content.list_type_show" resname="tt_content.list_type_show">
-				<source>Store Finder: Single location map</source>
 			</trans-unit>
 			<trans-unit id="wizard.group.store_finder" resname="wizard.group.store_finder">
 				<source>Store Finder</source>

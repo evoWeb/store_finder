@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * It is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
+ * of the License or any later version.
  *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
@@ -19,17 +19,24 @@ use Doctrine\DBAL\Exception as DbalException;
 use Doctrine\DBAL\ParameterType;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Worksheet\Row;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
 
+#[AsCommand(
+    'storefinder:import',
+    'Import locations from excel file into given storage folder (default 1)'
+)]
+#[Autoconfigure(public: true)]
 class ImportLocationsCommand extends Command
 {
     /**
@@ -396,7 +403,7 @@ class ImportLocationsCommand extends Command
                     $reference['uid_foreign']
                 );
             } else {
-                // existing reference is still current and does not need to be handled anymore
+                // the existing reference is still current and does not need to be handled anymore
                 unset($attributes[$reference['uid_foreign']]);
             }
         }
@@ -428,7 +435,7 @@ class ImportLocationsCommand extends Command
                     $locationUid
                 );
             } else {
-                // existing reference is still current and does not need to be handled anymore
+                // the existing reference is still current and does not need to be handled anymore
                 unset($currentCategories[$reference['uid_local']]);
             }
         }

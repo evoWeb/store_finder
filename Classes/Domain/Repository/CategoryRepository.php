@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * It is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
+ * of the License or any later version.
  *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
@@ -106,7 +106,7 @@ class CategoryRepository extends Repository
             $result[] = $category;
 
             $foundCategories = $this->findByParent($category)->toArray();
-            $foundCategoriesUid = array_map(fn(Category $category):int => $category->getUid(), $foundCategories);
+            $foundCategoriesUid = array_map(fn(Category $category): int => $category->getUid(), $foundCategories);
 
             $result = $this->findByParentRecursive($foundCategoriesUid, $result);
         }
@@ -181,6 +181,7 @@ class CategoryRepository extends Repository
         $languageAspect = $context->getAspect('language');
         $expression = $queryBuilder->expr();
 
+        // @extensionScannerIgnoreLine
         $fields = array_keys($this->settings['tables'][$table]['fields'] ?? ['*' => '']);
         $fields[] = 'uid';
         $fields[] = 'pid';
@@ -208,9 +209,12 @@ class CategoryRepository extends Repository
             );
         }
 
+        // @extensionScannerIgnoreLine
         if (!empty($this->settings['tables'][$table]['sortBy'])) {
             $queryBuilder->addOrderBy(
+                // @extensionScannerIgnoreLine
                 $this->settings['tables'][$table]['sortBy']['field'] ?? 'c.uid',
+                // @extensionScannerIgnoreLine
                 $this->settings['tables'][$table]['sortBy']['direction'] ?? 'ASC'
             );
         }
@@ -236,7 +240,7 @@ class CategoryRepository extends Repository
             $children = $queryBuilder
                 ->select('uid')
                 ->from('sys_category')
-                ->where($queryBuilder->expr()->eq('parent', (int)$category))
+                ->where($queryBuilder->expr()->eq('parent', $category))
                 ->executeQuery()
                 ->fetchFirstColumn();
             $children = $this->enrichCategoriesWithChildren($children);

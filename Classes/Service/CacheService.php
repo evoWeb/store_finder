@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * It is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
+ * of the License or any later version.
  *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
@@ -16,12 +16,19 @@ declare(strict_types=1);
 namespace Evoweb\StoreFinder\Service;
 
 use Evoweb\StoreFinder\Domain\Model\Location;
+use Exception;
+use Psr\Http\Message\ServerRequestInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
+use TYPO3\CMS\Core\Cache\CacheDataCollector;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\CacheTag;
 
-class CacheService
+#[Autoconfigure(public: true)]
+readonly class CacheService
 {
-    public function __construct(readonly private CacheManager $cacheManager) {}
+    public function __construct(private CacheManager $cacheManager)
+    {
+    }
 
     public function addTagsForPost(Location $location): void
     {
@@ -41,28 +48,22 @@ class CacheService
      */
     public function addTagsToPage(array $tags): void
     {
-        $cacheDataCollector = $GLOBALS['TYPO3_REQUEST']->getAttribute('frontend.cache.collector');
+        /** @var CacheDataCollector $cacheDataCollector */
+        $cacheDataCollector = $this->getRequest()->getAttribute('frontend.cache.collector');
+        // @extensionScannerIgnoreLine
         $cacheDataCollector->addCacheTags(...array_map(fn(string $tag) => new CacheTag($tag), $tags));
     }
 
     public function flushCacheByTag(string $tag): void
     {
         try {
-            $this->cacheManager
-                ->getCache('pages')
-                ->flushByTag($tag);
-        } catch (\Exception) {}
+            $this->cacheManager->getCache('pages')->flushByTag($tag);
+        } catch (Exception) {
+        }
     }
 
-    /**
-     * @param string[] $tags
-     */
-    public function flushCacheByTags(array $tags): void
+    protected function getRequest(): ServerRequestInterface
     {
-        try {
-            $this->cacheManager
-                ->getCache('pages')
-                ->flushByTags($tags);
-        } catch (\Exception) {}
+        return $GLOBALS['TYPO3_REQUEST'];
     }
 }

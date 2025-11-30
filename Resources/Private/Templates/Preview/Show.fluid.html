@@ -1,0 +1,31 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+      data-namespace-typo3-fluid="true">
+
+<table class="table table-condensed table-hover news-table">
+    <colgroup>
+        <col style="width: 40%"/>
+        <col style="width: 60%"/>
+    </colgroup>
+    <tbody>
+        <f:if condition="{record.pi_flexform.sheets.sheetDisplayOptions.settings.location -> f:count()}">
+        <tr>
+            <th><f:translate id="pi_flexform.singleLocationId" domain="store_finder.be"/></th>
+            <td>
+                <f:for each="{record.pi_flexform.sheets.sheetDisplayOptions.settings.location}" as="location">
+                    <core:iconForRecord table="tx_storefinder_domain_model_location" row="{
+                        uid: location.uid,
+                        hidden: location.hidden,
+                        starttime: location.starttime,
+                        endtime: location.endtime,
+                        fe_group: location.fe_group,
+                        deleted: location.deleted
+                    }" /> {location.name}
+                </f:for>
+            </td>
+        </tr>
+        </f:if>
+    </tbody>
+</table>
+
+</html>

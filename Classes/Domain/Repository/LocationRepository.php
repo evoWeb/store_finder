@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * It is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
+ * of the License or any later version.
  *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
@@ -98,7 +98,7 @@ class LocationRepository extends Repository
             ->getQuerySettings()
                 ->setIgnoreEnableFields(true)
                 ->setRespectStoragePage(false)
-                ->setRespectSyslanguage(false);
+                ->setRespectSysLanguage(false);
 
         /** @var Location $location */
         $location = $query
@@ -392,7 +392,7 @@ class LocationRepository extends Repository
             );
         }
         if ($languageAspect->getOverlayType() === LanguageAspect::OVERLAYS_MIXED) {
-            // returns records from current language which have a default language
+            // returns records from the current language which have a default language
             // together with not translated default language records
             $translatedOnlyTableAlias = $tableAlias . '_to';
             $queryBuilderForSubselect = $queryBuilder->getConnection()->createQueryBuilder();
@@ -486,7 +486,7 @@ class LocationRepository extends Repository
         /** @var ?Location $minLatitude south */
         $minLatitude = $query->execute()->getFirst();
 
-        // only search for the other locations if first succeeded otherwise we have no locations at all
+        // only search for the other locations if first succeeded, otherwise we have no locations at all
         if ($minLatitude === null) {
             $maxLatitude = $minLongitude = $maxLongitude = null;
         } else {
@@ -609,6 +609,7 @@ class LocationRepository extends Repository
         $queryBuilder = $this->getQueryBuilderForTable($tableName);
         $expression = $queryBuilder->expr();
 
+        // @extensionScannerIgnoreLine
         $fields = array_keys($this->settings['tables'][$tableName]['fields'] ?? ['l.*' => '']);
         $queryBuilder
             ->select(...$fields)
@@ -621,7 +622,9 @@ class LocationRepository extends Repository
                 ),
             )
             ->orderBy(
+                // @extensionScannerIgnoreLine
                 $this->settings['tables'][$tableName]['sortBy']['field'] ?? 'c.uid',
+                // @extensionScannerIgnoreLine
                 $this->settings['tables'][$tableName]['sortBy']['direction'] ?? 'ASC',
             );
 

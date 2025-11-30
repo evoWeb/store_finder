@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * It is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
+ * of the License or any later version.
  *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
@@ -23,6 +23,7 @@ use Evoweb\StoreFinder\Domain\Repository\LocationRepository;
 use Evoweb\StoreFinder\Middleware\Event\ModifyMiddlewareCategoriesEvent;
 use Evoweb\StoreFinder\Middleware\Event\ModifyMiddlewareLocationsEvent;
 use Evoweb\StoreFinder\Service\GeocodeService;
+use JsonException;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -30,19 +31,20 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use SJBR\StaticInfoTables\Domain\Model\CountryZone;
 use SJBR\StaticInfoTables\Domain\Repository\CountryZoneRepository;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Lazy;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
+use TYPO3\CMS\Core\Configuration\FlexForm\FlexFormTools;
 use TYPO3\CMS\Core\Context\Exception\AspectNotFoundException;
 use TYPO3\CMS\Core\Core\SystemEnvironmentBuilder;
 use TYPO3\CMS\Core\Country\CountryProvider;
 use TYPO3\CMS\Core\Error\Http\StatusException;
 use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Routing\PageArguments;
-use TYPO3\CMS\Core\Service\FlexFormService;
 use TYPO3\CMS\Core\Site\Entity\SiteLanguage;
 use TYPO3\CMS\Core\TypoScript\FrontendTypoScript;
 use TYPO3\CMS\Core\TypoScript\FrontendTypoScriptFactory;
@@ -52,6 +54,7 @@ use TYPO3\CMS\Frontend\Page\PageInformation;
 use TYPO3\CMS\Frontend\Page\PageInformationCreationFailedException;
 use TYPO3\CMS\Frontend\Page\PageInformationFactory;
 
+#[Autoconfigure(public: true)]
 final readonly class StoreFinderMiddleware implements MiddlewareInterface
 {
     public function __construct(
@@ -62,15 +65,19 @@ final readonly class StoreFinderMiddleware implements MiddlewareInterface
         #[Lazy]
         private ContentRepository $contentRepository,
         #[Lazy]
-        private FlexFormService $flexFormService,
+        private FlexFormTools $flexFormTools,
         #[Lazy]
         private TypoScriptService $typoScriptService,
-
         private FrontendTypoScriptFactory $frontendTypoScriptFactory,
         private PageInformationFactory $pageInformationFactory,
         #[Autowire(service: 'cache.typoscript')]
         private PhpFrontend $typoScriptCache,
-    ) {}
+        #[Lazy]
+        private CategoryRepository $categoryRepository,
+        #[Lazy]
+        private LocationRepository $locationRepository,
+    ) {
+    }
 
     /**
      * @throws PageInformationCreationFailedException
@@ -96,7 +103,10 @@ final readonly class StoreFinderMiddleware implements MiddlewareInterface
             $rows = $cache->get($cacheIdentifier);
         } else {
             [$settings, $request] = $this->getSettings($request, $contentUid);
-            $rows = $this->{$action . 'Action'}($request, $settings);
+            $rows = match ($action) {
+                'categories' => $this->categoriesAction($request, $settings),
+                'locations' => $this->locationsAction($request, $settings),
+            };
             $cache?->set($cacheIdentifier, $rows);
         }
 
@@ -167,7 +177,7 @@ final readonly class StoreFinderMiddleware implements MiddlewareInterface
     {
         $row = $this->contentRepository->findByUid($contentUid);
 
-        $settings = $this->flexFormService->convertFlexFormContentToArray($row['pi_flexform'] ?? '')['settings'] ?? [];
+        $settings = $this->flexFormTools->convertFlexFormContentToArray($row['pi_flexform'] ?? '')['settings'] ?? [];
         $settings['pid'] = $row['pid'];
         $settings['storagePid'] = $row['pages'];
 
@@ -202,7 +212,7 @@ final readonly class StoreFinderMiddleware implements MiddlewareInterface
                 $isCachingAllowed ? $this->typoScriptCache : null,
                 $request,
             );
-        } catch (\JsonException) {
+        } catch (JsonException) {
         }
 
         return $frontendTypoScript;
@@ -216,14 +226,14 @@ final readonly class StoreFinderMiddleware implements MiddlewareInterface
         PageInformation $pageInformation,
     ): array {
         $topDownRootLine = $pageInformation->getRootLine();
-        $localRootline = $pageInformation->getLocalRootLine();
+        $localRootLine = $pageInformation->getLocalRootLine();
         ksort($topDownRootLine);
         return [
             'request' => $request,
             'pageId' => $pageInformation->getId(),
             'page' => $pageInformation->getPageRecord(),
             'fullRootLine' => $topDownRootLine,
-            'localRootLine' => $localRootline,
+            'localRootLine' => $localRootLine,
             'site' => $request->getAttribute('site'),
             'siteLanguage' => $request->getAttribute('language'),
             'tsfe' => $request->getAttribute('frontend.controller'),
@@ -238,12 +248,10 @@ final readonly class StoreFinderMiddleware implements MiddlewareInterface
      */
     protected function categoriesAction(ServerRequestInterface $request, array $settings): array
     {
-        /** @var CategoryRepository $categoryRepository */
-        $categoryRepository = GeneralUtility::makeInstance(CategoryRepository::class);
-        $categoryRepository->setSettings($settings);
+        $this->categoryRepository->setSettings($settings);
 
         $categories = GeneralUtility::intExplode(',', $settings['categories'] ?? '', true);
-        $categoryTree = $categoryRepository->getCategoriesByParents($categories);
+        $categoryTree = $this->categoryRepository->getCategoriesByParents($categories);
 
         $eventResult = $this->eventDispatcher->dispatch(
             new ModifyMiddlewareCategoriesEvent($request, $this, $settings, $categoryTree),
@@ -259,13 +267,11 @@ final readonly class StoreFinderMiddleware implements MiddlewareInterface
      */
     protected function locationsAction(ServerRequestInterface $request, array $settings): array
     {
-        /** @var LocationRepository $locationRepository */
-        $locationRepository = GeneralUtility::makeInstance(LocationRepository::class);
-        $locationRepository->setSettings($settings);
+        $this->locationRepository->setSettings($settings);
 
         $json = $request->getBody()->getContents();
         $constraint = $this->prepareConstraint($json, $settings);
-        $rows = $locationRepository->findAllForAjaxMiddleware($constraint);
+        $rows = $this->locationRepository->findAllForAjaxMiddleware($constraint);
 
         $eventResult = $this->eventDispatcher->dispatch(
             new ModifyMiddlewareLocationsEvent($request, $this, $settings, $rows),

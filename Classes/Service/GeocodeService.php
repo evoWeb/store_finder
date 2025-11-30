@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * It is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
+ * of the License or any later version.
  *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
@@ -26,10 +26,12 @@ use Geocoder\Provider\Provider;
 use Geocoder\Query\GeocodeQuery;
 use Geocoder\StatefulGeocoder;
 use SJBR\StaticInfoTables\Domain\Model\CountryZone;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use TYPO3\CMS\Core\Country\Country;
 use TYPO3\CMS\Core\Http\Client\GuzzleClientFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
+#[Autoconfigure(public: true)]
 class GeocodeService
 {
     /**
@@ -70,8 +72,8 @@ class GeocodeService
             }
         }
 
-        // In case the address without geocoded location was stored in
-        // session or the geocoding did not work a second try is done
+        // In case the address without a geocoded location was stored in
+        // session or the geocoding did not work, a second try is done
         if (!$forceGeoCoding && !$geoCodedAddress->isGeocoded()) {
             $geoCodedAddress = $this->geocodeAddress($geoCodedAddress, true);
         }
@@ -101,7 +103,7 @@ class GeocodeService
             $coordinate = $this->getCoordinatesFromProvider($queryValues);
         }
 
-        // We should have coordinates by now and add them to location
+        // We should have coordinates by now and add them to the location
         if ($coordinate->getLatitude() && $coordinate->getLongitude()) {
             $location->setLatitude($coordinate->getLatitude());
             $location->setLongitude($coordinate->getLongitude());
@@ -125,7 +127,7 @@ class GeocodeService
             $value = $location->{$methodName}();
 
             switch ($field) {
-                // if a known country code is used we fetch the english short name
+                // if a known country code is used, we fetch the english short name
                 // to enhance the map api query result
                 case 'country':
                     if ($value instanceof Country) {
