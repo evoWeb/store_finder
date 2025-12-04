@@ -16,7 +16,7 @@ declare(strict_types=1);
 namespace Evoweb\StoreFinder\ViewHelpers;
 
 use Evoweb\StoreFinder\Domain\Model\Location;
-use Evoweb\StoreFinder\Service\CacheService;
+use Evoweb\StoreFinder\Services\CacheService;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 class CacheViewHelper extends AbstractViewHelper

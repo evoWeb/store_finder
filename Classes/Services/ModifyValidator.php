@@ -13,7 +13,7 @@ declare(strict_types=1);
  * LICENSE.txt file that was distributed with this source code.
  */
 
-namespace Evoweb\StoreFinder\Service;
+namespace Evoweb\StoreFinder\Services;
 
 use Doctrine\Common\Annotations\AnnotationException;
 use Doctrine\Common\Annotations\DocParser;

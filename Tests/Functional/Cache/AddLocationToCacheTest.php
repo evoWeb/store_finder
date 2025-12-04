@@ -15,7 +15,7 @@ namespace Evoweb\StoreFinder\Tests\Functional\Cache;
 
 use Evoweb\StoreFinder\Cache\CoordinatesCache;
 use Evoweb\StoreFinder\Domain\Model\Constraint;
-use Evoweb\StoreFinder\Service\GeocodeService;
+use Evoweb\StoreFinder\Services\GeocodeService;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Psr\Http\Message\ServerRequestInterface;

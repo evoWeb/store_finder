@@ -22,7 +22,7 @@ use Evoweb\StoreFinder\Domain\Repository\ContentRepository;
 use Evoweb\StoreFinder\Domain\Repository\LocationRepository;
 use Evoweb\StoreFinder\Middleware\Event\ModifyMiddlewareCategoriesEvent;
 use Evoweb\StoreFinder\Middleware\Event\ModifyMiddlewareLocationsEvent;
-use Evoweb\StoreFinder\Service\GeocodeService;
+use Evoweb\StoreFinder\Services\GeocodeService;
 use JsonException;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -58,24 +58,22 @@ use TYPO3\CMS\Frontend\Page\PageInformationFactory;
 final readonly class StoreFinderMiddleware implements MiddlewareInterface
 {
     public function __construct(
-        #[Lazy]
-        private EventDispatcherInterface $eventDispatcher,
-        #[Lazy]
-        private CacheManager $cacheManager,
-        #[Lazy]
-        private ContentRepository $contentRepository,
-        #[Lazy]
         private FlexFormTools $flexFormTools,
-        #[Lazy]
         private TypoScriptService $typoScriptService,
         private FrontendTypoScriptFactory $frontendTypoScriptFactory,
         private PageInformationFactory $pageInformationFactory,
         #[Autowire(service: 'cache.typoscript')]
         private PhpFrontend $typoScriptCache,
         #[Lazy]
+        private EventDispatcherInterface $eventDispatcher,
+        #[Lazy]
+        private CacheManager $cacheManager,
+        #[Lazy]
         private CategoryRepository $categoryRepository,
         #[Lazy]
         private LocationRepository $locationRepository,
+        #[Lazy]
+        private ContentRepository $contentRepository,
     ) {
     }
 

@@ -16,7 +16,7 @@ declare(strict_types=1);
 namespace Evoweb\StoreFinder\Command;
 
 use Evoweb\StoreFinder\Domain\Repository\LocationRepository;
-use Evoweb\StoreFinder\Service\GeocodeService;
+use Evoweb\StoreFinder\Services\GeocodeService;
 use Exception;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;

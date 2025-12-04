@@ -16,8 +16,8 @@ declare(strict_types=1);
 namespace Evoweb\StoreFinder\Hooks;
 
 use Evoweb\StoreFinder\Domain\Repository\LocationRepository;
-use Evoweb\StoreFinder\Service\CacheService;
-use Evoweb\StoreFinder\Service\GeocodeService;
+use Evoweb\StoreFinder\Services\CacheService;
+use Evoweb\StoreFinder\Services\GeocodeService;
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
