@@ -27,6 +27,7 @@ use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\Exception as ExtbaseException;
+use TYPO3\CMS\Extbase\Persistence\Generic\Qom\Statement;
 use TYPO3\CMS\Extbase\Persistence\Generic\Query;
 use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
@@ -177,7 +178,10 @@ class LocationRepository extends Repository
                 ->executeQuery()
                 ->fetchAllAssociative();
         } else {
-            $query->statement($queryBuilder);
+            // @todo remove once an error cause in https://review.typo3.org/c/Packages/TYPO3.CMS/+/88690 was fixed
+            $statementProperty = new \ReflectionProperty($query, 'statement');
+            $statement = GeneralUtility::makeInstance(Statement::class, $queryBuilder, []);
+            $statementProperty->setValue($query, $statement);
             return $query->execute()->toArray();
         }
     }
