@@ -17,7 +17,7 @@ namespace Evoweb\StoreFinder\Validation\Validator;
 
 use Evoweb\StoreFinder\Domain\Model\Constraint;
 
-interface SettableInterface
+interface SetPropertyNameInterface
 {
     public function setModel(Constraint $model): void;
 

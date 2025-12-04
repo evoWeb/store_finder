@@ -15,16 +15,15 @@ declare(strict_types=1);
 
 namespace Evoweb\StoreFinder\Controller;
 
-use Doctrine\Common\Annotations\DocParser;
 use Evoweb\StoreFinder\Controller\Event\MapGetLocationsByConstraintsEvent;
 use Evoweb\StoreFinder\Domain\Model\Constraint;
 use Evoweb\StoreFinder\Domain\Model\Location;
 use Evoweb\StoreFinder\Domain\Repository\CategoryRepository;
 use Evoweb\StoreFinder\Domain\Repository\LocationRepository;
 use Evoweb\StoreFinder\Property\TypeConverter\CountryConverter;
+use Evoweb\StoreFinder\Service\ModifyValidator;
 use Evoweb\StoreFinder\Service\GeocodeService;
 use Evoweb\StoreFinder\Validation\Validator\ConstraintValidator;
-use Evoweb\StoreFinder\Validation\Validator\SettableInterface;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Country\CountryProvider;
 use TYPO3\CMS\Core\Http\HtmlResponse;
@@ -34,16 +33,11 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Attribute as Extbase;
 use TYPO3\CMS\Extbase\Http\ForwardResponse;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use TYPO3\CMS\Extbase\Mvc\Controller\Argument;
 use TYPO3\CMS\Extbase\Mvc\Controller\Arguments;
 use TYPO3\CMS\Extbase\Persistence\Generic\Exception as Exception;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Property\PropertyMappingConfiguration;
 use TYPO3\CMS\Extbase\Property\TypeConverter\PersistentObjectConverter;
-use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
-use TYPO3\CMS\Extbase\Validation\Validator\ConjunctionValidator;
-use TYPO3\CMS\Extbase\Validation\Validator\ValidatorInterface;
-use TYPO3\CMS\Extbase\Validation\ValidatorClassNameResolver;
 use TYPO3\CMS\Core\View\ViewInterface;
 
 class MapController extends ActionController
@@ -53,82 +47,21 @@ class MapController extends ActionController
         protected CategoryRepository $categoryRepository,
         protected CountryProvider $countryProvider,
         protected GeocodeService $geocodeService,
+        protected ModifyValidator $modifyValidator,
     ) {
     }
 
     protected function initializeActionMethodValidators(): void
     {
-        if ($this->arguments->hasArgument('constraint')) {
-            $this->modifyValidatorsBasedOnSettings(
-                $this->arguments->getArgument('constraint'),
-                $this->settings['validation'] ?? [],
+        if ($this->modifyValidator->shouldValidationBeModified($this->arguments, $this->settings)) {
+            $this->arguments = $this->modifyValidator->modifyArgumentValidators(
+                $this->arguments,
+                $this->request,
+                $this->settings,
             );
         } else {
             parent::initializeActionMethodValidators();
         }
-    }
-
-    /**
-     * @param array<string, string|string[]> $configuredValidators
-     */
-    protected function modifyValidatorsBasedOnSettings(
-        Argument $argument,
-        array $configuredValidators,
-    ): void {
-        $parser = new DocParser();
-
-        /** @var ConstraintValidator $validator */
-        $validator = GeneralUtility::makeInstance(ConstraintValidator::class);
-        foreach ($configuredValidators as $fieldName => $configuredValidator) {
-            if (!is_array($configuredValidator)) {
-                $validatorInstance = $this->getValidatorByConfiguration(
-                    $configuredValidator,
-                    $parser,
-                );
-
-                if ($validatorInstance instanceof SettableInterface) {
-                    $validatorInstance->setPropertyName($fieldName);
-                }
-            } else {
-                /** @var ConjunctionValidator $validatorInstance */
-                $validatorInstance = GeneralUtility::makeInstance(ConjunctionValidator::class);
-                foreach ($configuredValidator as $individualConfiguredValidator) {
-                    $individualValidatorInstance = $this->getValidatorByConfiguration(
-                        $individualConfiguredValidator,
-                        $parser,
-                    );
-
-                    if ($individualValidatorInstance instanceof SettableInterface) {
-                        $individualValidatorInstance->setPropertyName($fieldName);
-                    }
-
-                    $validatorInstance->addValidator($individualValidatorInstance);
-                }
-            }
-
-            $validator->addPropertyValidator($fieldName, $validatorInstance);
-        }
-
-        $argument->setValidator($validator);
-    }
-
-    protected function getValidatorByConfiguration(string $configuration, DocParser $parser): ValidatorInterface
-    {
-        if (!str_contains($configuration, '"') && !str_contains($configuration, '(')) {
-            $configuration = sprintf('"%s"', $configuration);
-        }
-
-        /** @var Extbase\Validate $validateAnnotation */
-        $validateAnnotation = current($parser->parse(
-            '@TYPO3\CMS\Extbase\Annotation\Validate(' . $configuration . ')',
-        ));
-        /** @var class-string<AbstractValidator> $validatorObjectName */
-        $validatorObjectName = ValidatorClassNameResolver::resolve(
-            $validateAnnotation->validator,
-        );
-        /** @var ValidatorInterface $validator */
-        $validator = GeneralUtility::makeInstance($validatorObjectName, $validateAnnotation->options);
-        return $validator;
     }
 
     protected function setTypeConverter(): void

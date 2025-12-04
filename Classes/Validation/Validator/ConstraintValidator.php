@@ -53,7 +53,7 @@ class ConstraintValidator extends AbstractGenericObjectValidator
         /** @var Result|null $result */
         $result = null;
         foreach ($validators as $validator) {
-            if ($validator instanceof SettableInterface) {
+            if ($validator instanceof SetPropertyNameInterface) {
                 $validator->setModel($this->model);
             }
 
