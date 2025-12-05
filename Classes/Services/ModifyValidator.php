@@ -20,11 +20,11 @@ use Doctrine\Common\Annotations\DocParser;
 use Evoweb\StoreFinder\Annotation\Validate;
 use Evoweb\StoreFinder\Validation\Validator\ConstraintValidator;
 use Evoweb\StoreFinder\Validation\Validator\SetPropertyNameInterface;
+use Exception;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use ReflectionException;
 use TYPO3\CMS\Core\Log\LogManager;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Attribute as Extbase;
 use TYPO3\CMS\Extbase\Mvc\Controller\Argument;
 use TYPO3\CMS\Extbase\Mvc\Controller\Arguments;
@@ -75,24 +75,25 @@ readonly class ModifyValidator
             $this->modifyValidatorsBasedOnSettings(
                 $argument,
                 $request,
-                $settings['validation'] ?? [],
+                $settings,
             );
         }
         return $arguments;
     }
 
     /**
-     * @param array<string, string|string[]> $configuredValidators
+     * @param array<string, string|string[]> $settings
      */
     public function modifyValidatorsBasedOnSettings(
         Argument $argument,
         ServerRequestInterface $request,
-        array $configuredValidators,
+        array $settings,
     ): void {
+        $configuredValidators = $settings['validation'] ?? [];
         $parser = new DocParser();
 
         /** @var ConstraintValidator $validator */
-        $validator = GeneralUtility::makeInstance(ConstraintValidator::class);
+        $validator = $this->validatorResolver->createValidator(ConstraintValidator::class);
         foreach ($configuredValidators as $fieldName => $configuredValidator) {
             if (!is_array($configuredValidator)) {
                 try {
@@ -102,15 +103,13 @@ readonly class ModifyValidator
                         $fieldName,
                         $request,
                     );
-                } catch (\Exception $exception) {
+                } catch (Exception $exception) {
                     $this->logger->debug($exception->getMessage());
                     continue;
                 }
             } else {
                 /** @var ConjunctionValidator $validatorInstance */
-                $validatorInstance = $this->validatorResolver->createValidator(
-                    ConjunctionValidator::class
-                );
+                $validatorInstance = $this->validatorResolver->createValidator(ConjunctionValidator::class);
                 foreach ($configuredValidator as $individualConfiguredValidator) {
                     try {
                         $individualValidatorInstance = $this->getValidatorByConfiguration(
@@ -119,7 +118,7 @@ readonly class ModifyValidator
                             $fieldName,
                             $request,
                         );
-                    } catch (\Exception $exception) {
+                    } catch (Exception $exception) {
                         $this->logger->debug($exception->getMessage());
                         continue;
                     }

@@ -29,14 +29,14 @@ call_user_func(static function () {
     $showItems = '
             --palette--;;general,
             --palette--;;headers,
-        --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:plugin,
+        --div--;core.tabs:plugin,
             pi_flexform,
             pages;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:pages.ALT.list_formlabel,
             recursive,
-        --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:appearance,
+        --div--;core.tabs:appearance,
             --palette--;;storefinder-frames,
             --palette--;;appearanceLinks,
-        --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:categories,
+        --div--;core.tabs:categories,
             categories,
     ';
 
