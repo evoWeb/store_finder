@@ -33,7 +33,7 @@
       </trans-unit>
       <trans-unit id="div-address" resname="div-address">
         <source>Address</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Adresas</target>
+        <target state="needs-translation">Address</target>
       </trans-unit>
       <trans-unit id="div-contact" resname="div-contact">
         <source>Contact</source>
@@ -69,11 +69,11 @@
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_attribute.description" resname="tx_storefinder_domain_model_attribute.description">
         <source>Description</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Aprašymas</target>
+        <target state="needs-translation">Description</target>
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_attribute.icon" resname="tx_storefinder_domain_model_attribute.icon">
         <source>Icon</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Piktograma</target>
+        <target state="needs-translation">Icon</target>
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_attribute.name" resname="tx_storefinder_domain_model_attribute.name">
         <source>Name</source>
@@ -89,7 +89,7 @@
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.address" resname="tx_storefinder_domain_model_location.address">
         <source>Address</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Adresas</target>
+        <target state="needs-translation">Address</target>
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.attributes" resname="tx_storefinder_domain_model_location.attributes">
         <source>Attributes</source>
@@ -97,7 +97,7 @@
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.categories" resname="tx_storefinder_domain_model_location.categories">
         <source>Categories</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Kategorijos</target>
+        <target state="needs-translation">Categories</target>
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.center" resname="tx_storefinder_domain_model_location.center">
         <source>Use as center</source>
@@ -125,7 +125,7 @@
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.email" resname="tx_storefinder_domain_model_location.email">
         <source>Email</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">El. paštas</target>
+        <target state="needs-translation">Email</target>
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.fax" resname="tx_storefinder_domain_model_location.fax">
         <source>Fax</source>
@@ -145,7 +145,7 @@
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.icon" resname="tx_storefinder_domain_model_location.icon">
         <source>Icon</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Piktograma</target>
+        <target state="needs-translation">Icon</target>
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.image" resname="tx_storefinder_domain_model_location.image">
         <source>Images</source>
@@ -169,7 +169,7 @@
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.media" resname="tx_storefinder_domain_model_location.media">
         <source>Media</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Multimedija</target>
+        <target state="needs-translation">Media</target>
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.mobile" resname="tx_storefinder_domain_model_location.mobile">
         <source>Cellular</source>
