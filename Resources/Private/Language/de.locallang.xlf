@@ -3,77 +3,77 @@
   <file source-language="en" original="messages" datatype="plaintext" product-name="store_finder" date="2024-08-02T16:39:12+02:00" target-language="de">
     <header/>
     <body>
-      <trans-unit id="address" resname="address" approved="yes">
+      <trans-unit id="address" resname="address">
         <source>Address</source>
-        <target state="final">Anschrift</target>
+        <target state="needs-translation">Address</target>
       </trans-unit>
-      <trans-unit id="category" resname="category" approved="yes">
+      <trans-unit id="category" resname="category">
         <source>Restrict on Categories</source>
-        <target state="final">Beschränkt auf Kategorien</target>
+        <target state="needs-translation">Restrict on Categories</target>
       </trans-unit>
-      <trans-unit id="city" resname="city" approved="yes">
+      <trans-unit id="city" resname="city">
         <source>City</source>
-        <target state="final">Stadt</target>
+        <target state="needs-translation">City</target>
       </trans-unit>
-      <trans-unit id="country" resname="country" approved="yes">
+      <trans-unit id="country" resname="country">
         <source>Country</source>
-        <target state="final">Land</target>
+        <target state="needs-translation">Country</target>
       </trans-unit>
-      <trans-unit id="error_either" resname="error_either" approved="yes">
+      <trans-unit id="error_either" resname="error_either">
         <source>At least one of the required fields need to be filled in</source>
-        <target state="final">Mindestens eines der Pflichtfelder muss gefüllt sein.</target>
+        <target state="needs-translation">At least one of the required fields need to be filled in</target>
       </trans-unit>
-      <trans-unit id="error_notexists" resname="error_notexists" approved="yes">
+      <trans-unit id="error_notexists" resname="error_notexists">
         <source>Field does not exists</source>
-        <target state="final">Diese Feld gibt es nicht</target>
+        <target state="needs-translation">Field does not exists</target>
       </trans-unit>
-      <trans-unit id="error_notvalidatable" resname="error_notvalidatable" approved="yes">
+      <trans-unit id="error_notvalidatable" resname="error_notvalidatable">
         <source>Model is not validatable</source>
-        <target state="final">Model ist nicht validierbar</target>
+        <target state="needs-translation">Model is not validatable</target>
       </trans-unit>
-      <trans-unit id="error_required" resname="error_required" approved="yes">
+      <trans-unit id="error_required" resname="error_required">
         <source>Required field may not be empty</source>
-        <target state="final">Pflichtfeld darf nicht leer sein</target>
+        <target state="needs-translation">Required field may not be empty</target>
       </trans-unit>
-      <trans-unit id="latitude" resname="latitude" approved="yes">
+      <trans-unit id="latitude" resname="latitude">
         <source>Latitude</source>
-        <target state="final">Längengrad</target>
+        <target state="needs-translation">Latitude</target>
       </trans-unit>
-      <trans-unit id="longitude" resname="longitude" approved="yes">
+      <trans-unit id="longitude" resname="longitude">
         <source>Longitude</source>
-        <target state="final">Breitengrad</target>
+        <target state="needs-translation">Longitude</target>
       </trans-unit>
-      <trans-unit id="name" resname="name" approved="yes">
+      <trans-unit id="name" resname="name">
         <source>Storename</source>
-        <target state="final">Name</target>
+        <target state="needs-translation">Storename</target>
       </trans-unit>
-      <trans-unit id="phonenumber" resname="phonenumber" approved="yes">
+      <trans-unit id="phonenumber" resname="phonenumber">
         <source>Phonenumber</source>
-        <target state="final">Telefonnummer</target>
+        <target state="needs-translation">Phonenumber</target>
       </trans-unit>
-      <trans-unit id="please-select-country" resname="please-select-country" approved="yes">
+      <trans-unit id="please-select-country" resname="please-select-country">
         <source>Please select a country</source>
-        <target state="final">Bitte wählen Sie Ihr Land aus</target>
+        <target state="needs-translation">Please select a country</target>
       </trans-unit>
-      <trans-unit id="products" resname="products" approved="yes">
+      <trans-unit id="products" resname="products">
         <source>Products comma separated</source>
-        <target state="final">Produkte (Komma-separiert)</target>
+        <target state="needs-translation">Products comma separated</target>
       </trans-unit>
-      <trans-unit id="radius" resname="radius" approved="yes">
+      <trans-unit id="radius" resname="radius">
         <source>Radius (km)</source>
-        <target state="final">Umkreis (km)</target>
+        <target state="needs-translation">Radius (km)</target>
       </trans-unit>
-      <trans-unit id="route" resname="route" approved="yes">
+      <trans-unit id="route" resname="route">
         <source>Route</source>
-        <target state="final">Routen</target>
+        <target state="needs-translation">Route</target>
       </trans-unit>
-      <trans-unit id="submit_find" resname="submit_find" approved="yes">
+      <trans-unit id="submit_find" resname="submit_find">
         <source>Find Store</source>
-        <target state="final">Geschäft finden</target>
+        <target state="needs-translation">Find Store</target>
       </trans-unit>
-      <trans-unit id="zipcode" resname="zipcode" approved="yes">
+      <trans-unit id="zipcode" resname="zipcode">
         <source>Zipcode</source>
-        <target state="final">Postleitzahl</target>
+        <target state="needs-translation">Zipcode</target>
       </trans-unit>
     </body>
   </file>

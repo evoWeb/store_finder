@@ -33,11 +33,11 @@
       </trans-unit>
       <trans-unit id="div-address" resname="div-address">
         <source>Address</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Adresse</target>
+        <target state="needs-translation">Address</target>
       </trans-unit>
       <trans-unit id="div-contact" resname="div-contact">
         <source>Contact</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Contact</target>
+        <target state="needs-translation">Contact</target>
       </trans-unit>
       <trans-unit id="div-informations" resname="div-informations">
         <source>Informations</source>
@@ -45,11 +45,11 @@
       </trans-unit>
       <trans-unit id="div-relations" resname="div-relations">
         <source>Relations</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Relations</target>
+        <target state="needs-translation">Relations</target>
       </trans-unit>
       <trans-unit id="palette-coordinates" resname="palette-coordinates">
         <source>Coordinates</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Coordonnées</target>
+        <target state="needs-translation">Coordinates</target>
       </trans-unit>
       <trans-unit id="sys_category.add" resname="sys_category.add">
         <source>Add category</source>
@@ -69,15 +69,15 @@
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_attribute.description" resname="tx_storefinder_domain_model_attribute.description">
         <source>Description</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Description</target>
+        <target state="needs-translation">Description</target>
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_attribute.icon" resname="tx_storefinder_domain_model_attribute.icon">
         <source>Icon</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Icône</target>
+        <target state="needs-translation">Icon</target>
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_attribute.name" resname="tx_storefinder_domain_model_attribute.name">
         <source>Name</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Nom</target>
+        <target state="needs-translation">Name</target>
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location" resname="tx_storefinder_domain_model_location">
         <source>Store Location</source>
@@ -89,15 +89,15 @@
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.address" resname="tx_storefinder_domain_model_location.address">
         <source>Address</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Adresse</target>
+        <target state="needs-translation">Address</target>
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.attributes" resname="tx_storefinder_domain_model_location.attributes">
         <source>Attributes</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Attributs</target>
+        <target state="needs-translation">Attributes</target>
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.categories" resname="tx_storefinder_domain_model_location.categories">
         <source>Categories</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Catégories</target>
+        <target state="needs-translation">Categories</target>
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.center" resname="tx_storefinder_domain_model_location.center">
         <source>Use as center</source>
@@ -105,15 +105,15 @@
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.city" resname="tx_storefinder_domain_model_location.city">
         <source>City</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Ville</target>
+        <target state="needs-translation">City</target>
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.content_elements" resname="tx_storefinder_domain_model_location.content_elements">
         <source>Content Elements</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Eléments de contenu</target>
+        <target state="needs-translation">Content Elements</target>
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.country" resname="tx_storefinder_domain_model_location.country">
         <source>Country</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Pays</target>
+        <target state="needs-translation">Country</target>
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.country.default" resname="tx_storefinder_domain_model_location.country.default">
         <source>Please select a country</source>
@@ -125,11 +125,11 @@
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.email" resname="tx_storefinder_domain_model_location.email">
         <source>Email</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">E-mail</target>
+        <target state="needs-translation">Email</target>
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.fax" resname="tx_storefinder_domain_model_location.fax">
         <source>Fax</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Fax</target>
+        <target state="needs-translation">Fax</target>
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.geocode" resname="tx_storefinder_domain_model_location.geocode">
         <source>Geocode this location</source>
@@ -141,19 +141,19 @@
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.hours" resname="tx_storefinder_domain_model_location.hours">
         <source>Hours</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Heures</target>
+        <target state="needs-translation">Hours</target>
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.icon" resname="tx_storefinder_domain_model_location.icon">
         <source>Icon</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Icône</target>
+        <target state="needs-translation">Icon</target>
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.image" resname="tx_storefinder_domain_model_location.image">
         <source>Images</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Images</target>
+        <target state="needs-translation">Images</target>
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.latitude" resname="tx_storefinder_domain_model_location.latitude">
         <source>Latitude</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Latitude</target>
+        <target state="needs-translation">Latitude</target>
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.layer" resname="tx_storefinder_domain_model_location.layer">
         <source>Layer</source>
@@ -165,11 +165,11 @@
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.longitude" resname="tx_storefinder_domain_model_location.longitude">
         <source>Longitude</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Longitude</target>
+        <target state="needs-translation">Longitude</target>
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.media" resname="tx_storefinder_domain_model_location.media">
         <source>Media</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Médias</target>
+        <target state="needs-translation">Media</target>
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.mobile" resname="tx_storefinder_domain_model_location.mobile">
         <source>Cellular</source>
@@ -185,7 +185,7 @@
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.notes" resname="tx_storefinder_domain_model_location.notes">
         <source>Notes</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Remarques/Notes</target>
+        <target state="needs-translation">Notes</target>
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.person" resname="tx_storefinder_domain_model_location.person">
         <source>Contact person</source>
@@ -193,11 +193,11 @@
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.phone" resname="tx_storefinder_domain_model_location.phone">
         <source>Phone</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Téléphone</target>
+        <target state="needs-translation">Phone</target>
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.products" resname="tx_storefinder_domain_model_location.products">
         <source>Products</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">Produits</target>
+        <target state="needs-translation">Products</target>
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.related" resname="tx_storefinder_domain_model_location.related">
         <source>Related to location</source>
@@ -205,7 +205,7 @@
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.state" resname="tx_storefinder_domain_model_location.state">
         <source>State</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">État</target>
+        <target state="needs-translation">State</target>
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.storeid" resname="tx_storefinder_domain_model_location.storeid">
         <source>Store Id</source>
@@ -213,7 +213,7 @@
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.url" resname="tx_storefinder_domain_model_location.url">
         <source>URL</source>
-        <target state="needs-review-translation" state-qualifier="leveraged-tm">URL</target>
+        <target state="needs-translation">URL</target>
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.zipcode" resname="tx_storefinder_domain_model_location.zipcode">
         <source>ZIP / Postal Code</source>
