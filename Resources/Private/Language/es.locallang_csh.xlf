@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" original="messages" datatype="plaintext" product-name="store_finder" date="2024-08-02T16:41:03+02:00" target-language="es-ES">
+    <header/>
+    <body>
+      <trans-unit id="TSconfig.description" resname="TSconfig.description">
+        <source>Page TypoScript configuration.</source>
+        <target state="needs-translation">Page TypoScript configuration.</target>
+      </trans-unit>
+      <trans-unit id="TSconfig.details" resname="TSconfig.details">
+        <source>Basically 'TypoScript' is a . . . alled).</source>
+        <target state="needs-translation">Basically 'TypoScript' is a . . . alled).</target>
+      </trans-unit>
+      <trans-unit id="TSconfig.syntax" resname="TSconfig.syntax">
+        <source>Basic TypoScr. . . 'Conditions' and 'Constants'.</source>
+        <target state="needs-translation">Basic TypoScr. . . 'Conditions' and 'Constants'.</target>
+      </trans-unit>
+      <trans-unit id="doktype.description" resname="doktype.description">
+        <source>Select the page type. This affects . . . ses.</source>
+        <target state="needs-translation">Select the page type. This affects . . . ses.</target>
+      </trans-unit>
+      <trans-unit id="doktype.details" resname="doktype.details">
+        <source>The 'Standard' type represents a . . . any problems).</source>
+        <target state="needs-translation">The 'Standard' type represents a . . . any problems).</target>
+      </trans-unit>
+      <trans-unit id="title.description" resname="title.description">
+        <source>Enter the title of the page or folder.</source>
+        <target state="needs-translation">Enter the title of the page or folder.</target>
+      </trans-unit>
+      <trans-unit id="title.syntax" resname="title.syntax">
+        <source>You must enter a page title. The field is required.</source>
+        <target state="needs-translation">You must enter a page title. The field is required.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
