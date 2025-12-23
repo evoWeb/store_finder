@@ -39,9 +39,9 @@
         <source>Contact</source>
         <target state="final">Kontakt</target>
       </trans-unit>
-      <trans-unit id="div-informations" resname="div-informations">
+      <trans-unit id="div-informations" resname="div-informations" approved="yes">
         <source>Informations</source>
-        <target state="needs-translation">Informations</target>
+        <target state="final">Informationen</target>
       </trans-unit>
       <trans-unit id="div-relations" resname="div-relations" approved="yes">
         <source>Relations</source>
