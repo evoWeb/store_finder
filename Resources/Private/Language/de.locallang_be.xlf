@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" original="messages" datatype="plaintext" product-name="store_finder" date="2024-08-02T16:40:16+02:00" target-language="de">
+    <header/>
+    <body>
+      <trans-unit id="addPaginator" resname="addPaginator" approved="yes">
+        <source>Add paginator to lists</source>
+        <target state="final">Paginator zur Liste hinzufügen</target>
+      </trans-unit>
+      <trans-unit id="apiConsoleKey" resname="apiConsoleKey" approved="yes">
+        <source>Public key for map rendering</source>
+        <target state="final">Öffentlicher für die Karten Ausgabe</target>
+      </trans-unit>
+      <trans-unit id="apiConsoleKeyGeocoding" resname="apiConsoleKeyGeocoding" approved="yes">
+        <source>Private key for geocoding</source>
+        <target state="final">Privater Schlüssel für Geokodierung</target>
+      </trans-unit>
+      <trans-unit id="geocoderLocale" resname="geocoderLocale" approved="yes">
+        <source>Locale for geocoder</source>
+        <target state="final">Gebietsschema für Geocoder</target>
+      </trans-unit>
+      <trans-unit id="mapId" resname="mapId" approved="yes">
+        <source>MapID to identify a map and configure the map rendering</source>
+        <target state="final">MapID um eine Karte zu identifizieren und die Kartenausgabe zu konfigurieren</target>
+      </trans-unit>
+      <trans-unit id="googleLibraries" resname="googleLibraries" approved="yes">
+        <source>Comma separated list of Google map libraries to load. Core, maps and marker are always added by the configuration partial.</source>
+        <target state="final">Durch Komma getrennte Liste der zu ladenden Google Map-Bibliotheken. Core, Maps und Marker werden immer durch die Konfiguration ergänzt.</target>
+      </trans-unit>
+      <trans-unit id="latitude" resname="latitude" approved="yes">
+        <source>Default latitude in location record form</source>
+        <target state="final">Standard Breitengrad im lokalisiere Datensatz Formular</target>
+      </trans-unit>
+      <trans-unit id="longitude" resname="longitude" approved="yes">
+        <source>Default longitude in location record form</source>
+        <target state="final">Standard Längengrad im lokalisiere Datensatz Formular</target>
+      </trans-unit>
+      <trans-unit id="pages" resname="pages" approved="yes">
+        <source>Record Storage Page</source>
+        <target state="final">Datensatzsammlung</target>
+      </trans-unit>
+      <trans-unit id="pi_flexform.activeCategories" resname="pi_flexform.activeCategories" approved="yes">
+        <source>Active (preselected) categories</source>
+        <target state="final">Aktive (vorselektierte) Kategorien</target>
+      </trans-unit>
+      <trans-unit id="pi_flexform.additionalLayers.label" resname="pi_flexform.additionalLayers.label" approved="yes">
+        <source>additional overlays api v2</source>
+        <target state="final">zusätzliche Overlays API v2</target>
+      </trans-unit>
+      <trans-unit id="pi_flexform.additionalMapTypes.label" resname="pi_flexform.additionalMapTypes.label" approved="yes">
+        <source>additional map types</source>
+        <target state="final">zusätzliche Kartenstile</target>
+      </trans-unit>
+      <trans-unit id="pi_flexform.ajaxSearchWithMap.label" resname="pi_flexform.ajaxSearchWithMap.label" approved="yes">
+        <source>ajax search with map</source>
+        <target state="final">ajax-Suche mit Karte</target>
+      </trans-unit>
+      <trans-unit id="pi_flexform.allMapView.label" resname="pi_flexform.allMapView.label" approved="yes">
+        <source>display all stores in a map</source>
+        <target state="final">alle Shops auf einer Karte anzeigen</target>
+      </trans-unit>
+      <trans-unit id="pi_flexform.allowedCountries" resname="pi_flexform.allowedCountries" approved="yes">
+        <source>Countries allowed in search country selectbox</source>
+        <target state="final">Länder in der Länderauswahl erlaubt</target>
+      </trans-unit>
+      <trans-unit id="pi_flexform.apiV3Layers" resname="pi_flexform.apiV3Layers" approved="yes">
+        <source>additional overlays in api v3</source>
+        <target state="final">zusätzliche Overlays in API v3</target>
+      </trans-unit>
+      <trans-unit id="pi_flexform.apiV3Layers.bicyclingOverlay" resname="pi_flexform.apiV3Layers.bicyclingOverlay" approved="yes">
+        <source>bicycling</source>
+        <target state="final">Radfahren</target>
+      </trans-unit>
+      <trans-unit id="pi_flexform.apiV3Layers.kmlOverlay" resname="pi_flexform.apiV3Layers.kmlOverlay" approved="yes">
+        <source>kml</source>
+        <target state="final">kml</target>
+      </trans-unit>
+      <trans-unit id="pi_flexform.apiV3Layers.trafficOverlay" resname="pi_flexform.apiV3Layers.trafficOverlay" approved="yes">
+        <source>traffic</source>
+        <target state="final">Verkehr</target>
+      </trans-unit>
+      <trans-unit id="pi_flexform.autoMailView.label" resname="pi_flexform.autoMailView.label" approved="yes">
+        <source>automated mails</source>
+        <target state="final">automatisierte Mails</target>
+      </trans-unit>
+      <trans-unit id="pi_flexform.catMenu.label" resname="pi_flexform.catMenu.label" approved="yes">
+        <source>category menu view</source>
+        <target state="final">Kategorie Menu Ansicht</target>
+      </trans-unit>
+      <trans-unit id="pi_flexform.categories" resname="pi_flexform.categories" approved="yes">
+        <source>Categories</source>
+        <target state="final">Kategorien</target>
+      </trans-unit>
+      <trans-unit id="pi_flexform.categoryPriority" resname="pi_flexform.categoryPriority" approved="yes">
+        <source>Category used for</source>
+        <target state="final">Kategorie verwendet für</target>
+      </trans-unit>
+      <trans-unit id="pi_flexform.categoryPriority.limitResultsToCategories" resname="pi_flexform.categoryPriority.limitResultsToCategories" approved="yes">
+        <source>Filter used for the query without user utilization</source>
+        <target state="final">Filter für die Abfrage ohne Benutzer-Nutzung</target>
+      </trans-unit>
+      <trans-unit id="pi_flexform.categoryPriority.useAsFilterInFrontend" resname="pi_flexform.categoryPriority.useAsFilterInFrontend" approved="yes">
+        <source>Filter utilized by the user in frontend</source>
+        <target state="final">Filter wird vom Benutzer im Frontend verwendet</target>
+      </trans-unit>
+      <trans-unit id="pi_flexform.categoryPriority.useParentIfNoFilterSelected" resname="pi_flexform.categoryPriority.useParentIfNoFilterSelected" approved="yes">
+        <source>Filter utilized by the user in frontend or as filter if the user selected none</source>
+        <target state="final">Filter, der vom Benutzer im Frontend oder als Filter verwendet wird, wenn der Benutzer keine ausgewählt hat</target>
+      </trans-unit>
+      <trans-unit id="pi_flexform.cookieLifeTime.label" resname="pi_flexform.cookieLifeTime.label" approved="yes">
+        <source>cookie life time [sec]</source>
+        <target state="final">Cookie Lebenszeit [sec]</target>
+      </trans-unit>
+      <trans-unit id="pi_flexform.countryCitySelector.label" resname="pi_flexform.countryCitySelector.label" approved="yes">
+        <source>country city selector</source>
+        <target state="final">Landestadt-Selektor</target>
+      </trans-unit>
+      <trans-unit id="pi_flexform.countryCodes.label" resname="pi_flexform.countryCodes.label" approved="yes">
+        <source>Allowed country codes in search form</source>
+        <target state="final">Erlaubte Ländercodes im Suchformular</target>
+      </trans-unit>
+      <trans-unit id="pi_flexform.distanceUnit.label" resname="pi_flexform.distanceUnit.label" approved="yes">
+        <source>distances in</source>
+        <target state="final">Distanzen in</target>
+      </trans-unit>
+      <trans-unit id="pi_flexform.enableLogs.label" resname="pi_flexform.enableLogs.label" approved="yes">
+        <source>Enable logs</source>
+        <target state="final">Logs aktivieren</target>
+      </trans-unit>
+      <trans-unit id="pi_flexform.enableMoreButton.label" resname="pi_flexform.enableMoreButton.label" approved="yes">
+        <source>enable overlays button</source>
+        <target state="final">Overlays Button aktivieren</target>
+      </trans-unit>
+      <trans-unit id="pi_flexform.enableStreetView.label" resname="pi_flexform.enableStreetView.label" approved="yes">
+        <source>enable street view</source>
+        <target state="final">Straßenansicht aktivieren</target>
+      </trans-unit>
+      <trans-unit id="pi_flexform.enableStreetViewOverlay.label" resname="pi_flexform.enableStreetViewOverlay.label" approved="yes">
+        <source>enable street view overlay</source>
+        <target state="final">Straßenansicht-Overlay aktivieren</target>
+      </trans-unit>
+      <trans-unit id="pi_flexform.externalLocationTable.label" resname="pi_flexform.externalLocationTable.label" approved="yes">
+        <source>External location table</source>
+        <target state="final">Externe Positionstabelle</target>
+      </trans-unit>
+      <trans-unit id="pi_flexform.feUserGroup.label" resname="pi_flexform.feUserGroup.label" approved="yes">
+        <source>FE user group</source>
+        <target state="final">FE-Benutzergruppe</target>
+      </trans-unit>
+      <trans-unit id="pi_flexform.partialRootPath" resname="pi_flexform.partialRootPath" approved="yes">
+        <source>Partial path</source>
+        <target state="final">Wurzelverzeichnis für Partials</target>
+      </trans-unit>
+      <trans-unit id="pi_flexform.resultPageId" resname="pi_flexform.resultPageId" approved="yes">
+        <source>Result page</source>
+        <target state="final">Ergebnis-Seite</target>
+      </trans-unit>
+      <trans-unit id="pi_flexform.sheetDisplayOptions" resname="pi_flexform.sheetDisplayOptions" approved="yes">
+        <source>Display options</source>
+        <target state="final">Anzeigeeinstellungen</target>
+      </trans-unit>
+      <trans-unit id="pi_flexform.sheetReferenceOptions" resname="pi_flexform.sheetReferenceOptions" approved="yes">
+        <source>Reference options</source>
+        <target state="final">Referenzeinstellungen</target>
+      </trans-unit>
+      <trans-unit id="pi_flexform.showAfterSearch" resname="pi_flexform.showAfterSearch" approved="yes">
+        <source>Show after search</source>
+        <target state="final">Nach der Suche anzeigen</target>
+      </trans-unit>
+      <trans-unit id="pi_flexform.showBeforeSearch" resname="pi_flexform.showBeforeSearch" approved="yes">
+        <source>Show before search</source>
+        <target state="final">Vor der Suche anzeigen</target>
+      </trans-unit>
+      <trans-unit id="pi_flexform.showItems.list" resname="pi_flexform.showItems.list" approved="yes">
+        <source>List</source>
+        <target state="final">Liste</target>
+      </trans-unit>
+      <trans-unit id="pi_flexform.showItems.map" resname="pi_flexform.showItems.map" approved="yes">
+        <source>Map</source>
+        <target state="final">Karte</target>
+      </trans-unit>
+      <trans-unit id="pi_flexform.showItems.search" resname="pi_flexform.showItems.search" approved="yes">
+        <source>Search</source>
+        <target state="final">Suche</target>
+      </trans-unit>
+      <trans-unit id="pi_flexform.showStoreImage" resname="pi_flexform.showStoreImage" approved="yes">
+        <source>Show store image in list</source>
+        <target state="final">Bild in der Liste anzeigen</target>
+      </trans-unit>
+      <trans-unit id="pi_flexform.singleLocationId" resname="pi_flexform.singleLocationId" approved="yes">
+        <source>Single location to render</source>
+        <target state="final">Einzelner Ort zum ausgeben</target>
+      </trans-unit>
+      <trans-unit id="pi_flexform.templateRootPath" resname="pi_flexform.templateRootPath" approved="yes">
+        <source>Template path</source>
+        <target state="final">Wurzelverzeichnis für Templates</target>
+      </trans-unit>
+      <trans-unit id="pi_flexform.zoom" resname="pi_flexform.zoom" approved="yes">
+        <source>Zoom</source>
+        <target state="final">Zoom</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
