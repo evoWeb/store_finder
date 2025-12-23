@@ -3,69 +3,69 @@
   <file source-language="en" original="messages" datatype="plaintext" product-name="store_finder" date="2024-08-02T16:41:21+02:00" target-language="nl">
     <header/>
     <body>
-      <trans-unit id="tt_content.list_type_group" resname="tt_content.list_type_group">
+      <trans-unit id="tt_content.list_type_group" resname="tt_content.list_type_group" approved="yes">
         <source>Store Finder</source>
-        <target state="needs-translation">Store Finder</target>
+        <target state="final">Store Finder</target>
       </trans-unit>
-      <trans-unit id="tt_content.list_type_cached" resname="tt_content.list_type_cached">
+      <trans-unit id="tt_content.list_type_cached" resname="tt_content.list_type_cached" approved="yes">
         <source>Store Finder: Cached map</source>
-        <target state="needs-translation">Store Finder: Cached map</target>
+        <target state="final">Store Finder: kaart in cache</target>
       </trans-unit>
-      <trans-unit id="tt_content.list_type_cached_description" resname="tt_content.list_type_cached_description">
+      <trans-unit id="tt_content.list_type_cached_description" resname="tt_content.list_type_cached_description" approved="yes">
         <source>Adds a store finder cached map.</source>
-        <target state="needs-translation">Adds a store finder cached map.</target>
+        <target state="final">Voegt een kaart toe voor Store Finder in de cache.</target>
       </trans-unit>
-      <trans-unit id="tt_content.list_type_map" resname="tt_content.list_type_map">
+      <trans-unit id="tt_content.list_type_map" resname="tt_content.list_type_map" approved="yes">
         <source>Store Finder: Map with search and list</source>
-        <target state="needs-translation">Store Finder: Map with search and list</target>
+        <target state="final">Store Finder: kaart met zoek en lijst</target>
       </trans-unit>
-      <trans-unit id="tt_content.list_type_map_description" resname="tt_content.list_type_map_description">
+      <trans-unit id="tt_content.list_type_map_description" resname="tt_content.list_type_map_description" approved="yes">
         <source>Adds a store finder search form with map and result list.</source>
-        <target state="needs-translation">Adds a store finder search form with map and result list.</target>
+        <target state="final">Voegt een zoekformulier voor winkel toe met de kaart- en resultatenlijst.</target>
       </trans-unit>
-      <trans-unit id="tt_content.list_type_show" resname="tt_content.list_type_show">
+      <trans-unit id="tt_content.list_type_show" resname="tt_content.list_type_show" approved="yes">
         <source>Store Finder: Single location map</source>
-        <target state="needs-translation">Store Finder: Single location map</target>
+        <target state="final">Store Finder: enkele-locatiekaart</target>
       </trans-unit>
-      <trans-unit id="tt_content.list_type_show_description" resname="tt_content.list_type_show_description">
+      <trans-unit id="tt_content.list_type_show_description" resname="tt_content.list_type_show_description" approved="yes">
         <source>Adds a map for a single location to display.</source>
-        <target state="needs-translation">Adds a map for a single location to display.</target>
+        <target state="final">Voegt een kaart toe voor een enkele locatie om weer te geven.</target>
       </trans-unit>
       <trans-unit id="div-address" resname="div-address" approved="yes">
         <source>Address</source>
         <target state="final">Adres</target>
       </trans-unit>
-      <trans-unit id="div-contact" resname="div-contact">
+      <trans-unit id="div-contact" resname="div-contact" approved="yes">
         <source>Contact</source>
-        <target state="needs-translation">Contact</target>
+        <target state="final">Contact</target>
       </trans-unit>
-      <trans-unit id="div-informations" resname="div-informations">
+      <trans-unit id="div-informations" resname="div-informations" approved="yes">
         <source>Informations</source>
-        <target state="needs-translation">Informations</target>
+        <target state="final">Informaties</target>
       </trans-unit>
       <trans-unit id="div-relations" resname="div-relations" approved="yes">
         <source>Relations</source>
         <target state="final">Relaties</target>
       </trans-unit>
-      <trans-unit id="palette-coordinates" resname="palette-coordinates">
+      <trans-unit id="palette-coordinates" resname="palette-coordinates" approved="yes">
         <source>Coordinates</source>
-        <target state="needs-translation">Coordinates</target>
+        <target state="final">Coördinaten</target>
       </trans-unit>
-      <trans-unit id="sys_category.add" resname="sys_category.add">
+      <trans-unit id="sys_category.add" resname="sys_category.add" approved="yes">
         <source>Add category</source>
-        <target state="needs-translation">Add category</target>
+        <target state="final">Categorie toevoegen</target>
       </trans-unit>
-      <trans-unit id="sys_category.children" resname="sys_category.children">
+      <trans-unit id="sys_category.children" resname="sys_category.children" approved="yes">
         <source>Child categories</source>
-        <target state="needs-translation">Child categories</target>
+        <target state="final">Subcategorieën</target>
       </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_attribute" resname="tx_storefinder_domain_model_attribute">
+      <trans-unit id="tx_storefinder_domain_model_attribute" resname="tx_storefinder_domain_model_attribute" approved="yes">
         <source>Store Attributes</source>
-        <target state="needs-translation">Store Attributes</target>
+        <target state="final">Winkel Eigenschappen</target>
       </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_attribute.css_class" resname="tx_storefinder_domain_model_attribute.css_class">
+      <trans-unit id="tx_storefinder_domain_model_attribute.css_class" resname="tx_storefinder_domain_model_attribute.css_class" approved="yes">
         <source>CSS Class</source>
-        <target state="needs-translation">CSS Class</target>
+        <target state="final">CSS-klasse</target>
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_attribute.description" resname="tx_storefinder_domain_model_attribute.description" approved="yes">
         <source>Description</source>
@@ -79,29 +79,29 @@
         <source>Name</source>
         <target state="final">Naam</target>
       </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location" resname="tx_storefinder_domain_model_location">
+      <trans-unit id="tx_storefinder_domain_model_location" resname="tx_storefinder_domain_model_location" approved="yes">
         <source>Store Location</source>
-        <target state="needs-translation">Store Location</target>
+        <target state="final">Winkel locatie</target>
       </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.additionaladdress" resname="tx_storefinder_domain_model_location.additionaladdress">
+      <trans-unit id="tx_storefinder_domain_model_location.additionaladdress" resname="tx_storefinder_domain_model_location.additionaladdress" approved="yes">
         <source>Additional address</source>
-        <target state="needs-translation">Additional address</target>
+        <target state="final">Bijkomend adres</target>
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.address" resname="tx_storefinder_domain_model_location.address" approved="yes">
         <source>Address</source>
         <target state="final">Adres</target>
       </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.attributes" resname="tx_storefinder_domain_model_location.attributes">
+      <trans-unit id="tx_storefinder_domain_model_location.attributes" resname="tx_storefinder_domain_model_location.attributes" approved="yes">
         <source>Attributes</source>
-        <target state="needs-translation">Attributes</target>
+        <target state="final">Attributen</target>
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.categories" resname="tx_storefinder_domain_model_location.categories" approved="yes">
         <source>Categories</source>
         <target state="final">Categorieën</target>
       </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.center" resname="tx_storefinder_domain_model_location.center">
+      <trans-unit id="tx_storefinder_domain_model_location.center" resname="tx_storefinder_domain_model_location.center" approved="yes">
         <source>Use as center</source>
-        <target state="needs-translation">Use as center</target>
+        <target state="final">Gebruik als midden</target>
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.city" resname="tx_storefinder_domain_model_location.city" approved="yes">
         <source>City</source>
@@ -119,9 +119,9 @@
         <source>Please select a country</source>
         <target state="final">Selecteer een land</target>
       </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.distance" resname="tx_storefinder_domain_model_location.distance">
+      <trans-unit id="tx_storefinder_domain_model_location.distance" resname="tx_storefinder_domain_model_location.distance" approved="yes">
         <source>Calculated value by search query</source>
-        <target state="needs-translation">Calculated value by search query</target>
+        <target state="final">Berekende waarde door zoekopdracht</target>
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.email" resname="tx_storefinder_domain_model_location.email" approved="yes">
         <source>Email</source>
@@ -131,13 +131,13 @@
         <source>Fax</source>
         <target state="final">Fax</target>
       </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.geocode" resname="tx_storefinder_domain_model_location.geocode">
+      <trans-unit id="tx_storefinder_domain_model_location.geocode" resname="tx_storefinder_domain_model_location.geocode" approved="yes">
         <source>Geocode this location</source>
-        <target state="needs-translation">Geocode this location</target>
+        <target state="final">Geocodeer deze locatie</target>
       </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.hidden" resname="tx_storefinder_domain_model_location.hidden">
+      <trans-unit id="tx_storefinder_domain_model_location.hidden" resname="tx_storefinder_domain_model_location.hidden" approved="yes">
         <source>Visibility of location</source>
-        <target state="needs-translation">Visibility of location</target>
+        <target state="final">Zichtbaarheid van locatie</target>
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.hours" resname="tx_storefinder_domain_model_location.hours" approved="yes">
         <source>Hours</source>
@@ -155,9 +155,9 @@
         <source>Latitude</source>
         <target state="final">Breedtegraad</target>
       </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.layer" resname="tx_storefinder_domain_model_location.layer">
+      <trans-unit id="tx_storefinder_domain_model_location.layer" resname="tx_storefinder_domain_model_location.layer" approved="yes">
         <source>Layer</source>
-        <target state="needs-translation">Layer</target>
+        <target state="final">Layer</target>
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.layer.addFileReference" resname="tx_storefinder_domain_model_location.layer.addFileReference">
         <source>Add layer file</source>
@@ -171,53 +171,53 @@
         <source>Media</source>
         <target state="final">Media</target>
       </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.mobile" resname="tx_storefinder_domain_model_location.mobile">
+      <trans-unit id="tx_storefinder_domain_model_location.mobile" resname="tx_storefinder_domain_model_location.mobile" approved="yes">
         <source>Cellular</source>
-        <target state="needs-translation">Cellular</target>
+        <target state="final">Mobiltelefon</target>
       </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.modifyLocationMap" resname="tx_storefinder_domain_model_location.modifyLocationMap">
+      <trans-unit id="tx_storefinder_domain_model_location.modifyLocationMap" resname="tx_storefinder_domain_model_location.modifyLocationMap" approved="yes">
         <source>Modify location coordinate</source>
-        <target state="needs-translation">Modify location coordinate</target>
+        <target state="final">Wijzig locatie coördinaat</target>
       </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.name" resname="tx_storefinder_domain_model_location.name">
+      <trans-unit id="tx_storefinder_domain_model_location.name" resname="tx_storefinder_domain_model_location.name" approved="yes">
         <source>Store Name</source>
-        <target state="needs-translation">Store Name</target>
+        <target state="final">Winkelnaam</target>
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.notes" resname="tx_storefinder_domain_model_location.notes" approved="yes">
         <source>Notes</source>
         <target state="final">Notities</target>
       </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.person" resname="tx_storefinder_domain_model_location.person">
+      <trans-unit id="tx_storefinder_domain_model_location.person" resname="tx_storefinder_domain_model_location.person" approved="yes">
         <source>Contact person</source>
-        <target state="needs-translation">Contact person</target>
+        <target state="final">Contactpersoon</target>
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.phone" resname="tx_storefinder_domain_model_location.phone" approved="yes">
         <source>Phone</source>
         <target state="final">Telefoon</target>
       </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.products" resname="tx_storefinder_domain_model_location.products">
+      <trans-unit id="tx_storefinder_domain_model_location.products" resname="tx_storefinder_domain_model_location.products" approved="yes">
         <source>Products</source>
-        <target state="needs-translation">Products</target>
+        <target state="final">Producten</target>
       </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.related" resname="tx_storefinder_domain_model_location.related">
+      <trans-unit id="tx_storefinder_domain_model_location.related" resname="tx_storefinder_domain_model_location.related" approved="yes">
         <source>Related to location</source>
-        <target state="needs-translation">Related to location</target>
+        <target state="final">Gerelateerd aan locatie</target>
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.state" resname="tx_storefinder_domain_model_location.state" approved="yes">
         <source>State</source>
         <target state="final">Provincie</target>
       </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.storeid" resname="tx_storefinder_domain_model_location.storeid">
+      <trans-unit id="tx_storefinder_domain_model_location.storeid" resname="tx_storefinder_domain_model_location.storeid" approved="yes">
         <source>Store Id</source>
-        <target state="needs-translation">Store Id</target>
+        <target state="final">Winkel ID</target>
       </trans-unit>
       <trans-unit id="tx_storefinder_domain_model_location.url" resname="tx_storefinder_domain_model_location.url" approved="yes">
         <source>URL</source>
         <target state="final">URL</target>
       </trans-unit>
-      <trans-unit id="tx_storefinder_domain_model_location.zipcode" resname="tx_storefinder_domain_model_location.zipcode">
+      <trans-unit id="tx_storefinder_domain_model_location.zipcode" resname="tx_storefinder_domain_model_location.zipcode" approved="yes">
         <source>ZIP / Postal Code</source>
-        <target state="needs-translation">ZIP / Postal Code</target>
+        <target state="final">Postcode</target>
       </trans-unit>
     </body>
   </file>
