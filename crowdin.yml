@@ -1,12 +1,3 @@
 files:
-  - source: /Resources/Private/Language/
-    translation: /Resources/Private/Language/%two_letters_code%.locallang.xlf
-
-  - source: /Resources/Private/Language/
-    translation: /Resources/Private/Language/%two_letters_code%.locallang_be.xlf
-
-  - source: /Resources/Private/Language/
-    translation: /Resources/Private/Language/%two_letters_code%.locallang_csh.xlf
-
-  - source: /Resources/Private/Language/
-    translation: /Resources/Private/Language/%two_letters_code%.locallang_db.xlf
+  - source: /Resources/Private/Language/*.xlf
+    translation: /Resources/Private/Language/%two_letters_code%.%file_name%.xlf
