@@ -1,0 +1,31 @@
+name: Crowdin
+
+on:
+  workflow_dispatch:
+
+  push:
+    branches:
+      - develop
+    paths:
+      - '**.xlf'
+
+jobs:
+  sync:
+    name: Synchronize with Crowdin
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Upload sources
+        uses: crowdin/github-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          config: '.crowdin.yml'
+          project_id: ${{ secrets.CROWDIN_PROJECT_ID }}
+          token: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+          crowdin_branch_name: 'l10n_develop'
+          upload_sources: true
+          upload_translations: false
+          download_sources: false
+          download_translations: true
