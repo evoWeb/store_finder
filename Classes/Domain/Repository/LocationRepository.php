@@ -178,10 +178,7 @@ class LocationRepository extends Repository
                 ->executeQuery()
                 ->fetchAllAssociative();
         } else {
-            // @todo remove once an error cause in https://review.typo3.org/c/Packages/TYPO3.CMS/+/88690 was fixed
-            $statementProperty = new \ReflectionProperty($query, 'statement');
-            $statement = GeneralUtility::makeInstance(Statement::class, $queryBuilder, []);
-            $statementProperty->setValue($query, $statement);
+            $query->statement($queryBuilder);
             return $query->execute()->toArray();
         }
     }
