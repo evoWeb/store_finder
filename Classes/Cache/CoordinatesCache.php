@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * It is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
+ * of the License or any later version.
  *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
@@ -17,6 +17,7 @@ namespace Evoweb\StoreFinder\Cache;
 
 use Evoweb\StoreFinder\Domain\Model\Location;
 use Psr\Http\Message\ServerRequestInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Http\NormalizedParams;
 use TYPO3\CMS\Core\Http\SetCookieService;
@@ -25,6 +26,9 @@ use TYPO3\CMS\Core\Session\UserSessionManager;
 
 class CoordinatesCache
 {
+    /**
+     * @var string[]
+     */
     protected array $fields = ['address', 'zipcode', 'city', 'state', 'country'];
 
     protected string $sessionName = 'evoweb-storefinder-session';
@@ -35,8 +39,10 @@ class CoordinatesCache
 
     protected UserSession $session;
 
-    public function __construct(protected FrontendInterface $cacheFrontend)
-    {
+    public function __construct(
+        #[Autowire(service: 'cache.store_finder.coordinate_cache')]
+        protected FrontendInterface $cacheFrontend
+    ) {
     }
 
     public function initializeUserSessionManager(?UserSessionManager $userSessionManager = null): void
@@ -48,6 +54,9 @@ class CoordinatesCache
         );
     }
 
+    /**
+     * @param array<string, mixed> $queryValues
+     */
     public function addCoordinateForAddress(Location $address, array $queryValues): void
     {
         if (empty($queryValues)) {
@@ -68,6 +77,9 @@ class CoordinatesCache
         }
     }
 
+    /**
+     * @param array<string, mixed> $queryValues
+     */
     public function getCoordinateByAddress(Location $address, array $queryValues): Location
     {
         if (empty($queryValues)) {
@@ -93,7 +105,7 @@ class CoordinatesCache
     }
 
     /**
-     * Flush both sql table and session caches
+     * Flush both SQL table and session caches
      */
     public function flushCache(): void
     {
@@ -102,13 +114,16 @@ class CoordinatesCache
     }
 
     /**
-     * Check if session has key set and return true if the value is not empty
+     * Check if the session has a key set and return true if the value is not empty
      */
     public function sessionHasKey(string $key): bool
     {
         return !empty($this->session->getData()[$this->sessionKey][$key] ?? []);
     }
 
+    /**
+     * @return array<string, double>
+     */
     public function getValueFromSession(string $key): array
     {
         $sessionData = $this->session->get($this->sessionKey);
@@ -116,6 +131,9 @@ class CoordinatesCache
         return is_array($sessionData) && isset($sessionData[$key]) ? unserialize($sessionData[$key]) : [];
     }
 
+    /**
+     * @param array<string, double> $value
+     */
     public function setValueInSession(string $key, array $value): void
     {
         $sessionData = $this->session->get($this->sessionKey);
@@ -133,11 +151,12 @@ class CoordinatesCache
         $this->userSessionManager->removeSession($this->session);
         $setCookieService = SetCookieService::create($this->sessionName, 'FE');
         $normalizedParams = NormalizedParams::createFromRequest($this->getRequest());
+        // @extensionScannerIgnoreLine
         $setCookieService->removeCookie($normalizedParams);
     }
 
     /**
-     * Fetch value for hash from session
+     * Fetch value for hash from a session
      */
     public function getValueFromCacheTable(string $key): mixed
     {
@@ -145,7 +164,8 @@ class CoordinatesCache
     }
 
     /**
-     * Store coordinate for hash in cache table
+     * Store coordinate for hash in the cache table
+     * @param array<string, double> $value
      */
     public function setValueInCacheTable(string $key, array $value): void
     {
@@ -153,7 +173,7 @@ class CoordinatesCache
     }
 
     /**
-     * Flush data from cache table
+     * Flush data from a cache table
      */
     public function flushCacheTable(): void
     {

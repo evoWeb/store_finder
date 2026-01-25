@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * It is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
+ * of the License or any later version.
  *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
@@ -20,13 +20,10 @@ use Evoweb\StoreFinder\Domain\Model\Constraint;
 use Evoweb\StoreFinder\Domain\Repository\LocationRepository;
 use TYPO3\CMS\Core\Attribute\AsEventListener;
 
-class MapGetAllLocationsListener
+readonly class MapGetAllLocationsListener
 {
-    protected LocationRepository $locationRepository;
-
-    public function __construct(LocationRepository $locationRepository)
+    public function __construct(protected LocationRepository $locationRepository)
     {
-        $this->locationRepository = $locationRepository;
     }
 
     // #[AsEventListener('storefinder_controller_locationsfetched', MapGetLocationsByConstraintsEvent::class)]
@@ -37,8 +34,7 @@ class MapGetAllLocationsListener
         }
     }
 
-    // #[AsEventListener('storefinder_controller_isoverride', MapGetLocationsByConstraintsEvent::class)]
-    public function isOverrideLocations(MapGetLocationsByConstraintsEvent $event): bool
+    private function isOverrideLocations(MapGetLocationsByConstraintsEvent $event): bool
     {
         // @extensionScannerIgnoreLine
         $controller = $event->getController();

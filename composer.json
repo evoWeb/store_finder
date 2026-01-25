@@ -33,12 +33,12 @@
 	},
 	"require": {
 		"php": "^8.2",
-		"typo3/cms-core": "^13.3 || 13.4.x-dev || dev-main",
-		"typo3/cms-backend": "^13.3 || 13.4.x-dev || dev-main",
-		"typo3/cms-extbase": "^13.3 || 13.4.x-dev || dev-main",
-		"typo3/cms-fluid": "^13.3 || 13.4.x-dev || dev-main",
-		"typo3/cms-frontend": "^13.3 || 13.4.x-dev || dev-main",
-		"typo3/cms-install": "^13.3 || 13.4.x-dev || dev-main",
+		"typo3/cms-core": "^14.1 || 14.*.*@dev || dev-main",
+		"typo3/cms-backend": "^14.1 || 14.*.*@dev || dev-main",
+		"typo3/cms-extbase": "^14.1 || 14.*.*@dev || dev-main",
+		"typo3/cms-fluid": "^14.1 || 14.*.*@dev || dev-main",
+		"typo3/cms-frontend": "^14.1 || 14.*.*@dev || dev-main",
+		"typo3/cms-install": "^14.1 || 14.*.*@dev || dev-main",
 
 		"doctrine/annotations": "^2.0.2",
 		"doctrine/dbal": "^4.1.1",
@@ -50,13 +50,16 @@
 		"symfony/console": "^7.1",
 		"geocoder-php/google-maps-provider": "^4.7.1",
 		"php-http/discovery": "^1.16",
-		"phpoffice/phpspreadsheet": "^2.2.0"
+		"phpoffice/phpspreadsheet": "^2.2.0 || ^5.2.0"
 	},
 	"require-dev": {
 		"friendsofphp/php-cs-fixer": "^3.64.0",
 		"friendsoftypo3/phpstan-typo3": "^0.9.0",
+		"phpstan/phpdoc-parser": "^1.30.0",
 		"phpstan/phpstan": "^1.12.5",
-		"typo3/testing-framework": "dev-main"
+		"phpunit/phpunit": "^11.0.3",
+		"typo3/testing-framework": "dev-main",
+		"sjbr/static-info-tables": "dev-master"
 	},
 	"minimum-stability": "dev",
 	"prefer-stable": true,
@@ -94,6 +97,12 @@
 	"autoload-dev": {
 		"psr-4": {
 			"Evoweb\\StoreFinder\\Tests\\": "Tests/"
+		}
+	},
+	"repositories": {
+		"static_info_tables": {
+			"url": "https://github.com/garbast/static_info_tables.git",
+			"type": "git"
 		}
 	}
 }

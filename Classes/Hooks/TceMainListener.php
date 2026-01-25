@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * It is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
+ * of the License or any later version.
  *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
@@ -16,12 +16,17 @@ declare(strict_types=1);
 namespace Evoweb\StoreFinder\Hooks;
 
 use Evoweb\StoreFinder\Domain\Repository\LocationRepository;
-use Evoweb\StoreFinder\Service\CacheService;
-use Evoweb\StoreFinder\Service\GeocodeService;
+use Evoweb\StoreFinder\Services\CacheService;
+use Evoweb\StoreFinder\Services\GeocodeService;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
+use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
+use TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException;
+use TYPO3\CMS\Extbase\Persistence\Generic\Exception;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 
+#[Autoconfigure(public: true)]
 class TceMainListener
 {
     public function __construct(
@@ -40,6 +45,10 @@ class TceMainListener
 
     /**
      * After database operations hook
+     * @param array<string, mixed> $fieldValues
+     * @throws IllegalObjectTypeException
+     * @throws UnknownObjectException
+     * @throws Exception
      */
     public function processDatamap_afterDatabaseOperations(
         string $status,
@@ -75,6 +84,7 @@ class TceMainListener
 
     /**
      * Remap id for id and table
+     * @return array<int|string>
      */
     protected function remapId(string|int $NEW_id, string $table, DataHandler $parentObject): array
     {

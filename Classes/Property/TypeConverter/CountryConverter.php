@@ -10,12 +10,15 @@ use TYPO3\CMS\Extbase\Property\TypeConverter\AbstractTypeConverter;
 
 class CountryConverter extends AbstractTypeConverter
 {
+    /**
+     * @param array<string, mixed> $convertedChildProperties
+     */
     public function convertFrom(
         $source,
         string $targetType,
         array $convertedChildProperties = [],
         ?PropertyMappingConfigurationInterface $configuration = null
-    ): null|Country {
+    ): ?Country {
         if ($source === '') {
             return null;
         }

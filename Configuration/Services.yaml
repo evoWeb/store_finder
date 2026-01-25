@@ -15,63 +15,8 @@ services:
       $identifier: 'store_finder_coordinate_cache'
     public: true
 
-  frontend.user:
-    class: 'TYPO3\CMS\Core\Cache\Frontend\FrontendInterface'
-    factory: ['@Evoweb\StoreFinder\Service\FrontendUserService', 'getCurrentUser']
-    public: true
-
-  Evoweb\StoreFinder\Cache\CoordinatesCache:
-    arguments:
-      $cacheFrontend: '@cache.store_finder.coordinate_cache'
-    public: true
-
-  Evoweb\StoreFinder\Command\ImportLocationsCommand:
-    tags:
-      - name: 'console.command'
-        command: 'storefinder:import'
-        description: 'Import locations from excel file into given storage folder (default 1)'
-        schedulable: true
-
-  Evoweb\StoreFinder\Command\GeocodeLocationsCommand:
-    tags:
-      - name: 'console.command'
-        command: 'storefinder:geocode'
-        description: 'Query google geocode service to get lat/lon for locations that are not geocode already'
-        schedulable: true
-
-  Evoweb\StoreFinder\Property\TypeConverter\CountryConverter:
-    tags:
-      - name: extbase.type_converter
-        priority: 10
-        target: TYPO3\CMS\Core\Country\Country
-        sources: string
-
-  Evoweb\StoreFinder\Domain\Repository\CategoryRepository:
-    public: true
-
-  Evoweb\StoreFinder\Domain\Repository\ContentRepository:
-    public: true
-
-  Evoweb\StoreFinder\Domain\Repository\LocationRepository:
-    public: true
-
-  Evoweb\StoreFinder\Domain\Repository\CountryRepository:
-    public: true
-
-  Evoweb\StoreFinder\Hooks\TceMainListener:
-    public: true
-
-  Evoweb\StoreFinder\Middleware\StoreFinderMiddleware:
-    public: true
-
-  Evoweb\StoreFinder\Service\CacheService:
-    public: true
-
-  Evoweb\StoreFinder\Service\GeocodeService:
-    public: true
-
   SJBR\StaticInfoTables\Domain\Repository\TerritoryRepository:
     public: true
 
-  SJBR\StaticInfoTables\Domain\Model\CountryZoneRepository:
+  SJBR\StaticInfoTables\Domain\Repository\CountryZoneRepository:
     public: true

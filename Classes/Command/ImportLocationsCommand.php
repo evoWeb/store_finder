@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * It is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
+ * of the License or any later version.
  *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
@@ -15,22 +15,33 @@ declare(strict_types=1);
 
 namespace Evoweb\StoreFinder\Command;
 
+use Doctrine\DBAL\Exception as DbalException;
 use Doctrine\DBAL\ParameterType;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Worksheet\Row;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
 
+#[AsCommand(
+    'storefinder:import',
+    'Import locations from excel file into given storage folder (default 1)'
+)]
+#[Autoconfigure(public: true)]
 class ImportLocationsCommand extends Command
 {
+    /**
+     * @var array<string, mixed>
+     */
     private array $columnMap = [
         'A' => 'import_id',
         'B' => ['name', 'storeid'],
@@ -44,20 +55,32 @@ class ImportLocationsCommand extends Command
         'J' => 'image',
     ];
 
+    /**
+     * @var array<string, array<string, int>>
+     */
     private array $attributeMap = [
         'K' => [
             'att1' => 1,
         ],
     ];
 
+    /**
+     * @var array<string, array<string, int>>
+     */
     private array $categoryMap = [
         'L' => [
             'cat1' => 1,
         ],
     ];
 
+    /**
+     * @var array<string, array<string, mixed>>
+     */
     private array $countryCache = [];
 
+    /**
+     * @var array<string, array<string, mixed>>
+     */
     private array $stateCache = [];
 
     public function __construct(
@@ -335,6 +358,11 @@ class ImportLocationsCommand extends Command
         ;
     }
 
+    /**
+     * @param array<string, mixed> $location
+     * @return array<string, mixed>
+     * @throws DbalException
+     */
     protected function processLocation(array $location): array
     {
         $table = 'tx_storefinder_domain_model_location';
@@ -347,12 +375,16 @@ class ImportLocationsCommand extends Command
         } else {
             $location['crdate'] = $location['tstamp'];
             $connection->insert($table, $location);
-            $locationUid = (int)$connection->lastInsertId($table);
+            $locationUid = (int)$connection->lastInsertId();
         }
         $location['uid'] = $locationUid;
         return $location;
     }
 
+    /**
+     * @param int[] $attributes
+     * @throws DbalException
+     */
     protected function processAttributes(int $locationUid, array $attributes): void
     {
         $table = 'tx_storefinder_location_attribute_mm';
@@ -371,7 +403,7 @@ class ImportLocationsCommand extends Command
                     $reference['uid_foreign']
                 );
             } else {
-                // existing reference is still current and does not need to be handled anymore
+                // the existing reference is still current and does not need to be handled anymore
                 unset($attributes[$reference['uid_foreign']]);
             }
         }
@@ -381,6 +413,10 @@ class ImportLocationsCommand extends Command
         }
     }
 
+    /**
+     * @param int[] $currentCategories
+     * @throws DbalException
+     */
     protected function processCategories(int $locationUid, array $currentCategories): void
     {
         $table = 'sys_category_record_mm';
@@ -399,7 +435,7 @@ class ImportLocationsCommand extends Command
                     $locationUid
                 );
             } else {
-                // existing reference is still current and does not need to be handled anymore
+                // the existing reference is still current and does not need to be handled anymore
                 unset($currentCategories[$reference['uid_local']]);
             }
         }
@@ -409,6 +445,11 @@ class ImportLocationsCommand extends Command
         }
     }
 
+    /**
+     * @param array<string, mixed> $location
+     * @param string[] $files
+     * @throws DbalException
+     */
     protected function processFiles(array $location, array $files): void
     {
         $table = 'sys_file_reference';
@@ -458,6 +499,10 @@ class ImportLocationsCommand extends Command
         }
     }
 
+    /**
+     * @param array<string, mixed> $location
+     * @throws DbalException
+     */
     protected function getCurrentRecordUid(array $location, string $table): int
     {
         $queryBuilder = $this->getQueryBuilderForTable($table);
@@ -480,6 +525,10 @@ class ImportLocationsCommand extends Command
         return (int)$result;
     }
 
+    /**
+     * @return array<array<string, mixed>>
+     * @throws DbalException
+     */
     protected function getReferences(
         string $table,
         string $tableName,
@@ -528,6 +577,9 @@ class ImportLocationsCommand extends Command
             ->fetchAllAssociative();
     }
 
+    /**
+     * @param array<string, mixed> $additionalData
+     */
     protected function addReference(
         string $table,
         string $tableName,

@@ -10,7 +10,8 @@
  */
 
 import FrontendMap from './FrontendMap';
-import { LoaderOptions, Library, Loader } from '@googlemaps/js-api-loader';
+import { Loader } from '@googlemaps/js-api-loader';
+import type { LoaderOptions, Library } from '@googlemaps/js-api-loader';
 
 /**
  * Module: Evoweb/StoreFinder/FrontendGoogleMap
@@ -23,7 +24,7 @@ class FrontendGoogleMap extends FrontendMap {
   /**
    * Initialize map
    */
-  initializeMap(): void {
+  override initializeMap(): void {
     let center;
 
     if (typeof this.mapConfiguration.center !== 'undefined') {
@@ -66,7 +67,7 @@ class FrontendGoogleMap extends FrontendMap {
   /**
    * Initialize information layer on map
    */
-  initializeLayer(): void {
+  override initializeLayer(): void {
     if (this.mapConfiguration.apiV3Layers.indexOf('traffic') > -1) {
       const trafficLayer = new google.maps.TrafficLayer();
       trafficLayer.setMap(this.map);
@@ -78,7 +79,7 @@ class FrontendGoogleMap extends FrontendMap {
     }
 
     if (this.mapConfiguration.apiV3Layers.indexOf('kml') > -1) {
-      const kmlLayer = new google.maps.KmlLayer({ url : this.mapConfiguration.kmlUrl });
+      const kmlLayer = new google.maps.KmlLayer({ url: this.mapConfiguration.kmlUrl });
       kmlLayer.setMap(this.map);
     }
   }
@@ -100,7 +101,7 @@ class FrontendGoogleMap extends FrontendMap {
   /**
    * Create marker and add to map
    */
-  createMarker(location: Location, iconPath: string): google.maps.marker.AdvancedMarkerElement {
+  override createMarker(location: Location, iconPath: string): google.maps.marker.AdvancedMarkerElement {
     const markerOptions: MarkerOptions = {
       map: this.map,
       title: location.name,
@@ -134,33 +135,33 @@ class FrontendGoogleMap extends FrontendMap {
   /**
    * Initialize instance of map infoWindow
    */
-  initializeInfoWindow(): void {
+  override initializeInfoWindow(): void {
     this.infoWindow = new google.maps.InfoWindow();
   }
 
   /**
    * Close info window
    */
-  closeInfoWindow() {
+  override closeInfoWindow() {
     this.infoWindow.close();
   }
 
   /**
    * Trigger click event on marker on click in result list
    */
-  openInfoWindow(index: number): void {
+  override openInfoWindow(index: number): void {
     google.maps.event.trigger(this.locations[index].marker, 'click');
   }
 
   /**
    * Load google map script
    */
-  loadScript(): void {
+  override async loadScript() {
     const loaderOptions: LoaderOptions = {
       apiKey: this.mapConfiguration.apiConsoleKey,
       version: 'weekly',
       libraries: this.mapConfiguration.libraries as unknown as Library[]
-    }
+    };
 
     if (this.mapConfiguration.language !== '') {
       loaderOptions.language = this.mapConfiguration.language;

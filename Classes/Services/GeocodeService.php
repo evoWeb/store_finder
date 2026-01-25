@@ -7,31 +7,41 @@ declare(strict_types=1);
  *
  * It is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
+ * of the License or any later version.
  *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  */
 
-namespace Evoweb\StoreFinder\Service;
+namespace Evoweb\StoreFinder\Services;
 
 use Evoweb\StoreFinder\Cache\CoordinatesCache;
 use Evoweb\StoreFinder\Domain\Model\Constraint;
 use Evoweb\StoreFinder\Domain\Model\Location;
+use Geocoder\Exception\Exception;
+use Geocoder\Http\Provider\AbstractHttpProvider;
 use Geocoder\Model\Coordinates;
 use Geocoder\Provider\GoogleMaps\GoogleMaps;
 use Geocoder\Provider\Provider;
 use Geocoder\Query\GeocodeQuery;
 use Geocoder\StatefulGeocoder;
 use SJBR\StaticInfoTables\Domain\Model\CountryZone;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use TYPO3\CMS\Core\Country\Country;
 use TYPO3\CMS\Core\Http\Client\GuzzleClientFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
+#[Autoconfigure(public: true)]
 class GeocodeService
 {
+    /**
+     * @var array<string, mixed>
+     */
     protected array $settings = [];
 
+    /**
+     * @var string[]
+     */
     protected array $fields = ['address', 'zipcode', 'city', 'state', 'country'];
 
     public bool $hasMultipleResults = false;
@@ -43,6 +53,9 @@ class GeocodeService
         $this->coordinatesCache->initializeUserSessionManager();
     }
 
+    /**
+     * @param array<string, mixed> $settings
+     */
     public function setSettings(array $settings): void
     {
         $this->settings = $settings;
@@ -59,8 +72,8 @@ class GeocodeService
             }
         }
 
-        // In case the address without geocoded location was stored in
-        // session or the geocoding did not work a second try is done
+        // In case the address without a geocoded location was stored in
+        // session or the geocoding did not work, a second try is done
         if (!$forceGeoCoding && !$geoCodedAddress->isGeocoded()) {
             $geoCodedAddress = $this->geocodeAddress($geoCodedAddress, true);
         }
@@ -68,6 +81,11 @@ class GeocodeService
         return $geoCodedAddress;
     }
 
+    /**
+     * @param string[] $queryValues
+     * @throws CountryMissingException
+     * @throws Exception
+     */
     protected function processAddress(Location $location, array $queryValues): Location
     {
         if (empty($queryValues)) {
@@ -85,7 +103,7 @@ class GeocodeService
             $coordinate = $this->getCoordinatesFromProvider($queryValues);
         }
 
-        // We should have coordinates by now and add them to location
+        // We should have coordinates by now and add them to the location
         if ($coordinate->getLatitude() && $coordinate->getLongitude()) {
             $location->setLatitude($coordinate->getLatitude());
             $location->setLongitude($coordinate->getLongitude());
@@ -95,6 +113,11 @@ class GeocodeService
         return $location;
     }
 
+    /**
+     * @param string[] $fields
+     * @return array<string, string>
+     * @throws CountryMissingException
+     */
     public function prepareValuesForQuery(Location $location, array $fields): array
     {
         // for url encoding
@@ -104,7 +127,7 @@ class GeocodeService
             $value = $location->{$methodName}();
 
             switch ($field) {
-                // if a known country code is used we fetch the english short name
+                // if a known country code is used, we fetch the english short name
                 // to enhance the map api query result
                 case 'country':
                     if ($value instanceof Country) {
@@ -127,7 +150,7 @@ class GeocodeService
         }
 
         if (!isset($queryValues['country'])) {
-            throw new \Exception(
+            throw new CountryMissingException(
                 'Country may never be empty. Check your TypoScript setup to define a default constraint. Query: '
                 . var_export($queryValues, true),
                 1618235512
@@ -137,6 +160,10 @@ class GeocodeService
         return $queryValues;
     }
 
+    /**
+     * @param array<string, string> $queryValues
+     * @throws Exception
+     */
     protected function getCoordinatesFromProvider(array $queryValues): Coordinates
     {
         if (!str_contains($this->settings['geocoderProvider'], '\\')) {
@@ -146,6 +173,8 @@ class GeocodeService
         }
 
         $httpClient = $this->guzzleFactory->getClient();
+        /** @var class-string<AbstractHttpProvider> $providerClass */
+        /** @var AbstractHttpProvider $provider */
         $provider = GeneralUtility::makeInstance(
             $providerClass,
             $httpClient,

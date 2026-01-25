@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * It is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
+ * of the License or any later version.
  *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
@@ -15,16 +15,23 @@ declare(strict_types=1);
 
 namespace Evoweb\StoreFinder\Command;
 
-use Evoweb\StoreFinder\Domain\Model\Location;
 use Evoweb\StoreFinder\Domain\Repository\LocationRepository;
-use Evoweb\StoreFinder\Service\GeocodeService;
+use Evoweb\StoreFinder\Services\GeocodeService;
+use Exception;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 
+#[AsCommand(
+    'storefinder:geocode',
+    'Query google geocode service to get lat/lon for locations that are not geocode already'
+)]
+#[Autoconfigure(public: true)]
 class GeocodeLocationsCommand extends Command
 {
     public function __construct(
@@ -35,7 +42,7 @@ class GeocodeLocationsCommand extends Command
     ) {
         try {
             $this->geocodeService->setSettings($extensionConfiguration->get('store_finder') ?? []);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             die('Error in $GLOBALS[\'TYPO3_CONF_VARS\'][\'EXTENSIONS\']: ' . $exception->getMessage());
         }
         parent::__construct();
@@ -51,7 +58,6 @@ class GeocodeLocationsCommand extends Command
 
         $progressBar = $io->createProgressBar($locationCount);
 
-        /** @var Location $location */
         foreach ($locationsToGeocode as $index => $location) {
             $location = $this->geocodeService->geocodeAddress($location);
             $location->setGeocode(($location->getLatitude() && $location->getLongitude()) ? 0 : 1);

@@ -1,0 +1,124 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+      xmlns:sf="http://typo3.org/ns/Evoweb/StoreFinder/ViewHelpers"
+      data-namespace-typo3-fluid="true">
+
+<table class="table table-condensed table-hover news-table">
+    <colgroup>
+        <col style="width: 40%"/>
+        <col style="width: 60%"/>
+    </colgroup>
+    <tbody>
+        <tr>
+            <th class="align-top"><f:translate id="pi_flexform.showBeforeSearch" domain="store_finder.be"/></th>
+            <td>
+                <f:alias map="{showBeforeSearch: record.pi_flexform.sheets.sheetDisplayOptions.settings.showBeforeSearch}">
+                    <sf:bitwiseIf a="{showBeforeSearch}" b="1"><f:translate id="pi_flexform.showItems.search" domain="store_finder.be"/><br></sf:bitwiseIf>
+                    <sf:bitwiseIf a="{showBeforeSearch}" b="2"><f:translate id="pi_flexform.showItems.map" domain="store_finder.be"/><br></sf:bitwiseIf>
+                    <sf:bitwiseIf a="{showBeforeSearch}" b="4"><f:translate id="pi_flexform.showItems.list" domain="store_finder.be"/></sf:bitwiseIf>
+                </f:alias>
+            </td>
+        </tr>
+
+        <tr>
+            <th class="align-top"><f:translate id="pi_flexform.showAfterSearch" domain="store_finder.be"/></th>
+            <td>
+                <f:alias map="{showAfterSearch: record.pi_flexform.sheets.sheetDisplayOptions.settings.showAfterSearch}">
+                    <sf:bitwiseIf a="{showAfterSearch}" b="1"><f:translate id="pi_flexform.showItems.search" domain="store_finder.be"/><br></sf:bitwiseIf>
+                    <sf:bitwiseIf a="{showAfterSearch}" b="2"><f:translate id="pi_flexform.showItems.map" domain="store_finder.be"/><br></sf:bitwiseIf>
+                    <sf:bitwiseIf a="{showAfterSearch}" b="4"><f:translate id="pi_flexform.showItems.list" domain="store_finder.be"/></sf:bitwiseIf>
+                </f:alias>
+            </td>
+        </tr>
+
+        <f:if condition="{record.pi_flexform.sheets.sheetReferenceOptions.settings.categories}">
+            <tr>
+                <th class="align-top"><f:translate id="pi_flexform.categories" domain="store_finder.be"/></th>
+                <td>
+                    <f:for each="{record.pi_flexform.sheets.sheetReferenceOptions.settings.categories}" as="category" iteration="iterator">
+                        <core:iconForRecord table="sys_category" row="{
+                            uid: category.uid,
+                            hidden: category.hidden,
+                            starttime: category.starttime,
+                            endtime: category.endtime,
+                            fe_group: category.fe_group,
+                            deleted: category.deleted
+                        }" /> {category.title}
+                        <f:if condition="!{iterator.isLast}"><br></f:if>
+                    </f:for>
+                </td>
+            </tr>
+
+            <tr>
+                <th><f:translate id="pi_flexform.categoryPriority" domain="store_finder.be"/></th>
+                <td>
+                    <f:switch expression="{record.pi_flexform.sheets.sheetReferenceOptions.settings.categoryPriority}">
+                        <f:case value="useAsFilterInFrontend"><f:translate id="pi_flexform.categoryPriority.useAsFilterInFrontend" domain="store_finder.be"/></f:case>
+                        <f:case value="useParentIfNoFilterSelected"><f:translate id="pi_flexform.categoryPriority.useParentIfNoFilterSelected" domain="store_finder.be"/></f:case>
+                        <f:case value="limitResultsToCategories"><f:translate id="pi_flexform.categoryPriority.limitResultsToCategories" domain="store_finder.be"/></f:case>
+                    </f:switch>
+                </td>
+            </tr>
+        </f:if>
+
+        <f:if condition="{record.pi_flexform.sheets.sheetReferenceOptions.settings.singleLocationId}">
+            <tr>
+                <th><f:translate id="pi_flexform.singleLocationId" domain="store_finder.be"/></th>
+                <td>
+                    <f:for each="{record.pi_flexform.sheets.sheetReferenceOptions.settings.singleLocationId}" as="location" iteration="iterator">
+                        <core:iconForRecord table="tx_storefinder_domain_model_location" row="{
+                            uid: location.uid,
+                            hidden: location.hidden,
+                            starttime: location.starttime,
+                            endtime: location.endtime,
+                            fe_group: location.fe_group,
+                            deleted: location.deleted
+                        }" /> {location.name}
+                        <f:if condition="!{iterator.isLast}"><br></f:if>
+                    </f:for>
+                </td>
+            </tr>
+        </f:if>
+        <f:if condition="{record.pi_flexform.sheets.sheetReferenceOptions.settings.resultPageId}">
+            <tr>
+                <th><f:translate id="pi_flexform.resultPageId" domain="store_finder.be"/></th>
+                <td>
+                    <f:for each="{record.pi_flexform.sheets.sheetReferenceOptions.settings.resultPageId}" as="page" iteration="iterator">
+                        <core:iconForRecord table="pages" row="{
+                            uid: page.uid,
+                            hidden: page.hidden,
+                            starttime: page.starttime,
+                            endtime: page.endtime,
+                            fe_group: page.fe_group,
+                            deleted: page.deleted,
+                            doktype: page.doktype
+                        }" /> {page.title}
+                        <f:if condition="!{iterator.isLast}"><br></f:if>
+                    </f:for>
+                </td>
+            </tr>
+        </f:if>
+
+        <f:if condition="{record.pages}">
+            <tr>
+                <th class="align-top"><f:translate id="pages" domain="store_finder.be"/></th>
+                <td>
+                    <f:for each="{record.pages}" as="page" iteration="iterator">
+                        <core:iconForRecord table="pages" row="{
+                            uid: page.uid,
+                            hidden: page.hidden,
+                            starttime: page.starttime,
+                            endtime: page.endtime,
+                            fe_group: page.fe_group,
+                            deleted: page.deleted,
+                            doktype: page.doktype
+                        }" /> {page.title}
+                        <f:if condition="!{iterator.isLast}"><br></f:if>
+                    </f:for>
+                </td>
+            </tr>
+        </f:if>
+    </tbody>
+</table>
+
+</html>

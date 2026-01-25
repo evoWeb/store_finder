@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * It is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
+ * of the License or any later version.
  *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
@@ -25,33 +25,33 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class LocationCountryItems extends AbstractItemProvider implements FormDataProviderInterface
 {
+    /**
+     * @param array<string, mixed> $result
+     * @return array<string, mixed>
+     */
     public function addData(array $result): array
     {
         $table = $result['tableName'];
 
-        if ($table === 'tx_storefinder_domain_model_location') {
+        if (
+            $table === 'tx_storefinder_domain_model_location'
+            && isset($result['processedTca']['columns']['country'])
+        ) {
             $fieldName = '';
+            $items =& $result['processedTca']['columns']['country']['config']['items'];
 
             /** @var CountryProvider $countryProvider */
-            $countryProvider = null;
-            foreach ($result['processedTca']['columns'] as $fieldName => $fieldConfig) {
-                if ($fieldName !== 'country') {
-                    continue;
-                } elseif ($countryProvider === null) {
-                    $countryProvider = GeneralUtility::makeInstance(CountryProvider::class);
-                }
-
-                foreach ($countryProvider->getAll() as $country) {
-                    $result['processedTca']['columns']['country']['config']['items'][] = [
-                        'label' => $country->getLocalizedNameLabel(),
-                        'value' => $country->getAlpha2IsoCode(),
-                    ];
-                }
+            $countryProvider = GeneralUtility::makeInstance(CountryProvider::class);
+            foreach ($countryProvider->getAll() as $country) {
+                $items[] = [
+                    'label' => $country->getLocalizedNameLabel(),
+                    'value' => $country->getAlpha2IsoCode(),
+                ];
             }
 
-            $result['processedTca']['columns']['country']['config']['items'] = $this->translateLabels(
+            $items = $this->translateLabels(
                 $result,
-                $result['processedTca']['columns']['country']['config']['items'],
+                $items,
                 $table,
                 $fieldName
             );

@@ -23,7 +23,7 @@ class FrontendOsmMap extends FrontendMap {
   /**
    * Initialize map
    */
-  initializeMap(): void {
+  override initializeMap(): void {
     this.map = L.map('tx_storefinder_map');
 
     if (typeof this.mapConfiguration.center !== 'undefined') {
@@ -47,7 +47,7 @@ class FrontendOsmMap extends FrontendMap {
   /**
    * Initialize information layer on map
    */
-  initializeLayer(): void {
+  override initializeLayer(): void {
     if (this.mapConfiguration.apiV3Layers.indexOf('kml') > -1) {
       Promise.all([
         this.createFilePromise(
@@ -84,7 +84,7 @@ class FrontendOsmMap extends FrontendMap {
   /**
    * Create marker and add to map
    */
-  createMarker(location: Location, icon: string): L.Marker {
+  override createMarker(location: Location, icon: string): L.Marker {
     const options = {
         title: location.name,
         icon: new L.Icon({ iconUrl: icon }),
@@ -102,28 +102,28 @@ class FrontendOsmMap extends FrontendMap {
   /**
    * Initialize instance of map infoWindow
    */
-  initializeInfoWindow(): void {
+  override initializeInfoWindow(): void {
     this.infoWindow = L.popup();
   }
 
   /**
    * Close info window
    */
-  closeInfoWindow(): void {
+  override closeInfoWindow(): void {
     this.infoWindow.closePopup();
   }
 
   /**
    * Trigger click event on marker on click in result list
    */
-  openInfoWindow(index: number): void {
+  override openInfoWindow(index: number): void {
     this.locations[index].marker.fire('click');
   }
 
   /**
    * Load open street map leaflet script
    */
-  loadScript(): void {
+  override loadScript(): void {
     Promise.all([
       this.createFilePromise(
         'https://unpkg.com/leaflet@1.9.3/dist/leaflet.css',
@@ -138,7 +138,7 @@ class FrontendOsmMap extends FrontendMap {
           } else {
             window.requestAnimationFrame(wait);
           }
-        }
+        };
         window.requestAnimationFrame(wait);
       })
       .catch(() => {

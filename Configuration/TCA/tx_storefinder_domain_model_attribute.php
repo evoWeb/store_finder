@@ -1,6 +1,8 @@
 <?php
 
-$languageFile = 'LLL:EXT:store_finder/Resources/Private/Language/locallang_db.xlf:';
+defined('TYPO3') or die();
+
+$languageFile = 'store_finder.db:';
 
 return [
     'ctrl' => [

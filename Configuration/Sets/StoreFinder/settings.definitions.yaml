@@ -36,6 +36,10 @@ settings:
     default: 0
     type: bool
     category: store-finder.common
+  evoweb.store-finder.categories:
+    default: ''
+    type: string
+    category: store-finder.common
   evoweb.store-finder.templateRootPaths:
     default: 'EXT:store_finder/Resources/Private/Templates/'
     type: string
@@ -61,6 +65,10 @@ settings:
     type: string
     category: store-finder.ajax
   evoweb.store-finder.ajax.storagePid:
+    default: ''
+    type: string
+    category: store-finder.ajax
+  evoweb.store-finder.ajax.categories:
     default: ''
     type: string
     category: store-finder.ajax

@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * It is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
+ * of the License or any later version.
  *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
@@ -16,9 +16,11 @@ declare(strict_types=1);
 namespace Evoweb\StoreFinder\Validation\Validator;
 
 use Evoweb\StoreFinder\Domain\Model\Constraint;
+use Traversable;
 use TYPO3\CMS\Extbase\Error\Result;
 use TYPO3\CMS\Extbase\Validation\Validator\AbstractGenericObjectValidator;
 use TYPO3\CMS\Extbase\Validation\Validator\ObjectValidatorInterface;
+use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
 
 class ConstraintValidator extends AbstractGenericObjectValidator
 {
@@ -28,7 +30,7 @@ class ConstraintValidator extends AbstractGenericObjectValidator
     protected Constraint $model;
 
     /**
-     * Checks if the given value is valid according to the property validators.
+     * Checks if the given value is valid, according to the property validators.
      *
      * @param Constraint $object The value that should be validated
      */
@@ -42,15 +44,16 @@ class ConstraintValidator extends AbstractGenericObjectValidator
     }
 
     /**
-     * Checks if the specified property of the given object is valid, and adds
+     * Checks if the specified property of the given object is valid and adds
      * found errors to the $messages object.
+     * @param Traversable<AbstractValidator> $validators
      */
-    protected function checkProperty(mixed $value, \Traversable $validators, string $propertyName): void
+    protected function checkProperty(mixed $value, Traversable $validators, string $propertyName): void
     {
         /** @var Result|null $result */
         $result = null;
         foreach ($validators as $validator) {
-            if ($validator instanceof SettableInterface) {
+            if ($validator instanceof SetPropertyNameInterface) {
                 $validator->setModel($this->model);
             }
 
@@ -72,7 +75,7 @@ class ConstraintValidator extends AbstractGenericObjectValidator
     }
 
     /**
-     * Checks if validator can validate the object
+     * Checks if a validator can validate the object
      *
      * @param Constraint $object
      *

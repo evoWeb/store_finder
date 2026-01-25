@@ -62,7 +62,7 @@ export default class FrontendMap {
    * Render content of the info window
    */
   renderInfoWindowContent(location: Location): string {
-    return Mustache.render(this.infoWindowTemplate, location.information)
+    return Mustache.render(this.infoWindowTemplate, location.information);
   }
 
   /* eslint-disable */
@@ -130,7 +130,7 @@ export default class FrontendMap {
         return;
       }
       this.openInfoWindow(parseInt(target.dataset.index, 10));
-    })
+    });
   }
 
   /**
@@ -195,7 +195,7 @@ export default class FrontendMap {
         reject(uri);
       };
       document.head.appendChild(element);
-    })
+    });
   }
 
   loadScript(): void {

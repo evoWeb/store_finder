@@ -3,6 +3,27 @@
 	<file source-language="en" original="messages" datatype="plaintext" product-name="store_finder" date="2024-08-02T16:41:21+02:00">
 		<header/>
 		<body>
+			<trans-unit id="tt_content.list_type_group" resname="tt_content.list_type_group">
+				<source>Store Finder</source>
+			</trans-unit>
+			<trans-unit id="tt_content.list_type_cached" resname="tt_content.list_type_cached">
+				<source>Store Finder: Cached map</source>
+			</trans-unit>
+			<trans-unit id="tt_content.list_type_cached_description" resname="tt_content.list_type_cached_description">
+				<source>Adds a store finder cached map.</source>
+			</trans-unit>
+			<trans-unit id="tt_content.list_type_map" resname="tt_content.list_type_map">
+				<source>Store Finder: Map with search and list</source>
+			</trans-unit>
+			<trans-unit id="tt_content.list_type_map_description" resname="tt_content.list_type_map_description">
+				<source>Adds a store finder search form with map and result list.</source>
+			</trans-unit>
+			<trans-unit id="tt_content.list_type_show" resname="tt_content.list_type_show">
+				<source>Store Finder: Single location map</source>
+			</trans-unit>
+			<trans-unit id="tt_content.list_type_show_description" resname="tt_content.list_type_show_description">
+				<source>Adds a map for a single location to display.</source>
+			</trans-unit>
 			<trans-unit id="div-address" resname="div-address">
 				<source>Address</source>
 			</trans-unit>

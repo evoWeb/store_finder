@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * It is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
+ * of the License or any later version.
  *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 namespace Evoweb\StoreFinder\Domain\Repository;
 
+use Doctrine\DBAL\Exception;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 
@@ -22,20 +23,30 @@ class ContentRepository
 {
     public function __construct(
         protected ConnectionPool $connectionPool
-    ) {}
+    ) {
+    }
 
+    /**
+     * @return array<array<string, mixed>>
+     */
     public function findByUid(int $uid): array
     {
         $queryBuilder = $this->getQueryBuilderForTable('tt_content');
 
-        return $queryBuilder
+        $result = $queryBuilder
             ->select('*')
             ->from('tt_content')
             ->where(
                 $queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter($uid))
             )
-            ->executeQuery()
-            ->fetchAssociative();
+            ->executeQuery();
+        try {
+            $rows = $result->fetchAssociative();
+        } catch (Exception) {
+            $rows = [];
+        }
+
+        return $rows;
     }
 
     protected function getQueryBuilderForTable(string $table): QueryBuilder

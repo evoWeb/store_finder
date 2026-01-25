@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * It is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
+ * of the License or any later version.
  *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
@@ -15,34 +15,30 @@ declare(strict_types=1);
 
 namespace Evoweb\StoreFinder\Controller;
 
-use Doctrine\Common\Annotations\DocParser;
 use Evoweb\StoreFinder\Controller\Event\MapGetLocationsByConstraintsEvent;
 use Evoweb\StoreFinder\Domain\Model\Constraint;
 use Evoweb\StoreFinder\Domain\Model\Location;
 use Evoweb\StoreFinder\Domain\Repository\CategoryRepository;
 use Evoweb\StoreFinder\Domain\Repository\LocationRepository;
 use Evoweb\StoreFinder\Property\TypeConverter\CountryConverter;
-use Evoweb\StoreFinder\Service\GeocodeService;
+use Evoweb\StoreFinder\Services\ModifyValidator;
+use Evoweb\StoreFinder\Services\GeocodeService;
 use Evoweb\StoreFinder\Validation\Validator\ConstraintValidator;
-use Evoweb\StoreFinder\Validation\Validator\SettableInterface;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Country\CountryProvider;
 use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Pagination\ArrayPaginator;
 use TYPO3\CMS\Core\Pagination\SimplePagination;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Annotation as Extbase;
+use TYPO3\CMS\Extbase\Attribute as Extbase;
 use TYPO3\CMS\Extbase\Http\ForwardResponse;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use TYPO3\CMS\Extbase\Mvc\Controller\Argument;
 use TYPO3\CMS\Extbase\Mvc\Controller\Arguments;
+use TYPO3\CMS\Extbase\Persistence\Generic\Exception as Exception;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Property\PropertyMappingConfiguration;
 use TYPO3\CMS\Extbase\Property\TypeConverter\PersistentObjectConverter;
-use TYPO3\CMS\Extbase\Validation\Validator\ValidatorInterface;
-use TYPO3\CMS\Extbase\Validation\ValidatorClassNameResolver;
-use TYPO3Fluid\Fluid\View\ViewInterface;
+use TYPO3\CMS\Core\View\ViewInterface;
 
 class MapController extends ActionController
 {
@@ -51,83 +47,28 @@ class MapController extends ActionController
         protected CategoryRepository $categoryRepository,
         protected CountryProvider $countryProvider,
         protected GeocodeService $geocodeService,
-    ) {}
+        protected ModifyValidator $modifyValidator,
+    ) {
+    }
 
     protected function initializeActionMethodValidators(): void
     {
-        if ($this->arguments->hasArgument('constraint')) {
-            $this->modifyValidatorsBasedOnSettings(
-                $this->arguments->getArgument('constraint'),
-                $this->settings['validation'] ?? [],
+        if ($this->modifyValidator->shouldValidationBeModified($this->arguments, $this->settings)) {
+            $this->arguments = $this->modifyValidator->modifyArgumentValidators(
+                $this->arguments,
+                $this->request,
+                $this->settings,
             );
         } else {
             parent::initializeActionMethodValidators();
         }
     }
 
-    protected function modifyValidatorsBasedOnSettings(
-        Argument $argument,
-        array $configuredValidators,
-    ): void {
-        $parser = new DocParser();
-
-        /** @var ConstraintValidator $validator */
-        $validator = GeneralUtility::makeInstance(ConstraintValidator::class);
-        foreach ($configuredValidators as $fieldName => $configuredValidator) {
-            if (!is_array($configuredValidator)) {
-                $validatorInstance = $this->getValidatorByConfiguration(
-                    $configuredValidator,
-                    $parser,
-                );
-
-                if ($validatorInstance instanceof SettableInterface) {
-                    $validatorInstance->setPropertyName($fieldName);
-                }
-            } else {
-                $validatorInstance = GeneralUtility::makeInstance(ConstraintValidator::class);
-                foreach ($configuredValidator as $individualConfiguredValidator) {
-                    $individualValidatorInstance = $this->getValidatorByConfiguration(
-                        $individualConfiguredValidator,
-                        $parser,
-                    );
-
-                    if ($individualValidatorInstance instanceof SettableInterface) {
-                        $individualValidatorInstance->setPropertyName($fieldName);
-                    }
-
-                    $validatorInstance->addValidator($individualValidatorInstance);
-                }
-            }
-
-            $validator->addPropertyValidator($fieldName, $validatorInstance);
-        }
-
-        $argument->setValidator($validator);
-    }
-
-    protected function getValidatorByConfiguration(string $configuration, DocParser $parser): ValidatorInterface
-    {
-        if (!str_contains($configuration, '"') && !str_contains($configuration, '(')) {
-            $configuration = sprintf('"%s"', $configuration);
-        }
-
-        /** @var Extbase\Validate $validateAnnotation */
-        $validateAnnotation = current($parser->parse(
-            '@TYPO3\CMS\Extbase\Annotation\Validate(' . $configuration . ')',
-        ));
-        $validatorObjectName = ValidatorClassNameResolver::resolve(
-            $validateAnnotation->validator,
-        );
-        /** @var ValidatorInterface $validator */
-        $validator = GeneralUtility::makeInstance($validatorObjectName, $validateAnnotation->options);
-        return $validator;
-    }
-
     protected function setTypeConverter(): void
     {
         $argumentName = 'constraint';
         if ($this->request->hasArgument($argumentName)) {
-            /** @var array $constraint */
+            /** @var array<string, mixed> $constraint */
             $constraint = $this->request->getArgument($argumentName);
             if (!is_array($constraint['category'] ?? '')) {
                 $constraint['category'] = array_filter(explode(',', $constraint['category'] ?? ''));
@@ -169,7 +110,9 @@ class MapController extends ActionController
         }
 
         $this->settings['allowedCountries'] = explode(',', $this->settings['allowedCountries'] ?? '');
-        $this->settings['mapConfiguration']['libraries'] = explode(',', $this->settings['mapConfiguration']['libraries'] ?? '');
+        $this->settings['mapConfiguration']['libraries'] = $this->settings['mapConfiguration']['libraries'] ?
+            explode(',', $this->settings['mapConfiguration']['libraries'] ?? '') :
+            [];
 
         $this->geocodeService->setSettings($this->settings);
         $this->locationRepository->setSettings($this->settings);
@@ -275,6 +218,10 @@ class MapController extends ActionController
         return new HtmlResponse($this->view->render());
     }
 
+    /**
+     * @return array<Location[]|Constraint>
+     * @throws Exception
+     */
     protected function getLocationsByConstraints(Constraint $constraint): array
     {
         if ($this->settings['disableLocationFetchLogic'] ?? false) {
@@ -290,9 +237,13 @@ class MapController extends ActionController
         return [$locations, $constraint];
     }
 
+    /**
+     * @return array<Location[]|Constraint>
+     * @throws Exception
+     */
     protected function getLocationsByDefaultConstraints(): array
     {
-        /** @var array[] $locations */
+        /** @var Location[] $locations */
         $locations = [];
         /** @var Constraint $constraint */
         $constraint = GeneralUtility::makeInstance(Constraint::class);
@@ -311,6 +262,7 @@ class MapController extends ActionController
             }
 
             if ($this->settings['showLocationsForDefaultConstraint'] ?? false) {
+                /** @var Constraint $constraint */
                 $locations = $this->locationRepository->findByConstraint($constraint);
             }
         }
@@ -329,12 +281,18 @@ class MapController extends ActionController
         return [$locations, $constraint];
     }
 
+    /**
+     * @param array<string, array<string, mixed>> $settings
+     */
     protected function isDisabledFetchLocation(string $action, array $settings): bool
     {
-        return in_array(str_replace('Action', '', $action), ($settings['disableFetchLocationInAction'] ?? []));
+        return in_array(
+            str_replace('Action', '', $action),
+            ($settings['disableFetchLocationInAction'] ?? [])
+        );
     }
 
-    public function showAction(Location $location = null): ResponseInterface
+    public function showAction(?Location $location = null): ResponseInterface
     {
         if ($location === null) {
             $location = $this->locationRepository->findOneByUid((int)($this->settings['location'] ?? -1));
@@ -366,13 +324,13 @@ class MapController extends ActionController
     }
 
     /**
-     * Get center from query result based on center of all coordinates. If only one
-     * is found this is used. In case none was found the center based on the request
+     * Get center from a query result based on a center of all coordinates. If only one
+     * is found, this is used. In case none was found, the center based on the request
      * gets calculated
+     * @param Location[] $locations
      */
     protected function getCenterOfQueryResult(Location $constraint, array $locations): Location
     {
-        /** @var Location $center */
         $count = count($locations);
         if ($count == 0) {
             $center = $this->getCenter($constraint);
@@ -383,7 +341,6 @@ class MapController extends ActionController
             $y = 0;
             $z = 0;
 
-            /** @var Location[] $locations */
             foreach ($locations as $location) {
                 $latitude = $location->getLatitude() * M_PI / 180;
                 $longitude = $location->getLongitude() * M_PI / 180;
@@ -410,7 +367,7 @@ class MapController extends ActionController
     }
 
     /**
-     * Add default constraints configured in typoscript and only set if property
+     * Add default constraints configured in TypoScript and only set if the property
      * in search is empty
      */
     protected function addDefaultConstraint(Constraint $search): Constraint
@@ -449,9 +406,9 @@ class MapController extends ActionController
     }
 
     /**
-     * Geocode requested address and use as center or fetch location that was flagged as center.
+     * Geocode requested address and use as a center or fetch location that was flagged as a center.
      */
-    public function getCenter(Location $constraint = null): Location
+    public function getCenter(?Location $constraint = null): Location
     {
         $center = null;
 
@@ -479,12 +436,12 @@ class MapController extends ActionController
     }
 
     /**
-     * Set zoom level for map based on maximum radius
+     * Set the zoom level for a map based on the maximum radius
+     * @param Location[] $locations
      */
     public function setZoomLevel(Location $center, array $locations): Location
     {
         $radius = 0;
-        /** @var Location $location */
         foreach ($locations as $location) {
             $radius = max($radius, $location->getDistance());
         }
@@ -520,6 +477,9 @@ class MapController extends ActionController
         return $center;
     }
 
+    /**
+     * @param Location[] $locations
+     */
     protected function addPaginator(array $locations): void
     {
         if ($this->settings['addPaginator'] ?? false) {
@@ -553,6 +513,9 @@ class MapController extends ActionController
         return false;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getSettings(): array
     {
         return $this->settings;

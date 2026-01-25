@@ -1,0 +1,3 @@
+mod.web_list {
+  allowedNewTables = tx_storefinder_domain_model_attribute, tx_storefinder_domain_model_location, sys_category
+}

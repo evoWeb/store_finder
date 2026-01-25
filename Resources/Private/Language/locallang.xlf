@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
 	<file source-language="en" original="messages" datatype="plaintext" product-name="store_finder" date="2024-08-02T16:39:12+02:00">
-		<header></header>
+		<header/>
 		<body>
 			<trans-unit id="address" resname="address">
 				<source>Address</source>

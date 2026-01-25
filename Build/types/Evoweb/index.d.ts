@@ -71,6 +71,9 @@ declare interface Window {
   mapConfiguration: MapConfiguration,
   locations: Array<any>,
   sfas: any
+  google: {
+    maps: any
+  }
 }
 
 interface Element {

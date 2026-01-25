@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * It is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
+ * of the License or any later version.
  *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
@@ -20,18 +20,26 @@ use Psr\Http\Message\ServerRequestInterface;
 
 final class ModifyMiddlewareLocationsEvent
 {
+    /**
+     * @param array<string, mixed> $settings
+     * @param array<array<string, mixed>> $locations
+     */
     public function __construct(
         protected ServerRequestInterface $request,
         protected StoreFinderMiddleware $storeFinderMiddleware,
         protected array $settings,
         protected array $locations,
-    ) {}
+    ) {
+    }
 
     public function getStoreFinderMiddleware(): StoreFinderMiddleware
     {
         return $this->storeFinderMiddleware;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getSettings(): array
     {
         return $this->settings;
@@ -42,15 +50,19 @@ final class ModifyMiddlewareLocationsEvent
         return $this->request;
     }
 
+    /**
+     * @return array<array<string, mixed>>
+     */
     public function getLocations(): array
     {
         return $this->locations;
     }
 
-    public function setLocations(array $locations): self
+    /**
+     * @param array<array<string, mixed>> $locations
+     */
+    public function setLocations(array $locations): void
     {
         $this->locations = $locations;
-
-        return $this;
     }
 }

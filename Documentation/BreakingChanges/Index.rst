@@ -6,6 +6,18 @@
 Breaking Changes
 ================
 
+04. December 2025
+=================
+
+The validation got an overhaul.
+
+The modification it self was moved from the controller to the ModifyValidator service.
+
+Validator namespaced shorthand got dropped in EXT:extbase, that's why only fully qualified
+namespaced validator class names are possible. The TypoScript was adapted accordingly.
+
+The services namespaces got changed from \Service\ to \Services\.
+
 02. August 2024
 ===============
 

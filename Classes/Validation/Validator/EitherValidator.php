@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * It is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
+ * of the License or any later version.
  *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
@@ -33,20 +33,27 @@ class EitherValidator extends AbstractValidator implements ValidatorInterface
      */
     protected $acceptsEmptyValues = false;
 
+    /** @var array<string, string[]> */
     protected $supportedOptions = [
-        'properties' => [ '', 'Properties to check in either', 'string' ],
+        'properties' => ['', 'Properties to check in either', 'string'],
     ];
 
+    /**
+     * @var string[]
+     */
     protected array $properties = [];
 
     protected ?Constraint $model = null;
 
     protected string $propertyName = '';
 
+    /**
+     * @param array<string, string> $options
+     */
     public function setOptions(array $options = []): void
     {
-        if (isset($this->options['properties'])) {
-            $this->properties = GeneralUtility::trimExplode(',', $this->options['properties'], true);
+        if (isset($options['properties'])) {
+            $this->properties = GeneralUtility::trimExplode(',', $options['properties'], true);
         }
     }
 
@@ -61,7 +68,7 @@ class EitherValidator extends AbstractValidator implements ValidatorInterface
     }
 
     /**
-     * Check if $value is valid. If it is not valid, needs to add an error to result.
+     * Check if $value is valid. If it is not valid, needs to add an error to the result.
      */
     protected function isValid(mixed $value): void
     {

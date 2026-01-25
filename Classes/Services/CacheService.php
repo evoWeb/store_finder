@@ -7,21 +7,28 @@ declare(strict_types=1);
  *
  * It is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
+ * of the License or any later version.
  *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  */
 
-namespace Evoweb\StoreFinder\Service;
+namespace Evoweb\StoreFinder\Services;
 
 use Evoweb\StoreFinder\Domain\Model\Location;
+use Exception;
+use Psr\Http\Message\ServerRequestInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
+use TYPO3\CMS\Core\Cache\CacheDataCollector;
 use TYPO3\CMS\Core\Cache\CacheManager;
-use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
+use TYPO3\CMS\Core\Cache\CacheTag;
 
-class CacheService
+#[Autoconfigure(public: true)]
+readonly class CacheService
 {
-    public function __construct(readonly private CacheManager $cacheManager) {}
+    public function __construct(private CacheManager $cacheManager)
+    {
+    }
 
     public function addTagsForPost(Location $location): void
     {
@@ -36,25 +43,27 @@ class CacheService
         $this->addTagsToPage([$tag]);
     }
 
+    /**
+     * @param string[] $tags
+     */
     public function addTagsToPage(array $tags): void
     {
-        $this->getTypoScriptFrontendController()->addCacheTags($tags);
+        /** @var CacheDataCollector $cacheDataCollector */
+        $cacheDataCollector = $this->getRequest()->getAttribute('frontend.cache.collector');
+        // @extensionScannerIgnoreLine
+        $cacheDataCollector->addCacheTags(...array_map(fn(string $tag) => new CacheTag($tag), $tags));
     }
 
     public function flushCacheByTag(string $tag): void
     {
-        $this->flushCacheByTags([$tag]);
+        try {
+            $this->cacheManager->getCache('pages')->flushByTag($tag);
+        } catch (Exception) {
+        }
     }
 
-    public function flushCacheByTags(array $tags): void
+    protected function getRequest(): ServerRequestInterface
     {
-        $this->cacheManager
-            ->getCache('pages')
-            ->flushByTags($tags);
-    }
-
-    protected function getTypoScriptFrontendController(): ?TypoScriptFrontendController
-    {
-        return $GLOBALS['TSFE'];
+        return $GLOBALS['TYPO3_REQUEST'];
     }
 }
