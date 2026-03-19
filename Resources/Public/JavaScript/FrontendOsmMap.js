@@ -1,18 +1,3 @@
-function _mergeNamespaces(n, m) {
-  m.forEach(function (e) {
-    e && typeof e !== 'string' && !Array.isArray(e) && Object.keys(e).forEach(function (k) {
-      if (k !== 'default' && !(k in n)) {
-        var d = Object.getOwnPropertyDescriptor(e, k);
-        Object.defineProperty(n, k, d.get ? d : {
-          enumerable: true,
-          get: function () { return e[k]; }
-        });
-      }
-    });
-  });
-  return Object.freeze(n);
-}
-
 /*!
  * mustache.js - Logic-less {{mustache}} templates with JavaScript
  * http://github.com/janl/mustache.js
@@ -956,27 +941,23 @@ class FrontendMap {
     }
 }
 
-function getDefaultExportFromCjs (x) {
-	return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;
-}
-
-var leafletSrc$2 = {exports: {}};
+var leafletSrc$1 = {exports: {}};
 
 /* @preserve
  * Leaflet 1.9.4, a JS library for interactive maps. https://leafletjs.com
  * (c) 2010-2023 Vladimir Agafonkin, (c) 2010-2011 CloudMade
  */
-var leafletSrc$1 = leafletSrc$2.exports;
+var leafletSrc = leafletSrc$1.exports;
 
 var hasRequiredLeafletSrc;
 
 function requireLeafletSrc () {
-	if (hasRequiredLeafletSrc) return leafletSrc$2.exports;
+	if (hasRequiredLeafletSrc) return leafletSrc$1.exports;
 	hasRequiredLeafletSrc = 1;
 	(function (module, exports$1) {
 		(function (global, factory) {
 		  factory(exports$1) ;
-		})(leafletSrc$1, (function (exports$1) {
+		})(leafletSrc, (function (exports$1) {
 		  var version = "1.9.4";
 
 		  /*
@@ -15478,17 +15459,15 @@ function requireLeafletSrc () {
 
 		}));
 		
-	} (leafletSrc$2, leafletSrc$2.exports));
-	return leafletSrc$2.exports;
+	} (leafletSrc$1, leafletSrc$1.exports));
+	return leafletSrc$1.exports;
 }
 
 var leafletSrcExports = requireLeafletSrc();
-var leafletSrc = /*@__PURE__*/getDefaultExportFromCjs(leafletSrcExports);
 
-var L$1 = /*#__PURE__*/_mergeNamespaces({
-  __proto__: null,
-  default: leafletSrc
-}, [leafletSrcExports]);
+var L$1 = /*#__PURE__*/Object.freeze({
+  __proto__: null
+});
 
 /**
  * This file is developed by evoWeb.
