@@ -5,7 +5,12 @@ SHELL := /bin/bash
 .SHELLFLAGS := -eu -o pipefail -c
 .SILENT:
 
-PHP_VERSION := 8.3
+# use the rest as arguments for "run"
+_ARGS := $(wordlist 2, $(words $(MAKECMDGOALS)), $(MAKECMDGOALS))
+# ...and turn them into do-nothing targets
+$(eval $(_ARGS):;@:)
+
+PHP_VERSION := 8.4
 
 
 ##@
@@ -37,7 +42,7 @@ build-resources: ##@ Build frontend resource files
 
 
 .PHONY: install
-install-build: ##@ Composer install
+install: ##@ Composer install
 	echo "Installed build tools started"
 	Build/Scripts/runTests.sh -p ${PHP_VERSION} -s composerInstall
 	echo "Installed build tools finished"
@@ -47,8 +52,28 @@ install-build: ##@ Composer install
 cleanup: ##@ Cleanup
 	echo "Cleanup started"
 	Build/Scripts/runTests.sh -s clean
-	Build/Scripts/additionalTests.sh -s clean
 	echo "Cleanup finished";
+
+
+.PHONY: cleanTests
+cleanTests: ##@ Clean test files but leave cache files
+	echo "cleanTests started"
+	Build/Scripts/runTests.sh -s cleanTests
+	echo "cleanTests finished";
+
+
+.PHONY: phpstan
+phpstan: ##@ Run functional tests
+	echo "Checking with phpstan started"
+	Build/Scripts/runTests.sh -p ${PHP_VERSION} -s phpstan -- $(_ARGS)
+	echo "Checking with phpstan finished"
+
+
+.PHONY: cgl
+cgl: ##@ Coding guideline check with
+	echo "Coding guideline check with php-cs-fixer started"
+	Build/Scripts/runTests.sh -p ${PHP_VERSION} -s cgl -n
+	echo "Coding guideline check with php-cs-fixer finished"
 
 
 .PHONY: functional-test
