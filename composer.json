@@ -46,6 +46,7 @@
 		"psr/http-message": "^1.1 || ^2.0",
 		"psr/http-server-handler": "^1.0",
 		"psr/http-server-middleware": "^1.0",
+		"symfony/cache-contracts": "^3.6",
 		"symfony/console": "^7.1",
 		"geocoder-php/google-maps-provider": "^4.7.1",
 		"php-http/discovery": "^1.16",
