@@ -42,6 +42,7 @@ class AddLocationToCacheTest extends FunctionalTestCase
     protected array $coreExtensionsToLoad = [
         'extbase',
         'fluid',
+        'install',
     ];
 
     protected array $configurationToUseInTestInstance = [
