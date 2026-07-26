@@ -1,4 +1,3 @@
-namespace Scripts;
 #!/usr/bin/env php
 <?php
 
