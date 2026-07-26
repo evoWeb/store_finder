@@ -20,10 +20,8 @@ use Doctrine\Common\Annotations\DocParser;
 use Evoweb\StoreFinder\Annotation\Validate;
 use Evoweb\StoreFinder\Validation\Validator\ConstraintValidator;
 use Evoweb\StoreFinder\Validation\Validator\SetPropertyNameInterface;
-use Exception;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
-use ReflectionException;
 use TYPO3\CMS\Core\Log\LogManager;
 use TYPO3\CMS\Extbase\Attribute as Extbase;
 use TYPO3\CMS\Extbase\Mvc\Controller\Argument;
@@ -52,11 +50,11 @@ readonly class ModifyValidator
         array $settings,
     ): bool {
         $validation = $settings['validation'] ?? [];
-        return (
+        return
             $arguments->hasArgument('constraint')
             && is_array($validation)
             && !empty($validation)
-        );
+        ;
     }
 
     /**
@@ -82,7 +80,7 @@ readonly class ModifyValidator
     }
 
     /**
-     * @param array<string, string|string[]> $settings
+     * @param array<string, array<string, string|string[]>> $settings
      */
     public function modifyValidatorsBasedOnSettings(
         Argument $argument,
@@ -103,7 +101,7 @@ readonly class ModifyValidator
                         $fieldName,
                         $request,
                     );
-                } catch (Exception $exception) {
+                } catch (\Exception $exception) {
                     $this->logger->debug($exception->getMessage());
                     continue;
                 }
@@ -118,7 +116,7 @@ readonly class ModifyValidator
                             $fieldName,
                             $request,
                         );
-                    } catch (Exception $exception) {
+                    } catch (\Exception $exception) {
                         $this->logger->debug($exception->getMessage());
                         continue;
                     }
@@ -134,7 +132,7 @@ readonly class ModifyValidator
     }
 
     /**
-     * @throws ReflectionException
+     * @throws \ReflectionException
      * @throws AnnotationException
      */
     protected function getValidatorByConfiguration(
@@ -147,8 +145,8 @@ readonly class ModifyValidator
             $configuration = '"' . $configuration . '"';
         }
 
-        /** @var Extbase\Validate $validateAnnotation */
         $configuration = '@' . Validate::class . '(' . $configuration . ')';
+        /** @var Extbase\Validate $validateAnnotation */
         $validateAnnotation = current($parser->parse($configuration));
         $validator = $this->validatorResolver->createValidator(
             $validateAnnotation->validator,

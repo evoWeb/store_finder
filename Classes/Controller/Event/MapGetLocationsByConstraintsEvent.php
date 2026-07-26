@@ -28,8 +28,7 @@ class MapGetLocationsByConstraintsEvent
         protected MapController $controller,
         protected array $locations,
         protected Constraint $constraint
-    ) {
-    }
+    ) {}
 
     public function getController(): MapController
     {

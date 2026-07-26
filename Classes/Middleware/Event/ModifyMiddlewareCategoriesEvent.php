@@ -29,8 +29,7 @@ final class ModifyMiddlewareCategoriesEvent
         protected StoreFinderMiddleware $storeFinderMiddleware,
         protected array $settings,
         protected array $categories,
-    ) {
-    }
+    ) {}
 
     public function getStoreFinderMiddleware(): StoreFinderMiddleware
     {

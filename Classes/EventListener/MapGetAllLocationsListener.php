@@ -22,9 +22,7 @@ use TYPO3\CMS\Core\Attribute\AsEventListener;
 
 readonly class MapGetAllLocationsListener
 {
-    public function __construct(protected LocationRepository $locationRepository)
-    {
-    }
+    public function __construct(protected LocationRepository $locationRepository) {}
 
     // #[AsEventListener('storefinder_controller_locationsfetched', MapGetLocationsByConstraintsEvent::class)]
     public function onLocationsFetchedEvent(MapGetLocationsByConstraintsEvent $event): void

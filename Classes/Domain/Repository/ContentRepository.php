@@ -23,8 +23,7 @@ class ContentRepository
 {
     public function __construct(
         protected ConnectionPool $connectionPool
-    ) {
-    }
+    ) {}
 
     /**
      * @return array<array<string, mixed>>

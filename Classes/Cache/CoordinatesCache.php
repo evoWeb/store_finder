@@ -42,8 +42,7 @@ class CoordinatesCache
     public function __construct(
         #[Autowire(service: 'cache.store_finder.coordinate_cache')]
         protected FrontendInterface $cacheFrontend
-    ) {
-    }
+    ) {}
 
     public function initializeUserSessionManager(?UserSessionManager $userSessionManager = null): void
     {
@@ -122,7 +121,7 @@ class CoordinatesCache
     }
 
     /**
-     * @return array<string, double>
+     * @return array<string, float>
      */
     public function getValueFromSession(string $key): array
     {
@@ -132,7 +131,7 @@ class CoordinatesCache
     }
 
     /**
-     * @param array<string, double> $value
+     * @param array<string, float> $value
      */
     public function setValueInSession(string $key, array $value): void
     {
@@ -165,7 +164,7 @@ class CoordinatesCache
 
     /**
      * Store coordinate for hash in the cache table
-     * @param array<string, double> $value
+     * @param array<string, float> $value
      */
     public function setValueInCacheTable(string $key, array $value): void
     {

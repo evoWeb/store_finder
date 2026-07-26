@@ -21,8 +21,8 @@ use Evoweb\StoreFinder\Domain\Model\Location;
 use Evoweb\StoreFinder\Domain\Repository\CategoryRepository;
 use Evoweb\StoreFinder\Domain\Repository\LocationRepository;
 use Evoweb\StoreFinder\Property\TypeConverter\CountryConverter;
-use Evoweb\StoreFinder\Services\ModifyValidator;
 use Evoweb\StoreFinder\Services\GeocodeService;
+use Evoweb\StoreFinder\Services\ModifyValidator;
 use Evoweb\StoreFinder\Validation\Validator\ConstraintValidator;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Country\CountryProvider;
@@ -30,6 +30,7 @@ use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Pagination\ArrayPaginator;
 use TYPO3\CMS\Core\Pagination\SimplePagination;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\View\ViewInterface;
 use TYPO3\CMS\Extbase\Attribute as Extbase;
 use TYPO3\CMS\Extbase\Http\ForwardResponse;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
@@ -38,7 +39,6 @@ use TYPO3\CMS\Extbase\Persistence\Generic\Exception as Exception;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Property\PropertyMappingConfiguration;
 use TYPO3\CMS\Extbase\Property\TypeConverter\PersistentObjectConverter;
-use TYPO3\CMS\Core\View\ViewInterface;
 
 class MapController extends ActionController
 {
@@ -48,8 +48,7 @@ class MapController extends ActionController
         protected CountryProvider $countryProvider,
         protected GeocodeService $geocodeService,
         protected ModifyValidator $modifyValidator,
-    ) {
-    }
+    ) {}
 
     protected function initializeActionMethodValidators(): void
     {

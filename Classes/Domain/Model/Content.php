@@ -17,6 +17,4 @@ namespace Evoweb\StoreFinder\Domain\Model;
 
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
-class Content extends AbstractEntity
-{
-}
+class Content extends AbstractEntity {}

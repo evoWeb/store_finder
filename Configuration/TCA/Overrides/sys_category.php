@@ -18,7 +18,7 @@ $tempColumns = [
         'config' => [
             'type' => 'input',
             'max' => 100,
-        ]
+        ],
     ],
 ];
 

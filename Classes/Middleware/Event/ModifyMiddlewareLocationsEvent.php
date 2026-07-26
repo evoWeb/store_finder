@@ -29,8 +29,7 @@ final class ModifyMiddlewareLocationsEvent
         protected StoreFinderMiddleware $storeFinderMiddleware,
         protected array $settings,
         protected array $locations,
-    ) {
-    }
+    ) {}
 
     public function getStoreFinderMiddleware(): StoreFinderMiddleware
     {

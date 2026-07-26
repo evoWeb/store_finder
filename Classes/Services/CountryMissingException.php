@@ -15,6 +15,4 @@ declare(strict_types=1);
 
 namespace Evoweb\StoreFinder\Services;
 
-class CountryMissingException extends \Exception
-{
-}
+class CountryMissingException extends \Exception {}

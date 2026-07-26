@@ -80,8 +80,8 @@ return [
         ],
         'import_id' => [
             'config' => [
-                'type' => 'number'
-            ]
+                'type' => 'number',
+            ],
         ],
     ],
 

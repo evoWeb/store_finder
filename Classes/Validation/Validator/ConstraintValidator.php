@@ -16,11 +16,10 @@ declare(strict_types=1);
 namespace Evoweb\StoreFinder\Validation\Validator;
 
 use Evoweb\StoreFinder\Domain\Model\Constraint;
-use Traversable;
 use TYPO3\CMS\Extbase\Error\Result;
 use TYPO3\CMS\Extbase\Validation\Validator\AbstractGenericObjectValidator;
-use TYPO3\CMS\Extbase\Validation\Validator\ObjectValidatorInterface;
 use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
+use TYPO3\CMS\Extbase\Validation\Validator\ObjectValidatorInterface;
 
 class ConstraintValidator extends AbstractGenericObjectValidator
 {
@@ -46,9 +45,9 @@ class ConstraintValidator extends AbstractGenericObjectValidator
     /**
      * Checks if the specified property of the given object is valid and adds
      * found errors to the $messages object.
-     * @param Traversable<AbstractValidator> $validators
+     * @param \Traversable<AbstractValidator> $validators
      */
-    protected function checkProperty(mixed $value, Traversable $validators, string $propertyName): void
+    protected function checkProperty(mixed $value, \Traversable $validators, string $propertyName): void
     {
         /** @var Result|null $result */
         $result = null;

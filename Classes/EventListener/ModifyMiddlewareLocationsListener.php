@@ -21,9 +21,7 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 readonly class ModifyMiddlewareLocationsListener
 {
-    public function __construct(private ContentObjectRenderer $contentObjectRenderer)
-    {
-    }
+    public function __construct(private ContentObjectRenderer $contentObjectRenderer) {}
 
     #[AsEventListener('storefinder_middleware_locationsfetched', ModifyMiddlewareLocationsEvent::class)]
     public function __invoke(ModifyMiddlewareLocationsEvent $event): void

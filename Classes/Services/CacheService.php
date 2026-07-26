@@ -16,7 +16,6 @@ declare(strict_types=1);
 namespace Evoweb\StoreFinder\Services;
 
 use Evoweb\StoreFinder\Domain\Model\Location;
-use Exception;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use TYPO3\CMS\Core\Cache\CacheDataCollector;
@@ -26,9 +25,7 @@ use TYPO3\CMS\Core\Cache\CacheTag;
 #[Autoconfigure(public: true)]
 readonly class CacheService
 {
-    public function __construct(private CacheManager $cacheManager)
-    {
-    }
+    public function __construct(private CacheManager $cacheManager) {}
 
     public function addTagsForPost(Location $location): void
     {
@@ -58,7 +55,7 @@ readonly class CacheService
     {
         try {
             $this->cacheManager->getCache('pages')->flushByTag($tag);
-        } catch (Exception) {
+        } catch (\Exception) {
         }
     }
 

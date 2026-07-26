@@ -36,7 +36,7 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1549261866] = [
 ];
 
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['tcaDatabaseRecord'][LocationCountryItems::class] = [
-    'depends' => [ TcaSelectItems::class ]
+    'depends' => [ TcaSelectItems::class ],
 ];
 
 ExtensionUtility::configurePlugin(

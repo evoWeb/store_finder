@@ -18,12 +18,12 @@ namespace Evoweb\StoreFinder\Updates;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Result;
 use Symfony\Component\Console\Output\OutputInterface;
+use TYPO3\CMS\Core\Attribute\UpgradeWizard;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
-use TYPO3\CMS\Core\Attribute\UpgradeWizard;
-use TYPO3\CMS\Core\Upgrades\UpgradeWizardInterface;
 use TYPO3\CMS\Core\Upgrades\DatabaseUpdatedPrerequisite;
+use TYPO3\CMS\Core\Upgrades\UpgradeWizardInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 #[UpgradeWizard('sfLocationCountryMigration')]
@@ -288,9 +288,7 @@ class LocationCountryMigration implements UpgradeWizardInterface
 
     protected OutputInterface $output;
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public function setOutput(OutputInterface $output): void
     {

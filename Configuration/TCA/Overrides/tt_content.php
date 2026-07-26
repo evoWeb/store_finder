@@ -23,7 +23,7 @@ call_user_func(static function () {
             frame_class;frontend.ttc:frame_class_formlabel,
             space_before_class;frontend.ttc:space_before_class_formlabel,
             space_after_class;frontend.ttc:space_after_class_formlabel
-        '
+        ',
     ];
 
     $showItems = '

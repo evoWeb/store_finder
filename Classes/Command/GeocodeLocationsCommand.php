@@ -17,7 +17,6 @@ namespace Evoweb\StoreFinder\Command;
 
 use Evoweb\StoreFinder\Domain\Repository\LocationRepository;
 use Evoweb\StoreFinder\Services\GeocodeService;
-use Exception;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -42,7 +41,7 @@ class GeocodeLocationsCommand extends Command
     ) {
         try {
             $this->geocodeService->setSettings($extensionConfiguration->get('store_finder') ?? []);
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             die('Error in $GLOBALS[\'TYPO3_CONF_VARS\'][\'EXTENSIONS\']: ' . $exception->getMessage());
         }
         parent::__construct();

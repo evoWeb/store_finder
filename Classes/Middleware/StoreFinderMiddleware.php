@@ -23,7 +23,6 @@ use Evoweb\StoreFinder\Domain\Repository\LocationRepository;
 use Evoweb\StoreFinder\Middleware\Event\ModifyMiddlewareCategoriesEvent;
 use Evoweb\StoreFinder\Middleware\Event\ModifyMiddlewareLocationsEvent;
 use Evoweb\StoreFinder\Services\GeocodeService;
-use JsonException;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -74,8 +73,7 @@ final readonly class StoreFinderMiddleware implements MiddlewareInterface
         private LocationRepository $locationRepository,
         #[Lazy]
         private ContentRepository $contentRepository,
-    ) {
-    }
+    ) {}
 
     /**
      * @throws PageInformationCreationFailedException
@@ -103,7 +101,7 @@ final readonly class StoreFinderMiddleware implements MiddlewareInterface
             [$settings, $request] = $this->getSettings($request, $contentUid);
             $rows = match ($action) {
                 'categories' => $this->categoriesAction($request, $settings),
-                'locations' => $this->locationsAction($request, $settings),
+                default => $this->locationsAction($request, $settings),
             };
             $cache?->set($cacheIdentifier, $rows);
         }
@@ -210,7 +208,7 @@ final readonly class StoreFinderMiddleware implements MiddlewareInterface
                 $isCachingAllowed ? $this->typoScriptCache : null,
                 $request,
             );
-        } catch (JsonException) {
+        } catch (\JsonException) {
         }
 
         return $frontendTypoScript;

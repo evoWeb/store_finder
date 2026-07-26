@@ -38,7 +38,7 @@ class LocationCountryItems extends AbstractItemProvider implements FormDataProvi
             && isset($result['processedTca']['columns']['country'])
         ) {
             $fieldName = '';
-            $items =& $result['processedTca']['columns']['country']['config']['items'];
+            $items = & $result['processedTca']['columns']['country']['config']['items'];
 
             /** @var CountryProvider $countryProvider */
             $countryProvider = GeneralUtility::makeInstance(CountryProvider::class);

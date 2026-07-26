@@ -21,9 +21,7 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 class CacheViewHelper extends AbstractViewHelper
 {
-    public function __construct(protected CacheService $cacheService)
-    {
-    }
+    public function __construct(protected CacheService $cacheService) {}
 
     public function initializeArguments(): void
     {

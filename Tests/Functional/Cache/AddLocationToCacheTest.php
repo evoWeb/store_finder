@@ -152,7 +152,8 @@ class AddLocationToCacheTest extends FunctionalTestCase
 
             $queryValues = $geocodeService->prepareValuesForQuery($expected, $getFields);
             $actual = $coordinatesCache->getCoordinateByAddress($actual, $queryValues);
-        } catch (\Exception) {}
+        } catch (\Exception) {
+        }
         self::assertEquals($expected, $actual);
     }
 
