@@ -31,14 +31,24 @@ class LocationCountryItems extends AbstractItemProvider implements FormDataProvi
      */
     public function addData(array $result): array
     {
-        $table = $result['tableName'];
+        $table = is_string($result['tableName'] ?? null) ? $result['tableName'] : '';
+
+        /** @var array<string, mixed> $processedTca */
+        $processedTca = $result['processedTca'] ?? [];
+        /** @var array<string, mixed> $columns */
+        $columns = $processedTca['columns'] ?? [];
 
         if (
             $table === 'tx_storefinder_domain_model_location'
-            && isset($result['processedTca']['columns']['country'])
+            && isset($columns['country'])
         ) {
             $fieldName = '';
-            $items = & $result['processedTca']['columns']['country']['config']['items'];
+            /** @var array<string, mixed> $countryColumn */
+            $countryColumn = $columns['country'];
+            /** @var array<string, mixed> $config */
+            $config = $countryColumn['config'] ?? [];
+            /** @var array<int, array<string, mixed>> $items */
+            $items = $config['items'] ?? [];
 
             /** @var CountryProvider $countryProvider */
             $countryProvider = GeneralUtility::makeInstance(CountryProvider::class);
@@ -55,6 +65,12 @@ class LocationCountryItems extends AbstractItemProvider implements FormDataProvi
                 $table,
                 $fieldName
             );
+
+            $config['items'] = $items;
+            $countryColumn['config'] = $config;
+            $columns['country'] = $countryColumn;
+            $processedTca['columns'] = $columns;
+            $result['processedTca'] = $processedTca;
         }
 
         return $result;

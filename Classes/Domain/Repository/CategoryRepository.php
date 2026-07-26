@@ -106,7 +106,7 @@ class CategoryRepository extends Repository
             $result[] = $category;
 
             $foundCategories = $this->findByParent($category)->toArray();
-            $foundCategoriesUid = array_map(fn(Category $category): int => $category->getUid(), $foundCategories);
+            $foundCategoriesUid = array_map(fn(Category $category): int => $category->getUid() ?? 0, $foundCategories);
 
             $result = $this->findByParentRecursive($foundCategoriesUid, $result);
         }
@@ -128,12 +128,18 @@ class CategoryRepository extends Repository
             ->fetchAllAssociative();
 
         $pageRepository = $this->getPageRepository();
-        foreach ($categories as &$category) {
+        $result = [];
+        foreach ($categories as $category) {
             $category = $pageRepository->getLanguageOverlay('sys_category', $category);
+            if ($category === null) {
+                continue;
+            }
+
             $category['children'] = $this->findCategoryByParent($selectedCategories, $category['uid']);
+            $result[] = $category;
         }
 
-        return $categories;
+        return $result;
     }
 
     /**
@@ -154,18 +160,27 @@ class CategoryRepository extends Repository
             ->fetchAllAssociative();
 
         $pageRepository = $this->getPageRepository();
-        foreach ($categoryChildren as &$categoryChild) {
+        $activeCategories = explode(',', $this->toStringOrDefault($this->settings['activeCategories'] ?? ''));
+
+        $result = [];
+        foreach ($categoryChildren as $categoryChild) {
             $categoryChild = $pageRepository->getLanguageOverlay('sys_category', $categoryChild);
-            if (in_array($categoryChild['uid'], explode(',', $this->settings['activeCategories']))) {
+            if ($categoryChild === null) {
+                continue;
+            }
+
+            if (in_array($categoryChild['uid'], $activeCategories)) {
                 $categoryChild['active'] = 1;
             }
 
             if ($categoryChild['children'] > 0) {
                 $categoryChild['children'] = $this->findCategoryByParent($selectedCategories, $categoryChild['uid']);
             }
+
+            $result[] = $categoryChild;
         }
 
-        return $categoryChildren;
+        return $result;
     }
 
     /**
@@ -181,11 +196,23 @@ class CategoryRepository extends Repository
         $languageAspect = $context->getAspect('language');
         $expression = $queryBuilder->expr();
 
+        /** @var array<string, mixed> $tables */
         // @extensionScannerIgnoreLine
-        $fields = array_keys($this->settings['tables'][$table]['fields'] ?? ['*' => '']);
+        $tables = $this->settings['tables'] ?? [];
+        /** @var array<string, mixed> $tableSettings */
+        $tableSettings = $tables[$table] ?? [];
+        /** @var array<string, mixed> $fieldsSetting */
+        $fieldsSetting = $tableSettings['fields'] ?? ['*' => ''];
+        $fields = array_keys($fieldsSetting);
         $fields[] = 'uid';
         $fields[] = 'pid';
-        $fields[] = $GLOBALS['TCA'][$table]['ctrl']['languageField'];
+        /** @var array<string, mixed> $tca */
+        $tca = $GLOBALS['TCA'] ?? [];
+        /** @var array<string, mixed> $tableTca */
+        $tableTca = $tca[$table] ?? [];
+        /** @var array<string, mixed> $tableTcaCtrl */
+        $tableTcaCtrl = $tableTca['ctrl'] ?? [];
+        $fields[] = $this->toStringOrDefault($tableTcaCtrl['languageField'] ?? '');
         $queryBuilder
             ->select(...$fields)
             ->from($table, 'c')
@@ -209,13 +236,12 @@ class CategoryRepository extends Repository
             );
         }
 
-        // @extensionScannerIgnoreLine
-        if (!empty($this->settings['tables'][$table]['sortBy'])) {
+        /** @var array<string, mixed> $sortBySetting */
+        $sortBySetting = $tableSettings['sortBy'] ?? [];
+        if (!empty($sortBySetting)) {
             $queryBuilder->addOrderBy(
-                // @extensionScannerIgnoreLine
-                $this->settings['tables'][$table]['sortBy']['field'] ?? 'c.uid',
-                // @extensionScannerIgnoreLine
-                $this->settings['tables'][$table]['sortBy']['direction'] ?? 'ASC'
+                $this->toStringOrDefault($sortBySetting['field'] ?? 'c.uid'),
+                $this->toStringOrDefault($sortBySetting['direction'] ?? 'ASC')
             );
         }
 
@@ -237,12 +263,16 @@ class CategoryRepository extends Repository
         $result = $categories;
         foreach ($categories as $category) {
             $queryBuilder = $this->getQueryBuilderForTable('sys_category');
-            $children = $queryBuilder
+            $columnValues = $queryBuilder
                 ->select('uid')
                 ->from('sys_category')
                 ->where($queryBuilder->expr()->eq('parent', $category))
                 ->executeQuery()
                 ->fetchFirstColumn();
+            $children = array_map(
+                static fn(mixed $value): int => is_numeric($value) ? (int)$value : 0,
+                $columnValues
+            );
             $children = $this->enrichCategoriesWithChildren($children);
             $result = array_merge($result, $children);
         }
@@ -252,5 +282,10 @@ class CategoryRepository extends Repository
     protected function getQueryBuilderForTable(string $table): QueryBuilder
     {
         return $this->connectionPool->getQueryBuilderForTable($table);
+    }
+
+    protected function toStringOrDefault(mixed $value, string $default = ''): string
+    {
+        return is_scalar($value) ? (string)$value : $default;
     }
 }

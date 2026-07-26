@@ -25,10 +25,10 @@ final class ModifyMiddlewareLocationsEvent
      * @param array<array<string, mixed>> $locations
      */
     public function __construct(
-        protected ServerRequestInterface $request,
-        protected StoreFinderMiddleware $storeFinderMiddleware,
-        protected array $settings,
-        protected array $locations,
+        private readonly ServerRequestInterface $request,
+        private readonly StoreFinderMiddleware $storeFinderMiddleware,
+        private readonly array $settings,
+        private array $locations,
     ) {}
 
     public function getStoreFinderMiddleware(): StoreFinderMiddleware

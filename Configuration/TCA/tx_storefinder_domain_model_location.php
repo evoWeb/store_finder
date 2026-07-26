@@ -117,9 +117,9 @@ return [
                     ['label' => '', 'value' => 0],
                 ],
                 'foreign_table' => 'static_country_zones',
-                'foreign_table_where' =>
-                    'AND {#static_country_zones}.{#zn_country_iso_2}=\'###REC_FIELD_country###\'
-                    ORDER BY static_country_zones.zn_name_local',
+                'foreign_table_where'
+                    => 'AND {#static_country_zones}.{#zn_country_iso_2}=\'###REC_FIELD_country###\'
+                        ORDER BY static_country_zones.zn_name_local',
                 'minitems' => 0,
                 'maxitems' => 1,
                 'behaviour' => [
@@ -232,9 +232,9 @@ return [
                 'type' => 'group',
                 'allowed' => 'tx_storefinder_domain_model_location',
                 'foreign_table' => 'tx_storefinder_domain_model_location',
-                'foreign_table_where' =>
-                    'AND {#tx_storefinder_domain_model_location}.{#uid} != ###THIS_UID###
-                    ORDER BY tx_storefinder_domain_model_location.name',
+                'foreign_table_where'
+                    => 'AND {#tx_storefinder_domain_model_location}.{#uid} != ###THIS_UID###
+                        ORDER BY tx_storefinder_domain_model_location.name',
                 'MM' => 'tx_storefinder_location_location_mm',
             ],
         ],
@@ -255,9 +255,9 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectMultipleSideBySide',
                 'foreign_table' => 'tx_storefinder_domain_model_attribute',
-                'foreign_table_where' =>
-                    'AND {#tx_storefinder_domain_model_attribute}.{#pid} = ###CURRENT_PID###
-                     AND {#tx_storefinder_domain_model_attribute}.{#sys_language_uid} IN (-1,0)',
+                'foreign_table_where'
+                    => 'AND {#tx_storefinder_domain_model_attribute}.{#pid} = ###CURRENT_PID###
+                        AND {#tx_storefinder_domain_model_attribute}.{#sys_language_uid} IN (-1,0)',
                 'MM' => 'tx_storefinder_location_attribute_mm',
                 'size' => 10,
                 'maxitems' => 30,

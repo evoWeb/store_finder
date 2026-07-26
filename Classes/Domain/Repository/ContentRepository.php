@@ -26,7 +26,7 @@ class ContentRepository
     ) {}
 
     /**
-     * @return array<array<string, mixed>>
+     * @return array<string, mixed>
      */
     public function findByUid(int $uid): array
     {
@@ -40,12 +40,12 @@ class ContentRepository
             )
             ->executeQuery();
         try {
-            $rows = $result->fetchAssociative();
+            $row = $result->fetchAssociative() ?: [];
         } catch (Exception) {
-            $rows = [];
+            $row = [];
         }
 
-        return $rows;
+        return $row;
     }
 
     protected function getQueryBuilderForTable(string $table): QueryBuilder

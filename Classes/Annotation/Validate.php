@@ -71,7 +71,8 @@ class Validate
         if (count($this->options) > 0) {
             $validatorOptionsStrings = [];
             foreach ($this->options as $optionKey => $optionValue) {
-                $validatorOptionsStrings[] = $optionKey . '=' . $optionValue;
+                $optionValueString = is_scalar($optionValue) ? (string)$optionValue : '';
+                $validatorOptionsStrings[] = $optionKey . '=' . $optionValueString;
             }
 
             $strings[] = '(' . implode(', ', $validatorOptionsStrings) . ')';

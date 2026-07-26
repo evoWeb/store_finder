@@ -29,6 +29,10 @@ class BitwiseIfViewHelper extends AbstractConditionViewHelper
 
     public static function verdict(array $arguments, RenderingContextInterface $renderingContext): bool
     {
-        return (bool)($arguments['a'] & $arguments['b']);
+        /** @var int $a */
+        $a = $arguments['a'];
+        /** @var int $b */
+        $b = $arguments['b'];
+        return (bool)($a & $b);
     }
 }

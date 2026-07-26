@@ -74,12 +74,12 @@ class ImportLocationsCommand extends Command
     ];
 
     /**
-     * @var array<string, array<string, mixed>>
+     * @var array<string, int>
      */
     private array $countryCache = [];
 
     /**
-     * @var array<string, array<string, mixed>>
+     * @var array<string, int>
      */
     private array $stateCache = [];
 
@@ -140,18 +140,30 @@ class ImportLocationsCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->title($this->getDescription());
 
-        $fileName = $input->getArgument('fileName');
-        $storagePid = (int)$input->getOption('storagePid');
+        $fileName = $this->toStringOrDefault($input->getArgument('fileName'));
+        $storagePid = $this->toIntOrDefault($input->getOption('storagePid'));
         $clearStorageFolder = (bool)$input->getOption('clearStorageFolder');
 
         if ($input->hasOption('columnMap') && !empty($input->getOption('columnMap'))) {
-            $this->columnMap = json_decode($input->getOption('columnMap'), true);
+            $columnMap = json_decode($this->toStringOrDefault($input->getOption('columnMap')), true);
+            if (is_array($columnMap)) {
+                /** @var array<string, mixed> $columnMap */
+                $this->columnMap = $columnMap;
+            }
         }
         if ($input->hasOption('attributeMap') && !empty($input->getOption('attributeMap'))) {
-            $this->attributeMap = json_decode($input->getOption('attributeMap'), true);
+            $attributeMap = json_decode($this->toStringOrDefault($input->getOption('attributeMap')), true);
+            if (is_array($attributeMap)) {
+                /** @var array<string, array<string, int>> $attributeMap */
+                $this->attributeMap = $attributeMap;
+            }
         }
         if ($input->hasOption('categoryMap') && !empty($input->getOption('categoryMap'))) {
-            $this->categoryMap = json_decode($input->getOption('categoryMap'), true);
+            $categoryMap = json_decode($this->toStringOrDefault($input->getOption('categoryMap')), true);
+            if (is_array($categoryMap)) {
+                /** @var array<string, array<string, int>> $categoryMap */
+                $this->categoryMap = $categoryMap;
+            }
         }
 
         $file = $this->getFile($fileName);
@@ -161,7 +173,12 @@ class ImportLocationsCommand extends Command
 
     protected function getFile(string $fileName): File
     {
-        return $this->resourceFactory->getFileObjectFromCombinedIdentifier($fileName);
+        $file = $this->resourceFactory->getFileObjectFromCombinedIdentifier($fileName);
+        if (!$file instanceof File) {
+            throw new \RuntimeException('File not found: ' . $fileName, 1753500000);
+        }
+
+        return $file;
     }
 
     protected function processFile(File $file, int $storagePid, bool $clearStorageFolder, SymfonyStyle $io): void
@@ -266,18 +283,18 @@ class ImportLocationsCommand extends Command
 
         foreach ($row->getCellIterator() as $cell) {
             $sourceColumn = $cell->getColumn();
-            $value = (string)$cell->getValue();
+            $value = $this->toStringOrDefault($cell->getValue());
 
             switch (true) {
                 case isset($this->attributeMap[$sourceColumn]):
-                    if ($this->attributeMap[$sourceColumn][$value]) {
+                    if (!empty($this->attributeMap[$sourceColumn][$value])) {
                         $attributes[] = $this->attributeMap[$sourceColumn][$value];
                         $location['area']++;
                     }
                     break;
 
                 case isset($this->categoryMap[$sourceColumn]):
-                    if ($this->categoryMap[$sourceColumn][$value]) {
+                    if (!empty($this->categoryMap[$sourceColumn][$value])) {
                         $categories[] = $this->categoryMap[$sourceColumn][$value];
                         $location['categories']++;
                     }
@@ -287,21 +304,24 @@ class ImportLocationsCommand extends Command
                     $targetColumn = $this->columnMap[$sourceColumn];
                     if (is_array($targetColumn)) {
                         foreach ($targetColumn as $targetSubColumn) {
-                            $location[$targetSubColumn] = $value;
-                        }
-                    } elseif ($targetColumn == 'import_id') {
-                        $location[$targetColumn] = (int)$value;
-                    } elseif ($targetColumn == 'country') {
-                        $location[$targetColumn] = $this->fetchCountry($value);
-                    } elseif ($targetColumn == 'state') {
-                        $location[$targetColumn] = $this->fetchState($value);
-                    } elseif (in_array($targetColumn, ['image', 'media', 'icon'])) {
-                        if ($fileUid = $this->fetchFile($value)) {
-                            $files[$fileUid] = $targetColumn;
-                            $location[$targetColumn]++;
+                            $location[$this->toStringOrDefault($targetSubColumn)] = $value;
                         }
                     } else {
-                        $location[$targetColumn] = $value;
+                        $targetColumn = $this->toStringOrDefault($targetColumn);
+                        if ($targetColumn === 'import_id') {
+                            $location[$targetColumn] = (int)$value;
+                        } elseif ($targetColumn === 'country') {
+                            $location[$targetColumn] = $this->fetchCountry($value);
+                        } elseif ($targetColumn === 'state') {
+                            $location[$targetColumn] = $this->fetchState($value);
+                        } elseif (in_array($targetColumn, ['image', 'media', 'icon'], true)) {
+                            if ($fileUid = $this->fetchFile($value)) {
+                                $files[$fileUid] = $targetColumn;
+                                $location[$targetColumn]++;
+                            }
+                        } else {
+                            $location[$targetColumn] = $value;
+                        }
                     }
                     break;
             }
@@ -309,8 +329,8 @@ class ImportLocationsCommand extends Command
 
         if (!empty($location['city']) || !empty($location['zipcode'])) {
             $location = $this->processLocation($location);
-            $this->processAttributes($location['uid'], $attributes);
-            $this->processCategories($location['uid'], $categories);
+            $this->processAttributes($this->toIntOrDefault($location['uid']), $attributes);
+            $this->processCategories($this->toIntOrDefault($location['uid']), $categories);
             $this->processFiles($location, $files);
         }
     }
@@ -320,14 +340,14 @@ class ImportLocationsCommand extends Command
         if (!isset($this->countryCache[$value])) {
             $table = 'static_countries';
             $queryBuilder = $this->getQueryBuilderForTable($table);
-            $this->countryCache[$value] = (int)$queryBuilder
+            $this->countryCache[$value] = $this->toIntOrDefault($queryBuilder
                 ->select('uid')
                 ->from($table)
                 ->where(
                     $queryBuilder->expr()->eq('cn_iso_3', $queryBuilder->createNamedParameter($value))
                 )
                 ->executeQuery()
-                ->fetchOne();
+                ->fetchOne());
         }
         return $this->countryCache[$value];
     }
@@ -337,14 +357,14 @@ class ImportLocationsCommand extends Command
         if (!isset($this->stateCache[$value])) {
             $table = 'static_country_zones';
             $queryBuilder = $this->getQueryBuilderForTable($table);
-            $this->stateCache[$value] = (int)$queryBuilder
+            $this->stateCache[$value] = $this->toIntOrDefault($queryBuilder
                 ->select('uid')
                 ->from($table)
                 ->where(
                     $queryBuilder->expr()->eq('zn_code', $queryBuilder->createNamedParameter($value))
                 )
                 ->executeQuery()
-                ->fetchOne();
+                ->fetchOne());
         }
         return $this->stateCache[$value];
     }
@@ -398,13 +418,13 @@ class ImportLocationsCommand extends Command
                 $this->removeReference(
                     $table,
                     $tableName,
-                    $reference['fieldname'],
+                    $this->toStringOrDefault($reference['fieldname']),
                     $locationUid,
-                    $reference['uid_foreign']
+                    $this->toIntOrDefault($reference['uid_foreign'])
                 );
             } else {
                 // the existing reference is still current and does not need to be handled anymore
-                unset($attributes[$reference['uid_foreign']]);
+                unset($attributes[$this->toIntOrDefault($reference['uid_foreign'])]);
             }
         }
 
@@ -430,13 +450,13 @@ class ImportLocationsCommand extends Command
                 $this->removeReference(
                     $table,
                     $tableName,
-                    $reference['fieldname'],
-                    $reference['uid_local'],
+                    $this->toStringOrDefault($reference['fieldname']),
+                    $this->toIntOrDefault($reference['uid_local']),
                     $locationUid
                 );
             } else {
                 // the existing reference is still current and does not need to be handled anymore
-                unset($currentCategories[$reference['uid_local']]);
+                unset($currentCategories[$this->toIntOrDefault($reference['uid_local'])]);
             }
         }
 
@@ -455,16 +475,17 @@ class ImportLocationsCommand extends Command
         $table = 'sys_file_reference';
         $tableName = 'tx_storefinder_domain_model_location';
 
-        $references = $this->getReferences($table, $tableName, 0, $location['uid']);
+        $references = $this->getReferences($table, $tableName, 0, $this->toIntOrDefault($location['uid']));
 
         foreach ($references as $reference) {
-            if (!isset($files[$reference['uid_local']])) {
+            $referenceUidLocal = $this->toStringOrDefault($reference['uid_local']);
+            if (!isset($files[$referenceUidLocal])) {
                 $this->removeReference(
                     $table,
                     $tableName,
-                    $reference['fieldname'],
-                    $reference['uid_local'],
-                    $location['uid']
+                    $this->toStringOrDefault($reference['fieldname']),
+                    $this->toIntOrDefault($reference['uid_local']),
+                    $this->toIntOrDefault($location['uid'])
                 );
             } else {
                 $data = [
@@ -477,12 +498,12 @@ class ImportLocationsCommand extends Command
                     $data,
                     [
                         'tablenames' => $tableName,
-                        'fieldname' => $files[$reference['uid_local']],
+                        'fieldname' => $files[$referenceUidLocal],
                         'uid_local' => $reference['uid_local'],
                         'uid_foreign' => $location['uid'],
                     ]
                 );
-                unset($files[$reference['uid_local']]);
+                unset($files[$referenceUidLocal]);
             }
         }
 
@@ -495,7 +516,14 @@ class ImportLocationsCommand extends Command
                 'description' => $location['name'],
             ];
 
-            $this->addReference($table, $tableName, $fieldName, $uid, $location['uid'], $data);
+            $this->addReference(
+                $table,
+                $tableName,
+                $fieldName,
+                $this->toIntOrDefault($uid),
+                $this->toIntOrDefault($location['uid']),
+                $data
+            );
         }
     }
 
@@ -522,7 +550,7 @@ class ImportLocationsCommand extends Command
             )
             ->executeQuery()
             ->fetchOne();
-        return (int)$result;
+        return $this->toIntOrDefault($result);
     }
 
     /**
@@ -644,5 +672,15 @@ class ImportLocationsCommand extends Command
         $queryBuilder = $this->connectionPool->getQueryBuilderForTable($table);
         $queryBuilder->getRestrictions()->removeAll();
         return $queryBuilder;
+    }
+
+    protected function toStringOrDefault(mixed $value, string $default = ''): string
+    {
+        return is_scalar($value) ? (string)$value : $default;
+    }
+
+    protected function toIntOrDefault(mixed $value, int $default = 0): int
+    {
+        return is_numeric($value) ? (int)$value : $default;
     }
 }

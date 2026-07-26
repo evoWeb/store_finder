@@ -42,8 +42,14 @@ class BinaryAndViewHelper extends AbstractViewHelper
      */
     public function render(): int
     {
+        /** @var int $content */
         $content = $this->arguments['content'];
+        /** @var int $base */
         $base = $this->arguments['base'];
-        return ($content ?: $this->renderChildren()) & $base;
+        if (!$content) {
+            /** @var int $content */
+            $content = $this->renderChildren();
+        }
+        return $content & $base;
     }
 }

@@ -17,8 +17,10 @@ namespace Evoweb\StoreFinder\EventListener;
 
 use Evoweb\StoreFinder\Controller\Event\MapGetLocationsByConstraintsEvent;
 use Evoweb\StoreFinder\Domain\Model\Constraint;
+use Evoweb\StoreFinder\Domain\Model\Location;
 use Evoweb\StoreFinder\Domain\Repository\LocationRepository;
 use TYPO3\CMS\Core\Attribute\AsEventListener;
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
 readonly class MapGetAllLocationsListener
 {
@@ -28,7 +30,9 @@ readonly class MapGetAllLocationsListener
     public function onLocationsFetchedEvent(MapGetLocationsByConstraintsEvent $event): void
     {
         if ($this->isOverrideLocations($event)) {
-            $event->setLocations($this->locationRepository->findAll());
+            /** @var QueryResultInterface<int, Location> $queryResult */
+            $queryResult = $this->locationRepository->findAll();
+            $event->setLocations($queryResult->toArray());
         }
     }
 
@@ -36,9 +40,9 @@ readonly class MapGetAllLocationsListener
     {
         // @extensionScannerIgnoreLine
         $controller = $event->getController();
-        $constraint = $controller->getArguments()->hasArgument('constraint') ?
-            $controller->getArguments()->getArgument('constraint')->getValue() :
-            null;
+        $constraint = $controller->getArguments()->hasArgument('constraint')
+            ? $controller->getArguments()->getArgument('constraint')->getValue()
+            : null;
 
         return !(
             $constraint instanceof Constraint

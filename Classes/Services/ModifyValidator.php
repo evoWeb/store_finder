@@ -58,20 +58,16 @@ readonly class ModifyValidator
     }
 
     /**
-     * @param array<string, mixed> $settings
+     * @param array<string, array<string, string|string[]>> $settings
      */
     public function modifyArgumentValidators(
         Arguments $arguments,
         RequestInterface $request,
         array $settings,
     ): Arguments {
-        foreach ($arguments as $argumentName => $argument) {
-            if ($argumentName !== 'constraint') {
-                continue;
-            }
-
+        if ($arguments->hasArgument('constraint')) {
             $this->modifyValidatorsBasedOnSettings(
-                $argument,
+                $arguments->getArgument('constraint'),
                 $request,
                 $settings,
             );
@@ -105,6 +101,9 @@ readonly class ModifyValidator
                     $this->logger->debug($exception->getMessage());
                     continue;
                 }
+                if ($validatorInstance === null) {
+                    continue;
+                }
             } else {
                 /** @var ConjunctionValidator $validatorInstance */
                 $validatorInstance = $this->validatorResolver->createValidator(ConjunctionValidator::class);
@@ -118,6 +117,9 @@ readonly class ModifyValidator
                         );
                     } catch (\Exception $exception) {
                         $this->logger->debug($exception->getMessage());
+                        continue;
+                    }
+                    if ($individualValidatorInstance === null) {
                         continue;
                     }
 

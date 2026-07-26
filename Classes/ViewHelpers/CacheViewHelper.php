@@ -30,6 +30,7 @@ class CacheViewHelper extends AbstractViewHelper
 
     public function render(): void
     {
+        /** @var Location $location */
         $location = $this->arguments['location'];
         $this->cacheService->addTagsForPost($location);
     }

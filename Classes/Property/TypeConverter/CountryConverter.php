@@ -19,7 +19,7 @@ class CountryConverter extends AbstractTypeConverter
         array $convertedChildProperties = [],
         ?PropertyMappingConfigurationInterface $configuration = null
     ): ?Country {
-        if ($source === '') {
+        if ($source === '' || !is_string($source)) {
             return null;
         }
         /** @var CountryProvider $countryProvider */

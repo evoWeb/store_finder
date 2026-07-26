@@ -38,7 +38,7 @@ class RequiredValidator extends AbstractValidator implements ValidatorInterface
     {
         if (empty($value)) {
             $this->addError(
-                LocalizationUtility::translate('error_required', 'StoreFinder'),
+                LocalizationUtility::translate('error_required', 'StoreFinder') ?? '',
                 1305008423
             );
         }

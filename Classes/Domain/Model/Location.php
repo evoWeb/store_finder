@@ -72,7 +72,7 @@ class Location extends AbstractEntity
     protected ?Country $countryShadow = null;
 
     #[Extbase\ORM\Lazy]
-    protected null|CountryZone|LazyLoadingProxy $state = null;
+    protected CountryZone|LazyLoadingProxy|null $state = null;
 
     /**
      * @var ObjectStorage<Attribute>
@@ -271,9 +271,12 @@ class Location extends AbstractEntity
 
     public function getState(): ?CountryZone
     {
-        return $this->state instanceof LazyLoadingProxy
-            ? $this->state->_loadRealInstance()
-            : $this->state;
+        if ($this->state instanceof LazyLoadingProxy) {
+            $state = $this->state->_loadRealInstance();
+            return $state instanceof CountryZone ? $state : null;
+        }
+
+        return $this->state;
     }
 
     public function setState(?CountryZone $state): void
@@ -286,7 +289,7 @@ class Location extends AbstractEntity
         return $this->getState() ? $this->getState()->getNameEn() : '';
     }
 
-    public function getCountry(): null|Country
+    public function getCountry(): ?Country
     {
         if ($this->countryShadow === null && $this->country !== '') {
             $countryProvider = GeneralUtility::makeInstance(CountryProvider::class);

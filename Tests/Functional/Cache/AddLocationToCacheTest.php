@@ -57,7 +57,7 @@ class AddLocationToCacheTest extends FunctionalTestCase
     ];
 
     /**
-     * @return array<string, array<string[]|array<string, mixed>>>
+     * @return array<string, array{0: array<string, mixed>, 1: string[], 2: string[]}>
      */
     public static function cacheDataProvider(): array
     {
@@ -128,6 +128,7 @@ class AddLocationToCacheTest extends FunctionalTestCase
     public function locationStoredInCacheTable(array $data, array $addFields, array $getFields): void
     {
         $expected = $this->getConstraintStub($data);
+        /** @var Constraint $actual */
         $actual = unserialize(serialize($expected));
 
         $request = $this->createServerRequest('https://typo3-testing.local/typo3/');
@@ -138,6 +139,7 @@ class AddLocationToCacheTest extends FunctionalTestCase
             $cacheManager = $this->get(CacheManager::class);
             $cacheFrontend = $cacheManager->getCache('store_finder_coordinate_cache');
 
+            /** @var UserSessionManager $userSessionManagerMock */
             $userSessionManagerMock = $this->get(UserSessionManager::class);
             $coordinatesCache = new CoordinatesCache($cacheFrontend);
             $coordinatesCache->initializeUserSessionManager($userSessionManagerMock);
@@ -168,8 +170,9 @@ class AddLocationToCacheTest extends FunctionalTestCase
             $setter = 'set' . ucfirst($field);
             if (method_exists($constraint, $setter) && !empty($value)) {
                 if ($field === 'country') {
-                    /** @var Country $value */
-                    $value = $this->get(CountryProvider::class)->getByAlpha2IsoCode('de');
+                    /** @var CountryProvider $countryProvider */
+                    $countryProvider = $this->get(CountryProvider::class);
+                    $value = $countryProvider->getByAlpha2IsoCode('de');
                 }
                 if ($field === 'state') {
                     /** @var CountryZone $value */
@@ -202,7 +205,7 @@ class AddLocationToCacheTest extends FunctionalTestCase
             'SCRIPT_FILENAME' => $docRoot . '/index.php',
             'PATH_TRANSLATED' => $docRoot . '/index.php',
             'QUERY_STRING' => $requestUrlParts['query'] ?? '',
-            'REQUEST_URI' => $requestUrlParts['path']
+            'REQUEST_URI' => ($requestUrlParts['path'] ?? '')
                 . (isset($requestUrlParts['query']) ? '?' . $requestUrlParts['query'] : ''),
             'REQUEST_METHOD' => 'GET',
         ];

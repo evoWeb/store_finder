@@ -47,22 +47,26 @@ class MinifyViewHelper extends AbstractViewHelper
      */
     public function render(): string
     {
+        /** @var string $content */
         $content = $this->arguments['content'];
-        $content = $content ?: $this->renderChildren();
+        if (!$content) {
+            /** @var string $content */
+            $content = $this->renderChildren();
+        }
 
         /* remove comments */
         $content = str_replace('://', "\xff", $content);
-        $content = preg_replace('@(/\*(?:[^*]|\*+[^*/])*\*+/|//.*)@', '', $content);
+        $content = preg_replace('@(/\*(?:[^*]|\*+[^*/])*\*+/|//.*)@', '', $content) ?? '';
         $content = str_replace("\xff", '://', $content);
 
         /* remove tabs, spaces, newlines, etc. */
         $content = str_replace(
-            [CRLF, CR, LF, "\t", '     ', '    ', '  ', '": "'],
+            ["\r\n", "\r", "\n", "\t", '     ', '    ', '  ', '": "'],
             ['', '', '', '', '', '', '', '":"'],
             $content
         );
 
         /* remove other spaces before/after ) */
-        return preg_replace(['(( )+\))', '(\)( )+)'], ')', $content);
+        return preg_replace(['(( )+\))', '(\)( )+)'], ')', $content) ?? '';
     }
 }

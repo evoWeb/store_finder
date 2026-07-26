@@ -96,8 +96,10 @@ class CoordinatesCache
         }
 
         if (is_array($coordinate)) {
-            $address->setLatitude($coordinate['latitude']);
-            $address->setLongitude($coordinate['longitude']);
+            $latitude = $coordinate['latitude'] ?? null;
+            $longitude = $coordinate['longitude'] ?? null;
+            $address->setLatitude(is_numeric($latitude) ? (float)$latitude : null);
+            $address->setLongitude(is_numeric($longitude) ? (float)$longitude : null);
         }
 
         return $address;
@@ -126,8 +128,17 @@ class CoordinatesCache
     public function getValueFromSession(string $key): array
     {
         $sessionData = $this->session->get($this->sessionKey);
+        if (!is_array($sessionData) || !isset($sessionData[$key]) || !is_string($sessionData[$key])) {
+            return [];
+        }
 
-        return is_array($sessionData) && isset($sessionData[$key]) ? unserialize($sessionData[$key]) : [];
+        $unserialized = unserialize($sessionData[$key]);
+        if (!is_array($unserialized)) {
+            return [];
+        }
+
+        /** @var array<string, float> $unserialized */
+        return $unserialized;
     }
 
     /**
@@ -181,6 +192,11 @@ class CoordinatesCache
 
     public function getRequest(): ServerRequestInterface
     {
-        return $GLOBALS['TYPO3_REQUEST'];
+        $request = $GLOBALS['TYPO3_REQUEST'];
+        if (!$request instanceof ServerRequestInterface) {
+            throw new \RuntimeException('No request available', 1753500002);
+        }
+
+        return $request;
     }
 }

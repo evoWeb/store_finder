@@ -23,7 +23,7 @@ use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
 class Attribute extends AbstractEntity
 {
     #[Extbase\ORM\Lazy]
-    protected null|FileReference|LazyLoadingProxy $icon = null;
+    protected FileReference|LazyLoadingProxy|null $icon = null;
 
     protected string $name = '';
 
@@ -33,9 +33,12 @@ class Attribute extends AbstractEntity
 
     public function getIcon(): ?FileReference
     {
-        return $this->icon instanceof LazyLoadingProxy
-            ? $this->icon->_loadRealInstance()
-            : $this->icon;
+        if ($this->icon instanceof LazyLoadingProxy) {
+            $icon = $this->icon->_loadRealInstance();
+            return $icon instanceof FileReference ? $icon : null;
+        }
+
+        return $this->icon;
     }
 
     public function setIcon(FileReference $icon): void

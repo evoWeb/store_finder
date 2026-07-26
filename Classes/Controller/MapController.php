@@ -35,10 +35,13 @@ use TYPO3\CMS\Extbase\Attribute as Extbase;
 use TYPO3\CMS\Extbase\Http\ForwardResponse;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\Controller\Arguments;
+use TYPO3\CMS\Extbase\Mvc\ExtbaseRequestParameters;
 use TYPO3\CMS\Extbase\Persistence\Generic\Exception as Exception;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Property\PropertyMappingConfiguration;
 use TYPO3\CMS\Extbase\Property\TypeConverter\PersistentObjectConverter;
+use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 class MapController extends ActionController
 {
@@ -70,8 +73,12 @@ class MapController extends ActionController
             /** @var array<string, mixed> $constraint */
             $constraint = $this->request->getArgument($argumentName);
             if (!is_array($constraint['category'] ?? '')) {
-                $constraint['category'] = array_filter(explode(',', $constraint['category'] ?? ''));
-                $this->request->getAttribute('extbase')->setArgument($argumentName, $constraint);
+                $constraint['category'] = array_filter(
+                    explode(',', $this->toStringOrDefault($constraint['category'] ?? '')),
+                );
+                /** @var ExtbaseRequestParameters $extbaseAttribute */
+                $extbaseAttribute = $this->request->getAttribute('extbase');
+                $extbaseAttribute->setArgument($argumentName, $constraint);
             }
 
             if ($this->arguments->hasArgument($argumentName)) {
@@ -84,6 +91,7 @@ class MapController extends ActionController
     protected function getPropertyMappingConfiguration(
         ?PropertyMappingConfiguration $configuration
     ): PropertyMappingConfiguration {
+        $configuration ??= new PropertyMappingConfiguration();
         $configuration->allowProperties('category');
         $configuration->setTypeConverterOption(
             PersistentObjectConverter::class,
@@ -109,9 +117,9 @@ class MapController extends ActionController
         }
 
         $this->settings['allowedCountries'] = explode(',', $this->settings['allowedCountries'] ?? '');
-        $this->settings['mapConfiguration']['libraries'] = $this->settings['mapConfiguration']['libraries'] ?
-            explode(',', $this->settings['mapConfiguration']['libraries'] ?? '') :
-            [];
+        $this->settings['mapConfiguration']['libraries'] = $this->settings['mapConfiguration']['libraries']
+            ? explode(',', $this->settings['mapConfiguration']['libraries'] ?? '')
+            : [];
 
         $this->geocodeService->setSettings($this->settings);
         $this->locationRepository->setSettings($this->settings);
@@ -121,7 +129,11 @@ class MapController extends ActionController
 
     protected function initializeView(): void
     {
-        $this->view->assign('cObjectData', $this->request->getAttribute('currentContentObject')?->data);
+        $currentContentObject = $this->request->getAttribute('currentContentObject');
+        $this->view->assign(
+            'cObjectData',
+            $currentContentObject instanceof ContentObjectRenderer ? $currentContentObject->data : null,
+        );
     }
 
     /**
@@ -218,7 +230,7 @@ class MapController extends ActionController
     }
 
     /**
-     * @return array<Location[]|Constraint>
+     * @return array{0: Location[], 1: Constraint}
      * @throws Exception
      */
     protected function getLocationsByConstraints(Constraint $constraint): array
@@ -231,13 +243,14 @@ class MapController extends ActionController
         $constraint = $this->geocodeService->geocodeAddress($constraint);
         $constraint = $this->addDefaultConstraint($constraint);
 
+        /** @var Location[] $locations */
         $locations = $this->locationRepository->findByConstraint($constraint);
 
         return [$locations, $constraint];
     }
 
     /**
-     * @return array<Location[]|Constraint>
+     * @return array{0: Location[], 1: Constraint}
      * @throws Exception
      */
     protected function getLocationsByDefaultConstraints(): array
@@ -257,11 +270,14 @@ class MapController extends ActionController
         ) {
             $constraint = $this->addDefaultConstraint($constraint);
             if ($this->settings['geocodeDefaultConstraint'] ?? false) {
-                $constraint = $this->geocodeService->geocodeAddress($constraint);
+                $geocodedConstraint = $this->geocodeService->geocodeAddress($constraint);
+                if ($geocodedConstraint instanceof Constraint) {
+                    $constraint = $geocodedConstraint;
+                }
             }
 
             if ($this->settings['showLocationsForDefaultConstraint'] ?? false) {
-                /** @var Constraint $constraint */
+                /** @var Location[] $locations */
                 $locations = $this->locationRepository->findByConstraint($constraint);
             }
         }
@@ -274,7 +290,9 @@ class MapController extends ActionController
                 'name' => QueryInterface::ORDER_ASCENDING,
             ]);
 
-            $locations = $this->locationRepository->findAll()->toArray();
+            /** @var QueryResultInterface<int, Location> $queryResult */
+            $queryResult = $this->locationRepository->findAll();
+            $locations = $queryResult->toArray();
         }
 
         return [$locations, $constraint];
@@ -296,7 +314,7 @@ class MapController extends ActionController
         if ($location === null) {
             $location = $this->locationRepository->findOneByUid((int)($this->settings['location'] ?? -1));
         } else {
-            $location = $this->locationRepository->findOneByUid($location->getUid());
+            $location = $this->locationRepository->findOneByUid($location->getUid() ?? 0);
         }
 
         $this->view->assign('afterSearch', 1);
@@ -483,7 +501,7 @@ class MapController extends ActionController
     {
         if ($this->settings['addPaginator'] ?? false) {
             $currentPage = $this->request->hasArgument('currentPage')
-                ? (int)$this->request->getArgument('currentPage') : 1;
+                ? $this->toIntOrDefault($this->request->getArgument('currentPage'), 1) : 1;
 
             $resultPaginator = new ArrayPaginator(
                 $locations,
@@ -528,5 +546,15 @@ class MapController extends ActionController
     public function getArguments(): Arguments
     {
         return $this->arguments;
+    }
+
+    protected function toStringOrDefault(mixed $value, string $default = ''): string
+    {
+        return is_scalar($value) ? (string)$value : $default;
+    }
+
+    protected function toIntOrDefault(mixed $value, int $default = 0): int
+    {
+        return is_numeric($value) ? (int)$value : $default;
     }
 }

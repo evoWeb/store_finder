@@ -328,8 +328,14 @@ class LocationCountryMigration implements UpgradeWizardInterface
     {
         $records = $this->getRecordsToUpdate();
         try {
-            foreach ($records->fetchAssociative() as $record) {
-                $this->updateRecordWithNewCountryValue($record['uid'], self::VALUE_MAP[$record['country']]);
+            foreach ($records->fetchAllAssociative() as $record) {
+                $countryUid = is_numeric($record['country'] ?? null) ? (int)$record['country'] : 0;
+                if (!isset(self::VALUE_MAP[$countryUid])) {
+                    continue;
+                }
+
+                $uid = is_numeric($record['uid'] ?? null) ? (int)$record['uid'] : 0;
+                $this->updateRecordWithNewCountryValue($uid, self::VALUE_MAP[$countryUid]);
             }
         } catch (Exception $exception) {
             $this->output->write('Querying for locations throws an exception: ' . $exception->getMessage());
@@ -345,7 +351,7 @@ class LocationCountryMigration implements UpgradeWizardInterface
     {
         $queryBuilder = $this->getPreparedQueryBuilder();
         $expression = $queryBuilder->expr();
-        return $queryBuilder
+        $count = $queryBuilder
             ->count('uid')
             ->from(self::TABLE_NAME)
             ->where(
@@ -363,6 +369,8 @@ class LocationCountryMigration implements UpgradeWizardInterface
             )
             ->executeQuery()
             ->fetchOne();
+
+        return is_numeric($count) ? (int)$count : 0;
     }
 
     protected function getRecordsToUpdate(): Result

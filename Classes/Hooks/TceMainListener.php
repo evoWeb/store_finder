@@ -37,7 +37,8 @@ class TceMainListener
         ExtensionConfiguration $extensionConfiguration
     ) {
         try {
-            $this->geocodeService->setSettings($extensionConfiguration->get('store_finder') ?? []);
+            $configuration = $extensionConfiguration->get('store_finder');
+            $this->geocodeService->setSettings(is_array($configuration) ? $configuration : []);
         } catch (\Exception $e) {
             die('Error in $GLOBALS[\'TYPO3_CONF_VARS\'][\'EXTENSIONS\']: ' . $e->getMessage());
         }
@@ -84,7 +85,7 @@ class TceMainListener
 
     /**
      * Remap id for id and table
-     * @return array<int|string>
+     * @return array{0: int, 1: string}
      */
     protected function remapId(string|int $NEW_id, string $table, DataHandler $parentObject): array
     {

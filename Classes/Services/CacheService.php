@@ -61,6 +61,11 @@ readonly class CacheService
 
     protected function getRequest(): ServerRequestInterface
     {
-        return $GLOBALS['TYPO3_REQUEST'];
+        $request = $GLOBALS['TYPO3_REQUEST'];
+        if (!$request instanceof ServerRequestInterface) {
+            throw new \RuntimeException('No request available', 1753500001);
+        }
+
+        return $request;
     }
 }

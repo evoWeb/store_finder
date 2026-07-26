@@ -40,7 +40,8 @@ class GeocodeLocationsCommand extends Command
         ExtensionConfiguration $extensionConfiguration
     ) {
         try {
-            $this->geocodeService->setSettings($extensionConfiguration->get('store_finder') ?? []);
+            $configuration = $extensionConfiguration->get('store_finder');
+            $this->geocodeService->setSettings(is_array($configuration) ? $configuration : []);
         } catch (\Exception $exception) {
             die('Error in $GLOBALS[\'TYPO3_CONF_VARS\'][\'EXTENSIONS\']: ' . $exception->getMessage());
         }

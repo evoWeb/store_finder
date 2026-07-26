@@ -32,12 +32,24 @@ class ModifyLocationMap extends AbstractFormElement
         } catch (\Exception) {
             $configuration = [];
         }
+        /** @var array<string, mixed> $configuration */
+        $configuration = is_array($configuration) ? $configuration : [];
 
         $fieldId = StringUtility::getUniqueId('formengine-map-');
 
+        /** @var array<string, mixed> $row */
         $row = $this->data['databaseRow'];
 
         $resultArray = $this->initializeResultArray();
+
+        $latitude = $row['latitude'] ?? null;
+        if (empty($latitude)) {
+            $latitude = $configuration['latitude'] ?? 51.4583912;
+        }
+        $longitude = $row['longitude'] ?? null;
+        if (empty($longitude)) {
+            $longitude = $configuration['longitude'] ?? 7.0157931;
+        }
 
         $resultArray['html'] = '<div id="' . $fieldId . '" style="height: 300px; width: 100%;"></div>';
         $resultArray['stylesheetFiles'][] = 'EXT:store_finder/Resources/Public/JavaScript/leaflet/leaflet.css';
@@ -46,11 +58,21 @@ class ModifyLocationMap extends AbstractFormElement
         )->instance([
             'mapId' => $fieldId,
             'uid' => $row['uid'],
-            'latitude' => (float)($row['latitude'] ?: $configuration['latitude'] ?? 51.4583912),
-            'longitude' => (float)($row['longitude'] ?: $configuration['longitude'] ?? 7.0157931),
-            'zoom' => (int)($configuration['zoom'] ?? 16),
+            'latitude' => $this->toFloatOrDefault($latitude, 51.4583912),
+            'longitude' => $this->toFloatOrDefault($longitude, 7.0157931),
+            'zoom' => $this->toIntOrDefault($configuration['zoom'] ?? 16, 16),
         ]);
 
         return $resultArray;
+    }
+
+    private function toFloatOrDefault(mixed $value, float $default = 0.0): float
+    {
+        return is_numeric($value) ? (float)$value : $default;
+    }
+
+    private function toIntOrDefault(mixed $value, int $default = 0): int
+    {
+        return is_numeric($value) ? (int)$value : $default;
     }
 }

@@ -89,7 +89,7 @@ class EitherValidator extends AbstractValidator implements ValidatorInterface
 
         if (!$result) {
             $this->addError(
-                LocalizationUtility::translate('error_either', 'StoreFinder'),
+                LocalizationUtility::translate('error_either', 'StoreFinder') ?? '',
                 1305008423
             );
         }

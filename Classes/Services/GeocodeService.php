@@ -145,7 +145,10 @@ class GeocodeService
             }
 
             if (!empty($value) && !is_object($value) && !is_array($value)) {
-                $queryValues[$field] =  \iconv('UTF-8', 'ASCII//TRANSLIT', $value);
+                $convertedValue = iconv('UTF-8', 'ASCII//TRANSLIT', $value);
+                if ($convertedValue !== false) {
+                    $queryValues[$field] = $convertedValue;
+                }
             }
         }
 
@@ -166,10 +169,11 @@ class GeocodeService
      */
     protected function getCoordinatesFromProvider(array $queryValues): Coordinates
     {
-        if (!str_contains($this->settings['geocoderProvider'], '\\')) {
+        $geocoderProvider = $this->toStringOrDefault($this->settings['geocoderProvider'] ?? '');
+        if (!str_contains($geocoderProvider, '\\')) {
             $providerClass = GoogleMaps::class;
         } else {
-            $providerClass = $this->settings['geocoderProvider'];
+            $providerClass = $geocoderProvider;
         }
 
         $httpClient = $this->guzzleFactory->getClient();
@@ -189,7 +193,8 @@ class GeocodeService
             $query = GeocodeQuery::create(implode(',', $queryValues));
             $query = $query->withData('components', 'country:' . $country);
 
-            $geoCoder = new StatefulGeocoder($provider, $this->settings['geocoderLocale']);
+            $geocoderLocale = $this->settings['geocoderLocale'] ?? null;
+            $geoCoder = new StatefulGeocoder($provider, is_string($geocoderLocale) ? $geocoderLocale : null);
             $results = $geoCoder->geocodeQuery($query);
             $this->hasMultipleResults = $results->count() > 1;
             if ($results->count() > 0) {
@@ -202,5 +207,10 @@ class GeocodeService
         }
 
         return $result;
+    }
+
+    protected function toStringOrDefault(mixed $value, string $default = ''): string
+    {
+        return is_scalar($value) ? (string)$value : $default;
     }
 }

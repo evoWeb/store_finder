@@ -44,11 +44,13 @@ use TYPO3\CMS\Core\Country\CountryProvider;
 use TYPO3\CMS\Core\Error\Http\StatusException;
 use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Routing\PageArguments;
+use TYPO3\CMS\Core\Site\Entity\SiteInterface;
 use TYPO3\CMS\Core\Site\Entity\SiteLanguage;
 use TYPO3\CMS\Core\TypoScript\FrontendTypoScript;
 use TYPO3\CMS\Core\TypoScript\FrontendTypoScriptFactory;
 use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Frontend\Cache\CacheInstruction;
 use TYPO3\CMS\Frontend\Page\PageInformation;
 use TYPO3\CMS\Frontend\Page\PageInformationCreationFailedException;
 use TYPO3\CMS\Frontend\Page\PageInformationFactory;
@@ -96,7 +98,8 @@ final readonly class StoreFinderMiddleware implements MiddlewareInterface
         $cacheIdentifier = $this->getCacheIdentifier($json, $locale, $action, $contentUid);
         $cache = $this->getCache();
         if ($cache && $cache->has($cacheIdentifier)) {
-            $rows = $cache->get($cacheIdentifier);
+            $cachedRows = $cache->get($cacheIdentifier);
+            $rows = is_array($cachedRows) ? $cachedRows : [];
         } else {
             [$settings, $request] = $this->getSettings($request, $contentUid);
             $rows = match ($action) {
@@ -109,7 +112,7 @@ final readonly class StoreFinderMiddleware implements MiddlewareInterface
         return new JsonResponse($rows);
     }
 
-    protected function getCache(): ?FrontendInterface
+    private function getCache(): ?FrontendInterface
     {
         try {
             $cache = $this->cacheManager->getCache('store_finder_middleware_cache');
@@ -119,35 +122,44 @@ final readonly class StoreFinderMiddleware implements MiddlewareInterface
         return $cache;
     }
 
-    protected function processMiddleware(ServerRequestInterface $request): bool
+    private function processMiddleware(ServerRequestInterface $request): bool
     {
         return str_contains($request->getUri()->getPath(), 'api/storefinder/')
             && in_array(($request->getQueryParams()['action'] ?? ''), ['locations', 'categories']);
     }
 
-    protected function getCacheIdentifier(string $json, string $locale, string $action, int $contentUid): string
+    private function getCacheIdentifier(string $json, string $locale, string $action, int $contentUid): string
     {
-        $encryptionKey = $GLOBALS['TYPO3_CONF_VARS']['SYS']['encryptionKey'] ?? '';
+        /** @var array<string, mixed> $typo3ConfVars */
+        $typo3ConfVars = $GLOBALS['TYPO3_CONF_VARS'] ?? [];
+        /** @var array<string, mixed> $sys */
+        $sys = $typo3ConfVars['SYS'] ?? [];
+        $encryptionKey = $this->toStringOrDefault($sys['encryptionKey'] ?? '');
         return sha1($encryptionKey . 'store_finder' . $json . $locale . $action . $contentUid);
     }
 
     /**
-     * @return array<array<string, mixed>|ServerRequestInterface>
+     * @return array{0: array<string, mixed>, 1: ServerRequestInterface}
      * @throws PageInformationCreationFailedException
      * @throws StatusException
      */
-    protected function getSettings(ServerRequestInterface $request, int $contentUid): array
+    private function getSettings(ServerRequestInterface $request, int $contentUid): array
     {
-        $pageId = $request->getAttribute('routing')->getPageId();
+        /** @var PageArguments $routing */
+        $routing = $request->getAttribute('routing');
+        $pageId = $routing->getPageId();
         $contentSettings = $this->getContentSettings($contentUid);
+        $contentSettingsPid = $this->toIntOrDefault($contentSettings['pid'] ?? 0);
 
-        if ($pageId === $contentSettings['pid']) {
+        if ($pageId === $contentSettingsPid) {
+            /** @var FrontendTypoScript $typoScript */
             $typoScript = $request->getAttribute('frontend.typoscript');
         } else {
-            $pageInformation = $this->getPageInformation($request, $contentSettings['pid']);
+            $pageInformation = $this->getPageInformation($request, $contentSettingsPid);
             $typoScript = $this->getTypoScriptForPage($request, $pageInformation);
         }
 
+        /** @var array<string, mixed> $settings */
         $settings = $this->typoScriptService->convertTypoScriptArrayToPlainArray(
             $typoScript->getSetupArray()['plugin.']['tx_storefinder.']['ajax.'] ?? [],
         ) + $contentSettings;
@@ -159,7 +171,7 @@ final readonly class StoreFinderMiddleware implements MiddlewareInterface
      * @throws PageInformationCreationFailedException
      * @throws StatusException
      */
-    protected function getPageInformation(ServerRequestInterface $request, int $pageUid): PageInformation
+    private function getPageInformation(ServerRequestInterface $request, int $pageUid): PageInformation
     {
         $request = $request->withAttribute('applicationType', SystemEnvironmentBuilder::REQUESTTYPE_FE);
         $request = $request->withAttribute('routing', new PageArguments($pageUid, '0', []));
@@ -169,25 +181,32 @@ final readonly class StoreFinderMiddleware implements MiddlewareInterface
     /**
      * @return array<string, mixed>
      */
-    protected function getContentSettings(int $contentUid): array
+    private function getContentSettings(int $contentUid): array
     {
         $row = $this->contentRepository->findByUid($contentUid);
 
-        $settings = $this->flexFormTools->convertFlexFormContentToArray($row['pi_flexform'] ?? '')['settings'] ?? [];
+        $settings = $this->flexFormTools->convertFlexFormContentToArray(
+            $this->toStringOrDefault($row['pi_flexform'] ?? ''),
+        )['settings'] ?? [];
         $settings['pid'] = $row['pid'];
         $settings['storagePid'] = $row['pages'];
 
         return $settings;
     }
 
-    protected function getTypoScriptForPage(
+    private function getTypoScriptForPage(
         ServerRequestInterface $request,
         PageInformation $pageInformation,
     ): FrontendTypoScript {
+        /** @var SiteInterface $site */
         $site = $request->getAttribute('site');
-        $pageType = $request->getAttribute('routing')->getPageType();
+        /** @var PageArguments $routing */
+        $routing = $request->getAttribute('routing');
+        $pageType = $routing->getPageType();
         $sysTemplateRows = $pageInformation->getSysTemplateRows();
-        $isCachingAllowed = $request->getAttribute('frontend.cache.instruction')->isCachingAllowed();
+        /** @var CacheInstruction $cacheInstruction */
+        $cacheInstruction = $request->getAttribute('frontend.cache.instruction');
+        $isCachingAllowed = $cacheInstruction->isCachingAllowed();
         $conditionMatcherVariables = $this->prepareConditionMatcherVariables($request, $pageInformation);
 
         $frontendTypoScript = $this->frontendTypoScriptFactory->createSettingsAndSetupConditions(
@@ -242,13 +261,14 @@ final readonly class StoreFinderMiddleware implements MiddlewareInterface
      * @throws Exception
      * @throws AspectNotFoundException
      */
-    protected function categoriesAction(ServerRequestInterface $request, array $settings): array
+    private function categoriesAction(ServerRequestInterface $request, array $settings): array
     {
         $this->categoryRepository->setSettings($settings);
 
-        $categories = GeneralUtility::intExplode(',', $settings['categories'] ?? '', true);
+        $categories = GeneralUtility::intExplode(',', $this->toStringOrDefault($settings['categories'] ?? ''), true);
         $categoryTree = $this->categoryRepository->getCategoriesByParents($categories);
 
+        /** @var ModifyMiddlewareCategoriesEvent $eventResult */
         $eventResult = $this->eventDispatcher->dispatch(
             new ModifyMiddlewareCategoriesEvent($request, $this, $settings, $categoryTree),
         );
@@ -261,7 +281,7 @@ final readonly class StoreFinderMiddleware implements MiddlewareInterface
      * @throws Exception
      * @throws AspectNotFoundException
      */
-    protected function locationsAction(ServerRequestInterface $request, array $settings): array
+    private function locationsAction(ServerRequestInterface $request, array $settings): array
     {
         $this->locationRepository->setSettings($settings);
 
@@ -269,6 +289,7 @@ final readonly class StoreFinderMiddleware implements MiddlewareInterface
         $constraint = $this->prepareConstraint($json, $settings);
         $rows = $this->locationRepository->findAllForAjaxMiddleware($constraint);
 
+        /** @var ModifyMiddlewareLocationsEvent $eventResult */
         $eventResult = $this->eventDispatcher->dispatch(
             new ModifyMiddlewareLocationsEvent($request, $this, $settings, $rows),
         );
@@ -279,42 +300,48 @@ final readonly class StoreFinderMiddleware implements MiddlewareInterface
      * @param array<string, mixed> $settings
      * @throws Exception
      */
-    protected function prepareConstraint(string $json, array $settings): Constraint
+    private function prepareConstraint(string $json, array $settings): Constraint
     {
         /** @var Constraint $constraint */
         $constraint = GeneralUtility::makeInstance(Constraint::class);
-        $post = strlen($json) > 0 ? json_decode($json, true) : [];
+        $decodedPost = strlen($json) > 0 ? json_decode($json, true) : [];
+        /** @var array<string, mixed> $post */
+        $post = is_array($decodedPost) ? $decodedPost : [];
 
         if (!empty($post['address'])) {
-            if ((string)($settings['country'] ?? '')) {
+            if ($this->toStringOrDefault($settings['country'] ?? '')) {
                 /** @var CountryProvider $countryProvider */
                 $countryProvider = GeneralUtility::makeInstance(CountryProvider::class);
-                $country = $countryProvider->getByAlpha2IsoCode((string)$settings['country']);
-                $constraint->setCountry($country);
+                $country = $countryProvider->getByAlpha2IsoCode($this->toStringOrDefault($settings['country'] ?? ''));
+                if ($country !== null) {
+                    $constraint->setCountry($country);
+                }
             }
 
-            if ((int)($settings['state'] ?? 0)) {
+            if ($this->toIntOrDefault($settings['state'] ?? 0)) {
                 /** @var CountryZoneRepository $countryZoneRepository */
                 $countryZoneRepository = GeneralUtility::makeInstance(CountryZoneRepository::class);
                 /** @var CountryZone $countryZone */
-                $countryZone = $countryZoneRepository->findByUid((int)$settings['state']);
+                $countryZone = $countryZoneRepository->findByUid($this->toIntOrDefault($settings['state'] ?? 0));
                 $constraint->setState($countryZone);
             }
 
-            $constraint->setCity($post['address']);
-            $constraint->setZipcode($post['address']);
+            $constraint->setCity($this->toStringOrDefault($post['address']));
+            $constraint->setZipcode($this->toStringOrDefault($post['address']));
         }
 
         if (!empty($post['search'])) {
-            $constraint->setSearch($post['search']);
+            $constraint->setSearch($this->toStringOrDefault($post['search']));
         }
 
         if (!empty($post['categories'])) {
-            $constraint->setCategory(GeneralUtility::intExplode(',', $post['categories'], true));
+            $constraint->setCategory(
+                GeneralUtility::intExplode(',', $this->toStringOrDefault($post['categories']), true),
+            );
         } else {
             /** @var CategoryRepository $categoryRepository */
             $categoryRepository = GeneralUtility::makeInstance(CategoryRepository::class);
-            $categories = GeneralUtility::intExplode(',', $settings['categories'], true);
+            $categories = GeneralUtility::intExplode(',', $this->toStringOrDefault($settings['categories'] ?? ''), true);
             $categories = $categoryRepository->enrichCategoriesWithChildren($categories);
             $constraint->setCategory($categories);
         }
@@ -328,5 +355,15 @@ final readonly class StoreFinderMiddleware implements MiddlewareInterface
         }
 
         return $constraint;
+    }
+
+    private function toStringOrDefault(mixed $value, string $default = ''): string
+    {
+        return is_scalar($value) ? (string)$value : $default;
+    }
+
+    private function toIntOrDefault(mixed $value, int $default = 0): int
+    {
+        return is_numeric($value) ? (int)$value : $default;
     }
 }

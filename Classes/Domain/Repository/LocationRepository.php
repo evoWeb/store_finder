@@ -39,12 +39,6 @@ use TYPO3\CMS\Extbase\Persistence\Repository;
  */
 class LocationRepository extends Repository
 {
-    protected $defaultOrderings = [
-        'zipcode' => QueryInterface::ORDER_ASCENDING,
-        'city' => QueryInterface::ORDER_ASCENDING,
-        'name' => QueryInterface::ORDER_ASCENDING,
-    ];
-
     /**
      * Natural logarithm of 2
      *
@@ -63,6 +57,12 @@ class LocationRepository extends Repository
      * @var int
      */
     public const ZOOM_MAX = 21;
+
+    protected $defaultOrderings = [
+        'zipcode' => QueryInterface::ORDER_ASCENDING,
+        'city' => QueryInterface::ORDER_ASCENDING,
+        'name' => QueryInterface::ORDER_ASCENDING,
+    ];
 
     /**
      * @var array<string, mixed>
@@ -226,7 +226,11 @@ class LocationRepository extends Repository
                 && !count($constraint->getCategory())
             )
         ) {
-            $constraint->setCategory(GeneralUtility::intExplode(',', $this->settings['categories'], true));
+            $constraint->setCategory(GeneralUtility::intExplode(
+                ',',
+                $this->toStringOrDefault($this->settings['categories'] ?? ''),
+                true,
+            ));
         }
         $categories = $this->categoryRepository->findByParentRecursive($constraint->getCategory());
 
@@ -328,20 +332,27 @@ class LocationRepository extends Repository
         string $tableAlias,
         QueryBuilder $queryBuilder,
     ): QueryBuilder {
-        if (empty($GLOBALS['TCA'][$tableName]['ctrl']['languageField'])) {
+        /** @var array<string, mixed> $tca */
+        $tca = $GLOBALS['TCA'] ?? [];
+        /** @var array<string, mixed> $tableTca */
+        $tableTca = $tca[$tableName] ?? [];
+        /** @var array<string, mixed> $ctrl */
+        $ctrl = $tableTca['ctrl'] ?? [];
+
+        if (empty($ctrl['languageField'])) {
             return $queryBuilder;
         }
 
         // Select all entries for the current language
         // If any language is set -> get those entries which are not translated yet
-        $languageField = $GLOBALS['TCA'][$tableName]['ctrl']['languageField'];
+        $languageField = $this->toStringOrDefault($ctrl['languageField']);
 
         /** @var Context $context */
         $context = GeneralUtility::makeInstance(Context::class);
         /** @var LanguageAspect $languageAspect */
         $languageAspect = $context->getAspect('language');
 
-        $transOrigPointerField = $GLOBALS['TCA'][$tableName]['ctrl']['transOrigPointerField'] ?? '';
+        $transOrigPointerField = $this->toStringOrDefault($ctrl['transOrigPointerField'] ?? '');
         if (
             !$transOrigPointerField
             || !$languageAspect->getContentId()
@@ -426,7 +437,7 @@ class LocationRepository extends Repository
 
     protected function addLimitQueryParts(Constraint $constraint, QueryBuilder $queryBuilder): QueryBuilder
     {
-        $limit = (int)$this->settings['limit'];
+        $limit = $this->toIntOrDefault($this->settings['limit'] ?? 0);
         $page = 0;
 
         if ($constraint->getLimit()) {
@@ -448,21 +459,22 @@ class LocationRepository extends Repository
     protected function addFulltextSearchQueryParts(Constraint $constraint, QueryBuilder $queryBuilder): QueryBuilder
     {
         $search = preg_replace('/[^a-zA-Z0-9äöüÄÖÜß,-]+/', '', $constraint->getSearch());
+        $fulltextSearchFields = $this->settings['fulltextSearchFields'] ?? null;
         if (
             $search
-            && isset($this->settings['fulltextSearchFields'])
-            && is_array($this->settings['fulltextSearchFields'])
+            && isset($fulltextSearchFields)
+            && is_array($fulltextSearchFields)
         ) {
             $expression = $queryBuilder->expr();
 
             $fullTextSearchConstraint = [];
-            $searchWordWrap = $this->settings['fulltextSearchWordWrap'] ?? '|';
+            $searchWordWrap = $this->toStringOrDefault($this->settings['fulltextSearchWordWrap'] ?? '|', '|');
 
             $searchWords = GeneralUtility::trimExplode(',', $search);
             foreach ($searchWords as $searchWord) {
-                foreach ($this->settings['fulltextSearchFields'] as $searchField) {
+                foreach ($fulltextSearchFields as $searchField) {
                     $fullTextSearchConstraint[] = $expression->like(
-                        $searchField,
+                        $this->toStringOrDefault($searchField),
                         $queryBuilder->createNamedParameter(str_replace('|', $searchWord, $searchWordWrap)),
                     );
                 }
@@ -504,6 +516,8 @@ class LocationRepository extends Repository
 
         /** @var Location $location */
         $location = GeneralUtility::makeInstance(Location::class);
+        /** @var array<string, mixed> $mapSize */
+        $mapSize = $this->settings['mapSize'] ?? [];
         $latitudeZoom = $longitudeZoom = 0;
 
         /**
@@ -514,18 +528,18 @@ class LocationRepository extends Repository
             $location->setLatitude(($maxLatitude->getLatitude() + $minLatitude->getLatitude()) / 2);
             $latitudeDiff = $this->latRad($maxLatitude->getLatitude()) - $this->latRad($minLatitude->getLatitude());
             $latitudeFraction = ($latitudeDiff) / M_PI;
-            $latitudeZoom = $this->zoom($this->settings['mapSize']['height'], self::GLOBE_WIDTH, $latitudeFraction);
+            $latitudeZoom = $this->zoom($this->toIntOrDefault($mapSize['height'] ?? 0), self::GLOBE_WIDTH, $latitudeFraction);
         }
 
         if ($minLongitude instanceof Location && $maxLongitude instanceof Location) {
             $location->setLongitude(($maxLongitude->getLongitude() + $minLongitude->getLongitude()) / 2);
             $longitudeDiff = $maxLongitude->getLongitude() - $minLongitude->getLongitude();
             $longitudeFraction = ($longitudeDiff < 0 ? $longitudeDiff + 360 : $longitudeDiff) / 360;
-            $longitudeZoom = $this->zoom($this->settings['mapSize']['width'], self::GLOBE_WIDTH, $longitudeFraction);
+            $longitudeZoom = $this->zoom($this->toIntOrDefault($mapSize['width'] ?? 0), self::GLOBE_WIDTH, $longitudeFraction);
         }
 
         if ($latitudeZoom > 0 || $longitudeZoom > 0) {
-            $location->setZoom(min($latitudeZoom, $longitudeZoom, self::ZOOM_MAX));
+            $location->setZoom((int)min($latitudeZoom, $longitudeZoom, self::ZOOM_MAX));
         }
 
         return $location;
@@ -602,14 +616,22 @@ class LocationRepository extends Repository
      */
     public function findAllForAjaxMiddleware(Constraint $constraint): array
     {
-        $storagePid = GeneralUtility::intExplode(',', $this->settings['storagePid'] ?? '');
+        $storagePid = GeneralUtility::intExplode(',', $this->toStringOrDefault($this->settings['storagePid'] ?? ''));
 
         $tableName = 'tx_storefinder_domain_model_location';
         $queryBuilder = $this->getQueryBuilderForTable($tableName);
         $expression = $queryBuilder->expr();
 
+        /** @var array<string, mixed> $tables */
         // @extensionScannerIgnoreLine
-        $fields = array_keys($this->settings['tables'][$tableName]['fields'] ?? ['l.*' => '']);
+        $tables = $this->settings['tables'] ?? [];
+        /** @var array<string, mixed> $tableSettings */
+        $tableSettings = $tables[$tableName] ?? [];
+        /** @var array<string, mixed> $fieldsSetting */
+        $fieldsSetting = $tableSettings['fields'] ?? ['l.*' => ''];
+        $fields = array_keys($fieldsSetting);
+        /** @var array<string, mixed> $sortBySetting */
+        $sortBySetting = $tableSettings['sortBy'] ?? [];
         $queryBuilder
             ->select(...$fields)
             ->from($tableName, 'l')
@@ -621,10 +643,8 @@ class LocationRepository extends Repository
                 ),
             )
             ->orderBy(
-                // @extensionScannerIgnoreLine
-                $this->settings['tables'][$tableName]['sortBy']['field'] ?? 'c.uid',
-                // @extensionScannerIgnoreLine
-                $this->settings['tables'][$tableName]['sortBy']['direction'] ?? 'ASC',
+                $this->toStringOrDefault($sortBySetting['field'] ?? 'c.uid'),
+                $this->toStringOrDefault($sortBySetting['direction'] ?? 'ASC'),
             );
 
         $queryBuilder = $this->addDistanceQueryPart($constraint, $queryBuilder);
@@ -639,15 +659,31 @@ class LocationRepository extends Repository
             ->executeQuery()
             ->fetchAllAssociative();
 
-        foreach ($locations as &$location) {
+        $result = [];
+        foreach ($locations as $location) {
             $location = $this->pageRepository->getLanguageOverlay('tx_storefinder_domain_model_location', $location);
+            if ($location === null) {
+                continue;
+            }
+
+            $result[] = $location;
         }
 
-        return $locations;
+        return $result;
     }
 
     protected function getQueryBuilderForTable(string $table): QueryBuilder
     {
         return $this->connectionPool->getQueryBuilderForTable($table);
+    }
+
+    protected function toStringOrDefault(mixed $value, string $default = ''): string
+    {
+        return is_scalar($value) ? (string)$value : $default;
+    }
+
+    protected function toIntOrDefault(mixed $value, int $default = 0): int
+    {
+        return is_numeric($value) ? (int)$value : $default;
     }
 }
