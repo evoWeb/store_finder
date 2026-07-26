@@ -23,22 +23,21 @@
 		"docs": "https://docs.typo3.org/p/evoweb/store-finder/main/en-us/"
 	},
 	"config": {
-		"vendor-dir": "Build/vendor",
+		"cache-dir": ".cache/composer",
 		"bin-dir": "bin",
 		"allow-plugins": {
 			"typo3/class-alias-loader": true,
-			"typo3/cms-composer-installers": true,
-			"php-http/discovery": true
+			"typo3/cms-composer-installers": true
 		}
 	},
 	"require": {
 		"php": "^8.2",
-		"typo3/cms-core": "^14.1 || 14.*.*@dev || dev-main",
-		"typo3/cms-backend": "^14.1 || 14.*.*@dev || dev-main",
-		"typo3/cms-extbase": "^14.1 || 14.*.*@dev || dev-main",
-		"typo3/cms-fluid": "^14.1 || 14.*.*@dev || dev-main",
-		"typo3/cms-frontend": "^14.1 || 14.*.*@dev || dev-main",
-		"typo3/cms-install": "^14.1 || 14.*.*@dev || dev-main",
+		"typo3/cms-core": "^14.1 || 15.*.*@dev || dev-main",
+		"typo3/cms-backend": "^14.1 || 15.*.*@dev || dev-main",
+		"typo3/cms-extbase": "^14.1 || 15.*.*@dev || dev-main",
+		"typo3/cms-fluid": "^14.1 || 15.*.*@dev || dev-main",
+		"typo3/cms-frontend": "^14.1 || 15.*.*@dev || dev-main",
+		"typo3/cms-install": "^14.1 || 15.*.*@dev || dev-main",
 
 		"doctrine/annotations": "^2.0.2",
 		"doctrine/dbal": "^4.1.1",
@@ -53,12 +52,12 @@
 		"phpoffice/phpspreadsheet": "^2.2.0 || ^5.2.0"
 	},
 	"require-dev": {
-		"friendsofphp/php-cs-fixer": "^3.64.0",
-		"friendsoftypo3/phpstan-typo3": "^0.9.0",
+		"friendsofphp/php-cs-fixer": "^3.95",
 		"phpstan/phpdoc-parser": "^1.30.0",
-		"phpstan/phpstan": "^1.12.5",
-		"phpunit/phpunit": "^11.0.3",
-		"typo3/testing-framework": "dev-main",
+		"phpstan/phpstan": "^2.2.2",
+		"phpstan/phpstan-phpunit": "^2.0.16",
+		"phpunit/phpunit": "^11.5.55",
+		"typo3/testing-framework": "^9.5.0 || dev-main",
 		"sjbr/static-info-tables": "dev-master"
 	},
 	"minimum-stability": "dev",
@@ -66,21 +65,23 @@
 	"extra": {
 		"typo3/cms": {
 			"extension-key": "store_finder",
-			"app-dir": "Build",
-			"web-dir": "Build/Web"
+			"version": "9.0.0",
+			"Package": {
+				"providesPackages": {}
+			}
 		}
 	},
 	"scripts": {
 		"prepare-release": [
+			"rm -rf .Build",
 			"rm -rf .github",
-			"rm -rf Build",
 			"rm -rf Tests",
 			"rm .gitattributes",
 			"rm .gitignore",
 			"sed -i \"s/version' => '.*'/version' => '$(echo ${GITHUB_REF} | cut -d / -f 3)'/\" ext_emconf.php\n"
 		],
 		"post-install-cmd": [
-			"ln -sf vendor/typo3/testing-framework/Resources/Core/Build/ Build/phpunit;"
+			"ln -sf ../vendor/typo3/testing-framework/Resources/Core/Build/ Build/phpunit;"
 		],
 		"post-update-cmd": [
 			"@post-install-cmd"
