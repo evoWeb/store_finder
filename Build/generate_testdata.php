@@ -28,7 +28,7 @@ $seeder = new class {
         $this->faker = \Faker\Factory::create('de_DE');
         $this->faker->seed(1974);
 
-        $this->databaseConnection = new ConnectionPool()->getConnectionForTable($this->table);
+        $this->databaseConnection = (new ConnectionPool())->getConnectionForTable($this->table);
     }
 
     public function generateRows(int $amount = 10): void
